@@ -1,0 +1,358 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "CommRsrc.h"
+#include "EDlgRsrc.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "edlgrsrc.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IMAGE1DOWN              BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1U.BMP"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ELP_PIPE DIALOGEX 70, 70, 151, 140
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "PIPE Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "LineID",IDC_LINEHEAD,110,18,28,7
+    RTEXT           "ReleaseID:",IDC_STATIC,9,17,44,8
+    RTEXT           "Property_ID",IDC_STATIC,106,41,41,8
+    RTEXT           "Material_ID",IDC_STATIC,107,69,40,8
+    LTEXT           "Stress Index:",IDC_STATIC,9,29,44,8
+    CONTROL         "DONE",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,97,108,48,
+                    24,0,0x80930001
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,5,
+                    108,48,24,0,0x80930002
+    GROUPBOX        "End I",IDC_STATIC,4,4,99,42
+    RTEXT           "ReleaseID:",IDC_STATIC,15,62,40,8
+    RTEXT           "Stress Index:",IDC_STATIC,10,74,45,8
+    GROUPBOX        "End J",IDC_STATIC,4,49,99,42
+    CONTROL         "Valve",IDD_VALVE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    111,6,28,10,0,0x80930083
+    COMBOBOX        IDD_PIPE_STRESS_ID_I,58,28,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80930146
+    COMBOBOX        IDD_PIPE_RID_I,58,15,40,37,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80930144
+    COMBOBOX        IDD_PIPE_STRESS_ID_J,58,73,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80930147
+    COMBOBOX        IDD_PIPE_RID_J,58,60,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80930145
+    COMBOBOX        IDD_PIPE_MID,107,78,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80930148
+    COMBOBOX        IDD_PIPE_PID,106,51,40,40,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x8093012f
+    EDITTEXT        IDD_PIPE_LINE_ID,106,26,40,12,ES_AUTOHSCROLL | 
+                    ES_READONLY,0,0x8093012d
+    RTEXT           "ReferenceTemp:",IDC_STATIC,28,94,54,9
+    EDITTEXT        IDC_REFTEMP,87,93,32,12,ES_AUTOHSCROLL,0,0x809300aa
+END
+
+IDD_ELP_PLATE DIALOGEX 70, 50, 223, 140
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "2D Finite Element Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "ReleaseID:",IDC_RELHEAD_L,17,13,37,8
+    RTEXT           "Property_ID:",IDC_STATIC,13,59,44,8
+    RTEXT           "Material_ID:",IDC_STATIC,124,61,40,8
+    CONTROL         "DONE",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,128,91,48,
+                    24,0,HIDOK
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,36,
+                    91,48,24,0,HIDCANCEL
+    GROUPBOX        "End I",IDC_STATIC,2,30,107,24
+    RTEXT           "ReleaseID:",IDC_STATIC,123,12,40,8
+    GROUPBOX        "End J",IDC_STATIC,115,31,103,24
+    COMBOBOX        IDD_RID_L,56,11,48,37,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_RID_L
+    COMBOBOX        IDD_RID_J,167,39,48,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_RID_J
+    COMBOBOX        IDD_MID,167,58,48,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_MID
+    COMBOBOX        IDD_PID,60,57,48,40,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP,0,HIDD_PID
+    GROUPBOX        "End L",IDC_GRPHEAD_L,3,3,105,24
+    GROUPBOX        "End K",IDC_STATIC,116,3,102,23
+    COMBOBOX        IDD_RID_I,58,38,48,30,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_RID_I
+    RTEXT           "ReleaseID:",IDC_STATIC,15,41,38,8
+    RTEXT           "ReleaseID:",IDC_STATIC,125,42,37,8
+    COMBOBOX        IDD_RID_K,166,10,48,30,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_RID_K
+    RTEXT           "Thickness:",IDC_STATIC,13,72,42,9
+    RTEXT           "ReferenceTemp:",IDC_STATIC,108,73,54,9
+    EDITTEXT        IDC_THKNESS,60,72,32,12,ES_AUTOHSCROLL,0,HIDC_THKNESS
+    EDITTEXT        IDC_REFTEMP,167,72,32,12,ES_AUTOHSCROLL,0,HIDC_REFTEMP
+    CONTROL         "Incompatible Mode:",IDC_DISP,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,58,123,92,11
+END
+
+IDD_ELP_SOLID DIALOGEX 70, 50, 224, 145
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "3D Finite Element Properties"
+FONT 8, "System"
+BEGIN
+    RTEXT           "ReleaseID:",IDC_STATIC,14,13,37,8
+    RTEXT           "Property_ID:",IDC_STATIC,13,59,44,8
+    RTEXT           "Material_ID:",IDC_STATIC,124,61,40,8
+    GROUPBOX        "End I",IDC_STATIC,2,30,107,24
+    RTEXT           "ReleaseID:",IDC_STATIC,123,10,40,8
+    GROUPBOX        "End J",IDC_STATIC,115,31,103,24
+    COMBOBOX        IDD_RID_L,56,11,48,37,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDD_RID_J,167,39,48,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDD_MID2,167,58,48,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDD_PID2,60,57,48,40,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "End L",IDC_STATIC,3,3,105,24
+    GROUPBOX        "End K",IDC_STATIC,116,3,102,23
+    COMBOBOX        IDD_RID_I,58,38,48,30,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "ReleaseID:",IDC_STATIC,16,38,38,8
+    RTEXT           "ReleaseID:",IDC_STATIC,126,39,37,8
+    COMBOBOX        IDD_RID_K,166,10,48,30,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "DONE",IDOK2,"Button",BS_OWNERDRAW | WS_TABSTOP,129,94,
+                    48,24
+    CONTROL         "Cancel",IDCANCEL2,"Button",BS_OWNERDRAW | WS_TABSTOP,37,
+                    94,48,24
+    RTEXT           "Thickness:",IDC_STATIC,14,75,42,9
+    RTEXT           "ReferenceTemp:",IDC_STATIC,109,76,54,9
+    EDITTEXT        IDC_THKNESS,61,75,32,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_REFTEMP,168,75,32,12,ES_AUTOHSCROLL
+    CONTROL         "Incompatible Mode:",IDC_DISP,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,59,126,92,11
+END
+
+IDD_ELP_ELBOW DIALOGEX 60, 40, 153, 144
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "ELBOW Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "LineID",IDC_LINEHEAD,110,9,28,7
+    RTEXT           "ReleaseID:",IDC_STATIC,9,17,44,8
+    RTEXT           "Property_ID",IDC_STATIC,106,32,41,8
+    RTEXT           "Material_ID",IDC_STATIC,107,60,40,8
+    LTEXT           "Stress Index:",IDC_STATIC,9,29,44,8
+    CONTROL         "DONE",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,97,112,48,
+                    24,0,0x80950001
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,5,
+                    112,48,24,0,0x80950002
+    GROUPBOX        "End I",IDC_STATIC,4,4,99,42
+    RTEXT           "ReleaseID:",IDC_STATIC,15,62,40,8
+    RTEXT           "Stress Index:",IDC_STATIC,10,74,45,8
+    GROUPBOX        "End J",IDC_STATIC,4,49,99,42
+    COMBOBOX        IDD_PIPE_STRESS_ID_I,58,28,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80950146
+    COMBOBOX        IDD_PIPE_RID_I,58,15,40,37,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80950144
+    COMBOBOX        IDD_PIPE_STRESS_ID_J,58,73,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80950147
+    COMBOBOX        IDD_PIPE_RID_J,58,60,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80950145
+    COMBOBOX        IDD_PIPE_MID,107,69,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80950148
+    COMBOBOX        IDD_PIPE_PID,106,42,40,40,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x8095012f
+    EDITTEXT        IDD_PIPE_LINE_ID,106,17,40,12,ES_AUTOHSCROLL | 
+                    ES_READONLY,0,0x8095012d
+    RTEXT           "ReferenceTemp:",IDC_STATIC,31,96,54,9
+    EDITTEXT        IDC_REFTEMP,90,95,32,12,ES_AUTOHSCROLL,0,0x809500aa
+END
+
+IDD_ELP_BEAM DIALOGEX 60, 40, 155, 127
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "BEAM Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "K NodeID:",IDC_STATIC,10,64,37,7
+    COMBOBOX        IDD_BEAM_NID_K,54,63,46,52,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80960196
+    CTEXT           "GroupID",IDC_LINEHEAD,117,4,28,7
+    RTEXT           "ReleaseID:",IDC_STATIC,10,14,44,8
+    RTEXT           "Property_ID",IDC_STATIC,106,27,41,8
+    RTEXT           "Material_ID",IDC_STATIC,107,55,40,8
+    CONTROL         "DONE",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,93,96,48,
+                    24,0,0x80960001
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,6,
+                    96,48,24,0,0x80960002
+    GROUPBOX        "End I",IDC_STATIC,5,2,99,28
+    RTEXT           "ReleaseID:",IDC_STATIC,16,45,40,8
+    GROUPBOX        "End J",IDC_STATIC,5,32,99,29
+    COMBOBOX        IDD_PIPE_RID_I,59,12,40,37,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80960144
+    COMBOBOX        IDD_PIPE_RID_J,59,43,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80960145
+    COMBOBOX        IDD_PIPE_MID,107,64,40,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x80960148
+    COMBOBOX        IDD_PIPE_PID,107,37,40,40,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,0x8096012f
+    EDITTEXT        IDD_PIPE_LINE_ID,107,12,40,12,ES_AUTOHSCROLL | 
+                    ES_READONLY,0,0x8096012d
+    RTEXT           "ReferenceTemp:",IDC_STATIC,30,80,54,9
+    EDITTEXT        IDC_REFTEMP,89,79,32,12,ES_AUTOHSCROLL,0,0x809600aa
+END
+
+IDD_SUPPORT DIALOG DISCARDABLE  130, 100, 128, 115
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "SUPPORTED Node Properties"
+FONT 8, "System"
+BEGIN
+    LTEXT           "ID:",7,69,3,13,8
+    LTEXT           "ST:",10,70,15,10,8
+    LTEXT           "CODE:",30,70,28,28,9
+    LTEXT           "NID_A:",31,70,41,28,8
+    CONTROL         "",18,"Static",SS_BLACKFRAME,4,80,122,32
+    EDITTEXT        IDD_SUPPORT_ID,82,1,25,10
+    EDITTEXT        IDD_SUPPORT_STIFFNESS,80,13,45,11
+    EDITTEXT        IDD_SUPPORT_KODE,99,26,26,11
+    EDITTEXT        IDD_SUPPORT_NID_A,99,38,26,12
+    RADIOBUTTON     "TSPRING",IDD_SUPPORT_TSPRING,12,84,53,12,WS_TABSTOP
+    RADIOBUTTON     "RSPRING",IDD_SUPPORT_RSPRING,12,96,50,12,WS_TABSTOP
+    RADIOBUTTON     "TSNUBBER",IDD_SUPPORT_TSNUBBER,68,84,50,12,WS_TABSTOP
+    RADIOBUTTON     "RSNUBBER",IDD_SUPPORT_RSNUBBER,68,96,51,12,WS_TABSTOP
+    LISTBOX         IDD_LIST,27,3,40,73,LBS_SORT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDD_OK,2,2,24,14
+    PUSHBUTTON      "ESC",IDD_ESC,2,18,24,14
+    PUSHBUTTON      "ADD",IDD_ADD,2,34,24,14
+    PUSHBUTTON      "DEL",IDD_DEL,2,48,24,14
+    PUSHBUTTON      "EDIT",IDD_EDIT,2,62,24,14
+END
+
+IDD_ELP_TRUSS DIALOGEX 0, 0, 154, 103
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "TRUSS Properties"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "GroupID",IDC_LINEHEAD,89,8,37,9
+    CTEXT           "Property_ID",IDC_STATIC,24,8,55,10
+    CTEXT           "Material_ID",IDC_STATIC,25,39,53,10
+    CONTROL         "DONE",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,91,71,52,
+                    26,0,HIDOK
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,5,
+                    70,55,26,0,HIDCANCEL
+    COMBOBOX        IDD_PIPE_MID,25,50,53,38,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_PIPE_MID
+    COMBOBOX        IDD_PIPE_PID,23,17,53,40,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_PIPE_PID
+    EDITTEXT        IDD_PIPE_LINE_ID,84,17,53,15,ES_AUTOHSCROLL | 
+                    ES_READONLY,0,HIDD_PIPE_LINE_ID
+    RTEXT           "ReferenceTemp:",IDC_STATIC,79,39,59,9
+    EDITTEXT        IDC_REFTEMP,87,49,43,15,ES_AUTOHSCROLL,0,HIDC_REFTEMP
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "edlgrsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICONPIPE            ICON    DISCARDABLE     "d:\\drgraf4_0\\applic\\RES\\ICO_PIPE.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ELP_PLATE, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 138
+    END
+
+    IDD_ELP_ELBOW, DIALOG
+    BEGIN
+        BOTTOMMARGIN, 140
+    END
+
+    IDD_ELP_BEAM, DIALOG
+    BEGIN
+        RIGHTMARGIN, 154
+        BOTTOMMARGIN, 125
+    END
+
+    IDD_ELP_TRUSS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 147
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 96
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+

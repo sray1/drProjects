@@ -1,0 +1,104 @@
+ // ELMouse.h : header file
+//
+#ifndef _NODEDIT_H 
+#define _NODEDIT_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+#include "mouse.h"
+/////////////////////
+#include "DrNode.h" 	
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class CNodEdit : public CMouse
+{
+public:
+
+	CNodEdit();
+//////////////////////////////////////
+	DECLARE_SERIAL(CNodEdit)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+
+	///////////////////////////////////////////////////////////////////////////
+	UINT				ReSetToolID_NOD(UINT CntlID,UINT IGenID, UINT OperID);
+	/////////////////////
+	void 				OnEBoxMouseMove_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 				OnEBoxLButtonDown_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 				OnEBoxRButtonDown_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 				OnEBoxLButtonUp_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 				OnEBoxRButtonUp_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	///////////////////////////////////////////////////// NODE
+	int					ShowNodeToEdit(CDrNode* pDrNode);
+
+	
+		
+protected:
+
+
+	void			SizeRectDlgEd(CRect& BoxRect);
+	///////////////////////////////////////////////////////// Node
+	void			ElementLeftDown_NOD();
+	void			ElementLeftUp_NOD(CPoint point);
+	int				LeftUp_NODE(CPoint point,BOOL bCNode);
+	////////////////////////////////////////////////////////////////// Curve
+	int				ReGen_EditedCurveControls(CDrCurve* pEditedCurve);
+	////////////////////////////////////////////////////////////////// Patch
+	int				ReGen_EditedPatchControls(CDrPatch* pEditedPatch);
+	int				SetUp_EditedPatchControls(CDrPatch* pEditedPatch);
+	int				ReGen_Controls_EXTRUDE(CDrPatch* pEditedPatch,CString* pID);
+	int				ReGen_Controls_ROTATE(CDrPatch* pEditedPatch,CString* pID);
+	int				ReGen_Controls_LOFT2(CDrPatch* pEditedPatch,CString* pID);
+	int				ReGen_Controls_DUCT(CDrPatch* pEditedPatch,CString* pID);
+	int				ReGen_Controls_SWEEP(CDrPatch* pEditedPatch,CString* pID);
+	int				ReGen_Controls_COONS(CDrPatch* pEditedPatch,CString* pID);
+
+protected:  
+// Attributes
+
+
+	///////////////////////////////////////////////////
+	GENERATE	m_Gener;		// forward/reverse/auto					
+	///////////////////////////////////////////
+	int			m_nActiveObject;
+	int			m_nActiveTool;
+	/////////////////////////////////////////// Node 
+	CDrNode*	m_pCurrentNode;
+
+
+
+//Operations
+public:
+
+	~CNodEdit();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CNodEdit)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

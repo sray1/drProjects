@@ -1,0 +1,9 @@
+; drgraf_D.def : Declares the module parameters for the application-DEBUG Version.
+
+NAME         DRGRAF_D32
+DESCRIPTION  'DRGRAF_D Windows Application Win32/windows95'
+EXETYPE      WINDOWS
+
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+

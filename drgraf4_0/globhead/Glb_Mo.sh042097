@@ -1,0 +1,112 @@
+#ifndef _MOGLOBAL_H
+#define _MOGLOBAL_H
+///////////////////////////////////////////////////////////// GLOBALS
+#include "Def_IGen.h"   // Operations
+#include "Def_Mo.h"   // Operations
+////////////////////////////////////////////////////////
+typedef struct motypes 
+	{
+		char*   	ObjName;  	// internal name
+		int			num;   		// number associated with element
+		int			type;  		// MO_TOOL 
+								// MO_NONE
+								// MO_OBJ_0D
+								// MO_OBJ_1D
+								// MO_OBJ_2D 
+								// MO_OBJ_3D
+	}MOTYPES;
+/////////////////////////////////////////////////////////////////	
+MOTYPES	MoTypes[] =
+	{ 
+		"",					NONE,		MO_NONE,		
+		"NODE",				NODE,		MO_OBJ_0D,
+		"Control NODE",		CNODE,		MO_OBJ_0D,
+		"Mesh NODE",		MNODE,		MO_OBJ_0D,
+		///////////////////////////////////////////////////////
+		"CURVE",			CURVE,		MO_OBJ_1D,
+		"CIRCULAR Curve",	C_CIRCLE,	MO_OBJ_1D,
+		"ELLIPTIC Curve",	C_ELLIPSE,	MO_OBJ_1D,
+		"PARABOLIC Curve", 	C_PARABOLA,	MO_OBJ_1D,
+		"LINEAR Curve",		C_LINEAR,	MO_OBJ_1D,
+		"QUADRATIC Curve",  C_QUADRATIC,MO_OBJ_1D,
+		"CUBIC Curve",		C_CUBIC,	MO_OBJ_1D,
+		"HERMITE Curve",  	C_HERMITE, 	MO_OBJ_1D,
+		"BEZIER Curve",		C_BEZIER,	MO_OBJ_1D,
+		"B-SPLINE Curve",	C_BSPLINE,	MO_OBJ_1D,
+		"NURB Curve",		C_NURB,		MO_OBJ_1D,
+		"OPERATION Curve",	C_OPER,		MO_TOOL,
+		"EDIT Curve",		C_EDIT,		MO_TOOL,
+		"MOVE Curve",		C_MOVE,		MO_TOOL, 
+		"POST Curve",		C_POST,		MO_TOOL, 
+		"UNPOST Curve",		C_UNPOST,	MO_TOOL, 
+		"DELETE Curve",		C_DELETE,	MO_TOOL, 
+		"STITCH Curves",	C_STITCH,	MO_TOOL, 
+		"SPAWN Curve",		C_SPAWN,	MO_TOOL, 
+		"ROTATE Curve",		C_ROTATE,	MO_TOOL, 
+		"TRANSLATE Curve",	C_XLATE,	MO_TOOL, 
+		"SCALE Curve",		C_SCALE,	MO_TOOL,
+		"Curve PROFILE",	C_PROFILE,	MO_TOOL,
+		///////////////////////////////////////////////////////
+		"PATCH",			PATCH,		MO_OBJ_2D,
+		"TENSOR Patch",		P_TENSOR,	MO_OBJ_2D,
+		"GORDONS Patch",	P_GORDONS,	MO_OBJ_2D,
+		"COONS Patch",		P_COONS,	MO_OBJ_2D,
+		"ROTATED Patch",	P_ROTATE,	MO_OBJ_2D,
+		"LOFTED Patch",   	P_LOFT,   	MO_OBJ_2D,
+		"EXTRUDED Patch",	P_EXTRUDE,	MO_OBJ_2D,
+		"DUCTED Patch",   	P_DUCT,   	MO_OBJ_2D,
+		"SWEPT Patch",  	P_SWEEP,  	MO_OBJ_2D,
+		"FLAT Patch",		P_FLATPLATE,MO_OBJ_2D,
+		"LINEAR Patch",		P_LINEAR,	MO_OBJ_2D,
+		"QUADRATIC Patch",  P_QUADRATIC,MO_OBJ_2D,
+		"CUBIC Patch",		P_CUBIC,	MO_OBJ_2D,
+		"BEZIER Patch",		P_BEZIER,	MO_OBJ_2D,
+		"B-SPLINE Patch",	P_BSPLINE,	MO_OBJ_2D,
+		"NURB Patch",		P_NURB,		MO_OBJ_2D,
+		"OPERATION Patch",	P_OPER,		MO_TOOL,
+		"EDIT Patch",		P_EDIT,		MO_TOOL,
+		"MOVE Patch",		P_MOVE,		MO_TOOL,
+		"POST Patch",		P_POST,		MO_TOOL,
+		"UNPOST Patch",		P_UNPOST,	MO_TOOL, 
+		"DELETE Patch",		P_DELETE,	MO_TOOL, 
+		"STITCH Patches",	P_STITCH,	MO_TOOL, 
+		"SPAWN Patch",		P_SPAWN,	MO_TOOL, 
+		"ROTATE Patch",		P_ROTATE_B,	MO_TOOL,
+		"TRANSLATE Patch",	P_XLATE,	MO_TOOL, 
+		"SCALE Patch",		P_SCALE,	MO_TOOL, 
+		"SHEAR Patch",		P_SHEAR,	MO_TOOL, 
+		"Patch PROFILE",	C_PROFILE,	MO_TOOL, 
+		/////////////////////////////////////////////////////// solids
+		"SOLID",			SOLID,		MO_OBJ_3D,
+		"TENSOR Solid",		S_TENSOR,	MO_OBJ_3D,
+		"GORDONS Solid",	S_GORDONS,	MO_OBJ_3D,
+		"COONS Solid",		S_COONS,	MO_OBJ_3D,
+		"ROTATED Solid",	S_ROTATE,	MO_OBJ_3D,
+		"LOFTED Solid",   	S_LOFT,   	MO_OBJ_3D,
+		"EXTRUDED Solid",	S_EXTRUDE,	MO_OBJ_3D,
+		"DUCTED Solid",   	S_DUCT,   	MO_OBJ_3D,
+		"SWEPT Solid",  	S_SWEEP,  	MO_OBJ_3D,
+		"FLAT Solid",		S_FLATPLATE,MO_OBJ_3D,
+		"LINEAR Solid",		S_LINEAR,	MO_OBJ_3D,
+		"QUADRATIC Solid",  S_QUADRATIC,MO_OBJ_3D,
+		"CUBIC Solid",		S_CUBIC,	MO_OBJ_3D,
+		"BEZIER Solid",		S_BEZIER,	MO_OBJ_3D,
+		"B-SPLINE Solid",	S_BSPLINE,	MO_OBJ_3D,
+		"NURB Solid",		S_NURB,		MO_OBJ_3D,
+		"OPERATION Solid",	S_OPER,		MO_TOOL,
+		"EDIT Solid",		S_EDIT,		MO_TOOL,
+		"MOVE Solid",		S_MOVE,		MO_TOOL, 
+		"POST Solid",		S_POST,		MO_TOOL, 
+		"UNPOST Solid",		S_UNPOST,	MO_TOOL, 
+		"DELETE Solid",		S_DELETE,	MO_TOOL,
+		"STITCH Solids",	S_STITCH,	MO_TOOL, 
+		"SPAWN Solid",		S_SPAWN,	MO_TOOL,
+		"ROTATE Solid",		S_ROTATE_B,	MO_TOOL,
+		"TRANSLATE Solid",	S_XLATE,	MO_TOOL, 
+		"SCALE Solid",		S_SCALE,	MO_TOOL,
+		"SHEAR Solid",		S_SHEAR,	MO_TOOL 
+    	///////////////////////////////////////////////////////
+};
+	int	nMax_MousTypes = (sizeof (MoTypes)/ sizeof(MoTypes[0]) );  		
+///////////////////////////////////////////////
+#endif

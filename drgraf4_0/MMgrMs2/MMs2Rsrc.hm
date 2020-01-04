@@ -1,0 +1,12 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by MMs2Mgr.rc
+//
+#define HIDCANCEL                       0xffff0002    // "IDD_2_PROFILE_SI"
+#define HIDC_CID                        0x80e601bc    // IDD_P_SPAWN
+#define HIDC_CID_PROF                   0xffff00ce    // "IDD_2_PROFILE_SI"
+#define HIDC_SPNID                      0x80e60169    // IDD_P_SPAWN
+#define HIDC_SYMM                       0x80e60168    // IDD_P_SPAWN
+#define HIDC_XFORM                      0x80e60167    // IDD_P_SPAWN
+#define HIDD_LIST                       0xffff0090    // "IDD_2_PROFILE_SI"
+#define HIDD_POOLLIST                   0xffff0091    // "IDD_2_PROFILE_SI"
+#define HIDOK                           0xffff0001    // "IDD_2_PROFILE_SI"

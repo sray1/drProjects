@@ -1,0 +1,17 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by Elem_dlg.rc
+//
+#define HIDC_REFTEMP                    0x80ee00aa
+#define HIDC_THKNESS                    0x80ed00a9
+#define HIDC_UPDATE                     0x80ee038a
+#define HIDD_BEAM_NID_K                 0x80ec0196
+#define HIDD_CANCEL                     0x80ee0002
+#define HIDD_MID                        0x80ee00a6
+#define HIDD_PID                        0x80ee00a5
+#define HIDD_PIPE_STRESS_ID_I           0x80ec0146
+#define HIDD_PIPE_STRESS_ID_J           0x80ec0147
+#define HIDD_RID_I                      0x80ec0144
+#define HIDD_RID_J                      0x80ec0145
+#define HIDD_RID_K                      0x80ed014a
+#define HIDD_RID_L                      0x80ed00a2
+#define HIDD_VALVE                      0x80ec0083

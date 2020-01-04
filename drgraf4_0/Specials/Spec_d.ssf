@@ -1,0 +1,97 @@
+; Spec_D.def -- for CSpecial stuff --  DEBUG version
+
+LIBRARY	Spec_D32
+DESCRIPTION  'Specials DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitSpecDLL												@2 NONAME
+
+    
+
+; CDListMgr
+;	; Constructor and Destructor
+
+
+
+
+; CDrObject
+;	; Constructor and Destructor
+
+    
+
+
+; CBooleans
+;	; Constructor and Destructor
+ 	                                    
+
+
+; CDataWindow
+;	; Constructor and Destructor
+
+
+
+; CDrFont
+;	; Constructor and Destructor
+
+
+; CDrPen
+;	; Constructor and Destructor
+    
+    
+;  CHitNet
+;	; Constructor and Destructor
+
+
+; CLayer
+;	; Constructor and Destructor
+
+
+
+
+; CPatchMnu
+;	; Constructor and Destructor
+
+
+
+; CObj3DMnu
+;	; Constructor and Destructor
+
+
+
+; CMapFactor
+;	; Constructor and Destructor
+
+
+; CPrecision
+	; Constructor and Destructor
+
+
+
+; CScaleFactor
+;	; Constructor and Destructor
+
+
+
+; CUnit
+;	; Constructor and Destructor
+
+
+	
+; CClock
+;	; Constructor and Destructor
+;	??0CClock@@REC@XZ
+; 	??1CClock@@VEC@XZ 
+ 	  
+;	?GetRuntimeClass@CClock@@VFCPEUCRuntimeClass@@XZ
+;	?GetTimeDate@CClock@@RECXPEVCString@@0@Z
+;	?SetInternational@CClock@@RECXXZ 
+	
+;    ?classCClock@CClock@@2UCRuntimeClass@@A
+ 	                                 
+  

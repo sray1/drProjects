@@ -1,0 +1,110 @@
+; MeshObj.def : Declares the module parameters for the DLL.
+
+LIBRARY	Mesh_D32
+DESCRIPTION  'Mesh DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMeshDLL												@2 NONAME
+
+
+
+
+
+; CDrMesh1D
+	; Constructor and Destructor
+		??0CDrMesh1D@@QAE@XZ
+		??1CDrMesh1D@@UAE@XZ 
+
+
+ 
+		?classCDrMesh1D@CDrMesh1D@@2UCRuntimeClass@@A
+		?Serialize@CDrMesh1D@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CDrMesh2D
+	; Constructor and Destructor
+		??0CDrMesh2D@@QAE@XZ
+		??1CDrMesh2D@@UAE@XZ 
+
+
+ 
+		?classCDrMesh2D@CDrMesh2D@@2UCRuntimeClass@@A
+		?Serialize@CDrMesh2D@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CDrMesh3D
+	; Constructor and Destructor
+		??0CDrMesh3D@@QAE@XZ
+		??1CDrMesh3D@@UAE@XZ 
+
+
+ 
+		?classCDrMesh3D@CDrMesh3D@@2UCRuntimeClass@@A
+		?Serialize@CDrMesh3D@@UAEXAAVCArchive@@@Z 
+
+
+
+
+
+; CDrFE3D
+	; Constructor and Destructor
+		??0CDrFE3D@@QAE@XZ
+		??1CDrFE3D@@UAE@XZ 
+
+
+ 
+		?classCDrFE3D@CDrFE3D@@2UCRuntimeClass@@A
+		?Serialize@CDrFE3D@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CDrFE2D
+	; Constructor and Destructor
+		??0CDrFE2D@@QAE@XZ
+		??1CDrFE2D@@UAE@XZ 
+
+
+ 
+		?classCDrFE2D@CDrFE2D@@2UCRuntimeClass@@A
+		?Serialize@CDrFE2D@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CDrFE1D
+	; Constructor and Destructor
+		??0CDrFE1D@@QAE@XZ
+		??1CDrFE1D@@UAE@XZ 
+
+
+ 
+		?classCDrFE1D@CDrFE1D@@2UCRuntimeClass@@A
+		?Serialize@CDrFE1D@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CDrFE0D
+	; Constructor and Destructor
+		??0CDrFE0D@@QAE@XZ
+		??1CDrFE0D@@UAE@XZ 
+
+
+ 
+		?classCDrFE0D@CDrFE0D@@2UCRuntimeClass@@A
+		?Serialize@CDrFE0D@@UAEXAAVCArchive@@@Z 
+
+
+
+
+

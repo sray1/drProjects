@@ -1,0 +1,41 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by MNodMgr.rc
+//
+#define HIDCANCEL                       0x80680002    // IDD_ELP_NODE
+#define HIDC_ADVANCED                   0x806603f7    // IDD_NODE_EDIT_SIMPLE
+#define HIDC_AXIS_X                     0x806803fc    // IDD_CRO_IN
+#define HIDC_AXIS_Y                     0x806803fd    // IDD_CRO_IN
+#define HIDC_AXIS_Z                     0x806803fe    // IDD_CRO_IN
+#define HIDC_CNODE_FROM                 0x81a3019d    // IDD_ELP_NODE
+#define HIDC_CNODE_TO                   0x81a3019e    // IDD_ELP_NODE
+#define HIDC_COORD                      0x81a30190    // IDD_ELP_NODE
+#define HIDC_COORD_INPUT                0x806801df    // IDD_CRO_IN
+#define HIDC_COORD_X                    0x806603e8    // IDD_NODE_EDIT_SIMPLE
+#define HIDC_COORD_Y                    0x80660191    // IDD_NODE_EDIT_SIMPLE
+#define HIDC_COORD_Z                    0x80660192    // IDD_NODE_EDIT_SIMPLE
+#define HIDC_DIRECT                     0x806703f8    // IDD_NOD_IN
+#define HIDC_DIRECTION                  0x81a30191    // IDD_ELP_NODE
+#define HIDC_NEGATIVE                   0x80680400    // IDD_CRO_IN
+#define HIDC_OBJID                      0x806803f1    // IDD_CRO_IN
+#define HIDC_OJECTHEAD                  0x806803f0    // IDD_CRO_IN
+#define HIDC_ROT_X                      0x8068006c    // IDD_CRO_IN
+#define HIDC_ROT_Y                      0x8068006d    // IDD_CRO_IN
+#define HIDC_ROT_Z                      0x8068006f    // IDD_CRO_IN
+#define HIDC_TRANHEAD                   0x806803ee    // IDD_CRO_IN
+#define HIDC_TRANPT                     0x806800f6    // IDD_CRO_IN
+#define HIDC_UPDATE                     0x8067038a    // IDD_NOD_IN
+#define HIDD_ADD                        0x81a3008d    // IDD_ELP_NODE
+#define HIDD_CANCEL                     0x80680002    // IDD_CRO_IN
+#define HIDD_DEL                        0x81a3008e    // IDD_ELP_NODE
+#define HIDD_EDIT                       0x81a30092    // IDD_ELP_NODE
+#define HIDD_LENGTH                     0x81a3019f    // IDD_ELP_NODE
+#define HIDD_LIST                       0x81a30090    // IDD_ELP_NODE
+#define HIDD_NODE_DX                    0x81a30194    // IDD_ELP_NODE
+#define HIDD_NODE_DY                    0x81a30196    // IDD_ELP_NODE
+#define HIDD_NODE_DZ                    0x81a30198    // IDD_ELP_NODE
+#define HIDD_NODE_ID                    0x81a30192    // IDD_ELP_NODE
+#define HIDD_NODE_NID_R                 0x81a30199    // IDD_ELP_NODE
+#define HIDD_NODE_X2                    0x81a3019a    // IDD_ELP_NODE
+#define HIDD_NODE_Y2                    0x81a3019b    // IDD_ELP_NODE
+#define HIDD_NODE_Z2                    0x81a3019c    // IDD_ELP_NODE
+#define HIDOK                           0x81a30001    // IDD_ELP_NODE

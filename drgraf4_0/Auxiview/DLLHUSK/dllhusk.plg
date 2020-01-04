@@ -1,0 +1,84 @@
+--------------------Configuration: TestDll1 - Win32 Debug--------------------
+Begining build with project "C:\Auxiview\DLLHUSK\TestDll1.dsp", at root.
+Active configuration is Win32 (x86) Dynamic-Link Library (based on Win32 (x86) Dynamic-Link Library)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W3 /Gm /GX /Zi /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXEXT" /D "_MBCS" /Fo".\Debug/" /Fd".\Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo".\Debug/testdll1.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o".\Debug/TestDll1.bsc" "
+			"COFF Linker for 80x86" with flags "/nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/TestDll1.pdb" /debug /machine:I386 /out:".\Debug/TestDll1.dll" /implib:".\Debug/TestDll1.lib" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating command line "rc.exe /l 0x409 /fo".\Debug/testdll1.res" /d "_DEBUG" /d "_AFXDLL" "C:\Auxiview\DLLHUSK\testdll1.rc"" 
+Creating temp file "C:\WINDOWS\TEMP\RSP30A0.TMP" with contents </nologo /MDd /W3 /Gm /GX /Zi /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXEXT" /D "_MBCS" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\Auxiview\DLLHUSK\testdll1.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP30A0.TMP" 
+Creating command line "link.exe /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/TestDll1.pdb" /debug /machine:I386 /out:".\Debug/TestDll1.dll" /implib:".\Debug/TestDll1.lib"  .\Debug\testdll1.obj .\Debug\testdll1.res" 
+Compiling resources...
+Compiling...
+testdll1.cpp
+Linking...
+   Creating library .\Debug/TestDll1.lib and object .\Debug/TestDll1.exp
+--------------------Configuration: TestDll2 - Win32 Debug--------------------
+Begining build with project "C:\Auxiview\DLLHUSK\TestDll2.dsp", at root.
+Active configuration is Win32 (x86) Dynamic-Link Library (based on Win32 (x86) Dynamic-Link Library)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W3 /Gm /GX /Zi /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXEXT" /D "_MBCS" /Fo".\Debug/" /Fd".\Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo".\Debug/testdll2.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o".\Debug/TestDll2.bsc" "
+			"COFF Linker for 80x86" with flags "/nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/TestDll2.pdb" /debug /machine:I386 /out:".\Debug/TestDll2.dll" /implib:".\Debug/TestDll2.lib" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating command line "rc.exe /l 0x409 /fo".\Debug/testdll2.res" /d "_DEBUG" /d "_AFXDLL" "C:\Auxiview\DLLHUSK\testdll2.rc"" 
+Creating temp file "C:\WINDOWS\TEMP\RSP3303.TMP" with contents </nologo /MDd /W3 /Gm /GX /Zi /Od /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_AFXEXT" /D "_MBCS" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\Auxiview\DLLHUSK\testdll2.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP3303.TMP" 
+Creating command line "link.exe /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/TestDll2.pdb" /debug /machine:I386 /out:".\Debug/TestDll2.dll" /implib:".\Debug/TestDll2.lib"  .\Debug\testdll2.obj .\Debug\testdll2.res" 
+Compiling resources...
+Compiling...
+testdll2.cpp
+Linking...
+   Creating library .\Debug/TestDll2.lib and object .\Debug/TestDll2.exp
+--------------------Configuration: DLLHusk - Win32 Debug--------------------
+Begining build with project "C:\Auxiview\DLLHUSK\dllhusk.dsp", at root.
+Active configuration is Win32 (x86) Application (based on Win32 (x86) Application)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fo".\Debug/" /Fd".\Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo".\Debug/dllhusk.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o".\Debug/dllhusk.bsc" "
+			"COFF Linker for 80x86" with flags "Debug\TestDll1.lib Debug\TestDll2.lib /nologo /subsystem:windows /incremental:yes /pdb:".\Debug/dllhusk.pdb" /debug /machine:I386 /out:".\Debug/dllhusk.exe" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating command line "rc.exe /l 0x409 /fo".\Debug/dllhusk.res" /d "_DEBUG" /d "_AFXDLL" "C:\Auxiview\DLLHUSK\dllhusk.rc"" 
+Creating temp file "C:\WINDOWS\TEMP\RSP4152.TMP" with contents </nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\Auxiview\DLLHUSK\dllhusk.cpp"
+"C:\Auxiview\DLLHUSK\mainfrm.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP4152.TMP" 
+Creating temp file "C:\WINDOWS\TEMP\RSP4153.TMP" with contents <Debug\TestDll1.lib Debug\TestDll2.lib /nologo /subsystem:windows /incremental:yes /pdb:".\Debug/dllhusk.pdb" /debug /machine:I386 /out:".\Debug/dllhusk.exe" 
+.\Debug\dllhusk.obj
+.\Debug\mainfrm.obj
+.\Debug\dllhusk.res
+.\Debug\TestDll1.lib
+.\Debug\TestDll2.lib>
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP4153.TMP" 
+Compiling resources...
+Compiling...
+dllhusk.cpp
+mainfrm.cpp
+Generating Code...
+Linking...
+
+
+
+dllhusk.exe - 0 error(s), 0 warning(s)

@@ -1,0 +1,71 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: MMgrMs0 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MMs0Mgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MMgrMs0\MMs0Mgr.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP5F.tmp" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs0.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs0\dlg_enoA.cpp"
+"C:\drgraf4_0\MMgrMs0\dlg_ENod.cpp"
+"C:\drgraf4_0\MMgrMs0\Mi_Gang0.cpp"
+"C:\drgraf4_0\MMgrMs0\MMs0dll.cpp"
+"C:\drgraf4_0\MMgrMs0\MMs0Mgr.cpp"
+"C:\drgraf4_0\MMgrMs0\Po_FE0D.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP5F.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP60.tmp" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs0_d32.pdb" /map:".\Debug/MMs0_d32.map" /debug /machine:I386 /def:".\MMs0Mgr.def" /out:"c:\drgraf4_0\applic\Debug\MMs0_d32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs0_d32.lib" 
+.\Debug\dlg_enoA.obj
+.\Debug\dlg_ENod.obj
+.\Debug\Mi_Gang0.obj
+.\Debug\MMs0dll.obj
+.\Debug\MMs0Mgr.obj
+.\Debug\Po_FE0D.obj
+.\Debug\MMs0Mgr.res
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP60.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+dlg_enoA.cpp
+c:\drgraf4_0\mmgrms0\dlg_enoa.cpp(166) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms0\dlg_enoa.cpp(610) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms0\dlg_enoa.cpp(805) : warning C4189: 'pWndCtrl' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms0\dlg_enoa.cpp(933) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+dlg_ENod.cpp
+C:\drgraf4_0\MMgrMs0\dlg_ENod.cpp(108) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs0\dlg_ENod.cpp(146) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs0\dlg_ENod.cpp(308) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+Mi_Gang0.cpp
+C:\drgraf4_0\MMgrMs0\Mi_Gang0.cpp(118) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs0\Mi_Gang0.cpp(333) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+MMs0dll.cpp
+C:\drgraf4_0\MMgrMs0\Mi_Gang0.cpp(126) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs0\MMs0dll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MMs0Mgr.cpp
+Po_FE0D.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(103) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(108) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(113) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(119) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(124) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(129) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(141) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(148) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(155) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(162) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+Error executing cl.exe.
+
+
+
+<h3>Results</h3>
+CreM_D32.dll - 10 error(s), 11 warning(s)
+</pre>
+</body>
+</html>

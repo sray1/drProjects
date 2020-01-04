@@ -1,0 +1,834 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "MSolRsrc.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "MSolRsrc.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "CommRsrc.h"
+#include "MNodRsrc.h"
+#include "MCurRsrc.h"
+#include "MPatRsrc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IMAGE1DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1U.BMP"
+IDB_CURVEBIT            BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\CURVEBIT.BMP"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_LOCALMATRIX DIALOG DISCARDABLE  90, 100, 216, 155
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Local Transformation Matrix"
+FONT 6, "System"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,175,125,32,
+                    20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,10,
+                    125,32,20
+    RTEXT           "Rotate",IDC_STATIC,16,68,24,8
+    EDITTEXT        IDC_ROT_X,48,64,32,12
+    EDITTEXT        IDC_ROT_Z,120,64,32,12
+    EDITTEXT        IDC_ROT_Y,84,64,32,12
+    RTEXT           "Translate",IDC_STATIC,8,52,32,8
+    EDITTEXT        IDC_TRAN_X,48,48,32,12
+    EDITTEXT        IDC_TRAN_Z,120,48,32,12
+    EDITTEXT        IDC_TRAN_Y,84,48,32,12
+    RTEXT           "Scale",IDC_STATIC,20,84,20,8
+    EDITTEXT        IDC_SCALE_X,48,80,32,12
+    EDITTEXT        IDC_SCALE_Z,120,80,32,12
+    EDITTEXT        IDC_SCALE_Y,84,80,32,12
+    CTEXT           "X",IDC_STATIC,60,36,12,8
+    CTEXT           "Y",IDC_STATIC,96,36,12,8
+    CTEXT           "Z",IDC_STATIC,132,36,12,8
+    CTEXT           "Translate To ",IDC_STATIC,156,36,52,8
+    COMBOBOX        IDC_ROTPT,96,12,52,64,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    ICON            IDI_ICONPIPE,IDC_STATIC,16,8,18,20
+    COMBOBOX        IDC_TRANPT,160,48,52,72,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CTEXT           "Center About ",IDC_STATIC,40,16,52,8
+    RTEXT           "Shear",IDC_STATIC,20,99,20,8
+    EDITTEXT        IDC_SHEAR_X,48,95,32,12
+    EDITTEXT        IDC_SHEAR_Z,120,95,32,12
+    EDITTEXT        IDC_SHEAR_Y,84,95,32,12
+END
+
+IDD_SOL_IN_COONS DIALOGEX 0, 0, 236, 39
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Bi-linear Coons Solid"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "Solid ID",IDC_STATIC,12,0,31,8
+    LTEXT           "Patch ID",IDC_CIDHEAD,74,0,33,8
+    COMBOBOX        IDC_SID,1,8,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_PID,68,8,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "Update",IDC_UPDATE,200,23,30,15,0,0,HIDC_UPDATE
+    COMBOBOX        IDC_ORIENT_P,61,24,67,79,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,39,26,19,8
+    PUSHBUTTON      "Cancel",IDD_CANCEL,200,5,30,15,0,0,HIDD_CANCEL
+    CONTROL         "BndryCurves",IDC_GENBCURVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,131,6,54,8
+    CONTROL         "BndryPatches",IDC_GENBPATCH,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,131,20,58,8
+END
+
+IDD_SOL_IN_XTRUDE DIALOGEX 0, 0, 339, 45
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Solid by Extrusion"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "Solid ID",IDC_STATIC,3,2,40,8
+    LTEXT           "Patch ID",IDC_PIDHEAD,69,1,48,8
+    LTEXT           "Elems",IDC_STATIC,192,1,20,8,0,0,HIDC_STATIC
+    EDITTEXT        IDC_ELEMS,191,9,18,14,ES_AUTOHSCROLL,0,HIDC_ELEMS
+    RTEXT           "Ratio ",IDC_STATIC,209,28,20,8
+    EDITTEXT        IDC_RATIO,191,24,18,14,ES_AUTOHSCROLL,0,HIDC_RATIO
+    COMBOBOX        IDC_SID,1,10,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_PID,63,10,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    RTEXT           "Length",IDC_LENHEAD,232,30,25,9
+    EDITTEXT        IDC_LEN,259,26,35,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_NID,130,10,60,75,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Axis Node From",IDC_NIDHEAD,130,2,56,8
+    COMBOBOX        IDC_ORIENT_P,63,25,60,46,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,123,27,19,8
+    EDITTEXT        IDC_COORD,156,24,34,14,ES_AUTOHSCROLL
+    RTEXT           "Z:",IDC_OTHER,146,27,9,8
+    CONTROL         "BndryPatches",IDC_GENBPATCH,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,25,54,8
+    PUSHBUTTON      "Cancel",IDD_CANCEL,306,9,30,11,0,0,HIDD_CANCEL
+    PUSHBUTTON      "Update",IDC_UPDATE,306,23,30,11,0,0,HIDC_UPDATE
+    LTEXT           "Extrusion\nType",IDC_STATIC,233,6,33,16
+    CONTROL         "1",IDC_EXTRU_1,"Button",BS_AUTORADIOBUTTON,267,6,20,10
+    CONTROL         "2 ...",IDC_EXTRU_2,"Button",BS_AUTORADIOBUTTON,267,16,
+                    29,10
+    GROUPBOX        "",IDC_STATIC,229,0,72,40
+    CONTROL         "BndryCurves",IDC_GENBCURVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,4,35,54,8
+END
+
+IDD_SOL_IN_REVOLV DIALOGEX 0, 0, 394, 46
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Solid of Revolution"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "Solid ID",IDC_STATIC,18,2,25,8
+    LTEXT           "Patch ID",IDC_PIDHEAD,69,1,41,8
+    LTEXT           "El/Seg",IDC_STATIC,192,1,23,8,0,0,HIDC_STATIC
+    EDITTEXT        IDC_ELEMS,191,9,18,14,ES_AUTOHSCROLL,0,HIDC_ELEMS
+    RTEXT           "Ratio ",IDC_STATIC,209,28,20,8
+    EDITTEXT        IDC_RATIO,191,24,18,14,ES_AUTOHSCROLL,0,HIDC_RATIO
+    COMBOBOX        IDC_SID,1,10,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_PID,63,10,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_NID,130,10,60,75,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Axis Node From",IDC_NIDHEAD,130,2,56,8
+    COMBOBOX        IDC_ORIENT_P,63,25,60,46,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,123,27,19,8
+    CONTROL         "Closed",IDC_CLOSED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,230,34,37,8
+    EDITTEXT        IDC_COORD,156,24,34,14,ES_AUTOHSCROLL
+    RTEXT           "Z:",IDC_OTHER,146,27,9,8
+    PUSHBUTTON      "Update",IDC_UPDATE,361,20,30,11,0,0,HIDC_UPDATE
+    LTEXT           "Rot.Angle",IDC_HEAD_ANGORRAD,257,20,32,9
+    EDITTEXT        IDC_ANG_END,229,19,23,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Cancel",IDD_CANCEL,361,7,30,11,0,0,HIDD_CANCEL
+    CONTROL         "X",IDC_AXIS_X,"Button",BS_AUTORADIOBUTTON,295,17,21,10,
+                    0,HIDC_AXIS_X
+    CONTROL         "Y",IDC_AXIS_Y,"Button",BS_AUTORADIOBUTTON,317,17,17,10,
+                    0,HIDC_AXIS_Y
+    CONTROL         "Z",IDC_AXIS_Z,"Button",BS_AUTORADIOBUTTON,335,17,17,10,
+                    0,HIDC_AXIS_Z
+    GROUPBOX        "",IDC_STATIC,291,0,65,37
+    CONTROL         "Axis",IDC_AXIS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    305,7,29,10,0,HIDC_AXIS
+    CONTROL         "Negative",IDC_NEGATIVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,305,25,45,10,0,HIDC_NEGATIVE
+    EDITTEXT        IDC_TOTELEMS,229,3,15,12,ES_AUTOHSCROLL
+    LTEXT           "Bezier\nSegments",IDC_TOTELEMHEAD,247,2,42,17
+    CONTROL         "BndryPatches",IDC_GENBPATCH,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,2,25,56,8
+    CONTROL         "BndryCurves",IDC_GENBCURVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,1,35,56,8
+END
+
+IDD_LOFTX_SOLID DIALOGEX 0, 0, 182, 122
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Boundary Conditions",IDC_STATIC,7,39,169,44,BS_FLAT
+    COMBOBOX        IDC_BC_LEFT,21,62,65,63,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BC_RIGHT,101,62,65,62,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "I-end",IDC_BC_LEFT_ON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,21,52,35,10
+    CONTROL         "J-end",IDC_BC_RIGHT_ON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,101,52,35,10
+    ICON            IDI_ICONPIPE,IDC_STATIC,11,9,20,20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,8,92,44,25
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | BS_FLAT | WS_TABSTOP,
+                    131,93,44,25
+    COMBOBOX        IDC_BLEND,45,17,124,87,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Blending Option",IDC_STATIC,44,6,51,8
+    CONTROL         "Closed",IDC_CLOSED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,68,91,37,10
+    LTEXT           "Closing Seg\nElements",IDC_STATIC,88,103,38,15,0,0,
+                    HIDC_STATIC
+    EDITTEXT        IDC_ELEMS,68,103,18,14,ES_AUTOHSCROLL,0,HIDC_ELEMS
+END
+
+IDD_SOL_IN_LOFT DIALOGEX 0, 0, 347, 42
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Solid by Lofting"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "Solid ID",IDC_STATIC,14,2,29,8
+    LTEXT           "Patch ID",IDC_CIDHEAD,90,1,41,8
+    LTEXT           "Elems",IDC_STATIC,152,2,20,8,0,0,HIDC_STATIC
+    EDITTEXT        IDC_ELEMS,151,10,18,14,ES_AUTOHSCROLL,0,HIDC_ELEMS
+    RTEXT           "Ratio ",IDC_STATIC,169,30,20,8
+    EDITTEXT        IDC_RATIO,151,26,18,14,ES_AUTOHSCROLL,0,HIDC_RATIO
+    COMBOBOX        IDC_SID,1,10,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_PID,84,10,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "Update",IDC_UPDATE,313,22,30,15,0,0,HIDC_UPDATE
+    COMBOBOX        IDC_ORIENT_P,84,25,60,46,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,62,27,19,8
+    CONTROL         "Closed Patch",IDC_CLOSED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,190,6,54,13
+    CONTROL         "AutoSeg",IDC_AUTOSEG,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,190,18,39,10
+    EDITTEXT        IDC_SEGANGLE,190,26,24,12,ES_AUTOHSCROLL
+    LTEXT           "Seg Angle",IDC_SEGANGHEAD,215,29,33,8
+    PUSHBUTTON      "Cancel",IDD_CANCEL,313,4,30,15,0,0,HIDD_CANCEL
+    CONTROL         "Advanced BC",IDC_ADVANCED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,2,27,56,8
+    CONTROL         "BndryPatches",IDC_GENBPATCH,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,250,11,58,8
+    CONTROL         "BndryCurves",IDC_GENBCURVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,250,24,58,8
+END
+
+IDD_SOL_IN_DUCT DIALOGEX 0, 0, 381, 54
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Solid by Ducting"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    RTEXT           "Solid ID",IDC_STATIC,3,2,40,8
+    LTEXT           "Curve ID",IDC_CIDHEAD,77,2,48,8
+    COMBOBOX        IDC_SID,1,10,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_CID,71,10,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_NID,140,9,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Axis Node From",IDC_NIDHEAD,140,0,56,8
+    COMBOBOX        IDC_ORIENT_C,64,26,67,75,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Curve Latch",IDC_STATIC,132,28,43,8
+    EDITTEXT        IDC_TWISTMULT,270,25,27,12,ES_AUTOHSCROLL
+    LTEXT           "Twist Step",IDC_STEPHEAD,300,28,33,8
+    EDITTEXT        IDC_TWISTSTART,270,12,27,12,ES_AUTOHSCROLL
+    LTEXT           "Twist Start",IDC_STARTHEAD,300,14,37,8
+    EDITTEXT        IDC_COORD,180,39,25,12,ES_AUTOHSCROLL
+    RTEXT           "Z:",IDC_OTHER,189,30,9,8
+    CONTROL         "BndryCurves",IDC_GENBCURVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,277,42,60,8
+    PUSHBUTTON      "Update",IDC_UPDATE,347,28,30,11,0,0,HIDC_UPDATE
+    PUSHBUTTON      "Cancel",IDD_CANCEL,347,9,30,11,0,0,HIDD_CANCEL
+    CONTROL         "Incremental",IDC_INCREMENT,"Button",BS_AUTORADIOBUTTON,
+                    215,16,53,10
+    CONTROL         "Distribution...",IDC_DISTRIB,"Button",
+                    BS_AUTORADIOBUTTON,215,28,52,10
+    GROUPBOX        "Twist",IDC_STATIC,208,2,134,38
+    COMBOBOX        IDC_PID,1,26,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "BndryPatches",IDC_GENBPATCH,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,209,42,60,8
+    COMBOBOX        IDC_ORIENT_P,64,39,67,70,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Patch Latch",IDC_STATIC,133,41,40,8
+    LTEXT           "XSec Patch",IDC_STATIC,9,41,41,8
+END
+
+IDD_SOL_IN_SWEEP DIALOGEX 0, 0, 378, 55
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Patch by Sweeping"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    RTEXT           "Patch ID",IDC_STATIC,3,2,40,8
+    LTEXT           "Curve ID",IDC_CIDHEAD,78,2,48,8
+    COMBOBOX        IDC_SID,1,10,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_CID,72,10,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_NID,141,10,60,75,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Axis Node From",IDC_NIDHEAD,140,2,56,8
+    COMBOBOX        IDC_ORIENT_C,63,26,69,46,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    EDITTEXT        IDC_TWISTMULT,269,24,27,12,ES_AUTOHSCROLL
+    LTEXT           "Twist Step",IDC_STEPHEAD,299,27,33,8
+    EDITTEXT        IDC_TWISTSTART,269,11,27,12,ES_AUTOHSCROLL
+    LTEXT           "Twist Start",IDC_STARTHEAD,299,14,37,8
+    EDITTEXT        IDC_COORD,181,41,24,12,ES_AUTOHSCROLL
+    RTEXT           "Z:",IDC_OTHER,189,33,9,8
+    CONTROL         "BndryCurves",IDC_GENBCURVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,285,45,60,8
+    PUSHBUTTON      "Update",IDC_UPDATE,345,26,30,11,0,0,HIDC_UPDATE
+    PUSHBUTTON      "Cancel",IDD_CANCEL,345,9,30,11,0,0,HIDD_CANCEL
+    CONTROL         "Incremental",IDC_INCREMENT,"Button",BS_AUTORADIOBUTTON,
+                    215,15,53,10
+    CONTROL         "Distribution...",IDC_DISTRIB,"Button",
+                    BS_AUTORADIOBUTTON,215,27,52,10
+    GROUPBOX        "Twist or Scale",IDC_TWISTGROUP,207,1,134,42
+    COMBOBOX        IDC_PID,0,26,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_ORIENT_P,63,39,69,46,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Curve Latch",IDC_STATIC,135,28,43,8
+    LTEXT           "Patch Latch",IDC_STATIC,136,41,40,8
+    CONTROL         "BndryPatches",IDC_GENBPATCH,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,216,45,60,8
+    LTEXT           "XSec Patch",IDC_STATIC,9,41,41,8
+END
+
+IDD_SOL_IN_GORDON DIALOGEX 0, 0, 202, 42
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Gordon Blended Solid"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "Solid ID",IDC_STATIC,3,2,40,8
+    LTEXT           "Patch ID",IDC_CIDHEAD,105,1,48,8
+    COMBOBOX        IDC_SID,1,10,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_PID,99,10,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "Update",IDC_UPDATE,165,23,30,15,0,0,HIDC_UPDATE
+    COMBOBOX        IDC_ORIENT_P,88,25,71,68,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,67,28,19,8
+    PUSHBUTTON      "Cancel",IDD_CANCEL,165,5,30,15,0,0,HIDD_CANCEL
+    CONTROL         "Advanced BC",IDC_ADVANCED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,2,28,60,10
+END
+
+IDD_SOL_IN_TENSOR DIALOGEX 0, 0, 360, 47
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CONTEXTHELP | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Tensor Product Solid"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    RTEXT           "Solid ID",IDC_STATIC,3,2,40,8
+    LTEXT           "Elems_U",IDC_STATIC,138,2,29,8,0,0,HIDC_STATIC
+    EDITTEXT        IDC_ELEMS,138,10,29,14,ES_AUTOHSCROLL,0,HIDC_ELEMS
+    CTEXT           "<----------------Ratios------------->",IDC_STATIC,145,
+                    39,87,8
+    EDITTEXT        IDC_RATIO,144,26,18,12,ES_AUTOHSCROLL,0,HIDC_RATIO
+    COMBOBOX        IDC_SID,1,10,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "Update",IDC_UPDATE,324,22,30,15,0,0,HIDC_UPDATE
+    LTEXT           "Junction Node",IDC_NIDHEAD,65,1,53,8
+    COMBOBOX        IDC_NID,65,10,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "Closed",IDC_CLOSED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,261,1,54,13
+    PUSHBUTTON      "Cancel",IDD_CANCEL,324,4,30,15,0,0,HIDD_CANCEL
+    EDITTEXT        IDC_COORD,79,25,34,12,ES_AUTOHSCROLL
+    RTEXT           "Z:",IDC_OTHER,69,28,9,8
+    CONTROL         "AutoSeg",IDC_AUTOSEG,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,261,15,39,10
+    EDITTEXT        IDC_SEGANGLE,261,25,24,12,ES_AUTOHSCROLL
+    LTEXT           "Seg Angle",IDC_SEGANGHEAD,286,28,33,8
+    LTEXT           "Elems_V",IDC_STATIC,177,2,28,8,0,0,HIDC_STATIC
+    EDITTEXT        IDC_ELEMSV,177,10,30,14,ES_AUTOHSCROLL,0,HIDC_ELEMSV
+    EDITTEXT        IDC_RATIOV,183,25,18,12,ES_AUTOHSCROLL,0,HIDC_RATIOV
+    CONTROL         "Advanced BC",IDC_ADVANCED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,0,26,60,8
+    CONTROL         "BndryCurves",IDC_GENBCURVE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,68,40,60,8
+    LTEXT           "Elems_W",IDC_STATIC,209,1,31,8,0,0,HIDC_STATIC
+    EDITTEXT        IDC_ELEMSW,209,9,30,14,ES_AUTOHSCROLL,0,HIDC_ELEMSW
+    EDITTEXT        IDC_RATIOW,213,25,18,12,ES_AUTOHSCROLL,0,HIDC_RATIOW
+    CONTROL         "BndryPatches",IDC_GENBPATCH,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,3,40,60,8
+END
+
+IDD_TENSORBLEND_SOLID DIALOGEX 0, 0, 178, 94
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    ICON            IDI_ICONPIPE,IDC_STATIC,11,9,20,20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,5,63,44,25
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | BS_FLAT | WS_TABSTOP,
+                    129,63,44,25
+    COMBOBOX        IDC_BLEND,28,44,124,87,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Blending Option",IDC_STATIC,26,33,51,8
+    CONTROL         "Closed",IDC_CLOSED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,40,14,37,10
+    LTEXT           "Closing Segment Elements",IDC_STATIC,101,11,59,15,0,0,
+                    HIDC_STATIC
+    EDITTEXT        IDC_ELEMS,81,11,18,12,ES_AUTOHSCROLL,0,HIDC_ELEMS
+END
+
+IDD_TENSOR_SOLID DIALOGEX 0, 0, 161, 101
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Tensor Product"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,15,71,44,25
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | BS_FLAT | WS_TABSTOP,
+                    105,71,44,25
+    ICON            IDI_ICONPIPE,IDC_STATIC,11,9,20,20
+    RTEXT           "# of  Nodes_U:",IDC_STATIC,46,6,52,10
+    EDITTEXT        IDC_NODE_U,100,5,32,12,ES_AUTOHSCROLL
+    RTEXT           "# of  Nodes_V:",IDC_STATIC,46,20,52,10
+    EDITTEXT        IDC_NODE_V,100,19,32,12,ES_AUTOHSCROLL
+    RTEXT           "Total Nodes:",IDC_STATIC,46,47,52,10
+    EDITTEXT        IDC_NODE_TOT,100,46,32,12,ES_AUTOHSCROLL | ES_READONLY
+    RTEXT           "# of  Nodes_W:",IDC_STATIC,47,33,52,10
+    EDITTEXT        IDC_NODE_W,100,32,32,12,ES_AUTOHSCROLL
+END
+
+IDD_GORDON_SOLID DIALOGEX 0, 0, 195, 119
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Gordon Solid"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,29,83,44,25
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | BS_FLAT | WS_TABSTOP,
+                    119,83,44,25
+    ICON            IDI_ICONPIPE,IDC_STATIC,11,9,20,20
+    RTEXT           "# of  Patches_U:",IDC_STATIC,69,11,59,10
+    EDITTEXT        IDC_NODE_U,129,10,32,12,ES_AUTOHSCROLL
+    RTEXT           "# of  Patches_V:",IDC_STATIC,65,25,63,10
+    EDITTEXT        IDC_NODE_V,129,24,32,12,ES_AUTOHSCROLL
+    RTEXT           "Total Curves:",IDC_STATIC,75,55,52,10
+    EDITTEXT        IDC_NODE_TOT,129,54,32,12,ES_AUTOHSCROLL | ES_READONLY
+    RTEXT           "# of  Patches_W:",IDC_STATIC,67,39,61,10
+    EDITTEXT        IDC_NODE_W,129,38,32,12,ES_AUTOHSCROLL
+END
+
+IDD_SOL_IN_ENDCOND DIALOGEX 0, 0, 277, 39
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "End Conditions_U or V"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    COMBOBOX        IDC_BC_LEFT,54,10,65,63,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_BC_RIGHT,122,10,65,62,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "I-end",IDC_BC_LEFT_ON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,55,0,35,10
+    CONTROL         "J-end",IDC_BC_RIGHT_ON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,123,0,35,10
+    LTEXT           "End Direction",IDC_STATIC,3,1,44,8
+    COMBOBOX        IDC_COMBODIR,8,10,37,55,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBONODE,7,24,65,62,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Node",IDC_STATICNODE,74,27,18,8
+    PUSHBUTTON      "Update",IDC_UPDATE,239,22,30,15,0,0,HIDC_UPDATE
+    PUSHBUTTON      "Cancel",IDD_CANCEL,239,3,30,15,0,0,HIDD_CANCEL
+    COMBOBOX        IDC_COMBOTWIST,122,25,65,86,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Twist",IDC_STATICTWIST,102,27,18,8
+    CONTROL         "Default",IDC_DEFAULT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,192,4,39,10
+    CONTROL         "All Same",IDC_ALLSAME,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,192,15,44,10
+    PUSHBUTTON      "Edit",IDC_EDIT,195,25,32,11
+END
+
+IDD_LOFTCC_SOLID DIALOGEX 0, 0, 150, 66
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "LoftedSolid Patch Count"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | BS_FLAT | 
+                    WS_TABSTOP,9,37,44,25
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | BS_FLAT | WS_TABSTOP,
+                    99,37,44,25
+    ICON            IDI_ICONPIPE,IDC_STATIC,11,9,20,20
+    RTEXT           "# of  Patches_U:",IDC_STATIC,42,10,57,10
+    EDITTEXT        IDC_NODE_U,101,9,32,12,ES_AUTOHSCROLL
+END
+
+IDD_ROTATE_SOLID DIALOG DISCARDABLE  120, 100, 271, 186
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "3DSolid Controls  by ROTATION"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_CURVE_ID,114,20,48,64,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Patch to Rotate: ",IDC_STATIC,54,25,56,7
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,221,
+                    134,40,23
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,221,160,38,
+                    22
+    RTEXT           "Angle in Degrees: ",IDC_STATIC,50,40,60,9
+    EDITTEXT        IDC_ANG_END,114,36,40,12,ES_AUTOHSCROLL
+    ICON            IDI_ICONPIPE,IDC_STATIC,8,8,20,20
+    GROUPBOX        "",IDC_STATIC,42,8,132,52
+    RTEXT           "Solid Ic: ",IDC_STATIC,181,6,34,9
+    EDITTEXT        IDC_PID,217,4,40,12,ES_AUTOHSCROLL
+    LISTBOX         IDD_LIST,217,20,48,108,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CNODE_FROM,51,88,60,63,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "From Node: ",IDC_STATIC,53,76,42,8
+    COMBOBOX        IDC_CNODE_TO,115,88,60,67,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "To Node: ",IDC_STATIC,122,77,36,8
+    GROUPBOX        "Rotation Axis",IDC_STATIC,16,65,185,60
+    RTEXT           "# of  Elements:",IDC_STATIC,69,143,52,12
+    EDITTEXT        IDC_ELOUT_SEG,127,140,20,12,ES_AUTOHSCROLL
+    GROUPBOX        "Output Mesh",IDC_STATIC,15,132,186,44
+    RTEXT           "** Ratio of Last to First:",IDC_STATIC,49,154,72,12
+    EDITTEXT        IDC_ELOUT_RATIO,127,153,20,12,ES_AUTOHSCROLL
+    LTEXT           "** 1.0 Means Uniform",IDC_STATIC,69,167,80,8
+    CONTROL         "Control Node",IDC_FROMNODECONTROL,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,50,105,58,10
+    CONTROL         "Control Node",IDC_TONODECONTROL,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,113,105,58,10
+END
+
+IDD_SWEEP_SOLID DIALOG DISCARDABLE  120, 100, 517, 189
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "3DSolid Controls by Volume SWEEP"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,454,157,40,
+                    26
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,453,
+                    130,40,26
+    ICON            IDI_ICONPIPE,IDC_STATIC,10,7,20,20
+    RTEXT           "Solid Ic: ",IDC_STATIC,415,14,32,9
+    EDITTEXT        IDC_PID,451,10,40,12,ES_AUTOHSCROLL
+    LISTBOX         IDD_LIST,451,30,48,96,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CID_XSEC,117,45,64,80,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Patch Ic: ",IDC_STATIC,75,45,36,10
+    GROUPBOX        "Cross Section",IDC_STATIC,65,25,123,48
+    GROUPBOX        "SpineTwist ",IDC_STATIC,10,80,210,100
+    EDITTEXT        IDC_TWISTMULT,135,130,40,14,ES_AUTOHSCROLL
+    RTEXT           "Additive Step",IDC_STATIC,85,130,45,8
+    CONTROL         "Incremental",IDC_INCREMENT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,35,140,50,10
+    EDITTEXT        IDC_TWISTSTART,135,150,40,14,ES_AUTOHSCROLL
+    RTEXT           "Starting Angle",IDC_STATIC,80,150,50,8
+    GROUPBOX        "Uniform",IDC_STATIC,25,120,185,55
+    GROUPBOX        "Radial Scale",IDC_STATIC,235,80,210,100
+    EDITTEXT        IDC_RADMULT,361,130,40,14,ES_AUTOHSCROLL
+    RTEXT           "Additive Step",IDC_STATIC,305,130,50,8
+    CONTROL         "Incremental",IDC_INC_RAD,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,260,140,50,10
+    EDITTEXT        IDC_RADSTART,361,150,40,14,ES_AUTOHSCROLL
+    RTEXT           "Starting Scale",IDC_STATIC,305,150,51,8
+    GROUPBOX        "Uniform",IDC_STATIC,250,120,185,55
+    LTEXT           "degree",IDC_STATIC,180,135,25,8
+    LTEXT           "degree",IDC_STATIC,180,155,25,8
+    LTEXT           "degree",IDC_STATIC,405,135,25,8
+    LTEXT           "degree",IDC_STATIC,405,155,25,8
+    COMBOBOX        IDC_CID_TWIST,110,90,64,75,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Curve Ic: ",IDC_STATIC,70,90,36,10
+    COMBOBOX        IDC_ORIENT_TWIST,110,105,64,46,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,75,105,19,8
+    GROUPBOX        "Spine",IDC_STATIC,235,25,160,48
+    COMBOBOX        IDC_CID_SPINE,320,40,64,80,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Curve Ic: ",IDC_STATIC,280,40,36,10
+    COMBOBOX        IDC_ORIENT_SPINE,320,55,64,46,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,280,55,19,8
+    COMBOBOX        IDC_CID_RAD,330,90,64,75,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Curve Ic: ",IDC_STATIC,290,90,36,10
+    COMBOBOX        IDC_ORIENT_RAD,330,105,64,46,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,290,105,19,8
+    COMBOBOX        IDC_CNID_DANCHOR,102,5,64,60,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Anchor Node: ",IDC_STATIC,43,6,52,10
+    CONTROL         "Control Node",IDC_CONTROLNODE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,176,6,57,10
+END
+
+IDD_SOLID_IN DIALOGEX 0, 0, 396, 42
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    RTEXT           "Solid ID",IDC_STATIC,3,2,40,8
+    LTEXT           "Patch ID",IDC_CIDHEAD,69,1,48,8
+    LTEXT           "Elems",IDC_STATIC,192,1,20,8,0,0,HIDC_STATIC
+    EDITTEXT        IDC_ELEMS,191,9,18,14,ES_AUTOHSCROLL,0,HIDC_ELEMS
+    RTEXT           "Ratio ",IDC_STATIC,209,28,20,8
+    EDITTEXT        IDC_RATIO,191,24,18,14,ES_AUTOHSCROLL,0,HIDC_RATIO
+    COMBOBOX        IDC_PID,1,10,60,80,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_CID,63,10,60,75,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP
+    PUSHBUTTON      "Update",IDC_UPDATE,362,20,30,15,0,0,HIDC_UPDATE
+    RTEXT           "Length",IDC_LENHEAD,0,26,25,9
+    EDITTEXT        IDC_LEN,26,24,35,14,ES_AUTOHSCROLL
+    COMBOBOX        IDC_NID,130,10,60,75,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Axis Node From",IDC_NIDHEAD,130,2,56,8
+    COMBOBOX        IDC_ORIENT,63,25,60,46,CBS_DROPDOWNLIST | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Latch",IDC_STATIC,123,27,19,8
+    EDITTEXT        IDC_TWISTMULT,230,26,27,14,ES_AUTOHSCROLL
+    LTEXT           "Twist Step",IDC_STEPHEAD,259,29,33,8
+    CONTROL         "Incremental Twist",IDC_INCREMENT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,230,2,72,10
+    EDITTEXT        IDC_TWISTSTART,230,12,27,14,ES_AUTOHSCROLL
+    LTEXT           "Twist Start",IDC_STARTHEAD,260,16,37,8
+    CONTROL         "Closed Patch",IDC_CLOSED,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,301,2,54,13
+    CONTROL         "AutoSeg",IDC_AUTOSEG,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,301,14,39,10
+    EDITTEXT        IDC_SEGANGLE,301,23,24,12,ES_AUTOHSCROLL
+    LTEXT           "Seg Angle",IDC_SEGANGHEAD,326,25,33,8
+    PUSHBUTTON      "Cancel",IDD_CANCEL,362,1,30,15,0,0,HIDD_CANCEL
+    EDITTEXT        IDC_COORD,156,24,34,14,ES_AUTOHSCROLL
+    RTEXT           "Z:",IDC_OTHER,146,27,9,8
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "MSolRsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""CommRsrc.h""\r\n"
+    "#include ""MNodRsrc.h""\r\n"
+    "#include ""MCurRsrc.h""\r\n"
+    "#include ""MPatRsrc.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_CINT_RAT_RB DLGINIT
+BEGIN
+    IDC_DEGREE, 0x403, 6, 0
+0x5543, 0x4942, 0x0043, 
+    IDC_DEGREE, 0x403, 10, 0
+0x5551, 0x4441, 0x4152, 0x4954, 0x0043, 
+    IDC_DEGREE, 0x403, 7, 0
+0x494c, 0x454e, 0x5241, "\000" 
+    IDC_KN_OPTION, 0x403, 12, 0
+0x4843, 0x524f, 0x4c44, 0x4e45, 0x5447, 0x0048, 
+    IDC_KN_OPTION, 0x403, 12, 0
+0x4543, 0x544e, 0x4952, 0x4550, 0x4154, 0x004c, 
+    IDC_KN_OPTION, 0x403, 6, 0
+0x4f46, 0x454c, 0x0059, 
+    0
+END
+
+IDD_SWEEP_SOLID DLGINIT
+BEGIN
+    IDC_ORIENT_TWIST, 0x403, 9, 0
+0x4142, 0x4b43, 0x4157, 0x4452, "\000" 
+    IDC_ORIENT_TWIST, 0x403, 8, 0
+0x4f46, 0x5752, 0x5241, 0x0044, 
+    IDC_ORIENT_SPINE, 0x403, 9, 0
+0x4142, 0x4b43, 0x4157, 0x4452, "\000" 
+    IDC_ORIENT_SPINE, 0x403, 8, 0
+0x4f46, 0x5752, 0x5241, 0x0044, 
+    IDC_ORIENT_RAD, 0x403, 9, 0
+0x4142, 0x4b43, 0x4157, 0x4452, "\000" 
+    IDC_ORIENT_RAD, 0x403, 8, 0
+0x4f46, 0x5752, 0x5241, 0x0044, 
+    0
+END
+
+IDD_SOLID_IN DLGINIT
+BEGIN
+    IDC_ORIENT, 0x403, 8, 0
+0x4f46, 0x5752, 0x5241, 0x0044, 
+    IDC_ORIENT, 0x403, 9, 0
+0x4142, 0x4b43, 0x4157, 0x4452, "\000" 
+    0
+END
+
+IDD_SOL_IN_DUCT DLGINIT
+BEGIN
+    IDC_ORIENT_C, 0x403, 8, 0
+0x4f46, 0x5752, 0x5241, 0x0044, 
+    IDC_ORIENT_C, 0x403, 9, 0
+0x4142, 0x4b43, 0x4157, 0x4452, "\000" 
+    IDC_ORIENT_P, 0x403, 10, 0
+0x4f46, 0x5752, 0x5241, 0x5f44, 0x0031, 
+    IDC_ORIENT_P, 0x403, 10, 0
+0x4f46, 0x5752, 0x5241, 0x5f44, 0x0032, 
+    IDC_ORIENT_P, 0x403, 10, 0
+0x4f46, 0x5752, 0x5241, 0x5f44, 0x0033, 
+    IDC_ORIENT_P, 0x403, 10, 0
+0x4f46, 0x5752, 0x5241, 0x5f44, 0x0034, 
+    IDC_ORIENT_P, 0x403, 11, 0
+0x4142, 0x4b43, 0x4157, 0x4452, 0x315f, "\000" 
+    IDC_ORIENT_P, 0x403, 11, 0
+0x4142, 0x4b43, 0x4157, 0x4452, 0x325f, "\000" 
+    IDC_ORIENT_P, 0x403, 11, 0
+0x4142, 0x4b43, 0x4157, 0x4452, 0x335f, "\000" 
+    IDC_ORIENT_P, 0x403, 11, 0
+0x4142, 0x4b43, 0x4157, 0x4452, 0x345f, "\000" 
+    0
+END
+
+IDD_SOL_IN_COONS DLGINIT
+BEGIN
+    IDC_ORIENT_P, 0x403, 10, 0
+0x4f46, 0x5752, 0x5241, 0x5f44, 0x0031, 
+    IDC_ORIENT_P, 0x403, 10, 0
+0x4f46, 0x5752, 0x5241, 0x5f44, 0x0032, 
+    IDC_ORIENT_P, 0x403, 10, 0
+0x4f46, 0x5752, 0x5241, 0x5f44, 0x0033, 
+    IDC_ORIENT_P, 0x403, 10, 0
+0x4f46, 0x5752, 0x5241, 0x5f44, 0x0034, 
+    IDC_ORIENT_P, 0x403, 11, 0
+0x4142, 0x4b43, 0x4157, 0x4452, 0x315f, "\000" 
+    IDC_ORIENT_P, 0x403, 11, 0
+0x4142, 0x4b43, 0x4157, 0x4452, 0x325f, "\000" 
+    IDC_ORIENT_P, 0x403, 11, 0
+0x4142, 0x4b43, 0x4157, 0x4452, 0x335f, "\000" 
+    IDC_ORIENT_P, 0x403, 11, 0
+0x4142, 0x4b43, 0x4157, 0x4452, 0x345f, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICONPIPE            ICON    DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\ICO_PIPE.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "MSolMgr Resource String"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

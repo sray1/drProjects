@@ -1,0 +1,721 @@
+// Dlg_CurI.cpp : implementation file
+//
+
+#include "stdafx.h"
+
+/////////////////////
+#include "drgraf.h"
+#include "drgradoc.h" 
+/////////////////////
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+#include "MNodDll.h"
+#include "UserMsg.h"
+#include "Def_View.h"
+///////////////////// ElemObjs
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "DrNode.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "precison.h"
+#include "mapfacto.h"
+#include "ScaleFac.h"
+#include "DrFont.h"
+/////////////////////
+#include "CommRsrc.h"
+#include "MNodRsrc.h"
+#include "Dlg_NodI.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CDlg_NodI dialog
+
+
+CDlg_NodI::CDlg_NodI(CWnd* pWnd,BOOL bDirect,BOOL bCNode,
+					 BOOL bAdv,BOOL bCoord)
+	: CDialog()                    // Modeless constructor
+{
+	//{{AFX_DATA_INIT(CDlg_NodI)
+	m_ObjID			= _T("");
+	m_X				= 0.0;
+	m_Y				= 0.0;
+	m_Z				= 0.0;
+	m_NID			= _T("");
+	m_bDirection	= FALSE;
+	//}}AFX_DATA_INIT
+	m_pWnd 		= pWnd;
+	m_bnid_c	= bCNode;
+	m_bDirect	= bDirect;
+	m_bAdvanced	= bAdv;
+	m_bCoord	= bCoord;
+	m_dLength	= 0.0;
+	m_DxWorld	= 0.0;
+	m_DyWorld	= 0.0;
+	m_DzWorld	= 0.0;
+
+}
+
+
+void CDlg_NodI::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CDlg_NodI)
+	DDX_Text(pDX, IDC_OBJID, m_ObjID);
+	DDX_Text(pDX, IDC_ROT_X, m_X);
+	DDX_Text(pDX, IDC_ROT_Y, m_Y);
+	DDX_Text(pDX, IDC_ROT_Z, m_Z);
+	DDX_Text(pDX, IDC_TRANPT, m_NID);
+	//}}AFX_DATA_MAP
+}
+
+
+BEGIN_MESSAGE_MAP(CDlg_NodI, CDialog)
+	//{{AFX_MSG_MAP(CDlg_NodI)
+	ON_BN_CLICKED(IDC_UPDATE, OnUpdate)
+	ON_BN_CLICKED(IDC_ADVANCED, OnAdvanced)
+	ON_WM_HELPINFO()
+	ON_BN_CLICKED(IDC_DIRECTION, OnDirection)
+	ON_BN_CLICKED(IDC_COORD_INPUT, OnCoordInput)
+	ON_BN_CLICKED(IDD_CANCEL, OnCancel)
+	ON_BN_DOUBLECLICKED(IDC_UPDATE, OnUpdate)
+	ON_BN_DOUBLECLICKED(IDD_CANCEL, OnCancel)
+	ON_BN_DOUBLECLICKED(IDC_ADVANCED, OnAdvanced)
+	ON_BN_DOUBLECLICKED(IDC_DIRECTION, OnDirection)
+	ON_BN_DOUBLECLICKED(IDC_COORD_INPUT, OnCoordInput)
+	ON_EN_CHANGE(IDD_NODE_DX, OnChangeNodeDx)
+	ON_EN_CHANGE(IDD_NODE_DY, OnChangeNodeDy)
+	ON_EN_CHANGE(IDD_NODE_DZ, OnChangeNodeDz)
+	ON_EN_CHANGE(IDD_LENGTH, OnChangeLength)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+	ON_BN_CLICKED(IDC_DIRECT, OnDirect)
+	ON_BN_DOUBLECLICKED(IDC_DIRECT, OnDirect)
+
+
+/////////////////////////////////////////////////// resource switch
+extern AFX_EXTENSION_MODULE NEAR extensionMNod_DLL;
+
+/////////////////////////////////////////////////////////////////////////////
+// CDlg_NodI message handlers
+
+BOOL CDlg_NodI::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+	////////////////////////////////////////// Headings
+	ResetDlg();
+	////////////////////////////////////////// Focus
+	CWnd* pWndCtrl = GetDlgItem(IDC_NODEID);
+	pWndCtrl->SetFocus();
+    ////////////////////
+	UpdateData(FALSE);			//Update Screen(FALSE)    
+    ///////////////////	
+	return FALSE;  // return TRUE  unless you set the focus to a control
+}
+
+void CDlg_NodI::ResetDlg()
+{
+	//////////////////////////////////////////////
+	if(m_bDirect)
+	{
+		GetDlgItem(IDD_NODE_X2)->EnableWindow(TRUE);
+		GetDlgItem(IDD_NODE_Y2)->EnableWindow(TRUE);
+		GetDlgItem(IDD_NODE_Z2)->EnableWindow(TRUE);
+	}
+	else
+	{
+		GetDlgItem(IDD_NODE_X2)->EnableWindow(FALSE);
+		GetDlgItem(IDD_NODE_Y2)->EnableWindow(FALSE);
+		GetDlgItem(IDD_NODE_Z2)->EnableWindow(FALSE);
+		////////////
+		switch (m_nViewNum)
+		{
+			case VIEW12:
+				GetDlgItem(IDD_NODE_Z2)->EnableWindow(TRUE);
+				break;
+			case VIEW23:
+				GetDlgItem(IDD_NODE_X2)->EnableWindow(TRUE);
+				break;
+			case VIEW31:
+				GetDlgItem(IDD_NODE_Y2)->EnableWindow(TRUE);
+				break;
+			default:
+				break;
+		}
+	}
+	//////////
+	GetDlgItem(IDD_LENGTH)->EnableWindow(FALSE);
+	GetDlgItem(IDC_CNODE_FROM)->EnableWindow(FALSE);
+	GetDlgItem(IDC_CNODE_TO)->EnableWindow(FALSE);
+	GetDlgItem(IDC_DIRECTION)->SetWindowText("");
+	((CButton*)GetDlgItem(IDC_DIRECTION))->SetCheck(FALSE);
+	GetDlgItem(IDC_FROM_HEAD)->SetWindowText("");
+	GetDlgItem(IDC_TO_HEAD)->SetWindowText("");
+	GetDlgItem(IDC_LEN_HEAD)->SetWindowText("");
+	//////////
+	GetDlgItem(IDC_COORD_INPUT)->SetWindowText("");
+	((CButton*)GetDlgItem(IDC_COORD_INPUT))->SetCheck(FALSE);
+	GetDlgItem(IDC_DX_HEAD)->SetWindowText("");
+	GetDlgItem(IDD_NODE_DX)->EnableWindow(FALSE);
+	GetDlgItem(IDC_DX_HEAD)->SetWindowText("");
+	GetDlgItem(IDD_NODE_DY)->EnableWindow(FALSE);
+	GetDlgItem(IDC_DX_HEAD)->SetWindowText("");
+	GetDlgItem(IDD_NODE_DZ)->EnableWindow(FALSE);
+	////////////////////////////////////////// Headings
+	if(m_bnid_c)
+		SetWindowText("CNode Properties");
+	else
+		SetWindowText("Node Properties");
+	/////////////////////////////////////
+	if(m_bAdvanced)
+	{
+		if(m_bCoord)
+		{
+			//////////
+			GetDlgItem(IDC_COORD_INPUT)->SetWindowText("Coordinates");
+			((CButton*)GetDlgItem(IDC_COORD_INPUT))->SetCheck(TRUE);
+			GetDlgItem(IDC_DX_HEAD)->SetWindowText("DX");
+			GetDlgItem(IDD_NODE_DX)->EnableWindow(TRUE);
+			GetDlgItem(IDC_DX_HEAD)->SetWindowText("DY");
+			GetDlgItem(IDD_NODE_DY)->EnableWindow(TRUE);
+			GetDlgItem(IDC_DX_HEAD)->SetWindowText("DZ");
+			GetDlgItem(IDD_NODE_DZ)->EnableWindow(TRUE);
+			///////////////////
+			ResolveReference_Coords();
+			///
+		}
+		else
+		{
+			///////////////////////////////////
+			GetDlgItem(IDD_LENGTH)->EnableWindow(TRUE);
+			GetDlgItem(IDC_LEN_HEAD)->SetWindowText("Length");
+			GetDlgItem(IDC_DIRECTION)->SetWindowText("Direction");
+			((CButton*)GetDlgItem(IDC_DIRECTION))->SetCheck(TRUE);
+			GetDlgItem(IDC_FROM_HEAD)->SetWindowText("From");
+			GetDlgItem(IDC_TO_HEAD)->SetWindowText("To");
+			///////////////////
+			ResolveReference_Direction();
+			///
+		}
+
+	}
+	////////////////////
+	else
+	{
+		CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+		CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+		CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	    /////////////////////////////////////////// 
+		CPrecision* pPrecision     	= (CPrecision*)pObjectMgr->GetSpecObject(PRECISION);
+//		CScaleFactor* pScaleFactor 	= (CScaleFactor*)pObjectMgr->GetSpecObject(SCALEFACTOR);
+		CMapFactor* pMapFactor     	= (CMapFactor*)pObjectMgr->GetSpecObject(MAPFACTOR); 
+    
+		LONG  lWorldBase  = pPrecision->GetWorldBase(); 
+	   	double dWorldBase = (double)lWorldBase; 
+	    m_xWorld 		= ((double)(m_MouseWIC.x))/dWorldBase;
+	    m_yWorld 		= ((double)(m_MouseWIC.y))/dWorldBase;
+	    m_zWorld 		= ((double)(m_MouseWIC.z))/dWorldBase;
+	    ///////////////////////////////////////////
+		double dMapFactor   = pMapFactor->GetMapFactor();
+		///////////////////////////////////////////
+		m_xWorld 		*= dMapFactor;
+		m_yWorld 		*= dMapFactor;
+	    m_zWorld 		*= dMapFactor;
+	    //////////////////////// World Coord
+		pObjectMgr->DStoSC(&m_xWorld);
+		pObjectMgr->DStoSC(&m_yWorld);
+		pObjectMgr->DStoSC(&m_zWorld);
+	}
+}
+
+BOOL CDlg_NodI::Create ()
+{
+	BOOL bOk;	
+#ifdef _AFXDLL
+#ifdef _DEBUG
+	CString strRes;
+	strRes.LoadString(IDS_CHECK_RESOURCE);
+	TRACE("resource string = %s\n", (const char*) strRes); 
+#endif
+
+	HINSTANCE hInstResourceClient = AfxGetResourceHandle();
+	AfxSetResourceHandle(extensionMNod_DLL.hModule); // uses server's instance handle 
+
+#ifdef _DEBUG
+	strRes.LoadString(IDS_CHECK_RESOURCE);
+	TRACE("resource string = %s\n", (const char*) strRes);
+//	return hInstResourceClient;  
+#endif
+#endif
+	///////////////////////////////////////////////////////////// 
+	bOk = CDialog::Create(CDlg_NodI::IDD);
+	///////////////////////////////////////
+#ifdef _AFXDLL
+//	CString strRes;
+	AfxSetResourceHandle(hInstResourceClient); // restores client's instance handle
+
+#ifdef _DEBUG
+	strRes.LoadString(IDS_CHECK_RESOURCE);
+	TRACE("resource string = %s\n", (const char*) strRes); 
+#endif
+#endif
+	//////////////////
+	return bOk;
+}
+
+void CDlg_NodI::OnSelchangeNid() 
+{
+	if(m_pWnd !=NULL)
+		m_pWnd->SendMessage(ID_UPDATE_NODIN,IDC_NODEID);
+}
+
+void CDlg_NodI::OnCancel() 
+{
+	////////////////////
+	if(m_pWnd !=NULL)
+		m_pWnd->SendMessage(ID_CANCEL_NODIN,IDD_CANCEL);
+	////////////////////////////////////////////////////
+}
+
+void CDlg_NodI::OnUpdate() 
+{
+	if(m_pWnd !=NULL)
+		m_pWnd->SendMessage(ID_UPDATE_NODIN,IDC_UPDATE);
+}
+
+void CDlg_NodI::OnDirect() 
+{
+	UpdateData(TRUE);
+	/////////////////
+	m_bDirect = !m_bDirect;
+	///////////////////////
+	if(m_pWnd !=NULL)
+		m_pWnd->SendMessage(ID_UPDATE_NODIN,IDC_DIRECT);
+}
+
+void CDlg_NodI::OnAdvanced() 
+{
+    ////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+    ///////////////////	
+	m_bAdvanced = !m_bAdvanced;
+	////////////////////
+	if(m_bAdvanced)
+	{
+		GetDlgItem(IDC_COORD_INPUT)->SetWindowText("Coordinates");
+		((CButton*)GetDlgItem(IDC_COORD_INPUT))->SetCheck(TRUE);
+		GetDlgItem(IDC_DIRECTION)->SetWindowText("Direction");
+		((CButton*)GetDlgItem(IDC_DIRECTION))->SetCheck(TRUE);
+		///////////
+		m_bCoord = TRUE;
+	}
+	else
+	{
+		GetDlgItem(IDC_COORD_INPUT)->SetWindowText("");
+		((CButton*)GetDlgItem(IDC_COORD_INPUT))->SetCheck(FALSE);
+		GetDlgItem(IDC_DIRECTION)->SetWindowText("");
+		((CButton*)GetDlgItem(IDC_DIRECTION))->SetCheck(FALSE);
+		///////////
+		m_bCoord = FALSE;
+		/////////////////
+	}
+	///////////
+	ResetDlg();
+	////////////////////
+	UpdateData(FALSE);			//TO  Screen(FALSE)    
+	////////////////////
+	if(m_pWnd !=NULL)
+		m_pWnd->SendMessage(ID_UPDATE_NODIN,IDC_ADVANCED);
+}
+
+void CDlg_NodI::OnDirection() 
+{
+    ////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+    ///////////////////	
+	m_bCoord = FALSE;
+	///////////
+	ResetDlg();
+	/////////////////////////// ReSet
+//	m_id		= "";	
+//	m_nid_r		= "";   
+	m_dLength	= 0.0;
+//	m_xWorld	= 0.;	
+//	m_yWorld	= 0.;	
+//	m_zWorld	= 0.;	
+//	m_bnid_c 	= FALSE;
+	///////////////////////////
+	ResolveReference_Direction();
+	////////////////////
+	UpdateData(FALSE);			//TO  Screen(FALSE)    
+	////////////////////
+	if(m_pWnd !=NULL)
+		m_pWnd->SendMessage(ID_UPDATE_NODIN,IDC_DIRECTION);
+}
+
+void CDlg_NodI::OnCoordInput() 
+{
+    ////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+    ///////////////////	
+	m_bCoord = TRUE;
+	///////////
+	ResetDlg();
+	/////////////////////////// ReSet
+//	m_id		= "";	
+//	m_nid_r		= "";   
+	m_DxWorld	= 0.;	
+	m_DyWorld	= 0.;	
+	m_DzWorld	= 0.;	
+//	m_xWorld	= 0.;	
+//	m_yWorld	= 0.;	
+//	m_zWorld	= 0.;	
+//	m_bnid_c 	= FALSE;
+	///////////////////////////
+	ResolveReference_Coords();
+	////////////////////
+	UpdateData(FALSE);			//TO  Screen(FALSE)    
+	////////////////////
+	if(m_pWnd !=NULL)
+		m_pWnd->SendMessage(ID_UPDATE_NODIN,IDC_COORD_INPUT);
+}
+
+
+void CDlg_NodI::OnChangeNodeDx() 
+{
+    ////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+    //////////////////// check if -ve
+	m_strDx.TrimLeft();
+	/////////
+	int nLen = m_strDx.GetLength(); 
+	if((nLen == 1) && (m_strDx.Left(1) == "-"))
+		return;
+	////////////////////////////
+	LPTSTR p = m_strDx.GetBuffer(1024);
+//		sscanf( p, "%f", &m_DxWorld );			// cannot Use in DLL
+	m_DxWorld = atof( p );
+	//////////////////
+	ResolveReference_Coords();
+	////////////////////
+	UpdateData(FALSE);			//TO  Screen(FALSE)    
+ 	///////////////////	
+}
+
+void CDlg_NodI::OnChangeNodeDy() 
+{
+    ////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+    //////////////////// check if -ve
+	m_strDy.TrimLeft();
+	/////////
+	int nLen = m_strDy.GetLength(); 
+	if((nLen == 1) && (m_strDy.Left(1) == "-"))
+		return;
+	////////////////////////////
+	LPTSTR p = m_strDy.GetBuffer(1024);
+//		sscanf( p, "%f", &m_DxWorld );			// cannot Use in DLL
+	m_DyWorld = atof( p );
+	//////////////////
+	ResolveReference_Coords();
+	////////////////////
+	UpdateData(FALSE);			//TO  Screen(FALSE)    
+ 	///////////////////	
+}
+
+void CDlg_NodI::OnChangeNodeDz() 
+{
+    ////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+    //////////////////// check if -ve
+	m_strDz.TrimLeft();
+	/////////
+	int nLen = m_strDz.GetLength(); 
+	if((nLen == 1) && (m_strDz.Left(1) == "-"))
+		return;
+	////////////////////////////
+	LPTSTR p = m_strDz.GetBuffer(1024);
+//		sscanf( p, "%f", &m_DxWorld );			// cannot Use in DLL
+	m_DzWorld = atof( p );
+	//////////////////
+	ResolveReference_Coords();
+	////////////////////
+	UpdateData(FALSE);			//TO  Screen(FALSE)    
+ 	///////////////////	
+}
+
+void CDlg_NodI::OnChangeLength() 
+{
+    ////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+    //////////////////// check if -ve
+	m_strLn.TrimLeft();
+	/////////
+	int nLen = m_strLn.GetLength(); 
+	if((nLen == 1) && (m_strLn.Left(1) == "-"))
+		return;
+	////////////////////////////
+	LPTSTR p = m_strLn.GetBuffer(1024);
+//		sscanf( p, "%f", &m_DxWorld );			// cannot Use in DLL
+	m_dLength = atof( p );
+	//////////////////
+	if(m_dLength == 0.0)
+	{
+		AfxMessageBox("For Distinct Node Entry\n Length Must be NonZero",MB_ICONEXCLAMATION);
+		GetDlgItem(IDD_LENGTH)->SetFocus();
+	}
+	else
+		ResolveReference_Direction();
+	////////////////////
+	UpdateData(FALSE);			//TO  Screen(FALSE)    
+ 	///////////////////	
+}
+
+int CDlg_NodI::ResolveReference_Direction()
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	///////////////////////////////////////////////
+	CPrecision* pPrecision     	= (CPrecision*)pObjectMgr->GetSpecObject(PRECISION);
+//	CScaleFactor* pScaleFactor 	= (CScaleFactor*)pObjectMgr->GetSpecObject(SCALEFACTOR);
+	CMapFactor* pMapFactor     	= (CMapFactor*)pObjectMgr->GetSpecObject(MAPFACTOR); 
+	///////////////
+	LONG  lWorldBase  = pPrecision->GetWorldBase(); 
+    double dWorldBase = (double)lWorldBase; 
+    ///////////////////////////////////////////
+	double dMapFactor   = pMapFactor->GetMapFactor();
+	///////////////////////////////////////////
+	WORLD Axis;
+	int nResult = UnitAxisFromEndNodes(&Axis);
+	if(nResult<0)
+		return -1;
+    /////////////////
+	int 		index;
+	CDrNode* 	pDrNode;
+	////////////////////////////////////////////////////// RefNode
+	if(m_nid_r == "")
+	{
+		m_xWorld = 0.0;
+		m_yWorld = 0.0;
+		m_zWorld = 0.0;
+	}
+	else
+	{
+		pDListMgr 	= pObjectMgr->GetObjectList(CNODE);
+		index	= pObjectMgr->GetObjectIndexfromKey(CNODE,m_nid_r,1);
+		if(index>=0)
+		pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+		else
+		{
+			pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+			index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_nid_r,1);
+			if(index>=0)
+			pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+			else
+			{
+				AfxMessageBox("Error:\nCDlg_NodI::ResolveReference_Direction\nm_nid_r");
+				return -1;
+			}
+		}
+		////////////////////////////
+		double xWorld,yWorld,zWorld;
+	 	///////////////////////////////////////////// get Raw Pt.
+    	xWorld 		= ((double)((pDrNode->GetNodeCard())->x))/dWorldBase;
+    	yWorld 		= ((double)((pDrNode->GetNodeCard())->y))/dWorldBase;
+    	zWorld 		= ((double)((pDrNode->GetNodeCard())->z))/dWorldBase;
+    	////////////////////////////// Map Factor
+    	xWorld 		*= dMapFactor;
+    	yWorld 		*= dMapFactor;
+    	zWorld 		*= dMapFactor;
+   		//////////////////////// World Coord
+		pObjectMgr->DStoSC(&xWorld);
+		pObjectMgr->DStoSC(&yWorld);
+		pObjectMgr->DStoSC(&zWorld);
+		//////////////////////////////////////// Coordinates
+		m_xWorld = xWorld + m_dLength * Axis.x;
+		m_yWorld = yWorld + m_dLength * Axis.y;
+		m_zWorld = zWorld + m_dLength * Axis.z;
+		////////
+	}
+	/////////
+	return 0;
+}
+
+int CDlg_NodI::ResolveReference_Coords()
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+ 	///////////////////////////////////////////////
+	CPrecision* pPrecision     	= (CPrecision*)pObjectMgr->GetSpecObject(PRECISION);
+//	CScaleFactor* pScaleFactor 	= (CScaleFactor*)pObjectMgr->GetSpecObject(SCALEFACTOR);
+	CMapFactor* pMapFactor     	= (CMapFactor*)pObjectMgr->GetSpecObject(MAPFACTOR); 
+	///////////////
+	LONG  lWorldBase  = pPrecision->GetWorldBase(); 
+    double dWorldBase = (double)lWorldBase; 
+    ///////////////////////////////////////////
+	double dMapFactor   = pMapFactor->GetMapFactor();
+	///////////////////////////////////////////
+	int 		index;
+	CDrNode* 	pDrNode;
+	////////////////////////////////////////////////////// RefNode
+	if(m_nid_r == "")
+	{
+		//////////////////////////////////////// Coordinates
+		m_xWorld = m_DxWorld;
+		m_yWorld = m_DyWorld;
+		m_zWorld = m_DzWorld;
+		////////
+	}
+	else
+	{
+		pDListMgr 	= pObjectMgr->GetObjectList(CNODE);
+		index	= pObjectMgr->GetObjectIndexfromKey(CNODE,m_nid_r,1);
+		if(index>=0)
+		pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+		else
+		{
+			pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+			index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_nid_r,1);
+			if(index>=0)
+			pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+			else
+			{
+				AfxMessageBox("Error:\nCDlg_NodI::ResolveReference_Coords\nm_nid_r");
+				return -1;
+			}
+		}
+		////////////////////////////
+		double xWorld,yWorld,zWorld;
+	 	///////////////////////////////////////////// get Raw Pt.
+    	xWorld 		= ((double)((pDrNode->GetNodeCard())->x))/dWorldBase;
+    	yWorld 		= ((double)((pDrNode->GetNodeCard())->y))/dWorldBase;
+    	zWorld 		= ((double)((pDrNode->GetNodeCard())->z))/dWorldBase;
+    	////////////////////////////// Map Factor
+    	xWorld 		*= dMapFactor;
+    	yWorld 		*= dMapFactor;
+    	zWorld 		*= dMapFactor;
+   		//////////////////////// World Coord
+		pObjectMgr->DStoSC(&xWorld);
+		pObjectMgr->DStoSC(&yWorld);
+		pObjectMgr->DStoSC(&zWorld);
+		//////////////////////////////////////// Coordinates
+		m_xWorld = m_DxWorld + xWorld;
+		m_yWorld = m_DyWorld + yWorld;
+		m_zWorld = m_DzWorld + zWorld;
+		////////
+	}		
+	/////////
+	return 0;
+}
+
+int CDlg_NodI::UnitAxisFromEndNodes(pWORLD pNormal)
+{
+	///////////////
+	C3DMath	Math3D;
+	//////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+    /////////////////
+	int 		index;
+	CDrNode* 	pDrNode;
+	if(m_FromID == "" || m_ToID == "")
+	{
+		pNormal->x = 0.0;
+		pNormal->y = 0.0;
+		pNormal->z = 0.0;
+		//////////
+		return 0;
+	}
+	////////////////////////////////////////////////////// Same Node
+	if(m_FromID == m_ToID)
+	{
+		pNormal->x = 0.0;
+		pNormal->y = 0.0;
+		pNormal->z = 0.0;
+		//////////
+		return 0;
+	}
+	////////////////////////////////////////////////////// FromNode
+	pDListMgr 	= pObjectMgr->GetObjectList(CNODE);
+	index	= pObjectMgr->GetObjectIndexfromKey(CNODE,m_FromID,1);
+	if(index>=0)
+		pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+	else
+	{
+		pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+		index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_FromID,1);
+		if(index>=0)
+		pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+		else
+		{
+			AfxMessageBox("Error:\nCDlg_NodI::UnitAxisFromEndNodes\nFromID");
+			return -1;
+		}
+	}
+   	///////////////////////////////////////// get Raw Pt.
+   	WORLD FromPt = *(pDrNode->GetLocalPos());
+	////////////////////////////////////////////////////// ToNode
+	pDListMgr 	= pObjectMgr->GetObjectList(CNODE);
+	index	= pObjectMgr->GetObjectIndexfromKey(CNODE,m_ToID,1);
+	if(index>=0)
+		pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+	else
+	{
+		pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+		index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_ToID,1);
+		if(index>=0)
+		pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+		else
+		{
+			AfxMessageBox("Error:\nCDlg_NodI::UnitAxisFromEndNodes\nToID");
+			return -1;
+		}
+	}
+   	//////////////////////////////////////// get Raw Pt.
+  	WORLD ToPt = *(pDrNode->GetLocalPos());
+	///////////////////////////////////////////// Vector
+	Math3D.Sub3DPts(&ToPt, &FromPt, pNormal);
+	Math3D.Normalize(pNormal,pNormal);
+	///////////////
+	return 0;
+}
+
+void CDlg_NodI::OnContextMenu(CWnd* pWnd, CPoint point) 
+{
+	// TODO: Add your message handler code here
+	
+}
+
+BOOL CDlg_NodI::OnHelpInfo(HELPINFO* pHelpInfo) 
+{
+	// TODO: Add your message handler code here and/or call default
+/*
+	BOOL WinHelp(
+  
+
+    HWND  hWndMain,	// handle of window requesting Help 
+    LPCTSTR  lpszHelp,	// address of directory-path string 
+    UINT  uCommand,	// type of Help 
+    DWORD  dwData 	// additional data 
+   );
+*/ 
+
+	AfxGetApp()->WinHelp(pHelpInfo->dwContextId,HELP_CONTEXTPOPUP);
+	return TRUE;
+
+//	return CDialog::OnHelpInfo(pHelpInfo);
+}
+
+/////////////////////////// end of module //////////////

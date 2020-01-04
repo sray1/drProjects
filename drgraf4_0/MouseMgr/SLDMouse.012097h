@@ -1,0 +1,229 @@
+ // ELMouse.h : header file
+//
+#ifndef _SLD_MOUSE_H 
+#define _SLD_MOUSE_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+                    
+#include "SupMouse.h"
+///////////////////// Modeless
+#include "Dlg_F_MI.h"
+#include "Dlg_D_RI.h"
+#include "Dlg_PrsI.h"
+#include "Dlg_ThrI.h"
+#include "Dlg_LWtI.h"
+/////////////////////
+#include "DrF_M.h" 	
+#include "DrD_R.h" 	
+#include "DrPrs.h" 	
+#include "DrThr.h" 	
+#include "DrLWt.h"
+///////////////////// 	
+#include "DrNode.h" 	
+#include "DrLabel.h" 	
+#include "DrCurve.h" 	
+#include "DListMgr.h"
+#include "Def_Type.h"                    
+#include "Def_StaL.h"	// StaLort                    
+#include "Def_Mous.h"                    
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class CSLDMouse : public CSupMouse
+{
+public:
+
+	CSLDMouse();
+//////////////////////////////////////
+	DECLARE_SERIAL(CSLDMouse)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+
+	///////////////////////////////////////////////////////////////////////////
+	UINT			ReSetToolID_SLD(UINT CntlID,UINT IGenID, UINT OperID);
+	void			InitDlgIn_SLD();
+	void			ModeLessOff_SLD();
+	void			ModeLessOn_SLD();
+	CDlg_F_MI*		GetF_MInDlg(){return m_pF_MInDlg;};	// F_MSup                                                                                
+	CDlg_D_RI*		GetD_RInDlg(){return m_pD_RInDlg;};	//                                                                                 
+	CDlg_PrsI*		GetPrsInDlg(){return m_pPrsInDlg;};	//                                                                                 
+	CDlg_ThrI*		GetThrInDlg(){return m_pThrInDlg;};	//                                                                                 
+	CDlg_LWtI*		GetLWtInDlg(){return m_pLWtInDlg;};	//                                                                                 
+	/////////////////////
+	void 			OnEBoxMouseMove_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonDown_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonDown_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonUp_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonUp_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivateF_MIn(UINT wParam, long lParam);
+	long			CancelF_MIn(UINT wParam, long lParam);
+	long			GoodByeF_MIn(UINT wParam, long lParam);
+	long			UpdateF_MIn(UINT wParam, long lParam);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivateD_RIn(UINT wParam, long lParam);
+	long			CancelD_RIn(UINT wParam, long lParam);
+	long			GoodByeD_RIn(UINT wParam, long lParam);
+	long			UpdateD_RIn(UINT wParam, long lParam);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivatePrsIn(UINT wParam, long lParam);
+	long			CancelPrsIn(UINT wParam, long lParam);
+	long			GoodByePrsIn(UINT wParam, long lParam);
+	long			UpdatePrsIn(UINT wParam, long lParam);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivateThrIn(UINT wParam, long lParam);
+	long			CancelThrIn(UINT wParam, long lParam);
+	long			GoodByeThrIn(UINT wParam, long lParam);
+	long			UpdateThrIn(UINT wParam, long lParam);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivateLWtIn(UINT wParam, long lParam);
+	long			CancelLWtIn(UINT wParam, long lParam);
+	long			GoodByeLWtIn(UINT wParam, long lParam);
+	long			UpdateLWtIn(UINT wParam, long lParam);
+	//////////////////////////////////////////////////////
+	virtual STALPROC	GetStaLProc(){return m_StaLProc;};
+	virtual void		SetStaLProc(STALPROC b)
+						{
+							m_StaLProcOld	= m_StaLProc;
+							m_StaLProc		= b;
+						};
+  				
+		
+protected:
+
+
+	virtual void	ElementLeftDown_SLD();				// described in derived also
+	virtual void	ElementLeftUp_SLD(CPoint point);	// described in derived also
+	////////////////////////////////////////////////////////////////////// FORCE
+	void		UpdateForceDlg_TRUE();
+	void		UpdateForceDlg_FALSE();
+	///////////////////////////////////////////////////////// 
+	int			ShowInfo_NodeForce(CDrNode* pDrNode, char* buf, int jStart);
+	int 		ShowNodeForce(CString* pID,int nHowMany);
+	int 		LeftUp_NodeForce(CPoint point);
+	///////////////////////////////////////////////////////// 
+	int			ShowInfo_CurveForce(CDrCurve* pDrCurve, char* buf, int jStart);
+	int			ShowCurveForce(CString* pID,int nHowMany);
+	int			LeftUp_CurveForce(CPoint point);
+	////////////////////////////////////////////////////////////////////// DISPLACE
+	void		UpdateDisplaceDlg_TRUE();
+	void		UpdateDisplaceDlg_FALSE();
+	///////////////////////////////////////////////////////// 
+	int 		ShowNodeDisplace(CString* pID,int nHowMany);
+	int 		LeftUp_NodeDisplace(CPoint point);
+	///////////////////////////////////////////////////////// 
+	int			ShowCurveDisplace(CString* pID,int nHowMany);
+	int			LeftUp_CurveDisplace(CPoint point);
+	////////////////////////////////////////////////////////////////////// PRESSURE
+	void		UpdatePressureDlg_TRUE();
+	void		UpdatePressureDlg_FALSE();
+	///////////////////////////////////////////////////////// 
+//	int 		ShowNodePressure(CString* pID,int nHowMany);
+//	int 		LeftUp_NodePressure(CPoint point);
+	///////////////////////////////////////////////////////// 
+	int			ShowCurvePressure(CString* pID,int nHowMany);
+	int			LeftUp_CurvePressure(CPoint point);
+	////////////////////////////////////////////////////////////////////// THERMAL
+	void		UpdateThermalDlg_TRUE();
+	void		UpdateThermalDlg_FALSE();
+	///////////////////////////////////////////////////////// 
+//	int 		ShowNodePressure(CString* pID,int nHowMany);
+//	int 		LeftUp_NodePressure(CPoint point);
+	///////////////////////////////////////////////////////// 
+	int			ShowCurveThermal(CString* pID,int nHowMany);
+	int			LeftUp_CurveThermal(CPoint point);
+	////////////////////////////////////////////////////////////////////// LUMPWT
+	void		UpdateLumpWtDlg_TRUE();
+	void		UpdateLumpWtDlg_FALSE();
+	///////////////////////////////////////////////////////// 
+	int 		ShowNodeLumpWt(CString* pID,int nHowMany);
+	int 		LeftUp_NodeLumpWt(CPoint point);
+	///////////////////////////////////////////////////////// 
+	int			ShowCurveLumpWt(CString* pID,int nHowMany);
+	int			LeftUp_CurveLumpWt(CPoint point);
+	/////////////////////////////////////////////////////////////////////////// F_M & D_R
+	double		GetFx(){return m_Tx;};
+	void		SetFx(double b){ m_Tx = b;};
+	double		GetFy(){return m_Ty;};
+	void		SetFy(double b){ m_Ty = b;};
+	double		GetFz(){return m_Tz;};
+	void		SetFz(double b){ m_Tz = b;};
+	double		GetMx(){return m_Rx;};
+	void		SetMx(double b){ m_Rx = b;};
+	double		GetMy(){return m_Ry;};
+	void		SetMy(double b){ m_Ry = b;};
+	double		GetMz(){return m_Rz;};
+	void		SetMz(double b){ m_Rz = b;};
+	/////////////////////////////////////////////////////////////////////////// Pressure
+	/////////////////////////////////////////////////////////////////////////// Thermal
+	/////////////////////////////////////////////////////////////////////////// LumpWt
+	BOOL		IsGravMulOn(){return m_bGravMul;};
+	void		SetGravMul(BOOL b){m_bGravMul = b;};
+	
+
+protected:  
+// Attributes
+
+
+	CDlg_StLI*	m_pStLInDlg;                                                                                
+    int			m_LastStLNum;
+	/////////////////////////////////////////// F_M and D_R
+	CString		m_CurrentStLID;
+	CString		m_CurrentStLIDOld;
+	CDrF_M*		m_pCurrentF_M;
+	STALPROC	m_StaLProcOld;
+	STALPROC	m_StaLProc;
+	double    	m_Tx;			// also for Prs,Thr and LWt
+	double    	m_Ty;			// also for Prs,Thr and LWt
+	double    	m_Tz;			// also for             LWt
+	double    	m_Rx;
+	double    	m_Ry;
+	double    	m_Rz;
+//	CString		m_aNid;			// already in supMpouse
+//	BOOL		m_bTan;			// already in supMpouse
+	/////////////////////////////////////////// D_R
+	CDrD_R*		m_pCurrentD_R;
+	/////////////////////////////////////////// Prs
+	CDrPrs*		m_pCurrentPrs;
+	/////////////////////////////////////////// Thr
+	CDrThr*		m_pCurrentThr;
+	/////////////////////////////////////////// LWt
+	CDrLWt*		m_pCurrentLWt;
+	BOOL		m_bGravMul;
+
+
+//Operations
+public:
+
+	~CSLDMouse();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CSLDMouse)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

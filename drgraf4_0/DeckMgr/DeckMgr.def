@@ -1,0 +1,66 @@
+; Deck_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	Deck_D32
+DESCRIPTION  'Deck Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitDeckDLL											@2 NONAME
+
+
+; CDeckMgr
+	; Constructor and Destructor
+
+
+??0CDeckMgr@@QAE@XZ
+??1CDeckMgr@@UAE@XZ
+?UpdateDeckList@CDeckMgr@@QAEXXZ
+
+
+;CNodDeck
+
+
+
+;CCurDeck
+
+
+
+;CPatDeck
+
+
+
+;CSolDeck
+
+
+
+;CSupDeck
+
+
+
+;CSLDDeck
+
+
+
+;CFE0DDeck
+
+
+
+;CFE1DDeck
+
+
+
+;CFE2DDeck
+
+
+
+;CFE3DDeck
+
+
+
+ 

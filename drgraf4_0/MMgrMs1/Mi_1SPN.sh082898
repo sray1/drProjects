@@ -1,0 +1,75 @@
+ // ELMouse.h : header file
+//
+#ifndef _MI_1SPN_H 
+#define _MI_1SPN_H 
+
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+                    
+#include "DrMesh1D.h"
+#include "MI_0SPN.h"
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class AFX_EXT_CLASS CMI_1SPN : public CMI_0SPN
+{
+public:
+
+	CMI_1SPN();
+//////////////////////////////////////
+	DECLARE_SERIAL(CMI_1SPN)
+//////////////////////////////////////
+
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+	int		SpawnMESH1DShowingDlg(CDrMesh1D* pNewMESH1D,CDrMesh1D* pOldMESH1D,
+											CDrObject* pContextObj,UINT nContextType); 
+	int		SpawnMESH1DWithoutDlg(CDrMesh1D* pNewMESH1D,CDrMesh1D* pOldMESH1D,pMATRIX pXFMat,
+										CString* pCid,CDrObject* pContextObj,UINT nContextType);
+	//////////////////////////////////////////////////////////////////////////////////
+	int		FillSpawnedMESH1DDlgDataBase(CDrMesh1D* pDrMESH1D,CString& Cid,CString& ParentCid);
+    				
+		
+protected:
+
+	int		GetInfoFromDlg(CDrMesh1D* pNewMESH1D, CDrMesh1D* pOldMESH1D);
+	int		SpawnMESH1D(CDrMesh1D* pOldMESH1D, pMATRIX pXFMat);
+	int		SpawnFE0DListinMESH1D(CDListMgr* pFillList, pMATRIX pXFMat, BOOL bCNode);
+	void	ReciprocateMESH1DNodes(CDListMgr* pList);
+
+	
+
+protected:
+	
+	CDrMesh1D*	m_pDrMESH1D;
+	//////////////////////
+
+    
+//Operations
+public:
+
+	~CMI_1SPN();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CMI_1SPN)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

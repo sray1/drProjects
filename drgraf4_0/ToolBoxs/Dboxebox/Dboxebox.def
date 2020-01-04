@@ -1,0 +1,11 @@
+; dboxebox.def : Declares the module parameters for the application.
+
+NAME         DBOXEBOX32
+DESCRIPTION  'DBOXEBOX Windows Application'
+EXETYPE      WINDOWS
+
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+
+
+

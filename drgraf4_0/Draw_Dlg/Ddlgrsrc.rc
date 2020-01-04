@@ -1,0 +1,195 @@
+//Microsoft App Studio generated resource script.
+//
+#include "ddlgrsrc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IMAGE1DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1U.BMP"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_TEXT_INSERT DIALOG DISCARDABLE  0, 0, 212, 135
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Label  Insert"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,160,100,45,
+                    28
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,160,
+                    4,44,28
+    EDITTEXT        IDD_EDIT_LABEL,4,4,140,12,ES_AUTOHSCROLL
+    LISTBOX         IDD_LIST_LABEL,4,20,140,84,LBS_SORT | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_HSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Rotation (from Horizontal)",IDC_STATIC,4,116,84,12
+    EDITTEXT        IDC_TEXT_ANGLE,96,116,30,12,ES_AUTOHSCROLL
+    LTEXT           "Degree",IDC_STATIC,128,116,23,12
+END
+
+IDD_LABEL_EDIT DIALOG DISCARDABLE  0, 0, 185, 50
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Label Edit"
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_EDIT_LABEL,4,4,176,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Delete",IDC_DELETE,4,24,32,24
+    PUSHBUTTON      "Change",IDC_EDIT,148,24,32,24
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,72,
+                    24,40,24
+END
+
+IDD_GRID DIALOG DISCARDABLE  100, 100, 256, 207
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Grid Parameters"
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_ALIGN_NODE,72,112,48,64,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Alignment Node: ",IDC_STATIC,8,114,60,10
+    COMBOBOX        IDC_CNODE_FROM,72,133,48,63,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "From Node: ",IDC_STATIC,12,136,56,8
+    COMBOBOX        IDC_CNODE_TO,72,149,48,55,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "To Node: ",IDC_STATIC,12,152,56,8
+    GROUPBOX        "Rotation Axis",IDC_STATIC,8,124,136,48
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,8,
+                    176,40,23
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,208,176,38,
+                    22
+    RTEXT           "Number of X- Steps: ",IDC_STATIC,20,71,68,9
+    COMBOBOX        IDC_CNODE_MIN,92,36,48,60,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_STEP_X,92,68,40,12,ES_AUTOHSCROLL
+    RTEXT           "Minimum Control Node: ",IDC_STATIC,12,39,76,8
+    COMBOBOX        IDC_CNODE_MAX,92,52,48,56,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Maximum Control Node: ",IDC_STATIC,12,55,76,8
+    RTEXT           "Number of Y- Steps :",IDC_STATIC,20,84,68,9
+    EDITTEXT        IDC_STEP_Y,92,80,40,12,ES_AUTOHSCROLL
+    RTEXT           "Number of Z- Steps: ",IDC_STATIC,20,95,68,9
+    EDITTEXT        IDC_STEP_Z,92,92,40,12,ES_AUTOHSCROLL
+    CONTROL         "Left",IDC_LEFT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    164,20,32,10
+    CONTROL         "Top",IDC_TOP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,164,
+                    44,32,10
+    CONTROL         "Right",IDC_RIGHT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    164,32,32,10
+    CONTROL         "Bottom",IDC_BOTTOM,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,204,20,32,10
+    CONTROL         "Front",IDC_FRONT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    204,32,32,10
+    CONTROL         "Back",IDC_BACK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    204,44,32,10
+    GROUPBOX        "Drawing Grid Controls",IDC_STATIC,152,4,96,124
+    CONTROL         "Screen Full",IDC_FULL,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,172,144,44,10
+    CONTROL         "Rotated",IDC_ROTATE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,208,156,36,10
+    CONTROL         "Aligned",IDC_ALIGN,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,160,156,32,10
+    CONTROL         "ForeGround",IDC_FOREGROUND,"Button",BS_AUTORADIOBUTTON,
+                    176,100,48,10
+    CONTROL         "BackGround",IDC_BACKGROUND,"Button",BS_AUTORADIOBUTTON,
+                    176,112,52,10
+    GROUPBOX        "",IDC_STATIC,168,92,64,32
+    GROUPBOX        "Data Grid Controls",IDC_STATIC,152,128,96,44
+    CONTROL         "Internal X",IDC_XCON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,176,60,44,10
+    CONTROL         "Internal Z",IDC_ZCON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,176,84,44,10
+    CONTROL         "Internal Y",IDC_YCON,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,176,72,44,10
+    EDITTEXT        IDC_GRIDID,84,12,31,12,ES_AUTOHSCROLL
+    RTEXT           "Grid ID",IDC_STATIC,44,15,31,8
+    GROUPBOX        "Grid Essentials",IDC_STATIC,8,24,136,84
+END
+
+IDD_EYEPOSITION DIALOG DISCARDABLE  0, 0, 193, 130
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Viewer's Eye Position"
+FONT 12, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,108,8,34,22
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,108,
+                    52,32,21
+    GROUPBOX        "Sample",IDC_SAMPLE,10,5,75,70
+    LTEXT           "Pitch (about X-axis)",IDC_STATIC,8,88,80,8
+    EDITTEXT        IDC_PITCH,96,88,19,12
+    LTEXT           "Yaw ( about Y- axis)",IDC_STATIC,8,100,85,8
+    EDITTEXT        IDC_ROLL,96,112,19,12
+    LTEXT           "Increment/Decrement",IDC_STATIC,8,76,75,8
+    EDITTEXT        IDC_INCREMENT,96,76,19,12,ES_AUTOHSCROLL
+    LTEXT           "degrees",IDC_STATIC,158,80,30,8
+    LTEXT           "degrees",IDC_STATIC,158,92,30,8
+    LTEXT           "degrees",IDC_STATIC,158,104,30,8
+    LTEXT           "Roll ( about Z- axis)",IDC_STATIC,8,112,85,8
+    EDITTEXT        IDC_YAW,96,100,19,12
+    LTEXT           "degrees",IDC_STATIC,158,116,30,8
+END
+
+IDD_AXISWND DIALOG DISCARDABLE  0, 480, 49, 52
+STYLE WS_POPUP | WS_VISIBLE
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "",IDC_AXIS,0,0,48,48
+END
+
+#ifdef APSTUDIO_INVOKED
+//////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "ddlgrsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\0"
+END
+
+/////////////////////////////////////////////////////////////////////////////////////
+#endif    // APSTUDIO_INVOKED
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "DDlgMgr Resource String"
+END
+

@@ -1,0 +1,228 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Mmgr_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP2.tmp" with contents
+[
+/nologo /MDd /W4 /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/Mmgr_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\MOUSE_D.PDB" /FD /c 
+"C:\drgraf4_0\MOUSEMGR\CurMouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\Dbmouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\DLDmouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\Mi_obj3d.cpp"
+"C:\drgraf4_0\MOUSEMGR\Mouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\Mousemgr.cpp"
+"C:\drgraf4_0\MOUSEMGR\NodMouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\O3DMouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\PatMouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\SLDmouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\SolMouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\SpLmouse.cpp"
+"C:\drgraf4_0\MOUSEMGR\Supmouse.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP2.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP3.tmp" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib EDlg_D32.lib DDlg_D32.lib Dr3D_D32.lib MSup_D32.lib MStL_D32.lib MNod_D32.lib MCur_D32.lib MPat_D32.lib MSol_D32.lib MO3D_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/Mmgr_d32.pdb" /map:".\Debug/Mmgr_d32.map" /debug /machine:IX86 /def:".\Mmgr_d.def" /out:"c:\drgraf4_0\applic\Debug\Mmgr_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Mmgr_d32.lib" 
+.\Debug\CalcTime.obj
+.\Debug\CurMouse.obj
+.\Debug\Dbmouse.obj
+.\Debug\DLDmouse.obj
+.\Debug\Mi_cur_i.obj
+.\Debug\Mi_obj3d.obj
+.\Debug\Mi_pat_i.obj
+.\Debug\Mi_sol_i.obj
+.\Debug\Mmgrdll.obj
+.\Debug\Mouse.obj
+.\Debug\Mousemgr.obj
+.\Debug\NodMouse.obj
+.\Debug\O3DMouse.obj
+.\Debug\PatMouse.obj
+.\Debug\SLDmouse.obj
+.\Debug\SolMouse.obj
+.\Debug\SpLmouse.obj
+.\Debug\Supmouse.obj
+.\Debug\Mmgr.res
+\drgraf4_0\applic\Debug\MCur_D32.lib
+\drgraf4_0\applic\Debug\MNod_d32.lib
+\drgraf4_0\applic\Debug\MO3D_D32.lib
+\drgraf4_0\applic\Debug\MPat_D32.lib
+\drgraf4_0\applic\Debug\MSol_D32.lib
+\drGraf4_0\Applic\Debug\MSup_D32.lib
+\drGraf4_0\Applic\Debug\MStL_D32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP3.tmp"
+<h3>Output Window</h3>
+Compiling...
+CurMouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+c:\drgraf4_0\mousemgr\curmouse.cpp(927) : warning C4390: ';' : empty controlled statement found; is this the intent?
+c:\drgraf4_0\mousemgr\curmouse.cpp(1075) : warning C4553: '==' : operator has no effect; did you intend '='?
+c:\drgraf4_0\mousemgr\curmouse.cpp(2289) : warning C4390: ';' : empty controlled statement found; is this the intent?
+Dbmouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+DLDmouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+Mi_obj3d.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+Mouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+C:\drgraf4_0\MOUSEMGR\Mouse.cpp(659) : warning C4390: ';' : empty controlled statement found; is this the intent?
+Mousemgr.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+NodMouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+C:\drgraf4_0\MOUSEMGR\NodMouse.cpp(483) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MOUSEMGR\NodMouse.cpp(1836) : warning C4390: ';' : empty controlled statement found; is this the intent?
+O3DMouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+C:\drgraf4_0\MOUSEMGR\O3DMouse.cpp(255) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MOUSEMGR\O3DMouse.cpp(949) : warning C4390: ';' : empty controlled statement found; is this the intent?
+PatMouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+C:\drgraf4_0\MOUSEMGR\PatMouse.cpp(952) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MOUSEMGR\PatMouse.cpp(3763) : warning C4390: ';' : empty controlled statement found; is this the intent?
+SLDmouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+C:\drgraf4_0\MOUSEMGR\SLDmouse.cpp(533) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MOUSEMGR\SLDmouse.cpp(2750) : warning C4390: ';' : empty controlled statement found; is this the intent?
+SolMouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+C:\drgraf4_0\MOUSEMGR\SolMouse.cpp(792) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MOUSEMGR\SolMouse.cpp(3594) : warning C4390: ';' : empty controlled statement found; is this the intent?
+SpLmouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+Supmouse.cpp
+c:\drgraf4_0\allheads\drgrafrm.h(104) : error C2065: 'ID_RESET_CNTLOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(109) : error C2065: 'ID_RESET_IGENOPEN_MESH' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(114) : error C2065: 'ID_RESET_MASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(120) : error C2065: 'ID_RESET_IGENOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(125) : error C2065: 'ID_RESET_CNTLOPEN' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(130) : error C2065: 'ID_RESET_TASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(142) : error C2065: 'ID_RESET_VASKID' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(149) : error C2065: 'ID_RESET_CNTLOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(156) : error C2065: 'ID_RESET_IGENOPEN_AUXI' : undeclared identifier
+c:\drgraf4_0\allheads\drgrafrm.h(163) : error C2065: 'ID_RESET_XASKID' : undeclared identifier
+C:\drgraf4_0\MOUSEMGR\Supmouse.cpp(666) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MOUSEMGR\Supmouse.cpp(2952) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MOUSEMGR\Supmouse.cpp(3460) : warning C4553: '==' : operator has no effect; did you intend '='?
+Error executing cl.exe.
+
+
+
+<h3>Results</h3>
+MMs0_d32.dll - 130 error(s), 17 warning(s)
+</pre>
+</body>
+</html>

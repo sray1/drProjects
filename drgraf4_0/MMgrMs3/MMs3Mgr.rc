@@ -1,0 +1,230 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "MMs3Rsrc.h"
+
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "CommRsrc.h"
+#include "MMs0Rsrc.h"
+#include "MMs1Rsrc.h"
+#include "MMs2Rsrc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IMAGE1DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1U.BMP"
+IDB_CURVEBIT            BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\CURVEBIT.BMP"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_LOCALMATRIX DIALOG DISCARDABLE  90, 100, 216, 155
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Local Transformation Matrix"
+FONT 6, "System"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,175,125,32,
+                    20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,10,
+                    125,32,20
+    RTEXT           "Rotate",IDC_STATIC,16,68,24,8
+    EDITTEXT        IDC_ROT_X,48,64,32,12
+    EDITTEXT        IDC_ROT_Z,120,64,32,12
+    EDITTEXT        IDC_ROT_Y,84,64,32,12
+    RTEXT           "Translate",IDC_STATIC,8,52,32,8
+    EDITTEXT        IDC_TRAN_X,48,48,32,12
+    EDITTEXT        IDC_TRAN_Z,120,48,32,12
+    EDITTEXT        IDC_TRAN_Y,84,48,32,12
+    RTEXT           "Scale",IDC_STATIC,20,84,20,8
+    EDITTEXT        IDC_SCALE_X,48,80,32,12
+    EDITTEXT        IDC_SCALE_Z,120,80,32,12
+    EDITTEXT        IDC_SCALE_Y,84,80,32,12
+    CTEXT           "X",IDC_STATIC,60,36,12,8
+    CTEXT           "Y",IDC_STATIC,96,36,12,8
+    CTEXT           "Z",IDC_STATIC,132,36,12,8
+    CTEXT           "Translate To ",IDC_STATIC,156,36,52,8
+    COMBOBOX        IDC_ROTPT,96,12,52,64,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    ICON            IDI_ICONPIPE,IDC_STATIC,16,8,18,20
+    COMBOBOX        IDC_TRANPT,160,48,52,72,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CTEXT           "Center About ",IDC_STATIC,40,16,52,8
+    RTEXT           "Shear",IDC_STATIC,20,99,20,8
+    EDITTEXT        IDC_SHEAR_X,48,95,32,12
+    EDITTEXT        IDC_SHEAR_Z,120,95,32,12
+    EDITTEXT        IDC_SHEAR_Y,84,95,32,12
+END
+
+IDD_POST_SOLID DIALOG DISCARDABLE  120, 100, 191, 130
+STYLE DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "POST 3DSolid Finite Element"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,152,104,34,
+                    24
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,4,
+                    104,36,24
+    RTEXT           "POSTED Solid Ic: ",IDC_STATIC,44,11,64,9
+    CTEXT           "Solid Pool",IDC_STATIC,8,60,40,8
+    COMBOBOX        IDC_ORIENT,4,40,48,44,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CTEXT           "Orientation",IDC_STATIC,8,28,40,9
+    COMBOBOX        IDC_DIRTYPATCH,4,72,48,68,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CTEXT           "FEM Type",IDC_STATIC,136,60,40,8
+    COMBOBOX        IDC_SUBDIV,132,40,48,44,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CTEXT           "SubDivision",IDC_STATIC,136,28,40,9
+    COMBOBOX        IDC_FEMS,132,72,48,72,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Transformation",IDC_LOCALM,68,40,50,15
+    PUSHBUTTON      "Rendition",IDC_RENDINFO,68,72,50,14
+    CONTROL         "Identity Transformation",IDC_DEFAULT_LMAT,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,60,104,92,10
+    CONTROL         "WireFrame Rendition",IDC_DEFAULT_REND,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,60,116,92,10
+    EDITTEXT        IDC_PID_POST,113,8,40,12,ES_AUTOHSCROLL
+    ICON            IDI_ICONPIPE,IDC_STATIC,8,4,18,20
+END
+
+IDD_S_SPAWN DIALOG DISCARDABLE  0, 0, 297, 191
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "SPAWNING Solid"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,207,152,40,
+                    24
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,45,
+                    150,40,26
+    COMBOBOX        IDC_CID,45,41,74,60,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Parent Solic: ",IDC_STATIC,45,30,60,8
+    RTEXT           "Spawn Ic: ",IDC_STATIC,155,33,39,9
+    EDITTEXT        IDC_SPNID,207,30,40,12,ES_AUTOHSCROLL
+    ICON            IDI_ICONPIPE,IDC_STATIC,10,10,18,20
+    LISTBOX         IDD_LIST,200,46,48,94,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Transformations",IDC_XFORM,"Button",BS_AUTORADIOBUTTON,
+                    65,80,66,10
+    CONTROL         "Symmetry",IDC_SYMM,"Button",BS_AUTORADIOBUTTON,65,106,
+                    46,10
+    GROUPBOX        "Spawn by ",IDC_STATIC,45,60,115,70
+END
+
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "MMs3Rsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""CommRsrc.h""\r\n"
+    "#include ""MMs0Rsrc.h""\r\n"
+    "#include ""MMs1Rsrc.h""\r\n"
+    "#include ""MMs2Rsrc.h""\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICONPIPE            ICON    DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\ICO_PIPE.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_SOL_IN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 389
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 34
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "MMgr_Ms3 Resource String"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

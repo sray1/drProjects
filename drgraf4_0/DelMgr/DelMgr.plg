@@ -1,0 +1,129 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: DelMgr - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/Dmgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\DelMgr\Dmgr.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSPE1E4.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/DelMgr.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\DelMgr\CurDel.cpp"
+"C:\drgraf4_0\DelMgr\DelMgr.cpp"
+"C:\drgraf4_0\DelMgr\DLDDel.cpp"
+"C:\drgraf4_0\DelMgr\DmgrDll.cpp"
+"C:\drgraf4_0\DelMgr\NodDel.cpp"
+"C:\drgraf4_0\DelMgr\PatDel.cpp"
+"C:\drgraf4_0\DelMgr\SLDDel.cpp"
+"C:\drgraf4_0\DelMgr\SolDel.cpp"
+"C:\drgraf4_0\DelMgr\SpLDel.cpp"
+"C:\drgraf4_0\DelMgr\SupDel.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSPE1E4.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSPE1E5.TMP" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib EDlg_D32.lib DDlg_D32.lib Dr3D_D32.lib MSup_D32.lib MStL_D32.lib MNod_D32.lib MCur_D32.lib MPat_D32.lib MSol_D32.lib MMgr_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/DMgr_d32.pdb" /map:".\Debug/DMgr_d32.map" /debug /machine:I386 /def:".\Dmgr_d.def" /out:"c:\drgraf4_0\applic\Debug\DMgr_d32.dll" /implib:"c:\drgraf4_0\applic\Debug/DMgr_d32.lib" 
+.\Debug\CurDel.obj
+.\Debug\DelMgr.obj
+.\Debug\DLDDel.obj
+.\Debug\DmgrDll.obj
+.\Debug\NodDel.obj
+.\Debug\PatDel.obj
+.\Debug\SLDDel.obj
+.\Debug\SolDel.obj
+.\Debug\SpLDel.obj
+.\Debug\SupDel.obj
+.\Debug\Dmgr.res
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSPE1E5.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+CurDel.cpp
+c:\drgraf4_0\delmgr\curdel.cpp(44) : warning C4189: 'pBool' : local variable is initialized but not referenced
+c:\drgraf4_0\delmgr\curdel.cpp(132) : warning C4189: 'pDrPatch' : local variable is initialized but not referenced
+c:\drgraf4_0\delmgr\curdel.cpp(417) : warning C4390: ';' : empty controlled statement found; is this the intent?
+c:\drgraf4_0\delmgr\curdel.cpp(428) : warning C4189: 'pID' : local variable is initialized but not referenced
+c:\drgraf4_0\delmgr\curdel.cpp(548) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+c:\drgraf4_0\delmgr\curdel.cpp(550) : warning C4189: 'IGenID' : local variable is initialized but not referenced
+c:\drgraf4_0\delmgr\curdel.cpp(541) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\delmgr\curdel.cpp(609) : warning C4390: ';' : empty controlled statement found; is this the intent?
+DelMgr.cpp
+DLDDel.cpp
+DmgrDll.cpp
+C:\drgraf4_0\DelMgr\DmgrDll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+NodDel.cpp
+C:\drgraf4_0\DelMgr\NodDel.cpp(68) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\NodDel.cpp(452) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\DelMgr\NodDel.cpp(458) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\NodDel.cpp(716) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\NodDel.cpp(709) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\NodDel.cpp(774) : warning C4390: ';' : empty controlled statement found; is this the intent?
+PatDel.cpp
+C:\drgraf4_0\DelMgr\NodDel.cpp(566) : warning C4700: local variable 'pID' used without having been initialized
+C:\drgraf4_0\DelMgr\NodDel.cpp(518) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\DelMgr\NodDel.cpp(591) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\DelMgr\PatDel.cpp(45) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\PatDel.cpp(280) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\DelMgr\PatDel.cpp(291) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\PatDel.cpp(407) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\PatDel.cpp(409) : warning C4189: 'IGenID' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\PatDel.cpp(399) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\PatDel.cpp(469) : warning C4390: ';' : empty controlled statement found; is this the intent?
+SLDDel.cpp
+C:\drgraf4_0\DelMgr\SLDDel.cpp(47) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(155) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(197) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(239) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(281) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(356) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\DelMgr\SLDDel.cpp(514) : warning C4189: 'bNew' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(694) : warning C4189: 'bNew' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(869) : warning C4189: 'bNew' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(1023) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(1022) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SLDDel.cpp(1112) : warning C4390: ';' : empty controlled statement found; is this the intent?
+SolDel.cpp
+C:\drgraf4_0\DelMgr\SLDDel.cpp(565) : warning C4701: local variable 'pStatic' may be used without having been initialized
+C:\drgraf4_0\DelMgr\SLDDel.cpp(602) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\DelMgr\SLDDel.cpp(742) : warning C4701: local variable 'pStatic' may be used without having been initialized
+C:\drgraf4_0\DelMgr\SLDDel.cpp(917) : warning C4701: local variable 'pStatic' may be used without having been initialized
+C:\drgraf4_0\DelMgr\SolDel.cpp(45) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SolDel.cpp(237) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\DelMgr\SolDel.cpp(248) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SolDel.cpp(364) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SolDel.cpp(366) : warning C4189: 'IGenID' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SolDel.cpp(356) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SolDel.cpp(426) : warning C4390: ';' : empty controlled statement found; is this the intent?
+SpLDel.cpp
+SupDel.cpp
+C:\drgraf4_0\DelMgr\SupDel.cpp(44) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(104) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(146) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(188) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(230) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(305) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\DelMgr\SupDel.cpp(503) : warning C4189: 'bNew' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(727) : warning C4189: 'bNew' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(946) : warning C4189: 'bNew' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(1090) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(1089) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DelMgr\SupDel.cpp(1195) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\DelMgr\SupDel.cpp(369) : warning C4701: local variable 'pDrLinSup' may be used without having been initialized
+C:\drgraf4_0\DelMgr\SupDel.cpp(567) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\DelMgr\SupDel.cpp(709) : warning C4701: local variable 'pDrLinSup' may be used without having been initialized
+C:\drgraf4_0\DelMgr\SupDel.cpp(928) : warning C4701: local variable 'pDrLinSup' may be used without having been initialized
+Linking...
+.\Dmgr_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Dmgr_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug/DMgr_d32.lib and object c:\drgraf4_0\applic\Debug/DMgr_d32.exp
+
+
+
+<h3>Results</h3>
+DMgr_d32.dll - 0 error(s), 66 warning(s)
+</pre>
+</body>
+</html>

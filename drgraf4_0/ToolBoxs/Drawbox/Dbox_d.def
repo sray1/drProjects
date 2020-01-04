@@ -1,0 +1,34 @@
+; DBox_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	DBox_D32
+DESCRIPTION  'DrawBox DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitDBoxDLL												
+
+
+
+; CDBoxMgr
+	; Constructor and Destructor
+	
+
+; CDrawBox
+	; Constructor and Destructor
+
+??0CDrawBox@@QAE@XZ
+??1CDrawBox@@UAE@XZ
+?GetHeight@CDrawBox@@QAEIXZ
+?GetWidth@CDrawBox@@QAEIXZ
+
+?GetActiveTool@CDrawBox@@QAEHXZ
+?GetActiveDrawObject@CDrawBox@@QAEHXZ
+
+??0CVOprBox@@QAE@XZ
+??1CVOprBox@@UAE@XZ
+  

@@ -1,0 +1,599 @@
+// Loft2.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+
+#include "Def_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "MPatMgr.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "PA_CoonP.h"
+ 
+#include "MP_CoonP.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define MIN_CNODES_CURVE	4
+#define MIN_CNODES_PATCH	16
+/////////////////////////////////////
+#define wEQL(a,b)	((a).x ==(b).x) && ((a).y ==(b).y) \
+					&& ((a).z ==(b).z)  
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMP_CoonP,CMI_GangP,1)
+/////////////////////////////////////////////////////////////////////////////
+CMP_CoonP::CMP_CoonP()
+{
+	m_bBack = FALSE;
+}
+
+CMP_CoonP::~CMP_CoonP()
+{
+}
+
+CDrPatch* CMP_CoonP::GoDoIt() 
+{
+	//////////////////////////////////////////////////////////
+	m_pDrPatch 		= GetInfo();       // PGen Dialog
+	if(!m_pDrPatch)		// cancel
+		return (CDrPatch*)NULL;
+	//////////////////////////////////	
+	m_pCNodeList 	= m_pDrPatch->GetCNodeList();	
+	///////                    				// ControlNode Mesh
+	Coon();
+	////////////////////////
+	m_PatchType = PA_COONS;
+	////////////////////////
+	if(InsertMeshInfo(FALSE)<0)		// WE HAVE CHANGED TO FALSE
+									// TO SAVE ALL CONTROL NODES
+		return (CDrPatch*)NULL;
+	/////////////////////
+	return m_pDrPatch;
+}			
+
+CDrPatch* CMP_CoonP::GetInfo()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+	//////////////////////////////////////////////////////////////////
+	CMPatMgr 	MPatMgr;
+	CMPatMgr* 	pMPatMgr = &MPatMgr;
+	CString		Cid;
+	int 		index;
+	///////////////////////////////////////////////////
+	if (pMPatMgr->DoModal_Patch_Coon(&Cid,4) == IDCANCEL)
+			return (CDrPatch*)NULL;
+    /////////////////////////////////////////////////////// update
+	m_CurrentPatchID 	= Cid;
+	index 				= pObjectMgr->
+							GetObjectIndexfromKey(PATCH,Cid,1);
+	if(index>=0)
+	{						
+		CDrPatch* pDrPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+   		//////////////////////////////
+		m_PatchProc		= pDrPatch->GetPatchProc();
+		m_CurveID_S[0]	= pDrPatch->GetCurveID(0);	// Curve_1
+		m_CurveID_S[1]	= pDrPatch->GetCurveID(1);	// Curve_2
+		m_CurveID_S[2]	= pDrPatch->GetCurveID(2);	// Curve_3
+		m_CurveID_S[3]	= pDrPatch->GetCurveID(3);	// Curve_4
+		m_CuLatch[0]	= pDrPatch->GetCurveLatch(0);
+		m_CuLatch[1]	= pDrPatch->GetCurveLatch(1);
+		m_CuLatch[2]	= pDrPatch->GetCurveLatch(2);
+		m_CuLatch[3]	= pDrPatch->GetCurveLatch(3);
+		////////////////
+		return pDrPatch;
+	}
+	else
+		return (CDrPatch*)NULL;
+}			
+
+int CMP_CoonP::GoDoIt(
+						CString&	PatchID,		
+						CDrPatch*	pDrPatch,
+						CString		PatCurveID[],
+						CURVELATCH	PatCurveLatchID[]
+				     )
+{
+	/////////////////////////////////////////////// ElemCompatibility 
+	if(!CheckElemCompatibility(PatCurveID))
+		return -1;
+	/////////////////////////////////////////////// DATABASE 
+	SetInfoForCoonBase(	PatchID,pDrPatch,PatCurveID,
+						PatCurveLatchID);
+	//////////////////////////////////////////////////////////
+	m_pDrPatch 		= pDrPatch;
+	//////////////////////////////////	
+	m_pCNodeList 	= m_pDrPatch->GetCNodeList();	
+	////////////////////////////////// Info
+	m_CurrentPatchID= m_pDrPatch->GetObjectID();
+	//////////////////////////////
+	m_PatchProc		= m_pDrPatch->GetPatchProc();
+	m_CurveID_S[0]	= m_pDrPatch->GetCurveID(0);	// Curve_1
+	m_CurveID_S[1]	= m_pDrPatch->GetCurveID(1);	// Curve_2
+	m_CurveID_S[2]	= m_pDrPatch->GetCurveID(2);	// Curve_3
+	m_CurveID_S[3]	= m_pDrPatch->GetCurveID(3);	// Curve_4
+	m_CuLatch[0]	= m_pDrPatch->GetCurveLatch(0);
+	m_CuLatch[1]	= m_pDrPatch->GetCurveLatch(1);
+	m_CuLatch[2]	= m_pDrPatch->GetCurveLatch(2);
+	m_CuLatch[3]	= m_pDrPatch->GetCurveLatch(3);
+	/////////////////////////////////////////////// ControlNode Mesh
+	Coon();
+	////////////////////////
+	m_PatchType = PA_COONS;
+	////////////////////////
+	if(InsertMeshInfo(FALSE)<0)		// WE HAVE CHANGED TO FALSE
+									// TO SAVE ALL CONTROL NODES
+		return -1;
+	else
+		/////////
+		return 0;
+}			
+
+BOOL CMP_CoonP::CheckElemCompatibility(CString PatCurveID[])
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+    ///////////////////	
+	BOOL bClosed;
+	int nOut1,nOut2;
+	int index;
+	CDrCurve* pDrCurve1;
+	CDrCurve* pDrCurve2;
+	CDrCurve* pDrCurve3;
+	CDrCurve* pDrCurve4;
+    ///////////////////////////////////////////////////////////////////////// Check S-dir Compatibility
+	////////////////////////////// nOut_S must be same
+	index			= pObjectMgr->GetObjectIndexfromKey(CURVE,PatCurveID[0],1);
+	if(index<0)
+	{
+		AfxMessageBox(
+		"No Valid Curve_1!\nPlease Select One from the List");
+		return FALSE;
+	}
+	pDrCurve1	= (CDrCurve*)(pDListMgr->GetObject(index));
+	nOut1		= pDrCurve1->GetMaxOutPts_S();
+	bClosed		= pDrCurve1->IsClosed_S();
+	////////////////////////////////////////////////////////////////////////// Curve3
+	index 			= pObjectMgr->GetObjectIndexfromKey(CURVE,PatCurveID[2],1);
+	if(index<0)
+	{
+		AfxMessageBox(
+		"No Valid Curve_3!\nPlease Select One from the List");
+		return FALSE;
+	}
+	pDrCurve3		= (CDrCurve*)(pDListMgr->GetObject(index));
+	nOut2			= pDrCurve3->GetMaxOutPts_S();
+	bClosed			= pDrCurve3->IsClosed_S();
+	////////////////////////////////////// Both must have same nOut_S
+	if(nOut1 != nOut2)
+	{
+		CString str;
+		LPTSTR buf = str.GetBuffer( 200 );
+		sprintf(buf,"Curve MisMatch!\nBOTH CURVES MUST HAVE SAME NUMBER OF ELEMENTS\nCURVE_1:\n\tNumber of Elements = %d\nCURVE_3:\n\tNumber of Elements = %d",
+			nOut1-1,nOut2-1);
+		AfxMessageBox(str);
+		str.ReleaseBuffer();
+		return FALSE;
+	}
+    ///////////////////////////////////////////////////////////////////////// Check T-dir Compatibility
+	///////////////////////////////////////////////////////////////////////// Curve2
+	index			= pObjectMgr->GetObjectIndexfromKey(CURVE,PatCurveID[1],1);
+	if(index<0)
+	{
+		AfxMessageBox(
+		"No Valid Curve_2!\nPlease Select One from the List");
+		return FALSE;
+	}
+	pDrCurve2		= (CDrCurve*)(pDListMgr->GetObject(index));
+	nOut1			= pDrCurve2->GetMaxOutPts_S();
+	bClosed			= pDrCurve2->IsClosed_S();
+	////////////////////////////////////////////////////////////////////////// Curve4
+	index 			= pObjectMgr->GetObjectIndexfromKey(CURVE,PatCurveID[3],1);
+	if(index<0)
+	{
+		AfxMessageBox(
+		"No Valid Curve_4!\nPlease Select One from the List");
+		return FALSE;
+	}
+	pDrCurve4		= (CDrCurve*)(pDListMgr->GetObject(index));
+	nOut2			= pDrCurve4->GetMaxOutPts_S();
+	bClosed			= pDrCurve4->IsClosed_S();
+	////////////////////////////////////// Both must have same nOut_S
+	if(nOut1 != nOut2)
+	{
+		CString str;
+		LPTSTR buf = str.GetBuffer( 200 );
+		sprintf(buf,"Curve MisMatch!\nBOTH CURVES MUST HAVE SAME NUMBER OF ELEMENTS\nCURVE_2:\n\tNumber of Elements = %d\nCURVE_4:\n\tNumber of Elements = %d",
+			nOut1-1,nOut2-1);
+		AfxMessageBox(str);
+		str.ReleaseBuffer();
+		return FALSE;
+	}
+	///////////////////////////////////////////////////////////////// OK
+	return TRUE;
+}
+
+int CMP_CoonP::Coon()
+{
+	//////////////////////////////////////////////////////////////////////////////////
+	//	CoonP is LINEAR interpolation of GENERATED NODES, NOT of CONTROL NODES		//
+	//	of the curves in S/T-Direction. So, all generated nodes of Curves will		//
+	//	be saved as CNodes of the patch in S/T-Direction and eventually the PATCH	//
+	//  will be generated by LINEAR interpolation in S/T- direction,				//
+	//					IRRESPECTIVE of CURVETYPE of SPINE							// 												//
+	//	THIS INEFFICIENCY is needed for Finite Element Data Generation wherein		//
+	//		Total Tally of Generated Nodes are important , Not of Control Nodes		//
+	//////////////////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* 	pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+	//////////////////////////////////////////////////////////////////
+	CDrCurve*	pDrCurve;
+	int			index,nResult;
+	CString		CurveID;
+	///////////////////////// 
+	if(m_pOut != NULL)
+	{
+		FreeMem(m_pOut);
+		m_pOut = NULL;
+	}	
+	if(m_pOutWts != NULL)
+	{
+		FreeMemD(m_pOutWts);
+		m_pOutWts = NULL;
+	}	
+	///////////////////////////////////////////////////////////////// S-dir
+	//////////////////////////////////////////////////////// Curve_1
+   	CurveID = m_CurveID_S[0];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pDrCurve)
+		return -1;
+	////////////////////////////////////// Set Curve Info	
+	GetInfo_Curve(pDrCurve);
+	/////////////////////////////////////////// PreProcess: Curve_1
+	nResult = Pre_Curve(pDrCurve, 0, m_nOut_S);
+	if(nResult<0)
+		return -1;
+	//////////////////////////////////////////////////////// Curve_3
+   	CurveID = m_CurveID_S[2];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pDrCurve)
+		return -1;
+	/////////////////////////////////////////// PreProcess: Curve_3
+	nResult = Pre_Curve(pDrCurve, 2, m_nOut_S);
+	if(nResult<0)
+		return -1;
+	/////////////////////////////////////////// Reset S-Con
+	Curve_S_Process();
+	///////////////////////////////////////////////////////////////// T-dir
+	//////////////////////////////////////////////////////// Curve_2
+   	CurveID = m_CurveID_S[1];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pDrCurve)
+		return -1;
+	////////////////////////////////////// Set Curve Info	
+	GetInfo_Curve_T(pDrCurve);
+	/////////////////////////////////////////// PreProcess: Curve_2
+	nResult = Pre_Curve(pDrCurve, 1, m_nOut_T);
+	if(nResult<0)
+		return -1;
+	//////////////////////////////////////////////////////// Curve_4
+   	CurveID = m_CurveID_S[3];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pDrCurve)
+		return -1;
+	/////////////////////////////////////////// PreProcess: Curve_4
+	nResult = Pre_Curve(pDrCurve, 3, m_nOut_T);
+	if(nResult<0)
+		return -1;
+	/////////////////////////////////////////// Reset T-Con
+	Curve_T_Process();
+	////////////////////////////////// Save PatchInfo
+	m_nOut				= (((long)m_nOut_S)*((long)m_nOut_T) );				
+	m_nOutCon			= (((long)m_nOut_SCon)*((long)m_nOut_TCon) );				
+	m_nMaxPatchCNodes	= (int)m_nOutCon;
+	/////////////////////////////////////////// Memory OutPts 
+	m_pOut		= FixMem(m_nOutCon);
+	m_pOutWts	= FixMemD(m_nOutCon);
+	if( !m_pOut || !m_pOutWts )
+	{
+		AfxMessageBox("CMP_CoonP::Loft\nFixMem Failure!");
+		return -1;
+	}
+	///////////////////////////////////////// Go Loft 
+	nResult = GenerateCNodes();
+	///////////////////////////////////////// Free InputCNodeMems
+	int i;
+	//////
+    for(i=0;i<4;i++)
+    {
+    	if(m_pIn_S[i])
+    	{
+			FreeMem(m_pIn_S[i]);
+			m_pIn_S[i] = NULL;
+		}	
+    	if(m_pInWts_S[i])
+    	{
+			FreeMemD(m_pInWts_S[i]);
+			m_pInWts_S[i] = NULL;
+		}	
+	}	
+	///////////////////////////////////////////////////////////// 
+	if(nResult<0)	
+		return -1;
+	else	
+		return 0;
+	/////////////			 
+}			
+
+int CMP_CoonP::Pre_Curve(CDrCurve* pDrCurve,int i, int nOut)
+{
+
+	/////////////////////////////////////////////// Memory OutPts 
+	m_pIn_S[i]		= FixMem(nOut);
+	m_pInWts_S[i]	= FixMemD(nOut);
+	if( !m_pIn_S[i] || !m_pInWts_S[i] )
+	{
+		AfxMessageBox("CMP_CoonP::Pre_Curve\nFixMem Failure!");
+		return -1;
+	}
+	/////////////////////////////////////////////// Generate Curve
+	m_bBack = FALSE;
+	if(m_CuLatch[i] == CL_BACKWARD)
+		m_bBack = TRUE;
+	FillMeshNodesCurve(pDrCurve, m_pIn_S[i], m_pInWts_S[i], nOut );
+	///////////////
+	return 0;
+
+}
+
+int CMP_CoonP::Curve_S_Process()
+{
+	int i;
+	////////////////////////////////////// LINEAR BEZIER in S-direction
+	m_nSegs_S			= 1;	// ALWAYS
+	m_nOrder_S			= 2;	// ALWAYS
+	m_CurveType_S		= CP_LINEAR;
+	m_nOut_SCon			= m_nOut_S;
+	m_nSegs_SCon		= m_nOut_SCon - 1;
+	///////////
+	if(m_bClosed_S)
+	{
+		m_nOut_SCon--;
+	}
+	/////////////////////////////////////
+	m_nMaxPatchCNodes_S = m_nOut_SCon;
+	/////////
+	m_pNum_t_S			= new int[m_nSegs_SCon];
+	for (i=0;i<m_nSegs_SCon;i++)
+		m_pNum_t_S[i] = 1;
+	////////////////////
+	return 0;
+}
+
+int CMP_CoonP::Curve_T_Process()
+{
+	int i;
+	////////////////////////////////////// LINEAR BEZIER in S-direction
+	m_nSegs_T			= 1;	// ALWAYS
+	m_nOrder_T			= 2;	// ALWAYS
+	m_CurveType_T		= CP_LINEAR;
+	m_nOut_TCon			= m_nOut_T;
+	m_nSegs_TCon		= m_nOut_TCon - 1;
+	///////////
+	if(m_bClosed_T)
+	{
+		m_nOut_TCon--;
+	}
+	/////////////////////////////////////
+	m_nMaxPatchCNodes_T = m_nOut_TCon;
+	/////////
+	m_pNum_t_T			= new int[m_nSegs_TCon];
+	for (i=0;i<m_nSegs_TCon;i++)
+		m_pNum_t_T[i] = 1;
+	////////////////////
+	return 0;
+}
+
+int CMP_CoonP::GetInfo_Curve_T(CDrCurve* pDrCurve)
+{
+	/////////////////	
+//	m_pWts_BZ_T			= pDrCurve->GetpWts_BZ_S();		
+//	m_nMaxCurveCNodes_T = pDrCurve->GetMaxCNodes_S();
+	////////////////////////////////////////////////// FILL INFO
+	m_nDim_T			= pDrCurve->GetnDim_S();
+	m_pNum_t_T			= pDrCurve->GetNum_tPointer_S();
+	m_pDis_t_T			= pDrCurve->GetDis_tPointer_S();
+	m_pNum_t_Ex_T		= pDrCurve->GetNum_tPointer_Ex_S();
+	m_CurveType_T		= pDrCurve->GetCurveType_S();
+	m_nOrder_T			= pDrCurve->GetOrder_S();
+	///////////////////////////////////////////	
+	m_bClosed_T			= pDrCurve->IsClosed_S();		// X-Section
+	m_nOut_TCon			= (int)m_nMaxCurveCNodes_S;
+    ///////////////////////////////////
+	m_nOut_T			= (int)pDrCurve->GetLongOutPts();
+	m_nSegs_T			= pDrCurve->GetSegmentCount_S();
+	//////// 
+	m_nSegs_TCon		= m_nOut_SCon - 1;
+	m_nMaxPatchCNodes_T = m_nOut_SCon;
+	///////////////////////////////
+	return 0;
+}
+
+int CMP_CoonP::GenerateCNodes()
+{
+
+	////////////////////////////////////////////// 
+	int nOut		= (int)m_nOutCon;  // for now
+	////////////////////////////////////////////// generate Patch Pts
+	CPA_CoonP	PA_CoonP;
+	int nOutActual	= PA_CoonP.CoonCurves
+			(
+				(short)m_nOut_SCon,	//	number of input Control points in S-dir
+				(short)m_nOut_TCon,	//	number of input Control points in T-dir
+				m_pIn_S[0],			//	input data point for Curve 1
+		      	m_pInWts_S[0],		//	input data Weight for Curve 1 
+				m_pIn_S[1],			//	input data point for Curve 2
+		      	m_pInWts_S[1],		//	input data Weight for Curve 2 
+				m_pIn_S[2],			//	input data point for Curve 3
+		      	m_pInWts_S[2],		//	input data Weight for Curve 3 
+				m_pIn_S[3],			//	input data point for Curve 4
+		      	m_pInWts_S[3],		//	input data Weight for Curve 4 
+				m_pOut,				//	Output ControlPts array
+				m_pOutWts			//	Output Wts array
+			);	  
+	////////////////////////////	
+	if(nOutActual != nOut)
+		return -1;
+	else
+		return 0;
+												
+}
+
+void CMP_CoonP::SetInfoForCoonBase(
+									CString&	PatchID,		
+									CDrPatch*	pDrObject,
+									CString		PatCurveID[],
+									CURVELATCH	PatCurveLatchID[]
+								  )
+{
+
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr*  pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+    pDrObject->SetObjectType((int)PATCH);
+    pDrObject->SetElemType((int)GENR_OBJECT);          // globals
+    pDrObject->SetLevelType((int)LEVEL_DADDY);          // globals
+	pDrObject->SetPatchType(PA_COONS);
+	///////////////////////////////////////////
+	pDrObject->SetPatchProc(PP_LOFT4);
+	pDrObject->SetPatSubType(PS_QUADRILAT);
+	////////////////////////////////////////////
+	pDrObject->SetOrder_S(2);							// k = LINEAR for Loft
+	pDrObject->SetOrder_T(2);							// k = LINEAR for Loft
+	pDrObject->SetCurveType_T(CP_LINEAR);				// k = LINEAR for Loft
+	pDrObject->SetnDim_S(4); //Rational for use in circle and later in Solid 
+	pDrObject->SetnDim_T(4); //Rational for use in circle and later in Solid 
+	pDrObject->SetClosed_S(FALSE);						// k = LINEAR for Loft
+	pDrObject->SetClosed_T(FALSE);						// k = LINEAR for Loft
+    //////////////////////////////
+	pDrObject->SetObjectID(PatchID);
+	pDrObject->SetCurveID(PatCurveID[0],0);
+	pDrObject->SetCurveID(PatCurveID[1],1);
+	pDrObject->SetCurveID(PatCurveID[2],2);
+	/////////////////////////////////
+	pDrObject->SetCurveID(PatCurveID[3],3);
+	/////////////////////////////////
+	for(int i=0;i<4;i++)
+		pDrObject->SetCurveLatch(PatCurveLatchID[i],i);
+	////////////////////////////////////////// Reciprocate
+	int index;
+	CDrCurve* pDrCurve;
+	index 		= pObjectMgr->GetObjectIndexfromKey(CURVE,PatCurveID[0],1);
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	pDrCurve->GetPatchList()->InsertObject(pDrObject);
+	index 		= pObjectMgr->GetObjectIndexfromKey(CURVE,PatCurveID[1],1);
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	pDrCurve->GetPatchList()->InsertObject(pDrObject);
+	index 		= pObjectMgr->GetObjectIndexfromKey(CURVE,PatCurveID[2],1);
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	pDrCurve->GetPatchList()->InsertObject(pDrObject);
+	index 		= pObjectMgr->GetObjectIndexfromKey(CURVE,PatCurveID[3],1);
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	pDrCurve->GetPatchList()->InsertObject(pDrObject);
+	/////////////////////////////////////////////////
+//	pDrObject->SetSegs(m_nSegs);
+//	pDrObject->SetPatchType(PA_DUCT);
+	pDrObject->NumberOfElements(P_DUCT,1/*int nElemType*/); // temp:1=LINE
+	//////////////////////////////////////////////////////////////////////////////// Mesh(Output)
+	pDrObject->SetOutMethod_T(PA_HORNER);		// Output Method
+	////////////////////////////////////////////////	
+	pDrObject->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pDrObject->SetLayer(pLayer->GetCurrentLayer());
+	//////////////////
+	return;
+	
+} 
+
+void CMP_CoonP::Serialize(CArchive& ar)
+{
+
+	CMI_GangP::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMP_CoonP:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMP_CoonP:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////// end of module ///////////////////

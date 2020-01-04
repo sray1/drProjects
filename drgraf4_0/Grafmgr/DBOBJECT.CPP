@@ -1,0 +1,376 @@
+// Element dataBase.cpp : implementation of the CObjectBase class
+//
+
+#include "stdafx.h"
+
+#include "drgraf.h"
+#include "drgradoc.h" 
+
+#include "objmgr.h"
+#include "drobject.h" 
+///////////////////////////// 3D Drawing Operations
+#include "3Ddefine.h"
+#include "XForm.h"
+///////////////////////////// ElemObjs
+#include "eldefine.h"
+#include "node.h"
+#include "pipe.h"
+///////////////////////////// DrawObjs
+#include "drdefine.h"
+#include "label.h"
+#include "freehand.h"
+///////////////////////////// SpecObjs
+#include "spdefine.h"
+#include "booleans.h"
+#include "datawind.h"
+#include "drfont.h"
+#include "drpen.h"
+#include "layer.h"
+#include "hitnet.h"
+#include "precison.h"
+#include "Mapfacto.h"
+#include "ScaleFac.h"
+#include "unit.h"
+/////////////////////////////
+#include "dbObject.h" 
+
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif 
+/*
+BEGIN_MESSAGE_MAP(CObjectBase, CObject)
+	//{{AFX_MSG_MAP(CObjectBase)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/
+
+IMPLEMENT_DYNCREATE(CObjectBase,CObject)
+
+CObjectBase::CObjectBase()
+{
+}
+
+CObjectBase::~CObjectBase()
+{
+}
+///////////////////////////////////////////////////////////////////////
+void CObjectBase::AssertValid() const
+{
+	CObject::AssertValid();
+}
+
+void CObjectBase::Dump(CDumpContext& dc) const
+{
+	CObject::Dump(dc);
+}
+
+
+
+POSITION CObjectBase::GetFirstObjectPos()
+{
+
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////////////////   
+	return (pObjectMgr->GetObjectList() )->GetHeadPosition();
+
+}	
+
+CDrObject* CObjectBase::GetNextObject( POSITION& pos)
+{ 
+
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////////////////   
+	return (CDrObject*)((pObjectMgr->GetObjectList() )->GetNext(pos));
+
+}
+
+CDrObject* CObjectBase::NewObject(int nObjectType)
+{ 
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////
+//	int nCurrentObjectType = pObjectMgr->GetActiveObjectType();
+	CDrObject* pObject;
+	//////////////////
+	switch (nObjectType)
+	{
+
+		///////////////////////////////////////////////// ElemObjs	
+		case NODE:
+			
+			pObject = new CDrNode();
+			break;
+			   
+		case PIPE:
+			
+			pObject = new CDrPipe();
+			break;
+		///////////////////////////////////////////////// 3D Drawing Operations	
+		case XFORM:
+			
+			pObject = new CXForm();
+			break;
+			   
+		///////////////////////////////////////////////// DrawObjs	
+		case LABEL:
+			
+			pObject = new CDrLabel();
+			break;
+			
+		case FREEHAND:
+			
+			pObject = new CDrFreeHand();
+			break;
+		///////////////////////////////////////////////// SpecObjs	
+		case BOOLEANS:
+			pObject = new CBooleans();
+			break; 
+			
+		case DATAWINDOW:
+			pObject = new  CDataWindow;
+			break; 
+			
+		case DRFONT:
+			pObject = new CDrFont;
+			break; 
+			
+		case DRPEN:
+			pObject = new CDrPen;
+			break; 
+			
+		case HITNET:
+			pObject = new CHitNet;
+			break;
+			
+		case LAYER:
+			pObject = new CLayer;
+			break;
+			
+		case MAPFACTOR:
+			pObject = new CMapFactor;
+			break;
+			
+		case PRECISION:
+			pObject = new CPrecision;
+			break; 
+			
+		case SCALEFACTOR:
+			pObject = new CScaleFactor;
+			break; 
+			
+		case UNIT:
+			pObject = new CUnit;
+			break; 
+			
+
+		default:			   
+		
+			pObject = (CDrObject*)NULL;
+			break;
+			
+	}
+	/////////////////////////////////////////////////			
+	(pObjectMgr->GetObjectList() )->AddTail(pObject);
+	return pObject;
+}
+												
+int CObjectBase::AddObject(CDrObject* pAddObject,int nObjectType)
+{
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	/////////////////////////////////////////////////////////////////// 
+
+	CDrObject* pObject; 
+    UINT nLastObjectNo;
+	if((pObject = NewObject(nObjectType)) == NULL)
+		return -1;
+	else 
+	{     
+	
+		////////////////////////////////////////////// 
+		pObject->SetObjectInfo(pAddObject);
+		nLastObjectNo = pObjectMgr->GetLastObjectNo();
+		pObject->SetObjectNo(nLastObjectNo);					// for ObjectList
+		pAddObject->SetObjectNo(nLastObjectNo);					// for ObjectList
+		////////////////////////////////////////////////////////// ObjectList Update
+															 	// search for
+															 	// edit/delete	 
+		pObjectMgr->UpdateLastObjectNo();                    	// ++ for next
+	    //////////////////////////////////////////////
+	    int nElemType = pObject->GetElemType();   				// Mark document
+	    if( nElemType>0)                              			// as modified for 
+			pDoc->SetModifiedFlag();                   			// VIEWABLE Objects ONLY		 
+		////////////////////////////////////////////////////////////////////////////////													    
+															     
+		int nActiveIndex = pObjectMgr->GetObjectCount() - 1;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Index									
+        ////////////////////////////////////////////////////////// Invalidate
+        														// IF VIEWABLE 
+		int nElType;        														
+        nElType = pObject->GetElemType();														
+		if(nElType >0)        															
+			pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex);
+		///////////////////////////////////////////////////										
+		return 0;
+	}		
+		
+}		
+
+int	CObjectBase::EditObject(int index,CDrObject* pEditObject)
+{                                                   
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////////////////   
+	CDrObject* pObject = GetObject(index);
+//	pObject->SetObjectInfo(pEditObject);
+	pObjectMgr->SetActiveObjectIndex(index);		    	// set Index									
+    ////////////////////////////////////////////////////////// Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,index);
+	///////////////////////////////////////////////////										
+	return 0;		
+}	
+
+int	CObjectBase::DeleteObject(int index)
+{ 
+
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////////////////   
+	int nMaxIndex = (pObjectMgr->GetObjectList() )->GetCount() - 1; 
+ 
+	if ((index>nMaxIndex) || (index<0) )
+		return -1;
+
+	POSITION pos2;
+	CDrObject* pTemp;
+	POSITION pos = GetFirstObjectPos();
+	for (int i=0;((pos2=pos) !=NULL) && (i < index);i++)
+	{
+		CDrObject* pObject = GetNextObject( pos);
+		
+	}
+	pTemp = (CDrObject*)(pObjectMgr->GetObjectList()->GetAt(pos2));
+	/////////////////		
+	pObjectMgr->GetObjectList()->RemoveAt(pos2);
+	delete pTemp;	
+    //////////////////////////////////////////////
+	pDoc->SetModifiedFlag();                   			    // Mark document
+														    // as modified 
+	////////////////////////////////////////////////////////// any Object left?														    
+	nMaxIndex = (pObjectMgr->GetObjectList() )->GetCount() - 1;
+	if(nMaxIndex>=0)
+	{ 
+		int nActiveIndex = max(0,index-1);
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		// set Index									
+	}
+	////////////////////////////////////////////////////////// Invalidate
+	pDoc->UpdateAllViews(NULL);
+	///////////////////////////											
+	return 0;
+
+}		
+	 
+CDrObject* CObjectBase::GetObject(int index)
+{ 
+
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////////////////   
+	int nMaxIndex = (pObjectMgr->GetObjectList() )->GetCount() - 1;
+
+	if ((index>nMaxIndex) || (index<0) )
+		return (CDrObject*)NULL;
+
+	POSITION pos = GetFirstObjectPos();
+	CDrObject* pObject;
+	for (int i=0;(pos !=NULL) && (i <= index);i++)
+	{
+		pObject = GetNextObject( pos);
+		
+	}
+	return pObject;
+}
+				
+int	CObjectBase::GetObjectIndex(UINT nObjectNo)
+{
+
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////////////////   
+	if((pObjectMgr->GetObjectList() )->IsEmpty() ) 
+		return -1;
+    /////////////////////////////////
+	POSITION pos = GetFirstObjectPos();
+	CDrObject* pObject;
+	for (int i=0;pos !=NULL;i++)
+	{
+		pObject = GetNextObject( pos);
+		if(pObject->GetObjectNo() == nObjectNo)
+		/////////
+		return i;
+		
+	}
+	//////////
+	return -1;
+}	
+				
+int	CObjectBase::GetObjectFirstIndex(UINT nObjectType)
+{
+
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////////////////   
+	if((pObjectMgr->GetObjectList() )->IsEmpty() ) 
+		return -1;
+    /////////////////////////////////
+	POSITION pos = GetFirstObjectPos();
+	CDrObject* pObject;
+	for (int i=0;pos !=NULL;i++)
+	{
+		pObject = GetNextObject( pos);
+		if(pObject->GetObjectType() == (int)nObjectType)
+		/////////
+		return i;
+		
+	}
+	//////////
+	return -1;
+				
+}
+int	CObjectBase::GetSpecificObjectCount(int nObjectType)
+{
+
+	///////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////////////////////////////////   
+    int nCount = 0;
+	if((pObjectMgr->GetObjectList() )->IsEmpty() ) 
+		return nCount;
+    /////////////////////////////////
+	POSITION pos = GetFirstObjectPos();
+	CDrObject* pObject;
+	for (int i=0;pos !=NULL;i++)
+	{
+		pObject = GetNextObject( pos);
+		if(pObject->GetObjectType() == nObjectType)
+			nCount++;
+	}
+	//////////
+	return nCount;
+				
+}
+//////////////////////////// End of Module /////////////////////		

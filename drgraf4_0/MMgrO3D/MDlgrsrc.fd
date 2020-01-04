@@ -1,0 +1,6 @@
+!MS$FREEFORM
+! Microsoft Developer Studio generated include file.
+! Used by MO3DMgr.rc
+!
+      integer, parameter :: IDD_O_SPAWN                     = 125
+      integer, parameter :: IDD_O3D_IN                      = 126

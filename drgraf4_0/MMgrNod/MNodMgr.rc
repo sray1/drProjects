@@ -1,0 +1,205 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "MNodRsrc.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "MNodRsrc.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "CommRsrc.h"
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IMAGE1DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1U.BMP"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_NOD_IN DIALOGEX 0, 0, 331, 36
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE | WS_EX_CONTEXTHELP | WS_EX_STATICEDGE
+CAPTION "NODE Input"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Update",IDC_UPDATE,295,20,35,13,0,WS_EX_CLIENTEDGE,
+                    HIDC_UPDATE
+    PUSHBUTTON      "Cancel",IDD_CANCEL,295,4,34,13,0,WS_EX_CLIENTEDGE,
+                    HIDD_CANCEL
+    CONTROL         "Advanced",IDC_ADVANCED,"Button",BS_AUTOCHECKBOX | 
+                    BS_LEFTTEXT | WS_TABSTOP,111,23,49,10,0,HIDC_ADVANCED
+    LTEXT           "Ref. Node",IDC_TRANHEAD,49,24,36,10,0,0,HIDC_TRANHEAD
+    EDITTEXT        IDC_ROT_X,47,10,38,12,0,0,HIDC_ROT_X
+    EDITTEXT        IDC_ROT_Z,123,10,38,12,0,0,HIDC_ROT_Z
+    EDITTEXT        IDC_ROT_Y,86,10,38,12,0,0,HIDC_ROT_Y
+    RTEXT           "NodeID",IDC_OJECTHEAD,9,0,28,8,0,WS_EX_RIGHT,
+                    HIDC_OJECTHEAD
+    CTEXT           "X",IDC_XHEAD,55,0,24,9
+    CTEXT           "Y",IDC_YHEAD,94,0,21,8
+    CTEXT           "Z",IDC_OTHER,132,0,22,10
+    EDITTEXT        IDC_OBJID,5,10,40,12,ES_AUTOHSCROLL,0,HIDC_OBJID
+    EDITTEXT        IDC_TRANPT,6,23,40,12,ES_AUTOHSCROLL | ES_READONLY,0,
+                    HIDC_TRANPT
+    LTEXT           "Coords",IDC_COORDHEAD,163,11,24,8
+    CONTROL         "Direct",IDC_DIRECT,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,250,9,35,8,0,HIDC_DIRECT
+    CONTROL         "Dominant",IDC_DOMINANT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,250,17,46,10
+    CONTROL         "Increment",IDC_INCREMENT,"Button",BS_AUTORADIOBUTTON,
+                    191,5,47,10
+    CONTROL         "Direction",IDC_DIRECTION,"Button",BS_AUTORADIOBUTTON,
+                    191,14,47,10
+    GROUPBOX        "",IDC_STATIC,188,0,55,35
+    CONTROL         "Multiple",IDC_MULTIPLE,"Button",BS_AUTORADIOBUTTON,191,
+                    23,47,10
+END
+
+IDD_ELP_NODE DIALOGEX 120, 90, 287, 140
+STYLE DS_3DLOOK | DS_CENTER | WS_POPUP | WS_VISIBLE | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CLIENTEDGE | WS_EX_CONTEXTHELP | WS_EX_STATICEDGE
+CAPTION "Advanced NODE Genearation"
+FONT 8, "System"
+BEGIN
+    EDITTEXT        IDD_NODE_ID,41,13,47,12,0,0,HIDD_NODE_ID
+    RTEXT           "DX:",IDC_STATIC,141,82,14,8
+    EDITTEXT        IDD_NODE_DX,157,79,47,12,0,0,HIDD_NODE_DX
+    RTEXT           "DY:",IDC_STATIC,141,93,14,8
+    EDITTEXT        IDD_NODE_DY,157,91,47,12,0,0,HIDD_NODE_DY
+    RTEXT           "DZ:",IDC_STATIC,141,104,14,8
+    EDITTEXT        IDD_NODE_DZ,157,103,47,12,0,0,HIDD_NODE_DZ
+    RTEXT           "Ref. NodeIc:",IDC_STATIC,15,53,44,8
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,222,107,45,
+                    20,0,HIDOK
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,223,
+                    7,45,20,0,HIDCANCEL
+    DEFPUSHBUTTON   "ADD",IDD_ADD,184,51,25,15,0,0,HIDD_ADD
+    DEFPUSHBUTTON   "DEL",IDD_DEL,220,85,24,14,0,0,HIDD_DEL
+    DEFPUSHBUTTON   "EDIT",IDD_EDIT,254,85,24,14,0,0,HIDD_EDIT
+    LISTBOX         IDD_LIST,219,43,58,43,LBS_SORT | WS_VSCROLL | WS_TABSTOP,
+                    0,HIDD_LIST
+    RTEXT           "NodeIc:",IDC_STATIC,41,4,26,8
+    ICON            IDI_ICONPIPE,IDC_STATIC,14,8,20,20
+    LTEXT           "Node Pool",IDC_STATIC,219,33,35,8
+    CONTROL         "Coordinates",IDC_COORD,"Button",BS_AUTORADIOBUTTON,162,
+                    25,50,10,0,HIDC_COORD
+    CONTROL         "Direction",IDC_DIRECTION,"Button",BS_AUTORADIOBUTTON,
+                    162,14,45,10,0,HIDC_DIRECTION
+    GROUPBOX        "Input Mode",IDC_STATIC,152,3,64,35
+    GROUPBOX        "Node Info",IDC_STATIC,8,40,207,88
+    COMBOBOX        IDC_CNODE_FROM,50,77,49,63,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDC_CNODE_FROM
+    RTEXT           "From : ",IDC_STATIC,24,79,23,7
+    COMBOBOX        IDC_CNODE_TO,50,90,49,67,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDC_CNODE_TO
+    RTEXT           "To : ",IDC_STATIC,24,92,23,7
+    GROUPBOX        "Direction Nodes",IDC_STATIC,18,67,117,55
+    RTEXT           "Length: ",IDC_STATIC,19,109,29,8
+    EDITTEXT        IDD_LENGTH,50,106,47,12,0,0,HIDD_LENGTH
+    COMBOBOX        IDD_NODE_NID_R,65,53,49,63,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_NODE_NID_R
+    GROUPBOX        "Coordinates",IDC_STATIC,137,67,72,55
+    RTEXT           "X:",IDC_STATIC,93,5,8,8
+    EDITTEXT        IDD_NODE_X2,102,3,47,12,ES_READONLY,0,HIDD_NODE_X2
+    RTEXT           "Y:",IDC_STATIC,93,16,8,8
+    EDITTEXT        IDD_NODE_Y2,102,15,47,12,ES_READONLY,0,HIDD_NODE_Y2
+    RTEXT           "Z:",IDC_STATIC,93,27,8,8
+    EDITTEXT        IDD_NODE_Z2,102,27,47,12,ES_READONLY,0,HIDD_NODE_Z2
+    CONTROL         "CN",IDC_FROM_IS_CN,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,102,78,23,10
+    CONTROL         "CN",IDC_REF_IS_CN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    116,54,26,10
+    CONTROL         "CN",IDC_TO_IS_CN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    102,90,24,10
+    CONTROL         "CN",IDC_POOL_IS_CN,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,257,32,20,10
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "MNodRsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""CommRsrc.h""\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICONPIPE            ICON    DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\ICO_PIPE.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "MNodMgr Resource String"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

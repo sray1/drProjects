@@ -1,0 +1,2812 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+
+#include "drgraf.h"
+#include "drgrafrm.h"
+#include "UserMsg.h"
+#include "drawView.h"
+//#include "Def_Eror.h" // Mouse Action ERROR
+//#include "Def_Cond.h" // Mouse Action Condition
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_Objs.h"                    
+#include "Def_Mous.h"                    
+#include "Def_MouseAct.h" // Mouse Action                   
+#include "Def_CuPS.h"                    
+#include "Def_Ms.h" // Mesh Types for Solch
+///////////////////// dialogMgr
+#include "MSolMgr.h"  
+///////////////////// elements
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "Ext_Elem.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+#include "DrObj3D.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h" 	
+///////////////////// specials
+#include "Def_Spec.h"
+#include "DrPen.h"
+#include "Layer.h"
+#include "booleans.h"
+#include "precison.h"
+/////////////////////
+#include "mouse.h"
+#include "DListMgr.h"
+/////////////////////
+#include "MI_GangS.h" 
+//#include "MI_SSPN.h" 
+////////////////////// 
+#include "Dlg_SolI.h"
+//////////////////////
+#include "SolMouse.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////////////////////////////
+#define MAX_INFO_EXTRUDE	3	// 1 Patches/2 Nodes        
+#define MAX_INFO_ROTATE		3	// 1 Patches/2 Nodes           
+#define MAX_INFO_LOFT2		2	// 2 Patches           
+#define MAX_INFO_DUCT		4	// 1 Patch/2 Curves/1 Node        
+#define MAX_INFO_SWEEP		5	// 1 Patch/3 Curves/1 Node    
+#define MAX_INFO_COONS		4	// 4 or 6 Patches  
+///////      
+#define	new					DEBUG_NEW
+#define	BUFF_SIZE			1024
+///////////////////////////////
+/*
+#define MA_OK				0
+#define MA_ERROR			-1
+#define MA_CANCEL			-2
+#define MA_GETMOREINFO		-3
+*/
+////////////////////////////////////
+IMPLEMENT_SERIAL(CSolMouse,CPatMouse,1)
+/////////////////////////////////////////////////////////////////////////////
+CSolMouse::CSolMouse()
+{
+
+	////////////////////////////
+	m_pSolInDlg			= NULL;                                                                                
+	m_bCurve			= FALSE; //Dlg.CID is used for both Patch or Curve			
+ 	/////////////////////////////////////////// Patch 
+	m_nPatchDone		= 0;
+    m_LastSolidNum		= 0;		// internal
+	m_SolProc			= SP_COONSHEXA;
+	m_SolSubType		= SS_HEXA;
+	m_CurrentSolidID	= "S0";
+	m_bSolidDone		= TRUE;		// for dragging
+
+	m_PatchList.RemoveAll();
+	if(!m_PLatchList.IsEmpty())
+		m_PLatchList.RemoveAll();
+	///////////////////////////////////////////// 
+}
+
+CSolMouse::~CSolMouse()
+{
+	/////////////////////////////////// Modeless Dialogs
+	if(m_pSolInDlg)
+	{
+		if(m_pSolInDlg->m_hWnd)
+			m_pSolInDlg->DestroyWindow();
+		///////////////////
+		delete m_pSolInDlg; 
+		///////////////////
+	}
+}
+
+void CSolMouse::InitDlgIn_SOL()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////////////// System Sizes
+	m_pSolInDlg		= new CDlg_SolI(pWnd,m_SolProc); 
+}
+
+int CSolMouse::Terminate_SOL(BOOL bError)
+{
+	if(!bError) // return for now
+		return 0;
+	/////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	pWnd->GetMouseMgr()->SetCurrentProcessDone(TRUE);
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr*	pList;
+	int nActiveIndex;
+	///////////////////
+	pObjectMgr->SetActiveObjectType(SOLID);
+	///////////////////////////////////////// delete
+	pList = pObjectMgr->GetObjectList(SOLID);
+	nActiveIndex = pList->GetObjectIndex(SOLID, m_CurrentSolidID);
+	if(nActiveIndex>=0)
+	{
+		pObjectMgr->DeleteFromDataBase(nActiveIndex, SOLID);
+		m_pCurrentSolid = (CDrSolid*)NULL;
+	}
+	/////////////////////////////////////// Reset
+	m_nInfoDone		= 0;
+	m_nCurveDone	= 0;	// 
+	m_nNodeDone		= 0;	// 
+	m_nPatchDone	= 0;	// 
+	m_bSolidDone	= TRUE;	// 
+	//////////////////////////
+	m_pCurrentSolid = NULL;
+	m_CurveList.RemoveAll();
+	m_PatchList.RemoveAll();
+	m_NodeList.RemoveAll();
+	m_ElSegList.RemoveAll();
+	m_LatchList.RemoveAll();
+	m_PLatchList.RemoveAll();
+	/////////////////// reset
+	if(m_pSolInDlg->GetSafeHwnd())
+		m_pSolInDlg->GetDlgItem(IDC_PID)->EnableWindow(TRUE);
+	/////////////////////////////////////
+	pDoc->UpdateAllViews(NULL);
+	/////////
+	return 0;
+}
+	
+int CSolMouse::LeftDown_SOLID()
+{
+	return 0;
+}
+	
+void CSolMouse:: ElementLeftDown_SOL()
+{	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	/////////////////////////////////////////////////////////
+//	int nMeshType;
+	////////////////////////
+	m_bSolidDone	= FALSE;
+	/////////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		////////////////////////////////////////////////// SOLID
+		case S_COONS:
+
+			m_SolProc = SP_COONS;
+			LeftDown_SOLID();
+			return;
+
+		case S_EXTRUDE:				// 
+
+			m_SolProc = SP_EXTRUDE;
+			LeftDown_SOLID();
+			return;
+
+		case S_ROTATE: 
+
+			m_SolProc = SP_ROTATE;
+			LeftDown_SOLID();
+			return;
+
+		case S_LOFT: 
+
+			m_SolProc = SP_LOFT2;
+			LeftDown_SOLID();
+			return;
+
+		case S_DUCT: 
+
+			m_SolProc = SP_DUCT;
+			m_bTwist  = TRUE;
+			LeftDown_SOLID();
+			return;
+
+		case S_SWEEP: 
+
+			m_SolProc = SP_SWEEP;
+			m_bTwist  = TRUE;
+			if(m_nCurveDone == 2)	// Radius or Scale
+				m_bTwist  = FALSE;
+			LeftDown_SOLID();
+			return;
+
+/*
+		////////////////////////////////////////////////// POST	
+		case S_POST:				// SOLID 
+			///////		
+			m_MI_Sol_P.LBDownInit_SPost();
+			return;
+*/		
+		//////////////////////////////////////////////////
+		default:
+			break;
+	}  
+
+}
+
+void CSolMouse::OnEBoxLButtonDown_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	if(pWnd->GetMouseMgr()->IsCurrentProcessDone())
+	{
+		pWnd->GetMouseMgr()->SetCurrentProcessDone(FALSE);
+	}
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	CDListMgr* pDListMgr;
+	/////////////////////////////////// 
+   	m_bDragOn 		= pBool->IsDragOn();
+	m_bDialogOn		= pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	if(m_bSolidDone)			// Reset
+	{
+		m_nInfoDone		= 0;
+		m_nNodeDone		= 0;
+		m_nCurveDone	= 0;
+		////////////////////
+		if(!m_NodeList.IsEmpty())
+			m_NodeList.RemoveAll();
+		if(!m_ElSegList.IsEmpty())
+			m_ElSegList.RemoveAll();
+		if(!m_PLatchList.IsEmpty())
+			m_PLatchList.RemoveAll();
+		if(!m_LatchList.IsEmpty())
+			m_LatchList.RemoveAll();
+		if(!m_CurveList.IsEmpty())
+			m_CurveList.RemoveAll();
+	}
+	//////////////////////////////////////////////////////// LOG
+	m_pdc->DPtoLP(&point);
+	///////////////////////////////////////// make sure Dlg is Open
+	if( !(GetSolInDlg()->m_hWnd) )
+		pWnd->SendMessage(ID_ACTIVE_SOLIN,IDOK);
+	//////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////////////////////////////////// take care of Edit AllClear
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	if(!(pDListMgr->GetSpecificObjectCount(NODE)) ) m_nNodeDone = 0;
+	/////////////////////////////////////////////////////////////////
+    /////////////////////////////  ELement Dialog On/Off Check
+    if(m_Gener == FORWARD)
+		ElementLeftDown_SOL();
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftDown_I();
+	//////////////////////////////////
+}
+
+void CSolMouse::UpdateSDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pSolInDlg->UpdateData(TRUE); // from screen
+	//////////////////////////////
+//	m_SolProc			= GetSolInDlg()->m_SolProc;
+	m_CurrentSolidID	= GetSolInDlg()->m_PID;
+	////////////
+	if(m_bCurve)
+		m_CurrentPatchID	= GetSolInDlg()->m_CID;
+	else
+		m_CurrentCurveID	= GetSolInDlg()->m_CID;
+	////////////
+	m_CurrentNodeID		= GetSolInDlg()->m_NID;
+	m_ThirdCoord		= GetSolInDlg()->m_dCoord;
+	m_ElPerSeg			= GetSolInDlg()->m_nMesh;
+	m_Ratio				= GetSolInDlg()->m_Ratio;
+	m_Orient			= GetSolInDlg()->m_Orient;
+	m_bClosed			= GetSolInDlg()->m_bClosed;
+	m_dLen				= GetSolInDlg()->m_dLen;
+	////
+	m_bTwist			= GetSolInDlg()->m_bTwist;
+	if(m_bTwist)
+	{
+		m_bIncrement		= GetSolInDlg()->m_bIncrement;
+		m_TwistStart		= GetSolInDlg()->m_TwistStart;
+		m_TwistMult			= GetSolInDlg()->m_TwistMult;
+	}
+	else
+	{
+		m_bIncScale			= GetSolInDlg()->m_bIncrement;
+		m_ScaleStart		= GetSolInDlg()->m_TwistStart;
+		m_ScaleMult			= GetSolInDlg()->m_TwistMult;
+	}
+	////
+	m_SegAngle			= GetSolInDlg()->m_SegAngle;
+	m_bAutoSeg			= GetSolInDlg()->m_bAutoSeg;
+	///////////////////////////////////////////////////// List Inclusion, If Any
+	switch(m_SolProc)
+	{
+		case SP_EXTRUDE:
+			switch(m_nInfoDone)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				default:
+					break;
+			}
+			break;
+
+		case SP_ROTATE:
+			switch(m_nInfoDone)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				default:
+					break;
+			}
+			break;
+
+		case SP_LOFT2:
+			switch(m_nInfoDone)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				default:
+					break;
+			}
+			break;
+
+		case SP_COONS:
+			switch(m_nInfoDone)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				default:
+					break;
+			}
+			break;
+
+		case SP_DUCT:
+			switch(m_nInfoDone)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				default:
+					break;
+			}
+			break;
+		case SP_SWEEP:
+			switch(m_nInfoDone)
+			{
+				case 0:
+					break;
+				case 1:
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+}			
+
+void CSolMouse::UpdateSDlg_FALSE()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	//////////////////////////////////////
+	if(m_nInfoDone>=1)
+		m_pSolInDlg->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+	//////////////////////////////
+	GetSolInDlg()->m_SolProc	= m_SolProc;
+	GetSolInDlg()->m_PID		= m_CurrentSolidID;
+	////////////
+	GetSolInDlg()->m_bCurve		= m_bCurve;
+	if(m_bCurve)
+		GetSolInDlg()->m_CID	= m_CurrentPatchID;
+	else
+		GetSolInDlg()->m_CID	= m_CurrentCurveID;
+	////////////
+	GetSolInDlg()->m_NID		= m_CurrentNodeID;
+	GetSolInDlg()->m_dCoord		= m_ThirdCoord;
+	GetSolInDlg()->m_nMesh		= m_ElPerSeg;
+	GetSolInDlg()->m_Ratio		= m_Ratio;
+//	GetSolInDlg()->m_Orient		= m_Orient;
+	/////
+	GetSolInDlg()->m_bClosed	= m_bClosed;
+	if(m_bClosed)
+		m_dLen = 360.;
+	GetSolInDlg()->m_dLen		= m_dLen;
+	/////
+	GetSolInDlg()->m_bTwist		= m_bTwist;
+	if(m_bTwist)
+	{
+		GetSolInDlg()->m_bIncrement	= m_bIncrement;
+		GetSolInDlg()->m_TwistStart	= m_TwistStart;
+		GetSolInDlg()->m_TwistMult	= m_TwistMult;
+	}
+	else
+	{
+		GetSolInDlg()->m_bIncrement	= m_bIncScale;
+		GetSolInDlg()->m_TwistStart	= m_ScaleStart;
+		GetSolInDlg()->m_TwistMult	= m_ScaleMult;
+	}
+	/////
+	GetSolInDlg()->m_SegAngle	= m_SegAngle;
+	GetSolInDlg()->m_bAutoSeg	= m_bAutoSeg;
+	///////////////////////////////
+	switch(m_SolProc)
+	{
+		case SP_EXTRUDE:
+
+			switch(m_nInfoDone)
+			{
+				case 0:
+
+					strCurr = "Solid by Extrusion: Click in@A Patch To Extrude";
+					m_bCurve = FALSE; //Dlg.CID is used for both Patch or Curve			
+					GetSolInDlg()->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Extrn. Patch");
+/*
+					if(m_Orient == "FORWARD")
+ 						((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(1);//FORWARD=1
+					else
+					if(m_Orient == "BACKWARD")
+ 						((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(0);//BACKWARD=0
+*/
+					break;
+				case 1:
+					GetSolInDlg()->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_CIDHEAD)->SetWindowText("");
+					GetSolInDlg()->GetDlgItem(IDC_CID)->EnableWindow(FALSE);
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_OTHER)->SetWindowText("Z");
+					GetSolInDlg()->GetDlgItem(IDC_COORD)->EnableWindow(TRUE);
+					//////
+					strCurr = "Solid by Extrusion: Click in@Ist (C)Node defining Extrusion Direction";
+					GetSolInDlg()->GetDlgItem(IDC_NIDHEAD)->SetWindowText("Dirn. Node From");
+					GetSolInDlg()->GetDlgItem(IDC_NID)->EnableWindow(TRUE);
+					break;
+				case 2:
+					GetSolInDlg()->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_CIDHEAD)->SetWindowText("");
+					GetSolInDlg()->GetDlgItem(IDC_CID)->EnableWindow(FALSE);
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_OTHER)->SetWindowText("Z");
+					GetSolInDlg()->GetDlgItem(IDC_COORD)->EnableWindow(TRUE);
+					//////
+					strCurr = "Solid by Extrusion: Click in@2nd (C)Node defining Extrusion Direction";
+					GetSolInDlg()->GetDlgItem(IDC_NIDHEAD)->SetWindowText("Dirn. Node To");
+					GetSolInDlg()->GetDlgItem(IDC_NID)->EnableWindow(TRUE);
+					break;
+				case 3:
+					strCurr = "Ready with other Info.?@Click Right Button";
+					m_pSolInDlg->GetDlgItem(IDC_NIDHEAD)->SetWindowText("");
+					m_pSolInDlg->GetDlgItem(IDC_NID)->EnableWindow(FALSE);
+					break;
+				default:
+					break;
+			}
+			break;
+
+
+		case SP_ROTATE:
+
+			switch(m_nInfoDone)
+			{
+				case 0:
+					strCurr = "Solid by Rotation: Click in@A Patch To Rotate";
+					m_bCurve = FALSE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Rotnl. Patch");
+/*
+					if(m_Orient == "FORWARD")
+ 						((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(1);//FORWARD=1
+					else
+					if(m_Orient == "BACKWARD")
+ 						((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(0);//BACKWARD=0
+*/
+					break;
+				case 1:
+					GetSolInDlg()->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					//////
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_CIDHEAD)->SetWindowText("");
+					GetSolInDlg()->GetDlgItem(IDC_CID)->EnableWindow(FALSE);
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_OTHER)->SetWindowText("Z");
+					GetSolInDlg()->GetDlgItem(IDC_COORD)->EnableWindow(TRUE);
+					//////
+					strCurr = "Solid by Rotation: Click in@Ist (C)Node defining Rotation Axis";
+					m_pSolInDlg->GetDlgItem(IDC_NIDHEAD)->SetWindowText("Axis Node From");
+					GetSolInDlg()->GetDlgItem(IDC_NID)->EnableWindow(TRUE);
+					break;
+				case 2:
+					GetSolInDlg()->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					//////
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_CIDHEAD)->SetWindowText("");
+					GetSolInDlg()->GetDlgItem(IDC_CID)->EnableWindow(FALSE);
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_OTHER)->SetWindowText("Z");
+					GetSolInDlg()->GetDlgItem(IDC_COORD)->EnableWindow(TRUE);
+					//////
+					strCurr = "Solid by Rotation: Click in@2nd (C)Node defining Rotation Axis";
+					m_pSolInDlg->GetDlgItem(IDC_NIDHEAD)->SetWindowText("Axis Node To");
+					GetSolInDlg()->GetDlgItem(IDC_NID)->EnableWindow(TRUE);
+					break;
+				case 3:
+					strCurr = "Ready with other Info.?@Click Right Button";
+					m_pSolInDlg->GetDlgItem(IDC_NIDHEAD)->SetWindowText("");
+					m_pSolInDlg->GetDlgItem(IDC_NID)->EnableWindow(FALSE);
+					break;
+				default:
+					break;
+			}
+			break;
+
+
+		case SP_LOFT2:
+/*
+			if(m_Orient == "FORWARD")
+ 				((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(1);//FORWARD=1
+			else
+			if(m_Orient == "BACKWARD")
+ 				((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(0);//BACKWARD=0
+*/
+			///////////////////
+			switch(m_nInfoDone)
+			{
+				case 0:
+					strCurr = "Solid by Lofting: Click in@A Patch To Loft From";
+					m_bCurve = FALSE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Begin Patch");
+					break;
+				case 1:
+					strCurr = "Solid by Lofting: Click in@A Patch To Loft To";
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("End Patch");
+					break;
+				case 2:
+					strCurr = "Ready with other Info.?@Click Right Button";
+					m_pSolInDlg->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					break;
+				default:
+					break;
+			}
+			break;
+
+
+		case SP_COONS:
+/*
+			if(m_Orient == "FORWARD")
+ 				((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(1);//FORWARD=1
+			else
+			if(m_Orient == "BACKWARD")
+ 				((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(0);//BACKWARD=0
+*/
+			///////////////////
+			switch(m_nInfoDone)
+			{
+				case 0:
+					strCurr = "Solid by Coons Method:@Click in The First Patch";
+					m_bCurve = FALSE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Ist Patch");
+					break;
+				case 1:
+					strCurr = "Solid by Coons Method:@Click in The 2nd Patch";
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("2nd Patch");
+					break;
+				case 2:
+					strCurr = "Solid by Coons Method:@Click in The 3rd Patch";
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("3rd Patch");
+					break;
+				case 3:
+					strCurr = "HexaHedral: Select Another Patch@TetraHedral: Click Right Button";
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("4th Patch");
+					break;
+				case 4:
+					strCurr = "Solid by Coons Method:@Click in The 5th Patch";
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("5th Patch");
+					break;
+				case 5:
+					strCurr = "Solid by Coons Method:@Click in The 6th Patch";
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Last Patch");
+					break;
+				case 6:
+					strCurr = "Ready with other Info.?@Click Right Button";
+					m_pSolInDlg->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					break;
+				default:
+					break;
+			}
+			break;
+
+		case SP_DUCT:
+
+			if(m_Orient == "FORWARD")
+ 				((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(1);//FORWARD=1
+			else
+			if(m_Orient == "BACKWARD")
+ 				((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(0);//BACKWARD=0
+			///////////////////
+			switch(m_nInfoDone)
+			{
+				case 0:
+					strCurr = "Solid by Ducting:@Click in Cross Sectional Patch";
+					m_bCurve = FALSE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Xsec. PatchID");
+					break;
+				case 1:
+					strCurr = "Solid by Ducting:@Click in Spine Curve";
+					m_bCurve = TRUE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Spine CurveID");
+					GetSolInDlg()->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					break;
+				case 2:
+					strCurr = "Solid by Ducting:@Click in Twist Distribution Curve";
+					m_bCurve = TRUE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Twist CurveID");
+					break;
+				case 3:
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_CIDHEAD)->SetWindowText("");
+					GetSolInDlg()->GetDlgItem(IDC_CID)->EnableWindow(FALSE);
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_OTHER)->SetWindowText("Z");
+					GetSolInDlg()->GetDlgItem(IDC_COORD)->EnableWindow(TRUE);
+					//////
+					strCurr = "Solid by Ducting:@Click in Anchor Node";
+					m_pSolInDlg->GetDlgItem(IDC_NIDHEAD)->SetWindowText("Anchor Node");
+					GetSolInDlg()->GetDlgItem(IDC_NID)->EnableWindow(TRUE);
+					break;
+				case 4:
+					strCurr = "Ready with other Info.?@Click Right Button";
+					m_pSolInDlg->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("");
+					m_pSolInDlg->GetDlgItem(IDC_CID)->EnableWindow(FALSE);
+					m_pSolInDlg->GetDlgItem(IDC_NIDHEAD)->SetWindowText("");
+					m_pSolInDlg->GetDlgItem(IDC_NID)->EnableWindow(FALSE);
+					break;
+				default:
+					break;
+			}
+			break;
+
+			
+			case SP_SWEEP:
+
+			if(m_Orient == "FORWARD")
+ 				((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(1);//FORWARD=1
+			else
+			if(m_Orient == "BACKWARD")
+ 				((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(0);//BACKWARD=0
+			///////////////////
+			switch(m_nInfoDone)
+			{
+				case 0:
+					strCurr += "Solid by Sweeping:@Click in Cross Sectional Patch";
+					m_bCurve = FALSE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Xsec. Patch");
+					break;
+				case 1:
+					strCurr += "Solid by Sweeping:@Click in Spine Curve";
+					m_bCurve = TRUE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Spine Curve");
+					GetSolInDlg()->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					break;
+				case 2:
+					strCurr = "Solid by Sweeping:@Click in Twist Distribution Curve";
+					m_bCurve = TRUE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Twist Curve");
+					break;
+				case 3:
+					strCurr = "Solid by Sweeping:@Click in Radial Distribution Curve";
+					m_bCurve = TRUE; //Dlg.CID is used for both Patch or Curve			
+					m_pSolInDlg->GetDlgItem(IDC_CIDHEAD)->SetWindowText("Radius Curve");
+					break;
+				case 4:
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_CIDHEAD)->SetWindowText("");
+					GetSolInDlg()->GetDlgItem(IDC_CID)->EnableWindow(FALSE);
+					//////
+					GetSolInDlg()->GetDlgItem(IDC_OTHER)->SetWindowText("Z");
+					GetSolInDlg()->GetDlgItem(IDC_COORD)->EnableWindow(TRUE);
+					//////
+					strCurr = "Solid by Sweeping:@Click in Anchor Node";
+					m_pSolInDlg->GetDlgItem(IDC_NIDHEAD)->SetWindowText("Anchor Node");
+					GetSolInDlg()->GetDlgItem(IDC_NID)->EnableWindow(TRUE);
+					break;
+				case 5:
+					strCurr = "Ready with other Info.?@Click Right Button";
+					GetSolInDlg()->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+					GetSolInDlg()->GetDlgItem(IDC_CIDHEAD)->SetWindowText("");
+					GetSolInDlg()->GetDlgItem(IDC_CID)->EnableWindow(FALSE);
+					GetSolInDlg()->GetDlgItem(IDC_NIDHEAD)->SetWindowText("");
+					GetSolInDlg()->GetDlgItem(IDC_NID)->EnableWindow(FALSE);
+					break;
+				default:
+					break;
+			}
+			break;
+		default:
+			break;
+	}
+	/////////////////////////////////////////////// CurrStat: Show
+	pWnd->SetstrCurrID(strCurr);
+	pWnd->UpdateCurrStat(strCurr);
+	////////////////////////////////////////////////
+	m_pSolInDlg->UpdateData(FALSE); // To screen
+	////////////////////////////////////////////////
+}
+	
+int CSolMouse::LeftUp_Sol_Node(CPoint point,BOOL bCNode,BOOL bDistinct,BOOL bNoOtherType)
+{
+	///////////////////////////////////////////////////////////////////////
+	//	bDistinct		=		TRUE	-> Should Not be in m_NODELIST
+	//							FALSE	-> DONT CARE
+	//	bNoOtherType	=		TRUE	-> Should Not be other than Type dictated by bCNode
+	//							FALSE	-> DONT CARE
+	///////////////////////////////////////////////////////////////////////
+	int nResult = 0;
+	////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	///////////////////////////////////////////// See if any Existing Node Hit w/ same Coords
+	m_bCorINodeOpDone = FALSE;
+	BOOL bControl	  = FALSE;
+	if(bCNode)
+		bControl = TRUE;
+	////////////////////
+SEARCH:
+	nResult = LeftUp_Node_Accept_OtherContext(point,bControl,pWnd->IsMeshMode(),
+						m_bCorINodeOpDone,m_bAutoAcceptOn,&m_pCurrentNode);
+	/////////////////////////////////////////////   
+	//	MA_CREATENEW	// Create Anyway
+	//	MA_ACCEPTOLD	// Accept Old	
+	//	MA_ACCEPTNEW	// Accept New	
+	//	MA_NOHIT		// No Hit	
+	//	MA_CANCEL		// Cancel Process
+	switch(nResult)
+	{
+		case MA_ACCEPTOLD:		// Accept Old One
+			/////////////////// matches previous Node in m_NodeList,INADMISSIBLE
+			nResult = OldNode_N_Update_PATContext(m_pCurrentNode->IsControlNode(),bDistinct); // right type
+				return nResult;
+
+		case MA_NOHIT:			// NoHit
+			if(!bNoOtherType)
+			{
+				if(!m_bCorINodeOpDone)	// Not Final
+				{
+					m_bCorINodeOpDone = TRUE;	// try Final
+					bControl = TRUE;
+					if(bCNode)
+						bControl = FALSE;	// other type
+					goto SEARCH;
+				}
+			}
+			else
+				; // fall thro for NEW NODE
+
+		case MA_CREATENEW:			// Hit or Not , Create NEW anyway (m_wLoc Set)
+			nResult = NewNode_N_Update_OtherContext(point,bCNode); // desired Type
+			return nResult;
+			/////////
+		case MA_CANCEL:		// Cancel
+			return -2;
+		default:		// Error
+			return -1;
+	}					
+}
+
+int CSolMouse::OldNode_N_Update_SOLContext(BOOL bCNode,BOOL bDistinct)
+{
+	///
+	if(bDistinct)
+	{
+		/////////////////// matches previous Node in m_NodeList,INADMISSIBLE
+		if(m_nNodeDone>1)
+		{
+			////////////////////////////////////////////////// already exists
+			if(m_NodeList.GetObjectIndex(m_pCurrentNode) >=0)
+			{
+				m_pCurrentNode = NULL;
+				if(m_nActiveTool == S_EXTRUDE)
+					AfxMessageBox("ERROR:\nDegenerate Extrusion Direction:\nSame Node More than Once!");
+				if(m_nActiveTool == S_ROTATE)
+					AfxMessageBox("ERROR:\nDegenerate Rotation Axis:\nSame Node More than Once!");
+				return MA_CANCEL;
+			}
+		}
+	}
+	/////////////////////
+	m_NodeList.InsertObject(m_pCurrentNode);
+	UpdateforOldNode(bCNode);
+	/////////////
+	return MA_OK;
+}
+
+int CSolMouse::LeftUp_EXTRUDE_SOL(POINT point)
+{
+	int nResult = 0;
+	////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	///////////
+	switch(m_nInfoDone)
+	{
+		case 1:	m_nPatchDone++;
+				nResult = LeftUp_Sol_Patch(point);
+				//
+				if(nResult <0)		// Cancel
+				{
+					m_nPatchDone--;
+					return nResult;
+				}
+				////////////////////// prepare for Control Nodes
+				pObjectMgr->SetNodeInfoID(m_CurrentNodeID,TRUE,pWnd->IsMeshMode());		
+				///////
+				return 0;
+		case 2:	// fall thro'
+		case 3:	m_nNodeDone++;
+				nResult = LeftUp_Sol_Node(point,TRUE,TRUE,FALSE);
+				if(nResult <0)		// Cancel
+				{
+					m_nNodeDone--;
+					return nResult;
+				}
+				else
+					return 0;
+		default:break;
+	}
+	return -1;
+}
+
+int CSolMouse::LeftUp_ROTATE_SOL(POINT point)
+{
+	int nResult = 0;
+	////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	///////////
+	switch(m_nInfoDone)
+	{
+		case 1:	m_nPatchDone++;
+				nResult = LeftUp_Sol_Patch(point);
+				//
+				if(nResult <0)		// Cancel
+				{
+					m_nPatchDone--;
+					return nResult;
+				}
+				////////////////////// prepare for Control Nodes
+				pObjectMgr->SetNodeInfoID(m_CurrentNodeID,TRUE,pWnd->IsMeshMode());		
+				///////
+				return 0;
+		case 2:	// fall thro'
+		case 3:	m_nNodeDone++;
+				nResult = LeftUp_Sol_Node(point,TRUE,TRUE,FALSE);
+				if(nResult <0)		// Cancel
+				{
+					m_nNodeDone--;
+					return nResult;
+				}
+				else
+					return 0;
+		default:break;
+	}
+	return -1;
+}
+
+int CSolMouse::LeftUp_LOFT2_SOL(POINT point)
+{
+	int nResult = 0;
+	////////////////
+	switch(m_nInfoDone)
+	{
+		case 1:	// fall thro'
+		case 2:	m_nPatchDone++;
+				nResult = LeftUp_Sol_Patch(point);
+				//
+				if(nResult <0)		// Cancel
+				{
+					m_nPatchDone--;
+					return nResult;
+				}
+				return 0;
+		default:break;
+	}
+	return -1;
+}
+
+int CSolMouse::LeftUp_DUCT_SOL(POINT point)
+{
+	int nResult = 0;
+	////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	///////////
+	switch(m_nInfoDone)
+	{
+		case 1:	m_nPatchDone++;
+				nResult = LeftUp_Sol_Patch(point);
+				//
+				if(nResult <0 ||nResult == MA_NOHIT)		// Cancel
+				{
+					m_nPatchDone--;
+					return nResult;
+				}
+				return 0;
+		case 2:	// fall thro'
+		case 3:	m_nCurveDone++;
+				nResult = LeftUp_Sol_Curve(point);	//
+				//
+				if(nResult <0 ||nResult == MA_NOHIT)		// Cancel
+				{
+					m_nCurveDone--;
+					return nResult;
+				}
+				////////////////////// prepare for Control Nodes
+				if(m_nInfoDone>2)
+				{
+					////////////////////// prepare for Control Nodes
+					pObjectMgr->SetNodeInfoID(m_CurrentNodeID,TRUE,pWnd->IsMeshMode());		
+					///////
+				}
+				///////
+				return 0;
+		case 4:	m_nNodeDone++;
+				nResult = LeftUp_Sol_Node(point,TRUE,TRUE,FALSE);
+				if(nResult <0 ||nResult == MA_NOHIT)		// Cancel
+				{
+					m_nNodeDone--;
+					return nResult;
+				}
+				else
+					return 0;
+		default:break;
+	}
+	return -1;
+}
+
+int CSolMouse::LeftUp_SWEEP_SOL(POINT point)
+{
+	int nResult = 0;
+	////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	///////////
+	switch(m_nInfoDone)
+	{
+		case 1:	m_nPatchDone++;
+				nResult = LeftUp_Sol_Patch(point);
+				//
+				if(nResult <0)		// Cancel
+				{
+					m_nPatchDone--;
+					return nResult;
+				}
+				return 0;
+		case 2:	// fall thro'
+		case 3:	// fall thro'
+		case 4:	m_nCurveDone++;
+				nResult = LeftUp_Sol_Curve(point);	//
+				//
+				if(nResult <0)		// Cancel
+				{
+					m_nCurveDone--;
+					return nResult;
+				}
+				////////////////////// prepare for Control Nodes
+				if(m_nInfoDone>3)
+				{
+					////////////////////// prepare for Control Nodes
+					pObjectMgr->SetNodeInfoID(m_CurrentNodeID,TRUE,pWnd->IsMeshMode());		
+					///////
+				}
+				///////
+				return 0;
+		case 5:	m_nNodeDone++;
+				nResult = LeftUp_Sol_Node(point,TRUE,TRUE,FALSE);
+				if(nResult <0)		// Cancel
+				{
+					m_nNodeDone--;
+					return nResult;
+				}
+				else
+					return 0;
+		default:break;
+	}
+	return -1;
+}
+
+int CSolMouse::LeftUp_COONS_SOL(POINT point)
+{
+	int nResult = 0;
+	////////////////
+	switch(m_nInfoDone)
+	{
+		case 1:	// fall thro'
+		case 2:	// fall thro'
+		case 3:	// fall thro'
+		case 4:	// fall thro'
+		case 5:	// fall thro'
+		case 6:	m_nPatchDone++;
+				nResult = LeftUp_Sol_Patch(point);
+				//
+				if(nResult <0 ||nResult == MA_NOHIT)		// Cancel
+				{
+					m_nPatchDone--;
+					return nResult;
+				}
+				return 0;
+		default:break;
+	}
+	return -1;
+}
+
+int CSolMouse::LeftUp_Patch_Accept_OtherContext(CPoint point)
+{
+	int nResult = -2;
+	//	nResult = 1		// Accept Old	
+	//	nResult = -2	// Cancel	
+	/////////////////////////////////
+	// multiple search fr same coord
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	////////////////////////////////////
+	CHitNet*	pHitNet		= (CHitNet*)pObjectMgr->GetSpecObject(HITNET);
+	double		dTol		= pHitNet->GetSearchDet(); 
+	WORtoWOP(&dTol,&dTol);	// physical
+	////////////////////////////////////////////////////////////////// Blank NodeID
+	CDListMgr* pDListMgr;
+	///
+	pDListMgr	= pObjectMgr->GetObjectList(PATCH);
+	//////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	CDrPatch*	pDrPatch;
+	int			index;
+	///////////////////////////////////////////// See if any Existing Patch Hit
+	index = IsObjectHit(PATCH,point,0);
+	/////////////////////////////////////////////////////////////// 
+	if(index<0)						
+		//////////////// Not Hit
+		return -2;
+	////////////////////////////////
+	pDrPatch	= (CDrPatch*)pDListMgr->GetObject(index);
+	ID			= pDrPatch->GetObjectID();
+	//////////////////////////////////////////////////////////////// MultipleSearch
+	int startIndex = index+1;
+	/////////////////////////
+	for(;;)
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+		/////////////
+		int j;
+		//////////////////////////////
+		j = sprintf(buf,"***** A Patch Hit ****\n");
+		j += sprintf(buf+j,"(with a Net Sieve of %f)\n",dTol);
+		j = ShowPatchInfo(pDrPatch, buf, j);
+		////////////////////////////
+		j += sprintf(buf+j,
+			"\n\nYES:\t\tAccept This Existing Patch");
+		j += sprintf(buf+j,
+			"\nNO:\t\tFind Next Matching Patch");
+		j += sprintf(buf+j,
+			"\nCANCEL:\t\tCancel Selection Process");
+		////////////////////////////
+		if(!m_bAutoAcceptOn)
+			nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+		else
+			nResult = IDYES;
+		/////////////
+		delete str;
+		if(nResult == IDYES)
+		{
+			///////////////// Accept Old
+			m_pCurrentPatch = pDrPatch;
+			return 1;
+		}
+		else
+		if(nResult == IDNO)
+		{
+			//////////////////////////////////////////////////////// Retry
+			index = IsObjectHit(PATCH,point,startIndex);
+			/////////////////////////////////////////////////////////////// Right Type
+			if(index>=0)
+			{
+				pDrPatch	= (CDrPatch*)pDListMgr->GetObject(index);
+				ID			= pDrPatch->GetObjectID();
+				////////////////////////////////////////
+				startIndex  = index+1;
+				/////////////////////
+			}
+			else
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				/////////////
+				int j;
+				//////////////////////////////
+				j = sprintf(buf,"***** No More Patch Found ****\n");
+				j += sprintf(buf+j,"(with a Net Sieve of %f)\n",dTol);
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OK|MB_ICONEXCLAMATION);
+				/////////////
+				delete str;
+				nResult = IDNO;
+				//////////////// Cancel
+				return -2;
+			}
+		}
+	}	// end for Loop			
+	//////////////// Cancel
+	return -2;
+}
+
+int CSolMouse::ShowPatchInfo(CDrPatch* pDrPatch, char* buf, int jStart)
+{
+	CString ID;
+	CString* pID = &ID;
+	//////////////////////////////
+	int j = jStart;
+	/////////////////////////////// total elems
+	ID						= pDrPatch->GetObjectID();
+	int nIn					= pDrPatch->GetMaxINodes_S();
+	int nElems				= pDrPatch->GetMaxOutPts_S();
+	CDListMgr* pList		= pDrPatch->GetINodeList();
+	//////////////////////////////
+	j += sprintf(buf+j,
+			"Patch %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+			ID,nIn,nElems);
+	j += sprintf(buf+j,"Nodes:\n");
+	//////////////////////////////
+	for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+	{
+		////
+		CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+		j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+	}
+	sprintf( buf + j-2, "; ");
+	/////////
+	return j;
+}
+
+int CSolMouse::LeftUp_Sol_Patch(POINT point)
+{
+	int nResult = 0;
+	////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	pDListMgr	= pObjectMgr->GetObjectList(PATCH);
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	nResult = LeftUp_Patch_Accept_OtherContext(point);
+	/////////////////////////////////////////////   
+	switch(nResult)
+	{
+		case MA_ACCEPTOLD:		// Accept Old One
+			/////////////////////////////////////
+			ID	= m_pCurrentPatch->GetObjectID();
+			///////////////////////////////////////// Check if matches previous Patchs,INADMISSIBLE
+			if(m_nPatchDone>1)
+			{
+				/////////////////////////////////////////// already exists
+   				if((m_PatchList.GetObjectIndex(PATCH,ID) ) >=0)
+				{
+					BOOL bError = FALSE;
+					////////////////////
+					if(m_nPatchDone>2)
+					{	
+						if((m_SolProc == SP_COONS) ||(m_SolProc == SP_LOFT2) )
+							bError = TRUE;
+					}
+					else
+					if(m_nPatchDone>1)
+					{	
+						if(
+							(m_SolProc == SP_COONS) ||(m_SolProc == SP_LOFT2) ||
+							(m_SolProc == SP_DUCT) ||(m_SolProc == SP_SWEEP)
+							)
+							bError = TRUE;
+					}
+					//////////////////
+					if(bError)
+					{
+						AfxMessageBox("Degenerate Solid:\nSame Patch More than Once!");
+						return -2;
+					}
+				}
+			}
+			/////////////////////////////////////////////
+			break;
+		case 0:			// Hit Not , cancel	fall thro
+		case -2:		// Cancel
+			return -2;
+		default:		// Error
+			return -1;
+	}
+	/////////////////////////////////////////
+	pObjectMgr->ShowObject_On_Off(m_pCurrentPatch,PATCH,TRUE);
+	///////////////////////////////////////////////// Check COONS Compatibility
+	CURVELATCH	NewLat = CL_FORWARD;
+	if(m_Orient == "BACKWARD")
+		NewLat = CL_BACKWARD;
+/*todo later
+	//////////////////////////
+	if(	m_nCurveDone > 1 && m_SolProc == SP_COONS)	// NOT IST patch
+	{
+		nResult = CheckCompatibility_COONS_Curve(m_pCurrentCurve,NewLat);
+		///
+		if(nResult<0)
+			return nResult;
+	}
+*/
+	//////////////////////////////////////////////////////////////// PatSubType
+	m_PatSubType = m_pCurrentPatch->GetPatSubType();
+	/////////////////////////////////////////////////  VALID:Progess
+	m_pCurSolPatch					= m_pCurrentPatch;
+	m_pOldSolPatch					= m_pCurSolPatch;
+	m_PatchList.InsertObject(m_pCurSolPatch);
+	///
+/*
+	m_Orient	= "FORWARD";
+	if(NewLat == CL_BACKWARD)
+		m_Orient = "BACKWARD";
+	m_LatchList.AddTail(NewLat);
+*/
+	/////////
+	return 0;
+}
+
+int CSolMouse::LeftUp_Sol_Curve(POINT point)
+{
+	int nResult = 0;
+	////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	nResult = LeftUp_Curve_Accept_OtherContext(point);
+	/////////////////////////////////////////////   
+	switch(nResult)
+	{
+		case 1:		// Accept Old One
+			/////////////////////////////////////
+			ID	= m_pCurrentCurve->GetObjectID();
+			break;
+		case 0:			// Hit Not , cancel	fall thro
+		case -2:		// Cancel
+			return -2;
+		default:		// Error
+			return -1;
+	}
+	/////////////////////////////////////////
+	pObjectMgr->ShowObject_On_Off(m_pCurrentCurve,CURVE,TRUE);
+	/////////////////////////////////////////////////  VALID:Progess
+	m_pCurSolCurve					= m_pCurrentCurve;
+	m_pOldSolCurve					= m_pCurSolCurve;
+	m_CurveList.InsertObject(m_pCurSolCurve);
+	CURVELATCH cLat = CL_FORWARD;
+	if(m_Orient == "BACKWARD")
+		cLat = CL_BACKWARD;
+	m_LatchList.AddTail(cLat);
+	/////////////////////////////////////////////////
+	return 0;
+}
+
+void CSolMouse::ElementLeftUp_SOL(CPoint point)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CString strCurr;
+	//////////////////////////////////////////////////////////////////
+//	CString*	pID;
+	/////////////
+//	char buf[20];
+	CString Nid;
+	BOOL bRightOn = FALSE;
+	///////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		///////////////////////////////////////////////////// Solides Insert
+		case S_EXTRUDE:
+
+			m_nInfoDone++;
+			if(m_nInfoDone > MAX_INFO_EXTRUDE)
+			{
+				m_nInfoDone--;
+				return;
+			}
+			////////////////
+			UpdateSDlg_TRUE();
+			if(LeftUp_EXTRUDE_SOL(point)<0)
+			{
+				m_nInfoDone--;
+				return;
+			}		
+			UpdateSDlg_FALSE();
+			////////////////
+			return;
+
+		case S_ROTATE: 
+
+			m_nInfoDone++;
+			if(m_nInfoDone > MAX_INFO_ROTATE)
+			{
+				m_nInfoDone--;
+				return;
+			}
+			////////////////
+			UpdateSDlg_TRUE();
+			if(LeftUp_ROTATE_SOL(point)<0)
+			{
+				m_nInfoDone--;
+				return;
+			}		
+			UpdateSDlg_FALSE();
+			////////////////
+			return;
+
+		case S_LOFT: 
+
+			m_nInfoDone++;
+			if(m_nInfoDone > MAX_INFO_LOFT2)
+			{
+				m_nInfoDone--;
+				return;
+			}
+			////////////////
+			UpdateSDlg_TRUE();
+			if(LeftUp_LOFT2_SOL(point)<0)
+			{
+				m_nInfoDone--;
+				return;
+			}		
+			UpdateSDlg_FALSE();
+			////////////////
+			return;
+
+		case S_DUCT: 
+
+			m_nInfoDone++;
+			if(m_nInfoDone > MAX_INFO_DUCT)
+			{
+				m_nInfoDone--;
+				return;
+			}
+			////////////////
+			UpdateSDlg_TRUE();
+			if(LeftUp_DUCT_SOL(point)<0)
+			{
+				m_nInfoDone--;
+				return;
+			}		
+			UpdateSDlg_FALSE();
+			////////////////
+			return;
+
+		case S_SWEEP:
+
+			m_nInfoDone++;
+			if(m_nInfoDone > MAX_INFO_SWEEP)
+			{
+				m_nInfoDone--;
+				return;
+			}
+			////////////////
+			UpdateSDlg_TRUE();
+			if(LeftUp_SWEEP_SOL(point)<0)
+			{
+				m_nInfoDone--;
+				return;
+			}		
+			//////
+			if(m_nInfoDone == MAX_INFO_SWEEP-2)	// Get Ready for Radial Curve
+				m_bTwist = FALSE;
+			//////
+			UpdateSDlg_FALSE();
+			////////////////
+			return;
+
+		case S_COONS:		// 
+			
+
+			m_nInfoDone++;
+			////////////////
+			if(m_nCurveDone > MAX_INFO_COONS)
+			{
+				m_nCurveDone--;
+				m_nInfoDone--;
+				return;
+			}
+			////////////////
+			UpdateSDlg_TRUE();
+			if(LeftUp_COONS_SOL(point)<0)
+			{
+				m_nInfoDone--;
+				return;
+			}		
+			UpdateSDlg_FALSE();
+			///////
+			return;
+	
+		////////////////////////////////////////////////// POST
+/*
+		case S_POST:				// SOLID 
+			///////		
+			m_MI_Pat_P.LBUpSolidPost();
+			return;
+*/
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	} 
+}
+
+int CSolMouse::ShowSolidInfo(CDrSolid* pDrSolid)
+{
+	int nResult;
+	CString ID;
+	CString* pID = &ID;
+	ID = pDrSolid->GetObjectID();
+	//////////////////////////////////////////////////////////////////////
+	SOLIDPROC 		SolProc		= pDrSolid->GetSolidProc();
+	SOLSUBTYPE 		SolSubType	= pDrSolid->GetSolSubType();
+//	PATSUBTYPE 		PatSubType	= pDrSolid->GetPatSubType();
+	//////////////////////////////
+	CString* str = new CString;
+	char* buf = str->GetBuffer(BUFF_SIZE);
+	int j;
+	//////
+	j = sprintf(buf,"***** A Solid Hit To Spawn ****\n");
+	//////////////////////////////////////
+	switch(SolProc)
+	{
+		case SP_EXTRUDE:
+			//////////////////////////////////////////////////// Show Solid
+			j += sprintf(buf+j,"Solid %s was Generated by Extrusion\n",*pID);
+			break;
+
+		case SP_ROTATE:
+			//////////////////////////////////////////////////// Show Solid
+			j += sprintf(buf+j,"Solid %s was Generated by Rotation\n",*pID);
+			break;
+
+		case SP_LOFT2:
+			//////////////////////////////////////////////////// Show Solid
+			j += sprintf(buf+j,"Solid %s\nGenerated by Lofting\n",*pID);
+			break;
+
+		case SP_DUCT:
+			//////////////////////////////////////////////////// Show Solid
+			j += sprintf(buf+j,"Solid %s\nGenerated by Ducting\n",*pID);
+			break;
+
+		case SP_SWEEP:
+			//////////////////////////////////////////////////// Show Solid
+			j += sprintf(buf+j,"Solid %s\nGenerated by\nSweeping\n",*pID);
+			break;
+
+		case SP_COONS:
+			//////////////////////////////////////////////////// Show Solid
+//			if(PatSubType == PS_TRIANGLE)
+				//////////////////////////////////////////////////// Show Solid
+				j += sprintf(buf+j,"Solid %s\nTriangular Coons Type\n",*pID);
+//			else
+//			if(PatSubType == PS_QUADRILAT)
+				//////////////////////////////////////////////////// Show Solid
+				j += sprintf(buf+j,"Solid %s\nQuadrilateral Coons Type\n",*pID);
+
+			////
+			break;
+
+		default:
+			break;
+	}
+	////////////////////////////
+	j += sprintf(buf+j,
+		"\nYES:\t\tSpawn This Solid");
+	j += sprintf(buf+j,
+		"\nNO:\t\tFind Next Solid with Intersecting Trace");
+	j += sprintf(buf+j,
+		"\nCANCEL:\t\tCancel Selection Process");
+	if(!m_bAutoAcceptOn)
+		nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+	else
+		nResult = IDYES;
+//	nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+	///////////////
+	delete str;
+	return nResult;
+}
+
+void CSolMouse::OnEBoxMouseMove_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{  
+
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CMouseMgr* pMouseMgr	= pWnd->GetMouseMgr(); 
+	////////////////////////// LOG: Log/DEScaled
+   	m_pdc->DPtoLP(&point);     
+	LPOINT LpLOG;
+	LpLOG.x = (long)point.x;
+	LpLOG.y = (long)point.y;
+   	m_pdc->LPtoDP(&point);     
+    /////////////////////////////////////////////
+    if(!m_bDragging)  // not currently dragging 
+    { 
+    
+		//////////////////////////////////////
+		LPOINT3 MouseOldTempWIC = GetMouseOldWIC();
+	    LPOINT3 MouseTempWIC 	= GetMouseWIC();
+   		SetMouseOldWIC(MouseTempWIC);
+   		LPOINT3 MouseWIC;
+    	///////////////////////  LOG :DEScaled
+    	LOGtoWIC2(&MouseWIC,&LpLOG,&MouseTempWIC); //LOG/Scaled WIC
+    	////////////////////                 
+    	SetMouseWIC(MouseWIC);
+    	///////////////////////////
+//    	pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+		pMouseMgr->SetStatusMouseWIC(MouseWIC);
+		////////////////////////////
+		///////////////////// recover MouseWIC changed for statusbar update 
+	    SetMouseOldWIC(MouseOldTempWIC);
+	    SetMouseWIC(MouseTempWIC);
+
+		return;
+    }	
+   	//////////////////////////////      ***** START FROM HERE *****
+   	CPen    Pen;
+	CPen*   PtrOldPen;
+	//////////////////////////////
+	m_pdc->SetBkMode(TRANSPARENT);
+	//////////////////////////////	
+	// Create Black Pen 2 Pixel wide;
+	int two = 2;
+	COLORREF crColor = 0x000000;  
+	Pen.CreatePen ((int)PS_SOLID,two,crColor);
+	PtrOldPen = m_pdc->SelectObject(&Pen);
+	///////////////////////////
+	m_MouseLOG = point;              // Device
+	POINT MouseLOC;
+	/////////////////////////	
+	m_pdc->SetROP2 (R2_NOT); 
+	
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseOldLOG;        // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+	////////////////////////	  
+//	m_pdc->SetROP2 (R2_COPYPEN);
+
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseLOG;
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+
+	m_MouseOldLOG = m_MouseLOG;
+	///////////////////////////
+   	m_pdc->SelectObject(PtrOldPen);   
+	Pen.DeleteObject(); 
+	//////////////////////////////////////
+    LPOINT3 MouseWIC = GetMouseWIC();
+    SetMouseOldWIC(MouseWIC);
+   	///////////////////////
+   	LOGtoWIC(&MouseWIC,&LpLOG); //LOG/Scaled WIC
+   	////////////////////                 
+    SetMouseWIC(MouseWIC);
+    ///////////////////////////
+//  pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+	pMouseMgr->SetStatusMouseWIC(MouseWIC);
+	//////////////////////////////////////////////    
+}
+
+void CSolMouse::OnEBoxLButtonUp_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+  	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+    if(m_bDragging)  // not currently dragging
+    {
+		m_bDragging = FALSE; 
+		::ReleaseCapture();
+		//	ClipCursor(NULL);				TOBEDONE 
+	}	
+	///////////////////////////////////////////////////////// 
+	PreLeftUp(point);
+    /////////////////////////////  ELement Dialog On/Off Check
+    POINT Logpoint;
+    m_pdc->DPtoLP(&point);
+    Logpoint.x = point.x;
+    Logpoint.y = point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftUp_SOL(Logpoint);
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftUp_I();
+	/////////////////
+	PostLeft();
+	/////////////////////////
+	
+}
+
+void CSolMouse::OnEBoxRButtonDown_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+									UINT nFlags, CPoint point)
+{ 
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+    /////////////////////////////  ELement Dialog On/Off Check
+	m_bDialogOn     = pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	/////////////////////////////////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	//////////////////////////////////////////
+	switch(m_nActiveTool) 
+	{
+		case SOLID:
+			break;
+		////////////////////////////////////////////////// Solid
+		default:
+			break;
+	}  
+}
+
+int CSolMouse::RightUp_Premature_SOL()
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr*	pList;
+	////////////////////////////////////////////////////// Add to DataBase
+	CString* pID;
+	int		nAnswer = IDOK;
+	BOOL	bPremature = FALSE;
+	////////////////////////////////
+	pID			= &m_CurrentSolidID; 
+	//////////////////////////////////////////////////// Check Adequate Curve,or cancel
+	switch(m_SolProc)
+	{
+		case SP_EXTRUDE:
+
+			if(m_nInfoDone<MAX_INFO_EXTRUDE)
+			{
+				bPremature = TRUE;
+				nAnswer = AfxMessageBox(
+				"Minimum of 1 Patch & 2 CNodes Needed\n Do You want to Continue to Get More Info. ?",
+				MB_YESNO|MB_ICONQUESTION );
+				/////////////////////////
+			}
+			break;
+
+		case SP_ROTATE:
+
+			if(m_nInfoDone<MAX_INFO_ROTATE)
+			{
+				bPremature = TRUE;
+				nAnswer = AfxMessageBox(
+				"Minimum of 1 Patch & 2 CNodes Needed\n Do You want to Continue to Get More Info. ?",
+				MB_YESNO|MB_ICONQUESTION );
+				/////////////////////////
+			}
+			break;
+
+		case SP_LOFT2:
+
+			if(m_nInfoDone<MAX_INFO_LOFT2)
+			{
+				bPremature = TRUE;
+				nAnswer = AfxMessageBox(
+				"Minimum of 2 Patches Needed\n Do You want to Continue to Get More Info. ?",
+				MB_YESNO|MB_ICONQUESTION );
+				/////////////////////////
+			}
+			break;
+
+		case SP_DUCT:
+
+			if(m_nInfoDone<MAX_INFO_DUCT)
+			{
+				bPremature = TRUE;
+				nAnswer = AfxMessageBox(
+				"Minimum of 1 Patch, 2 Curves & 1 CNode Needed\n Do You want to Continue to Get More Info. ?",
+				MB_YESNO|MB_ICONQUESTION );
+				/////////////////////////
+			}
+			break;
+
+		case SP_SWEEP:
+
+			if(m_nInfoDone<MAX_INFO_SWEEP)
+			{
+				bPremature = TRUE;
+				nAnswer = AfxMessageBox(
+				"Minimum of 1 Patch, 3 Curves & 1 CNode Needed\n Do You want to Continue to Get More Info. ?",
+				MB_YESNO|MB_ICONQUESTION );
+				/////////////////////////
+			}
+			break;
+
+		case SP_COONS:
+
+			if(m_nInfoDone<3)
+			{
+				nAnswer = AfxMessageBox(
+				"Minimum of 4 Patches Needed\n Do You want to Continue to Get More Info. ?",
+				MB_YESNO|MB_ICONQUESTION );
+				/////////////////////////
+			}
+			break;
+
+		default:
+			break;
+	}
+	//////////////////////////////////////////////////////// OK
+	if(!bPremature)
+		return 0;
+	//////////////////////////////////////////////////////// ReConfirm: Don't Continue			
+	if(nAnswer == IDNO)
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+		////////////////////
+		sprintf(buf,"Do You Want to Delete\nCurrent Solid to Start Allover");
+		/////////////////////////	
+		nAnswer = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+		///////////
+		delete str;
+		/////////////////////////
+		if(nAnswer == IDYES)		//delete
+		{
+			///////////////////////////////////////// delete
+			pList = pObjectMgr->GetObjectList(SOLID);
+			int nActiveIndex = pList->GetObjectIndex(SOLID, *pID);
+			//////////////////////////////////////////////////// Reset
+			pObjectMgr->DeleteFromDataBase(nActiveIndex, SOLID);
+			/////////////////////////////////////// Reset
+			m_nInfoDone		= 0;
+			m_nPatchDone	= 0;	// 
+			m_nCurveDone	= 0;	// 
+			m_nNodeDone		= 0;	// 
+			m_bSolidDone	= TRUE;	// 
+			//////////////////////////
+			m_pCurrentSolid = NULL;
+			m_NodeList.RemoveAll();
+			m_CurveList.RemoveAll();
+			m_PatchList.RemoveAll();
+			m_ElSegList.RemoveAll();
+			m_LatchList.RemoveAll();
+			m_PLatchList.RemoveAll();
+			/////////////////// reset
+			if(m_pSolInDlg->GetSafeHwnd())
+				m_pSolInDlg->GetDlgItem(IDC_PID)->EnableWindow(TRUE);
+			/////////////////////////////////////
+			pDoc->UpdateAllViews(NULL);
+			///////////////////////////
+		}
+		///////////
+	}
+	////////
+	return -1;
+}	
+
+int CSolMouse::RightUp_NotAutoAccept_SOL()
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr*	pList;
+	CDrPatch*	pDrPatch;
+	CDrNode*	pDrNode;
+	////////////////////////////////////////////////////// Add to DataBase
+	CString* pID;
+	int i;
+	int nAnswer = IDOK;
+	////////////////////////////////
+	pID			= &m_CurrentSolidID; 
+	////////////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		///////////////////////////////////////////////////////////// show Info
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+		////////////////////
+		int j;
+		//////////
+		pDrPatch = (CDrPatch*)(m_PatchList.GetObject(0) );	//Head
+		//////////////////////////////////////////////////// Check Adequate Patch,or cancel
+		switch(m_SolProc)
+		{
+			case SP_COONS:
+
+
+				j = sprintf(buf,"Solid %s contains\n\t%d Coons Curves:\n",
+					*pID,m_nPatchDone);
+
+				for(i=0;i<m_nPatchDone;i++)
+				{
+					pDrPatch = (CDrPatch*)(m_PatchList.GetObject(i) );
+					//////////////////
+					j += sprintf( buf + j, "\t%s Curve_%d\n",pDrPatch->GetObjectID(),i+1);
+				}
+				sprintf( buf + j-2, "; ");
+				/////////////////////////
+				break;
+
+
+			case SP_EXTRUDE:
+
+				j = sprintf(buf,"Solid %s contains\n\tExtrusion Patch:\t%s",
+					*pID,pDrPatch->GetObjectID());
+
+				j += sprintf(buf + j,"\n\t%d Direction Nodes:\t",m_nNodeDone);
+				for(i=0;i<m_nNodeDone;i++)
+				{
+					pDrNode = (CDrNode*)(m_NodeList.GetObject(i) );
+					j += sprintf( buf + j, "%s, ",pDrNode->GetObjectID());
+				}
+				sprintf( buf + j-2, "; ");
+				/////////////////////////
+				break;
+
+
+			case SP_ROTATE:
+
+				j = sprintf(buf,"Solid %s contains\n\tRotational Patch:\t%s",
+					*pID,pDrPatch->GetObjectID());
+
+				j += sprintf(buf + j,"\n\t%d Axis Nodes:\t",m_nNodeDone);
+				for(i=0;i<m_nNodeDone;i++)
+				{
+					pDrNode = (CDrNode*)(m_NodeList.GetObject(i) );
+					j += sprintf( buf + j, "%s, ",pDrNode->GetObjectID());
+				}
+				sprintf( buf + j-2, "; ");
+				/////////////////////////
+				break;
+
+
+			case SP_LOFT2:
+
+				j = sprintf(buf,"Solid %s contains\n\t%d Lofting Patches:\n",
+					*pID,m_nPatchDone);
+
+				for(i=0;i<m_nPatchDone;i++)
+				{
+					pDrPatch = (CDrPatch*)(m_PatchList.GetObject(i) );
+					//////////////////
+					switch(i)
+					{
+						case 0:
+							j += sprintf( buf + j, "\t%s To Loft From",pDrPatch->GetObjectID());
+							break;
+						case 1:
+							j += sprintf( buf + j, "\t%s To Loft To",pDrPatch->GetObjectID());
+							break;
+						default:
+							break;
+					}
+				}
+				sprintf( buf + j-2, "; ");
+				/////////////////////////
+				break;
+
+
+			case SP_DUCT:
+
+				j = sprintf(buf,"Solid %s contains\n\t%d Ducting Patch %d Curves && %d Anchor Node:\n",
+					*pID,m_nPatchDone,m_nCurveDone,m_nNodeDone);
+
+				pDrPatch = (CDrPatch*)(m_PatchList.GetObject(0) );
+				//////////////////
+				j += sprintf( buf + j, "\t%s CrossSectional Patch",pDrPatch->GetObjectID());
+				/////////////////////////////////////////////////////
+				for(i=0;i<m_nCurveDone;i++)
+				{
+					CDrCurve* pDrCurve = (CDrCurve*)(m_CurveList.GetObject(i) );
+					//////////////////
+					switch(i)
+					{
+						case 0:
+							j += sprintf( buf + j, "\t%s Spine Curve",pDrCurve->GetObjectID());
+							break;
+						case 1:
+							j += sprintf( buf + j, "\t%s Twist Curve",pDrCurve->GetObjectID());
+							break;
+						default:
+							break;
+					}
+				}
+				pDrNode = (CDrNode*)(m_NodeList.GetObject(0) );
+				j += sprintf( buf + j, "\n\t%s Anchor Node",pDrNode->GetObjectID());
+				/////////////////////////
+				sprintf( buf + j-2, "; ");
+				/////////////////////////
+				break;
+
+
+			case SP_SWEEP:
+
+				j = sprintf(buf,"Solid %s contains\n\t%d Sweeping Patch %d Curves && %d Anchor Node:\n",
+					*pID,m_nPatchDone,m_nCurveDone,m_nNodeDone);
+
+				pDrPatch = (CDrPatch*)(m_PatchList.GetObject(0) );
+				//////////////////
+				j += sprintf( buf + j, "\t%s CrossSectional Patch",pDrPatch->GetObjectID());
+				/////////////////////////////////////////////////////
+				for(i=0;i<m_nCurveDone;i++)
+				{
+					CDrCurve* pDrCurve = (CDrCurve*)(m_CurveList.GetObject(i) );
+					//////////////////
+					switch(i)
+					{
+						case 0:
+							j += sprintf( buf + j, "\t%s Spine Curve",pDrCurve->GetObjectID());
+							break;
+						case 1:
+							j += sprintf( buf + j, "\t%s Twist Curve",pDrCurve->GetObjectID());
+							break;
+						case 2:
+							j += sprintf( buf + j, "\t%s Radial Scale Curve",pDrCurve->GetObjectID());
+							break;
+						default:
+							break;
+					}
+				}
+				pDrNode = (CDrNode*)(m_NodeList.GetObject(0) );
+				j += sprintf( buf + j, "\n\t%s Anchor Node",pDrNode->GetObjectID());
+				/////////////////////////
+				sprintf( buf + j-2, "; ");
+				/////////////////////////
+				break;
+
+
+			default:
+				break;
+		}
+		/////////////////////////////////////////////////////////////////////
+		if(j>BUFF_SIZE)
+		{
+			sprintf( buf, "Internal Error:\nIncrease buffer to %d",j);
+			AfxMessageBox(*str);
+			delete str;
+			return -1;
+		}	 
+		///////////////////////////////////////////////////////////////	
+		nAnswer = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION );
+		/////////////////////////
+		if(nAnswer == IDCANCEL)
+		{
+			sprintf(buf,"Do You Want to Delete\nCurrent Solid to Start Allover");
+			/////////////////////////	
+			nAnswer = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+			/////////////////////////
+			if(nAnswer == IDYES)		//delete
+			{
+				///////////////////////////////////////// delete
+				pList = pObjectMgr->GetObjectList(SOLID);
+				int nActiveIndex = pList->GetObjectIndex(SOLID, *pID);
+				//////////////////////////////////////////////////// Reset
+				pObjectMgr->DeleteFromDataBase(nActiveIndex, SOLID);
+				/////////////////////////////////////// Reset
+				m_nInfoDone		= 0;	// 
+				m_nPatchDone	= 0;	// 
+				m_nCurveDone	= 0;	// 
+				m_nNodeDone		= 0;	// 
+				m_bSolidDone	= TRUE;	// 
+				//////////////////////////
+				m_NodeList.RemoveAll();
+				m_CurveList.RemoveAll();
+				m_PatchList.RemoveAll();
+				m_ElSegList.RemoveAll();
+				m_LatchList.RemoveAll();
+				m_PLatchList.RemoveAll();
+				/////////////////////////////////////
+				pDoc->UpdateAllViews(NULL);
+				///////////////////////////
+				delete str;
+				///////////
+				return -1;
+			}
+		}
+		/////////////////////
+		delete str;
+		return 0; 
+	}
+	/////////
+	return 0;
+}
+
+int CSolMouse::ShowSolid(CString* pID)
+{
+
+	CDrGrafFrame*	pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString			strCurr;
+	////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	SOLIDPROC		SolProcOld;
+	//////////////////////////////////////////////////////////////////// Show NewSolid
+	int nActiveIndex,nResult;
+	///////////////////////////
+	m_pCurrentSolid	= (CDrSolid*)(pObjectMgr->AddToDataBase(*pID,nActiveIndex,SOLID));
+	m_pCurrentSolid->SetShow(FALSE);	// not quite ready
+	//////////////////////////////////////////////////// Fill Mesh
+	m_ElSegList.RemoveAll();
+	m_ElSegList.AddTail(m_ElPerSeg);
+	////////////////////////////////
+	strCurr = "Please Wait";
+	///////////////////////// CurrStat: Show
+	pWnd->SetstrCurrID(strCurr);
+	pWnd->UpdateCurrStat(strCurr);
+	//////////////////////////////////////////////////////////////  Posting Dimension
+	int nMeshElemDim;
+	switch(pWnd->GetCurrentCntlID())
+	{
+		case EDIM_0: 
+			nMeshElemDim = 0;	// Node(0D)
+			break;
+		case EDIM_1: 
+			nMeshElemDim = 1;	// Grid(1D)
+			break;
+		default:
+			nMeshElemDim = 2;	// plate, etc(2D)
+	}
+	m_pCurrentSolid->SetMeshElemDim(nMeshElemDim);					// 1D or 2D 
+	////////////////////////////////////////////////////////////////////// Show
+	switch(m_SolProc)
+	{
+		case SP_EXTRUDE:
+			//////////////////////////////////////////////////// Show Solid
+			if(m_MI_Sol_I.RBUp_SExtrudeInsert(
+							m_PatSubType,
+							m_CurrentSolidID,		
+							m_pCurrentSolid,
+							&m_PatchList,
+							&m_PLatchList,
+							&m_NodeList,
+							&m_ElSegList,
+							m_dLen,
+							m_Ratio,
+							m_pView
+							) <0)
+				nResult = -1;
+			break;
+
+		case SP_ROTATE:
+			//////////////////////////////////////////////////// Show Solid
+			if(m_MI_Sol_I.RBUp_SRotateInsert(
+							m_PatSubType,
+							m_CurrentSolidID,		
+							m_pCurrentSolid,
+							&m_PatchList,
+							&m_PLatchList,
+							&m_NodeList,
+							&m_ElSegList,
+							m_dLen,
+							m_Ratio,
+							m_pView
+							) <0)
+				nResult = -1;
+			////
+			break;
+
+		case SP_LOFT2:
+			//////////////////////////////////////////////////// Show Solid
+			if(m_MI_Sol_I.RBUp_SLoft2Insert(
+							m_PatSubType,
+							m_CurrentSolidID,		
+							m_pCurrentSolid,
+							&m_PatchList,
+							&m_PLatchList,
+							&m_ElSegList,
+							m_Ratio,
+							m_pView
+							) <0)
+				nResult = -1;
+			////
+			break;
+
+		case SP_DUCT:
+			//////////////////////////////////////////////////// Show Solid
+			if(m_MI_Sol_I.RBUp_SDuctInsert(
+							m_PatSubType,
+							m_CurrentSolidID,		
+							m_pCurrentSolid,
+							&m_PatchList,
+							&m_CurveList,
+							&m_NodeList,
+							&m_PLatchList,
+							&m_LatchList,
+							m_TwistMult,
+							m_bIncrement,
+							m_TwistStart,
+							m_pView
+							) <0)
+				nResult = -1;
+			////
+			break;
+
+		case SP_SWEEP:
+			//////////////////////////////////////////////////// Show Solid
+			if(m_MI_Sol_I.RBUp_SSweepInsert(
+							m_PatSubType,
+							m_CurrentSolidID,		
+							m_pCurrentSolid,
+							&m_PatchList,
+							&m_CurveList,
+							&m_NodeList,
+							&m_PLatchList,
+							&m_LatchList,
+							m_TwistMult,
+							m_bIncrement,
+							m_TwistStart,
+							m_ScaleMult,
+							m_bIncScale,
+							m_ScaleStart,
+							m_pView
+							) <0)
+				nResult = -1;
+			////
+			break;
+
+		case SP_COONS:
+			//////////////////////////////////////////////////// Show Solid
+			////////////////////////////// OverRide PatProc for COONS Only
+			SolProcOld = m_SolProc;
+			/////////
+			if(m_nPatchDone == 4)
+				m_SolProc	= SP_COONSTETRA;
+			else
+			if(m_nPatchDone == 6)
+				m_SolProc	= SP_COONSHEXA;
+			//////////////////////////////////////////////////// Show Solid
+			if(m_MI_Sol_I.RBUp_SCoonInsert(
+							m_SolProc, 
+							m_CurrentSolidID,		
+							m_pCurrentSolid,
+							&m_PatchList,
+							&m_PLatchList,
+							m_pView
+							) <0)
+				nResult = -1;
+			////////////////////////////// Reset PatProc for COONS Only
+			m_SolProc = SolProcOld;
+			////
+			break;
+
+		default:
+			break;
+	}
+	if(nResult<0)
+		return MA_ERROR;
+	/////////////////////////////////////////////////////////// Update Patch Topology
+	nResult = SolTopo_Update(m_pCurrentSolid,&m_PatchList,&m_CurveList,&m_NodeList);
+	if(nResult<0)
+		return MA_ERROR;
+	/////////////////////////////////////
+	return MA_OK;
+	////
+}
+
+int CSolMouse::SolTopo_Update(CDrSolid* pCurrentSolid,CDListMgr* pCurrentPatList,
+						CDListMgr* pCurrentCurList,CDListMgr* pCurrentNodList)
+{
+	////////////////
+	int nResult = 0;
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	/////////////////////////////////////////////////////////// Bndry Patches of Current Solid 
+	int i,nCount;
+	///////////////////
+	nCount = pCurrentPatList->GetCount();
+	///
+	for(i=0;i<nCount;i++)	
+	{
+		CDrPatch* pPatch	= (CDrPatch*)(pCurrentPatList->GetObject(i));
+		////////////////
+		if(!pPatch)
+		{
+			AfxMessageBox(
+				"Internal ERROR:\nCSolMouse::SolTopo_Update\n!pPatch");
+			nResult = -1;
+			return nResult;
+		}
+		///////////////////////////////////////////////////////// 
+		CDListMgr* pSolList = pPatch->GetSolidList();
+		///
+		nResult = SolTopo_ConnectObjects(pCurrentSolid,pSolList);
+		if(nResult<0)
+			return nResult;
+		///
+	}
+	/////////////////////////////////////////////////////////// Curve_dependent Connection 
+	nCount = pCurrentCurList->GetCount();
+	///
+	for(i=0;i<nCount;i++)	
+	{
+		CDrCurve* pCurve	= (CDrCurve*)(pCurrentCurList->GetObject(i));
+		////////////////
+		if(!pCurve)
+		{
+			AfxMessageBox(
+				"Internal ERROR:\nCSolMouse::SolTopo_Update\n!pCurve");
+			nResult = -1;
+			return nResult;
+		}
+		///////////////////////////////////////////////////////// 
+		CDListMgr* pSolList = pCurve->GetSolidList();
+		///
+		nResult = SolTopo_ConnectObjects(pCurrentSolid,pSolList);
+		if(nResult<0)
+			return nResult;
+		///
+	}
+	/////////////////////////////////////////////////////////// Node_dependent Connection
+	nCount = pCurrentNodList->GetCount();
+	///
+	for(i=0;i<nCount;i++)	
+	{
+		CDrNode* pNode	= (CDrNode*)(pCurrentNodList->GetObject(i));
+		////////////////
+		if(!pNode)
+		{
+			AfxMessageBox(
+				"Internal ERROR:\nCSolMouse::SolTopo_Update\n!pNode");
+			nResult = -1;
+			return nResult;
+		}
+		///////////////////////////////////////////////////////// 
+		CDListMgr* pSolList = pNode->GetSolidList();
+		///
+		nResult = SolTopo_ConnectObjects(pCurrentSolid,pSolList);
+		if(nResult<0)
+			return nResult;
+		///
+	}
+	//////////////
+	return nResult;
+}
+
+int CSolMouse::SolTopo_ConnectObjects(CDrSolid* pCurrentObject,CDListMgr* pList)
+{
+	int nResult = 0;
+	////////////////
+	CDListMgr*	pObjObjList;
+	int j,nCount,index;
+	///////////////////
+	nCount = pList->GetCount();
+	///
+	for(j=0;j<nCount;j++)	
+	{
+		CDrSolid* pObject	= (CDrSolid*)(pList->GetObject(j));
+		////////////////
+		if(!pObject)
+		{
+			AfxMessageBox(
+				"Internal ERROR:\nCSolMouse::SolTopo_ConnectObjects\n!pObject");
+			nResult = -1;
+			return nResult;
+		}
+		///////////////////////////////////////////////////////// 
+		if(pObject != pCurrentObject)	// EXIST in other Solid
+		{
+			pObjObjList = pCurrentObject->GetSolidList();
+			///
+			index = pObjObjList->GetObjectIndex(pObject);
+			if(index<0)		// not in the list yet
+			pObjObjList->InsertObject(pObject);
+			////////////////////////////////////// Reciprocate Solid, if necessary
+			pObjObjList = pObject->GetSolidList();
+			index = pObjObjList->GetObjectIndex(pCurrentObject);
+			if(index<0)		// not in the list yet
+				pObjObjList->InsertObject(pCurrentObject);
+		}
+	}
+	///////////////
+	return nResult;
+}			
+
+void CSolMouse::OnEBoxRButtonUp_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+								UINT nFlags, CPoint point)
+{
+	int nResult = MA_OK;
+	////////////////////
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	CString* pID = &ID;
+	///////////////////////////////////////////////////////// Update Info
+	UpdateSDlg_TRUE();
+	///////////////////////////////////////////////////////// Is Enough Info?
+	nResult = RightUp_Premature_SOL();
+	//////////////////////////////////
+	switch(nResult)
+	{
+		case MA_OK:break;
+		case MA_ERROR:Terminate_SOL(TRUE);return;
+		case MA_CANCEL:Terminate_SOL(TRUE);return;
+		case MA_GETMOREINFO:return;
+	}
+	///////////////////////////////////////////////////////// Not Auto Accept
+	nResult = RightUp_NotAutoAccept_SOL();
+	//////////////////////////////////
+	switch(nResult)
+	{
+		case MA_OK:break;
+		case MA_ERROR:Terminate_SOL(TRUE);return;
+		case MA_CANCEL:Terminate_SOL(TRUE);return;
+		case MA_GETMOREINFO:return;
+	}
+	///////////////////////////////////////////////////// Show Solid 
+	switch(m_nActiveTool) 
+	{
+
+		case S_COONS:
+		case S_EXTRUDE:
+		case S_ROTATE:
+		case S_LOFT:
+		case S_DUCT:
+		case S_SWEEP:
+						
+			/////////////////////////////
+			nResult = ShowSolid(&m_CurrentSolidID);
+			switch(nResult)
+			{
+				case MA_OK:break;
+				case MA_ERROR:Terminate_SOL(TRUE);return;
+				case MA_CANCEL:Terminate_SOL(TRUE);return;
+			}
+			/////////
+			UpdateSDlg_FALSE();
+			///////////////////	
+			break;
+		
+		default:  
+			return;
+	} 
+	/////////////////////////////////////////
+	pWnd->GetMouseMgr()->SetCurrentProcessDone(TRUE);
+	/////////////////////////////////////// Set PatchID
+	*pID = m_pCurrentSolid->GetObjectID(); 
+	if(*pID == m_CurrentSolidID)
+		pObjectMgr->SetObjInfoID(m_CurrentSolidID,SOLID);
+	/////////////////////////////////////// Reset
+	m_nInfoDone		= 0;	// 
+	m_nCurveDone	= 0;	// 
+	m_nPatchDone	= 0;	// 
+	m_bSolidDone	= TRUE;	//   
+	//////////////////////////
+	m_NodeList.RemoveAll();
+	m_CurveList.RemoveAll();
+	m_PatchList.RemoveAll();
+	m_ElSegList.RemoveAll();
+	m_LatchList.RemoveAll();
+	m_PLatchList.RemoveAll();
+	/////////////////// reset
+	if(m_pSolInDlg->GetSafeHwnd())
+		m_pSolInDlg->GetDlgItem(IDC_PID)->EnableWindow(TRUE);
+	/////////
+
+}
+/////////////////////////////////////////////////////////////////////////////////////// F_M
+UINT CSolMouse::ReSetToolID_SOL(UINT CntlID,UINT IGenID, UINT OperID)
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCur;
+	////////////////
+	CString str;
+	UINT ID;
+	//////////////////////////////////////////// TaskID
+	strCur = "Ready for Creation@";
+	/////////////////////////////
+	switch(OperID)
+	{
+		//////////////////////////////////////////// Create
+		case COP_CREATE:
+		{
+			pWnd->SetIGenBoxStatus(TRUE);
+			pWnd->SetCntlBoxStatus(FALSE);
+			pWnd->SetDrawBoxStatus(FALSE);
+			///////////////////////////// String
+			str = "CREATE";
+			pWnd->SetstrOperID(str);
+			/////////////////////////////
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Elements
+				case ELEMENT:
+				case EDIM_0:
+				case EDIM_1:
+				case EDIM_2:
+				case EDIM_3:
+
+//					pWnd->SetMouseBoxType(ELEMDIMBOX);
+					str = "ELEMENT";
+					pWnd->SetstrCntlID(str);
+					///////////////////////////////////// EDim0/EDim1...
+					switch(IGenID)
+					{
+						/////////
+						case SOLID:			str = "SOLID";					ID = SOLID;
+								strCur += "Select a Solid Type";	break;
+						case S_TENSOR:		str = "Tensor Product@SOLID";	ID = S_TENSOR; 
+								strCur += "A Tensor Product Solid";	break;
+						case S_GORDONS:		str = "Gordons@SOLID";			ID = S_GORDONS;
+								strCur += "A Gordons Solid";	break;
+						case S_COONS:		str = "Coons@SOLID";			ID = S_COONS;
+								strCur += "A Coons Solid";	break;
+						case S_ROTATE:		str = "Rotational@SOLID";		ID = S_ROTATE; 
+								strCur += "A Solid by Rotation";	break;
+						case S_LOFT:		str = "Lofted@SOLID";			ID = S_LOFT; 
+								strCur += "A Solid by Lofting";	break;
+						case S_EXTRUDE:		str = "Extruded@SOLID";			ID = S_EXTRUDE; 
+								strCur += "A Solid by Extrusion";	break;
+						case S_DUCT:		str = "Ducted@SOLID";			ID = S_DUCT; 
+								strCur += "A Solid by Ducting";	break;
+						case S_SWEEP:		str = "Swept@SOLID";			ID = S_SWEEP; 
+								strCur += "A Solid by Sweeping";	break;
+						case S_FLATPLATE:	str = "Flat@SOLID";				ID = S_FLATPLATE;
+								strCur += "A Solid by Tessalation";	break;
+						default:			str = "UNKNOWN@SOLID";			ID = UNONE; 		break;
+					}
+					pWnd->SetstrIGenID(str);
+					////////////////////////
+					pWnd->SetstrCurrID(strCur);
+					//////////
+					return ID;
+				/////////
+				default:					str = "UNKNOWN";	ID = UNONE;
+					pWnd->SetstrIGenID(str);
+					return ID;
+			}
+			pWnd->SetstrCntlID(str);
+			return ID;
+		////////
+		default:							str = "UNKNOWN";	ID = UNONE;
+		}
+		pWnd->SetstrOperID(str);
+		return ID;
+	}
+}
+	
+void CSolMouse::ModeLessOff_SOL()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	if(GetSolInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_SOLIN,IDOK);
+}
+
+void CSolMouse::ModeLessOn_SOL()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	int aTool	= pWnd->GetActiveToolType();
+	int aObj	= pWnd->GetActiveObjectType();
+	/////////////////////////////////////////////////////////////////////////
+	if
+	(
+		(aTool == S_COONS)		||	(aTool == S_EXTRUDE)	||
+		(aTool == S_ROTATE)		||	(aTool == S_LOFT)		||		     
+		(aTool == S_DUCT)		||	(aTool == S_SWEEP)				     
+	)
+	{
+		switch(aTool)
+		{
+			case S_EXTRUDE:
+				m_SolProc = SP_EXTRUDE;
+				break;
+
+			case S_ROTATE:
+				m_SolProc = SP_ROTATE;
+				break;
+
+			case S_LOFT:
+				m_SolProc = SP_LOFT2;
+				break;
+
+			case S_COONS:
+				m_SolProc = SP_COONS;
+				break;
+
+			case S_DUCT:
+				m_SolProc = SP_DUCT;
+				break;
+			case S_SWEEP:
+				m_SolProc = SP_SWEEP;
+				break;
+			default:
+				break;
+		}
+		////////////////////////////
+//		if(!(GetSolInDlg()->m_hWnd))
+			pWnd->SendMessage(ID_ACTIVE_SOLIN,IDOK);
+	}
+
+}
+ 
+void CSolMouse::ResetVuBasedVars_SolDlg()
+{
+	////////////////////////////////////////////////////////////////// Set Info
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	///////////////////////////////////////////////////////////////// if NodeDlg Open
+	if(GetSolInDlg()->m_hWnd)
+	{
+		CStatic* pCtl;
+		pCtl = (CStatic*)(GetSolInDlg()->GetDlgItem(IDC_OTHER));
+		////////////////////////////////////////////////////////
+		SwitchThirdCoordHeading(pCtl,
+			(UINT)(pWnd->GetActiveViewNumber()) );
+	}
+}
+
+long CSolMouse::CreateorActivateSolIn(UINT wParam, long lParam)
+{
+	
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	GetSolInDlg()->m_SolProc = m_SolProc;
+	///////////////////////////////////////
+	if(GetSolInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetSolInDlg()->Create();
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetSolInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////////////////////////////////////
+		GetSolInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+	{
+		GetSolInDlg()->SetActiveWindow();
+		GetSolInDlg()->m_SolProc = m_SolProc;
+		GetSolInDlg()->ResetDlg();
+	}
+	///////////////////////// CurrStat: Show
+	switch(m_SolProc)
+	{
+		case SP_EXTRUDE:
+			//////////////////////////////
+			strCurr = "Solid by Extrusion: Click in@A Patch To Extrude";
+			////
+			break;
+		case SP_ROTATE:
+			//////////////////////////////
+			strCurr = "Solid by Rotation: Click in@A Patch To Rotate";
+			////
+			break;
+		case SP_LOFT2:
+			//////////////////////////////
+			strCurr = "Solid by Lofting: Click in@A Patch To Loft From";
+			////
+			break;
+		case SP_DUCT:
+			//////////////////////////////
+			strCurr = "Solid by Ducting: Click in@A CrossSection Patch";
+			////
+			break;
+		case SP_SWEEP:
+			//////////////////////////////
+			strCurr = "Solid by Sweeping: Click in@A CrossSection Patch";
+			////
+			break;
+		case SP_COONS:
+			//////////////////////////////
+			strCurr = "Solid by Coons Method: Click in@First Patch";
+			////
+			break;
+		default:
+			break;
+	}
+	///////////////////////////////////////////////////////////////// if PatDlg Open
+	if(GetSolInDlg()->m_hWnd)
+	{
+		ResetVuBasedVars_SolDlg();
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	GetSolInDlg()->m_SolProc	= m_SolProc;
+//	GetSolInDlg()->m_PID		= m_CurrentSolidID;
+	GetSolInDlg()->m_PID		= "";
+//	GetSolInDlg()->m_CID		= m_CurrentCurveID;
+	GetSolInDlg()->m_CID		= "";
+//	GetSolInDlg()->m_NID		= m_CurrentNodeID;
+	GetSolInDlg()->m_NID		= "";
+	GetSolInDlg()->m_nMesh		= m_ElPerSeg;
+	GetSolInDlg()->m_Ratio		= m_Ratio;
+	//////
+//	GetSolInDlg()->m_Orient		= m_Orient;
+	if(m_Orient == "FORWARD")
+		((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(1);//FORWARD=1
+	else
+	if(m_Orient == "BACKWARD")
+		((CComboBox*)(GetSolInDlg()->GetDlgItem(IDC_ORIENT)))->SetCurSel(0);//BACKWARD=0
+	//////
+	GetSolInDlg()->m_bClosed	= m_bClosed;
+	GetSolInDlg()->m_dLen		= m_dLen;
+	/////
+	GetSolInDlg()->m_bTwist		= m_bTwist;
+	if(m_bTwist)
+	{
+		GetSolInDlg()->m_bIncrement	= m_bIncrement;
+		GetSolInDlg()->m_TwistStart	= m_TwistStart;
+		GetSolInDlg()->m_TwistMult	= m_TwistMult;
+	}
+	else
+	{
+		GetSolInDlg()->m_bIncrement	= m_bIncScale;
+		GetSolInDlg()->m_TwistStart	= m_ScaleStart;
+		GetSolInDlg()->m_TwistMult	= m_ScaleMult;
+	}
+	/////
+	GetSolInDlg()->m_SegAngle	= m_SegAngle;
+	GetSolInDlg()->m_bAutoSeg	= m_bAutoSeg;
+	////////////////////////////////
+	GetSolInDlg()->UpdateData(FALSE);
+	/////////////////////////////////////// CurrStat: Show
+	pWnd->SetstrCurrID(strCurr);
+	pWnd->UpdateCurrStat(strCurr);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSolMouse::GoodByeSolIn(UINT wParam, long lParam)
+{
+	
+	GetSolInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSolMouse::CancelSolIn(UINT wParam, long lParam)
+{
+	
+	GetSolInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSolMouse::UpdateSolIn(UINT wParam, long lParam)
+{
+
+	GetSolInDlg()->UpdateData(TRUE);
+	//////////////////////////////////////
+	UpdateSDlg_TRUE();
+	//////////
+	return 0L;
+}
+void CSolMouse::Serialize(CArchive& ar)
+{
+
+	CPatMouse::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" SolMouse:    Storing\n");	
+		
+
+	}
+	else
+	{
+		TRACE(" SolMouse:    Loading\n");	
+
+	
+	}        
+}
+
+///////////////////////////////////// end of Module //////////////////////		
+

@@ -1,0 +1,597 @@
+// MP_Duct.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+#include <Float.h>		// MSVC/INC for DBL_MAX,DBL_MIN
+
+#include "Def_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "MSolMgr.h"
+#include "dlg_SDuc.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "PA_Duct.h"
+ 
+#include "MS_Duct.h" 
+
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define MIN_CNODES_CURVE	4
+#define MIN_CNODES_PATCH	16
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMS_Duct,CMI_GangS,1)
+/////////////////////////////////////////////////////////////////////////////
+CMS_Duct::CMS_Duct()
+{
+	m_PatSubType = PS_QUADRILAT;
+	m_SolSubType = SS_HEXA;
+}
+
+CMS_Duct::~CMS_Duct()
+{
+}
+
+int CMS_Duct::SetInfoBase
+				(
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					CDListMgr*						pPatchList,
+					CDListMgr*						pCurveList,
+					CDListMgr*						pNodeList,
+					CList<PATCHLATCH,PATCHLATCH>*	pPLatchList,
+					CList<CURVELATCH,CURVELATCH>*	pCLatchList,
+					double							TwistMult,
+					BOOL							bIncrement,
+					double							TwistStart,
+					CView*							pView
+				) 
+{
+	int index;
+	CDrCurve*	pDrCurve;
+	CDrPatch*	pDrPatch;
+//	CDrNode*	pDrNode;
+	////////////////////////////////////////////////////////// Dialog Info(Don't Display Dlg)
+	CDlg_Duct_S Dlg;
+	Dlg.m_SubType	= PS_QUADRILAT;
+	////////////////////////////////////////////////// SolidID
+	Dlg.m_PatchID	= SolidID;
+	////////////////////////////////////////////////// PatchID :XSec
+	// ??????What if No Twist Curve; may be Incremental????????????????????
+	if(pPatchList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMS_Duct::SetInfoBase\npPatchList->GetCount() != 1");
+		return -1;
+	}
+	pDrPatch		= (CDrPatch*)(pPatchList->GetObject(0) );
+	Dlg.m_CID_Xsec	= pDrPatch->GetObjectID();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index				= pDrPatch->GetSolidList()->GetObjectIndex(pDrSolid);
+	if(index>=0)
+		pDrPatch->GetSolidList()->RemoveObject(index);
+	///////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////// CurveID
+	// ??????What if No Twist Curve; may be Incremental????????????????????
+	if(pPatchList->GetCount() != 2)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMS_Duct::SetInfoBase\npCurveList->GetCount() != 2");
+		return -1;
+	}
+	pDrCurve		= (CDrCurve*)(pCurveList->GetObject(0) );
+	Dlg.m_CID_Spine	= pDrCurve->GetObjectID();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index				= pDrCurve->GetSolidList()->GetObjectIndex(pDrSolid);
+	if(index>=0)
+		pDrCurve->GetSolidList()->RemoveObject(index);
+	///
+	pDrCurve		= (CDrCurve*)(pCurveList->GetObject(1) );
+	Dlg.m_CID_Twist	= pDrCurve->GetObjectID();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index				= pDrCurve->GetSolidList()->GetObjectIndex(pDrSolid);
+	if(index>=0)
+		pDrCurve->GetSolidList()->RemoveObject(index);
+	///
+	////////////////////////////////////////////////// PatchLatch
+/*
+	if(pCLatchList->GetCount() != 2)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Duct::SetInfoBase\npLatchList->GetCount() != 3");
+		return -1;
+	}
+*/
+	////////////////////////////////////////////////// CurveLatch
+	if(pCLatchList->GetCount() != 2)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMS_Duct::SetInfoBase\npCLatchList->GetCount() != 2");
+		return -1;
+	}
+	////////////////////////////////////////////////// Latch
+	Dlg.m_Orient_1 = "FORWARD";
+	if(pCLatchList->GetHead() == CL_BACKWARD)
+		Dlg.m_Orient_1 = "BACKWARD";
+	///////
+	Dlg.m_Orient_2 = "FORWARD";
+	if(pCLatchList->GetTail() == CL_BACKWARD)
+		Dlg.m_Orient_2 = "BACKWARD";
+	////////////////////////////////////////////////// Mesh
+	if(pNodeList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMS_Duct::SetInfoBase\npNodeList->GetCount() != 1");
+		return -1;
+	}
+	m_pFromIDNode		= (CDrNode*)(pNodeList->GetObject(0) );
+	Dlg.m_bCNode		= m_pFromIDNode->IsControlNode();
+	Dlg.m_CNID_Anchor	= m_pFromIDNode->GetObjectID();
+	//////////////////
+	Dlg.m_TwistMult		= TwistMult;
+	Dlg.m_bIncrement	= bIncrement;
+	Dlg.m_TwistStart	= TwistStart;
+	////////////////////////////////////////////////// Fill Info
+	Dlg.SetInfoForDataBase(pDrSolid);
+	////////////////////////////////////////////////// Do It
+	int nResult = GoDoIt(pDrSolid);
+	//////////////
+	if(nResult<0)
+		return -1;
+	/////////////////////
+	return 0;		 
+}
+
+int CMS_Duct::GoDoIt(CDrSolid* pDrSolid) 
+{
+
+	//////////////////////////////////////////////////////////
+	GetInfo(pDrSolid);
+	m_pDrSolid = pDrSolid;
+	//////////////////////////////////	
+	m_pCNodeList 	= m_pDrSolid->GetCNodeList();	
+	///////                    				// ControlNode Mesh
+	Duct();
+	////////////////////////
+	m_SolidType = SO_TENSOR;
+	////////////////////////
+	if(InsertMeshInfo_Solid(FALSE)<0)		
+		return -1;
+	/////////////////////
+	return 0;
+}
+
+CDrSolid* CMS_Duct::GoDoIt() 
+{
+	//////////////////////////////////////////////////////////
+	m_pDrSolid 		= GetInfo();       // PGen Dialog
+	if(!m_pDrSolid)		// cancel
+		return (CDrSolid*)NULL;
+	//////////////////////////////////// ControlNode Mesh	
+	m_pCNodeList 	= m_pDrSolid->GetCNodeList();	
+	///////                    				
+	Duct();
+	////////////////////////
+	m_SolidType = SO_TENSOR;
+	////////////////////////
+	if(InsertMeshInfo_Solid(FALSE)<0)
+		return (CDrSolid*)NULL;
+	/////////////////////
+	return m_pDrSolid;
+}			
+
+CDrSolid* CMS_Duct::GetInfo()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(SOLID);
+	//////////////////////////////////////////////////////////////////
+	CMSolMgr 	MSolMgr;
+	CMSolMgr* 	pMSolMgr = &MSolMgr;
+	CString		Cid;
+	int 		index;
+	///////////////////////////////////////////////////
+	if (pMSolMgr->DoModal_Solid_Duct(&Cid,PS_QUADRILAT) == IDCANCEL)
+			return (CDrSolid*)NULL;
+    /////////////////////////////////////////////////////// update
+	m_CurrentSolidID 	= Cid;
+	index 				= pObjectMgr->
+							GetObjectIndexfromKey(SOLID,Cid,1);
+	if(index>=0)
+	{						
+		CDrSolid* pDrSolid	= (CDrSolid*)(pDListMgr->GetObject(index));
+   		//////////////////////////////
+		m_SolidProc		= pDrSolid->GetSolidProc();
+		m_pNum_t_R		= pDrSolid->GetNum_tPointer_R();
+//		m_FromID 		= pDrSolid->GetFromID_R();  // AnchorID
+		m_pFromIDNode 	= pDrSolid->GetFromIDNode_R();
+		m_CurveID_S[0]	= pDrSolid->GetPatchID(0);// XSec		: Patch
+		m_CurveID_S[1]	= pDrSolid->GetCurveID(1);// Spine		: Curve
+		m_CurveID_S[2]	= pDrSolid->GetCurveID(2);// Twist		: Curve
+		/////////
+		m_CuLatch[1]	= pDrSolid->GetCurveLatch(1);
+		m_CuLatch[2]	= pDrSolid->GetCurveLatch(2);
+		////////////
+		m_TwistStart	= pDrSolid->GetTwistStart_R();
+		m_TwistMult		= pDrSolid->GetTwistMult_R();
+		m_bIncTwist		= pDrSolid->IsIncTwist_R();
+		////////////////
+		return pDrSolid;
+	}
+	else
+		return (CDrSolid*)NULL;
+}			
+
+int CMS_Duct::GetInfo(CDrSolid* pDrSolid)
+{
+	//////////////////////////////
+	m_SolidProc		= pDrSolid->GetSolidProc();
+	m_pNum_t_R		= pDrSolid->GetNum_tPointer_R();
+//	m_FromID 		= pDrSolid->GetFromID_R();  // AnchorID
+	m_pFromIDNode 	= pDrSolid->GetFromIDNode_R();
+	m_CurveID_S[0]	= pDrSolid->GetPatchID(0);// XSec		: Patch
+	m_CurveID_S[1]	= pDrSolid->GetCurveID(1);// Spine		: Curve
+	m_CurveID_S[2]	= pDrSolid->GetCurveID(2);// Twist		: Curve
+	/////////
+	m_CuLatch[1]	= pDrSolid->GetCurveLatch(1);
+	m_CuLatch[2]	= pDrSolid->GetCurveLatch(2);
+	////////////
+	m_TwistStart	= pDrSolid->GetTwistStart_R();
+	m_TwistMult		= pDrSolid->GetTwistMult_R();
+	m_bIncTwist		= pDrSolid->IsIncTwist_R();
+	////////////////
+	return 0;
+}			
+
+int CMS_Duct::Duct() 
+{
+	//////////////////////////////////////////////////////////////////////////////////
+	//	DUCTING is LINEAR interpolation of GENERATED NODES, NOT of CONTROL NODES	//
+	//	of the curves in R-Direction. So, all generated nodes of SPINE curve will	//
+	//	be saved as CNodes of the patch in R-Direction and eventually the PATCH		//
+	//  will be generated by LINEAR interpolation in R- direction,					//
+	//					IRRESPECTIVE of CURVETYPE of SPINE							// 												//
+	//	THIS INEFFICIENCY is needed for Finite Element Data Generation wherein		//
+	//		Total Tally of Generated Nodes are important , Not of Control Nodes		//
+	//////////////////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr*	pDListMgr;
+	//////////////////////////////////////////////////////////////////
+	CDrCurve*	pDrCurve;
+	CDrPatch*	pDrPatch;
+	int			index,nResult,nOut;
+	CString		CurveID,PatchID;
+	///////////////////////// 
+	if(m_pOut != NULL)
+	{
+		FreeMem(m_pOut);
+		m_pOut = NULL;
+	}	
+	if(m_pOutWts != NULL)
+	{
+		FreeMemD(m_pOutWts);
+		m_pOutWts = NULL;
+	}	
+	///////////////////////////////////////////////////////////////// XSection: S-dir
+   	PatchID = m_CurveID_S[0];
+	//////////////////////////////////////// get Patch Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(PATCH,PatchID,1);
+	if(index<0)
+	{
+		AfxMessageBox("CMS_Duct::Duct\nXSecIndex Failure!");
+		return -1;
+	}
+	/////////////////////////////////////////////
+	pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+	pDrPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+	if(!pDrPatch)
+		return -1;
+	////////////////////////////////////// Set Curve Info	
+	GetInfo_Patch(pDrPatch);
+	/////////////////////////////////////////// PreProcess
+	nResult = Pre_ST_Direction(pDrPatch, 0, FALSE);
+	if(nResult<0)
+		return -1;
+	///////////////////////////////////////////////////////////////// SpinePath: T-dir
+   	CurveID = m_CurveID_S[1];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pDrCurve)
+		return -1;
+	//////////////
+	m_nOut_R	= pDrCurve->GetMaxOutPts_S();
+	////////
+	nResult		= Pre_R_Direction(pDrCurve, 1, m_nOut_R);
+	if(nResult<0)
+		return -1;
+	///////////////////// PreProcess: save as R-dir Info
+	SpineProcess(pDrCurve);
+	///////////////////////////////////////////////////////////////// Twist: T-dir
+   	CurveID = m_CurveID_S[2];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pDrCurve)
+		return -1;
+	//////////////
+	nOut	= pDrCurve->GetMaxOutPts_S();
+	if(nOut != m_nOut_R)
+	{
+		AfxMessageBox("CMS_Duct::Duct\nSPine & Twist MisMatch\nnOut != m_nOut_T");
+		return -1;
+	}
+	/////////////////////////
+	nResult = Pre_R_Direction(pDrCurve, 2, m_nOut_R);
+	if(nResult<0)
+		return -1;
+	///////////////////
+	TwistProcess(m_pIn_S[2], m_nOut_R, m_TwistMult, m_bIncTwist);
+	/////////////////////////////////////////////// Save PatchInfo
+	m_nOut				= (((long)m_nOut_ST)*((long)m_nOut_R) );				
+	m_nOutCon			= (((long)m_nOut_STCon)*((long)m_nOut_RCon) );				
+	m_nMaxSolidCNodes	= (int)m_nOutCon;
+    /////////////////////////////////////////////// Anchor Node Coords.
+    UnitAxisFromEndNodes(1);
+	/////////////////////////////////////////////// Memory OutPts 
+	m_pOut		= FixMem(m_nOutCon);
+	m_pOutWts	= FixMemD(m_nOutCon);
+	if( !m_pOut || !m_pOutWts )
+	{
+		AfxMessageBox("CMS_Duct::Duct\nFixMem Failure!");
+		return -1;
+	}
+	///////////////////////////////////////// Go Duct
+	nResult = GenerateCNodes();
+	///////////////////////////////////////// Free InputCNodeMems
+	int i;
+	//////
+    for(i=0;i<4;i++)
+    {
+    	if(m_pIn_S[i])
+    	{
+			FreeMem(m_pIn_S[i]);
+			m_pIn_S[i] = NULL;
+		}	
+    	if(m_pInWts_S[i])
+    	{
+			FreeMemD(m_pInWts_S[i]);
+			m_pInWts_S[i] = NULL;
+		}	
+	}	
+	/////////////// 
+	if(nResult<0)	
+		return -1;
+	else	
+		return 0;
+	/////////////			 
+}			
+
+int CMS_Duct::Pre_ST_Direction(CDrPatch* pDrPatch, int i, BOOL bPutinCNodeList)
+{
+
+	////////////////////////////////////////////////// FILL INFO
+	m_pIn_S[i]		= FixMem((long)m_nMaxSolidCNodes_ST);
+	m_pInWts_S[i]	= FixMemD((long)m_nMaxSolidCNodes_ST);
+	if( !m_pIn_S[i] || !m_pInWts_S[i]  )
+	{
+		AfxMessageBox("CMP_Duct::Pre_ST_Direction\nFixMemforCNodes[i] Failure!");
+		return -1;
+	}
+	/////////////////////////// Store LOCAL Pos	
+	m_bBack = FALSE;
+	FillCNodesLOCAL(pDrPatch->GetCNodeList(),m_pWts_BZ_ST,
+		m_pIn_S[i],m_pInWts_S[i],m_nMaxSolidCNodes_ST,bPutinCNodeList);
+	//////////
+	return 0;
+}
+
+int CMS_Duct::Pre_R_Direction(CDrCurve* pDrCurve,int i, int nOut_R)
+{
+
+	/////////////////////////////////////////////// Memory OutPts 
+	m_pIn_S[i]		= FixMem(nOut_R);
+	m_pInWts_S[i]	= FixMemD(nOut_R);
+	if( !m_pIn_S[i] || !m_pInWts_S[i] )
+	{
+		AfxMessageBox("CMP_Duct::Pre_R_Direction\nFixMem Failure!");
+		return -1;
+	}
+	/////////////////////////////////////////////// Generate Curve
+	m_bBack = FALSE;
+	if(m_CuLatch[i] == CL_BACKWARD)
+		m_bBack = TRUE;
+	FillMeshNodesCurve(pDrCurve, m_pIn_S[i], m_pInWts_S[i], nOut_R);
+	///////////////
+	return 0;
+
+}
+
+int CMS_Duct::SpineProcess(CDrCurve* pDrCurve)
+{
+	int i;
+	////////////////////////////////////// LINEAR BEZIER in T-direction
+	m_nSegs_R			= 1;	// ALWAYS
+	m_nOrder_R			= 2;	// ALWAYS
+	m_CurveType_R		= CP_LINEAR;
+	m_nOut_RCon			= m_nOut_R;
+	////////////////////////////////////////////////// FILL INFO
+	m_bClosed_R			= pDrCurve->IsClosed_S();	// 
+	m_nDim_R			= pDrCurve->GetnDim_S();
+	if(m_nDim_S == 4 || m_nDim_T == 4)
+		m_nDim_R = 4;
+	/////////////////////////////////////
+	m_nSegs_RCon		= m_nOut_RCon - 1;
+	m_nMaxSolidCNodes_R = m_nOut_RCon;
+	/////////
+//	m_pNum_t_T			= pDrCurve->GetNum_tPointer_S();
+	m_pNum_t_R			= new int[m_nSegs_RCon];
+	for (i=0;i<m_nSegs_RCon;i++)
+		m_pNum_t_R[i] = 1;
+	////////////////////
+	return 0;
+}
+
+int CMS_Duct::TwistProcess(pWORLD pIn, int nOut, double ScaleMax, BOOL bIncremental)
+{
+	// ONLY Y-COMPONENT IS USEFUL
+	/////////////////////////////////////////////
+	int		i;
+	////////////////////////////
+	pWORLD p = pIn;
+	///////////////////////////////////////////////// No Twist
+	if(ScaleMax == 0.0)
+	{
+		///////////
+		for(i=0;i<nOut;i++)
+			(p+i)->y = 0.0;
+		///////////////////
+	/////////
+	return 0;
+	}
+	///////////////////////////////////////////////// Incremental
+	if(bIncremental)
+	{
+		double dInc = ScaleMax; // could be +ve or -ve
+		p->y = m_TwistStart;
+		///////////
+		for(i=1;i<nOut;i++)
+			(p+i)->y = (p+i-1)->y + dInc;
+	/////////
+	return 0;
+	}
+	///////////////////////////////////////////////// Maximum
+	double	yMaxP;
+	double	yMaxN;
+	double	val;
+	/////////////////
+	yMaxP =  -DBL_MAX;
+	yMaxN =   DBL_MAX;
+	//////////////////////////////// Brackets
+	for (i=0;i<nOut;i++)
+	{
+		val = (p+i)->y;
+		///////////////////// y
+		if(val>=0)
+		{
+			if(val>yMaxP)
+				yMaxP = val;
+		}
+		else
+		{
+			if(val<yMaxN)
+				yMaxN = val;
+		}
+	}
+	////////////////////
+	if(yMaxP == -DBL_MAX)
+		yMaxP = 0.0;
+	if(yMaxN == DBL_MAX)
+		yMaxN = 0.0;
+	///////////////////////////
+	double Scale;
+	double diff = yMaxP - yMaxN;
+	if(diff == 0.0)
+		Scale = 0.0;
+	else
+		Scale = ScaleMax/diff;
+	//////////////////////////////// Scale
+	// change y-Coord 
+	///////////
+	for(i=0;i<nOut;i++)
+		(p+i)->y *= Scale;
+	////////////
+	return 0;
+
+}
+
+int CMS_Duct::GenerateCNodes()
+{
+
+	////////////////////////////////////////////// 
+	int nOut		= (int)m_nOutCon;  // for now
+	////////////////////////////////////////////// generate Patch Pts
+	CPA_Duct	PA_Duct;
+/*	
+	int nOutActual	= PA_Duct.Duct
+			(
+				m_FromPt,		//	Anchor 3D Pt. for Xsec scale,twist etc
+		    	m_nOut_STCon,	//	number of cross section points
+		      	m_pIn_S[0],		//	cross section curve ControlPts
+		      	m_pInWts_S[0],	//	cross section Wts 
+		   		m_nOut_RCon,	//	number of path points
+		      	m_pIn_S[1],		//	path curve ControlPts
+		      	m_pIn_S[2],		//	path Twist Factor distribution
+//		     	m_pIn_S[3],		//	path Scale factors
+				m_pOut,			//	Output ControlPts
+				m_pOutWts		//	Output Wts array
+			);	  
+	////////////////////////////	
+	if(nOutActual != nOut)
+		return -1;
+	else 
+*/
+		return 0;
+												
+}
+
+void CMS_Duct::Serialize(CArchive& ar)
+{
+
+	CMI_GangS::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMS_Duct:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMS_Duct:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////// end of module ///////////////////////
+

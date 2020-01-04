@@ -1,0 +1,481 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+
+#include "Def_Objs.h"
+#include "Def_MouseAct.h"
+///////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "MPatMgr.h"
+///////////////////// elements
+#include "Def_IGen.h"
+/////////////////////
+#include "MS_Xtrud.h" 
+#include "MS_Xtru3.h" 
+#include "MS_Rotat.h" 
+#include "MS_Rota3.h" 
+#include "MS_Lof42.h"
+#include "MS_Lof32.h"
+#include "MS_Duct.h" 
+#include "MS_Duc3.h" 
+#include "MS_Sweep.h" 
+#include "MS_Swee3.h"
+///////////////////// 
+//#include "MP_Tensor.h"
+//#include "MP_Gordon.h"
+//#include "MP_CooP4.h"
+//#include "MP_CooP3.h"
+///////////////////// 
+#include "MI_Sol_I.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define MIN_CNODES_CURVE	4
+#define MIN_CNODES_SATCH	16
+/////////////////////////////////////
+#define wEQL(a,b)	((a).x ==(b).x) && ((a).y ==(b).y) \
+					&& ((a).z ==(b).z)  
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_Sol_I,CMI_Pat_I,1)
+/////////////////////////////////////////////////////////////////////////////
+CMI_Sol_I::CMI_Sol_I()
+{
+}
+
+CMI_Sol_I::~CMI_Sol_I()
+{
+/*
+	if(m_pOut != NULL)
+	{
+		FreeMem(m_pOut);
+		m_pOut = NULL;
+	}
+*/	   
+}
+
+int CMI_Sol_I::LBDownInit_SInsert(UINT nType) 
+{
+//	m_bDirtySolid		= FALSE;
+	return 0;
+}
+
+int CMI_Sol_I::LBUpInit_SInsert(enum PATCHTYPE kind) 
+{
+	return 0;
+}
+
+int CMI_Sol_I::RBUp_SDuctInsert 
+				(
+					PATSUBTYPE						PatSubType, 
+					BOOL							bGenBCurve,
+					BOOL							bGenBPatch,
+					int								nTwistType,
+									// 1 = Given: Twist Distribution
+									// 2 = Given: Twist Increments etc
+					//////////////////////////////////////////
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					//////////////////////////////////////////
+					CDListMgr*						pNodeList,	// ist record: pFromIDNode
+																// 2nd record: pToIDNode
+					//////////////////////////////////////////
+					CDListMgr*						pCurveList,	// given Spine Curve
+					CList<CURVELATCH,CURVELATCH>*	pCLatchList,
+					//////////////////////////////////////////
+					CDListMgr*						pPatchList,	// given Xsec. Patch always taken as UV-dir
+																// and later switched,if needed,i.e.,
+																// nCurDir = 2
+					CList<PATCHLATCH,PATCHLATCH>*	pPLatchList,
+					//////////////////////////////////////////
+					CList<double,double>*			pTwistList,	// Distrib,if nTwistType = 1
+					double							TwistMult,	// if nTwistType = 2 
+					BOOL							bIncrement,
+					double							TwistStart,
+					//////////////////////////////////////////////
+					CView*							pView
+				) 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	int			nResult;
+	////////////////////////// Triangular Patch
+	if(PatSubType == PS_TRIANGLE)
+	{
+		CMS_Duc3	MS_Duct;
+		/////////////////////
+		nResult = MS_Duct.GoDoIt(bGenBCurve,bGenBPatch,nTwistType,SolidID,pDrSolid,pNodeList,
+									pCurveList,pCLatchList,pPatchList,pPLatchList,pTwistList,
+									TwistMult,bIncrement,TwistStart,pView);
+		//////////////
+		if(nResult<0)
+			return -1;
+	}
+	else
+	////////////////////////// Quadrilateral Patch
+	if(PatSubType == PS_QUADRILAT)
+	{	
+		CMS_Duct	MS_Duct;
+		/////////////////////
+		nResult = MS_Duct.GoDoIt(bGenBCurve,bGenBPatch,nTwistType,SolidID,pDrSolid,pNodeList,
+									pCurveList,pCLatchList,pPatchList,pPLatchList,pTwistList,
+									TwistMult,bIncrement,TwistStart,pView);
+		//////////////
+		if(nResult<0)
+			return -1;
+	}
+	//////////////////////
+	m_pDrSolid = pDrSolid;
+	m_pDrSolid->SetDirty(TRUE);
+ 	///////////////////////////////////////////////////////// show Solid
+	pObjectMgr->ShowObject_On_Off(m_pDrSolid,SOLID,TRUE);;
+	/////////////////////
+	return 0;		 
+}			
+
+int CMI_Sol_I::RBUp_SSweepInsert 
+				(
+					PATSUBTYPE						PatSubType, 
+					BOOL							bGenBCurve,
+					BOOL							bGenBPatch,
+					int								nTwistType,
+									// 1 = Given: Twist Distribution
+									// 2 = Given: Twist Increments etc
+					int								nScaleType,
+									// 1 = Given: Scale Distribution
+									// 2 = Given: Scale Increments etc
+					//////////////////////////////////////////
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					//////////////////////////////////////////
+					CDListMgr*						pNodeList,	// ist record: pFromIDNode
+																// 2nd record: pToIDNode
+					//////////////////////////////////////////
+					CDListMgr*						pCurveList,	// given Spine Curve
+					CList<CURVELATCH,CURVELATCH>*	pCLatchList,
+					//////////////////////////////////////////
+					CDListMgr*						pPatchList,	// given Xsec. Patch always taken as UV-dir
+																// and later switched,if needed,i.e.,
+																// nCurDir = 2
+					CList<PATCHLATCH,PATCHLATCH>*	pPLatchList,
+					//////////////////////////////////////////
+					CList<double,double>*			pTwistList,	// Distrib,if nTwistType = 1
+					double							TwistMult,	// if nTwistType = 2 
+					BOOL							bIncrement,
+					double							TwistStart,
+					//////////////////////////////////////////
+					CList<double,double>*			pScaleList,	// Distrib,if nScaleType = 1
+					double							ScaleMult,			// if nScaleType = 2 
+					BOOL							bIncScale,
+					double							ScaleStart,
+					//////////////////////////////////////////////
+					CView*							pView
+				) 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	int			nResult;
+	////////////////////////// Triangular Patch
+	if(PatSubType == PS_TRIANGLE)
+	{
+		CMS_Swee3 MS_Sweep;
+		/////////////////////
+		nResult = MS_Sweep.GoDoIt(bGenBCurve,bGenBPatch,nTwistType,nScaleType,SolidID,pDrSolid,
+									pNodeList,pCurveList,pCLatchList,pPatchList,pPLatchList,
+									pTwistList,TwistMult,bIncrement,TwistStart,
+									pScaleList,ScaleMult,bIncScale,ScaleStart,
+									pView);
+	//////////////
+	if(nResult<0)
+		return -1;
+	}
+	else
+	if(PatSubType == PS_QUADRILAT)
+	{
+		CMS_Sweep MS_Sweep;
+		/////////////////////
+		nResult = MS_Sweep.GoDoIt(bGenBCurve,bGenBPatch,nTwistType,nScaleType,SolidID,pDrSolid,
+									pNodeList,pCurveList,pCLatchList,pPatchList,pPLatchList,
+									pTwistList,TwistMult,bIncrement,TwistStart,
+									pScaleList,ScaleMult,bIncScale,ScaleStart,
+									pView);
+	//////////////
+	if(nResult<0)
+		return -1;
+	}
+	//////////////////////
+	m_pDrSolid = pDrSolid;
+	m_pDrSolid->SetDirty(TRUE);
+ 	///////////////////////////////////////////////////////// show Solid
+	pObjectMgr->ShowObject_On_Off(m_pDrSolid,SOLID,TRUE);;
+	/////////////////////
+	return 0;		 
+}			
+
+int CMI_Sol_I::RBUp_SLoft2Insert
+				(
+					PATSUBTYPE						PatSubType, 
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					CDListMgr*						pPatchList,
+					CList<PATCHLATCH,PATCHLATCH>*	pPLatchList,
+					CList<int,int>*					pElperSegList,
+					double							Ratio,
+					CView*							pView
+				) 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	int			nResult;
+	////////////////////////// Triangular Patch
+	if(PatSubType == PS_TRIANGLE)
+	{
+		CMS_Lof32	MS_Loft2;
+		/////////////////////
+		nResult = MS_Loft2.SetInfoBase(SolidID,pDrSolid,pPatchList,
+							pPLatchList,pElperSegList,Ratio,pView);
+		//////////////
+		if(nResult<0)
+			return -1;
+	}
+	else
+	////////////////////////// Quadrilateral Patch
+	if(PatSubType == PS_QUADRILAT)
+	{	
+		CMS_Lof42	MS_Loft2;
+		/////////////////////
+		nResult = MS_Loft2.SetInfoBase(SolidID,pDrSolid,pPatchList,
+							pPLatchList,pElperSegList,Ratio,pView);
+		//////////////
+		if(nResult<0)
+			return -1;
+	}
+	//////////////////////
+	m_pDrSolid = pDrSolid;
+	//////////////////////////////////////////////////////////
+	pDListMgr	 	= pObjectMgr->GetObjectList(SOLID);
+	int nSolidIndex = pDListMgr->GetObjectIndex(SOLID,SolidID);
+	int nOldIndex 	= pObjectMgr->GetActiveObjectIndex();
+	pObjectMgr->SetActiveObjectIndex(nSolidIndex);
+	pObjectMgr->SetActiveObjectType(SOLID);
+    ////////////////////////////////////////////////////////// done/Invalidate
+	m_pDrSolid->SetDirty(TRUE);
+	m_pDrSolid->SetShow(TRUE);	// make it visible
+   ////////////////////////////////////////////////////////// done/Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nSolidIndex,SOLID);
+	/////////////////////
+	return 0;		 
+}			
+
+int CMI_Sol_I::RBUp_SCoonInsert
+				(
+					SOLIDPROC						SolProcType, 
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					CDListMgr*						pPatchList,
+					CList<PATCHLATCH,PATCHLATCH>*	pPLatchList,
+					CView*							pView
+				) 
+{
+/*
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	//////////////////////////////////////////////////////////
+	CMS_Loft2	MS_Loft2;
+	m_pDrSolid = MS_Loft2.GoDoIt();
+	if(!m_pDrSolid)
+		return -1;
+	//////////////////////////////////////////////////////////
+	CString SolidID	= m_pDrSolid->GetObjectID();
+	int nSolidIndex = pDListMgr->GetObjectIndex(SOLID,SolidID);
+	int nOldIndex 	= pObjectMgr->GetActiveObjectIndex();
+	pObjectMgr->SetActiveObjectIndex(nSolidIndex);
+    ////////////////////////////////////////////////////////// done/Invalidate
+	m_pDrSolid->SetDirty(TRUE);
+	m_pDrSolid->SetShow(TRUE);	// make it visible
+   ////////////////////////////////////////////////////////// done/Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nSolidIndex);
+	/////////////////////
+*/
+	return 0;		 
+}			
+
+int CMI_Sol_I::RBUp_SRotateInsert
+				( 
+					PATSUBTYPE						PatSubType, 
+					BOOL							bGenBCurve,
+					BOOL							bGenBPatch,
+					//////////////////////////////////////////
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					//////////////////////////////////////////
+					CDListMgr*						pNodeList,	// ist record: pFromIDNode
+																// 2nd record: pToIDNode
+					//////////////////////////////////////////
+					CDListMgr*						pPatchList,	// given Curves always taken as U-dir
+																// and later switched,if needed,i.e.,
+																// nCurDir = 2
+					CList<PATCHLATCH,PATCHLATCH>*	pLatchList,
+					//////////////////////////////////////////
+					CList<int,int>&					ElperSegList_W, // ist record: elem/seg
+																	// 2nd record: #of BezSeg
+					double							dAngle_W,
+					double							Ratio_W,
+					BOOL							bAxis,
+					int								nAxis,
+					BOOL							bNegative,
+					//////////////////////////////////////////////
+					CView*							pView
+					
+				) 
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	int			nResult;
+	////////////////////////// Triangular Patch
+	if(PatSubType == PS_TRIANGLE)
+	{
+		CMS_Rota3	MS_Rotat;
+		/////////////////////
+		nResult = MS_Rotat.GoDoIt(bGenBCurve,bGenBPatch,SolidID,pDrSolid,pNodeList,
+							pPatchList,pLatchList,ElperSegList_W,dAngle_W,Ratio_W,
+							bAxis,nAxis,bNegative,pView);
+		//////////////
+		if(nResult<0)
+			return -1;
+	}
+	else
+	////////////////////////// Quadrilateral Patch
+	if(PatSubType == PS_QUADRILAT)
+	{	
+		CMS_Rotat	MS_Rotat;
+		/////////////////////
+		nResult = MS_Rotat.GoDoIt(bGenBCurve,bGenBPatch,SolidID,pDrSolid,pNodeList,
+							pPatchList,pLatchList,ElperSegList_W,dAngle_W,Ratio_W,
+							bAxis,nAxis,bNegative,pView);
+		//////////////
+		if(nResult == MA_ERROR)
+			return nResult;
+		///////////////////////////////////
+	}
+	//////////////////////
+	m_pDrSolid = pDrSolid;
+	m_pDrSolid->SetDirty(TRUE);
+ 	///////////////////////////////////////////////////////// show Patch
+	pObjectMgr->ShowObject_On_Off(m_pDrSolid,SOLID,TRUE);;
+	/////////////////////
+	return 0;		 
+}			
+
+int CMI_Sol_I::RBUp_SExtrudeInsert 
+				(
+					PATSUBTYPE						PatSubType, 
+					BOOL							bGenBCurve,
+					BOOL							bGenBPatch,
+					int								nExtruType,
+									// 1 = Given: Extrusion Direction Nodes
+									// 2 = Given: 3 Lenths (wLen) to Extrude to
+					//////////////////////////////////////////
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					//////////////////////////////////////////
+					CDListMgr*						pNodeList,	// ist record: pFromIDNode
+																// 2nd record: pToIDNode
+					//////////////////////////////////////////
+					CDListMgr*						pPatchList,	// given Curves always taken as U-dir
+																// and later switched,if needed,i.e.,
+																// nCurDir = 2
+					CList<PATCHLATCH,PATCHLATCH>*	pLatchList,
+					//////////////////////////////////////////
+					CList<int,int>&					ElperSegList_W, // ist record: elem/seg
+																	// 2nd record: #of BezSeg
+					WORLD							wLen_W,
+					double							dLen_W,
+					double							Ratio_W,
+					//////////////////////////////////////////////
+					CView*							pView
+					
+				) 
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	int			nResult;
+	////////////////////////// Triangular Patch
+	if(PatSubType == PS_TRIANGLE)
+	{
+		CMS_Xtru3	MS_Xtrud;
+		/////////////////////
+		nResult = MS_Xtrud.GoDoIt(bGenBCurve,bGenBPatch,nExtruType,SolidID,pDrSolid,pNodeList,
+							pPatchList,pLatchList,ElperSegList_W,wLen_W,dLen_W,Ratio_W,
+							pView);
+		//////////////
+		if(nResult<0)
+			return -1;
+	}
+	else
+	////////////////////////// Quadrilateral Patch
+	if(PatSubType == PS_QUADRILAT)
+	{	
+		CMS_Xtrud	MS_Xtrud;
+		/////////////////////
+		nResult = MS_Xtrud.GoDoIt(bGenBCurve,bGenBPatch,nExtruType,SolidID,pDrSolid,pNodeList,
+							pPatchList,pLatchList,ElperSegList_W,wLen_W,dLen_W,Ratio_W,
+							pView);
+		//////////////
+		if(nResult == MA_ERROR)
+			return nResult;
+		///////////////////////////////////
+	}
+	//////////////////////
+	m_pDrSolid = pDrSolid;
+	m_pDrSolid->SetDirty(TRUE);
+ 	///////////////////////////////////////////////////////// show Patch
+	pObjectMgr->ShowObject_On_Off(m_pDrSolid,SOLID,TRUE);;
+	/////////////////////
+	return 0;		 
+}
+////////////////////////////////////////////////////////////
+void CMI_Sol_I::Serialize(CArchive& ar)
+{
+
+	CMI_Pat_I::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" MI_SOL_I:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" MI_SOL_I:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+}
+
+///////////////////////////////////// end of Module //////////////////////		
+
+

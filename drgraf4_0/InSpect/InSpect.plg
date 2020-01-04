@@ -1,0 +1,31 @@
+--------------------Configuration: InSpect - Win32 Debug--------------------
+Begining build with project "C:\drgraf4_0\InSpect\InSpect.dsp", with item "splitter.cpp"
+Active configuration is Win32 (x86) Dynamic-Link Library (based on Win32 (x86) Dynamic-Link Library)
+
+
+Creating temp file "C:\WINDOWS\TEMP\RSP5381.TMP" with contents </nologo /MDd /W4 /Gm /GR /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp"Debug/InSpect.pch" /YX"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\drgraf4_0\InSpect\splitter.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP5381.TMP" 
+Compiling...
+splitter.cpp
+C:\drgraf4_0\InSpect\SpDrawVu.h(206) : error C2501: 'CDVM_CreO' : missing decl-specifiers
+C:\drgraf4_0\InSpect\SpDrawVu.h(206) : error C2146: syntax error : missing ';' before identifier 'm_DVM_CreO'
+C:\drgraf4_0\InSpect\SpDrawVu.h(206) : error C2501: 'm_DVM_CreO' : missing decl-specifiers
+C:\drgraf4_0\InSpect\SpDrawVu.h(207) : error C2501: 'CDVM_Post' : missing decl-specifiers
+C:\drgraf4_0\InSpect\SpDrawVu.h(207) : error C2146: syntax error : missing ';' before identifier 'm_DVM_Post'
+C:\drgraf4_0\InSpect\SpDrawVu.h(207) : error C2501: 'm_DVM_Post' : missing decl-specifiers
+C:\drgraf4_0\InSpect\SpDrawVu.h(208) : error C2501: 'CDVM_CreM' : missing decl-specifiers
+C:\drgraf4_0\InSpect\SpDrawVu.h(208) : error C2146: syntax error : missing ';' before identifier 'm_DVM_CreM'
+C:\drgraf4_0\InSpect\SpDrawVu.h(208) : error C2501: 'm_DVM_CreM' : missing decl-specifiers
+C:\drgraf4_0\InSpect\splitter.cpp(63) : error C2653: 'CSpDataVu' : is not a class or namespace name
+C:\drgraf4_0\InSpect\splitter.cpp(63) : error C2065: 'classCSpDataVu' : undeclared identifier
+C:\drgraf4_0\InSpect\splitter.cpp(70) : error C2653: 'CHsDrawVu' : is not a class or namespace name
+C:\drgraf4_0\InSpect\splitter.cpp(70) : error C2065: 'classCHsDrawVu' : undeclared identifier
+C:\drgraf4_0\InSpect\splitter.cpp(78) : error C2653: 'CHsDataVu' : is not a class or namespace name
+C:\drgraf4_0\InSpect\splitter.cpp(78) : error C2065: 'classCHsDataVu' : undeclared identifier
+Error executing cl.exe.
+
+
+
+splitter.obj - 15 error(s), 0 warning(s)

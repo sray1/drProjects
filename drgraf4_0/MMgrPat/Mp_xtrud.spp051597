@@ -1,0 +1,480 @@
+// Mp_Xtrud.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+
+#include "Def_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "MPatMgr.h"
+#include "dlg_xtrd.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "PA_Xtrud.h"
+ 
+#include "MP_Xtrud.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define MIN_CNODES_CURVE	4
+#define MIN_CNODES_PATCH	16
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMP_Xtrud,CMI_GangP,1)
+////////////////////////////////////
+CMP_Xtrud::CMP_Xtrud()
+{
+	m_nExtruType = 1;	// default
+}
+
+CMP_Xtrud::~CMP_Xtrud()
+{
+}
+
+int CMP_Xtrud::SetInfoBase_Type2
+				(
+					CString&						PatchID,		
+					CDrPatch*						pDrPatch,
+					CDListMgr*						pCurveList,
+					CList<CURVELATCH,CURVELATCH>*	pLatchList,
+					CDListMgr*						pNodeList,
+					CList<int,int>*					pElperSegList,
+					WORLD							wLen,
+					double							Ratio,
+					CView*							pView
+				) 
+{
+	int index;
+	////////////////////////////////////////////////////////// Dialog Info(Don't Display Dlg)
+	CDlg_Xtrd Dlg;
+	////////////////////
+	m_nExtruType	= 2;
+	Dlg.m_nType		= m_nExtruType;
+	////////////////////////////////////////////////// PatchID
+	Dlg.m_PatchID	= PatchID;
+	////////////////////////////////////////////////// CurveID
+	if(pCurveList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Xtrud::SetInfoBase\npCurveList->GetCount() != 1");
+		return -1;
+	}
+	CDrCurve* pDrCurve	= (CDrCurve*)(pCurveList->GetObject(0) );
+	Dlg.m_CurveID		= pDrCurve->GetObjectID();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index				= pDrCurve->GetPatchList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		pDrCurve->GetPatchList()->RemoveObject(index);
+	////////////////////////////////////////////////// Latch
+	if(pLatchList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Xtrud::SetInfoBase\npLatchList->GetCount() != 1");
+		return -1;
+	}
+	Dlg.m_Orient_1	= pLatchList->GetHead();
+	////////////////////////////////////////////////// Mesh
+	if(pElperSegList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Xtrud::SetInfoBase\npElperSegList->GetCount() != 1");
+		return -1;
+	}
+	Dlg.m_nMesh		= pElperSegList->GetHead();
+	Dlg.m_wLen		= wLen;
+	Dlg.m_Ratio		= Ratio;
+	////////////////////////////////////////////////// Fill Info
+	Dlg.SetInfoForDataBase(pDrPatch);
+	////////////////////////////////////////////////// Do It
+	int nResult = GoDoIt(pDrPatch);
+	//////////////
+	if(nResult<0)
+		return -1;
+	/////////////////////
+	return 0;		 
+}
+
+int CMP_Xtrud::SetInfoBase
+				(
+					CString&						PatchID,		
+					CDrPatch*						pDrPatch,
+					CDListMgr*						pCurveList,
+					CList<CURVELATCH,CURVELATCH>*	pLatchList,
+					CDListMgr*						pNodeList,
+					CList<int,int>*					pElperSegList,
+					double							dLen,
+					double							Ratio,
+					CView*							pView
+				) 
+{
+	int index;
+	////////////////////////////////////////////////////////// Dialog Info(Don't Display Dlg)
+	CDlg_Xtrd Dlg;
+	/////////////////
+	m_nExtruType	= 1;
+	Dlg.m_nType		= m_nExtruType;
+	///////////////////////////
+	CDrNode*	pDrNode;
+	////////////////////////////////////////////////// PatchID
+	Dlg.m_PatchID	= PatchID;
+	////////////////////////////////////////////////// CurveID
+	if(pCurveList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Xtrud::SetInfoBase\npCurveList->GetCount() != 1");
+		return -1;
+	}
+	CDrCurve* pDrCurve	= (CDrCurve*)(pCurveList->GetObject(0) );
+	Dlg.m_CurveID	= pDrCurve->GetObjectID();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index				= pDrCurve->GetPatchList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		pDrCurve->GetPatchList()->RemoveObject(index);
+	////////////////////////////////////////////////// Latch
+	if(pLatchList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Xtrud::SetInfoBase\npLatchList->GetCount() != 1");
+		return -1;
+	}
+	Dlg.m_Orient_1	= pLatchList->GetHead();
+	////////////////////////////////////////////////// FromNodeID & ToNodeID 
+	if(pNodeList->GetCount() != 2)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Xtrud::SetInfoBase\npNodeList->GetCount() != 2");
+		return -1;
+	}
+	pDrNode			= (CDrNode*)(pNodeList->GetObject(0) );
+	Dlg.m_FromID	= pDrNode->GetObjectID();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index			= pDrNode->GetPatchList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		pDrNode->GetPatchList()->RemoveObject(index);
+	/////////
+	pDrNode			= (CDrNode*)(pNodeList->GetObject(1) );
+	Dlg.m_ToID		= pDrNode->GetObjectID();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index			= pDrNode->GetPatchList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		pDrNode->GetPatchList()->RemoveObject(index);
+	////////////////////////////////////////////////// Mesh
+	if(pElperSegList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Xtrud::SetInfoBase\npElperSegList->GetCount() != 1");
+		return -1;
+	}
+	Dlg.m_nMesh		= pElperSegList->GetHead();
+	Dlg.m_dLen		= dLen;
+	Dlg.m_Ratio		= Ratio;
+	////////////////////////////////////////////////// Fill Info
+	Dlg.SetInfoForDataBase(pDrPatch);
+	////////////////////////////////////////////////// Do It
+	int nResult = GoDoIt(pDrPatch);
+	//////////////
+	if(nResult<0)
+		return -1;
+	/////////////////////
+	return 0;		 
+}
+
+int CMP_Xtrud::GoDoIt(CDrPatch* pDrPatch) 
+{
+
+	//////////////////////////////////////////////////////////
+	GetInfo(pDrPatch);
+	m_pDrPatch = pDrPatch;
+	//////////////////////////////////	
+	m_pCNodeList 	= m_pDrPatch->GetCNodeList();	
+	///////                    				// ControlNode Mesh
+	Extrude();
+	////////////////////////
+	m_PatchType = PA_TENSOR;
+	////////////////////////
+	if(InsertMeshInfo(FALSE)<0)
+		return -1;
+	/////////////////////
+	return 0;
+}
+
+CDrPatch* CMP_Xtrud::GoDoIt() 
+{
+	//////////////////////////////////////////////////////////
+	m_pDrPatch 		= GetInfo();       // PGen Dialog
+	////////////////////////////////
+	if(!m_pDrPatch)		// cancel
+		return (CDrPatch*)NULL;
+	//////////////////////////////////	
+	m_pCNodeList 	= m_pDrPatch->GetCNodeList();	
+	///////                    				// ControlNode Mesh
+	Extrude();
+	////////////////////////
+	m_PatchType = PA_TENSOR;
+	////////////////////////
+	if(InsertMeshInfo(FALSE)<0)
+		return (CDrPatch*)NULL;
+	/////////////////////
+	return m_pDrPatch;
+}			
+
+CDrPatch* CMP_Xtrud::GetInfo()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+	//////////////////////////////////////////////////////////////////
+	CMPatMgr 	MPatMgr;
+	CMPatMgr* 	pMPatMgr = &MPatMgr;
+	CString		Cid;
+	int 		index;
+	///////////////////////////////////////////////////
+	if (pMPatMgr->DoModal_Patch_Extrude(&Cid,4) == IDCANCEL)
+			return (CDrPatch*)NULL;
+    /////////////////////////////////////////////////////// update
+	m_CurrentPatchID 	= Cid;
+	index 				= pObjectMgr->
+							GetObjectIndexfromKey(PATCH,Cid,1);
+	if(index>=0)
+	{						
+		CDrPatch* pDrPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+   		//////////////////////////////
+		m_PatchProc		= pDrPatch->GetPatchProc();
+		m_pNum_t_T		= pDrPatch->GetNum_tPointer_T();
+		m_pDis_t_T		= pDrPatch->GetDis_tPointer_T();
+		m_CurveID_S[0]	= pDrPatch->GetCurveID(0);
+		m_CuLatch[0]	= pDrPatch->GetCurveLatch(0);
+		/////////
+		if(m_nExtruType == 1)
+		{
+			m_FromID 		= pDrPatch->GetFromID_T();
+			m_ToID			= pDrPatch->GetToID_T();
+			m_dLen			= pDrPatch->GetLength_T();
+		}
+		else
+		if(m_nExtruType == 2)
+		{
+			m_wLen			= pDrPatch->GetWorldLength_T();
+		}
+		/////////
+		m_nSegs_T		= pDrPatch->GetSegmentCount_T();	//segs in Extrusion dirn
+		m_Ratio			= pDrPatch->GetRatio_T();
+		m_bUnifOT		= pDrPatch->IsUniform_T();
+		m_nOut_T		= pDrPatch->GetMaxOutPts_T();;
+		m_nOrder_T		= pDrPatch->GetOrder_T();
+		m_CurveType_T	= pDrPatch->GetCurveType_T();;
+		m_nDim_T		= pDrPatch->GetnDim_T();
+		m_bClosed_T		= pDrPatch->IsClosed_T();					// for Extrusion
+		///////////////////////////////////////// Bezier Linear
+		if(m_bUnifOT)
+			m_nOut_TCon	= 2;// Only One Patch in T-dir
+		else
+//4/26/96			m_nOut_TCon	= pDrPatch->GetMaxOutSeg_T()+1;	// Number of Output Segments
+			m_nOut_TCon	= m_nSegs_T+1;	// Number of Output Segments
+		/////////////////////////////////////
+		m_nSegs_TCon		= m_nOut_TCon - 1;
+		m_nMaxPatchCNodes_T = m_nOut_TCon;
+		////////////////
+		return pDrPatch;
+	}
+	else 
+		return (CDrPatch*)NULL;
+}			
+
+int CMP_Xtrud::GetInfo(CDrPatch* pDrPatch)
+{
+	//////////////////////////////
+	m_PatchProc		= pDrPatch->GetPatchProc();
+	m_pNum_t_T		= pDrPatch->GetNum_tPointer_T();
+	m_pDis_t_T		= pDrPatch->GetDis_tPointer_T();
+	m_CurveID_S[0]	= pDrPatch->GetCurveID(0);
+	m_CuLatch[0]	= pDrPatch->GetCurveLatch(0);
+	/////////
+	if(m_nExtruType == 1)
+	{
+		m_FromID 		= pDrPatch->GetFromID_T();
+		m_ToID			= pDrPatch->GetToID_T();
+		m_dLen			= pDrPatch->GetLength_T();
+	}
+	else
+	if(m_nExtruType == 2)
+	{
+		m_wLen			= pDrPatch->GetWorldLength_T();
+	}
+	/////////
+	m_nSegs_T		= pDrPatch->GetSegmentCount_T();	//segs in Extrusion dirn
+	m_Ratio			= pDrPatch->GetRatio_T();
+	m_bUnifOT		= pDrPatch->IsUniform_T();
+	m_nOut_T		= pDrPatch->GetMaxOutPts_T();;
+	m_nOrder_T		= pDrPatch->GetOrder_T();
+	m_CurveType_T	= pDrPatch->GetCurveType_T();;
+	m_nDim_T		= pDrPatch->GetnDim_T();
+	m_bClosed_T		= pDrPatch->IsClosed_T();					// for Extrusion
+	///////////////////////////////////////// Bezier Linear
+	if(m_bUnifOT)
+		m_nOut_TCon	= 2;// Only One Patch in T-dir
+	else
+//4/26/96			m_nOut_TCon	= pDrPatch->GetMaxOutSeg_T()+1;	// Number of Output Segments
+		m_nOut_TCon	= m_nSegs_T+1;	// Number of Output Segments
+	/////////////////////////////////////
+	m_nSegs_TCon		= m_nOut_TCon - 1;
+	m_nMaxPatchCNodes_T = m_nOut_TCon;
+	////////////////
+	return 0;
+}			
+
+int CMP_Xtrud::Extrude() 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+	//////////////////////////////////////////////////////
+	CString		CurveID;
+	BOOL		bPutinCNodeList = TRUE;
+	int i;
+	///////////////////////////////////////// Generate CurvePts
+   	CurveID = m_CurveID_S[0];
+	//////////////////////////////////////// get Curve Info	
+	int index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+	if(index<0)
+	{
+		AfxMessageBox("CMP_Xtrud::Extrude\nCurveIndex Failure!");
+		return -1;
+	}
+	////////////////////////////////////
+	CDrCurve* pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pDrCurve)
+		return -1;
+	/////////////////
+	GetInfo_Curve(pDrCurve);
+	/////////////////////////////////////////// Memory ControlPts 
+	m_pIn_S[0]		= FixMem((long)m_nMaxCurveCNodes_S);
+	m_pInWts_S[0]	= FixMemD((long)m_nMaxCurveCNodes_S);
+	if( !m_pIn_S[0] || !m_pInWts_S[0] )
+	{
+		AfxMessageBox("CMP_Xtrud::Curve\nFixMemforCNodes Failure!");
+		return -1;
+	}
+	/////////////////////////// Store LOCAL Pos	
+	m_bBack = FALSE;
+	if(m_CuLatch[0] == CL_BACKWARD)
+		m_bBack = TRUE;
+	FillCNodesLOCAL(pDrCurve->GetCNodeList(),m_pWts_BZ_S,
+		m_pIn_S[0],m_pInWts_S[0],m_nMaxCurveCNodes_S,bPutinCNodeList);
+	////////////////////////////////// Save PatchInfo
+	m_nOut				= (((long)m_nOut_S)*((long)m_nOut_T) );				
+	m_nOutCon			= (((long)m_nOut_SCon)*((long)m_nOut_TCon) );				
+	m_nMaxPatchCNodes	= (int)m_nOutCon;
+	///////////////////////////////////////////////////////////////////
+	if(m_nExtruType == 1)
+	{
+		///////////////////////////////////////// AxisVector from
+    											// end nodes	
+		UnitAxisFromEndNodes(0);
+	}
+	else
+	if(m_nExtruType == 2)
+	{
+		///////////////////////////////////////// AxisVector from wLen
+		m_dLen = UnitAxis_N_LenFromWorldLength();
+	}
+	/////////////////////////////////////////////////////////////////// Memory OutPts 
+	m_pOut				= FixMem(m_nOutCon);
+	m_pOutWts			= FixMemD(m_nOutCon);
+	if( !m_pOut || !m_pOutWts )
+	{
+		AfxMessageBox("CMP_Xtrud::Extrude\nFixMem Failure!");
+		return -1;
+	}
+	///////////////////////////////////////// Go Extrude 
+	int nResult = GenerateCNodes();
+	///////////////////////////////////////// Free InputCNodeMems
+    for(i=0;i<4;i++)
+    {
+    	if(m_pIn_S[i])
+    	{
+			FreeMem(m_pIn_S[i]);
+			FreeMemD(m_pInWts_S[i]);
+			m_pIn_S[i] = NULL;
+			m_pInWts_S[i] = NULL;
+		}	
+	}	
+	//////////////// 
+	if(nResult<0)	
+		return -1;
+	else	
+		return 0;
+	/////////////			 
+}			
+
+int CMP_Xtrud::GenerateCNodes()
+{
+	/////////////////////////////////////////////////////////
+	//		RATIO business TAKEN CARE OF IN DLG_XTRD
+	//			SO MAKE RATIO = 1
+	////////////////////////////////////////////// 
+	double ratio	= 1.0;
+	/////////////////////
+	int nOut		= (int)m_nOutCon;  // for now
+	////////////////////////////////////////////// generate Patch Pts
+	CPA_Xtrud	Xtrud;		 	   	
+	int nOutActual	= Xtrud.ExtrudeCurve
+			(
+				m_dLen,			//	distance to the extended surface's end
+				m_vAxis,		//	unit extrusion vector (direction)
+				m_nSegs_TCon,	//	subdivision value (interior spaces)
+				ratio,			//  Output Last/Ist ratio in T_Direction
+				m_nOut_SCon,	//	number of input data points
+				m_pIn_S[0],		//	input XSec curve dataPts
+				m_pInWts_S[0],	//	input XSec curve Wts
+				m_pOut,			//	Output ControlPts
+				m_pOutWts		//	Output Wts array
+			);	  
+	////////////////////////////	
+	if(nOutActual != nOut)
+		return -1;
+	else
+		return 0;
+												
+}
+
+void CMP_Xtrud::Serialize(CArchive& ar)
+{
+
+	CMI_GangP::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMP_Xtrud:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMP_Xtrud:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+//////////////////////////////////// end of module ////////////////////////////

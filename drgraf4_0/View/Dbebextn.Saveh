@@ -1,0 +1,29 @@
+typedef struct eltypes 
+	{
+		char*   	ObjName;  	// internal name
+		int			num;   		// number associated with element
+		int			type;  		// -1 	= metacard
+								// 0	= element
+								// 1	= cardtype
+								// 2	= elem+card both 
+		char*		cardName;  	// dreamPipe	
+		int			ObjDim;		// 0,1,2,3;	// Mesh Generation purpose							
+	}ELTYPES;
+/////////////////////////////////////////////////////////////////	
+extern ELTYPES FAR ElTypes[];
+extern int	FAR nMax_ElemTypes;
+//////////////////////////////////  		
+typedef struct dbtypes 
+	{
+		char*   	ObjName;  	// internal name
+		int			num;   		// number associated with object
+		int			type;  		// 0 	= edit & move tool(for button management)
+								// 1	= object that can be edited & moved
+								// 2	= independent tool other than move/edit
+								// 3	= 3dObject
+		char*		otherName; 	// name,if needed
+	}DBTYPES;
+
+extern DBTYPES FAR DbTypes[];
+extern int FAR nMax_DBoxTypes;
+////////////////////////////////

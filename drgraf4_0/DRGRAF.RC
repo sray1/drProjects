@@ -1,0 +1,516 @@
+//Microsoft App Studio generated resource script.
+//
+#include "grafrsrc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "res\otherids.h"
+
+/////////////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+IDR_MAINFRAME           ICON    DISCARDABLE     "RES\\DSICON.ICO"
+IDR_GRAFTYPE            ICON    DISCARDABLE     "RES\\DSICON2.ICO"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "RES\\TOOLBAR.BMP"
+IMAGE1DOWN              BITMAP  DISCARDABLE     "RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "RES\\IMAGE1U.BMP"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_INITMENU MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New Drawing\tCtrl+N",        ID_FILE_NEW
+        MENUITEM "&Open Old Drawing...\tCtrl+O",ID_FILE_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Index",                      ID_HELP_INDEX
+        MENUITEM "&Using Help",                 ID_HELP_USING
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT
+    END
+END
+
+IDR_OPENMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&Drawing"
+    BEGIN
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+    {^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U{^ÐŒ¹U, GRAYED
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY, GRAYED
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "Clear &ALL",                  IDM_EDIT_CLEARALL
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Specs"
+    BEGIN
+        MENUITEM "&Paper...",                   IDM_DRAW_PAPER
+        MENUITEM "&Unit...",                    IDM_DRAW_UNITS
+        MENUITEM "&Scale Factor...",            IDM_DRAW_SCALEFACTOR
+        MENUITEM "Precisio&n...",               IDM_DRAW_PRECISION
+        MENUITEM SEPARATOR
+        MENUITEM "&Axis...",                    IDM_DRAW_AXIS
+        MENUITEM "&Eye Position...",            IDM_DRAW_EYEPOSITION
+        MENUITEM SEPARATOR
+        MENUITEM "&Layer...",                   IDM_DRAW_LAYER
+        MENUITEM SEPARATOR
+        POPUP "&Magnification", GRAYED
+        BEGIN
+            MENUITEM "&X Magnification",            IDM_DRAW_MAG_XMAG
+            , GRAYED
+            MENUITEM "&Y Magnification",            IDM_DRAW_MAG_YMAG
+            , GRAYED
+            MENUITEM "&Z Magnification",            ID_DRAW_MAG_ZMAG, GRAYED
+        END
+    END
+    POPUP "De&faults"
+    BEGIN
+        MENUITEM "&New Drawing",                IDM_DEFAULT_NEW
+        MENUITEM "&Current Drawing",            IDM_DEFAULT_CURRENT
+    END
+    POPUP "&Options"
+    BEGIN
+        MENUITEM "&Cursor Change",              IDM_OPTION_CURSOR
+        MENUITEM "&Pen Change ...",             ID_OPTIONS_PENCHANGE
+        MENUITEM "&Dialog On",                  IDM_OPTION_DIALOGON
+        MENUITEM "&Refresh On",                 ID_OPTION_REFRESH
+        MENUITEM "&Axis On",                    ID_OPTION_AXISON
+        MENUITEM "&RubberBandOn",               IDM_OPTION_RUBBERBAND
+        MENUITEM "",                            IDM_SCALE
+    END
+    POPUP "&Zoom"
+    BEGIN
+        MENUITEM "&In/Out",                     IDM_ZOOM, GRAYED
+        MENUITEM "To &Fit",                     IDM_ZOOM_FIT, GRAYED
+    END
+    POPUP "Dec&k"
+    BEGIN
+        MENUITEM "dream&Pipe",                  IDM_DECK_DREAMPIPE
+        MENUITEM "&SAP",                        IDM_DECK_SAP
+        MENUITEM "&TAB",                        IDM_DECK_TAB
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&BottomStatus Bar",           IDM_VIEW_S_BAR_BOT
+        MENUITEM "Top&StatusBar",               IDM_VIEW_S_BAR_TOP
+        MENUITEM SEPARATOR
+        MENUITEM "&12 View",                    IDM_VIEW_12VIEW
+        MENUITEM "&23 View",                    IDM_VIEW_23VIEW, GRAYED
+        MENUITEM "&31 View",                    IDM_VIEW_31VIEW, GRAYED
+        MENUITEM "&Iso View",                   IDM_VIEW_ISOVIEW, GRAYED
+        MENUITEM "&DataView",                   IDM_VIEW_DATAVIEW, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "&DrawBox",                    IDM_VIEW_DRAWBOX
+        MENUITEM "&ElementBox",                 IDM_VIEW_ELEMENTBOX
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "New",                         ID_WINDOW_NEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Index",                      ID_HELP_INDEX
+        MENUITEM "&Using Help",                 ID_HELP_USING
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT
+    END
+END
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY,CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY,CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY,CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY,CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY,CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY,CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY,CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY,CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY,ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY,SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY,CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY,SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY,SHIFT
+    VK_F1,          ID_CONTEXT_HELP,        VIRTKEY,SHIFT
+    VK_F1,          ID_HELP,                VIRTKEY 
+END
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  80, 40, 261, 74
+STYLE WS_POPUP | WS_CAPTION
+CAPTION "About DrGrafix"
+FONT 12, "Architect"
+BEGIN
+    CONTROL         "",IDC_BIGICON,"Button",BS_OWNERDRAW | WS_DISABLED,6,6,
+                    38,40
+    LTEXT           "DrGrafix Version 1.0",IDC_STATIC,55,6,78,8,NOT WS_GROUP
+    LTEXT           "An IDRI Structural Graphic Software",IDC_STATIC,55,15,
+                    142,8,NOT WS_GROUP
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKRECT,55,33,145,1
+    LTEXT           "Available Memory:",IDC_STATIC,55,43,63,8,NOT WS_GROUP
+    LTEXT           "(Avail mem)",IDC_AVAIL_MEM,127,43,129,8,NOT WS_GROUP
+    LTEXT           "Math Co-processor:",IDC_STATIC,55,51,64,8,NOT WS_GROUP
+    LTEXT           "(Math coprocessor)",IDC_MATH_COPR,127,51,129,8,NOT 
+                    WS_GROUP
+    LTEXT           "Disk Space:",IDC_STATIC,55,59,70,8,NOT WS_GROUP
+    LTEXT           "(Disk space)",IDC_DISK_SPACE,127,59,128,8,NOT WS_GROUP
+    CONTROL         "",IDOK,"Button",BS_OWNERDRAW,210,5,45,30
+END
+
+IDD_SPLASH DIALOG DISCARDABLE  80, 40, 237, 205
+STYLE DS_MODALFRAME | WS_POPUP
+FONT 8, "Helv"
+BEGIN
+    CONTROL         "",IDC_BIGICON,"Button",BS_OWNERDRAW | WS_DISABLED,6,6,
+                    38,40
+    LTEXT           "DrGrafix Version 1.0",IDC_STATIC,53,6,164,8,NOT 
+                    WS_GROUP
+    LTEXT           "An IDRI Structural Graphical Data Generator",IDC_STATIC,
+                    53,15,164,8,NOT WS_GROUP
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKRECT,53,30,184,1
+    LTEXT           "Warning: This computer program is protected by",
+                    IDC_STATIC,53,36,182,8
+    LTEXT           "copyright law and international treaties.  Unauthorized",
+                    IDC_STATIC,53,44,182,8
+    LTEXT           "reproduction or distribution of this program, or any",
+                    IDC_STATIC,53,52,182,8
+    LTEXT           "portion of it, may result in severe civil and criminal",
+                    IDC_STATIC,53,60,182,8
+    LTEXT           "penalties, and will be prosecuted to the maximum",
+                    IDC_STATIC,53,68,182,8
+    LTEXT           "extent possible under law.",IDC_STATIC,53,76,182,8
+    LTEXT           "The software is licensed to:",IDC_STATIC,55,90,180,10
+    LTEXT           "Debabrata Ray",IDC_STATIC,80,100,155,15
+END
+
+IDD_DEFAULTS DIALOG DISCARDABLE  45, 12, 106, 65
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Defaults"
+FONT 8, "System"
+BEGIN
+    LTEXT           "DEC PLACES",10,3,9,46,8
+    LTEXT           "MULT FACTOR",11,3,23,47,9
+    LTEXT           "UNITS",12,3,37,44,8
+    EDITTEXT        IDD_PARAMETERS_FIX,54,6,25,12
+    EDITTEXT        IDD_PARAMETERS_FACTOR,54,20,50,12
+    EDITTEXT        IDD_PARAMETERS_UNITS,54,34,25,12
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,9,49,24,14
+    CONTROL         "ESC",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,47,49,
+                    24,14
+END
+
+IDD_ELEMENTS DIALOG DISCARDABLE  60, 40, 60, 97
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Show Element"
+FONT 8, "System"
+BEGIN
+    CHECKBOX        "NODE",IDD_ELEMENTS_NODE,3,2,28,12
+    CHECKBOX        "PIPE",IDD_ELEMENTS_PIPE,3,14,28,12
+    CHECKBOX        "ELBOW",IDD_ELEMENTS_ELBOW,3,25,33,12
+    CHECKBOX        "BEAM",IDD_ELEMENTS_BEAM,3,37,28,12
+    CHECKBOX        "SUPPORT",IDD_ELEMENTS_SUPPORT,3,49,39,12
+    CHECKBOX        "NONLIN SUPP",IDD_ELEMENTS_NL_SUPP,3,61,55,12
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,2,78,24,14
+    CONTROL         "ESC",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,33,78,
+                    24,14
+END
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+
+#ifdef APSTUDIO_INVOKED
+//////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""res\\otherids.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""res\\drgraf.rc2""\r\n"
+END
+
+/////////////////////////////////////////////////////////////////////////////////////
+#endif    // APSTUDIO_INVOKED
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_DRG_CURSOR          CURSOR  DISCARDABLE     "RES\\CURSOR2.CUR"
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    65505                   "DRGRAF: An IDRI Graphics Program\001\340Ready\002\340Select an object on which to get Help\001"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    IDR_GRAFTYPE            "\nDrGraf\nDRGRAF Drawing\nDRGRAF Files (*.drg)\n.drg\nDrGrafFileType\nDRGRAF File Type"
+    IDS_NEW_DRGRAF          "New Piping System"
+    IDR_12TYPE              "12 View\nDoc\nDrawing\nDrawing File (*.drg)\n.drg\nDocFileType\nDrawing File Type"
+    IDR_23TYPE              "23 View\nDoc\n\n\n\nDocFileType\nDrawing File Type"
+    IDR_31TYPE              "31 View\nDoc\n\n\n\nDocFileType\nDrawing File Type"
+    IDR_ISOTYPE             "Iso View\nDoc\n\n\n\nDocFileType\nDrawing File Type"
+    IDR_DATATYPE            "Data View\nDoc\n\n\n\nDocFileType\nDrawing File Type"
+    IDS_TOO_MANY_ROWS       "WARNING:  Limit exceeded.  Cannot display/print one or more checks."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_TEXT_X     " X: "
+    ID_INDICATOR_TEXT_Y     " Horz: "
+    ID_INDICATOR_TEXT_Z     " Vert: "
+    ID_INDICATOR_TEXT_LAYER "Layer :"
+    ID_INDICATOR_TEXT_UNIT  "Unit:"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new drawing"
+    ID_FILE_OPEN            "Open an existing drawing"
+    ID_FILE_CLOSE           "Close the active drawing"
+    ID_FILE_SAVE            "Save the active drawing"
+    ID_FILE_SAVE_AS         "Save the active drawing with a new name"
+    ID_FILE_PAGE_SETUP      "Change the printing options"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options"
+    ID_FILE_PRINT           "Print the active Drawing"
+    ID_FILE_PRINT_PREVIEW   "Display full pages"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright"
+    ID_APP_EXIT             "Quit the application; prompts to save drawing"
+    ID_HELP_INDEX           "List Help topics"
+    ID_HELP_USING           "Display instructions about how to use help"
+    ID_CONTEXT_HELP         "Display help for clicked on buttons, menus and windows"
+    ID_HELP                 "Display help for current task or command"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "Open this drawing"
+    ID_FILE_MRU_FILE2       "Open this drawing"
+    ID_FILE_MRU_FILE3       "Open this drawing"
+    ID_FILE_MRU_FILE4       "Open this drawing"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane"
+    ID_PREV_PANE            "Switch back to the previous window pane"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles"
+    ID_WINDOW_SPLIT         "Split the active window into panes"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection"
+    ID_EDIT_CLEAR_ALL       "Erase everything"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard"
+    ID_EDIT_FIND            "Find the specified text"
+    ID_EDIT_PASTE           "Insert Clipboard contents"
+    ID_EDIT_REPEAT          "Repeat the last action"
+    ID_EDIT_REPLACE         "Replace specific text with different text"
+    ID_EDIT_SELECT_ALL      "Select the entire drawing"
+    ID_EDIT_UNDO            "Undo the last action"
+    ID_EDIT_REDO            "Redo the previously undone action"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar"
+    ID_VIEW_STATUS_BAR      "Show or hide Bottom StatusBar"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next drawing window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous drawing window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the drawings"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+    AFX_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_DISK_SPACE          "%lu KB Free"
+    IDS_MATH_COPR_NOTPRESENT "Not present"
+    IDS_MATH_COPR_PRESENT   "Present"
+    IDS_AVAIL_MEM           "%lu KB Free"
+    IDS_DISK_SPACE_UNAVAIL  "Unavailable"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_VIEW_12VIEW         "Show or Hide 12 View"
+    IDM_VIEW_23VIEW         "Show or Hide 23 View"
+    IDM_VIEW_31VIEW         "Show or Hide 31 View"
+    IDM_DRAW_PAPER          "Select Paper Size"
+    IDM_DRAW_PRECISION      "Select Number of Decimal Places for drawing"
+    IDM_DRAW_ELEMENTBOX     "Show or Hide Element Box"
+    IDM_DRAW_AXIS           "Select Vertical & Horizontal Axes"
+    IDM_DRAW_UNITS          "Select Drawing Unit (English,Metric etc.)"
+    IDM_DRAW_EYEPOSITION    "Select Eye Position with respect to Axes for Iso View"
+    IDM_DRAW_SCALEFACTOR    "Select As-drawn to Actual  Object Size ratio"
+    IDM_DEFAULT_NEW         "Set or Vew Default values for New drawing"
+    IDM_DEFAULT_CURRENT     "Set or View Default values for Current drawing"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_VIEW_ISOVIEW        "Show or Hide  IsoMetric View"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_DRAW_EYELEVEL       "Set Rotation & Tilt to fix Eye Level for Isometric View"
+    IDM_DRAW_LAYER          "Select Layer for the Current object"
+    IDM_DRAW_DRAWBOX        "Show or Hide Drawing ToolBox"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_OPTION_CURSOR       "Select Cursor"
+    ID_DRAW_MAG_YMAG        "Select Y-magnification for Deformations or Modes"
+    ID_DRAW_MAG_ZMAG        "Select Z-magnification for Deformations or Modes"
+    IDM_OPTION_DIALOG       "Select if Property Pages to be shown "
+    IDM_EDIT_CLEARALL       "Erase Drawing & Start All Over"
+    IDM_OPTION_RUBBERBAND   "Select for RubberBanding in Element drawing "
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_TEXT_TIME  "Time:"
+    ID_INDICATOR_TEXT_DATE  "Date:  "
+    ID_INDICATOR_TEXT_DRAWING "Drawing:"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_ZOOM_IN             "Zoom Selected View Objects"
+    IDM_ZOOM_OUT            "Shrink Selected Objects in the Active View"
+    IDM_ZOOM_FIT            "Scale Objects to Fit Entire View Window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_OPTIONS_PENCHANGE    "Click to Change drawing Pen Style, Width & Color"
+    ID_VIEW_STATUS_BAR_T    "Show or Hide Top StatusBar"
+    ID_VIEW_CARDDECK        "Show or Hide Card Deck View Window"
+    ID_DECK_DREAMPIPE       "Output  dreamPipe Deck "
+    ID_DECK_SAP             "Output SAP deck"
+    ID_DECK_TAB             "Output TAB Deck"
+END
+
+
+#ifndef APSTUDIO_INVOKED
+////////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "res\drgraf.rc2"
+/////////////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

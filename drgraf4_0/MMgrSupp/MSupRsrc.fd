@@ -1,0 +1,26 @@
+!MS$FREEFORM
+! Microsoft Developer Studio generated include file.
+! Used by SuppMgr.rc
+!
+      integer, parameter :: IDD_SUP_EDIT                    = 1
+      integer, parameter :: IDD_SUP_IN                      = 117
+      integer, parameter :: IDD_ADV_LSUP                    = 125
+      integer, parameter :: IDC_NIDHEADB                    = 1001
+      integer, parameter :: IDC_SKEWHEAD                    = 1002
+      integer, parameter :: IDC_SKEWED                      = 1003
+      integer, parameter :: IDC_SUPPROC                     = 1005
+      integer, parameter :: IDC_NIDB                        = 1011
+      integer, parameter :: IDC_NIDB2                       = 1012
+      integer, parameter :: IDC_TX                          = 1028
+      integer, parameter :: IDC_TY                          = 1029
+      integer, parameter :: IDC_TZ                          = 1030
+      integer, parameter :: IDC_RX                          = 1031
+      integer, parameter :: IDC_RY                          = 1032
+      integer, parameter :: IDC_RZ                          = 1033
+      integer, parameter :: IDC_STIFF                       = 1034
+      integer, parameter :: IDC_TX2                         = 1035
+      integer, parameter :: IDC_TY2                         = 1036
+      integer, parameter :: IDC_TZ2                         = 1037
+      integer, parameter :: IDC_RX2                         = 1038
+      integer, parameter :: IDC_RY2                         = 1039
+      integer, parameter :: IDC_RZ2                         = 1040

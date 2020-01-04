@@ -1,0 +1,1035 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+
+#include "drgraf.h"
+#include "drgrafrm.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+///////////////////// dialogMgr
+#include "MNodMgr.h"  
+///////////////////// IGens
+#include "Def_IGen.h"
+/////////////////////
+#include "MP_Xtrud.h"
+#include "MP_Rotat.h"
+#include "MP_Loft2.h"
+#include "MP_CoonP.h"
+#include "MP_CooP3.h"
+#include "MP_Duct.h"
+#include "MP_Sweep.h"
+///////////////////// Elems
+#include "Def_Elem.h"
+/////////////////////
+#include "MI_GangC.h" 
+//////////////////////
+#include "NodEdit.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////////////////////////////
+#define MIN_NODES_CURVE		2        
+#define MIN_CURVES_PATCH	3        
+#define	new					DEBUG_NEW
+#define	BUFF_SIZE			1024
+#define MAX_NODES_FE1D		2
+#define MAX_NODES_FE2D		4
+////////////////////////////////////
+IMPLEMENT_SERIAL(CNodEdit,CMouse,1)
+/////////////////////////////////////////////////////////////////////////////
+CNodEdit::CNodEdit()
+{
+
+	////////////////////////////
+	m_bAutoAcceptOn		= FALSE;
+  	m_bDialogOn    		= FALSE;
+	m_bDragOn      		= FALSE;
+	m_bDragging	   		= FALSE;
+	/////////////////////////////////////////// Node 
+    m_pCurrentNode		= NULL;
+	///////////////////////////////////////////
+	m_bRefreshOn		= FALSE;
+
+}
+
+CNodEdit::~CNodEdit()
+{
+}
+	
+void CNodEdit::ElementLeftDown_NOD()
+{	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	/////////////////////////////////////////////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		case N_EDIT:
+		//////////////////////////////////////////////////
+		default:
+			break;
+	}  
+
+}
+
+int CNodEdit::ShowNodeToEdit(CDrNode* pDrNode)
+{
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(NODE);                   
+	////////////////////
+	CMNodMgr* pMNodMgr;
+	/////////////////////////////////////////////////////////////// Using MNodMgr
+	if (pMNodMgr->DoModal_ShowNodeToEdit(pDrNode,m_nView) == IDCANCEL)
+		return -2;
+	////////////////////////////////////////////////////////////////////// Update Dependent Curves
+	CDListMgr* pCurList;
+	int i,nCurCount;
+	POSITION pos;
+	//////////////////////////////////////////////// Curves
+	pCurList	= pDrNode->GetCurveList(); 
+	nCurCount	= pCurList->GetCount();
+	///////////
+	for(i=0;i<nCurCount;i++)
+	{
+		pos					= pCurList->FindIndex(i);
+		CDrCurve* pCurve	= (CDrCurve*)(pCurList->GetAt(pos));
+		////////////////
+		if(pCurve)
+		{
+			pCurve->SetShow(FALSE);
+			ReGen_EditedCurveControls(pCurve);
+			pCurve->SetShow(TRUE);
+
+		}
+	}
+	////////////////////////////////////////////////////////////////////// Update Dependent Patches
+	CDListMgr*	pPatList;
+	int			nPatCount;
+	//////////////////////////////////////////////// Patches due to Node
+	pPatList	= pDrNode->GetPatchList(); 
+	nPatCount	= pPatList->GetCount();
+	///////////
+	for(i=0;i<nPatCount;i++)
+	{
+		pos					= pPatList->FindIndex(i);
+		CDrPatch* pPatch	= (CDrPatch*)(pPatList->GetAt(pos));
+		////////////////
+		if(pPatch)
+		{
+			pPatch->SetShow(FALSE);
+			ReGen_EditedPatchControls(pPatch);
+			pPatch->SetShow(TRUE);
+
+		}
+	}
+	//////////////////////////////////////////////// Patches due to Curve
+	int j,index;
+	CDListMgr	affectList;
+	////////////////////////////////////// collect affected patch
+	affectList.RemoveAll();
+	///////////////////////
+	pCurList	= pDrNode->GetCurveList(); 
+	nCurCount	= pCurList->GetCount();
+	///////////
+	for(i=0;i<nCurCount;i++)
+	{
+		pos					= pCurList->FindIndex(i);
+		CDrCurve* pCurve	= (CDrCurve*)(pCurList->GetAt(pos));
+		////////////////
+		pPatList	= pCurve->GetPatchList(); 
+		nPatCount	= pPatList->GetCount();
+		///////////
+		for(j=0;j<nPatCount;j++)
+		{
+			pos					= pPatList->FindIndex(j);
+			CDrPatch* pPatch	= (CDrPatch*)(pPatList->GetAt(pos));
+			//////////////// not in list - insert
+			if(pPatch)
+			{
+				index = affectList.GetObjectIndex(pPatch);
+				if(index<0)	// not in there
+					affectList.InsertObject(pPatch);
+			}
+		}
+	}
+	////////////////////////////////////// now Change
+	nPatCount	= affectList.GetCount();
+	for(i=0;i<nPatCount;i++)
+	{
+		pos					= affectList.FindIndex(i);
+		CDrPatch* pPatch	= (CDrPatch*)(affectList.GetAt(pos));
+		////////////////
+		if(pPatch)
+		{
+			pPatch->SetShow(FALSE);
+			ReGen_EditedPatchControls(pPatch);
+			pPatch->SetShow(TRUE);
+
+		}
+	}
+	////////////////////////////////////////////////////////////////////// Show Edited Stuff
+	pDoc->SetModifiedFlag();
+	pDoc->UpdateAllViews(NULL);
+	///////////////////////////////
+	return 0;
+}	 
+	
+int CNodEdit::ReGen_EditedCurveControls(CDrCurve* pEditedCurve)
+{
+
+	//////////////////////////////////////////////////////////////////
+	pEditedCurve->SetShow(FALSE);	// not quite ready
+	/////////////////////////////////////////////////// Get rid of Old CNodes & Delete 
+	CDrObject* pObject;
+	while(!(pEditedCurve->GetCNodeList()->IsEmpty()))// unload/no delete:public
+	{
+		pObject = (CDrObject*)(pEditedCurve->GetCNodeList()->RemoveHead());
+		int nLevelType = pObject->GetLevelType();
+		if(nLevelType == LEVEL_GRAPA) //no delete:public
+			pObject->ReadyToDelete();
+		else
+			delete pObject;	//delete:private	
+	}	
+	/////////////////////////////////////////////////////// Copy ElperSegList
+	CDListMgr	NodeList;
+	CList<int,int> ElSegList;
+	ElSegList.RemoveAll();
+	ElSegList.AddTail(pEditedCurve->GetElperSegList());
+	(pEditedCurve->GetElperSegList())->RemoveAll();		// now Remove, later stored in GangC
+	/////////////////////////////////////////////////////////////// Fill Input Nodes
+	CDListMgr* pINodeList = pEditedCurve->GetINodeList();
+	/////////////////////////////////////////////////////////////// Using GangC
+	CMI_GangC	GangC;
+	CDrNode*	pAddNode;
+	POSITION	pos;
+	///////////////////////////////////////////// Curve Info
+	double		SegAngle,dAng,dAngSpec,dRadius;
+	BOOL		bArc,bAdvanceOn;
+	CString		FromID,ToID,TIID,CCID,CAID,CBID;
+	////////////////////////////////////////////////////////
+	CString		ID			= pEditedCurve->GetObjectID();
+	CURVEPROC	SCurveType	= pEditedCurve->GetCurveType_S();
+	CIRCLETYPE	CircType	= pEditedCurve->GetCircleType();
+	////////////////////////////////////////////////////////
+	switch(SCurveType)
+	{
+		case CP_CIRCLE:
+
+			SegAngle		= pEditedCurve->GetSegAngle_S(); 
+			///////////////////////////////////////
+			switch(CircType)
+			{
+				
+				case CIRCLE_BY_ROT:
+
+					dAng		= pEditedCurve->GetTheta_S();
+					//////////////////////////////////////////// FromID & ToID
+					FromID		= pEditedCurve->GetFromID_S();
+					ToID		= pEditedCurve->GetToID_S();
+					////////////////////////////////////
+					pEditedCurve = GangC.CreateCircleByRot(
+						ID,pEditedCurve,&NodeList,SCurveType,
+						&ElSegList,CIRCLE_BY_ROT,dAng,FromID,ToID,SegAngle);
+
+					break;
+
+					
+				case CIRCLE_BY_NO3:
+
+					dAngSpec		= pEditedCurve->GetTheta_S();
+					bArc			= pEditedCurve->IsArcType();
+					//////////////////////////////////////////////				
+					pEditedCurve = GangC.CreateCircleBy3Node(
+						ID,pEditedCurve,&NodeList,SCurveType,
+						&ElSegList,CIRCLE_BY_NO3,SegAngle,dAngSpec,bArc);
+
+					break;
+
+					
+				case CIRCLE_BY_2N_TI:
+		
+					//////////////////////////////////////////// TIID
+					pos			= pINodeList->FindIndex( 1 );
+					pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+					TIID		= pAddNode->GetObjectID();
+					////////////////////////////////////
+					pEditedCurve = GangC.CreateCircleBy_2N_TI(
+						ID,pEditedCurve,&NodeList,SCurveType,
+						&ElSegList,CIRCLE_BY_2N_TI,SegAngle);
+
+					break;
+
+					
+				case CIRCLE_BY_2N_CC:
+
+					//////////////////////////////////////////// CCID
+					pos			= pINodeList->FindIndex( 1 );
+					pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+					CCID		= pAddNode->GetObjectID();
+					////////////////////////////////////
+					pEditedCurve = GangC.CreateCircleBy_2N_CC(
+						ID,pEditedCurve,&NodeList,SCurveType,
+						&ElSegList,CIRCLE_BY_2N_CC,SegAngle);
+
+					break;
+
+					
+				case CIRCLE_BY_2CN_TI_R:
+
+					dRadius		= pEditedCurve->GetRadius_S();
+					//////////////////////////////////////////// TIID
+					pos			= pINodeList->FindIndex( 1 );
+					pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+					TIID		= pAddNode->GetObjectID();
+					//////////////////////////////////////////// CAID
+					pAddNode	= (CDrNode*)(pINodeList->GetHead());
+					CAID		= pAddNode->GetObjectID();
+					//////////////////////////////////////////// CBID
+					pAddNode	= (CDrNode*)(pINodeList->GetTail());
+					CBID		= pAddNode->GetObjectID();
+					////////////////////////////////////
+					pEditedCurve = GangC.CreateCircleBy_2CN_TI_R(
+						ID,pEditedCurve,&NodeList,SCurveType,
+						&ElSegList,CIRCLE_BY_2CN_TI_R,dRadius,SegAngle);
+
+					break;
+				
+				default:
+
+					break;
+
+			}
+			break;
+				
+		default:
+			
+			bAdvanceOn = FALSE; // because data already Known
+			/////////////////////
+			pEditedCurve = GangC.CreateCurve(ID,pEditedCurve,&NodeList,SCurveType,
+											&ElSegList,bAdvanceOn,TRUE);// TRUE = Final
+	}
+	//////////////////////////////////
+	return 0;
+}
+
+int CNodEdit::ReGen_EditedPatchControls(CDrPatch* pEditedPatch)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CString strCurr;
+	int nResult;
+	//////////////////////////////////////////////////////////////////
+	PATCHPROC PatchProc = pEditedPatch->GetPatchProc();	// How was it Generated?
+	CString strID		= pEditedPatch->GetObjectID();
+	/////
+	nResult = SetUp_EditedPatchControls(pEditedPatch);
+	if(nResult<0)
+		return nResult;
+	///////////////////
+	switch(PatchProc) 
+	{
+		
+		///////////////////////////////////////////////////// Patches Insert
+		case PP_EXTRUDE:
+
+			///////////////////
+			nResult = ReGen_Controls_EXTRUDE(pEditedPatch,&strID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_ROTATE: 
+
+			///////////////////
+			nResult = ReGen_Controls_ROTATE(pEditedPatch,&strID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_LOFT2: 
+
+			///////////////////
+			nResult = ReGen_Controls_LOFT2(pEditedPatch,&strID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_DUCT: 
+
+			///////////////////
+			nResult = ReGen_Controls_DUCT(pEditedPatch,&strID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_SWEEP:
+
+			///////////////////
+			nResult = ReGen_Controls_SWEEP(pEditedPatch,&strID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_LOFT3:		// COONS:		// 
+		case PP_LOFT4:
+			
+			///////////////////
+			nResult = ReGen_Controls_COONS(pEditedPatch,&strID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_TENSOR:
+		case PP_COONS:
+		case PP_GORDON:		// GORDONS
+		case PP_FLAT:
+		case PP_SPAWN:		// Spawn
+		case PP_STITCH:		// Stitch
+		case PP_LOFTMANY:	
+			return -1;
+
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	}
+	///////////
+	return -1;
+}	
+
+int CNodEdit::SetUp_EditedPatchControls(CDrPatch* pEditedPatch)
+{
+
+	///////////////////////////////////////////////////
+	pEditedPatch->SetShow(FALSE);	// not quite ready
+	/////////////////////////////////////////////////// Get rid of Old CNodes & Delete 
+	CDrObject* pObject;
+	while(!(pEditedPatch->GetCNodeList()->IsEmpty()))// unload/no delete:public
+	{
+		pObject = (CDrObject*)(pEditedPatch->GetCNodeList()->RemoveHead());
+		int nLevelType = pObject->GetLevelType();
+		if(nLevelType == LEVEL_GRAPA) //no delete:public
+			pObject->ReadyToDelete();
+		else
+			delete pObject;	//delete:private	
+	}	
+	//////////////////////////////////
+	return 0;
+}
+
+int CNodEdit::ReGen_Controls_EXTRUDE(CDrPatch* pEditedPatch,CString* pID)
+{
+	CDListMgr* pNodeList	= pEditedPatch->GetINodeList(); 
+	CDListMgr* pCurveList	= pEditedPatch->GetCurveList(); 
+	//////////////////////////////////////////////////////////////// Set up
+	CList<CURVELATCH,CURVELATCH>	LatchList;
+	LatchList.RemoveAll();
+	LatchList.AddTail(pEditedPatch->GetCurveLatch(0));
+	//////////
+	int nMesh	= pEditedPatch->GetMaxOutSeg_T();	// Number of Output Segments
+	CList<int,int>	ElSegList;
+	ElSegList.RemoveAll();
+	ElSegList.AddTail(nMesh);
+	//////////
+	double		dLen;
+	WORLD		wLen;
+	CMP_Xtrud	MP_Xtrud;
+	int			nResult;
+	/////////
+	double	Ratio	= pEditedPatch->GetRatio_T();		
+	////////////////////////////////////////////////////////////////////////// Fill Info/Do It
+	if(pEditedPatch->GetExtruType_T() == 2)
+	{
+		wLen	= pEditedPatch->GetWorldLength_T();
+		nResult = MP_Xtrud.SetInfoBase_Type2(*pID,pEditedPatch,pCurveList,&LatchList,
+							pNodeList,&ElSegList,wLen,Ratio,m_pView);
+	}
+	else
+	{
+		dLen	= pEditedPatch->GetLength_T();
+		nResult = MP_Xtrud.SetInfoBase(*pID,pEditedPatch,pCurveList,&LatchList,
+							pNodeList,&ElSegList,dLen,Ratio,m_pView);
+	}
+	//////////////
+	if(nResult<0)
+		return -1;
+	//////////////////////////////////////////////////////////
+	return 0;
+}
+
+int CNodEdit::ReGen_Controls_ROTATE(CDrPatch* pEditedPatch,CString* pID)
+{
+	AfxMessageBox("CNodEdit::ReGen_Controls_ROTATE\nNOT IMPLEMENTED YET");
+	return -1;
+}
+
+int CNodEdit::ReGen_Controls_LOFT2(CDrPatch* pEditedPatch,CString* pID)
+{
+	CDListMgr* pCurveList = pEditedPatch->GetCurveList(); 
+	//////////////////////////////////////////////////////////////// Set up
+	CList<CURVELATCH,CURVELATCH>	LatchList;
+	LatchList.RemoveAll();
+	LatchList.AddTail(pEditedPatch->GetCurveLatch(0));
+	LatchList.AddTail(pEditedPatch->GetCurveLatch(1));
+	//////////
+	int nMesh	= pEditedPatch->GetMaxOutSeg_T();	// Number of Output Segments
+	CList<int,int>	ElSegList;
+	ElSegList.RemoveAll();
+	ElSegList.AddTail(nMesh);
+	//////////
+	double		Ratio			= pEditedPatch->GetRatio_T();		
+	////////////////////////////////////////////////////////////////////////// Fill Info/Do It
+	CMP_Loft2	MP_Loft2;
+	int nResult = MP_Loft2.SetInfoBase(*pID,pEditedPatch,pCurveList,&LatchList,
+							&ElSegList,Ratio,m_pView);
+	//////////////
+	if(nResult<0)
+		return -1;
+	//////////////////////////////////////////////////////////
+	return 0;
+}
+
+int CNodEdit::ReGen_Controls_DUCT(CDrPatch* pEditedPatch,CString* pID)
+{
+	//////////////////////////////////////////////////////////////////////////////
+	// Currently(03/05/97):
+	//		WE DONOT ALLOW DIFFERENT TWISTMULT, TWISTSTART, SCALEMULT, SCALESTART
+	//						FOR DIFFERENT COMPONENTS in:X,Y AND Z
+	//							USING VALUES FROM pPatchToIso
+	//		SINCE WE PACK FORCES ETC. IN X,Y AND Z DIRECTIONS IN SINGLE PATCH
+	//			WE CANNOT ALLOW ANY INPUT BUT TO USE pPatchToIso VALUES
+	//		IN LATER VERSION:
+	//			WE WILL USE wTwistMult (WORLD) variables for input
+	//////////////////////////////////////////////////////////////////////////////
+	int i,nResult;
+	//////////////////////////////////////////////////////////////// Set up
+	CDListMgr* pNodeList	= pEditedPatch->GetINodeList(); 
+	CDListMgr* pCurveList	= pEditedPatch->GetCurveList(); 
+	///////////////////////////////////////////////////
+	CList<CURVELATCH,CURVELATCH>	LatchList;
+	LatchList.RemoveAll();
+	////////////////////////
+	for(i=0;i<3;i++)
+		LatchList.AddTail(pEditedPatch->GetCurveLatch(i));
+	//////////
+	double		dTwistMult		= pEditedPatch->GetTwistMult_T();
+	BOOL		bIncrement		= pEditedPatch->IsIncTwist_T();		
+	double		dTwistStart		= pEditedPatch->GetTwistStart_T();		
+	////////////////////////////////////////////////////////////////////////// Fill Info/Do It
+	CMP_Duct	MP_Duct;
+	nResult = MP_Duct.SetInfoBase(*pID,pEditedPatch,pCurveList,pNodeList,
+							&LatchList,dTwistMult,bIncrement,dTwistStart,m_pView);
+	//////////////
+	if(nResult<0)
+		return -1;
+	//////////////////////////////////////////////////////////
+	return 0;
+}
+
+int CNodEdit::ReGen_Controls_SWEEP(CDrPatch* pEditedPatch,CString* pID)
+{
+	//////////////////////////////////////////////////////////////////////////////
+	// Currently(03/05/97):
+	//		WE DONOT ALLOW DIFFERENT TWISTMULT, TWISTSTART, SCALEMULT, SCALESTART
+	//						FOR DIFFERENT COMPONENTS in:X,Y AND Z
+	//							USING VALUES FROM pPatchToIso
+	//		SINCE WE PACK FORCES ETC. IN X,Y AND Z DIRECTIONS IN SINGLE PATCH
+	//			WE CANNOT ALLOW ANY INPUT BUT TO USE pPatchToIso VALUES 
+	//		IN LATER VERSION:
+	//			WE WILL USE wTwistMult (WORLD) variables for input
+	//////////////////////////////////////////////////////////////////////////////
+	int i,nResult;
+	//////////////////////////////////////////////////////////////// Set up
+	CDListMgr* pNodeList	= pEditedPatch->GetINodeList(); 
+	CDListMgr* pCurveList	= pEditedPatch->GetCurveList();
+	///////////////////////////////////////////////////////
+	CList<CURVELATCH,CURVELATCH>	LatchList;
+	LatchList.RemoveAll();
+	////////////////////////
+	for(i=0;i<4;i++)
+		LatchList.AddTail(pEditedPatch->GetCurveLatch(i));
+	//////////
+	double		dTwistMult		= pEditedPatch->GetTwistMult_T();
+	BOOL		bIncrement		= pEditedPatch->IsIncTwist_T();		
+	double		dTwistStart		= pEditedPatch->GetTwistStart_T();		
+	double		dRadiusMult		= pEditedPatch->GetScaleMult_T();
+	BOOL		bIncRad			= pEditedPatch->IsIncScale_T();		
+	double		dRadStart		= pEditedPatch->GetScaleStart_T();		
+	////////////////////////////////////////////////////////////////////////// Fill Info/Do It
+	CMP_Sweep	MP_Sweep;
+	nResult = MP_Sweep.SetInfoBase(*pID,pEditedPatch,pCurveList,pNodeList,
+							&LatchList,dTwistMult,bIncrement,dTwistStart,
+							dRadiusMult,bIncRad,dRadStart,m_pView);
+	//////////////
+	if(nResult<0)
+		return -1;
+	//////////////////////////////////////////////////////////
+	return 0;
+}
+
+int CNodEdit::ReGen_Controls_COONS(CDrPatch* pEditedPatch,CString* pID)
+{
+	int i;
+	//////////////////////////////////////////////////////////////// Set up
+	PATCHPROC ppKind = pEditedPatch->GetPatchProc();
+	//////////////////////////////////////////////////
+	CDListMgr* pCurveList	= pEditedPatch->GetCurveList(); 
+	//////////////////////////////////////////////////////////////// Set up
+	CList<CURVELATCH,CURVELATCH>	LatchList;
+	LatchList.RemoveAll();
+	//////////
+	for(i=0;i<4;i++)
+	{
+		if((ppKind == PP_LOFT3) && (i>2))
+			continue;
+		LatchList.AddTail(pEditedPatch->GetCurveLatch(i));
+	}
+	////////////////////////////////////////////////////
+	CString		PatCurveID[4];
+	CURVELATCH	PatCurveLatch[4];
+	POSITION	pos;
+	//////////////////////////////////////////////////// Fill Arrays
+	for(i=0;i<4;i++)
+	{
+		if((ppKind == PP_LOFT3) && (i>2))
+			continue;
+		//////////////////////////////////////////////////////////// ID
+		CDrCurve* pDrCurve	= (CDrCurve*)(pCurveList->GetObject(i) );
+		PatCurveID[i] = pDrCurve->GetObjectID();
+		//////////////////////////////////////////////////////////// Latch
+		pos					= LatchList.FindIndex(i);
+		PatCurveLatch[i]	= LatchList.GetAt(pos);
+		////////////////
+	}
+	////////////////////////// Triangular Patch
+	if(ppKind == PP_LOFT3)
+	{
+		CMP_CooP3	MP_CoonP;
+		/////////////////////
+		int nResult = MP_CoonP.GoDoIt(*pID,pEditedPatch,PatCurveID,
+										PatCurveLatch);
+		//////////////
+		if(nResult<0)
+			return -1;
+	}
+	else
+	////////////////////////// Quadrilateral Patch
+	if(ppKind == PP_LOFT4)
+	{	
+		CMP_CoonP	MP_CoonP;
+		/////////
+		int nResult = MP_CoonP.GoDoIt(*pID,pEditedPatch,PatCurveID,
+										PatCurveLatch);
+		//////////////
+		if(nResult<0)
+			return -1;
+	}
+	//////////////////////////////////////////////////////////
+	return 0;
+}
+
+void CNodEdit::OnEBoxLButtonDown_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	CDListMgr* pDListMgr;
+	/////////////////////////////////// 
+   	m_bDragOn 		= pBool->IsDragOn();
+	m_bDialogOn		= pBool->IsDialogOn();
+//	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	//////////////////////////////////////////////////////// LOG
+	m_pdc->DPtoLP(&point);
+	//////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////////////////////////////////// No Node
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	if(pDListMgr->GetCount()<=0)
+		return;
+	/////////////////////////////////////////////////////////////////
+    /////////////////////////////  ELement Dialog On/Off Check
+    if(m_Gener == FORWARD)
+		ElementLeftDown_NOD();
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftDown_I();
+	//////////////////////////////////
+}
+
+int CNodEdit::LeftUp_NODE(CPoint point,BOOL bCNode)
+{
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	CDrNode*	pDrNode;
+	int			nActiveIndex,index;
+	////////////////////////////////////
+	CHitNet*	pHitNet		= (CHitNet*)pObjectMgr->GetSpecObject(HITNET);
+	double		dTol		= pHitNet->GetSearchDet(); 
+	WORtoWOP(&dTol,&dTol);	// physical
+	///////////////////////////////////////////// See if any Existing Node Hit
+	index = IsObjectHit(NODE,point,0);
+	//////////////////////////////////////////////////// Check if CorrectType Node/CNode/MNode
+	////////////////////////////////////////////////////
+	if(index>=0)						
+	{
+		/////////////
+		pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+		ID					= pDrNode->GetObjectID();
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(NODE);
+		nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);	// set Active Index									
+		pObjectMgr->SetActiveObjectType(NODE);		    // set Active Type									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		int nResult;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			/////////////
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				/////////////
+				int j;
+				/////////////////////////////// Coords
+				WORLD Loc = *(pDrNode->GetLocalPos());
+				WORtoWOP(&Loc,&Loc);	// to Physical
+				//////////////////////////////
+				j = sprintf(buf,"***** A Node Hit ****\n");
+				j += sprintf(buf+j,"with Mouse Coordinates (with %f Tolerance):",dTol);
+				j += sprintf(buf+j,"\nExisting NodeID = %s\nCoordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f\n",
+					ID,Loc.x,Loc.y,Loc.z);
+				////////////////////////////
+				j += sprintf(buf+j,
+					"\n\nYES:\t\tEdit This Existing Node");
+				//////////////////////////
+				if(m_ProbLim == PDL_TWO)
+				{
+					j += sprintf(buf+j,
+						"\nNO:\t\tCancel Selection Process");
+					nResult = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+					if(nResult == IDNO)
+					{
+						delete str;
+						return -2;			// cancel: stop Searching
+					}
+				}
+				if(m_ProbLim == PDL_THREE)
+				{
+					j += sprintf(buf+j,
+						"\nNO:\t\tFind Next Node with same Trace");
+					j += sprintf(buf+j,
+						"\nCANCEL:\t\tCancel Selection Process");
+					nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+				}
+				/////////////
+				if(nResult == IDYES)
+				{
+					//////////////////////////////////////////////////////// Accept Old
+					delete str;
+					break;
+				}
+				else
+				if(nResult == IDNO)
+				{
+					//////////////////////////////////////////////////////// Retry
+					index = IsObjectHit(NODE,point,startIndex);
+					if(index>=0)
+					{
+						pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+						ID		= pDrNode->GetObjectID();
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(NODE);
+						nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+						////////////////////////////////////////
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return -2;
+					}
+					/////////
+				}
+				else				// Cancel
+				{
+					//////////////////////////////////////////////////////// Do Nothing
+					delete str;
+					return -2;
+				}
+			}						// end for loop
+			///////////////////////////////////////
+		}				// end !AutoAccept loop
+	}			// end Index loop
+	else
+		return 0;	// Not Hit
+	//////////////////////////////////////////////////////////////////// finally, show Properties
+	m_pCurrentNode = pDrNode;
+	/////////////////////////////
+	int nResult = ShowNodeToEdit(pDrNode);
+	///////////
+	if( nResult == -1)		// 
+	{
+		AfxMessageBox("ERROR:\nCNodEdit::LeftUp_Node\nShowNodeToEdit Problem");
+		return -1;
+	}
+	else
+	if(nResult == -2)		// Cancel
+		return -2;
+	////////////////////////////
+	return 0;
+}
+
+void CNodEdit::ElementLeftUp_NOD(CPoint point)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	//////////////////////////////////////////////////////////////////
+//	CString*	pID;
+	/////////////
+//	char buf[20];
+	CString Nid;
+	BOOL bRightOn = FALSE;
+	////////////////////////////////// IGenID
+	UINT IGenID = pWnd->GetCurrentIGenID();
+	///////////////////
+	switch(m_nActiveTool) 
+	{
+
+		case N_EDIT:
+				
+			////////////////
+			LeftUp_NODE(point,FALSE);		// FALSE = Not CNODE
+			///////
+			return;
+/*
+				
+		case CNODE:				
+
+			////////////////
+			LeftUp_NODE(point,TRUE);		// TRUE = CNODE;
+			///////
+			return;
+*/
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	} 
+}	
+
+void CNodEdit::OnEBoxLButtonUp_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+  	/////////////////////////////////////////////////////////
+//	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+    /////////////////////////////  ELement Dialog On/Off Check
+    POINT Logpoint;
+    m_pdc->DPtoLP(&point);
+    Logpoint.x = point.x;
+    Logpoint.y = point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftUp_NOD(Logpoint);
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftUp_I();
+	/////////////////////////
+	
+}
+void CNodEdit::OnEBoxMouseMove_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	return;
+	///////////do nothing for now
+}
+
+void CNodEdit::OnEBoxRButtonDown_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+									UINT nFlags, CPoint point)
+{
+		return;
+	//////////// do Nothing For Now
+}
+
+void CNodEdit::OnEBoxRButtonUp_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+								UINT nFlags, CPoint point)
+{
+	return;
+	//////////// do Nothing For Now
+}
+/////////////////////////////////////////////////////////////////////////////////////// F_M
+UINT CNodEdit::ReSetToolID_NOD(UINT CntlID,UINT IGenID, UINT OperID)
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCur;
+	////////////////
+	CString str;
+	UINT ID;
+	//////////////////////////////////////////// TaskID
+	strCur = "Ready for Editing a Node@";
+	/////////////////////////////
+	switch(OperID)
+	{
+		//////////////////////////////////////////// Create
+		case GOP_EDIT:
+		{
+			pWnd->SetIGenBoxStatus(TRUE);
+			pWnd->SetCntlBoxStatus(FALSE);
+			pWnd->SetDrawBoxStatus(FALSE);
+			///////////////////////////// String
+			str = "EDIT";
+			pWnd->SetstrOperID(str);
+			/////////////////////////////
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Elements
+				case ELEMENT:
+				case EDIM_0:
+				case EDIM_1:
+				case EDIM_2:
+				case EDIM_3:
+
+//					pWnd->SetMouseBoxType(ELEMDIMBOX);
+					str = "ELEMENT";
+					pWnd->SetstrCntlID(str);
+					///////////////////////////////////// EDim0/EDim1...
+					switch(IGenID)
+					{
+						/////////
+						case NODE:
+						case INODE:
+						case CNODE:			str = "NODE";	ID = N_EDIT;
+							strCur += "Click on a Node";	break;
+						default:			str = "UNKNOWN@NODE";	ID = UNONE;		break;
+					}
+					pWnd->SetstrIGenID(str);
+					////////////////////////
+					pWnd->SetstrCurrID(strCur);
+//					pWnd->GetCurrStat()->SetText(strCur);
+//					pWnd->GetCurrStat()->Invalidate();
+//					pWnd->GetCurrStat()->UpdateWindow();
+
+					return ID;
+				//////////////////
+			}
+		}
+	}
+	return UNONE;
+}
+
+void CNodEdit::Serialize(CArchive& ar)
+{
+
+	CMouse::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	BYTE bDialogOn,bElementMode,bDragOn,bDragging,bRefreshOn; 
+	WORD nActiveObject,nActiveTool,nNodeDone;
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" NodEdit:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+		ar	<</*BOOL*/	(BYTE)m_bDialogOn 
+			<</*int*/	(WORD)m_nActiveObject 
+			<</*int*/	(WORD)m_nActiveTool 
+			<</*BOOL*/	(BYTE)m_bDragOn 
+			<</*BOOL*/	(BYTE)m_bDragging 
+			<</*BOOL*/	(BYTE)m_bRefreshOn; 
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" NodEdit:    Loading\n");	
+
+			/////////////////////////////////////////////////
+		ar	>>/*BOOL*/	bDialogOn 
+			>>/*BOOL*/	bElementMode 
+			>>/*int*/	nActiveObject 
+			>>/*int*/	nActiveTool 
+			>>/*BOOL*/	bDragOn 
+			>>/*BOOL*/	bDragging 
+			>>/*BOOL*/	bRefreshOn 
+			>>/*int*/	nNodeDone;
+ 		//////////////////////////////
+		m_bDialogOn		= (BOOL)bDialogOn;
+		m_nActiveObject	= (int)nActiveObject;
+		m_nActiveTool	= (int)nActiveTool;
+		m_bDragOn		= (BOOL)bDragOn;
+		m_bDragging		= (BOOL)bDragging;
+		m_bRefreshOn	= (BOOL)bRefreshOn;
+	
+	}        
+}
+
+///////////////////////////////////// end of Module //////////////////////		
+/*	
+	///////////////////////////////////////////////////////////TEMPORARY
+	CString strRes;
+	strRes.LoadString(IDS_CHECK_RESOURCE);
+	TRACE("resource string = %s\n", (const char*) strRes); 
+    /////////////////////////////////////////////////////////////////////
+	CMNodMgr* pMNodMgr;
+	CString nID;
+	pMNodMgr->DoModal_Node(m_nView,&MouseWIC,&nID);
+	pMNodMgr->DoModal_Pipe();
+	/////////////////////////
+	CDDlgMgr* pDDlgMgr;
+	pDDlgMgr->DoModal_Label_Insert();
+	pDDlgMgr->DoModal_Label_Edit();
+	/////////////////////////////////////////////////////////////////////
+*/
+
+

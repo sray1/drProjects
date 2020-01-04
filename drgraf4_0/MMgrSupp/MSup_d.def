@@ -1,0 +1,25 @@
+; MSup_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	MSup_D32
+DESCRIPTION  'MSup Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMSupDLL											@2 NONAME
+
+; CMouseMg2
+	; Constructor and Destructor
+
+
+
+;??1CMI_LSupp@@UAE@XZ
+;??0CMI_LSupp@@QAE@XZ
+;?CreatePatchBased_3@CMI_LSupp@@QAEPAVCDrLinSup@@W4SUPPPROC@@AAUsupportcard@@PAVCDrPatch@@I@Z
+;?CreatePatchBased_4@CMI_LSupp@@QAEPAVCDrLinSup@@W4SUPPPROC@@AAUsupportcard@@PAVCDrPatch@@I@Z
+;?CreateCurveBased@CMI_LSupp@@QAEPAVCDrLinSup@@W4SUPPPROC@@AAUsupportcard@@PAVCDrCurve@@I@Z
+;?CreateNodeBased@CMI_LSupp@@QAEPAVCDrLinSup@@W4SUPPPROC@@AAUsupportcard@@PAVCDrNode@@I@Z

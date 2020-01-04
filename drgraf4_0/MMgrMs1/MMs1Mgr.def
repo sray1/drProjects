@@ -1,0 +1,47 @@
+; MMs1Mgr_D.def -- DEBUG version
+
+LIBRARY	MMs1_D32
+DESCRIPTION  'MMs1Mgr Debug DLL' 
+
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMMs1DLL											@2 NONAME
+
+
+;?classCMI_1SPN@CMI_1SPN@@2UCRuntimeClass@@A
+
+
+??0CMI_1Prof@@QAE@XZ
+??1CMI_1Prof@@UAE@XZ
+
+?RBUp_1Profile@CMI_1Prof@@UAEHPAVCDrProf_1@@@Z
+
+
+
+;??0CPo_FE1D@@QAE@XZ
+;??1CPo_FE1D@@UAE@XZ
+
+?classCPo_FE1D@CPo_FE1D@@2UCRuntimeClass@@B
+?GetRuntimeClass@CPo_FE1D@@UBEPAUCRuntimeClass@@XZ
+?Make_CentroidLabel@CPo_FE1D@@QAEPAVCDrNode@@AAUWORLD@@AAVCString@@@Z
+?Make_CentroidLabel_EDGE@CPo_FE1D@@QAEHPAVCDrFE1D@@PAUWORLD@@AAVCString@@@Z
+?CalcCentroid_EDGE@CPo_FE1D@@QAEXPAUWORLD@@0@Z
+
+
+?classCMI_Gang1@CMI_Gang1@@2UCRuntimeClass@@A
+
+
+
+; CMI_Gang1
+	; Constructor and Destructor
+
+
+??0CMI_Gang1@@QAE@XZ
+??1CMI_Gang1@@UAE@XZ
+
+

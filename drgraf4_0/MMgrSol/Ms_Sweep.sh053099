@@ -1,0 +1,95 @@
+ // ms_Sweep.h : header file
+//
+#ifndef _MS_SWEEP_H 
+#define _MS_SWEEP_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+                    
+#include "MI_GangS.h"
+#include "DrSolid.h"
+#include "DrPatch.h"
+#include "DrCurve.h"
+#include "Def_Type.h"                    
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+//class AFX_EXT_CLASS CMS_Sweep : public CMI_GangP
+class AFX_EXT_CLASS CMS_Sweep : public CMI_GangS
+{
+public:
+
+	CMS_Sweep();
+//////////////////////////////////////
+	DECLARE_SERIAL(CMS_Sweep)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+
+	int			SetInfoBase
+				(
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					CDListMgr*						pPatchList,
+					CDListMgr*						pCurveList,
+					CDListMgr*						pNodeList,
+					CList<PATCHLATCH,PATCHLATCH>*	pPLatchList,
+					CList<CURVELATCH,CURVELATCH>*	pCLatchList,
+					double							TwistMult,
+					BOOL							bIncrement,
+					double							TwistStart,
+					double							RadiusMult,
+					BOOL							bIncRad,
+					double							RadStart,
+					CView*							pView
+				); 
+	CDrSolid*	GoDoIt(); 
+ 	int			GoDoIt(CDrSolid* pDrSolid); 
+ 
+    				
+		
+protected:
+
+	////////////////////////////////////////////////////////////
+	int 		Sweep(); 
+	CDrSolid* 	GetInfo();
+	int			GetInfo(CDrSolid* pDrSolid);
+	int 		GenerateCNodes();
+	/////////////////////////
+	int			Pre_ST_Direction(CDrPatch* pDrPatch, int i, BOOL bPutinCNodeList);
+	int			Pre_R_Direction(CDrCurve* pDrCurve,int i, int nOut_R);
+	int			SpineProcess(CDrCurve* pDrCurve);
+	int			TwistProcess(pWORLD pIn, int nOut, double ScaleMax, BOOL bIncremental);
+	int			ScaleProcess(pWORLD pIn, int nOut, double ScaleMax, BOOL bIncremental);
+		          
+
+protected:  
+// Attributes
+
+	////////////////////////
+//Operations
+public:
+
+	~CMS_Sweep();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CMS_Sweep)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

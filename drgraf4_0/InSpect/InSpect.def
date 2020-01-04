@@ -1,0 +1,17 @@
+; InSpect_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	ISpe_D32
+DESCRIPTION  'Input Spectral Curve Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitISpeDLL											@2 NONAME
+
+
+; InSpeMgr

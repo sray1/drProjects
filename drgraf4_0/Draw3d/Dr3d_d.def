@@ -1,0 +1,160 @@
+; Dr3D_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	Dr3D_D32
+DESCRIPTION  'Dr3D_D32 DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+
+		InitDr3DDLL												@2 NONAME
+
+
+
+; CDr3DMgr
+	; Constructor and Destructor
+		??0CDr3DMgr@@QAE@XZ
+		??1CDr3DMgr@@UAE@XZ
+
+		?classCDr3DMgr@CDr3DMgr@@2UCRuntimeClass@@A 
+		?Serialize@CDr3DMgr@@UAEXAAVCArchive@@@Z
+		 
+		?Init@CDr3DMgr@@QAEXXZ
+		?SetTimeStatusCursor@CDr3DMgr@@UAEXM@Z 
+
+ 
+ 
+; CXForm
+;	; Constructor and Destructor
+;		??0CXForm@@QAE@XZ
+;		??0CXForm@@QAE@H@Z
+;		??1CXForm@@UAE@XZ          
+
+;		?classCXForm@CXForm@@2UCRuntimeClass@@A
+;		?GetRuntimeClass@CXForm@@UBEPAUCRuntimeClass@@XZ
+;		?Serialize@CXForm@@UAEXAAVCArchive@@@Z 
+
+;		?Scale@CXForm@@UAEXPAUMATRIX@@NNNW4XFMODE@@@Z
+;		?Shear_X@CXForm@@UAEXPAUMATRIX@@NNW4XFMODE@@@Z
+;		?Shear_Y@CXForm@@UAEXPAUMATRIX@@NNW4XFMODE@@@Z
+;		?Shear_Z@CXForm@@UAEXPAUMATRIX@@NNW4XFMODE@@@Z
+;		?Rotate_X@CXForm@@UAEXPAUMATRIX@@NW4XFMODE@@@Z
+;		?Rotate_Y@CXForm@@UAEXPAUMATRIX@@NW4XFMODE@@@Z
+;		?Rotate_Z@CXForm@@UAEXPAUMATRIX@@NW4XFMODE@@@Z
+;		?Translate@CXForm@@UAEXPAUMATRIX@@NNNW4XFMODE@@@Z 
+;		?VRCtoWORLDRotationMATRIX@CXForm@@UAEXPAUMATRIX@@PAUWORLD@@1@Z 
+;		?ComposeLocalMATRIX@CXForm@@UAEXPAUMATRIX@@NNNNNNNNNNNN@Z 
+;		?ComposeViewMATRIX@CXForm@@UAENPAUMATRIX@@UWORLD@@1111NNNN@Z
+;		?PerToParCVVMATRIX@CXForm@@UAEXPAUMATRIX@@N@Z 
+;		?ALT_ComposeViewMATRIX@CXForm@@UAEHPAUMATRIX@@UWORLD@@1111NNNN@Z 
+;		?SetVOMATRIX@CXForm@@UAEXPAUMATRIX@@UWORLD@@11@Z 
+;		?Par_SetVMMATRIX@CXForm@@UAEXPAUMATRIX@@UWORLD@@1NNNN@Z 
+;		?Per_SetVMMATRIX@CXForm@@UAENPAUMATRIX@@UWORLD@@1NNNN@Z 
+;		?ComposeCombineMATRIX@CXForm@@UAEXPAUMATRIX@@00@Z 
+;		?Transform@CXForm@@UAEXPAUWORLD@@0PAUMATRIX@@@Z 
+;		?TransformPerToParCVV@CXForm@@UAEXNPAUWORLD@@0@Z 
+;		?ComposeWin3DtoScreen3DMATRIX@CXForm@@UAEXPAUMATRIX@@UWORLD@@1@Z 
+;		?Project@CXForm@@UAEXPAUMATRIX@@PAUWORLD@@1@Z 
+;		?HeadToNewZLocMATRIX@CXForm@@UAEXPAUWORLD@@0PAUMATRIX@@W4XFMODE@@@Z
+;		?RotateToNewZMATRIX@CXForm@@UAEXPAUWORLD@@PAUMATRIX@@W4XFMODE@@@Z 
+;		?RotateAboutLineMATRIX@CXForm@@UAEXPAUMATRIX@@PAUWORLD@@1NW4XFMODE@@@Z 
+;		?SetParallel@CXForm@@UAEXH@Z 
+;		?GetParallel@CXForm@@UAEHXZ 
+;		?RotateToNewXMATRIX@CXForm@@UAEXPAUWORLD@@PAUMATRIX@@W4XFMODE@@@Z
+;		?HeadToNewXLocMATRIX@CXForm@@UAEXPAUWORLD@@0PAUMATRIX@@W4XFMODE@@@Z
+
+	
+
+	
+; C3DMath
+;	; Constructor and Destructor
+;		??0C3DMath@@QAE@XZ
+;		??1C3DMath@@UAE@XZ         
+
+; 		?classC3DMath@C3DMath@@2UCRuntimeClass@@A
+;		?GetRuntimeClass@C3DMath@@UBEPAUCRuntimeClass@@XZ 
+;		?Serialize@C3DMath@@UAEXAAVCArchive@@@Z
+
+;		?Set3DPts@C3DMath@@UAEXPAULPOINT3@@JJJ@Z 
+;		?Set3DPts@C3DMath@@UAEXPAUWORLD@@NNN@Z 
+;		?Len3DPts@C3DMath@@UAENPAUWORLD@@@Z 
+;		?BlockCopy@C3DMath@@UAEXPAD0K@Z 
+;		?Add3DPts@C3DMath@@UAEXPAULPOINT3@@00@Z 
+;		?Add3DPts@C3DMath@@UAEXPAUWORLD@@00@Z 
+;		?Sub3DPts@C3DMath@@UAEXPAULPOINT3@@00@Z 
+;		?Sub3DPts@C3DMath@@UAEXPAUWORLD@@00@Z 
+;		?Avg3DPts@C3DMath@@UAEXPAUWORLD@@00@Z 
+;		?Scale3DPts@C3DMath@@UAEXNPAUWORLD@@@Z 
+;		?ScaleVECTOR@C3DMath@@UAEXNPAUVECTOR@@@Z 
+;		?Dot3DPts@C3DMath@@UAENPAUWORLD@@0@Z 
+;		?Cross3DPts@C3DMath@@UAEXPAUWORLD@@00@Z 
+;		?AddVECTOR@C3DMath@@UAEXPAUVECTOR@@00@Z 
+;		?VdotV@C3DMath@@UAENUVECTOR@@0@Z  
+;		?VcrossV@C3DMath@@UAEXPAUVECTOR@@00@Z 
+;		?Normalize@C3DMath@@UAEXPAULPOINT3@@PAUWORLD@@H@Z 
+;		?Normalize@C3DMath@@UAEXPAUWORLD@@0@Z 
+;		?GetIdentityMATRIX@C3DMath@@UAEXPAUMATRIX@@@Z 
+;		?ScaleMATRIX@C3DMath@@UAEXNPAUMATRIX@@@Z 
+;		?AddMATRIX@C3DMath@@UAEXPAUMATRIX@@00@Z 
+;		?TransposeMATRIX@C3DMath@@UAEXPAUMATRIX@@@Z 
+;		?MultMATRIX@C3DMath@@UAEXPAUMATRIX@@00@Z 
+;		?F_MultMATRIX@C3DMath@@UAEXPAUMATRIX@@00@Z 
+;		?InvertMATRIX@C3DMath@@UAEXPAUMATRIX@@0@Z 
+;		?GetDeterminant@C3DMath@@UAENPAUMATRIX@@@Z 
+;		?LUDecompose@C3DMath@@UAEXPAUMATRIX@@PAHPAN@Z 
+;		?LUBackSubstitute@C3DMath@@UAEXPAUMATRIX@@PAHPAN@Z 
+;		?Solve_TriDiag@C3DMath@@UAEHPAN00PAY03N1HH@Z 
+;		?Solve_TriDiagPeriodic@C3DMath@@UAEHPAN00PAY03N1HH@Z 
+;		?CreateObject@CDr3DMgr@@SGPAVCObject@@XZ 
+
+
+ 
+ ; CDrClip
+	; Constructor and Destructor
+;		??0CDrClip@@QAE@XZ         
+;		??0CDrClip@@QAE@NHH@Z     
+;		??1CDrClip@@UAE@XZ         
+
+;		?GetRuntimeClass@CDrClip@@UBEPAUCRuntimeClass@@XZ 
+;		?classCDrClip@CDrClip@@2UCRuntimeClass@@A 
+;		?Serialize@CDrClip@@UAEXAAVCArchive@@@Z
+
+;		?CreateObject@CDrClip@@SGPAVCObject@@XZ 
+;		?PushUp@CDrClip@@IAEXPAUWORLD@@0@Z 
+;		?PushDown@CDrClip@@IAEXPAUWORLD@@0@Z 
+;		?PushRight@CDrClip@@IAEXPAUWORLD@@0@Z 
+;		?PushLeft@CDrClip@@IAEXPAUWORLD@@0@Z 
+;		?PushFront@CDrClip@@IAEXPAUWORLD@@0@Z 
+;		?PushBack@CDrClip@@IAEXPAUWORLD@@0@Z 
+;		?Push@CDrClip@@IAEXGPAUWORLD@@0@Z 
+;		?ClipEncode@CDrClip@@IAEGPAUWORLD@@@Z 
+;		?ClipLine_SC@CDrClip@@UAE?AW4VISIBILITY@@PAUWORLD@@0@Z 
+;		?ClipPt@CDrClip@@UAE?AW4VISIBILITY@@PAUWORLD@@@Z 
+;		?ClipLine_LB@CDrClip@@UAE?AW4VISIBILITY@@PAUWORLD@@0@Z 
+;		?ClipPt_LB@CDrClip@@IAEHNNPAN0@Z 
+;		?SetzMin@CDrClip@@UAEXN@Z  
+;		?GetzMin@CDrClip@@UAENXZ   
+;		?SetPerspective@CDrClip@@UAEXH@Z 
+;		?GetPerspective@CDrClip@@UAEHXZ 
+;		?SetCanonical@CDrClip@@UAEXH@Z 
+;		?GetCanonical@CDrClip@@UAEHXZ 
+
+	
+
+	
+; CMsMath
+;	; Constructor and Destructor
+		??0CMsMath@@QAE@XZ
+		??1CMsMath@@UAE@XZ         
+
+; ?IsCoLinear@CMsMath@@QAEHPAUWORLD@@00@Z
+; ?IsCoPlanar@CMsMath@@QAEHPAUWORLD@@0000PAN@Z
+; ?IsIntersect_LINE_LINE@CMsMath@@QAEHPAUWORLD@@AAU2@@Z
+;
+;		END OF MODULE
+;
+
+

@@ -1,0 +1,15 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by MPatMgr.rc
+//
+#define HIDC_AXIS                       0x806c0402    // IDD_PAT_IN_REVOLV
+#define HIDC_AXIS_X                     0x806c03fc    // IDD_PAT_IN_REVOLV
+#define HIDC_AXIS_Y                     0x806c03fd    // IDD_PAT_IN_REVOLV
+#define HIDC_AXIS_Z                     0x806c03fe    // IDD_PAT_IN_REVOLV
+#define HIDC_ELEMS                      0x806603ec    // IDD_LOFTX_PATCH
+#define HIDC_ELEMSV                     0x807103ee    // IDD_PAT_IN_TENSOR
+#define HIDC_NEGATIVE                   0x806c0400    // IDD_PAT_IN_REVOLV
+#define HIDC_RATIO                      0x806b03ed    // IDD_PAT_IN_LOFT
+#define HIDC_RATIOV                     0x807103ef    // IDD_PAT_IN_TENSOR
+#define HIDC_STATIC                     0x8066ffff    // IDD_LOFTX_PATCH
+#define HIDC_UPDATE                     0x8070038a    // IDD_PAT_IN_COONS
+#define HIDD_CANCEL                     0x80700002    // IDD_PAT_IN_COONS

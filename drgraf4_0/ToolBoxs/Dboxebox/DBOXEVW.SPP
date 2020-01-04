@@ -1,0 +1,171 @@
+// dboxevw.cpp : implementation of the CDBoxEBoxView class
+//
+
+#include "stdafx.h"
+#include "dboxebox.h"
+#include "mainfrm.h"
+/////////////////////////////////////////////// toolboxes
+#include "dbebextn.h"         
+///////////////////////////////////////////////
+#include "dboxedoc.h"
+#include "dboxevw.h"
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CDBoxEBoxView
+
+IMPLEMENT_DYNCREATE(CDBoxEBoxView, CView)
+
+BEGIN_MESSAGE_MAP(CDBoxEBoxView, CView)
+	//{{AFX_MSG_MAP(CDBoxEBoxView)
+	ON_WM_CREATE()
+	ON_WM_LBUTTONDOWN()
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CDBoxEBoxView construction/destruction
+
+CDBoxEBoxView::CDBoxEBoxView()
+{
+	// TODO: add construction code here
+}
+
+CDBoxEBoxView::~CDBoxEBoxView()
+{
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CDBoxEBoxView drawing
+
+void CDBoxEBoxView::OnDraw(CDC* pDC)
+{
+	CDBoxEBoxDoc* pDoc = GetDocument();
+	ASSERT_VALID(pDoc);
+
+	// TODO: add draw code for native data here
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CDBoxEBoxView diagnostics
+
+#ifdef _DEBUG
+void CDBoxEBoxView::AssertValid() const
+{
+	CView::AssertValid();
+}
+
+void CDBoxEBoxView::Dump(CDumpContext& dc) const
+{
+	CView::Dump(dc);
+}
+
+CDBoxEBoxDoc* CDBoxEBoxView::GetDocument() // non-debug version is inline
+{
+	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CDBoxEBoxDoc)));
+	return (CDBoxEBoxDoc*)m_pDocument;
+}
+#endif //_DEBUG
+
+/////////////////////////////////////////////////////////////////////////////
+// CDBoxEBoxView message handlers
+
+int CDBoxEBoxView::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CView::OnCreate(lpCreateStruct) == -1)
+		return -1;
+    /////////////////////////////////////////////////////////
+	CMainFrame* pWnd = (CMainFrame*)(AfxGetApp()->m_pMainWnd );
+	/////////////////////////////////////////////////////////
+	CRect	mainFrameclientRect,viewRect,Rect;
+	int width,height;
+	/////////////////////////////////////////////////////////////////////////// toolboxes 
+	pWnd->GetClientRect(&mainFrameclientRect); 
+	///////////////////////////////////////////// DrawBox 
+	width  		= (int)pWnd->GetDrawBox()->GetWidth();
+	height 		= (int)pWnd->GetDrawBox()->GetHeight();
+	
+   	Rect.left   = mainFrameclientRect.right - width;
+   	Rect.top    = 41;        // 
+   	Rect.right  = mainFrameclientRect.right;
+   	Rect.bottom = mainFrameclientRect.top + height;
+//	ClientToScreen(&Rect);
+	::AdjustWindowRect(&Rect,WS_BORDER|WS_CAPTION,FALSE); 
+	////////////////////////////////////// shift to adjust caption+border
+	pWnd->GetDrawBox()->SetWindowPos(NULL,Rect.left,Rect.top,Rect.right-Rect.left,
+                        Rect.bottom-Rect.top,SWP_NOZORDER|SWP_SHOWWINDOW);
+	///////////////////////////////////////////// ElemBox 
+	width  = (int)pWnd->GetElemBox()->GetWidth();
+	height = (int)pWnd->GetElemBox()->GetHeight(); 
+	
+   	Rect.left   = mainFrameclientRect.left;
+   	Rect.top    = 41;        // 
+   	Rect.right  = mainFrameclientRect.left + width;
+   	Rect.bottom = mainFrameclientRect.top + height;
+//	ClientToScreen(&Rect);
+	::AdjustWindowRect(&Rect,WS_BORDER|WS_CAPTION,FALSE); 
+	////////////////////////////////////// shift to adjust caption+border
+	pWnd->GetElemBox()->SetWindowPos(NULL,Rect.left,Rect.top,Rect.right-Rect.left,
+                        Rect.bottom-Rect.top,SWP_NOZORDER|SWP_SHOWWINDOW);								
+	////////////////////////////////////////////////////////////////////////////////// 
+	
+	return 0;
+}
+//////////////////////////////////////////
+
+
+void CDBoxEBoxView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	// TODO: Add your message handler code here and/or call default
+    /////////////////////////////////////////////////////////
+	CMainFrame* pWnd = (CMainFrame*)(AfxGetApp()->m_pMainWnd );
+	///////////////////
+	static CString str;
+	str = "EBoxDBox:LButDown\n";
+	/////////////////////////////////////////////////////////
+	// following logic won't work if both boxes have button down
+	// in actual situation, one of the boxes will be disabled
+	///////////////////////////////////////////////////////// ElemBox	
+	int nID = pWnd->GetElemBox()->GetActiveElemObject();
+	if(nID>=0) 
+	{
+		////////////////////////////////////////// get index 
+		for (int i = 0; i<nMax_ElemTypes; i++)
+		{
+			if(nID == ElTypes[i].num)
+			{
+				str += ElTypes[i].ObjName; 
+				AfxMessageBox(str);
+				return;
+			}
+		} 
+	}	
+	///////////////////////////////////////////////////////// DrawBox	
+	nID = pWnd->GetDrawBox()->GetActiveDrawObject();// 
+	if(nID<0) return;
+	////////////////////////////////////////// get index
+	for (int i = 0; i<nMax_DBoxTypes; i++)
+	{
+		if(nID == DbTypes[i].num)
+		{
+			str += DbTypes[i].ObjName;
+			/////////////////////////
+			if((nID = pWnd->GetDrawBox()->GetActiveTool())>=0)
+			{
+				for (int j = 0; j<nMax_DBoxTypes; j++)
+				{
+					if(nID == DbTypes[j].num)
+					str += DbTypes[j].ObjName;
+				}	 
+            }
+			AfxMessageBox(str);
+			return;
+		}
+	}	
+	
+	
+}

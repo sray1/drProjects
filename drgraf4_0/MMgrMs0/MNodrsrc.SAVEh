@@ -1,0 +1,37 @@
+//{{NO_DEPENDENCIES}}
+// Microsoft Developer Studio generated include file.
+// Used by Mouse_Dlg.rc
+//
+#define IDD_NOD_IN                      103
+#define IDC_COORD                       400
+#define IDC_DIRECTION                   401
+#define IDD_NODE_ID                     402
+#define IDD_NODE_X                      403
+#define IDD_NODE_DX                     404
+#define IDD_NODE_Y                      405
+#define IDD_NODE_DY                     406
+#define IDD_NODE_Z                      407
+#define IDD_NODE_DZ                     408
+#define IDD_NODE_NID_R                  409
+#define IDD_NODE_X2                     410
+#define IDD_NODE_Y2                     411
+#define IDD_NODE_Z2                     412
+#define IDC_CNODE_FROM                  413
+#define IDC_CNODE_TO                    414
+#define IDD_LENGTH                      415
+#define IDD_NODE_SUP_ID                 416
+#define IDD_NODE_LOAD_ID                417
+#define IDD_ELP_NODE                    419
+#define IDC_NID                         1010
+#define IDC_SUPID                       1011
+#define IDC_OTHER                       1014
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NEXT_RESOURCE_VALUE        125
+#define _APS_NEXT_COMMAND_VALUE         40001
+#define _APS_NEXT_CONTROL_VALUE         1062
+#define _APS_NEXT_SYMED_VALUE           101
+#endif
+#endif

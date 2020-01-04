@@ -1,0 +1,132 @@
+; View_D.def -- for CViewObj stuff --  DEBUG version
+
+LIBRARY	View_D
+DESCRIPTION  'ViewObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitViewDLL												@2 NONAME
+
+; CRowView
+;	; Constructor and Destructor
+	??0CRowView@@REC@XZ
+	??1CRowView@@NEC@XZ
+	
+	?GetRuntimeClass@CRowView@@VFCPEUCRuntimeClass@@XZ
+    ?classCRowView@CRowView@@2UCRuntimeClass@@A
+	?GetMessageMap@CRowView@@NFCPEUAFX_MSGMAP@@XZ
+	?messageMap@CRowView@@1UAFX_MSGMAP@@A
+; Operations
+	?UpdateRow@CRowView@@VECXH@Z
+
+; Implementation
+; standard overrides of MFC classes
+	?OnInitialUpdate@CRowView@@NECXXZ
+	?OnDraw@CRowView@@NECXPEVCDC@@@Z
+	?OnPrepareDC@CRowView@@NECXPEVCDC@@PEUCPrintInfo@@@Z
+	?OnPreparePrinting@CRowView@@NECHPEUCPrintInfo@@@Z
+	?OnBeginPrinting@CRowView@@NECXPEVCDC@@PEUCPrintInfo@@@Z
+	?OnPrint@CRowView@@NECXPEVCDC@@PEUCPrintInfo@@@Z
+
+	?CalculateRowMetrics@CRowView@@NECXPEVCDC@@@Z
+	?UpdateScrollSizes@CRowView@@NECXXZ
+	?RowToWndRect@CRowView@@NEC?EVCRect@@PEVCDC@@H@Z
+	?RowToYPos@CRowView@@NECHH@Z
+	?RectLPtoRowRange@CRowView@@NECXAFVCRect@@AEH1H@Z
+	?LastViewableRow@CRowView@@NECHXZ
+    
+
+
+; CDrawView
+;	; Constructor and Destructor
+	??0CDrawView@@JEC@XZ
+	??1CDrawView@@VEC@XZ
+ 	                                    
+	?GetRuntimeClass@CDrawView@@VFCPEUCRuntimeClass@@XZ
+ 	?classCDrawView@CDrawView@@2UCRuntimeClass@@A
+	?GetMessageMap@CDrawView@@NFCPEUAFX_MSGMAP@@XZ
+	?messageMap@CDrawView@@1UAFX_MSGMAP@@A
+
+; Operations
+
+    ?OnInitialUpdate@CDrawView@@VECXXZ
+	?UpdateObject@CDrawView@@VECXHHH@Z
+	?OnPrepareDC@CDrawView@@VECXPEVCDC@@PEUCPrintInfo@@@Z
+
+; Implementation
+; standard overrides of MFC classes
+	?OnDraw@CDrawView@@VECXPEVCDC@@@Z
+;?RenderReadySCENE@CDrawView@@NECXPEVCDC@@@Z
+;?RenderReadyOBJECT@CDrawView@@NECXPEVCDC@@PEVCDrObject@@H@Z
+?Transform@CDrawView@@VECXPEUWORLD@@0@Z
+?Project@CDrawView@@VECXPEUWORLD@@0H@Z
+
+;//	virtual BOOL OnPreparePrinting(CPrintInfo* pInfo);
+;//	virtual void OnBeginPrinting(CDC* pDC, CPrintInfo* pInfo);
+;//	virtual void OnPrint(CDC* pDC, CPrintInfo* pInfo);
+
+;//	virtual void UpdateScrollSizes();
+	?PreCreateWindow@CDrawView@@NECHAEUtagCREATESTRUCT@@@Z
+
+;?Init3DWindow@CDrawView@@VECXXZ
+?UpdateViewMatrix@CDrawView@@VECXXZ
+?UpdatePerToParMatrix@CDrawView@@VECXXZ
+?UpdateCombinedMatrix@CDrawView@@VECXXZ
+?UpdateWin3DtoViewPort3DMatrix@CDrawView@@VECXXZ
+
+;?Corner_3Dto2D@CDrawView@@VECXPEVCDrObject@@H@Z
+
+?GoRender@CDrawView@@NECXPEVCDC@@VCRect@@H@Z
+?GetObjectReadyforRender@CDrawView@@NECXPEVCDC@@PEVCDrObject@@H@Z
+;
+?GetMatrix@CDrawView@@VECPEUMATRIX@@W4MATRICES@@@Z
+?SetMatrix@CDrawView@@VECXW4MATRICES@@PEUMATRIX@@@Z
+?SetScalevv3DToLP@CDrawView@@VECXXZ
+?OnCreate@CDrawView@@RECHPEUtagCREATESTRUCT@@@Z
+
+
+
+; CZBuffer
+;	; Constructor and Destructor
+ 	??0CZBuffer@@REC@XZ   									
+ 	??1CZBuffer@@VEC@XZ
+
+	?classCZBuffer@CZBuffer@@2UCRuntimeClass@@A
+	?Serialize@CZBuffer@@VECXAEVCArchive@@@Z
+
+	?InitZB@CZBuffer@@VECHFFFF@Z
+	?TermZB@CZBuffer@@VECXXZ
+;?GetZdepth@CZBuffer@@VECNFF@Z
+;?SetZdepth@CZBuffer@@VECHFFNNN@Z
+	?UnSetZdepth@CZBuffer@@VECXFF@Z
+	
+
+
+
+; CColorPal
+;	; Constructor and Destructor
+ 	??0CColorPal@@REC@XZ   									
+ 	??1CColorPal@@VEC@XZ
+
+	?GetRuntimeClass@CColorPal@@VFCPEUCRuntimeClass@@XZ
+
+	?RGB2HSV@CColorPal@@VECXPEURGBCOLOR@@PEUHSVCOLOR@@@Z
+	?HSV2RGB@CColorPal@@VECXPEUHSVCOLOR@@PEURGBCOLOR@@@Z
+?Make256ColorPal@CColorPal@@VECHPEV1@@Z
+?MakeNewPal@CColorPal@@VECHPEV1@NHHH@Z
+?LoadStockPal@CColorPal@@VECHPEV1@PED@Z
+	?SelectPal@CColorPal@@VECPEV1@PEVCClientDC@@PEV1@@Z
+	?DisposePal@CColorPal@@VECXPEV1@@Z 
+	
+  

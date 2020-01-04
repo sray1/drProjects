@@ -1,0 +1,108 @@
+--------------------Configuration: MMgrMs0 - Win32 Debug--------------------
+Begining build with project "C:\drgraf4_0\MMgrMs0\MMgrMs0.dsp", at root.
+Active configuration is Win32 (x86) Dynamic-Link Library (based on Win32 (x86) Dynamic-Link Library)
+
+Project's tools are:
+			" (fl32.exe)" with flags "/I "Debug/" "
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W4 /Gm /GR /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs0.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo".\Debug/MMs0Mgr.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o".\Debug/MMgrMs0.bsc" "
+			"COFF Linker for 80x86" with flags "OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs0_d32.pdb" /map:".\Debug/MMs0_d32.map" /debug /machine:I386 /def:".\MMs0Mgr.def" /out:"c:\drgraf4_0\applic\Debug\MMs0_d32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs0_d32.lib" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "C:\WINDOWS\TEMP\RSP8061.TMP" with contents </nologo /MDd /W4 /Gm /GR /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs0.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs0\Po_FE0D.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP8061.TMP" 
+Creating temp file "C:\WINDOWS\TEMP\RSP8062.TMP" with contents <OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs0_d32.pdb" /map:".\Debug/MMs0_d32.map" /debug /machine:I386 /def:".\MMs0Mgr.def" /out:"c:\drgraf4_0\applic\Debug\MMs0_d32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs0_d32.lib" 
+.\Debug\dlg_enoA.obj
+.\Debug\dlg_ENod.obj
+.\Debug\Mi_Gang0.obj
+.\Debug\MMs0dll.obj
+.\Debug\MMs0Mgr.obj
+.\Debug\Po_FE0D.obj
+.\Debug\MMs0Mgr.res>
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP8062.TMP" 
+Compiling...
+Po_FE0D.cpp
+Linking...
+   Creating library c:\drgraf4_0\applic\Debug/MMs0_d32.lib and object c:\drgraf4_0\applic\Debug/MMs0_d32.exp
+--------------------Configuration: MMgrMs1 - Win32 Debug--------------------
+Begining build with project "C:\drgraf4_0\MMgrMs1\MMgrMs1.dsp", at root.
+Active configuration is Win32 (x86) Dynamic-Link Library (based on Win32 (x86) Dynamic-Link Library)
+
+Project's tools are:
+			" (fl32.exe)" with flags "/Zi /I "Debug/" /c /nologo /MT "
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs1.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo".\Debug/MMs1Mgr.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o".\Debug/MMgrMs1.bsc" "
+			"COFF Linker for 80x86" with flags "OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib Mesh_D32.lib MMgr_D32.lib MMs0_D32.lib MNod_D32.lib MCur_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs1_D32.pdb" /map:".\Debug/MMs1_D32.map" /debug /machine:I386 /def:".\MMs1Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs1_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs1_D32.lib" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "C:\WINDOWS\TEMP\RSP8285.TMP" with contents <OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib Mesh_D32.lib MMgr_D32.lib MMs0_D32.lib MNod_D32.lib MCur_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs1_D32.pdb" /map:".\Debug/MMs1_D32.map" /debug /machine:I386 /def:".\MMs1Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs1_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs1_D32.lib" 
+.\Debug\Dlg_1Mrg.obj
+.\Debug\Mi_1Prof.obj
+.\Debug\Mi_Gang1.obj
+.\Debug\MMs1dll.obj
+.\Debug\MMs1Mgr.obj
+.\Debug\Po_Beam.obj
+.\Debug\Po_Elbow.obj
+.\Debug\Po_FE1D.obj
+.\Debug\Po_Pipe.obj
+.\Debug\Po_Truss.obj
+.\Debug\MMs1Mgr.res
+\drgraf4_0\applic\Debug\MMs0_d32.lib>
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP8285.TMP" 
+Linking...
+   Creating library c:\drgraf4_0\applic\Debug/MMs1_D32.lib and object c:\drgraf4_0\applic\Debug/MMs1_D32.exp
+--------------------Configuration: MMgrMs2 - Win32 Debug--------------------
+Begining build with project "C:\drgraf4_0\MMgrMs2\MMgrMs2.dsp", at root.
+Active configuration is Win32 (x86) Dynamic-Link Library (based on Win32 (x86) Dynamic-Link Library)
+
+Project's tools are:
+			" (fl32.exe)" with flags "/Zi /I "Debug/" /c /nologo /MT "
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs2.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo".\Debug/MMs2Mgr.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o".\Debug/MMgrMs2.bsc" "
+			"COFF Linker for 80x86" with flags "OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib MMs0_D32.lib MMs1_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs2_D32.pdb" /map:".\Debug/MMs2_D32.map" /debug /machine:I386 /def:".\MMs2Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs2_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs2_D32.lib" "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "C:\WINDOWS\TEMP\RSP8344.TMP" with contents </nologo /MDd /W4 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs2.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP8344.TMP" 
+Creating temp file "C:\WINDOWS\TEMP\RSP8345.TMP" with contents <OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib MMs0_D32.lib MMs1_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs2_D32.pdb" /map:".\Debug/MMs2_D32.map" /debug /machine:I386 /def:".\MMs2Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs2_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs2_D32.lib" 
+.\Debug\Dlg_2Mrg.obj
+.\Debug\Mi_2Prof.obj
+.\Debug\Mi_Gang2.obj
+.\Debug\Mi_Qang2.obj
+.\Debug\Mi_Tang2.obj
+.\Debug\MMs2dll.obj
+.\Debug\MMs2Mgr.obj
+.\Debug\Po_FE2D.obj
+.\Debug\Po_Qu_12.obj
+.\Debug\Po_Qu_16.obj
+.\Debug\Po_Qu_4.obj
+.\Debug\Po_Qu_8.obj
+.\Debug\Po_Qu_9.obj
+.\Debug\Po_Tr_10.obj
+.\Debug\Po_Tr_3.obj
+.\Debug\Po_Tr_6.obj
+.\Debug\Po_Tr_9.obj
+.\Debug\MMs2Mgr.res
+\drgraf4_0\applic\Debug\MMs1_D32.lib>
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP8345.TMP" 
+Compiling...
+Mi_Qang2.cpp
+Linking...
+   Creating library c:\drgraf4_0\applic\Debug/MMs2_D32.lib and object c:\drgraf4_0\applic\Debug/MMs2_D32.exp
+
+
+
+MMs2_D32.dll - 0 error(s), 0 warning(s)

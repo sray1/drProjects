@@ -1,0 +1,433 @@
+// Rotate.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+
+#include "math.h"
+#include "XForm.h"
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "DListMgr.h"
+///////////////////// elements
+#include "Def_Elem.h"
+#include "DrLabel.h"
+///////////////////// dialogMgr
+#include "MMs2Mgr.h"
+#include "Dlg_Spn2.h"
+////////////////////
+#include "MI_Gang0.h"
+#include "MI_Gang2.h"
+ 
+#include "MI_2SPN.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define new	DEBUG_NEW
+#define	BUFF_SIZE			1024
+#define MIN_CNODES_MESH2D	4
+#define	NUM_LEN				12 
+#define	MAX_SEG_ANGLE		120
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_2SPN,CMI_1SPN,1)
+/////////////////////////////////////////////////////////////////////////////
+CMI_2SPN::CMI_2SPN()
+{
+	m_pContextPat = NULL;
+	m_pContextSol = NULL;
+}
+
+CMI_2SPN::~CMI_2SPN()
+{
+}
+
+int CMI_2SPN::SpawnMESH2DShowingDlg(CDrMesh2D* pNewMESH2D,CDrMesh2D* pOldMESH2D, 
+									CDrObject* pContextObj, UINT nContextType) 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	////////////////////////////////////////////////////////////////
+	switch(nContextType)
+	{
+		case MESH2D:
+			m_pContextPat = (CDrMesh2D*)pContextObj;
+			break;
+		case MESH3D:
+			m_pContextSol = (CDrMesh3D*)pContextObj;
+			break;
+		case MBJ3D:
+			m_pContextO3D = (CDrMbj3D*)pContextObj;
+			break;
+		default:
+			AfxMessageBox("ERROR:CMI_2SPN::CSpawn\nILLEGAL nContextType");
+			return -1;
+	}
+	/////////////////////
+	m_pDrMESH2D = pNewMESH2D;
+	////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	////////////////////////////////////////////////////////////////
+	int nResult = GetInfoFromDlg(m_pDrMESH2D,pOldMESH2D);
+	if(nResult<0)
+		return nResult;// error or cancel
+	///////////////////////////////////////////////////////////////////// Go Generate	
+	if(m_pDrMESH2D)
+	{
+		; // do nothing
+/*
+		CString* str = new CString;
+		char* buf = str->GetBuffer(80);
+				
+		sprintf(buf,"Got All MESH2D Spawning Info");
+		/////////////////////////	
+		AfxMessageBox(*str);
+		/////////////////////////
+		str->ReleaseBuffer();
+		delete str;
+*/
+	}	
+	else
+		return -1;	// error
+	///////////////////////////////// Spawn MESH2D
+	MATRIX Mat;
+	///////////
+	if(m_pDrMESH2D->IsInstanced())
+	{
+		CMatObj* pMatObj	= m_pDrMESH2D->GetMatObj();
+		Mat					= *(pMatObj->GetMatrix());
+		/////////////////////
+		if(SpawnMESH2D(pOldMESH2D, &Mat)<0)
+			return -1;
+		/////////////////////
+	}
+	else
+	{
+		MATRIX Mat;
+		C3DMath Math3D;
+		Math3D.GetIdentityMATRIX(&Mat);
+		/////////////////////
+		if(SpawnMESH2D(pOldMESH2D, &Mat)<0)
+			return -1;
+		/////////////////////
+	}
+	///////////////////////////// make it Unposted 
+	m_pDrMESH2D->SetPosted(FALSE);
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrMESH2D->Calc_3DBoundsLocal();
+	/////////
+	return 0;		 
+}			
+	 
+int CMI_2SPN::GetInfoFromDlg(CDrMesh2D* pNewMESH2D, CDrMesh2D* pOldMESH2D)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CMMs2Mgr* 	pCurMgr;
+	CString		Cid = pNewMESH2D->GetObjectID();
+	CString		ParentID = pOldMESH2D->GetObjectID(); 
+	///////////////////////////////////////////////////
+	if (pCurMgr->DoModal_Spawn_2(pNewMESH2D,&Cid,ParentID) == IDCANCEL)
+		return -2; 
+	/////////
+	return 0;
+}
+	 
+int CMI_2SPN::SpawnMESH2D(CDrMesh2D* pOldMESH2D, pMATRIX pXFMat)
+{
+	CDListMgr*	pFE0DList;
+	int			nResult;
+	/////////////////////////////////////////////////////////// FE0D/MNode
+    pFE0DList = m_pDrMESH2D->GetFE0DList();
+	/////////////////////////////////////////// Fill with Old FE0Ds
+	pFE0DList->RemoveAll();
+	pFE0DList->AddTail(pOldMESH2D->GetFE0DList());
+	///
+	if(pFE0DList->IsEmpty())
+	{
+		AfxMessageBox("Internal ERROR:\nCMI_2SPN::SpawnMESH1D\npFE0DList->IsEmpty()!");
+		return -1;
+	}
+	/////////////////////////
+	nResult = SpawnFE0DListinMESH2D(pFE0DList, pXFMat, FALSE);	// MNode/FE0D
+	///////
+	if(nResult<0)
+	{
+		AfxMessageBox("Internal ERROR:\nCMI_2SPN::SpawnMESH2D\nFE0DList Regen Problem!");
+		return -1;
+	}
+	////////////////////////////// Reciprocate
+	ReciprocateMESH2DNodes(pFE0DList);
+	/////////////////////////////////////////////////////////// CNode
+	if(!(pOldMESH2D->GetNodeList()->IsEmpty()) )
+	{
+	    pFE0DList = m_pDrMESH2D->GetNodeList();
+		/////////////////////////////////////////// Fill with Old CNodes
+		pFE0DList->RemoveAll();
+		pFE0DList->AddTail(pOldMESH2D->GetNodeList());
+		///
+		if(pFE0DList->IsEmpty())
+		{
+			AfxMessageBox("Internal ERROR:\nCMI_2SPN::SpawnMESH2D\npFE0DList->IsEmpty()!");
+			return -1;
+		}
+		/////////////////////////
+		nResult = SpawnFE0DListinMESH2D(pFE0DList, pXFMat, TRUE);	// bCNode = TRUE
+		///////
+		if(nResult<0)
+		{
+			AfxMessageBox("Internal ERROR:\nCMI_2SPN::SpawnMESH2D\nFE0DList Regen Problem!");
+			return -1;
+		}
+		////////////////////////////// Reciprocate
+		ReciprocateMESH2DNodes(pFE0DList);
+	}
+	/////////////////////////////////////////////////////////// FE1D/FE2D
+	CMI_Gang2 Gang2;
+	nResult = Gang2.Regen_MESH2D_Elements((CDrObject*)m_pDrMESH2D,(CDrObject*)pOldMESH2D);
+	if(nResult<0)
+	{
+		AfxMessageBox("Internal ERROR:\nCMI_2SPN::SpawnMESH2D\nFE1DList Regen Problem!");
+		return -1;
+	}
+	////////////
+	return 0;
+}
+
+int CMI_2SPN::SpawnFE0DListinMESH2D(CDListMgr* pFillList, pMATRIX pXFMat, BOOL bCNode)
+{
+	if(pFillList->IsEmpty())
+		return 0;
+	////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CDListMgr TempList;
+	TempList.RemoveAll();
+	////////////////////////////////////////////////// copy
+	TempList.AddTail(pFillList);
+	////////////////////////////////////////////////// Empty it
+	pFillList->RemoveAll();
+	/////////////////////////////////////////////////////////////////// XForm 
+	int			nMaxNodes;
+	CString		NewNID;
+	int s;
+	/////////////////////////////////////////////////////////// Data
+	nMaxNodes		 	= TempList.GetCount();
+	////////////////////////////////////////// 	
+	CDrFE0D* pOldNode;
+	//////////////////
+	for (s = 0; s<nMaxNodes; s++)
+	{
+		pOldNode = (CDrFE0D*)TempList.GetObject( s);
+		/////////////////////////////////////////////////////////////////  New
+		CDrFE0D NewNode;
+		///////////////////////////////////////// Get ID
+		NewNID = "";	// force it to create a name
+		int nResult = SpawnNodeWithoutDlg(&NewNode,pOldNode,pXFMat,&NewNID,
+													bCNode,m_pDrMESH2D,MESH2D);
+		///////////////////////////////////// in MESH2D 
+		if(nResult<0)
+			return -1;
+		///////////////////////////////////////////////////////////////
+		CDrFE0D*	pNewNode;
+		BOOL		bFinal = TRUE;;
+		CMI_Gang0	Gang0;
+		CDrLabel*	pLabel;
+		int			nNodeIndex = -12345;	//Create Anyway
+		int			nLabelIndex= 0;
+		///////////////////////////////
+		if(bCNode)		// Control Node
+		{
+			////////////////////////////
+			WORLD LocalPos = *(NewNode.GetLocalPos());
+			///////////////////////////////////// in THE List 
+			pNewNode = Gang0.PostFE0D(NewNID,LocalPos,TRUE,FALSE);	// Create DrCNode
+			if(!pNewNode)	// Create DrCNode
+				return -1;
+			///////////////////////////////////// in MESH2D 	
+			pNewNode->SetLevelType((int)LEVEL_KIDDO);          // private
+			//////////
+			if(bFinal)
+			{
+				//////////////////////////////////////////// if New Node Change Level/Reciprocate
+				if(pNewNode->GetObjectID() == NewNID)
+				{
+					//////////////////////////////////////// Reciprocate
+					pNewNode->GetMs1List()->InsertObject(m_pDrMESH2D);
+					m_pDrMESH2D->GetNodeList()->InsertObject(pNewNode);
+					////////
+				}
+			}
+		}
+		else		// Input Nodes
+		{
+			BOOL bMNode = pOldNode->IsMeshNode(); 
+			/////////////////////////////////////////////////////////////////
+			WORLD LocalPos = *(NewNode.GetLocalPos());
+			///////////////////////////////////// in THE List 
+			pNewNode = Gang0.CreateFE0D(NewNID,pLabel, LocalPos, bCNode, TRUE, bMNode,
+									nNodeIndex,nLabelIndex);// FALSE=Input/TRUE=InternallyGen
+			pNewNode->SetLevelType((int)LEVEL_GRAPA); // OverRide
+			pNewNode->SetCategory(CA_ELEMENT);
+			//////////////////////////////////////// Reciprocate
+//			pNewNode->GetMESH2DList()->InsertObject(m_pDrMESH2D);	// done later
+			///////////////////////////////////////////
+			//	Need To FinishObject for RectBound 
+			////////////////////////////////////////////////////////////////////// Show
+			pObjectMgr->SetActiveObjectIndex(nLabelIndex);		    // set Active Index for Label									
+			pObjectMgr->SetActiveObjectType(LABEL);					// set Active ObjectType									
+			pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nLabelIndex,LABEL);
+			//////////////////////////////////////////////////////////
+			pObjectMgr->SetActiveObjectIndex(nNodeIndex);	// set Active Index									
+			pObjectMgr->SetActiveObjectType(FE0D);		    // set Active Type									
+			pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nNodeIndex,FE0D);
+
+		}
+		//////////////
+		pFillList->InsertObject(pNewNode); //CNodeList 
+		////////
+	}				
+	///////////////////////////////////////////////////////// Empty it
+	TempList.RemoveAll();
+	////////////
+	return 0;
+}
+	 		
+void CMI_2SPN::ReciprocateMESH2DNodes(CDListMgr* pList)
+{
+	if(!pList || pList->IsEmpty())
+		return;
+	///////////////////////////////////
+	int s,nMaxNodes;
+	nMaxNodes = pList->GetCount();
+	/////////////////////////////
+	for (s = 0; s<nMaxNodes; s++)
+	{
+		CDrFE0D* pNewNode	= (CDrFE0D*)(pList->GetObject(s));
+		//////////////////////////////////////// Reciprocate
+		pNewNode->GetMs2List()->InsertObject(m_pDrMESH2D);
+		////////
+	}
+}
+	 		
+int CMI_2SPN::SpawnMESH2DWithoutDlg(CDrMesh2D* pNewMESH2D,CDrMesh2D* pOldMESH2D,pMATRIX pXFMat,
+						CString* pCid,CDrObject* pContextObj,UINT nContextType)
+{
+	///////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////
+	CString		MESH2DID = "",PatchID="",SolidID="",Obj3DID="";
+	//////////////////////////////////////////////////////////////// Name
+	switch(nContextType)
+	{
+		case MESH2D:
+			m_pContextPat	= (CDrMesh2D*)pContextObj;
+			PatchID			= m_pContextPat->GetObjectID();  	
+			MESH2DID			= pOldMESH2D->GetObjectID();  	
+			break;
+		case MESH3D:
+			m_pContextSol	= (CDrMesh3D*)pContextObj;
+			SolidID			= m_pContextSol->GetObjectID();  	
+			MESH2DID			= pOldMESH2D->GetObjectID();  	
+			break;
+		case MBJ3D:
+			m_pContextO3D	= (CDrMbj3D*)pContextObj;
+			Obj3DID			= m_pContextO3D->GetObjectID();  	
+			MESH2DID			= pOldMESH2D->GetObjectID();  	
+			break;
+		default:
+			AfxMessageBox("ERROR:CMI_2SPN::SpawnMESH2DWithoutDlg\nILLEGAL nContextType");
+			return -1;
+	}
+	/////////////////////////////
+	if(*pCid == "")
+	{
+/*
+		char buf[50];
+		int nLastNum = pObjectMgr->GetLastObjectNo(MESH2D);		// internal
+		sprintf(buf,"%d",nLastNum);
+		(*pCid) = "_1";
+		(*pCid)	+= buf;
+		pObjectMgr->BumpLastObjectNo(MESH2D);		// bump it
+*/	
+		/////////////////////////////
+		CMI_Gang0 Gang0;
+		CString strID;
+		//////////////
+		Gang0.SetElemInfoID(strID,MESH2D);		
+		*pCid = strID;
+	}
+	////////////////////////////////////////////////////////////////// CREATE	
+	m_pDrMESH2D = pNewMESH2D;
+	//////////////////////////
+	int nResult = FillSpawnedMESH2DDlgDataBase(m_pDrMESH2D,*pCid, MESH2DID);
+	if(nResult<0)
+		return nResult;
+	///////////////////
+	nResult = SpawnMESH2D(pOldMESH2D,pXFMat);
+	////////////////////
+	if(nResult<0)
+		return nResult;
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrMESH2D->Calc_3DBoundsLocal();											
+	///////////////////
+	return 0;
+}
+
+int CMI_2SPN::FillSpawnedMESH2DDlgDataBase(CDrMesh2D* pDrMESH2D,CString& Cid,CString& ParentCid)
+{
+
+	//// Copies Old Mesh2D with ID = ParentCid
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	////////////////////////////////////
+	CDlg_Spn2	Dlg_SpnC;		
+	////////////////////////////////////
+	Dlg_SpnC.m_SpawnID		= Cid;
+	Dlg_SpnC.m_bInstanced 	= FALSE;
+	Dlg_SpnC.m_CID		 	= ParentCid;
+	Dlg_SpnC.m_pMatObj 		= NULL;
+	///////////////////////////////////////
+	Dlg_SpnC.SetInfoForDataBase(pDrMESH2D);
+	///////////////
+    return 0;
+}
+
+void CMI_2SPN::Serialize(CArchive& ar)
+{
+
+	CMI_1SPN::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMI_2SPN:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMI_2SPN:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////// end of module //////////////////

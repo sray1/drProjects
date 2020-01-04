@@ -1,0 +1,779 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "AuxiObjs"=..\AuxiObjs\AuxiObjs.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Dr3d_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Spec_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "CreOMMgr"=..\CreOMMgr\CreOMMgr.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs2
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "CreOpMgr"=..\CreOpMgr\CreOpMgr.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "DataBase"=..\DataBase\DataBase.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Dbox_d"=..\TOOLBOXS\DRAWBOX\Dbox_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs0
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs1
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs2
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs3
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Ddlg_d"=..\DRAW_DLG\Ddlg_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Draw_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "DeckMgr"=..\DeckMgr\DeckMgr.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "DelMgr"=..\DelMgr\DelMgr.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Dr3d_d"=..\DRAW3D\Dr3d_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Draw_d"=..\DRAWOBJS\Draw_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Dr3d_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name GenObjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Spec_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Drgraf_d"=.\Drgraf_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name AuxiObjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CreOMMgr
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name CreOpMgr
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name DataBase
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Dbox_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Ddlg_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name DeckMgr
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name DelMgr
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Dr3d_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Draw_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Ebox_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name EditMgr
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Edlg_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Elem_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name GenObjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name IGenBox
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MeshObj
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Mmgr_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrCur
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs0
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs1
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs2
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrNod
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrO3D
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrPat
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrSol
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrSupp
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Omgr_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name PostMgr
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Sdlg_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Spec_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name StaLMouse
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name StaLobjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name SuppObjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name View_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Ebox_d"=..\TOOLBOXS\ELEMBOX\Ebox_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "EditMgr"=..\EditMgr\EditMgr.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Edlg_d"=..\ELEM_DLG\Edlg_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Elem_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Ddlg_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Elem_d"=..\ELEMOBJS\Elem_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MeshObj
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "GenObjs"=..\GenObjs\GenObjs.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Dr3d_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Spec_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "IGenBox"=..\TOOLBOXS\IGenBox\IGenBox.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Dbox_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Ebox_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "InSpect"=..\InSpect\InSpect.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "MMgrCur"=..\MMgrCur\MMgrCur.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrNod
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MMgrM3D"=..\MMgrM3D\MMgrM3D.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "MMgrMs0"=..\MMgrMs0\MMgrMs0.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Omgr_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Mmgr_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MMgrMs1"=..\MMgrMs1\MMgrMs1.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs0
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MMgrMs2"=..\MMgrMs2\MMgrMs2.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs1
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MMgrMs3"=..\MMgrMs3\MMgrMs3.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "MMgrNod"=..\MMgrNod\MMgrNod.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "MMgrO3D"=..\MMgrO3D\MMgrO3D.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrSol
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MMgrPat"=..\MMgrPat\MMgrPat.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "MMgrSol"=..\MMgrSol\MMgrSol.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrPat
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MMgrSupp"=..\MMgrSupp\MMgrSupp.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrO3D
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Mdit"=..\MditMgr\Mdit.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name CreOMMgr
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "MergMgr"=..\MergMgr\MergMgr.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "MeshObj"=..\MeshObj\MeshObj.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "Mmgr_d"=..\MOUSEMGR\Mmgr_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrCur
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrNod
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrO3D
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrPat
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrSol
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MMgrSupp
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name StaLMouse
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Omgr_d"=..\GRAFMGR\Omgr_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Dr3d_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name GenObjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Spec_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name StaLobjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name SuppObjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Draw_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Elem_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MeshObj
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name AuxiObjs
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "PostMgr"=..\PostMgr\PostMgr.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrMs2
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Sdlg_d"=..\SPEC_DLG\Sdlg_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Ddlg_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Edlg_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "Spec_d"=..\SPECIALS\Spec_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "StaLMouse"=..\MMgrStaL\StaLMouse.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name MMgrSupp
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "StaLobjs"=..\StaLobjs\StaLobjs.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Dr3d_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name GenObjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Spec_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Draw_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "SuppObjs"=..\SuppObjs\SuppObjs.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name Dr3d_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name GenObjs
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Spec_d
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name Draw_d
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "View_d"=..\VIEW\View_d32.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

@@ -1,0 +1,31 @@
+!MS$FREEFORM
+! Microsoft Developer Studio generated include file.
+! Used by Dbox.rc
+!
+      integer, parameter :: IDS_CHECK_RESOURCE              = 1
+      integer, parameter :: IDB_DBOX                        = 109
+      integer, parameter :: IB_VOPRBOX                      = 110
+      integer, parameter :: IDW_DRAWBAR                     = 119
+      integer, parameter :: IDW_CUSTOMCOLOR                 = 121
+      integer, parameter :: IDB_CUSTOMFORE                  = 122
+      integer, parameter :: IDB_CUSTOMBACK                  = 123
+      integer, parameter :: IDB_ROTATE                      = 201
+      integer, parameter :: IDB_ZOOM                        = 202
+      integer, parameter :: IDB_PAN                         = 203
+      integer, parameter :: IDB_ANIMATE                     = 204
+      integer, parameter :: IDC_BUTTON                      = 211
+      integer, parameter :: IDB_LABEL                       = 2001
+      integer, parameter :: IDB_FREEHAND                    = 2002
+      integer, parameter :: IDB_RECT_FILL                   = 2003
+      integer, parameter :: IDB_RECT                        = 2004
+      integer, parameter :: IDB_RRECT_FILL                  = 2005
+      integer, parameter :: IDB_RRECT                       = 2006
+      integer, parameter :: IDB_CIRCLE_FILL                 = 2007
+      integer, parameter :: IDB_CIRCLE                      = 2008
+      integer, parameter :: IDB_LINE                        = 2009
+      integer, parameter :: IDB_GRID                        = 2101
+      integer, parameter :: IDB_DIMENSION                   = 2103
+      integer, parameter :: IDB_FONT                        = 2104
+      integer, parameter :: IDB_BRUSH                       = 2105
+      integer, parameter :: IDB_EDIT                        = 2201
+      integer, parameter :: IDB_MOVE                        = 2202

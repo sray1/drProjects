@@ -1,0 +1,53 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Mmgr_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Build : warning : failed to (or don't know how to) build 'c:\drgraf4_0\allheads\usermsg.h'
+
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP8.tmp" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib EDlg_D32.lib DDlg_D32.lib Dr3D_D32.lib MSup_D32.lib MStL_D32.lib MNod_D32.lib MCur_D32.lib MPat_D32.lib MSol_D32.lib MO3D_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/Mmgr_d32.pdb" /map:".\Debug/Mmgr_d32.map" /debug /machine:IX86 /def:".\Mmgr_d.def" /out:"c:\drgraf4_0\applic\Debug\Mmgr_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Mmgr_d32.lib" 
+.\Debug\CalcTime.obj
+.\Debug\CurMouse.obj
+.\Debug\Dbmouse.obj
+.\Debug\DLDmouse.obj
+.\Debug\Mi_cur_i.obj
+.\Debug\Mi_obj3d.obj
+.\Debug\Mi_pat_i.obj
+.\Debug\Mi_sol_i.obj
+.\Debug\Mmgrdll.obj
+.\Debug\Mouse.obj
+.\Debug\Mousemgr.obj
+.\Debug\NodMouse.obj
+.\Debug\O3DMouse.obj
+.\Debug\PatMouse.obj
+.\Debug\SLDmouse.obj
+.\Debug\SolMouse.obj
+.\Debug\SpLmouse.obj
+.\Debug\Supmouse.obj
+.\Debug\Mmgr.res
+\drgraf4_0\applic\Debug\MCur_D32.lib
+\drgraf4_0\applic\Debug\MNod_d32.lib
+\drgraf4_0\applic\Debug\MO3D_D32.lib
+\drgraf4_0\applic\Debug\MPat_D32.lib
+\drgraf4_0\applic\Debug\MSol_D32.lib
+\drGraf4_0\Applic\Debug\MSup_D32.lib
+\drGraf4_0\Applic\Debug\MStL_D32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP8.tmp"
+<h3>Output Window</h3>
+Linking...
+LINK : fatal error LNK1104: cannot open file "EDlg_D32.lib"
+Error executing link.exe.
+
+
+
+<h3>Results</h3>
+Dbox_d32.dll - 1 error(s), 1 warning(s)
+</pre>
+</body>
+</html>

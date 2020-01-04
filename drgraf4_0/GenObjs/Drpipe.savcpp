@@ -1,0 +1,702 @@
+// Pipe.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "limits.h"
+
+#include "glb_Type.h"
+#include "glb_Objs.h"
+
+#include "3DMath.h"
+#include "XForm.h"
+////////////////////// elObjs
+#include "elextern.h"
+#include "eldefine.h"
+//////////////
+#include "DrPipe.h"
+
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+/////////////////////////////
+#define COMBO_NIDJ_LOC 	9     // Location of NidJ in element ComboBox
+////////////////////////////
+#define GREEN	RGB(0,255,0)
+#define RED		RGB(255,0,0)
+/////////////////////////////////////////////////////////////////////////////
+// CDrPipe
+IMPLEMENT_SERIAL(CDrPipe, CDrObject,1)
+/*
+BEGIN_MESSAGE_MAP(CDrPipe, CDrObject)
+	//{{AFX_MSG_MAP(CDrPipe)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/  
+/////////////////////////////////////////////////////////////////////////////
+CDrPipe::CDrPipe()
+{  
+    	
+    //////////////////////////////	
+    SetObjectType((int)PIPE);
+    SetElemType((int)ELEM_OBJECT);          //
+    //////////////////////////////  
+	m_PipeCard.line_id = "";
+	m_PipeCard.mid     = "";
+	m_PipeCard.nid_i   = "";
+	m_PipeCard.nid_j   = "";
+	m_PipeCard.numseg  = 0 ;
+	m_PipeCard.pid     = "";
+	m_PipeCard.rid_i   = "";
+	m_PipeCard.rid_j   = "";
+	m_PipeCard.sid_i   = "";
+	m_PipeCard.sid_j   = "";
+	m_PipeCard.bValve  = FALSE;  
+
+	//////////////////////////////
+    m_rectBounding.SetRectEmpty();
+    //////////////////////////////
+	 
+} 
+
+CDrPipe::~CDrPipe()
+{
+	/////////////////////////// empty all the lists
+	ReadyToDelete();
+	///////////////////////////
+}	
+
+void CDrPipe::ReadyToDelete()
+{
+	////////////////////////////////////// unload Nodes/No delete
+	CDListMgr* pNodeList = GetNodeList();
+    //////////////////////////////////////
+	CDrObject* pObject,pElem;
+	while(!pNodeList->IsEmpty())
+	{
+		pObject = (CDrObject*)pNodeList->RemoveHead();  //Node
+		/////////////////////////////////////////////
+		if(pObject)
+		{
+			CDListMgr* pElemList = pObject->GetElemList();
+			int index = pElemList->GetObjectIndex(this);
+			if(index>=0)
+				pElemList->RemoveObject(index); //elem
+		/////////////////////////
+		}
+	//////////
+	}
+	/////////////////////////////////////////////////////////////
+	while(!(GetCurveList()->IsEmpty()))// unload/no delete:public
+	{
+		pObject = (CDrObject*)(GetCurveList()->RemoveHead());
+		pObject->ReadyToDelete();
+	}	
+	while(!(GetPatchList()->IsEmpty()))// unload/no delete:public
+	{
+		pObject = (CDrObject*)(GetPatchList()->RemoveHead());
+		pObject->ReadyToDelete();
+	}	
+	while(!(GetSolidList()->IsEmpty()))// unload/no delete:public
+	{
+		pObject = (CDrObject*)(GetSolidList()->RemoveHead());
+		pObject->ReadyToDelete();
+	}
+	//////////////////////////////////////////////////////////////
+}
+
+int CDrPipe::DealObjectDialog()
+{
+/*
+	CPipeProp	dlg;
+	if(dlg.DoModal() == IDOK)
+		return 0;
+	else
+		return -1;
+*/
+	return 0;			
+}
+	
+void CDrPipe::SetObjectInfo(CDrObject* pObject)
+{
+	
+	CDrObject::SetObjectInfo(pObject);	
+	////////////////////////////////////////////////////////   
+	CDrPipe* pAdd = (CDrPipe*) pObject;
+	///////////////////////////////////////////////////// PIPEINFO
+	m_NodeList.AddTail(pAdd->GetNodeList() ); 
+	////////////////////////////////////////////////////////   
+	m_PipeCard.line_id  = (pAdd->GetPipeCard())->line_id;
+	m_PipeCard.pid      = (pAdd->GetPipeCard())->pid;
+	m_PipeCard.mid      = (pAdd->GetPipeCard())->mid;
+	m_PipeCard.nid_i  	= (pAdd->GetPipeCard())->nid_i;
+	m_PipeCard.nid_j  	= (pAdd->GetPipeCard())->nid_j;
+	m_PipeCard.rid_i  	= (pAdd->GetPipeCard())->rid_i;
+	m_PipeCard.rid_j  	= (pAdd->GetPipeCard())->rid_j;
+	m_PipeCard.sid_i  	= (pAdd->GetPipeCard())->sid_i;
+	m_PipeCard.sid_j  	= (pAdd->GetPipeCard())->sid_j;
+	m_PipeCard.bValve 	= (pAdd->GetPipeCard())->bValve;
+	m_PipeCard.numseg   = (pAdd->GetPipeCard())->numseg; 
+		
+	m_nCardNo			= pAdd->m_nCardNo;
+	m_nCenter			= pAdd->m_nCenter; 
+	////////////////////
+	return;
+}		
+
+void CDrPipe::GetObjectInfo(CDrObject* pObject)
+{
+	
+	CDrObject::GetObjectInfo(pObject);	
+	////////////////////////////////////////////////////////   
+	CDrPipe* pAdd = (CDrPipe*) pObject;
+	///////////////////////////////////////////////////// PIPEINFO
+	pAdd->m_NodeList.AddTail(GetNodeList() ); 
+	////////////////////////////////////////////////////////   
+	(pAdd->GetPipeCard())->line_id	= m_PipeCard.line_id;
+	(pAdd->GetPipeCard())->pid		= m_PipeCard.pid;
+	(pAdd->GetPipeCard())->mid		= m_PipeCard.mid;
+	(pAdd->GetPipeCard())->nid_i	= m_PipeCard.nid_i;
+	(pAdd->GetPipeCard())->nid_j	= m_PipeCard.nid_j;
+	(pAdd->GetPipeCard())->rid_i	= m_PipeCard.rid_i;
+	(pAdd->GetPipeCard())->rid_j	= m_PipeCard.rid_j;
+	(pAdd->GetPipeCard())->sid_i	= m_PipeCard.sid_i;
+	(pAdd->GetPipeCard())->sid_j	= m_PipeCard.sid_j;
+	(pAdd->GetPipeCard())->bValve	= m_PipeCard.bValve;
+	(pAdd->GetPipeCard())->numseg	= m_PipeCard.numseg; 
+		
+	pAdd->m_nCardNo					= m_nCardNo;
+	pAdd->m_nCenter					= m_nCenter; 
+	////////////////////
+	return;
+}		
+
+void CDrPipe::DoDataView(CDC* PtrDC, int y)
+{
+
+	CString strCard;
+	//////////////////////
+	Pack_drPipe(&strCard);
+	//////////////////////////// 
+	PtrDC->TextOut(0,y,strCard);
+	////////////////////////////
+	return;
+} 
+
+void CDrPipe::Pack_drPipe(CString* pstrCard)
+{
+
+   	static CString name;
+   	/////////////////////////
+   	for (int i = 0;i<nMax_ElemTypes;i++)
+   		if(ElTypes[i].num == PIPE) 
+   		{
+   			name = ElTypes[i].ObjName;
+   			break;
+   		}	
+   /////////////////////////
+   CString pad = " "; 
+   ////////////////////////
+//	m_PipeCard.bValve  = FALSE;  
+   AddStr(pstrCard,&name,5); 
+   AddStr(pstrCard,&m_PipeCard.line_id,5);
+   AddStr(pstrCard,&m_PipeCard.nid_i,5);
+   AddStr(pstrCard,&m_PipeCard.nid_j,5);
+   AddStr(pstrCard,&m_PipeCard.rid_i,5);
+   AddStr(pstrCard,&m_PipeCard.rid_j,5);
+   AddStr(pstrCard,&pad,5);
+   AddStr(pstrCard,&pad,5);
+   AddStr(pstrCard,&m_PipeCard.pid,5);
+   AddStr(pstrCard,&m_PipeCard.mid,5);
+   AddStr(pstrCard,&m_PipeCard.sid_i,5);
+   AddStr(pstrCard,&m_PipeCard.sid_j,5);
+   AddStr(pstrCard,&pad,5);
+   if(m_PipeCard.numseg!=0)
+   	AddInt(pstrCard,m_PipeCard.numseg);
+   else
+   	AddStr(pstrCard,&pad,5);
+	//////////// 
+	return;
+
+}   
+//////////////////////////////////////////////////////////
+void CDrPipe::TransformObjectToWorld(pMATRIX pLM,BOOL bYes)
+{
+	////////////////////////
+	TransformToWorldPos(pLM,bYes);
+	//////////////////
+}
+	
+void CDrPipe::TransformObjectToView(pMATRIX pViewM)
+{
+
+	//////////////////////
+	TransformToEyePos(pViewM);
+	//////////////////////
+}	
+
+BOOL CDrPipe::RemoveHiddenObject(pMATRIX pViewM,WORLD VDir,int nType)
+{
+		return FALSE;	// do nothing
+}			 
+				
+void CDrPipe::ProjectObject
+				(pMATRIX pvv3DM,double dScale_U,double dScale_V)
+{
+
+	//////////////////////
+	ProjectToScreenPos(pvv3DM,dScale_U,dScale_V);
+	///////////////////////
+	// CNodes are same as Nodes
+	////////////////////////////			
+	Calc_ScreenRectFromCNodes();
+	////////////////////////////
+
+}
+
+void CDrPipe::TransformToWorldPos(pMATRIX pLM,BOOL bYes)
+{
+
+	pMATRIX		pLMP;	
+	CDListMgr* pList;
+	POSITION pos;
+	///////////////////////// 
+	if(bYes)
+		pLMP 	= pLM;
+	//////////////////////////////////////////// Transform
+	// Bounding Corners are the Nodes
+	/////////////////////////////////////// Generated Nodes
+	pList = GetNodeList();
+	//////////////////////
+	if(!pList->IsEmpty())
+	{
+		////////
+		for (pos = pList->GetFirstObjectPos();pos !=NULL;)
+		{
+			CDrNode* pNode = (CDrNode*)pList->GetNextObject(pos);
+			//////////////////////////////////
+			pNode->Calc_WorldPos(pLMP,bYes);
+			//////////////////////////////////
+		}
+	}	
+	///////////////////	
+}
+
+void CDrPipe::TransformToEyePos(pMATRIX pViewM)
+{
+
+	CDListMgr* pList;
+	POSITION pos;
+	//////////////////////////////////////////// View Transform
+	/////////////////////////////////////// Generated Nodes
+	pList = GetNodeList();
+	//////////////////////
+	if(!pList->IsEmpty())
+	{
+		////////
+		for (pos = pList->GetFirstObjectPos();pos !=NULL;)
+		{
+			CDrNode* pNode = (CDrNode*)pList->GetNextObject(pos);
+			//////////////////////////////////
+			pNode->Calc_EyePos(pViewM);
+			//////////////////////////////////
+		}
+	}
+	///////////////////	
+}
+
+void CDrPipe::ProjectToScreenPos
+				(pMATRIX pvv3DM,double dScale_U,double dScale_V)
+{
+
+	CDListMgr* 	pList;
+	POSITION 	pos;
+	//////////////////////////////////////////// Project
+	/////////////////////////////////////// Generated Nodes
+	pList = GetNodeList();
+	//////////////////////
+	if(!pList->IsEmpty())
+	{
+		////////
+		for (pos = pList->GetFirstObjectPos();pos !=NULL;)
+		{
+			CDrNode* pNode = (CDrNode*)pList->GetNextObject(pos);
+			//////////////////////////////////
+			pNode->ProjectToScreenPos3D(pvv3DM);
+			//////////////////////////////////
+			//	Bounding Corners ARE the Nodes
+			// 	So no need to do again
+			///////////////////////////////////////
+			WORLD ScreenPos = *(pNode->GetScreenPos3D());
+			///////////////////////////////////////
+			POINT pt;
+			//////////////////////////////////////////////////////
+			// 	3DScreenPos belongs to [0,-1] because of CVV	//
+			//	So before we Change into Integer Logical		//
+			//	Coordinates, we Must Use Screen Client Data		//
+			//////////////////////////////////////////////////////
+			pt.x = (int)(ScreenPos.x * dScale_U);
+			pt.y = (int)(ScreenPos.y * dScale_V);
+			//////////////////////
+			pNode->SetScreenPos2D(pt);
+			//////////////////////
+		}
+	}
+	////////////////////////////
+}
+
+void CDrPipe::Calc_ScreenRectFromCNodes()
+{
+	/////////////////////
+	FinishObject();
+	///////////////
+}
+	
+void CDrPipe::FinishObject()
+{ 
+	CDListMgr* 	pList;
+	POSITION 	pos;
+	//////////////////////////////////////////////////////
+	// Calculate the bounding rectangle.  It's needed for smart
+	// repainting.
+	
+	m_rectBounding = CRect(INT_MAX,INT_MIN,INT_MIN,INT_MAX);//L,T,R,B
+	/////////////////////////////////////// Generated Nodes
+	pList = GetNodeList();
+	//////////////////////
+	if(!pList->IsEmpty())
+	{
+		////////
+		for (pos = pList->GetFirstObjectPos();pos !=NULL;)
+		{
+			CDrNode* pNode = (CDrNode*)pList->GetNextObject(pos);
+			//////////////////////////////////
+			POINT pt = *(pNode->GetScreenPos2D());
+			// If the point lies outside of the accumulated bounding
+			// rectangle, then inflate the bounding rect to include it.
+			m_rectBounding.left     = min(m_rectBounding.left, pt.x);
+			m_rectBounding.top      = max(m_rectBounding.top, pt.y);
+			m_rectBounding.right    = max(m_rectBounding.right, pt.x);
+			m_rectBounding.bottom   = min(m_rectBounding.bottom, pt.y);
+		}
+	}	
+    //////////////////////////////////////////////////////////////////
+	// Add the pen width to the bounding rectangle.  This is necessary
+	// to account for the width of the Plat when invalidating
+	// the screen.
+	m_rectBounding.InflateRect(CSize(m_nPenWidth, -(int)m_nPenWidth));
+	///////
+	return; 
+	
+} 
+//////////////////////////////////////////////////////////////
+void CDrPipe::InitDraw(CDC* PtrDC,BOOL bParallel,int nView,
+					 	pMATRIX pViewM,pMATRIX pvv3DM,
+						double dzMin,double dScale_U,double dScale_V)
+{ 
+	m_bParallel		= bParallel;
+    m_nView			= nView;
+    m_dzMin			= dzMin;
+	m_dScale_U		= dScale_U;		// vv3DToLP:U-direction  
+	m_dScale_V		= dScale_V;		// vv3DToLP:V-direction
+	m_ViewM			= *pViewM;		// viewers transform MATRIX
+	m_vv3DM			= *pvv3DM;		// Window to 3D Viewport MATRIX 
+	///////////////////////////////////////////////////////////////// PreProcess
+	////////////////////////////////////////////// Coordinates XForm
+												// Local->World	  
+	MATRIX LM;
+	BOOL bXForm = FALSE;
+	TransformObjectToWorld(&LM,bXForm);
+	///////////////////////////////////////////
+	TransformObjectToView(&m_ViewM); 
+	ProjectObject(&m_vv3DM,m_dScale_U,m_dScale_V);///	calc Bounding Rect 
+	///////////////////////////////////
+//	FinishObject();//	calc Bounding Rect  
+	/////////////
+}
+						
+//////////////////////////////////////////////////////////////
+void CDrPipe::DoDrawView(CDC* PtrDC,BOOL bPenChange)
+{
+
+    ///////////////////////////////////////////// Draw 
+	GoDoIt(PtrDC,bPenChange);
+   	//////////////////////////////////////////
+    
+}                            
+
+void CDrPipe::GoDoIt(CDC* PtrDC,BOOL bPenChange)
+{ 
+
+	CDListMgr* 	pList;
+	POSITION 	pos;
+    ////////////////
+   	CPen    Pen;
+   	CPen*   PtrOldPen;
+   	                        
+	/////////////////////////////////////////////////// 
+//	IF bLayerON = FALSE make PEN: DASHED or something     TO BE Done Later
+    /////////////////////////////////////////////////// Pen
+   	Pen.CreatePen (m_nPenStyle,m_nPenWidth,m_crPenColor); 
+   	PtrOldPen = PtrDC->SelectObject(&Pen);
+	/////////////////////////////////////// Generated Nodes
+	pList = GetNodeList();
+	//////////////////////
+	int i;
+	pWORLD pMemEye;
+	//////////////////////////////////////////////////////
+	if(!pList->IsEmpty())
+	{
+		/////////////////////////////////////// Memory
+		int nMaxCorner = pList->GetCount();
+		pMemEye = new WORLD[nMaxCorner];
+		if(!pMemEye)
+		return;
+		/////////////////////////////////////// GetNodes
+		pWORLD pPtEye; 	
+		for (pos = pList->GetFirstObjectPos(),i = 0;pos !=NULL;i++)
+		{
+			CDrNode* pNode = (CDrNode*)pList->GetNextObject(pos);
+			//////////////////////////////////
+			pPtEye = pMemEye+i;
+			*pPtEye = *(pNode->GetEyePos());
+			/////////////////////////////
+		}
+    	//////////////////////////////////// Line
+		DrawLine3D(PtrDC,pMemEye,pMemEye+1,TRUE);// TRUE = XFormed; FALSE = WORLD 
+//		PtrDC->MoveTo(*pPtMem);
+//		PtrDC->LineTo(*(pPtMem+1));
+		//////////////
+		delete [] pMemEye;
+	}	
+	//////////////////////////////////////////////////////   	
+   	PtrDC->SelectObject(PtrOldPen);   
+   	Pen.DeleteObject(); 
+   	
+}   
+
+//////////////////////////////////////////////////////////////////
+BOOL CDrPipe::IsKeyMatch(CDrObject* pObject, CString KeyID,UINT KeyNo)
+{
+
+				
+	CDrPipe* pPipe = (CDrPipe*)(pObject);
+	////////////////////////////////////		
+    CString EndNids_1; 
+    CString EndNids_2;
+    int nIdLen,nRepeat; 
+	///////////////////////////////////////////// EndNids
+	CString NidI = (pPipe->GetPipeCard())->nid_i;
+	CString NidJ = (pPipe->GetPipeCard())->nid_j;
+			
+	nIdLen  = NidI.GetLength();
+	nRepeat = COMBO_NIDJ_LOC - (nIdLen + 1);   // no. of Blank Spaces
+	CString blank1(' ',nRepeat);
+	EndNids_1 = NidI + blank1 + NidJ; 
+	/////////	
+	nIdLen  = NidJ.GetLength();
+	nRepeat = COMBO_NIDJ_LOC - (nIdLen + 1);   // no. of Blank Spaces
+	CString blank2(' ',nRepeat);
+	EndNids_2 = NidJ + blank2 + NidI;
+	//////////////////////////////////////////////	 
+	switch(KeyNo)
+	{ 
+	  case 1:         // PipeID = Nid_I + Nid_J  
+
+		if((EndNids_1 == KeyID) ||(EndNids_2 == KeyID) )
+			return TRUE;
+		break;  
+
+	  case 2:         // LineID
+   	
+		if((pPipe->GetPipeCard())->line_id ==KeyID)
+			return TRUE;
+		break;	
+
+	  case 3:         // NodeID_I
+		if((pPipe->GetPipeCard())->nid_i ==KeyID)
+			return TRUE;
+
+	  case 4:         // NodeID_J                     // FALL THRO'
+		if((pPipe->GetPipeCard())->nid_j ==KeyID)
+			return TRUE;
+		break;
+				
+	  case 5:         // PropertyID
+		if((pPipe->GetPipeCard())->pid ==KeyID)
+			return TRUE;
+		break;
+				
+	  case 6:         // MaterialID
+		if((pPipe->GetPipeCard())->mid ==KeyID)
+			return TRUE;
+		break; 
+
+	  case 7:         // Rel_ID_I
+		if((pPipe->GetPipeCard())->rid_i ==KeyID)
+			return TRUE;
+
+	  case 8:         // Rel_ID_J                      // FALL THRO'
+		if((pPipe->GetPipeCard())->rid_j ==KeyID)
+			return TRUE;
+		break;
+			
+	  case 9:         // SI_ID_I
+		if((pPipe->GetPipeCard())->sid_i ==KeyID)
+			return TRUE;
+
+	  case 10:        // SI_ID_J                       // FALL THRO' 
+		if((pPipe->GetPipeCard())->sid_j ==KeyID)
+			return TRUE;
+		break;
+					
+	  default:
+	  		return FALSE;					
+	}
+	return FALSE;
+}
+
+void CDrPipe::Serialize(CArchive& ar)
+{
+
+	CDrObject::Serialize( ar);              // must call base class Serializer
+	//////////////////////////////////////     
+	BYTE	bValve;
+	WORD	nElementType,numseg,nCardNo,nObjectNo,nObjectType,
+						nPenWidth,nPenStyle,nLayer;
+	DWORD   crPenColor;
+	
+	if (ar.IsStoring())
+	{
+		TRACE( " Pipe   :Storing\n");	// TODO: add loading code here
+
+		ar	<<	/*int*/		(WORD)m_nElemType	// Type = PIPE = 2 in ElGlobal.h
+			<<	/*int*/		(WORD)m_nObjectType
+			<<	/*UINT*/	(WORD)m_nObjectNo 
+			///////////////////////////////////
+			<<	/*CString*/ m_PipeCard.line_id                 // Pipe Card
+			<<	/*CString*/	m_PipeCard.nid_i
+			<<				m_PipeCard.nid_j
+			<<	/*CString*/ m_PipeCard.rid_i   
+			<<				m_PipeCard.rid_j   //* pad 2 nos 5 char fields */
+	  		<<	/*CString*/ m_PipeCard.pid
+			<<				m_PipeCard.mid
+			<<	/*CString*/ m_PipeCard.sid_i
+			<<				m_PipeCard.sid_j   //* pad 5 char field */
+	   		<<	/*int*/		(WORD)m_PipeCard.numseg  //* pad 5 char field */
+			<<	/*BOOL*/	(BYTE)m_PipeCard.bValve;
+			/////////////////////////////////
+		ar	<<	/*int*/		(WORD)m_nCardNo
+		
+			<<	/*CRect*/	m_rectBounding // smallest rect that surrounds 
+											// Pipe Ends measured in MM_LOENGLISH units
+											// (0.01 inches, with Y-axis inverted)
+			<<	/*UINT*/	(WORD)m_nPenWidth    // pen width for Pipe
+			<<	/*COLORREF*/(DWORD)m_crPenColor
+			<<	/*UINT*/	(WORD)m_nPenStyle 
+			
+			<<	/*UINT*/	(WORD)m_nLayer
+			<<	/*POINT*/	m_nCenter; 
+		//////////////////////////////////////////////////////
+
+ 	}
+	else
+	{
+	
+		TRACE( " Pipe   :Loading\n");	// TODO: add loading code here
+
+
+		ar	>>	/*int*/		nElementType
+			>>	/*int*/		nObjectType
+			>>	/*UINT*/	nObjectNo 
+			/////////////////////////////////// 
+			>>	/*CString*/ m_PipeCard.line_id                 // Pipe Card
+			>>	/*CString*/	m_PipeCard.nid_i
+			>>				m_PipeCard.nid_j
+			>>	/*CString*/ m_PipeCard.rid_i   
+			>>				m_PipeCard.rid_j   //* pad 2 nos 5 char fields */
+	   		>>	/*CString*/ m_PipeCard.pid
+    		>>				m_PipeCard.mid
+    		>>	/*CString*/ m_PipeCard.sid_i
+			>>				m_PipeCard.sid_j   //* pad 5 char field */
+    		>>	/*int*/		numseg  //* pad 5 char field */
+			>>	/*BOOL*/	bValve ;
+			/////////////////////////////////
+		ar	>>	/*int*/		nCardNo
+
+			>>	/*CRect*/	m_rectBounding // smallest rect that surrounds 
+											// Pipe Ends measured in MM_LOENGLISH units
+											// (0.01 inches, with Y-axis inverted)
+		  	>>	/*UINT*/	nPenWidth    // pen width for Pipe
+			>>	/*COLORREF*/crPenColor
+			>>	/*UINT*/	nPenStyle 
+			>>	/*UINT*/	nLayer
+			>>	/*POINT*/	m_nCenter;
+			 
+    //////////////////////////////////////////////    
+	m_nElemType		  	= 	(int)nElementType;		// Type = PIPE = 2 in ElGlobal.h
+
+	m_PipeCard.numseg 	= 	(int)numseg;
+    m_PipeCard.bValve 	= 	(BOOL) bValve;
+
+    m_nCardNo			= 	(int)nCardNo;
+    m_nObjectType		= 	(int)nObjectType;
+    m_nObjectNo			= 	(UINT)nObjectNo;
+	m_nPenWidth 		=	(UINT)nPenWidth;    // pen width for Pipe
+	m_crPenColor 		= 	(COLORREF)crPenColor;
+	m_nPenStyle 		= 	(UINT)nPenStyle; 
+	m_nLayer			=	(UINT)nLayer;
+    /////////////////////////////        
+
+		//////////////////////////////////////////////////////
+
+	}        
+	//////////////////////////////////////////////////////
+	m_NodeList.Serialize(ar);
+	////////////////////////
+
+}
+	
+BOOL CDrPipe::IsObjectHit(CDrObject* pObject,CClientDC* ptrDC,int nNet,
+								POINT point,RECT* pRect)
+{
+		CDrPipe* pPipe = (CDrPipe*)pObject;
+		///////////////////////////////////
+		if(pPipe->GetObjectType() == PIPE)
+		{
+			CSize	Size; 
+		/*	
+			int nType = pLabel->GetType();
+			///////////////////////////////////////// LeftTop Corner
+			POINT pointTemp = pLabel->GetCorner(nType,nViewNumber);
+	       	///////////////////////////////////////// LOG/Scaled
+			pRect->left = pointTemp.x;
+	    	pRect->top	= pointTemp.y;
+	    	///////////////////////////////////////// get FontSize etc.
+			CFont	Font;
+			Font.DeleteObject;
+			Font.CreateFontIndirect(&(pLabel->m_lf));
+			CFont* pOldFont = (CFont*) ptrDC->SelectObject(&Font);
+			Size		  = ptrDC->GetTextExtent(pLabel->m_Text,
+											(pLabel->m_Text).GetLength());
+			ptrDC->SelectObject(pOldFont);
+			////////////////////////////////////////////////////////////
+	    	pRect->right  = pRect->left + Size.cx; 
+	    	pRect->bottom = pRect->top  - Size.cy; // Logical
+	    	////////////////////////////// Assumed View12
+	    	if((point.x>=pRect->left) && (point.x<=pRect->right) &&
+	       		(point.y<=pRect->top ) && (point.y>=pRect->bottom)) 
+	    	{
+		       	return i; 
+	    	}
+	    	///////////////////
+	    */	
+		}
+	///////////////
+	return FALSE;
+}
+
+////////////////////// END OF MODULE ///////////////////////
+

@@ -1,0 +1,15 @@
+; DBASE_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	DBase_D32
+DESCRIPTION  'DBASE Debug DLL' 
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitDBaseDLL											@2 NONAME
+
+?classCDrTreeVu@CDrTreeVu@@2UCRuntimeClass@@B

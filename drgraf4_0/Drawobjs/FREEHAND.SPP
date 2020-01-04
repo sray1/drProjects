@@ -1,0 +1,362 @@
+// FreeHand.cpp : implementation file
+//
+//////////////////////////////////////// forward references
+
+#include "stdafx.h" 
+
+ 
+#include "drgraf.h"
+#include "drgrafrm.h"
+#include "drgradoc.h"
+#include "grafobj.h"
+
+#include "FreeHand.h"
+#include "dboxmgr.h"
+#include "dbFreHnd.h"
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+/////////////////////////
+#define	FREEHAND_SIZE	3
+/////////////////////////////////////////////////////////////////////////////
+// CDrFreeHand
+IMPLEMENT_SERIAL(CDrFreeHand,CObject,1)
+/*
+BEGIN_MESSAGE_MAP(CDrFreeHand, CGrafObject)
+	//{{AFX_MSG_MAP(CDrFreeHand)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/               
+/////////////////////////////////////////////////////////////////////////////
+CDrFreeHand::CDrFreeHand()
+{  
+}
+// CDrFreeHand serialization
+
+void CDrFreeHand::Serialize(CArchive& ar)
+{
+
+    //////////////////////////////////////
+	CObject::Serialize( ar);              // must call base class Serializer
+	////////////////////////////
+	WORD w;
+	/////// 
+	if (ar.IsStoring())
+	{
+		TRACE(" FreeHand	:Storing\n");	// TODO: add storing code here
+		
+		ar	<<	/*UINT*/(WORD)m_nFHNumber		// FreeHand Number
+    		<<	/*int*/		(WORD)m_nType;
+    	ar.Write(/*LPOINT3*/&m_lCorner,sizeof(LPOINT3) );
+    	ar.Write(/*LPOINT3*/&m_lRBCorner,sizeof(LPOINT3) );
+		/*CDWordArray*/
+		m_pointArray.Serialize(ar);   // series of connected points
+			
+
+	}
+	else
+	{
+		TRACE(" FreeHand	:Loading\n");	// TODO: add loading code here
+
+		ar	>>	/*UINT*/w;
+		m_nFHNumber = (UINT)w;		// FreeHand Number
+    	ar	>>	/*int*/w;
+    	m_nType = (int)w;
+    	ar.Read(/*LPOINT3*/&m_lCorner,sizeof(LPOINT3) );
+    	ar.Read(/*LPOINT3*/&m_lRBCorner,sizeof(LPOINT3) );
+		/*CDWordArray*/
+		m_pointArray.Serialize(ar);   // series of connected points
+
+	}
+	/////////////////////////////////
+	
+}
+
+void CDrFreeHand::ReplacePen()
+{
+	// Change the current pen to reflect the new user-specified width.
+	m_PenCur.DeleteObject();
+	m_PenCur.CreatePen(m_nPenStyle, m_nPenWidth, m_nPenColor); 
+}
+
+void CDrFreeHand::DrawFreeHand(CDC* PtrDC,BOOL bLayerOn,UINT nViewNumber)
+{
+	
+//   	CPen    Pen;
+   	CPen*   PtrOldPen;
+	/////////////////////////////////////////////////// 
+//	IF bLayerON = FALSE make PEN: DASHED or something
+    ///////////////////////////////////////////////////
+// Create Colored Pen 1 Pixel wide;   
+//   	Pen.CreatePen (m_nPenStyle,m_nPenWidth,m_nPenColor);
+	ReplacePen();
+   	PtrOldPen = PtrDC->SelectObject(&m_PenCur);
+
+	for (int i=0; i < m_pointArray.GetSize(); i++)
+	{
+		/////////////////////////////////////// Draw !!!
+    	GoDoIt(PtrDC,GetPoint(i),nViewNumber,i);
+        ///////////////////////////////////////
+	}
+	///////////////////////////////   	
+   	PtrDC->SelectObject(PtrOldPen);   
+//   	Pen.DeleteObject();
+
+} 
+
+void CDrFreeHand::GoDoIt(CDC* PtrDC,POINT pt,UINT nViewNumber,int nSequence)
+{ 
+//	CDrGrafFrame* pWnd = (CDrGrafFrame*)(theApp.m_pMainWnd ); 
+	CDrGrafDoc* pDoc   = (CDrGrafDoc*)(theApp.m_pDoc);
+	CGrafObject* pObjectMgr = pDoc->GetObjectMgr();
+	////////////////////////////////////////////////////////   
+    //////////////////////////////////// ScrollOffset
+//    CPoint ptOffset = GetScrollOffset(nViewNumber);
+//    ShiftbyScrollOffset(&pt,ptOffset,1);
+    //////////////////////////////////// Zoom
+    pObjectMgr->ScalebyZoomFactor(&pt,1,nViewNumber);
+    //////////////////////////////////// LineOut 
+/*
+    double dScaleFactor = pDoc->GetScaleFactor();
+    pt.x = (int)(((double)pt.x)/dScaleFactor);
+    pt.y = (int)(((double)pt.y)/dScaleFactor);
+*/
+    //////////////////////
+    if(nSequence>0)
+		PtrDC->LineTo(pt); 
+	else if(!nSequence)
+		PtrDC->MoveTo(pt); 
+	//////////////////////
+}   
+/*    
+POINT CDrFreeHand::TransformLPOINT3to2(double* Coord,double Tran[][3])
+{                                                              
+///////////////////////////////////////////////////// Transform
+
+	double sum,Temp[2];
+	POINT pt;
+	
+	for (int i =0;i<2;i++)
+	{         
+		sum = 0.0;
+    	for (int j=0;j<3;j++)
+			sum += Coord[j] * Tran[i][j];
+		Temp[i] = sum;
+	}        
+	pt.x = (UINT)Temp[0];
+	pt.y = (UINT)Temp[1]; 
+
+	return (pt);
+}
+*/
+void CDrFreeHand::DoFreeHands(CDC* PtrDC,UINT nViewNumber)
+{
+/*	
+	// Get the invalidated rectangle of the view, or in the case
+	// of printing, the clipping region of the printer dc.
+	CRect rectClip;
+	CRect rectStroke;
+	pDC->GetClipBox(&rectClip);
+	pDC->LPtoDP(&rectClip);
+*/
+	///////////////////////////////////////  Get Base Info
+	CFreeHandBase* pBase;
+	///////////////////////////////////////////////////////////   
+	for (POSITION pos = pBase->GetFirstFreeHandPos();pos !=NULL;)
+	{
+		CDrFreeHand* pFreeHand = pBase->GetNextFreeHand(pos);
+		///////////////////////////////////////// Get LayerInfo TOBEDONE 
+/*
+		rectFreeHand = pFreeHand->GetBoundingRect();
+		pDC->LPtoDP(&rectFreeHand);
+		if (!rectFreeHand.IntersectRect(&rectFreeHand, &rectClip))
+			continue; 
+*/
+		///////////////////////////////////////// Put info in Current pointer			
+		SetInfo(pFreeHand);		  
+    	///////////////////////////////////////// Draw FreeHand
+		pFreeHand->DrawFreeHand(PtrDC,TRUE,nViewNumber);
+		///////////////////////////////   	
+	}
+    
+} 
+void CDrFreeHand::ViewCurrentFreeHand(CDC* PtrDC,int nViewNumber)
+{
+	
+	////////////////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc = (CDrGrafDoc*)(theApp.m_pDoc);
+	///////////////////////////////////////////////////////////////////   
+	CDrGrafFrame* pWnd = (CDrGrafFrame*)(theApp.m_pMainWnd );
+    LPOINT3 MouseWIC = pWnd->GetMouseWIC(); 
+    CString	text;
+    ////////////////////////////////////// Draw FreeHand
+	DrawFreeHand(PtrDC,TRUE,nViewNumber);
+	///////////////////////////////   	
+    
+} 
+                               
+/////////////////////////////////////////////////////////////////////////////
+void CDrFreeHand::FinishFreeHand()
+{
+	// Calculate the bounding rectangle.  It's needed for smart
+	// repainting.
+
+	if (m_pointArray.GetSize()==0)
+	{
+		m_rectBounding.SetRectEmpty();
+		return;
+	}
+	CPoint pt = GetPoint(0);
+	m_rectBounding = CRect(pt.x, pt.y, pt.x, pt.y);
+
+	for (int i=1; i < m_pointArray.GetSize(); i++)
+	{
+		// If the point lies outside of the accumulated bounding
+		// rectangle, then inflate the bounding rect to include it.
+		pt = GetPoint(i);
+		m_rectBounding.left     = min(m_rectBounding.left, pt.x);
+		m_rectBounding.right    = max(m_rectBounding.right, pt.x);
+		m_rectBounding.top      = max(m_rectBounding.top, pt.y);
+		m_rectBounding.bottom   = min(m_rectBounding.bottom, pt.y);
+	}
+
+	// Add the pen width to the bounding rectangle.  This is necessary
+	// to account for the width of the stroke when invalidating
+	// the screen.
+	m_rectBounding.InflateRect(CSize(m_nPenWidth, -(int)m_nPenWidth));
+	return;
+}
+
+void CDrFreeHand::SetCorner(LPOINT3 lCorner)
+{
+
+	m_lCorner.x  = lCorner.x;
+	m_lCorner.y  = lCorner.y;
+	m_lCorner.z  = lCorner.z;
+	
+}
+
+void CDrFreeHand::SetOtherCorner(LPOINT3 lCorner)
+{
+
+	m_lRBCorner.x  = lCorner.x;    // RightBottom
+	m_lRBCorner.y  = lCorner.y;
+	m_lRBCorner.z  = lCorner.z;
+	
+}
+	
+	
+void CDrFreeHand::SetInfo(CDrFreeHand* pFreeHand)
+{
+
+	m_nPenColor	 = pFreeHand->m_nPenColor;
+	m_nPenWidth	 = pFreeHand->m_nPenWidth;
+	m_nPenStyle	 = pFreeHand->m_nPenStyle;
+	m_nType		 = pFreeHand->m_nType;
+	m_lCorner.x  = pFreeHand->m_lCorner.x;
+	m_lCorner.y  = pFreeHand->m_lCorner.y;
+	m_lCorner.z  = pFreeHand->m_lCorner.z;
+	m_lRBCorner.x= pFreeHand->m_lRBCorner.x;
+	m_lRBCorner.y= pFreeHand->m_lRBCorner.y;
+	m_lRBCorner.z= pFreeHand->m_lRBCorner.z;
+	
+}	
+				
+void CDrFreeHand::AddPoint(CPoint pt)
+{
+	m_pointArray.Add(MAKELONG(pt.x, pt.y));
+}
+
+int	CDrFreeHand::IsFreeHandHit(CClientDC* ptrDC,POINT point,RECT* pRect,int nViewNumber)
+{
+	////////////////// Return >=0 ->index (Yes Hit)
+	//////////////////         <0 -> No Hit
+	//////////////////////////////////////////////// Get Doc Info
+	CDrGrafDoc* pDoc = (CDrGrafDoc*)(theApp.m_pDoc); 
+	CGrafObject* pObjectMgr = pDoc->GetObjectMgr();
+	CDBoxMgr* pDBoxMgr = pObjectMgr->GetDBoxMgr();
+	CHitNet* pHitNet = pDoc->GetHitNet();
+	CFreeHandBase* pFreeHandBase;
+	////////////////////////////////////////////////   
+	if((pDBoxMgr->GetFreeHandList() )->IsEmpty())
+		return -1;
+ 		
+	CSize	Size; 
+// 	POSITION pos = pFreeHandBase->GetFirstFreeHandPos();
+	int i=0;
+	for (POSITION pos = pFreeHandBase->GetFirstFreeHandPos();pos !=NULL;i++)
+//	for (i=0;pos !=NULL ;i++)
+	{
+	
+		CDrFreeHand* pFreeHand = pFreeHandBase->GetNextFreeHand( pos);
+		///////////////////////////////////////// Check m_nType
+		if((pFreeHand->GetType()) == nViewNumber)
+		{
+			int nNet = pHitNet->GetSearchNet();        //SearchNet
+			for(int j=0; j<m_pointArray.GetSize(); j++)
+			{
+				POINT pointTemp = pFreeHand->GetPoint(j);
+				ptrDC->LPtoDP(&pointTemp);
+        		///////////////////////////////////////// Rectangle in
+        									   		   // Device Coordinate
+				pRect->left 	= pointTemp.x - nNet;
+	    		pRect->top		= pointTemp.y - nNet;
+				pRect->right 	= pointTemp.x + nNet;
+	    		pRect->bottom	= pointTemp.y + nNet;
+	    		///////////////////////////////////////////////////////
+	    		if((point.x>=pRect->left) && (point.x<=pRect->right) &&
+	      		 (point.y>=pRect->top ) && (point.y<=pRect->bottom)) 
+	    		{
+	    			ptrDC->DPtoLP(pRect);
+	       			return i; 
+	    		}
+			}
+		}		    
+	}
+	return -1;
+} 
+///////////////////////////////// End of Module /////////////////////////////
+/*
+/////////////////////////////////////////////////////////////////////////////
+// CStroke
+/////////////////////////////////////////////////////////////////////////////
+void CStroke::AddPoint(CPoint pt)
+{
+	m_pointArray.Add(MAKELONG(pt.x, pt.y));
+}
+
+/////////////////////////////////////////////////////////////////////////////
+void CStroke::FinishStroke()
+{
+	// Calculate the bounding rectangle.  It's needed for smart
+	// repainting.
+
+	if (m_pointArray.GetSize()==0)
+	{
+		m_rectBounding.SetRectEmpty();
+		return;
+	}
+	CPoint pt = GetPoint(0);
+	m_rectBounding = CRect(pt.x, pt.y, pt.x, pt.y);
+
+	for (int i=1; i < m_pointArray.GetSize(); i++)
+	{
+		// If the point lies outside of the accumulated bounding
+		// rectangle, then inflate the bounding rect to include it.
+		pt = GetPoint(i);
+		m_rectBounding.left     = min(m_rectBounding.left, pt.x);
+		m_rectBounding.right    = max(m_rectBounding.right, pt.x);
+		m_rectBounding.top      = max(m_rectBounding.top, pt.y);
+		m_rectBounding.bottom   = min(m_rectBounding.bottom, pt.y);
+	}
+
+	// Add the pen width to the bounding rectangle.  This is necessary
+	// to account for the width of the stroke when invalidating
+	// the screen.
+	m_rectBounding.InflateRect(CSize(m_nPenWidth, -(int)m_nPenWidth));
+	return;
+}
+/////////////////////////////////////////////////// 
+*/

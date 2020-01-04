@@ -1,0 +1,649 @@
+; Spec_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	Spec_D
+DESCRIPTION  'Specials DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitSpecDLL												@2 NONAME
+
+    
+
+; CDListMgr
+;	; Constructor and Destructor
+	??0CDListMgr@@REC@XZ
+ 	??1CDListMgr@@VEC@XZ
+ 	
+	
+	?GetRuntimeClass@CDListMgr@@VFCPEUCRuntimeClass@@XZ
+    ?classCDListMgr@CDListMgr@@2UCRuntimeClass@@A
+
+	?GetFirstObjectPos@CDListMgr@@RECPEXXZ
+	?DeleteObject@CDListMgr@@RECHH@Z
+	?GetObjectFirstIndex@CDListMgr@@RECHI@Z
+	?GetSpecificObjectCount@CDListMgr@@RECHH@Z
+
+?GetObjectIndex@CDListMgr@@RECHIVCString@@@Z
+?GetObjectIndex@CDListMgr@@RECHJ@Z
+?GetObjectIndex@CDListMgr@@RECHPEVCObject@@@Z
+?InsertObject@CDListMgr@@RECHPEVCObject@@@Z
+?GetNextObject@CDListMgr@@RECPEVCObject@@AEPEX@Z
+?EditObject@CDListMgr@@RECHHPEVCObject@@@Z
+?GetObject@CDListMgr@@RECPEVCObject@@H@Z
+?RemoveObject@CDListMgr@@RECHH@Z
+
+
+
+
+; CDrObject
+;	; Constructor and Destructor
+ 	??0CDrObject@@REC@XZ   									
+ 	??1CDrObject@@VEC@XZ 
+ 	                                     
+?DoDrawView@CDrObject@@VECXPEVCDC@@H@Z
+?DoDrawView@CDrObject@@VECXPEVCDC@@HH@Z
+	
+	?DoDataView@CDrObject@@VECXPEVCDC@@H@Z
+	?DealObjectDialog@CDrObject@@VECHXZ
+	?GetObjectType@CDrObject@@VECHXZ
+	?SetObjectType@CDrObject@@VECXH@Z
+	?GetElemType@CDrObject@@VECHXZ
+	?SetElemType@CDrObject@@VECXH@Z
+?GetObjectNo@CDrObject@@VECJXZ
+?SetObjectNo@CDrObject@@VECXJ@Z
+;?GetObjectNo@CDrObject@@VECIXZ
+;?SetObjectNo@CDrObject@@VECXI@Z
+	?GetObjectInfo@CDrObject@@VECXPEV1@@Z 
+	?SetObjectInfo@CDrObject@@VECXPEV1@@Z
+	?GetMaxCorners@CDrObject@@VECHXZ
+	?GetRawCoords@CDrObject@@VECXPEJPEHH@Z
+	?SetProjectedCoords@CDrObject@@VECXUtagPOINT@@H@Z
+	?RearrangeProjectedCoords@CDrObject@@VECXXZ
+	
+	?IsMoved@CDrObject@@VECHXZ
+	?SetMoved@CDrObject@@VECXH@Z
+
+	?FinishObject@CDrObject@@VECXPEVCClientDC@@H@Z
+	?FinishObject@CDrObject@@VECXH@Z
+	?FinishObject@CDrObject@@VECXXZ
+	?GetBoundingRect@CDrObject@@VEC?EVCRect@@XZ
+	?IsKeyMatch@CDrObject@@VECHPEV1@VCString@@I@Z
+	?IsObjectHit@CDrObject@@VECHPEV1@PEVCClientDC@@HUtagPOINT@@PEUtagRECT@@@Z
+	?IsObjectHit@CDrObject@@VECHPEV1@PEVCClientDC@@HUtagPOINT@@PEUtagRECT@@H@Z
+
+	?GetRuntimeClass@CDrObject@@VFCPEUCRuntimeClass@@XZ
+    ?classCDrObject@CDrObject@@2UCRuntimeClass@@A
+    ?Serialize@CDrObject@@VECXAEVCArchive@@@Z 
+    
+	?AddStr@CDrObject@@RECXPEVCString@@0H@Z
+	?AddNum@CDrObject@@RECXPEVCString@@JJJV2@@Z
+	?AddInt@CDrObject@@RECXPEVCString@@H@Z
+	
+	?BlockCopy@CDrObject@@RECXPID0K@Z
+;DoCentroid@CDrObject@@RECHPEULPOINT3@@HQEU2@@Z
+;?DoPolyNormal@CDrObject@@RECHPEULPOINT3@@U2@11@Z
+;DoUnitNormal@CDrObject@@RECHPEUWORLD@@ULPOINT3@@11@Z
+
+	?GetLevelType@CDrObject@@VECHXZ
+	?SetLevelType@CDrObject@@VECXH@Z
+    
+
+;?BlockCopy@CDrObject@@RECXPID0K@Z
+;?CullScreen@CDrObject@@VECXPEUMATRIX@@@Z
+;?CullWorld@CDrObject@@VECXUWORLD@@@Z
+;?IsDirty@CDrObject@@VECHXZ
+;?SetDirty@CDrObject@@VECXXZ
+;?IsCulled@CDrObject@@VECHXZ
+;?SetCulled@CDrObject@@VECXH@Z
+;?GetObjectList@CDrObject@@VECPEVCDListMgr@@XZ
+;?GetPatchList@CDrObject@@VECPEVCDListMgr@@XZ
+;?GetCurveList@CDrObject@@VECPEVCDListMgr@@XZ
+;?GetElemList@CDrObject@@VECPEVCDListMgr@@XZ
+;?GetNodeList@CDrObject@@VECPEVCDListMgr@@XZ
+;?Calc_NodePoses@CDrObject@@VECXPEUMATRIX@@00H@Z
+;?Calc_WorldPos@CDrObject@@VECXPEUMATRIX@@H@Z
+;?GetWorldPos@CDrObject@@VECPEUWORLD@@XZ
+;?SetWorldPos@CDrObject@@VECXUWORLD@@@Z
+;?Calc_EyePos@CDrObject@@VECXPEUMATRIX@@@Z
+;?Get_EyePos@CDrObject@@VECPEUWORLD@@XZ
+;?Set_EyePos@CDrObject@@VECXUWORLD@@@Z
+;?Calc_ScreenPos3D@CDrObject@@VECXPEUMATRIX@@@Z
+;?GetScreenPos3D@CDrObject@@VECPEUWORLD@@XZ
+;?SetScreenPos3D@CDrObject@@VECXXZ
+;?GetScreenPos2D@CDrObject@@VECPEUtagPOINT@@XZ
+;?SetScreenPos2D@CDrObject@@VECXXZ
+;?Calc_NodeNormal@CDrObject@@VECXXZ
+;?Calc_PolyNormal@CDrObject@@VECXXZ
+;?Calc_Normal@CDrObject@@VECXXZ
+;?GetNormal@CDrObject@@VECPEUWORLD@@XZ
+;?SetNormal@CDrObject@@VECXUWORLD@@@Z
+;?Calc_Centroid@CDrObject@@VECXXZ
+;?GetCentroid@CDrObject@@VECPEUWORLD@@XZ
+;?SetCentroid@CDrObject@@VECXUWORLD@@@Z
+;?GetCentroidZdepth@CDrObject@@VECNXZ
+;?SetCentroidZdepth@CDrObject@@VECXN@Z
+;?GetObjectIndex@CDrObject@@VECHXZ
+;?SetObjectIndex@CDrObject@@VECXH@Z
+;?GetObjectRAttribs@CDrObject@@VECPEURENDINFO@@XZ
+;?SetObjectRAttribs@CDrObject@@VECXPEURENDINFO@@@Z
+
+?GetEyeCorner@CDrObject@@VECXPEUWORLD@@H@Z
+?GetLocalCorner@CDrObject@@VECXPEUWORLD@@H@Z
+?GetScreen2DCorner@CDrObject@@VEC?EUtagPOINT@@H@Z
+?GetScreen3DCorner@CDrObject@@VECXPEUWORLD@@H@Z
+?GetWorldCorner@CDrObject@@VECXPEUWORLD@@H@Z
+?SetLocalCorner@CDrObject@@VECXPEUWORLD@@H@Z
+?SetEyeCorner@CDrObject@@VECXPEUWORLD@@H@Z
+?SetScreen2DCorner@CDrObject@@VECXUtagPOINT@@H@Z
+?SetScreen3DCorner@CDrObject@@VECXPEUWORLD@@H@Z
+?SetWorldCorner@CDrObject@@VECXPEUWORLD@@H@Z
+
+
+ 	
+; CBooleans
+;	; Constructor and Destructor
+ 	??0CBooleans@@REC@XZ   									
+ 	??1CBooleans@@VEC@XZ
+
+	?Pack_drPipe@CBooleans@@VECXPEVCString@@@Z
+    ?DoDataView@CBooleans@@VECXPEVCDC@@H@Z
+	?GetObjectType@CBooleans@@VECHXZ
+	?SetObjectType@CBooleans@@VECXH@Z
+    ?GetElemType@CBooleans@@VECHXZ
+	?SetElemType@CBooleans@@VECXH@Z
+?GetObjectNo@CBooleans@@VECJXZ
+?SetObjectNo@CBooleans@@VECXJ@Z
+;?GetObjectNo@CBooleans@@VECIXZ
+;?SetObjectNo@CBooleans@@VECXI@Z
+    ?GetObjectInfo@CBooleans@@VECXPEVCDrObject@@@Z
+    ?SetObjectInfo@CBooleans@@VECXPEVCDrObject@@@Z
+
+	?GetRuntimeClass@CBooleans@@VFCPEUCRuntimeClass@@XZ
+    ?classCBooleans@CBooleans@@2UCRuntimeClass@@A
+    ?Serialize@CBooleans@@VECXAEVCArchive@@@Z 
+    
+	?ReadDefaultBooleans@CBooleans@@VECXXZ
+	?InitBooleans@CBooleans@@VECXXZ
+ 	                                    
+	?IsZoomEnabled@CBooleans@@VECHH@Z
+	?IsZoomOn@CBooleans@@VECHHH@Z
+	?SetZoomEnabled@CBooleans@@VECXHH@Z
+	?ToggleZoom@CBooleans@@VECHHH@Z
+
+    ?IsDialogOn@CBooleans@@VECHXZ
+    ?ToggleDialogOn@CBooleans@@VECXXZ
+    ?IsElementOn@CBooleans@@VECHXZ
+    ?ToggleElementOn@CBooleans@@VECXXZ
+    ?IsDragOn@CBooleans@@VECHXZ
+    ?ToggleDragOn@CBooleans@@VECXXZ
+    ?IsRefreshOn@CBooleans@@VECHXZ
+    ?ToggleRefreshOn@CBooleans@@VECXXZ
+    ?IsRubberBandOn@CBooleans@@VECHXZ
+    ?ToggleRubberBandOn@CBooleans@@VECXXZ
+    ?Is12ViewActive@CBooleans@@VECHXZ
+    ?Toggle12ViewActive@CBooleans@@VECXXZ
+    ?Is23ViewActive@CBooleans@@VECHXZ
+    ?Toggle23ViewActive@CBooleans@@VECXXZ
+    ?Is31ViewActive@CBooleans@@VECHXZ
+    ?Toggle31ViewActive@CBooleans@@VECXXZ
+    ?IsIsoViewActive@CBooleans@@VECHXZ
+    ?ToggleIsoViewActive@CBooleans@@VECXXZ
+    ?IsDataViewActive@CBooleans@@VECHXZ
+    ?ToggleDataViewActive@CBooleans@@VECXXZ
+    ?IsInputMode@CBooleans@@VECHXZ
+    ?SetInputMode@CBooleans@@VECXH@Z
+    ?IsOutputMode@CBooleans@@VECHXZ
+    ?SetOutputMode@CBooleans@@VECXH@Z
+
+
+; CDataWindow
+;	; Constructor and Destructor
+ 	??0CDataWindow@@REC@XZ   									
+ 	??1CDataWindow@@VEC@XZ 
+ 	                                  
+	?Pack_drPipe@CDataWindow@@VECXPEVCString@@@Z
+	?DoDataView@CDataWindow@@VECXPEVCDC@@H@Z
+	?SetObjectType@CDataWindow@@VECXH@Z
+	?GetObjectType@CDataWindow@@VECHXZ
+	?GetElemType@CDataWindow@@VECHXZ
+	?SetElemType@CDataWindow@@VECXH@Z
+?GetObjectNo@CDataWindow@@VECJXZ
+?SetObjectNo@CDataWindow@@VECXJ@Z
+;?GetObjectNo@CDataWindow@@VECIXZ
+;?SetObjectNo@CDataWindow@@VECXI@Z  
+	?GetObjectInfo@CDataWindow@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CDataWindow@@VECXPEVCDrObject@@@Z
+	
+	?GetRuntimeClass@CDataWindow@@VFCPEUCRuntimeClass@@XZ
+    ?classCDataWindow@CDataWindow@@2UCRuntimeClass@@A
+    ?Serialize@CDataWindow@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultDataWindow@CDataWindow@@VECXXZ
+	?InitDataWindow@CDataWindow@@VECXXZ
+
+	?GetWinOrgWIC@CDataWindow@@VEC?EULPOINT3@@XZ
+	?GetWinMinWIC@CDataWindow@@VEC?EULPOINT3@@XZ
+	?GetWinMaxWIC@CDataWindow@@VEC?EULPOINT3@@XZ
+	?GetWinExtWIC@CDataWindow@@VEC?EULPOINT3@@XZ
+	?SetWinMinMaxWIC@CDataWindow@@VECXULPOINT3@@@Z
+	?SetWinExtWIC@CDataWindow@@VECXXZ
+
+
+; CDrFont
+;	; Constructor and Destructor
+ 	??0CDrFont@@REC@XZ   								
+ 	??1CDrFont@@VEC@XZ 
+ 	                                   
+	?Pack_drPipe@CDrFont@@VECXPEVCString@@@Z
+    ?DoDataView@CDrFont@@VECXPEVCDC@@H@Z
+	?GetObjectType@CDrFont@@VECHXZ
+	?SetObjectType@CDrFont@@VECXH@Z
+	?GetElemType@CDrFont@@VECHXZ
+	?SetElemType@CDrFont@@VECXH@Z
+?GetObjectNo@CDrFont@@VECJXZ
+?SetObjectNo@CDrFont@@VECXJ@Z
+;?GetObjectNo@CDrFont@@VECIXZ
+;?SetObjectNo@CDrFont@@VECXI@Z
+	?GetObjectInfo@CDrFont@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CDrFont@@VECXPEVCDrObject@@@Z 
+	
+	?GetRuntimeClass@CDrFont@@VFCPEUCRuntimeClass@@XZ
+    ?classCDrFont@CDrFont@@2UCRuntimeClass@@A
+    ?Serialize@CDrFont@@VECXAEVCArchive@@@Z 
+    
+	?ReadDefaultDrFont@CDrFont@@VECXXZ
+	?InitDrFont@CDrFont@@VECXXZ
+
+	?IsFontSelected@CDrFont@@VECHXZ
+	?DoTextFont@CDrFont@@VECXXZ 
+	?GetTextColor@CDrFont@@VECKXZ
+	?SetTextColor@CDrFont@@VECXK@Z
+	?GetCurrentLogFont@CDrFont@@VEC?EUtagLOGFONT@@XZ
+	?SetCurrentLogFont@CDrFont@@VECXUtagLOGFONT@@@Z
+
+
+; CDrPen
+;	; Constructor and Destructor
+ 	??0CDrPen@@REC@XZ   								
+ 	??1CDrPen@@VEC@XZ
+ 	                                   
+	?Pack_drPipe@CDrPen@@VECXPEVCString@@@Z
+	?DoDataView@CDrPen@@VECXPEVCDC@@H@Z
+	?GetObjectType@CDrPen@@VECHXZ
+	?SetObjectType@CDrPen@@VECXH@Z
+	?GetElemType@CDrPen@@VECHXZ
+	?SetElemType@CDrPen@@VECXH@Z
+?GetObjectNo@CDrPen@@VECJXZ
+?SetObjectNo@CDrPen@@VECXJ@Z
+;?GetObjectNo@CDrPen@@VECIXZ
+;?SetObjectNo@CDrPen@@VECXI@Z
+	?GetObjectInfo@CDrPen@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CDrPen@@VECXPEVCDrObject@@@Z
+
+	?GetRuntimeClass@CDrPen@@VFCPEUCRuntimeClass@@XZ
+    ?classCDrPen@CDrPen@@2UCRuntimeClass@@A
+    ?Serialize@CDrPen@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultDrPen@CDrPen@@VECXXZ
+	?InitDrPen@CDrPen@@VECXXZ
+
+	?ReplacePen@CDrPen@@VECXXZ
+     
+	?GetCurrentPen@CDrPen@@VECPEVCPen@@XZ
+	?GetStyle@CDrPen@@VECHXZ
+	?SetStyle@CDrPen@@VECXH@Z
+	?GetStyleOld@CDrPen@@VECHXZ
+	?SetStyleOld@CDrPen@@VECXH@Z
+	?GetStyleDefault@CDrPen@@VECHXZ
+	?SetStyleDefault@CDrPen@@VECXH@Z
+	?GetWidth@CDrPen@@VECHXZ
+	?SetWidth@CDrPen@@VECXH@Z
+	?GetWidthOld@CDrPen@@VECHXZ
+	?SetWidthOld@CDrPen@@VECXH@Z
+	?GetWidthDefault@CDrPen@@VECHXZ
+	?SetWidthDefault@CDrPen@@VECXH@Z
+	?GetColor@CDrPen@@VECKXZ
+	?SetColor@CDrPen@@VECXK@Z
+	?GetColorOld@CDrPen@@VECKXZ
+	?SetColorOld@CDrPen@@VECXK@Z
+	?GetColorDefault@CDrPen@@VECKXZ
+	?SetColorDefault@CDrPen@@VECXK@Z
+	?GetIndex@CDrPen@@VECIXZ
+	?SetIndex@CDrPen@@VECXI@Z
+	?GetIndexOld@CDrPen@@VECIXZ
+	?SetIndexOld@CDrPen@@VECXI@Z
+	?GetIndexDefault@CDrPen@@VECIXZ
+	?SetIndexDefault@CDrPen@@VECXI@Z
+	?GetStyleNameCount@CDrPen@@VECIXZ
+	?SetStyleNameCount@CDrPen@@VECXI@Z
+	?GetStyleName@CDrPen@@VEC?EVCString@@I@Z
+	?GetStyleConstant@CDrPen@@VECII@Z
+    
+    
+;  CHitNet
+;	; Constructor and Destructor
+ 	??0CHitNet@@REC@XZ   								
+ 	??1CHitNet@@VEC@XZ 
+ 	                                  
+	?Pack_drPipe@CHitNet@@VECXPEVCString@@@Z
+	?DoDataView@CHitNet@@VECXPEVCDC@@H@Z
+	?GetObjectType@CHitNet@@VECHXZ
+	?SetObjectType@CHitNet@@VECXH@Z
+	?GetElemType@CHitNet@@VECHXZ
+	?SetElemType@CHitNet@@VECXH@Z
+?GetObjectNo@CHitNet@@VECJXZ
+?SetObjectNo@CHitNet@@VECXJ@Z
+;?GetObjectNo@CHitNet@@VECIXZ
+;?SetObjectNo@CHitNet@@VECXI@Z
+	?GetObjectInfo@CHitNet@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CHitNet@@VECXPEVCDrObject@@@Z
+
+	?GetRuntimeClass@CHitNet@@VFCPEUCRuntimeClass@@XZ
+    ?classCHitNet@CHitNet@@2UCRuntimeClass@@A
+    ?Serialize@CHitNet@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultHitNet@CHitNet@@VECXXZ
+	?InitHitNet@CHitNet@@VECXXZ
+
+	?GetSearchNet@CHitNet@@VECHXZ
+	?SetSearchNet@CHitNet@@VECXH@Z
+	?GetSearchNetOld@CHitNet@@VECHXZ
+	?SetSearchNetOld@CHitNet@@VECXH@Z
+	?GetSearchNetDefault@CHitNet@@VECHXZ
+	?SetSearchNetDefault@CHitNet@@VECXH@Z
+
+
+; CLayer
+;	; Constructor and Destructor
+ 	??0CLayer@@REC@XZ   								
+ 	??1CLayer@@VEC@XZ  
+ 	                                  
+	?Pack_drPipe@CLayer@@VECXPEVCString@@@Z
+	?DoDataView@CLayer@@VECXPEVCDC@@H@Z
+	?GetObjectInfo@CLayer@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CLayer@@VECXPEVCDrObject@@@Z
+	?GetObjectType@CLayer@@VECHXZ
+	?SetObjectType@CLayer@@VECXH@Z
+	?GetElemType@CLayer@@VECHXZ
+	?SetElemType@CLayer@@VECXH@Z
+?GetObjectNo@CLayer@@VECJXZ
+?SetObjectNo@CLayer@@VECXJ@Z
+;?GetObjectNo@CLayer@@VECIXZ
+;?SetObjectNo@CLayer@@VECXI@Z
+
+	?GetRuntimeClass@CLayer@@VFCPEUCRuntimeClass@@XZ
+    ?classCLayer@CLayer@@2UCRuntimeClass@@A
+    ?Serialize@CLayer@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultLayer@CLayer@@VECXXZ
+	?InitLayer@CLayer@@VECXXZ
+
+	?GetCurrentLayer@CLayer@@VECIXZ
+	?SetCurrentLayer@CLayer@@VECXI@Z
+	?GetCurrentLayerOld@CLayer@@VECIXZ
+	?SetCurrentLayerOld@CLayer@@VECXI@Z
+	?GetCurrentLayerDefault@CLayer@@VECIXZ
+	?SetCurrentLayerDefault@CLayer@@VECXI@Z
+	?GetLayerInfo@CLayer@@VEC?EVCString@@I@Z
+	?SetLayerInfo@CLayer@@VECXII@Z
+	?GetLayerArray@CLayer@@VECXQEY01I@Z
+	?SetLayerArray@CLayer@@VECXQEY01I@Z
+	?GetLayerOldArray@CLayer@@VECXQEY01I@Z
+	?SetLayerOldArray@CLayer@@VECXQEY01I@Z
+	?GetLayerDefaultArray@CLayer@@VECXQEY01I@Z
+	?SetLayerDefaultArray@CLayer@@VECXQEY01I@Z
+
+
+
+
+; CPatchMnu
+;	; Constructor and Destructor
+ 	??0CPatchMnu@@REC@XZ   								
+ 	??1CPatchMnu@@VEC@XZ  
+ 	                                  
+	?Pack_drPipe@CPatchMnu@@VECXPEVCString@@@Z
+	?DoDataView@CPatchMnu@@VECXPEVCDC@@H@Z
+	?GetObjectInfo@CPatchMnu@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CPatchMnu@@VECXPEVCDrObject@@@Z
+	?GetObjectType@CPatchMnu@@VECHXZ
+	?SetObjectType@CPatchMnu@@VECXH@Z
+	?GetElemType@CPatchMnu@@VECHXZ
+	?SetElemType@CPatchMnu@@VECXH@Z
+?GetObjectNo@CPatchMnu@@VECJXZ
+?SetObjectNo@CPatchMnu@@VECXJ@Z
+;?GetObjectNo@CPatchMnu@@VECIXZ
+;?SetObjectNo@CPatchMnu@@VECXI@Z
+
+	?GetRuntimeClass@CPatchMnu@@VFCPEUCRuntimeClass@@XZ
+    ?classCPatchMnu@CPatchMnu@@2UCRuntimeClass@@A
+    ?Serialize@CPatchMnu@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultPatchMnu@CPatchMnu@@VECXXZ
+	?InitPatchMnu@CPatchMnu@@VECXXZ
+
+	?GetCurrentPatchMnu@CPatchMnu@@VECIXZ
+	?SetCurrentPatchMnu@CPatchMnu@@VECXI@Z
+	?GetCurrentPatchMnuOld@CPatchMnu@@VECIXZ
+	?SetCurrentPatchMnuOld@CPatchMnu@@VECXI@Z
+	?GetCurrentPatchMnuDefault@CPatchMnu@@VECIXZ
+	?SetCurrentPatchMnuDefault@CPatchMnu@@VECXI@Z
+	?GetPatchMnuInfo@CPatchMnu@@VEC?EVCString@@I@Z
+	?SetPatchMnuInfo@CPatchMnu@@VECXII@Z
+	?GetPatchMnuArray@CPatchMnu@@VECXQEY01I@Z
+	?SetPatchMnuArray@CPatchMnu@@VECXQEY01I@Z
+	?GetPatchMnuOldArray@CPatchMnu@@VECXQEY01I@Z
+	?SetPatchMnuOldArray@CPatchMnu@@VECXQEY01I@Z
+	?GetPatchMnuDefaultArray@CPatchMnu@@VECXQEY01I@Z
+	?SetPatchMnuDefaultArray@CPatchMnu@@VECXQEY01I@Z
+	?GetPatchMnuID@CPatchMnu@@VEC?EVCString@@I@Z
+	?SetPatchMnuID@CPatchMnu@@VECXVCString@@I@Z
+	?GetPatchMnuIDArray@CPatchMnu@@VECXQEVCString@@@Z
+	?SetPatchMnuIDArray@CPatchMnu@@VECXQEVCString@@@Z
+
+
+; CObj3DMnu
+;	; Constructor and Destructor
+ 	??0CObj3DMnu@@REC@XZ   								
+ 	??1CObj3DMnu@@VEC@XZ  
+ 	                                  
+	?Pack_drPipe@CObj3DMnu@@VECXPEVCString@@@Z
+	?DoDataView@CObj3DMnu@@VECXPEVCDC@@H@Z
+	?GetObjectInfo@CObj3DMnu@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CObj3DMnu@@VECXPEVCDrObject@@@Z
+	?GetObjectType@CObj3DMnu@@VECHXZ
+	?SetObjectType@CObj3DMnu@@VECXH@Z
+	?GetElemType@CObj3DMnu@@VECHXZ
+	?SetElemType@CObj3DMnu@@VECXH@Z
+?GetObjectNo@CObj3DMnu@@VECJXZ
+?SetObjectNo@CObj3DMnu@@VECXJ@Z
+;?GetObjectNo@CObj3DMnu@@VECIXZ
+;?SetObjectNo@CObj3DMnu@@VECXI@Z
+
+	?GetRuntimeClass@CObj3DMnu@@VFCPEUCRuntimeClass@@XZ
+    ?classCObj3DMnu@CObj3DMnu@@2UCRuntimeClass@@A
+    ?Serialize@CObj3DMnu@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultObj3DMnu@CObj3DMnu@@VECXXZ
+	?InitObj3DMnu@CObj3DMnu@@VECXXZ
+
+	?GetCurrentObj3DMnu@CObj3DMnu@@VECIXZ
+	?SetCurrentObj3DMnu@CObj3DMnu@@VECXI@Z
+	?GetCurrentObj3DMnuOld@CObj3DMnu@@VECIXZ
+	?SetCurrentObj3DMnuOld@CObj3DMnu@@VECXI@Z
+	?GetCurrentObj3DMnuDefault@CObj3DMnu@@VECIXZ
+	?SetCurrentObj3DMnuDefault@CObj3DMnu@@VECXI@Z
+	?GetObj3DMnuInfo@CObj3DMnu@@VEC?EVCString@@I@Z
+	?SetObj3DMnuInfo@CObj3DMnu@@VECXII@Z
+	?GetObj3DMnuArray@CObj3DMnu@@VECXQEY01I@Z
+	?SetObj3DMnuArray@CObj3DMnu@@VECXQEY01I@Z
+	?GetObj3DMnuOldArray@CObj3DMnu@@VECXQEY01I@Z
+	?SetObj3DMnuOldArray@CObj3DMnu@@VECXQEY01I@Z
+	?GetObj3DMnuDefaultArray@CObj3DMnu@@VECXQEY01I@Z
+	?SetObj3DMnuDefaultArray@CObj3DMnu@@VECXQEY01I@Z
+	?GetObj3DMnuID@CObj3DMnu@@VEC?EVCString@@I@Z
+	?SetObj3DMnuID@CObj3DMnu@@VECXVCString@@I@Z
+	?GetObj3DMnuIDArray@CObj3DMnu@@VECXQEVCString@@@Z
+	?SetObj3DMnuIDArray@CObj3DMnu@@VECXQEVCString@@@Z
+
+
+; CMapFactor
+;	; Constructor and Destructor
+ 	??0CMapFactor@@REC@XZ   								
+ 	??1CMapFactor@@VEC@XZ 
+ 	                                  
+	?Pack_drPipe@CMapFactor@@VECXPEVCString@@@Z
+	?DoDataView@CMapFactor@@VECXPEVCDC@@H@Z
+	?GetObjectType@CMapFactor@@VECHXZ
+	?SetObjectType@CMapFactor@@VECXH@Z
+	?GetElemType@CMapFactor@@VECHXZ
+	?SetElemType@CMapFactor@@VECXH@Z
+?GetObjectNo@CMapFactor@@VECJXZ
+?SetObjectNo@CMapFactor@@VECXJ@Z
+;?GetObjectNo@CMapFactor@@VECIXZ
+;?SetObjectNo@CMapFactor@@VECXI@Z
+	?GetObjectInfo@CMapFactor@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CMapFactor@@VECXPEVCDrObject@@@Z
+
+	?GetRuntimeClass@CMapFactor@@VFCPEUCRuntimeClass@@XZ
+    ?classCMapFactor@CMapFactor@@2UCRuntimeClass@@A
+    ?Serialize@CMapFactor@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultMapFactor@CMapFactor@@VECXXZ
+	?InitMapFactor@CMapFactor@@VECXXZ
+
+	?GetMapFactor@CMapFactor@@VECNXZ
+	?SetMapFactor@CMapFactor@@VECXN@Z
+	?GetMapModeIndex@CMapFactor@@VECHXZ
+	?SetMapModeIndex@CMapFactor@@VECXH@Z
+
+; CPrecision
+	; Constructor and Destructor
+ 	??0CPrecision@@REC@XZ   								
+ 	??1CPrecision@@VEC@XZ  
+ 	                                 
+	?Pack_drPipe@CPrecision@@VECXPEVCString@@@Z
+	?DoDataView@CPrecision@@VECXPEVCDC@@H@Z
+	?GetObjectType@CPrecision@@VECHXZ
+	?SetObjectType@CPrecision@@VECXH@Z
+	?GetElemType@CPrecision@@VECHXZ
+	?SetElemType@CPrecision@@VECXH@Z
+?GetObjectNo@CPrecision@@VECJXZ
+?SetObjectNo@CPrecision@@VECXJ@Z
+;?GetObjectNo@CPrecision@@VECIXZ
+;?SetObjectNo@CPrecision@@VECXI@Z
+	?GetObjectInfo@CPrecision@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CPrecision@@VECXPEVCDrObject@@@Z 
+
+	?GetRuntimeClass@CPrecision@@VFCPEUCRuntimeClass@@XZ
+    ?classCPrecision@CPrecision@@2UCRuntimeClass@@A
+    ?Serialize@CPrecision@@VECXAEVCArchive@@@Z 
+    
+	?ReadDefaultPrecision@CPrecision@@VECXXZ
+	?InitPrecision@CPrecision@@VECXXZ
+
+	?GetPrecision@CPrecision@@VECIXZ
+	?SetPrecision@CPrecision@@VECXI@Z
+	?GetPrecisionOld@CPrecision@@VECIXZ
+	?SetPrecisionOld@CPrecision@@VECXI@Z
+	?GetPrecisionDefault@CPrecision@@VECIXZ
+	?SetPrecisionDefault@CPrecision@@VECXI@Z
+	?GetWorldBase@CPrecision@@VECJXZ
+	?SetWorldBase@CPrecision@@VECXJ@Z
+	?GetWorldBaseOld@CPrecision@@VECJXZ
+	?SetWorldBaseOld@CPrecision@@VECXJ@Z
+	?GetWorldBaseDefault@CPrecision@@VECJXZ
+	?SetWorldBaseDefault@CPrecision@@VECXJ@Z
+
+
+; CScaleFactor
+;	; Constructor and Destructor
+ 	??0CScaleFactor@@REC@XZ   								
+ 	??1CScaleFactor@@VEC@XZ     
+ 	                              
+	?Pack_drPipe@CScaleFactor@@VECXPEVCString@@@Z
+	?DoDataView@CScaleFactor@@VECXPEVCDC@@H@Z
+	?GetObjectType@CScaleFactor@@VECHXZ
+	?SetObjectType@CScaleFactor@@VECXH@Z
+	?GetElemType@CScaleFactor@@VECHXZ
+	?SetElemType@CScaleFactor@@VECXH@Z
+?GetObjectNo@CScaleFactor@@VECJXZ
+?SetObjectNo@CScaleFactor@@VECXJ@Z
+;?GetObjectNo@CScaleFactor@@VECIXZ
+;?SetObjectNo@CScaleFactor@@VECXI@Z
+	?GetObjectInfo@CScaleFactor@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CScaleFactor@@VECXPEVCDrObject@@@Z
+
+	?GetRuntimeClass@CScaleFactor@@VFCPEUCRuntimeClass@@XZ
+    ?classCScaleFactor@CScaleFactor@@2UCRuntimeClass@@A
+    ?Serialize@CScaleFactor@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultScaleFactor@CScaleFactor@@VECXXZ
+	?InitScaleFactor@CScaleFactor@@VECXXZ
+
+	?GetScaleFactor@CScaleFactor@@VECNXZ
+	?SetScaleFactor@CScaleFactor@@VECXN@Z
+	?GetScaleFactorOld@CScaleFactor@@VECNXZ
+	?SetScaleFactorOld@CScaleFactor@@VECXN@Z
+	?GetScaleFactorDefault@CScaleFactor@@VECNXZ
+	?SetScaleFactorDefault@CScaleFactor@@VECXN@Z
+
+
+; CUnit
+;	; Constructor and Destructor
+ 	??0CUnit@@REC@XZ   								
+ 	??1CUnit@@VEC@XZ   
+ 	                                 
+	?Pack_drPipe@CUnit@@VECXPEVCString@@@Z 
+	?DoDataView@CUnit@@VECXPEVCDC@@H@Z
+	?GetObjectType@CUnit@@VECHXZ
+	?SetObjectType@CUnit@@VECXH@Z
+	?GetElemType@CUnit@@VECHXZ
+	?SetElemType@CUnit@@VECXH@Z
+?GetObjectNo@CUnit@@VECJXZ
+?SetObjectNo@CUnit@@VECXJ@Z
+;?GetObjectNo@CUnit@@VECIXZ
+;?SetObjectNo@CUnit@@VECXI@Z
+	?GetObjectInfo@CUnit@@VECXPEVCDrObject@@@Z
+	?SetObjectInfo@CUnit@@VECXPEVCDrObject@@@Z
+
+	?GetRuntimeClass@CUnit@@VFCPEUCRuntimeClass@@XZ
+    ?classCUnit@CUnit@@2UCRuntimeClass@@A
+    ?Serialize@CUnit@@VECXAEVCArchive@@@Z
+
+	?ReadDefaultUnit@CUnit@@VECXXZ
+	?InitUnit@CUnit@@VECXXZ
+
+	?GetUnitName@CUnit@@VEC?EVCString@@I@Z
+	?GetUnitIndex@CUnit@@VECIXZ
+	?SetUnitIndex@CUnit@@VECXI@Z
+	?GetUnitIndexOld@CUnit@@VECIXZ
+	?SetUnitIndexOld@CUnit@@VECXI@Z
+	?GetUnitIndexDefault@CUnit@@VECIXZ
+	?SetUnitIndexDefault@CUnit@@VECXI@Z
+	?GetUnitNameCount@CUnit@@VECIXZ
+	?SetUnitNameCount@CUnit@@VECXI@Z 
+
+	
+; CClock
+;	; Constructor and Destructor
+;	??0CClock@@REC@XZ
+; 	??1CClock@@VEC@XZ 
+ 	  
+;	?GetRuntimeClass@CClock@@VFCPEUCRuntimeClass@@XZ
+;	?GetTimeDate@CClock@@RECXPEVCString@@0@Z
+;	?SetInternational@CClock@@RECXXZ 
+	
+;    ?classCClock@CClock@@2UCRuntimeClass@@A
+ 	                                 
+  

@@ -1,0 +1,81 @@
+; View_D.def -- for CViewObj stuff --  DEBUG version
+
+LIBRARY	View_D32
+DESCRIPTION  'ViewObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitViewDLL												@2 NONAME
+
+; CRowView
+;	; Constructor and Destructor
+    
+?GetRuntimeClass@CRowView@@UBEPAUCRuntimeClass@@XZ
+?GetMessageMap@CRowView@@MBEPBUAFX_MSGMAP@@XZ
+?messageMap@CRowView@@1UAFX_MSGMAP@@B
+
+
+
+; CDrawView
+;	; Constructor and Destructor
+
+?GetRuntimeClass@CDrawView@@UBEPAUCRuntimeClass@@XZ
+?GetMessageMap@CDrawView@@MBEPBUAFX_MSGMAP@@XZ
+?messageMap@CDrawView@@1UAFX_MSGMAP@@B
+
+
+?classCDrawView@CDrawView@@2UCRuntimeClass@@A
+?messageMap@CDrawView@@1UAFX_MSGMAP@@B
+?GoRender@CDrawView@@MAEXPAVCDC@@VCRect@@H@Z
+?GetObjectReadyforRender@CDrawView@@MAEXPAVCDC@@PAVCDrObject@@H@Z
+?SetScalevv3DToLP@CDrawView@@UAEXXZ
+?SetMatrix@CDrawView@@UAEXW4MATRICES@@PAUMATRIX@@@Z
+?GetMatrix@CDrawView@@UAEPAUMATRIX@@W4MATRICES@@@Z
+?Project@CDrawView@@UAEXPAUWORLD@@0H@Z
+?Transform@CDrawView@@UAEXPAUWORLD@@0@Z
+?UpdateWin3DtoViewPort3DMatrix@CDrawView@@UAEXXZ
+?UpdateCombinedMatrix@CDrawView@@UAEXXZ
+?UpdatePerToParMatrix@CDrawView@@UAEXXZ
+?UpdateViewMatrix@CDrawView@@UAEXXZ
+?UpdateObject@CDrawView@@UAEXHHH@Z
+?OnPrepareDC@CDrawView@@UAEXPAVCDC@@PAUCPrintInfo@@@Z
+?PreCreateWindow@CDrawView@@MAEHAAUtagCREATESTRUCTA@@@Z
+??1CDrawView@@UAE@XZ
+??0CDrawView@@IAE@XZ
+?OnInitialUpdate@CDrawView@@UAEXXZ
+?Do_Object_DrawView@CObjectMgr@@QAEXPAVCDC@@HHH@Z
+?OnDraw@CDrawView@@UAEXPAVCDC@@@Z
+?OnCreate@CDrawView@@QAEHPAUtagCREATESTRUCTA@@@Z
+  
+
+; CZBuffer
+;	; Constructor and Destructor
+	
+
+
+
+; CColorPal
+;	; Constructor and Destructor
+	
+??0CRowView@@QAE@XZ
+??1CRowView@@MAE@XZ
+?classCRowView@CRowView@@2UCRuntimeClass@@A
+?LastViewableRow@CRowView@@MAEHXZ
+?RectLPtoRowRange@CRowView@@MAEXABVCRect@@AAH1H@Z
+?RowToYPos@CRowView@@MAEHH@Z
+?RowToWndRect@CRowView@@MAE?AVCRect@@PAVCDC@@H@Z
+?UpdateScrollSizes@CRowView@@MAEXXZ
+?UpdateRow@CRowView@@UAEXH@Z
+?OnPrint@CRowView@@MAEXPAVCDC@@PAUCPrintInfo@@@Z
+?OnBeginPrinting@CRowView@@MAEXPAVCDC@@PAUCPrintInfo@@@Z
+?OnPreparePrinting@CRowView@@MAEHPAUCPrintInfo@@@Z
+?OnDraw@CRowView@@MAEXPAVCDC@@@Z
+?OnInitialUpdate@CRowView@@MAEXXZ
+?OnPrepareDC@CRowView@@MAEXPAVCDC@@PAUCPrintInfo@@@Z
+?messageMap@CRowView@@1UAFX_MSGMAP@@B
+?classCDataRowHint@CDataRowHint@@2UCRuntimeClass@@A

@@ -1,0 +1,353 @@
+// axis.cpp : implementation file
+//
+#include "stdafx.h" 
+#include <math.h>
+#include "globals.h" 
+
+#include "DrAxis.h"
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+////////////////////////////////
+static double pi = acos(0.)*2.;
+////////////////////////////////
+/*
+BEGIN_MESSAGE_MAP(CAxis,CGrafObject)
+//BEGIN_MESSAGE_MAP
+	//{{AFX_MSG_MAP(CAxis)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/
+
+IMPLEMENT_SERIAL(CAxis,CObject,1)
+/////////////////////////////////////////////////////////////////////////////
+// CAxis
+/////////////////////////////////////////////////////////////////////////////
+CAxis::CAxis()                // call from serialization: No argument
+{ 
+	/////////////////
+	ReadDefaultAxis();
+	InitializeAxis();
+	////////////////////
+
+}
+/*	
+CAxis::CAxis(UINT nLength)
+{
+
+
+}
+*/
+void CAxis::ReadDefaultAxis()
+{
+
+	////////////////////////////// Set Axis Info	
+	m_nAxesDefault[0]    = 1;
+	m_nAxesDefault[1]    = 2;
+	m_nAxesDefault[2]    = 3;
+
+	m_nVerticalDefault   = 2;   // Y axis              
+	m_nPositiveDefault   = 1;   // Upward              
+	///////////////////////////////////// 
+	m_nLengthDefault     = 40;
+	//////////////////////////
+}
+
+void CAxis::InitializeAxis()
+{
+
+	////////////////////////////// Set Axis Info	
+	GetAxesDefault(m_nAxes);
+	GetAxesDefault(m_nAxesOld);
+	///////////////////////////
+    m_nVertical          = 	m_nVerticalDefault;
+    m_nVerticalOld       = 	m_nVerticalDefault;
+	m_nPositive          =  m_nPositiveDefault;
+	m_nPositiveOld       =  m_nPositiveDefault;
+	/////////////////////////////////////////// 
+	m_nLength			 =  m_nLengthDefault;
+	/////////////////////////////////////////
+	m_Coord[0][0] = 0.0;
+	m_Coord[1][0] = 0.0;
+	m_Coord[2][0] = 0.0;
+
+	m_Coord[0][1] = (double) m_nLength;
+	m_Coord[1][1] = 0.0;
+	m_Coord[2][1] = 0.0;
+
+	m_Coord[0][2] = 0.0;
+	m_Coord[1][2] = (double) m_nLength;
+	m_Coord[2][2] = 0.0;
+
+	m_Coord[0][3] = 0.0;
+	m_Coord[1][3] = 0.0;
+	m_Coord[2][3] = (double) m_nLength;
+    ///////////////////////////////// Tag
+    int nTag = m_nLength + 5;
+    ///////////////////////
+	m_Coord[0][4] = (double) nTag;
+	m_Coord[1][4] = 0.0;
+	m_Coord[2][4] = 0.0;
+
+	m_Coord[0][5] = 0.0;
+	m_Coord[1][5] = (double) nTag;
+	m_Coord[2][5] = 0.0;
+
+	m_Coord[0][6] = 0.0;
+	m_Coord[1][6] = 0.0;
+	m_Coord[2][6] = (double) nTag;
+    
+}
+	
+
+void CAxis::Serialize(CArchive& ar)
+{
+
+	CObject::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	WORD w;
+	/////// 
+	if (ar.IsStoring())
+	{
+		TRACE(" Axis:    Storing\n");	// TODO: add storing code here
+		
+		///////////////////////////////////
+		for(int i = 0;i<3;i++)
+		{
+			ar	<<	(WORD)m_nAxes[i]
+				<<	(WORD)m_nAxesOld[i];
+		}		
+	    ar	<<	(WORD)m_nVertical                           	// begin chain
+	    	<<	(WORD)m_nVerticalOld
+			<<	(WORD)m_nPositive
+			<<	(WORD)m_nPositiveOld;  
+		/////////////////////////////			
+/*
+	UINT 	m_nLength;
+	UINT 	m_nWidth;
+	UINT 	m_nHeight;
+	POINT 	m_pt[MAX_PT_AXIS];
+	double 	m_Coord[3][MAX_PT_AXIS];
+	double	m_dTran[2][3];
+*/	 
+	}
+	else
+	{
+		TRACE(" Axis:    Loading\n");	// TODO: add loading code here
+
+		////////////////////////////// 	
+		for(int i = 0;i<3;i++)
+		{
+			ar	>> w;
+			m_nAxes[i] = (UINT) w;
+			ar	>> w;
+			m_nAxesOld[i] = (UINT) w;
+		}		
+	    ar	>>	w;
+	    m_nVertical = (UINT) w;
+	    ar	>>	w;
+	    m_nVerticalOld = (UINT) w;
+		ar	>>	w;
+		m_nPositive = (UINT) w;
+		ar	>>	w;
+		m_nPositiveOld = (UINT) w; 
+		///////////////////////////////////
+
+	}        
+	///////////////
+	
+}
+
+void CAxis::TransformPoint3to2(double* Coord,double Tran[][3],
+									double* dTranCoord)
+{                                                              
+	//////////////////////////////////////////// Transform
+	double sum,Temp[2];
+	
+	for (int i =0;i<2;i++)
+	{         
+		sum = 0.0;
+    	for (int j=0;j<3;j++)
+			sum += Coord[j] * Tran[i][j];
+		Temp[i] = sum;
+	} 
+	       
+	dTranCoord[0] = Temp[0];
+	dTranCoord[1] = Temp[1]; 
+    ///////
+	return ;
+}		
+
+
+void CAxis::DrawAxes(CDC* PtrDC,POINT Origin,double Tran[][3],UINT* nAxes,
+					 UINT nViewNumber)
+{
+	
+   	CPen    Pen;
+   	CPen*   PtrOldPen;
+//   	CBrush  Brush;
+//   	CBrush* PtrOldBrush;
+	
+    ///////////////////////////////////////////////////
+// Create Blue Pen 1 Pixel wide;   
+   	Pen.CreatePen (PS_SOLID,1,0x0000ff);
+   	PtrOldPen = PtrDC->SelectObject(&Pen);
+//    PtrOldBrush= (CBrush*)PtrDC->SelectStockObject(NULL_BRUSH); 
+//    PtrOldBrush= PtrDC->SelectObject(&Brush);
+
+    // Transform points 3 to 2
+   	double Coord[3],Temp[2];
+    for (int i = 0;(UINT)i< MAX_PT_AXIS; i++)
+    {   
+    	for(int j = 0;j<3; j++)
+    		Coord[j] = m_Coord[j][i];  
+
+		TransformPoint3to2(Coord,Tran,Temp);
+		m_pt[i].x = (UINT)Temp[0];
+		m_pt[i].y = (UINT)Temp[1]; 
+	// Shift Axis to Origin
+		m_pt[i].x = Origin.x + m_pt[i].x;
+		m_pt[i].y = Origin.y + m_pt[i].y;
+	}
+	/////////////////////////////// Draw	
+    GoDoIt(PtrDC,m_pt,nAxes,nViewNumber);
+    /////////////////////////////
+//    PtrDC->SelectObject(PtrOldBrush);             
+//    Brush.DeleteObject(); 
+	///////////////////////////////   	
+   	PtrDC->SelectObject(PtrOldPen);   
+   	Pen.DeleteObject();
+
+} 
+
+void CAxis::GoDoIt(CDC* PtrDC,POINT* pt,UINT* nAxes,UINT nViewNumber)
+{
+    char*  AxesTag[3]={"X","Y","Z"}; 
+    ////////////////////////////////////
+	PtrDC->MoveTo(pt[0].x,pt[0].y);
+	PtrDC->LineTo(pt[1].x,pt[1].y);
+	/////////////////////////////////////////
+	PtrDC->MoveTo(pt[0].x,pt[0].y);
+	PtrDC->LineTo(pt[2].x,pt[2].y);
+	/////////////////////////////////////////
+	PtrDC->MoveTo(pt[0].x,pt[0].y);
+	PtrDC->LineTo(pt[3].x,pt[3].y);
+    /////////////////////////////// Tag
+    if (nViewNumber == VIEW12) //View12:rot=0;tilt=0
+    {
+		PtrDC->TextOut(pt[4].x,pt[4].y,AxesTag[nAxes[0]-1],1); 
+		PtrDC->TextOut(pt[5].x,pt[5].y,AxesTag[nAxes[1]-1],1); 
+		PtrDC->TextOut(pt[6].x,pt[6].y,AxesTag[nAxes[2]-1],1); 
+	}
+    else if (nViewNumber == VIEW23) //View23:rot=90;tilt=0;
+	{
+		PtrDC->TextOut(pt[4].x,pt[4].y,AxesTag[nAxes[2]-1],1); 
+		PtrDC->TextOut(pt[5].x,pt[5].y,AxesTag[nAxes[1]-1],1); 
+		PtrDC->TextOut(pt[6].x,pt[6].y,AxesTag[nAxes[0]-1],1); 
+    }
+    else if (nViewNumber == VIEW31) //View31:rot=0;tilt=270;
+	{
+		PtrDC->TextOut(pt[4].x,pt[4].y,AxesTag[nAxes[0]-1],1); 
+		PtrDC->TextOut(pt[5].x,pt[5].y,AxesTag[nAxes[2]-1],1); 
+		PtrDC->TextOut(pt[6].x,pt[6].y,AxesTag[nAxes[1]-1],1); 
+    }
+    else if (nViewNumber == VIEWISO) //ViewISO:rot=?;tilt=?;
+	{
+		PtrDC->TextOut(pt[4].x,pt[4].y,AxesTag[nAxes[0]-1],1); 
+		PtrDC->TextOut(pt[5].x,pt[5].y,AxesTag[nAxes[1]-1],1); 
+		PtrDC->TextOut(pt[6].x,pt[6].y,AxesTag[nAxes[2]-1],1); 
+	}
+	/////////////////////////////////////////
+}   
+                               
+void CAxis::SetTranArray(int nTilt,int nRotation)
+{           
+    //////////////////////////////////////
+	double cosT,cosR,sinT,sinR;
+	//////////////////////////////////////// 	
+	cosT =  cos(((double)nTilt)*pi/180.);
+	sinT =  sin(((double)nTilt)*pi/180.);
+	cosR =  cos(((double)nRotation)*pi/180.);
+	sinR =  sin(((double)nRotation)*pi/180.);
+    //////////////////////////////////////////////////////////// Fill Array
+    // NOTE: RIGHTHandedScrew(RHS)
+    //	     Positive Rotation: Anticlockwise about the axis
+    //							pointing AWAY FROM origin
+    //	     Positive Tilt    : Anticlockwise about the axis
+    //							pointing INTO origin
+    ////////////////////////////////////////////////////////////
+    // UP & X or Y Vertical
+	
+	m_dTran[0][0] =  cosR;
+	m_dTran[1][0] = -sinT*sinR;
+	m_dTran[0][1] =  0;
+	m_dTran[1][1] =  cosT;
+	m_dTran[0][2] = -sinR;
+	m_dTran[1][2] = -cosR*sinT; 
+
+}
+
+void CAxis::GetTranArray(double Tran[][3])
+{
+	for(int i =0; i<2;i++)
+	{ 
+		for(int j =0; j<3;j++) 
+			Tran[i][j] = m_dTran[i][j];
+    }
+} 
+
+void CAxis::DoAxes(CDC* PtrDC,int nTilt,int nRotation,POINT Origin,UINT nViewNumber)
+{
+	
+	/////////////////////////// Get Tran/Axes
+    double Tran[2][3];
+	SetTranArray(nTilt,nRotation);
+	GetTranArray(Tran);       
+	UINT nAxes[3];
+	GetAxes(nAxes);
+    ////////////////////////////////////// Draw Axes
+	DrawAxes(PtrDC,Origin,Tran,nAxes,nViewNumber);
+	///////////////////////////////   	
+
+}
+
+void CAxis::GetAxes(UINT* nAxes)
+{
+	for(int i = 0;i<3;i++)
+		nAxes[i] = m_nAxes[i];
+}
+void CAxis::SetAxes(UINT* nAxes)
+{
+	for(int i = 0;i<3;i++)
+		m_nAxes[i] = nAxes[i];
+}
+
+void CAxis::GetAxesOld(UINT* nAxes)
+{
+	for(int i = 0;i<3;i++)
+		nAxes[i] = m_nAxesOld[i];
+}
+void CAxis::SetAxesOld(UINT* nAxes)
+{
+	for(int i = 0;i<3;i++)
+		m_nAxesOld[i] = nAxes[i];
+}
+
+void CAxis::GetAxesDefault(UINT* nAxes)
+{
+	for(int i = 0;i<3;i++)
+		nAxes[i] = m_nAxesDefault[i];
+}
+void CAxis::SetAxesDefault(UINT* nAxes)
+{
+	for(int i = 0;i<3;i++)
+		m_nAxesDefault[i] = nAxes[i];
+}
+//////////////////////////////////// end of module ///////////////
+
+
+
+
+

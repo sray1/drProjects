@@ -1,0 +1,83 @@
+ // mp_Rotat.h : header file
+//
+#ifndef _MP_ROTAT_H 
+#define _MP_ROTAT_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+                    
+#include "MI_GangP.h"
+#include "DrPatch.h"
+#include "Def_Type.h"                    
+//////////////////////////////////////////////////////
+class AFX_EXT_CLASS CMP_Rotat : public CMI_GangP
+{
+public:
+
+	CMP_Rotat();
+//////////////////////////////////////
+	DECLARE_SERIAL(CMP_Rotat)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+
+	int			SetInfoBase
+				(
+					CString&						PatchID,		
+					CDrPatch*						pDrPatch,
+					CDListMgr*						pCurveList,
+					CList<CURVELATCH,CURVELATCH>*	pLatchList,
+					CDListMgr*						pNodeList,
+					CList<int,int>*					pElperSegList,
+					double							dLen,
+					double							Ratio,
+					CView*							pView
+				); 
+//	CDrPatch*	GoDoIt(); 
+ 	int			GoDoIt(CDrPatch* pDrPatch);
+
+    				
+		
+protected:
+
+	void		SetInfoForDataBase(CDrPatch* pDrObject);
+	////////////////////////////////////////////////////////////
+	int 		Rotate(); 
+//	CDrPatch* 	GetInfo();	// From Dlg
+	int			GetInfo(CDrPatch* pDrPatch);
+	int 		GenerateCNodes();
+	/////////////////////////
+		          
+
+protected:  
+
+
+	/////////////////////
+	CString		m_PatchID;
+
+//Operations
+public:
+
+	~CMP_Rotat();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CMP_Rotat)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

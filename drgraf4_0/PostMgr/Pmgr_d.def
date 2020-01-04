@@ -1,0 +1,115 @@
+; Post_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	PMgr_D32
+DESCRIPTION  'Post Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitPMgrDLL											@2 NONAME
+
+
+; CPostMgr
+	; Constructor and Destructor
+
+
+??0CPostMgr@@QAE@XZ
+??1CPostMgr@@UAE@XZ
+
+?ReSetToolID@CPostMgr@@QAEIIII@Z
+?InitDlgIn@CPostMgr@@QAEXXZ
+
+;?OnDBoxMouseMove@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+;?SetViewNumber@CMouse@@QAEXI@Z
+;?OnDBoxLButtonDown@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+;?OnDBoxLButtonUp@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+;?OnDBoxRButtonDown@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+;?OnDBoxRButtonUp@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+?SetViewCursor@CPostMgr@@QAEXH@Z
+?GetStatusMouseWIC@CPostMgr@@QAE?AULPOINT3@@XZ
+;?SetMouseWIC@CMouse@@QAEXULPOINT3@@@Z 
+?InitDlgIn@CPostMgr@@QAEXXZ
+
+
+
+;CNodPost
+
+?OnEBoxMouseMove_NOD@CNodPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_NOD@CNodPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_NOD@CNodPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_NOD@CNodPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_NOD@CNodPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?ModeLessOff_NOD@CNodPost@@QAEXXZ
+?ModeLessOn_NOD@CNodPost@@QAEXXZ
+?CreateorActivatePost_NOD@CNodPost@@QAEJIJ@Z
+?GoodByePost_NOD@CNodPost@@QAEJIJ@Z
+?UpdatePost_NOD@CNodPost@@QAEJIJ@Z
+?CancelPost_NOD@CNodPost@@QAEJIJ@Z
+
+
+;CCurPost
+
+?OnEBoxMouseMove_CUR@CCurPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_CUR@CCurPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_CUR@CCurPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_CUR@CCurPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_CUR@CCurPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?ModeLessOff_CUR@CCurPost@@QAEXXZ
+?ModeLessOn_CUR@CCurPost@@QAEXXZ
+?CreateorActivatePost_CUR@CCurPost@@QAEJIJ@Z
+?GoodByePost_CUR@CCurPost@@QAEJIJ@Z
+?UpdatePost_CUR@CCurPost@@QAEJIJ@Z
+?CancelPost_CUR@CCurPost@@QAEJIJ@Z
+
+
+
+;CPatPost
+
+?OnEBoxMouseMove_PAT@CPatPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_PAT@CPatPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_PAT@CPatPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_PAT@CPatPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_PAT@CPatPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?ModeLessOff_PAT@CPatPost@@QAEXXZ
+?ModeLessOn_PAT@CPatPost@@QAEXXZ
+?CreateorActivatePost_PAT@CPatPost@@QAEJIJ@Z
+?GoodByePost_PAT@CPatPost@@QAEJIJ@Z
+?UpdatePost_PAT@CPatPost@@QAEJIJ@Z
+?CancelPost_PAT@CPatPost@@QAEJIJ@Z
+
+
+;CSolPost
+
+;?OnEBoxMouseMove_SOL@CSolPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonDown_SOL@CSolPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonUp_SOL@CSolPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonDown_SOL@CSolPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonUp_SOL@CSolPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+
+;CSupPost
+
+;?OnEBoxMouseMove_SUP@CSupPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonDown_SUP@CSupPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonUp_SUP@CSupPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonDown_SUP@CSupPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonUp_SUP@CSupPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+;CSLDPost
+
+;?OnEBoxMouseMove_SLD@CSLDPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonDown_SLD@CSLDPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonUp_SLD@CSLDPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonDown_SLD@CSLDPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonUp_SLD@CSLDPost@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+ 
+
+
+ 

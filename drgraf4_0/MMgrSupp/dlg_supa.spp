@@ -1,0 +1,288 @@
+// Dlg_CurI.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "MSupDll.h"
+#include "UserMsg.h"
+/////////////////////
+#include "drgraf.h"
+#include "drgradoc.h" 
+/////////////////////
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// ElemObjs
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "DrNode.h"
+///////////////////// 
+#include "CommRsrc.h"
+#include "MNodRsrc.h"
+#include "MCurRsrc.h"
+/////////////////////
+#include "Dlg_SupA.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CDlg_SupA dialog
+
+CDlg_SupA::CDlg_SupA(CWnd* pParent /*=NULL*/)
+	: CDialog(CDlg_SupA::IDD, pParent)
+{
+	buttonOK.LoadBitmaps("Image1Up","Image1Down","Image1Focus");
+	buttonCancel.LoadBitmaps("Image2Up","Image2Down","Image2Focus");
+	//{{AFX_DATA_INIT(CDlg_SupA)
+	m_bRxG	= FALSE;
+	m_bRyG	= FALSE;
+	m_bRzG	= FALSE;
+	m_bTxG	= FALSE;
+	m_bTyG	= FALSE;
+	m_bTzG	= FALSE;
+	m_NID	= _T("");
+	m_bTan	= FALSE;
+	m_NID_B = _T("");
+	m_bCN_a = FALSE;
+	m_bCN_b = FALSE;
+	//}}AFX_DATA_INIT
+	m_bPat	= FALSE;
+}
+
+void CDlg_SupA::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CDlg_SupA)
+	DDX_Check(pDX, IDC_RX, m_bRxG);
+	DDX_Check(pDX, IDC_RY, m_bRyG);
+	DDX_Check(pDX, IDC_RZ, m_bRzG);
+	DDX_Check(pDX, IDC_TX, m_bTxG);
+	DDX_Check(pDX, IDC_TY, m_bTyG);
+	DDX_Check(pDX, IDC_TZ, m_bTzG);
+	DDX_CBString(pDX, IDC_NID, m_NID);
+	DDX_Check(pDX, IDC_TANGENT, m_bTan);
+	DDX_CBString(pDX, IDC_NIDB, m_NID_B);
+	DDX_Check(pDX, IDC_CN_A, m_bCN_a);
+	DDX_Check(pDX, IDC_CN_B, m_bCN_b);
+	//}}AFX_DATA_MAP
+}
+
+
+BEGIN_MESSAGE_MAP(CDlg_SupA, CDialog)
+	//{{AFX_MSG_MAP(CDlg_SupA)
+	ON_CBN_SELCHANGE(IDC_NID, OnSelchangeNid)
+	ON_BN_CLICKED(IDC_TANGENT, OnTangent)
+	ON_BN_CLICKED(IDC_CN_A, OnCnA)
+	ON_BN_CLICKED(IDC_CN_B, OnCnB)
+	ON_BN_DOUBLECLICKED(IDOK, OnOK)
+	ON_BN_DOUBLECLICKED(IDCANCEL, OnCancel)
+	ON_BN_DOUBLECLICKED(IDC_TANGENT, OnTangent)
+	ON_BN_DOUBLECLICKED(IDC_CN_A, OnCnA)
+	ON_BN_DOUBLECLICKED(IDC_CN_B, OnCnB)
+	ON_CBN_SELCHANGE(IDC_NIDB, OnSelchangeNidb)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+
+
+/////////////////////////////////////////////////// resource switch
+extern AFX_EXTENSION_MODULE NEAR extensionMSup_DLL;
+
+/////////////////////////////////////////////////////////////////////////////
+// CDlg_SupA message handlers
+
+BOOL CDlg_SupA::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+	
+	// TODO: Add extra initialization here
+	buttonOK.SubclassDlgItem(IDOK,this); 
+	buttonCancel.SubclassDlgItem(IDCANCEL,this);
+	buttonOK.SizeToContent();
+	buttonCancel.SizeToContent();
+	///////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	FillListAllNodeIDs_A();   //  with Nodes
+	FillListAllNodeIDs_B();   //  with Nodes
+	///////////////////////////////////////////
+	if(m_bTanHide)
+	{
+		m_bTan = FALSE;
+		GetDlgItem(IDC_TANGENT)->EnableWindow(FALSE);
+		GetDlgItem(IDC_TANGENT)->SetWindowText("");
+	}
+	if(m_bIdBHide)
+	{
+		m_NID_B = "";
+		m_bCN_b = FALSE;
+		GetDlgItem(IDC_CN_B)->EnableWindow(FALSE);
+		GetDlgItem(IDC_NIDB)->EnableWindow(FALSE);
+		GetDlgItem(IDC_NIDHEADB)->SetWindowText("");
+	}
+	/////////////////////////////////////////// Tangent or Normal
+	GetDlgItem(IDC_TANGENT)->SetWindowText("Tangential");
+	GetDlgItem(IDC_SKEWHEAD)->SetWindowText("Skew Joint X");
+	if(m_bPat)	// Patch
+	{
+		GetDlgItem(IDC_TANGENT)->SetWindowText("Normal");
+		GetDlgItem(IDC_SKEWHEAD)->SetWindowText("Skew Joint Z");
+	}
+	////////////////////////////////////// Fill Up Sup that are active
+	if(m_bRx)
+		GetDlgItem(IDC_RX)->EnableWindow(TRUE);
+	else
+		GetDlgItem(IDC_RX)->EnableWindow(FALSE);
+	if(m_bRy)
+		GetDlgItem(IDC_RY)->EnableWindow(TRUE);
+	else
+		GetDlgItem(IDC_RY)->EnableWindow(FALSE);
+	if(m_bRz)
+		GetDlgItem(IDC_RZ)->EnableWindow(TRUE);
+	else
+		GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+	////
+	if(m_bTx)
+		GetDlgItem(IDC_TX)->EnableWindow(TRUE);
+	else
+		GetDlgItem(IDC_TX)->EnableWindow(FALSE);
+	if(m_bTy)
+		GetDlgItem(IDC_TY)->EnableWindow(TRUE);
+	else
+		GetDlgItem(IDC_TY)->EnableWindow(FALSE);
+	if(m_bTz)
+		GetDlgItem(IDC_TZ)->EnableWindow(TRUE);
+	else
+		GetDlgItem(IDC_TZ)->EnableWindow(FALSE);
+    ////////////////////
+	UpdateData(FALSE);			//Update Screen(FALSE)    
+    ///////////////////	
+	return TRUE;  // return TRUE  unless you set the focus to a control
+}
+
+void CDlg_SupA::OnCnA() 
+{
+	m_bCN_a = !m_bCN_a;
+	///////////////////
+	FillListAllNodeIDs_A();
+}
+
+void CDlg_SupA::OnCnB() 
+{
+	m_bCN_b = !m_bCN_b;
+	///////////////////
+	FillListAllNodeIDs_B();
+}
+
+void CDlg_SupA::OnSelchangeNid() 
+{
+	CComboBox* pCtrl = (CComboBox*)(GetDlgItem(IDC_NID));
+	/////////////////
+	int index = pCtrl->GetCurSel();
+	if(index<0)
+	{
+		m_NID = "";
+		return;
+	}
+	///////////
+	pCtrl->GetLBText(index,m_NID);
+	//
+}
+
+void CDlg_SupA::OnSelchangeNidb() 
+{
+	CComboBox* pCtrl = (CComboBox*)(GetDlgItem(IDC_NIDB));
+	/////////////////
+	int index = pCtrl->GetCurSel();
+	if(index<0)
+	{
+		m_NID_B = "";
+		return;
+	}
+	///////////
+	pCtrl->GetLBText(index,m_NID_B);
+	//
+}
+
+void CDlg_SupA::OnTangent() 
+{
+	m_bTan = !m_bTan;
+	/////////////////////////
+	if(m_bTan)
+	{
+		GetDlgItem(IDC_NID)->EnableWindow(FALSE);
+		GetDlgItem(IDC_NIDHEAD)->SetWindowText("");
+		GetDlgItem(IDC_NIDB)->EnableWindow(FALSE);
+		GetDlgItem(IDC_NIDHEADB)->SetWindowText("");
+	}
+	else
+	{
+		GetDlgItem(IDC_NID)->EnableWindow(TRUE);
+		GetDlgItem(IDC_NIDHEAD)->SetWindowText("CNID_A");
+		GetDlgItem(IDC_NIDB)->EnableWindow(TRUE);
+		GetDlgItem(IDC_NIDHEADB)->SetWindowText("CNID_B");
+	}
+}
+
+void CDlg_SupA::OnOK()
+{
+	UpdateData(TRUE);
+	///////////////
+	CDialog::OnOK();
+}
+
+void CDlg_SupA::OnCancel()
+{
+	// TODO: Add extra cleanup here
+	
+	CDialog::OnCancel();
+}
+
+void CDlg_SupA::FillListAllNodeIDs_A()
+{
+   	((CComboBox*)(GetDlgItem(IDC_NID)))->ResetContent();	// Remove ALL  
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pList 		= pObjectMgr->GetObjectList((m_bCN_a)?CNODE:NODE);
+	//////////////////////////////////////////////////////
+	if(pList->IsEmpty())
+		return;
+	//////////////////////////////////
+	CString Nid;
+	
+	POSITION pos = pList->GetFirstObjectPos();
+	for (;pos !=NULL;)
+	{
+		CDrNode* pNode = (CDrNode*)pList->GetNextObject( pos);
+		Nid   = pNode->GetObjectID();
+    	((CComboBox*)(GetDlgItem(IDC_NID)))->AddString(Nid);		// Show   
+   	}
+}    
+
+void CDlg_SupA::FillListAllNodeIDs_B()
+{
+   	((CComboBox*)(GetDlgItem(IDC_NID)))->ResetContent();	// Remove ALL  
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pList 		= pObjectMgr->GetObjectList((m_bCN_b)?CNODE:NODE);
+	//////////////////////////////////////////////////////
+	if(pList->IsEmpty())
+		return;
+	//////////////////////////////////
+	CString Nid;
+	
+	POSITION pos = pList->GetFirstObjectPos();
+	for (;pos !=NULL;)
+	{
+		CDrNode* pNode = (CDrNode*)pList->GetNextObject( pos);
+		Nid   = pNode->GetObjectID();
+    	((CComboBox*)(GetDlgItem(IDC_NIDB)))->AddString(Nid);		// Show   
+   	}
+}    
+/////////////////////////// end of module /////////////

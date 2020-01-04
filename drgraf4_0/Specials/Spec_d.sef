@@ -1,0 +1,360 @@
+; Spec_D.def -- for CSpecial stuff --  DEBUG version
+
+LIBRARY	Spec_D32
+DESCRIPTION  'Specials DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitSpecDLL												@2 NONAME
+
+    
+
+; CDListMgr
+;	; Constructor and Destructor
+		??0CDListMgr@@QAE@XZ 
+		??1CDListMgr@@UAE@XZ  
+	
+		?GetFirstObjectPos@CDListMgr@@QAEPAU__POSITION@@XZ 
+		?GetNextObject@CDListMgr@@QAEPAVCObject@@AAPAU__POSITION@@@Z 
+		?InsertObject@CDListMgr@@QAEHPAVCObject@@@Z 
+		?EditObject@CDListMgr@@QAEHHPAVCObject@@@Z 
+		?ReplaceObject@CDListMgr@@QAEHHPAVCObject@@@Z 
+		?RemoveObject@CDListMgr@@QAEHH@Z 
+		?DeleteObject@CDListMgr@@QAEHH@Z 
+		?GetObjectA@CDListMgr@@QAEPAVCObject@@H@Z 
+		?GetObjectIndex@CDListMgr@@QAEHJ@Z 
+		?GetObjectIndex@CDListMgr@@QAEHIVCString@@@Z 
+		?GetObjectIndex@CDListMgr@@QAEHPAVCObject@@@Z 
+		?GetObjectFirstIndex@CDListMgr@@QAEHI@Z 
+		?GetSpecificObjectCount@CDListMgr@@QAEHH@Z 
+
+		?GetRuntimeClass@CDListMgr@@UBEPAUCRuntimeClass@@XZ 
+		?classCDListMgr@CDListMgr@@2UCRuntimeClass@@A
+
+
+; CDrObject
+;	; Constructor and Destructor
+		??0CDrObject@@QAE@XZ       
+		??1CDrObject@@UAE@XZ       
+
+		?DrawPoint3D@CDrObject@@QAEXPAVCDC@@NNNK@Z 
+		?DrawPoint3D@CDrObject@@QAEXPAVCDC@@PAUWORLD@@K@Z 
+		?DrawLine3D@CDrObject@@QAEXPAVCDC@@PAUWORLD@@1H@Z 
+		?DrawLine3D@CDrObject@@QAEXPAVCDC@@NNNNNNH@Z 
+		?AddStr@CDrObject@@QAEXPAVCString@@0H@Z 
+		?sprintn@CDrObject@@QAEXPADJJVCString@@@Z 
+		?AddNum@CDrObject@@QAEXPAVCString@@JJJV2@@Z 
+		?AddInt@CDrObject@@QAEXPAVCString@@H@Z 
+		?DoDataView@CDrObject@@UAEXPAVCDC@@H@Z 
+
+		?GetScreen2DCorner@CDrObject@@UAE?AUtagPOINT@@H@Z 
+		?SetScreen2DCorner@CDrObject@@UAEXUtagPOINT@@H@Z 
+		?GetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 
+		?SetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 
+		?GetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 
+		?SetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 
+		?GetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 
+		?SetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 
+		?GetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 
+		?SetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 
+
+ 		?Serialize@CDrObject@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CDrObject@@UBEPAUCRuntimeClass@@XZ 
+		?classCDrObject@CDrObject@@2UCRuntimeClass@@A 
+    
+
+
+; CBooleans
+;	; Constructor and Destructor
+		??0CBooleans@@QAE@XZ       
+		??1CBooleans@@UAE@XZ 
+		
+		?GetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z
+		?SetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z
+
+		?ReadDefaultBooleans@CBooleans@@UAEXXZ 
+		?InitBooleans@CBooleans@@UAEXXZ 
+		?DoDataView@CBooleans@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CBooleans@@UAEXPAVCString@@@Z 
+ 
+		?ToggleZoom@CBooleans@@UAEHHH@Z
+		?IsZoomOn@CBooleans@@UAEHHH@Z
+		?SetZoomEnabled@CBooleans@@UAEXHH@Z
+		?IsZoomEnabled@CBooleans@@UAEHH@Z
+
+		?Serialize@CBooleans@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CBooleans@@UBEPAUCRuntimeClass@@XZ 
+		?classCBooleans@CBooleans@@2UCRuntimeClass@@A 
+
+
+	                                    
+
+
+; CDataWindow
+;	; Constructor and Destructor
+		??0CDataWindow@@QAE@XZ     
+		??1CDataWindow@@UAE@XZ     
+		
+?SetWinExtWIC@CDataWindow@@UAEXXZ
+?SetWinMinMaxWIC@CDataWindow@@UAEXULPOINT3@@@Z
+?GetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z
+
+		?ReadDefaultDataWindow@CDataWindow@@UAEXXZ 
+		?InitDataWindow@CDataWindow@@UAEXXZ 
+		?DoDataView@CDataWindow@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CDataWindow@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CDataWindow@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CDataWindow@@UBEPAUCRuntimeClass@@XZ 
+		?classCDataWindow@CDataWindow@@2UCRuntimeClass@@A 
+
+
+
+
+; CDrFont
+;	; Constructor and Destructor
+ 
+		??0CDrFont@@QAE@XZ         
+		??1CFontDialog@@UAE@XZ     
+ 
+?GetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z
+
+		?ReadDefaultDrFont@CDrFont@@UAEXXZ 
+		?InitDrFont@CDrFont@@UAEXXZ 
+		?DoDataView@CDrFont@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CDrFont@@UAEXPAVCString@@@Z 
+ 
+		?DoTextFont@CDrFont@@UAEXXZ 
+		?Serialize@CDrFont@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CDrFont@@UBEPAUCRuntimeClass@@XZ 
+		?classCDrFont@CDrFont@@2UCRuntimeClass@@A 
+
+
+
+; CDrPen
+;	; Constructor and Destructor
+
+		??0CDrPen@@QAE@XZ          
+		??1CDrPen@@UAE@XZ         
+
+?GetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z
+
+		?ReadDefaultDrPen@CDrPen@@UAEXXZ 
+		?InitDrPen@CDrPen@@UAEXXZ  
+		?DoDataView@CDrPen@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CDrPen@@UAEXPAVCString@@@Z 
+ 
+		?ReplacePen@CDrPen@@UAEXXZ 
+
+		?Serialize@CDrPen@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CDrPen@@UBEPAUCRuntimeClass@@XZ 
+		?classCDrPen@CDrPen@@2UCRuntimeClass@@A 
+
+
+
+   
+;  CHitNet
+;	; Constructor and Destructor
+		??0CHitNet@@QAE@XZ        
+		??1CHitNet@@UAE@XZ         
+
+?GetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z
+
+		?ReadDefaultHitNet@CHitNet@@UAEXXZ 
+		?InitHitNet@CHitNet@@UAEXXZ 
+		?DoDataView@CHitNet@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CHitNet@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CHitNet@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CHitNet@@UBEPAUCRuntimeClass@@XZ 
+		?classCHitNet@CHitNet@@2UCRuntimeClass@@A 
+
+
+
+
+; CLayer
+;	; Constructor and Destructor
+		??0CLayer@@QAE@XZ          
+		??1CLayer@@UAE@XZ    
+		     
+?SetLayerDefaultArray@CLayer@@UAEXQAY01I@Z
+?GetLayerDefaultArray@CLayer@@UAEXQAY01I@Z
+?SetLayerOldArray@CLayer@@UAEXQAY01I@Z
+?GetLayerOldArray@CLayer@@UAEXQAY01I@Z
+?SetLayerArray@CLayer@@UAEXQAY01I@Z
+?GetLayerArray@CLayer@@UAEXQAY01I@Z
+?SetLayerInfo@CLayer@@UAEXII@Z
+?GetLayerInfo@CLayer@@UAE?AVCString@@I@Z
+?GetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z
+
+		?ReadDefaultLayer@CLayer@@UAEXXZ 
+		?InitLayer@CLayer@@UAEXXZ  
+		?DoDataView@CLayer@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CLayer@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CLayer@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CLayer@@UBEPAUCRuntimeClass@@XZ 
+		?classCLayer@CLayer@@2UCRuntimeClass@@A 
+
+
+
+
+
+; CPatchMnu
+;	; Constructor and Destructor
+		??0CPatchMnu@@QAE@XZ       
+		??1CPatchMnu@@UAE@XZ       
+
+?SetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z
+?GetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z
+?SetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z
+?GetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z
+?SetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z
+?GetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z
+?SetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z
+?GetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z
+?SetPatchMnuInfo@CPatchMnu@@UAEXII@Z
+?GetPatchMnuInfo@CPatchMnu@@UAE?AVCString@@I@Z
+?GetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z
+
+		?ReadDefaultPatchMnu@CPatchMnu@@UAEXXZ 
+		?InitPatchMnu@CPatchMnu@@UAEXXZ 
+		?DoDataView@CPatchMnu@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CPatchMnu@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CPatchMnu@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CPatchMnu@@UBEPAUCRuntimeClass@@XZ 
+		?classCPatchMnu@CPatchMnu@@2UCRuntimeClass@@A 
+
+
+
+
+; CObj3DMnu
+;	; Constructor and Destructor
+
+		??0CObj3DMnu@@QAE@XZ     
+		??1CObj3DMnu@@UAE@XZ       
+
+?SetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z
+?GetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z
+?SetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z
+?GetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z
+?SetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z
+?GetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z
+?SetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z
+?GetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z
+?SetObj3DMnuInfo@CObj3DMnu@@UAEXII@Z
+?GetObj3DMnuInfo@CObj3DMnu@@UAE?AVCString@@I@Z
+?GetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z
+
+		?ReadDefaultObj3DMnu@CObj3DMnu@@UAEXXZ 
+		?InitObj3DMnu@CObj3DMnu@@UAEXXZ 
+		?DoDataView@CObj3DMnu@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CObj3DMnu@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CObj3DMnu@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CObj3DMnu@@UBEPAUCRuntimeClass@@XZ 
+		?classCObj3DMnu@CObj3DMnu@@2UCRuntimeClass@@A 
+
+
+
+
+; CMapFactor
+;	; Constructor and Destructor
+		??0CMapFactor@@QAE@XZ      
+		??1CMapFactor@@UAE@XZ      
+
+ ?GetMapModeIndex@CMapFactor@@UAEHXZ
+
+		?ReadDefaultMapFactor@CMapFactor@@UAEXXZ 
+		?InitMapFactor@CMapFactor@@UAEXXZ 
+		?DoDataView@CMapFactor@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CMapFactor@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CMapFactor@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CMapFactor@@UBEPAUCRuntimeClass@@XZ 
+		?classCMapFactor@CMapFactor@@2UCRuntimeClass@@A 
+
+
+
+; CPrecision
+	; Constructor and Destructor
+		??0CPrecision@@QAE@XZ      
+		??1CPrecision@@UAE@XZ      
+
+		?ReadDefaultPrecision@CPrecision@@UAEXXZ 
+		?InitPrecision@CPrecision@@UAEXXZ 
+		?DoDataView@CPrecision@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CPrecision@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CPrecision@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CPrecision@@UBEPAUCRuntimeClass@@XZ 
+		?classCPrecision@CPrecision@@2UCRuntimeClass@@A 
+
+
+
+
+; CScaleFactor
+;	; Constructor and Destructor
+		??0CScaleFactor@@QAE@XZ    
+		??1CScaleFactor@@UAE@XZ    
+
+		?ReadDefaultScaleFactor@CScaleFactor@@UAEXXZ 
+		?InitScaleFactor@CScaleFactor@@UAEXXZ 
+		?DoDataView@CScaleFactor@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CScaleFactor@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CScaleFactor@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CScaleFactor@@UBEPAUCRuntimeClass@@XZ 
+		?classCScaleFactor@CScaleFactor@@2UCRuntimeClass@@A 
+
+
+
+; CUnit
+;	; Constructor and Destructor
+		??0CUnit@@QAE@XZ           
+		??1CUnit@@UAE@XZ           
+
+		?ReadDefaultUnit@CUnit@@UAEXXZ 
+		?InitUnit@CUnit@@UAEXXZ    
+		?DoDataView@CUnit@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CUnit@@UAEXPAVCString@@@Z 
+ 
+		?Serialize@CUnit@@UAEXAAVCArchive@@@Z 
+		?GetRuntimeClass@CUnit@@UBEPAUCRuntimeClass@@XZ 
+		?classCUnit@CUnit@@2UCRuntimeClass@@A 
+
+	
+; CClock
+;	; Constructor and Destructor
+;	??0CClock@@REC@XZ
+; 	??1CClock@@VEC@XZ 
+ 	  
+;	?GetRuntimeClass@CClock@@VFCPEUCRuntimeClass@@XZ
+;	?GetTimeDate@CClock@@RECXPEVCString@@0@Z
+;	?SetInternational@CClock@@RECXXZ 
+	
+;    ?classCClock@CClock@@2UCRuntimeClass@@A
+ 	                                 
+?GetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z
+?GetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z
+?GetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z
+?GetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z
+?SetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z
+
+ 

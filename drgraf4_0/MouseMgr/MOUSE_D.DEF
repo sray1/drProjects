@@ -1,0 +1,41 @@
+; Mouse_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	Mouse_D
+DESCRIPTION  'Mouse Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitMouseDLL											@2 NONAME
+
+; CElMouse
+	; Constructor and Destructor
+; 	??0CElMouse@@REC@XZ 									@101 NONAME
+; 	??1CElMouse@@VEC@XZ                                     @102 NONAME
+;void 	OnElementBoxMouseMove(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+;void 	OnElementBoxLButtonDown(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+;void 	OnElementBoxRButtonDown(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+;void 	OnElementBoxLButtonUp(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+;void 	OnElementBoxRButtonUp(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+
+; CDbMouse
+	; Constructor and Destructor
+; 	??0CDbMouse@@REC@XZ 									@201 NONAME
+; 	??1CDbMouse@@VEC@XZ                                     @202 NONAME
+;void 	OnDrawBoxMouseMove(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+;void 	OnDrawBoxLButtonDown(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+;void 	OnDrawBoxRButtonDown(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+;void 	OnDrawBoxLButtonUp(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+;void 	OnDrawBoxRButtonUp(UINT nFlags, CPoint point,CRuntimeClass* pViewClass);
+
+  

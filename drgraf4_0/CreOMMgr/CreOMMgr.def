@@ -1,0 +1,97 @@
+; CreOM_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	CreM_D32
+DESCRIPTION  'CreOM Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitCreMDLL											@2 NONAME
+
+
+; CreOMMgr
+
+??0CCreOMMgr@@QAE@XZ
+??1CCreOMMgr@@UAE@XZ
+
+
+?InitDlgIn@CCreOMMgr@@QAEXXZ
+?CreateorActivateCreIn@CCreOMMgr@@QAEIIJ@Z
+?GoodByeCreIn@CCreOMMgr@@QAEIIJ@Z
+?UpdateCreIn@CCreOMMgr@@QAEIIJ@Z
+?CancelCreIn@CCreOMMgr@@QAEIIJ@Z
+?ReSetToolID@CCreOMMgr@@QAEIIII@Z
+?SetViewCursor@CCreOMMgr@@QAEXH@Z
+
+
+
+; NodCreOM
+
+??0CNodCreOM@@QAE@XZ
+??1CNodCreOM@@UAE@XZ
+
+?ModeLessOn@CNodCreOM@@QAEXXZ
+?ModeLessOff@CNodCreOM@@QAEXXZ
+?OnEBoxMouseMove_NOD@CNodCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_NOD@CNodCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_NOD@CNodCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_NOD@CNodCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_NOD@CNodCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+
+; CurCreOM
+
+??0CCurCreOM@@QAE@XZ
+??1CCurCreOM@@UAE@XZ
+
+?OnEBoxMouseMove_CUR@CCurCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_CUR@CCurCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_CUR@CCurCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_CUR@CCurCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_CUR@CCurCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+
+; PatCreOM
+
+??0CPatCreOM@@QAE@XZ
+??1CPatCreOM@@UAE@XZ
+
+?OnEBoxMouseMove_PAT@CPatCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_PAT@CPatCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_PAT@CPatCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_PAT@CPatCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_PAT@CPatCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+
+; SolCreOM
+
+??0CSolCreOM@@QAE@XZ
+??1CSolCreOM@@UAE@XZ
+
+?OnEBoxMouseMove_SOL@CSolCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_SOL@CSolCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_SOL@CSolCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_SOL@CSolCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_SOL@CSolCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+ 
+
+
+; O3DCreOM
+
+??0CO3DCreOM@@QAE@XZ
+??1CO3DCreOM@@UAE@XZ
+
+?OnEBoxMouseMove_O3D@CO3DCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_O3D@CO3DCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_O3D@CO3DCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_O3D@CO3DCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_O3D@CO3DCreOM@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+ 

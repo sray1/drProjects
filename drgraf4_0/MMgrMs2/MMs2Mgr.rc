@@ -1,0 +1,174 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "MMs2Rsrc.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "MMs2Rsrc.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "CommRsrc.h"
+#include "MMs0Rsrc.h"
+#include "MMs1Rsrc.h"
+#include "MMs2Rsrc.h"
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IMAGE1DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1U.BMP"
+IDB_CURVEBIT            BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\CURVEBIT.BMP"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_P_SPAWN DIALOGEX 0, 0, 232, 130
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "SPAWNING Mesh2D"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,172,97,40,
+                    24,0,HIDOK
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,26,
+                    97,40,26,0,HIDCANCEL
+    RTEXT           "Parent Mesh2c: ",IDC_STATIC,43,8,60,8
+    RTEXT           "Spawn Ic: ",IDC_STATIC,119,8,39,9
+    EDITTEXT        IDC_SPNID,109,19,56,14,ES_AUTOHSCROLL,0,HIDC_SPNID
+    ICON            IDI_ICONPIPE,IDC_STATIC,10,10,21,20
+    LISTBOX         IDD_LIST,169,8,53,78,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_LIST
+    CONTROL         "Transformations",IDC_XFORM,"Button",BS_AUTORADIOBUTTON,
+                    77,54,66,10,0,HIDC_XFORM
+    CONTROL         "Symmetry",IDC_SYMM,"Button",BS_AUTORADIOBUTTON,77,67,46,
+                    10,0,HIDC_SYMM
+    GROUPBOX        "Spawn by ",IDC_STATIC,47,40,115,45
+    EDITTEXT        IDC_CID,43,19,56,14,ES_AUTOHSCROLL,0,HIDC_CID
+END
+
+IDD_2_PROFILE_SI DIALOGEX 0, 0, 170, 118
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Mesh2D Merge Info"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Done",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,121,83,42,
+                    26,0,HIDOK
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,7,
+                    83,40,26,0,HIDCANCEL
+    RTEXT           "New Mesh ID",IDC_STATIC,41,1,46,8,0,WS_EX_RIGHT
+    EDITTEXT        IDC_CID_PROF,41,10,40,12,ES_AUTOHSCROLL,0,HIDC_CID_PROF
+    ICON            IDI_ICONPIPE,IDC_STATIC,7,9,20,20
+    LISTBOX         IDD_POOLLIST,97,24,55,52,LBS_SORT | WS_VSCROLL | 
+                    WS_TABSTOP,0,HIDD_POOLLIST
+    CTEXT           "MeshPool",IDC_STATIC,117,16,36,7,0,WS_EX_RIGHT
+    LISTBOX         IDD_LIST,39,24,55,51,LBS_SORT | LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP,0,HIDD_LIST
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "MMs2Rsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""CommRsrc.h""\r\n"
+    "#include ""MMs0Rsrc.h""\r\n"
+    "#include ""MMs1Rsrc.h""\r\n"
+    "#include ""MMs2Rsrc.h""\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICONPIPE            ICON    DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\ICO_PIPE.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_P_SPAWN, DIALOG
+    BEGIN
+        RIGHTMARGIN, 222
+        VERTGUIDE, 222
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "MMgr_Ms2 Resource String"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

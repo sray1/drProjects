@@ -1,0 +1,37 @@
+--------------------Configuration: rundll - Win32 Debug--------------------
+Begining build with project "C:\drgraf4_0\Auxiview\test\rundll\rundll.dsp", at root.
+Active configuration is Win32 (x86) Application (based on Win32 (x86) Application)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Fp"Debug/rundll.pch" /YX"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /o NUL /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo"Debug/rundll.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o"Debug/rundll.bsc" "
+			"COFF Linker for 80x86" with flags "spec_D32.lib /nologo /subsystem:windows /incremental:yes /pdb:"Debug/rundll.pdb" /debug /machine:I386 /out:"Debug/rundll.exe" /pdbtype:sept "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "C:\WINDOWS\TEMP\RSPC330.TMP" with contents <spec_D32.lib /nologo /subsystem:windows /incremental:yes /pdb:"Debug/rundll.pdb" /debug /machine:I386 /out:"Debug/rundll.exe" /pdbtype:sept 
+.\Debug\ChildFrm.obj
+.\Debug\DrawVw.obj
+.\Debug\HistVw.obj
+.\Debug\Inputvw.obj
+.\Debug\MainFrm.obj
+.\Debug\MyButton.obj
+.\Debug\MySlider.obj
+.\Debug\ODDialog.obj
+.\Debug\rundll.obj
+.\Debug\rundllDoc.obj
+.\Debug\rundllView.obj
+.\Debug\SpecVw.obj
+.\Debug\Splitter.obj
+.\Debug\StdAfx.obj
+.\Debug\rundll.res
+.\Debug\AnimButton.obj
+.\Debug\spec_D32.lib>
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSPC330.TMP" 
+Linking...
+
+
+
+rundll.exe - 0 error(s), 0 warning(s)

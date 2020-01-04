@@ -1,0 +1,39 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by MCurMgr.rc
+//
+#define HIDCANCEL                       0x81db0002    // IDD_BC_TAN
+#define HIDC_AXIS                       0x80680402    // IDD_CRC_IN
+#define HIDC_AXIS_X                     0x806803fc    // IDD_CRC_IN
+#define HIDC_AXIS_Y                     0x806803fd    // IDD_CRC_IN
+#define HIDC_AXIS_Z                     0x806803fe    // IDD_CRC_IN
+#define HIDC_BEG                        0x81e501e8    // IDD_C_NONUNIFORM
+#define HIDC_CID_PROF                   0x806500ce    // IDD_C_PROFILE_SI
+#define HIDC_CNODE_FROM                 0x81db019d    // IDD_BC_TAN
+#define HIDC_CNODE_TO                   0x81db019e    // IDD_BC_TAN
+#define HIDC_COORD_INPUT                0x81db01df    // IDD_BC_TAN
+#define HIDC_DEFAULT_LMAT               0x80c700ef    // IDD_C_SPLICE
+#define HIDC_ELEMS                      0x806803ec    // IDD_CRC_IN
+#define HIDC_ELOUT_UNIF                 0x81ea01eb    // IDD_C_MESH
+#define HIDC_END                        0x81e501e6    // IDD_C_NONUNIFORM
+#define HIDC_NEGATIVE                   0x80680400    // IDD_CRC_IN
+#define HIDC_NONU_OT                    0x81ea01ec    // IDD_C_MESH
+#define HIDC_ORIENT                     0x80c700e9    // IDD_C_SPLICE
+#define HIDC_RATIO                      0x806803ed    // IDD_CRC_IN
+#define HIDC_SEG_OT                     0x81e501e7    // IDD_C_NONUNIFORM
+#define HIDC_STATIC                     0x81dbffff    // IDD_BC_TAN
+#define HIDC_STEP                       0x81d601d8    // IDD_C_KNOT
+#define HIDC_TAN_X                      0x81db01dc    // IDD_BC_TAN
+#define HIDC_TAN_Y                      0x81db01dd    // IDD_BC_TAN
+#define HIDC_TAN_Z                      0x81db01de    // IDD_BC_TAN
+#define HIDC_UNIF_OT                    0x81ea01ed    // IDD_C_MESH
+#define HIDC_UPDATE                     0x8068038a    // IDD_CRC_IN
+#define HIDC_VALUE                      0x81d601d9    // IDD_C_KNOT
+#define HIDD_ADD                        0x81d6008d    // IDD_C_KNOT
+#define HIDD_CANCEL                     0x80680002    // IDD_CRC_IN
+#define HIDD_DEL                        0x81d6008e    // IDD_C_KNOT
+#define HIDD_EDIT                       0x81e50092    // IDD_C_NONUNIFORM
+#define HIDD_LATCHLIST                  0x80c700b8    // IDD_C_SPLICE
+#define HIDD_LIST                       0x81d60090    // IDD_C_KNOT
+#define HIDD_POOLLIST                   0x80650091    // IDD_C_PROFILE_SI
+#define HIDD_SELECTLIST                 0x80c700b7    // IDD_C_SPLICE
+#define HIDOK                           0x81db0001    // IDD_BC_TAN

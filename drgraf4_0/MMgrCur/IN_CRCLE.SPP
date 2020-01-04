@@ -1,0 +1,444 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+#include "math.h"
+
+#include "drgraf.h"
+#include "drgradoc.h"
+#include "ObjMgr.h"
+/////////////////////
+#include "glb_Type.h"
+#include "glb_CuPS.h"
+/////////////////////
+#include "3DMath.h" 
+#include "XForm.h" 
+/////////////////////
+#include "In_Crcle.h" 
+
+#ifdef _DEBUG
+#include <stdio.h>
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////
+IMPLEMENT_SERIAL(CIn_Circle,CObject,1)
+/////////////////////////////////////
+#define MIN_INODES_CURVE	2        
+#define	new DEBUG_NEW
+#define	BUFF_SIZE	1024
+/////////////////////////////////////////////////////////////////////////////
+CIn_Circle::CIn_Circle()
+{
+	/////////////////// Memory
+	m_MemErr	= 0;
+	m_pWts_BS_S	= NULL;
+	m_pWts_BZ_S	= NULL;
+	m_pData		= NULL;
+	m_pDatNew	= NULL;
+	m_pCon_BS_S	= NULL;
+	m_pCon_BZ_S	= NULL;
+}
+
+CIn_Circle::~CIn_Circle()
+{
+	/////////////////// Memory
+	if(m_MemErr<0)
+	{
+		if(m_pWts_BS_S)
+			delete [] m_pWts_BS_S; 
+		if(m_pWts_BZ_S)
+			delete [] m_pWts_BZ_S; 
+		if(m_pData)
+			delete [] m_pData; 
+		if(m_pDatNew)
+			delete [] m_pDatNew; 
+		if(m_pCon_BS_S)
+			delete [] m_pCon_BS_S; 
+		if(m_pCon_BZ_S)
+			delete [] m_pCon_BZ_S;
+	}	
+}
+///////////////////////////////////////////////////////////////////////////////////// Interpolation
+	//////////////////////////////////////////////////////////////////////////////
+	//	NOTE:  BackGround:	k = Order; k-1 = Degree of Curve [ k=3 for Circle]	//
+	//																			//
+///////////////////////////////////////////////////////////////////////////////////////////////	
+int CIn_Circle::Interpolate()
+{
+	///////////////////////////////////////////////////////// Radius and Center
+	Compute_CandR(m_pData, &m_Center, &m_Radius);
+ 	///////////////////////////////////////////// Adjust Data as nSegAng degree segment
+ 	m_pDatNew	= new WORLD[m_nDatNew];
+	if(!m_pDatNew )
+	{
+		AfxMessageBox("ERROR:Interpolate -Memory Failure!");
+		m_MemErr = -1;
+		return m_MemErr;
+	}
+	GetNewPtsOnCircle(m_pData, m_phi, m_si, m_theta, m_Center, m_pDatNew, m_nDatNew, m_bClosed_S);
+	////////////////////////////////////////////////////////////////////////  Cons/Wts
+	m_pWts_BS_S	= new double[m_nCon_BS_S];		
+	m_pCon_BS_S	= new WORLD [m_nCon_BS_S];
+	m_pWts_BZ_S	= new double[m_nCon_BZ_S];
+	m_pCon_BZ_S	= new WORLD [m_nCon_BZ_S];
+	///////////
+	if(!m_pWts_BS_S || !m_pCon_BS_S || !m_pWts_BZ_S || !m_pCon_BZ_S )
+	{
+		AfxMessageBox("ERROR:Interpolate -Memory Failure!");
+		m_MemErr = -1;
+		return m_MemErr;
+	}
+	//////////////////////////////////////////////////////////////// FillUp
+	FillUpBezier(m_pDatNew, m_theta, m_Center, m_Radius, 
+ 				 m_pCon_BZ_S, m_pWts_BZ_S,m_nCon_BZ_S, m_nSeg_DT_S, m_bClosed_S);
+	//////////// 							 
+ 	FillUpSpline(m_pCon_BZ_S, m_pWts_BZ_S,m_nCon_BZ_S,
+	 			 m_pCon_BS_S, m_pWts_BS_S,m_nCon_BS_S, m_nSeg_DT_S, m_bClosed_S);
+	/////////////////////////////////////////////////////////////////
+	if(m_pData)
+	{
+		delete [] m_pData;
+		m_pData = NULL;
+	}
+	if(m_pDatNew)
+	{
+		delete [] m_pDatNew;
+		m_pDatNew = NULL;
+	}
+	////////////////
+	return 0;
+}		
+
+int CIn_Circle::Compute_CandR(pWORLD Data, pWORLD Center, pDOUBLE Radius)
+{
+	// ALSO COMPUTES NORMAL to CIRCLE PLANE
+	///////////////
+	C3DMath	Math3D;
+	CXForm	XForm(TRUE);	// Parallel
+	///////////////////////////////////////
+	MATRIX Rot;
+	pMATRIX pRot = &Rot;  
+	Math3D.GetIdentityMATRIX(pRot);
+	//////////////////////////////////////// Translate Center & DOld to Origin
+	XForm.Translate(pRot, -Data[0].x, -Data[0].y, -Data[0].z, XF_REPLACE);	
+	////////////
+	WORLD a,b,c;
+	XForm.Transform(&Data[0], &a, pRot);
+	XForm.Transform(&Data[1], &b, pRot);
+	XForm.Transform(&Data[2], &c, pRot);
+	//////////////////////////////////////// midPts
+	WORLD mid1,mid2;
+	Math3D.Avg3DPts(&a, &b, &mid1);
+	Math3D.Avg3DPts(&b, &c, &mid2);
+	//////////////////////////////////////// Normal to plane of Circle
+	WORLD wN;
+	WORLD rab,rac;
+	Math3D.Sub3DPts(&b, &a, &rab);
+	Math3D.Sub3DPts(&c, &a, &rac);
+	Math3D.Cross3DPts(&rab,&rac,&wN);
+	///////////////////////////////// Save
+	m_Normal.x = wN.x;
+	m_Normal.y = wN.y;
+	m_Normal.z = wN.z;
+	//////////////////////////////////////// Rotation Mat: wN->Z-axis/rab->Y-Axis
+	Math3D.GetIdentityMATRIX(pRot);
+	XForm.VRCtoWORLDRotationMATRIX(pRot,&wN,&rab);	
+	//////////////////////////////////////// Change Effectively to 2D
+	WORLD aBar,bBar,cBar,mid1Bar,mid2Bar;
+	XForm.Transform(&a, &aBar, pRot);
+	XForm.Transform(&b, &bBar, pRot);
+	XForm.Transform(&c, &cBar, pRot);
+	XForm.Transform(&mid1, &mid1Bar, pRot);
+	XForm.Transform(&mid2, &mid2Bar, pRot);
+	///////////////////////////////////////
+	WORLD Center2;
+	double m2Bar,b1Bar,b2Bar;
+//	m1Bar = 0;										// 2D slope of ab chord bisector 
+	if((cBar.y-bBar.y) == 0.)						// ab perpendicular to ac
+	{
+		Center2.x 	= mid2Bar.x;	 
+		Center2.y 	= mid1Bar.y;
+	}
+	else
+	{	 
+		b1Bar 		= mid1Bar.y;						// 2D intercept of ab chord bisector
+		m2Bar 		= (bBar.x-cBar.x)/(cBar.y-bBar.y);	// 2D Slope of bc chord bisector
+		b2Bar 		= mid2Bar.y - m2Bar*mid2Bar.x;		// 2D intercept of ab chord bisector
+		//////////////////////////////////////
+		Center2.y 	= b1Bar;
+		Center2.x 	= (Center2.y-b2Bar)/m2Bar;	 
+	}
+	/////////////////		 
+	Center2.z 	= 0.;
+	//////////////////////////////////////// Transform Center to 3D & Translate Back 
+	Math3D.TransposeMATRIX(pRot);
+	XForm.Transform(&Center2, Center, pRot);
+	///////////////////////////////
+	Math3D.GetIdentityMATRIX(pRot);
+	XForm.Translate(pRot, Data[0].x, Data[0].y, Data[0].z, XF_REPLACE);	
+	XForm.Transform(Center, &Center2, pRot);
+	Center->x = Center2.x;
+	Center->y = Center2.y;
+	Center->z = Center2.z;
+	//////////////////////////////////////// Radius
+	WORLD rVec;
+	Math3D.Sub3DPts(&Data[0], Center, &rVec);
+	*Radius = sqrt(rVec.x*rVec.x + rVec.y*rVec.y +rVec.z*rVec.z);
+	/////////
+	return 0;
+
+}
+	
+int CIn_Circle::GetNewPtsOnCircle(pWORLD DOld, double theta, WORLD Center, pWORLD DNew, int nNew) 
+{
+	
+	double Inc;
+	if(m_bClosed_S)
+		Inc	= 360/nNew;
+	else
+		Inc	= theta/(nNew-1);
+	/////////////////////////// Ist Input Data Pt retained
+	DNew[0].x 	= DOld[0].x;
+	DNew[0].y 	= DOld[0].y;
+	DNew[0].z 	= DOld[0].z;
+	//////////////////////////////////////////////////////////////////
+	C3DMath	Math3D;
+	CXForm	XForm(TRUE);	// Parallel
+	///////////////////////////////////////
+	MATRIX Rot;
+	pMATRIX pRot = &Rot;  
+	Math3D.GetIdentityMATRIX(pRot);
+	//////////////////////////////////////// Translate Center & DOld to Origin
+	XForm.Translate(pRot, -Center.x, -Center.y, -Center.z, XF_REPLACE);	
+	//////////////////////////////////////// 	
+	WORLD C0,D0;
+	XForm.Transform(&Center, &C0, pRot);
+	XForm.Transform(DNew, &D0, pRot);	  
+	//////////////////////////////////////// Rotate about Normal theta deg to get D1
+	Math3D.GetIdentityMATRIX(pRot);
+	////////////
+	WORLD Origin = {0.0,0.0,0.0};
+	double rAng = .0174533 * Inc; 
+	XForm.RotateAboutLineMATRIX(pRot, &Origin,&m_Normal,rAng);
+	//////////////////////////////////////////////////////////// Generate by rotation
+	DNew[0].x = D0.x;
+	DNew[0].y = D0.y;
+	DNew[0].z = D0.z;
+	/////////////////
+	int i;
+	for(i=1;i<nNew;i++)
+	{
+		XForm.Transform(&DNew[i-1], &DNew[i], pRot);
+	}
+	//////////////////////////////////////////////////////////// Translate Data Back: New Pt
+	Math3D.GetIdentityMATRIX(pRot);
+	XForm.Translate(pRot, Center.x, Center.y, Center.z, XF_REPLACE);
+	WORLD D1;	
+	for(i=0;i<nNew;i++)
+	{
+		XForm.Transform(&DNew[i], &D1, pRot);
+		/////////////////////////////////
+		DNew[i].x = D1.x;
+		DNew[i].y = D1.y;
+		DNew[i].z = D1.z;
+		/////////////////
+	}
+	/////////	
+	return 0;
+}	
+
+int CIn_Circle::FillUpBezier(pWORLD Data, double theta, WORLD Center, double Radius, 
+							 pWORLD Con, pDOUBLE Wts,int nCon, int L, BOOL bClosed)
+{
+	
+	int k;
+	///////////////////////////////////////////// Junctions
+	int nJunc = L+1;
+	if(bClosed)
+		nJunc--;
+	//////////////	
+	{
+		for(k=0;k<nJunc;k++)                        
+		{                                                                     
+			Con[2*k].x 	= Data[k].x;
+			Con[2*k].y 	= Data[k].y; 
+			Con[2*k].z 	= Data[k].z;
+			Wts[2*k]	= 1.0;		
+		}
+	}	
+	////////////////////////////////////////////////////////// In-Betweens Cons/Wts
+	int L2 = 2*L;
+	if(bClosed)
+	{
+		for(k=0;k<L;k++)
+		{
+			int Lt2 = 2*k;                        
+			Compute_b1_w1(Center,Con[Lt2],Con[(Lt2+2)%L2],Radius,
+							&(Con[Lt2+1]),&(Wts[Lt2+1]));
+		} 
+	}
+	else	
+	{
+		for(k=0;k<L;k++)
+		{
+			int Lt2 = 2*k;                        
+			Compute_b1_w1(Center,Con[Lt2],Con[Lt2+2],Radius,
+							&(Con[Lt2+1]),&(Wts[Lt2+1]));
+		} 
+	}
+	//////////////////////////////////////////////////// View Matrices
+#ifdef _DEBUG
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	if(pObjectMgr->GetMessage(13,0) ) // iDLL = 12 , Module = 1
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+		////////////////////
+		int j,k;
+		//////////
+		sprintf(buf,"FillUpBezier\nCIn_Circle::FillUpBezier");
+		AfxMessageBox(*str);
+		///////////////////
+		j = sprintf(buf,"Cons[%d]\n      X             Y            Z\n",nCon);
+		for(k=0;k<nCon;k++)
+		{
+		   j += sprintf( buf + j, "%2d %7.2f %7.2f %7.2f\n", k,
+		   							Con[k].x,Con[k].y,Con[k].z );
+		}
+		if(j>BUFF_SIZE)
+		{
+			 sprintf( buf, "Increase buffer to %d",j);
+			 AfxMessageBox(*str);
+			 delete str;
+			 return -1;
+		}	 
+		AfxMessageBox(*str);
+		///////////////////
+		j = sprintf(buf,"Wts[%d]\n      X             Y            Z\n",nCon);
+		for(k=0;k<nCon;k++)
+		{
+		   j += sprintf( buf + j, "%2d %7.2f\n", k,Wts[k] );
+		}
+		if(j>BUFF_SIZE)
+		{
+			 sprintf( buf, "Increase buffer to %d",j);
+			 AfxMessageBox(*str);
+			 delete str;
+			 return -1;
+		}	 
+		AfxMessageBox(*str);
+		///////////////////
+		delete str;
+	}		
+#endif				
+	/////////
+	return 0;
+}
+
+int CIn_Circle::FillUpSpline(pWORLD Con_BZ, pDOUBLE Wts_BZ,int nCon_BZ,
+							 pWORLD Con_BS, pDOUBLE Wts_BS,int nCon_BS, int L, BOOL bClosed)
+{
+	int k;
+	///////////////////////////////////////////// 
+	{
+		////////////////////////////////////////// Controls                                                                     
+		Con_BS[0].x = Con_BZ[0].x;
+		Con_BS[0].y = Con_BZ[0].y;
+		Con_BS[0].z = Con_BZ[0].z;
+		////////////////////////////////////////// Weights (Not Right)!!!                                                                     
+		Wts_BZ[0]	= 1.0;
+		////////////////////////		
+		for(k=1;k<nCon_BS-1;k++)                        
+		{
+			////////////////////////////////////// Controls                                                                     
+			Con_BS[k].x = Con_BZ[2*k-1].x;
+			Con_BS[k].y = Con_BZ[2*k-1].y;
+			Con_BS[k].z = Con_BZ[2*k-1].z;
+			////////////////////////////////////// Weights                                                                     
+			Wts_BS[k]	= 1.0;		
+		}
+		////////////////////////////////////////// Controls                                                                     
+		Con_BS[nCon_BS-1].x = Con_BZ[nCon_BZ-1].x;
+		Con_BS[nCon_BS-1].y = Con_BZ[nCon_BZ-1].y;
+		Con_BS[nCon_BS-1].z = Con_BZ[nCon_BZ-1].z;
+		////////////////////////////////////////// Weights                                                                     
+		Wts_BS[nCon_BS-1]	= 1.0;
+		////////////////////////		
+	}	
+	return 0;
+}
+								 
+int CIn_Circle::Compute_b1_w1(WORLD Center,WORLD b0,WORLD b2,double Rad,
+									pWORLD pb1,pDOUBLE pw1)
+{
+
+	// To find:
+	//		b1	= Bezier In-Betwen Pt.
+	//			= Intersection of Tangents at b0 and b2
+	// and
+	//		w1	= Weight at b1
+	//////////////////////////////////////////////////////// MidPt of Chord
+	double w1;
+	WORLD Rm;
+	////////////
+	Rm.x = .5 * (b0.x + b2.x);
+	Rm.y = .5 * (b0.y + b2.y);
+	Rm.z = .5 * (b0.z + b2.z);
+	//////////////////////////////////////////////////////// normal
+	WORLD N;
+	//////////
+	N.x = Rm.x - Center.x;									
+	N.y = Rm.y - Center.y;									
+	N.z = Rm.z - Center.z;
+	double Base = sqrt(N.x*N.x + N.y*N.y + N.z*N.z );
+	//////////////////////////////////////////////////////// Weight = cos(alfa) 
+	w1 = Base/Rad;
+	//////////////////////////////////////////////////////// Bezier In-Between Pt
+	//////////////////////////////// Unit Normal 
+	Base = 1./Base;
+	N.x *= Base;									
+	N.y *= Base;									
+	N.z *= Base;
+	////////////// Rad/cos(alfa) = length from center to b1
+	Base = Rad/w1;
+	////////////////////////////////
+	pb1->x 	= Center.x + Base * N.x; 
+	pb1->y 	= Center.y + Base * N.y; 
+	pb1->z 	= Center.z + Base * N.z;
+	*pw1	= w1; 
+	//////////////////////////////
+	return 0;
+	
+}
+	 					   	 
+void CIn_Circle::Serialize(CArchive& ar)
+{
+
+	CObject::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CIn_Circle:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CIn_Circle:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////////// end of Module //////////////////////

@@ -1,0 +1,44 @@
+; StaLMouse_D.def --  DEBUG version
+
+LIBRARY	MStL_D32
+DESCRIPTION  'StaLMouse Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMStLDLL											@2 NONAME
+
+
+;??0CMI_StaL@@QAE@XZ
+;??1CMI_StaL@@UAE@XZ
+;?CreateNodeBased@CMI_StaL@@QAEPAVCDrStatic@@W4STALPROC@@AAUstaLcard@@PAVCDrNode@@I@Z
+;?CreateCurveBased@CMI_StaL@@QAEPAVCDrStatic@@W4STALPROC@@AAUstaLcard@@PAVCDrCurve@@H22I@Z
+;?CreatePatchBased_3@CMI_StaL@@QAEPAVCDrStatic@@W4STALPROC@@AAUstaLcard@@PAVCDrPatch@@H22I@Z
+;?CreatePatchBased_4@CMI_StaL@@QAEPAVCDrStatic@@W4STALPROC@@AAUstaLcard@@PAVCDrPatch@@H22I@Z
+
+
+
+
+
+;??0CMI_F_M@@QAE@XZ
+;??1CMI_F_M@@UAE@XZ
+;?CreateNodeBased@CMI_F_M@@QAEPAVCDrF_M@@AAVCString@@PAVCDrNode@@NNNNNN0I@Z
+;?CreateCurveBased@CMI_F_M@@QAEPAVCDrF_M@@AAVCString@@PAVCDrCurve@@NNNNNN0HI@Z
+;??0CMI_D_R@@QAE@XZ
+;??1CMI_D_R@@UAE@XZ
+;?CreateNodeBased@CMI_D_R@@QAEPAVCDrD_R@@AAVCString@@PAVCDrNode@@NNNNNN0I@Z
+;?CreateCurveBased@CMI_D_R@@QAEPAVCDrD_R@@AAVCString@@PAVCDrCurve@@NNNNNN0I@Z
+;??0CMI_Prs@@QAE@XZ
+;??1CMI_Prs@@UAE@XZ
+;?CreateCurveBased@CMI_Prs@@QAEPAVCDrPrs@@AAVCString@@PAVCDrCurve@@NNN0I@Z
+;??0CMI_Thr@@QAE@XZ
+;??1CMI_Thr@@UAE@XZ
+;?CreateCurveBased@CMI_Thr@@QAEPAVCDrThr@@AAVCString@@PAVCDrCurve@@NNN0I@Z
+;??0CMI_LWt@@QAE@XZ
+;?CreateNodeBased@CMI_LWt@@QAEPAVCDrLWt@@AAVCString@@PAVCDrNode@@NNN0I@Z
+;?CreateCurveBased@CMI_LWt@@QAEPAVCDrLWt@@AAVCString@@PAVCDrCurve@@NNN0I@Z
+

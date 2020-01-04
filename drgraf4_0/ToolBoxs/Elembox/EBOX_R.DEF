@@ -1,0 +1,72 @@
+; EBox_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	EBox_D
+DESCRIPTION  'ElemBox DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitEBoxDLL												@2        										
+
+
+; CEBoxMgr
+	; Constructor and Destructor
+;	??0CEBoxMgr@@REC@XZ																				
+;	??1CEBoxMgr@@VEC@XZ                                    	
+	
+;	?GetRuntimeClass@CEBoxMgr@@VFCPEUCRuntimeClass@@XZ      
+;	?classCEBoxMgr@CEBoxMgr@@2UCRuntimeClass@@A             
+;	?Serialize@CEBoxMgr@@VECXAEVCArchive@@@Z                
+
+;	?IsElemBoxActive@CEBoxMgr@@VECHXZ						
+;	?SetElemBoxStatus@CEBoxMgr@@VECXH@Z                     
+;	?GetActiveObjectType@CEBoxMgr@@VECHXZ                   
+;	?SetActiveObjectType@CEBoxMgr@@VECXH@Z                  
+;	?GetActiveToolType@CEBoxMgr@@VECHXZ                     
+;	?SetActiveToolType@CEBoxMgr@@VECXH@Z                    
+	
+
+; CElemBox
+	; Constructor and Destructor
+ 	??0CElemBox@@REC@XZ 									@3 	
+ 	??1CElemBox@@VEC@XZ                                     @4            
+
+; 	?Create@CElemBox@@RECHPEVCMDIFrameWnd@@VCRect@@@Z                       
+	?Create@CElemBox@@RECHPEVCWnd@@VCRect@@@Z               @5            
+
+ 	?GetHeight@CElemBox@@RECIXZ                             @6              
+ 	?GetWidth@CElemBox@@RECIXZ                              @7            
+ 	?GetActiveTool@CElemBox@@RECHXZ                         @8             
+ 	?GetActiveElemObject@CElemBox@@RECHXZ                   @9                
+	?messageMap@CElemBox@@1UAFX_MSGMAP@@A					@10      
+;	?messageMap@CElemBar@@1UAFX_MSGMAP@@A						
+
+ 	
+; CPaletteBar
+	
+	??0CPaletteBar@@REC@XZ 								    @11                
+	??1CPaletteBar@@VEC@XZ                                  @12             
+	                                 
+	?messageMap@CPaletteBar@@1UAFX_MSGMAP@@A                @13              
+
+	?Create@CPaletteBar@@VECHPEVCWnd@@HHII@Z                @14                
+	?SetButtons@CPaletteBar@@VECHPFIHI@Z                    @15           
+	?SetSizes@CPaletteBar@@VECXUtagSIZE@@0H@Z               @16             
+	?RecalcLayout@CPaletteBar@@VECXI@Z                      @17             
+
+ 	?DoPaint@CPaletteBar@@NECXPEVCDC@@@Z                    @18
+	?GetItemRect@CPaletteBar@@VFCXHPEUtagRECT@@@Z			@19
+ 	?HitTest@CPaletteBar@@NECHVCPoint@@@Z                   @20
+ 	?OnLButtonDown@CPaletteBar@@JECXIVCPoint@@@Z            @21
+ 	?OnLButtonUp@CPaletteBar@@JECXIVCPoint@@@Z              @22
+  

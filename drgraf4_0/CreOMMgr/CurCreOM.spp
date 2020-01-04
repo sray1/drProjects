@@ -1,0 +1,1808 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+#include <math.h>
+#include <float.h>		// DBL_MIN
+
+#include "3DMath.h"
+#include "XForm.h"
+/////////////////////
+#include "drgraf.h"
+#include "drgrafrm.h"
+#include "UserMsg.h"
+#include "drawView.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_IGen.h"                    
+#include "Def_Elem.h"                    
+///////////////////// dialogMgr
+#include "MMs0Mgr.h"  
+#include "MMs1Mgr.h"	// for stitching
+////////////////////// 
+#include "MI_Gang1.h" 
+#include "MI_1SPN.h" 
+#include "MI_1Prof.h" 
+#include "Dlg_CrOI.h"
+//////////////////////
+#include "CurCreOM.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+///////////////////////////////////////////////////////////////////////////////////////////
+// if MESH1D_SPAWN: Object Grab Node Same As Node
+//////////////////////////////////////////////
+#define MAX_INFO_XLATE		3	// 1 Object/1 Object Grab Node/1 Node        
+#define MAX_INFO_ROTATE		6	// 1 Object/1 Object Grab Node/2 Nodes( for Axis)           
+#define MAX_INFO_SCALE		2	// 1 Object/1 Object Grab Node/None but 3 Coords(from Dlg)           
+#define MAX_INFO_REFLECT	4	// 1 Object/1 Object Grab Node/	3 Nodes ( defining Plane or
+								//			1 Node on Plane + 2 Nodes for Normal        
+#define MAX_INFO_SHEAR		2	// 1 Object/1 Object Grab Node/None but 3 Coords(from Dlg) 
+#define MAX_INFO_SPAWN		0	// 1 Object   
+#define MAX_INFO_STITCH		1	// Atleast Two Objects   
+///////////////////////////////////////////////////////////////////////////////////////////      
+#define	new					DEBUG_NEW
+#define	BUFF_SIZE			1024
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMs1CreOM,CMs0CreOM,1)
+/////////////////////////////////////////////////////////////////////////////
+CMs1CreOM::CMs1CreOM()
+{
+	m_bStitch		= FALSE;
+	m_bDoModalDone	= FALSE;
+}
+
+CMs1CreOM::~CMs1CreOM()
+{
+}
+
+void CMs1CreOM::Init_CUR()
+{
+	Init_NOD();
+	//////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMsObjMgr* pMsObjMgr 	= pDoc->GetMsObjMgr();
+	/////////////////////////////
+	CMI_Gang0 Gang0;
+	Gang0.SetElemInfoID(m_SpawnedID,MESH1D);		
+	/////////////////////////////////////////// Node
+	m_pSpawnedMESH1D		= NULL;
+	m_pParentMESH1D			= NULL;
+	m_ParentID				= "";
+	m_pCurrentMESH1D		= NULL;
+	/////////////////////////////////////////// Dlg_CrOI 
+	m_NID			= m_ParentID;
+	/////////////////////////////////////////// STitch
+	m_p1Profile		= NULL;
+	m_pLastMESH1D	= NULL;
+	m_Mesh1DList.RemoveAll();
+
+}
+
+void CMs1CreOM::Terminate_CUR(BOOL bError)
+{
+	Terminate_NOD(bError);
+	////
+	if(bError)
+	{
+		/////////////////////////////////////////// 
+		if(m_pSpawnedMESH1D)
+		{
+			delete m_pSpawnedMESH1D;
+			m_pSpawnedMESH1D = NULL;
+		}
+		/////////////////////////////////////////// 
+		if(m_p1Profile)
+		{
+			delete m_p1Profile;
+			m_p1Profile		= NULL;
+			m_pCurrentMESH1D	= NULL;
+			m_pLastMESH1D	= NULL;
+			m_Mesh1DList.RemoveAll();
+		}
+		///////////////////////////
+	}
+}
+
+void CMs1CreOM:: ElementLeftDown_CUR()
+{	
+	ElementLeftDown_NOD();
+}
+
+void CMs1CreOM::OnEBoxLButtonDown_CUR(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	CDListMgr* pDListMgr;
+	/////////////////////////////////// 
+   	m_bDragOn 		= pBool->IsDragOn();
+	m_bDialogOn		= pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	if(m_bDone)			// Reset
+		m_nInfoDone		= 0;
+	//////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////////////////////////////////// No MESH1D
+	pDListMgr 	= pObjectMgr->GetObjectList(MESH1D);
+	if(pDListMgr->GetCount()<=0)
+		return;
+	//////////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftDown_CUR();
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftDown_I();
+	//////////////////////////////////
+}
+
+int CMs1CreOM::LeftUp_GetMESH1D_Parent(POINT point)
+{
+	int nResult;
+	///////////////////////////////////////////// See if any Existing Node Hit
+	nResult = LeftUp_MESH1D_Accept(point);	// TRUE = Parent
+	///////////////////
+	if(nResult < 0)
+		return nResult; // Cancel or No Hit
+	///////
+	if(nResult>=0)	// Hit
+	{
+		switch(m_nInfoDone)
+		{
+			case 0:	// 
+				m_pParentMESH1D	= m_pCurrentMESH1D;
+				m_ParentID		= m_pParentMESH1D->GetObjectID();
+				break;
+			default:
+				return -1;
+		}
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+int CMs1CreOM::LeftUp_TRANSLATE_CUR(POINT point)
+{
+//	if(m_bDirect && m_bDominant)
+//		return -1;	// Should Not be Here
+	///////////////////
+	int nResult;
+	switch(m_nInfoDone)
+	{
+		case 0://	Parent MESH1D	
+			nResult = LeftUp_GetMESH1D_Parent(point);
+			if(nResult<0)
+				return nResult;
+			return 0;
+		case 1://	Grab Node	
+		case 2://	To Node
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_XLATE(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_XLATE(point,FALSE);	// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_XLATE(point,FALSE);	// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+			////////
+		default:
+			break;
+	}
+	return -1;
+}
+
+int CMs1CreOM::LeftUp_ROTATE_CUR(POINT point)
+{
+//	if(m_bDirect && m_bDominant)
+//		return -1;	// Should Not be Here
+	///////////////////
+	int nResult;
+	switch(m_nInfoDone)
+	{
+		case 0://	Parent MESH1D	
+			nResult = LeftUp_GetMESH1D_Parent(point);
+			if(nResult<0)
+				return nResult;
+			return 0;
+		case 1://	Grab Node	
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+			////////
+		case 2://		// From Rot Direction if Not AngleIn
+			if(m_bAngleIn)
+				return -1;
+			//////////////
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+			////////
+		case 3://		// To Rot Direction
+			if(m_bAngleIn)
+				return -1;
+			//////////////
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+			////////
+		case 4://		// From Rot Direction if Not AngleIn
+			if(m_bAngleIn)
+				return -1;
+			//////////////
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+			////////
+		case 5://		// To Rot Direction
+			if(m_bAngleIn)
+				return -1;
+			//////////////
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_ROTATE(point,FALSE);		// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+			////////
+		default:
+			break;
+	}
+	return -1;
+}
+
+int CMs1CreOM::LeftUp_SCALE_CUR(POINT point)
+{
+//	if(m_bDirect && m_bDominant)
+//		return -1;	// Should Not be Here
+	///////////////////
+	int nResult;
+	switch(m_nInfoDone)
+	{
+		case 0://	Parent MESH1D	
+			nResult = LeftUp_GetMESH1D_Parent(point);
+			if(nResult<0)
+				return nResult;
+			return 0;
+		case 1://	Grab Node	
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_SCALE(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_SCALE(point,FALSE);	// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_SCALE(point,FALSE);	// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+		case 2:		// Force Dialog entry
+			return -2;
+		default:
+			break;
+	}
+	return -1;
+}
+
+int CMs1CreOM::LeftUp_REFLECT_CUR(POINT point)
+{
+//	if(m_bDirect && m_bDominant)
+//		return -1;	// Should Not be Here
+	///////////////////
+	int nResult;
+	switch(m_nInfoDone)
+	{
+		case 0://	Parent MESH1D	
+			nResult = LeftUp_GetMESH1D_Parent(point);
+			if(nResult<0)
+				return nResult;
+			return 0;
+		case 1://	Ist Pt. or Node On Plane	
+		case 2://	2nd Pt. or Node On Plane OR Ist Pt. on Normal	
+		case 3://	Pt. or Node On Plane OR 2nd Pt. on Normal	
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_REFLECT(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_REFLECT(point,FALSE);		// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_REFLECT(point,FALSE);		// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+			////////
+		default:
+			break;
+	}
+	return -1;
+}
+
+int CMs1CreOM::LeftUp_SHEAR_CUR(POINT point)
+{
+//	if(m_bDirect && m_bDominant)
+//		return -1;	// Should Not be Here
+	///////////////////
+	int nResult;
+	switch(m_nInfoDone)
+	{
+		case 0://	Parent MESH1D	
+			nResult = LeftUp_GetMESH1D_Parent(point);
+			if(nResult<0)
+				return nResult;
+			return 0;
+		case 1://	Grab Node	
+			m_bCorMNodeOpDone = FALSE;
+			///
+			nResult = LeftUp_GetNode_SHEAR(point,TRUE);		// try MCNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			///
+			nResult = LeftUp_GetNode_SHEAR(point,FALSE);	// try MNODE
+			if(nResult == 0 || nResult == -2)
+				return nResult;
+			//
+			m_bCorMNodeOpDone = TRUE;
+			///
+			nResult = LeftUp_GetNode_SHEAR(point,FALSE);	// try FE0D
+			if(nResult < 0)
+				return nResult;
+			//
+			return 0;
+			////////
+		case 2:		// Force Dialog entry
+			return -2;
+		default:
+			break;
+	}
+	return -1;
+}
+
+void CMs1CreOM::ElementLeftUp_CUR(CPoint point)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CString strCurr;
+	//////////////////////////////////////////////////////////////////
+//	char buf[20];
+	CString Nid;
+	BOOL bRightOn	= FALSE;
+	m_bStitch		= FALSE;
+	///////////////////
+	switch(m_nActiveTool) 
+	{
+		///////////////////////////////////////////////////// Patches Insert
+		case COP_TRANSLATE:
+
+			if(m_nInfoDone > MAX_INFO_XLATE)
+				return;
+			////////////////
+			UpdateDlg_TRUE_XLATE();
+			//////////////////
+			if(!(m_bDirect && m_bDominant) )
+			{
+				if(LeftUp_TRANSLATE_CUR(point)<0)
+				{
+					Terminate_CUR(TRUE);
+					return;
+				}
+			}
+			/////////////
+			m_nInfoDone++;
+			UpdateDlg_FALSE_XLATE();
+			///////
+			return;
+
+		case COP_ROTATE: 
+
+			if(m_bAngleIn)
+			{
+				if(m_nInfoDone > 2)
+					return;
+			}
+			else
+			{
+				if(m_nInfoDone > MAX_INFO_ROTATE)
+					return;
+			}
+			////////////////
+			UpdateDlg_TRUE_ROTATE();
+			//////////////////
+			if(!(m_bDirect && m_bDominant) )
+			{
+				if(LeftUp_ROTATE_CUR(point)<0)
+				{
+					Terminate_CUR(TRUE);
+					return;
+				}
+			}
+			/////////////
+			m_nInfoDone++;
+			UpdateDlg_FALSE_ROTATE();
+			///////
+			return;
+
+		case COP_SCALE: 
+
+			if(m_nInfoDone > MAX_INFO_SCALE)
+				return;
+			////////////////
+			UpdateDlg_TRUE_SCALE();
+			//////////////////
+			if(!(m_bDirect && m_bDominant) )
+			{
+				if(LeftUp_SCALE_CUR(point)<0)
+				{
+					Terminate_CUR(TRUE);
+					return;
+				}
+			}
+			/////////////
+			m_nInfoDone++;
+			UpdateDlg_FALSE_SCALE();
+			///////
+			return;
+
+		case COP_REFLECT: 
+
+			if(m_nInfoDone > MAX_INFO_REFLECT)
+				return;
+			////////////////
+			UpdateDlg_TRUE_REFLECT();
+			//////////////////
+			if(!(m_bDirect && m_bDominant) )
+			{
+				if(LeftUp_REFLECT_CUR(point)<0)
+				{
+					Terminate_CUR(TRUE);
+					return;
+				}
+			}
+			/////////////
+			m_nInfoDone++;
+			UpdateDlg_FALSE_REFLECT();
+			///////
+			return;
+
+		case COP_SHEAR:
+
+			if(m_nInfoDone > MAX_INFO_SHEAR)
+				return;
+			////////////////
+			UpdateDlg_TRUE_SHEAR();
+			//////////////////
+			if(!(m_bDirect && m_bDominant) )
+			{
+				if(LeftUp_SHEAR_CUR(point)<0)
+				{
+					Terminate_CUR(TRUE);
+					return;
+				}
+			}
+			/////////////
+			m_nInfoDone++;
+				UpdateDlg_FALSE_SHEAR();
+				///////
+				return;
+		////////////////////////////////////////////////// SPAWN	
+		case COP_SPAWN:				// 
+
+			if(m_nInfoDone > MAX_INFO_SPAWN)
+				return;
+			///////		
+			if(LeftUp_CSPAWN(point)<0)
+			////////////////
+			{
+				Terminate_CUR(TRUE);
+				return;
+			}
+			else
+			{
+				Terminate_CUR(FALSE);
+				Init_CUR();
+				/////////////////////////
+//				UpdateDlg_FALSE_SPAWN();
+				return;
+			}
+			///////////////////	
+			break;
+		////////////////////////////////////////////////// STITCH	
+		case COP_STITCH:
+			
+			m_bStitch = TRUE;
+			///////		
+			if(LeftUp_CSTITCH(point)<0)
+			////////////////
+			{
+				Terminate_CUR(TRUE);
+				return;
+			}
+			///////////////////	
+			m_nInfoDone++;
+			return;
+		//////////////////////////////////////////////////
+		default:  
+			return;
+	} 
+	//////////////////////////////
+	CString* str = new CString;
+	char* buf = str->GetBuffer(BUFF_SIZE);
+	int j;
+	j = sprintf(buf,"***** Please Note ****\n");
+	j += sprintf(buf+j,"If you are trying to Hit an Object or\n");
+	j += sprintf(buf+j,"Click in for Coordinates, UnCheck\n");
+	j += sprintf(buf+j,"the Dominant Button in the Dialog Box\n");
+	//////
+	AfxMessageBox(*str);
+	delete str;
+	///////////
+	m_nInfoDone--;
+}	
+
+int CMs1CreOM::LeftUp_MESH1D_Accept(CPoint point)
+{
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CMsObjMgr* pMsObjMgr 	= pDoc->GetMsObjMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(MESH1D);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	CDrMesh1D*	pDrMESH1D;
+	int			nActiveIndex,index;
+	////////////////////////////////////
+	CHitNet*	pHitNet		= (CHitNet*)pObjectMgr->GetSpecObject(HITNET);
+	double		dTol		= pHitNet->GetSearchDet(); 
+	WORtoWOP(&dTol,&dTol);	// physical
+	///////////////////////////////////////////// See if any Existing MESH1D Hit
+	index = IsObjectHit(MESH1D,point,0);
+	////////////////////////////////////////////////////
+	if(index<0)
+		return -1; // No MESH1D Hit
+	//////////////////////////////////////////////////////////////// Existing MESH1D
+	pDrMESH1D	= (CDrMesh1D*)pDListMgr->GetObject(index);
+	ID			= pDrMESH1D->GetObjectID();
+	//////////////////////////////////////////////////////////////// for Stitching,Check Contiguity
+	if(m_bStitch && !m_Mesh1DList.IsEmpty())
+	{
+		if(IsInvalidSplicing(pDrMESH1D))
+		return -1; // No MESH1D Hit
+	}
+	/////////////////////////////////////////
+			pObjectMgr->ShowObject_On_Off(pDrCurve,MESH1D,TRUE);
+/*
+	pList = pObjectMgr->GetObjectList(MESH1D);
+	nActiveIndex = pList->GetObjectIndex(MESH1D, ID);;
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);	// set Active Index									
+	pObjectMgr->SetActiveObjectType(MESH1D);		    // set Active Type									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,MESH1D);
+*/
+	//////////////////////////////////////////////////////////////// MultipleSearch
+	int startIndex = index+1;
+	int nResult;
+	/////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		/////////////
+		for(;;)
+		{
+			//////////////////////////////
+//			nResult = ShowParentMESH1DInfo(pDrMESH1D);
+			nResult = ShowParentMESH1DInfo(pDrMESH1D);
+			/////////////
+			if(nResult == IDYES)
+				//////////////////////////////////////////////////////// Accept Old
+				break;
+			else
+			if(nResult == IDNO)
+			{
+				//////////////////////////////////////////////////////// Retry
+				index = IsObjectHit(MESH1D,point,startIndex);
+				if(index>=0)
+				{
+					pDrMESH1D	= (CDrMesh1D*)pDListMgr->GetObject(index);
+					ID		= pDrMESH1D->GetObjectID();
+					///////////////////////////////////////// for Stitching,Check Contiguity
+					if(m_bStitch)
+					{
+						if(IsInvalidSplicing(pDrMESH1D))
+						return -1; // No MESH1D Hit
+					}
+					///////////////////////////////////////// 
+			pObjectMgr->ShowObject_On_Off(pDrCurve,MESH1D,TRUE);
+/*
+					pList = pObjectMgr->GetObjectList(MESH1D);
+					nActiveIndex = pList->GetObjectIndex(MESH1D, ID);;
+					pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+					pObjectMgr->SetActiveObjectType(MESH1D);		    // set Active Index									
+					pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,MESH1D);
+*/
+					////////////////////////////////////////
+					startIndex  = index+1;
+					/////////////////////
+				}
+				else
+					////////////////
+					return -2;
+				/////////
+			}
+			else				// Cancel
+				//////////////////////////////////////////////////////// Do Nothing
+				return -2;
+		}						// end for loop
+		///////////////////////////////////////
+	}				// end !AutoAccept loop
+	//////////////////////////////////////////////////////////////////// finally, accept
+	m_pCurrentMESH1D = pDrMESH1D;
+	/////////
+	return 0;
+	/////////
+}
+
+BOOL CMs1CreOM::IsInvalidSplicing(CDrMesh1D* pDrMESH1D)
+{
+	CDListMgr* pINList;
+	//////////////////////////////////////////////////////// Last MESH1D
+	pINList = m_pLastMESH1D->GetFE0DList(); 
+	CDrNode* pNode_End = (CDrNode*)pINList->GetTail();
+	//////////////////////////////////////////////////////// Current MESH1D
+	pINList = pDrMESH1D->GetFE0DList(); 
+	CDrFE0D* pNode_Beg = (CDrFE0D*)pINList->GetHead();
+	////////////////////////////////////////////////////////
+/*
+		WORLD LocalPosB,LocalPosE;
+		LocalPosB = *(pNode_Beg->GetLocalPos());
+		LocalPosE = *(pNode_End->GetLocalPos());
+*/
+	/////////
+	if(pNode_Beg->GetObjectID() != pNode_End->GetObjectID())
+	{
+		//////////////////////////////
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+		int j;
+		//////
+		j = sprintf(buf,"***** INVALID SELECTION ****\n\n");
+		//////////////////////////////////////
+		j += sprintf(buf+j,"MESH1D is Not Contiguous to Previous MESH1D\n");
+		j += sprintf(buf+j,"i.e., End Node of Previous MESH1D and Beginning\n");
+		j += sprintf(buf+j,"Node of Current MESH1D do not have the same ID\n");
+		j += sprintf(buf+j,"Select MESH1Ds that are Contiguous or Make sure\n");
+		j += sprintf(buf+j,"that the Nodes of Contiguous MESH1Ds are Merged\n\n");
+		//////////////////////////
+		AfxMessageBox(*str,MB_OK|MB_ICONINFORMATION);
+		return TRUE; // Invalid 
+	}
+	//////
+	return FALSE;	// Valid 
+}
+
+int CMs1CreOM::LeftUp_CSPAWN(CPoint point)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CString strCurr;
+	////////////////
+	int nResult;
+	////////////
+	nResult = LeftUp_GetMESH1D_Parent(point);
+	///
+	if(nResult<0)
+		return nResult;
+	////////////////////////////////////////
+	nResult = ShowMESH1DToSpawn(m_pParentMESH1D,TRUE); // TRUE = With Dlg
+	///////////
+	if( nResult == -1)		// 
+	{
+		AfxMessageBox("ERROR:\nCMs1CreOM::LeftUp_CSpawn\nShowMESH1DToSpawn Problem");
+		return -1;
+	}
+	////////////////////////////
+	strCurr = "Ready for Spawning a MESH1D@";
+	strCurr += "Click on a MESH1D to Spawn";
+	/////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	///////////
+	if(nResult == -2)		// Cancel
+		return -2;
+	///
+	return 0;
+}
+
+int CMs1CreOM::ShowParentMESH1DInfo(CDrMesh1D* pDrMESH1D)
+{
+	int nResult;
+/*
+	CString ID;
+	CString* pID = &ID;
+	ID = pDrMESH1D->GetObjectID();
+	//////////////////////////////////////////////////////////////////////
+	CDListMgr*		pNodeList	= pDrMESH1D->GetINodeList();
+    CList<int,int>* pElSegList	= pDrMESH1D->GetElperSegList();
+	MESH1DPROC 		MESH1DType	= pDrMESH1D->GetMESH1DType_S();
+	CIRCLETYPE		CircType	= pDrMESH1D->GetCircleType();
+	CString			FromID		= pDrMESH1D->GetFromID_S();
+	CString			ToID		= pDrMESH1D->GetToID_S();
+	double			dAng		= pDrMESH1D->GetTheta_S();
+	BOOL			bArc		= pDrMESH1D->IsArcType();
+	BOOL			bClosed		= pDrMESH1D->IsClosed_S();
+	double			dAngSpec	= pDrMESH1D->GetTheta_S();
+	double			dRadius		= pDrMESH1D->GetRadius_S();
+	///////////////////////////
+	CString			CCID = "";
+	CString			TIID = "";
+	CString			CAID = "";
+	CString			CBID = "";
+	CDrNode*		pCN; 
+	/////////////////////////////////////////////////////////////////////// total elems
+	int nElems = 0;
+	if(!(pElSegList->IsEmpty()))
+	{
+		for (POSITION posI = pElSegList->GetHeadPosition( );posI !=NULL;)
+		{
+			////
+			nElems += pElSegList->GetNext(posI); 
+		}
+	}
+	//////////////////////////////
+	CString* str = new CString;
+	char* buf = str->GetBuffer(BUFF_SIZE);
+	int j;
+	//////
+	if(m_bStitch)
+		j = sprintf(buf,"***** A MESH1D_To_Stitch_In Hit ****\n");
+	else
+		j = sprintf(buf,"***** A MESH1D_To_Spawn_From Hit ****\n");
+	//////////////////////////////////////
+	switch(MESH1DType)
+	{
+		case CP_CIRCLE:
+
+			pCN = pDrMESH1D->GetCNode_CC(); 
+			if(pCN)
+				CCID = (pDrMESH1D->GetCNode_CC())->GetObjectID();
+			pCN = pDrMESH1D->GetCNode_TI(); 
+			if(pCN)
+				TIID = (pDrMESH1D->GetCNode_TI())->GetObjectID();
+			pCN = pDrMESH1D->GetCNode_CA(); 
+			if(pCN)
+				CAID = (pDrMESH1D->GetCNode_CA())->GetObjectID();
+			pCN = pDrMESH1D->GetCNode_CB(); 
+			if(pCN)
+				CBID = (pDrMESH1D->GetCNode_CB())->GetObjectID();
+			////////////////
+			switch(CircType)
+			{
+				
+				case CIRCLE_BY_ROT:
+
+					j += sprintf(buf+j,"Circle %s contains:\n\t%d InputNode to Rotate\n\t%d Elements\n",
+							*pID,pNodeList->GetCount(),nElems);
+					j += sprintf(buf+j,"\t%s and %s are Axis Nodes\n",FromID,ToID);
+					if(dAng == 360.)
+						j += sprintf(buf+j,"\tClosed Circle\n");
+					else
+						j += sprintf(buf+j,"\t%f is Angle of Rotation\n",dAng);
+					break;
+				
+				case CIRCLE_BY_NO3:
+
+					j = sprintf(buf,"Circle %s contains:\n\t%d Input Nodes\n\t%d Elements\n",
+							*pID,pNodeList->GetCount(),nElems);
+					if(bClosed)
+						j += sprintf(buf+j,"\tClosed Circle\n");
+					else
+					{
+						if(bArc)
+							j += sprintf(buf+j,"\tArc upto 3rd Node\n");
+						else
+							j += sprintf(buf+j,"\t%f is Angle of Rotation\n",dAngSpec);
+					}
+					break;
+				
+				
+				case CIRCLE_BY_2N_TI:
+
+					j = sprintf(buf,"Circle %s contains:\n\t%d Input Nodes\n\t%d Elements\n",
+							*pID,pNodeList->GetCount(),nElems);
+					j += sprintf(buf+j,"2 End Nodes & Tangent Intersection\n");
+					j += sprintf(buf+j,"\t%s is Tangent Intersection Node\n",TIID);
+					break;
+				
+				
+				case CIRCLE_BY_2N_CC:
+
+					j = sprintf(buf,"Circle %s contains:\n\t%d Input Nodes\n\t%d Elements\n",
+							*pID,pNodeList->GetCount(),nElems);
+						j += sprintf(buf+j,"2 End Nodes & Center\n");
+						j += sprintf(buf+j,"\t%s is Center Node\n",CCID);
+						break;
+						
+				case CIRCLE_BY_2CN_TI_R:
+
+					j = sprintf(buf,"Circle %s contains:\n\t%d InPut Nodes\n\t%d Elements\n\tRadius = %f\n",
+							*pID,pNodeList->GetCount(),nElems,dRadius);
+					j += sprintf(buf+j,"2 Control Nodes on Tangents &\nTangent Intersection\n");
+					j += sprintf(buf+j,"\t%s is CNode_CA\n",CAID);
+					j += sprintf(buf+j,"\t%s is Tangent Intersection Node\n",TIID);
+					j += sprintf(buf+j,"\t%s is CNode_CB\n",CBID);
+					break;
+	
+							
+				default:
+					break;
+
+			}
+			break;
+
+		default:
+
+			//////
+			j = sprintf(buf,"MESH1D %s contains:\n\t%d Mesh Nodes\n\t%d Elements\n",
+			*pID,pNodeList->GetCount(),nElems);
+	}
+	/////////////////////////
+	j += sprintf(buf+j,"Mesh Nodes:\n");
+	//////////////////////////////
+	for (POSITION posI = pNodeList->GetHeadPosition( );posI !=NULL;)
+	{
+		////
+		CDrFE0D* pNode = (CDrFE0D*)pNodeList->GetNextObject(posI);
+		j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+	}
+	sprintf( buf + j-2, ";");
+	////////////////////////////
+	if(m_bStitch)
+		j += sprintf(buf+j,
+			"\nYES:\t\tStitch This MESH1D");
+	else
+		j += sprintf(buf+j,
+			"\nYES:\t\tSpawn This MESH1D");
+	//////
+	j += sprintf(buf+j,
+		"\nNO:\t\tFind Next MESH1D with Intersecting Trace");
+	j += sprintf(buf+j,
+		"\nCANCEL:\t\tCancel Selection Process");
+	nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+	///////////////
+	delete str;
+*/
+	return nResult;
+}
+
+int CMs1CreOM::ShowMESH1DToSpawn(CDrMesh1D* pParentMESH1D,BOOL bUsingDlg)
+{
+
+	CDrGrafFrame*	pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString			strCurr;
+	////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	////////////////////////////////
+	strCurr = "Please Wait";
+	///////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	///////////////////
+	pObjectMgr->SetActiveObjectType(MESH1D);
+	////////////////////////////////////////////////////////////////////////////// Add to DataBase
+	int nActiveIndex;
+	///////////////
+	m_pSpawnedMESH1D	= (CDrMesh1D*)(pObjectMgr->AddToDataBase(nActiveIndex,MESH1D));
+	m_pSpawnedMESH1D->SetShow(FALSE);	// not quite ready
+	/////////////////////////////////////////////////////////////// Using CMI_CSPN
+	CMI_1SPN MI_CSPN;
+	int nResult;
+	if(bUsingDlg)
+	{
+		m_pSpawnedMESH1D->SetObjectID(m_ObjID);
+		///
+		nResult = MI_CSPN.SpawnMESH1DShowingDlg(m_pSpawnedMESH1D,pParentMESH1D,pParentMESH1D,MESH1D);
+	}
+	else
+	{
+		pMATRIX	pXFMat	= m_pMatObj->GetMatrix();
+		CString	SpawnID	= m_ObjID;
+		////
+		nResult = MI_CSPN.SpawnMESH1DWithoutDlg(m_pSpawnedMESH1D,pParentMESH1D,pXFMat,&m_SpawnedID,
+												pParentMESH1D,MESH1D); 
+	}
+	if(nResult<0)
+	{
+		/////////////////////////////////////// Reset
+		m_nInfoDone		= 0;
+		m_bDone			= TRUE;	// 
+		////////////////////////// Delete
+		pObjectMgr->DeleteFromDataBase(nActiveIndex, MESH1D);
+		m_pSpawnedMESH1D	= NULL;
+		//////////////////////////
+		return nResult;//
+	}
+	/////////////////////////////////////////////////////////// Control RectBound
+//	m_pSpawnedMESH1D->SetDirty(TRUE);
+	m_pSpawnedMESH1D->SetShow(TRUE);
+	////////////////////////////////////////////////////////// Save
+	CString ID		= m_pSpawnedMESH1D->GetObjectID();
+	pDListMgr	 	= pObjectMgr->GetObjectList(MESH1D);
+	int nIndex		= pDListMgr->GetObjectIndex(MESH1D,ID); 
+	int nOldIndex 	= pObjectMgr->GetActiveObjectIndex();
+	pObjectMgr->SetActiveObjectIndex(nIndex); 
+	pObjectMgr->SetActiveObjectType(MESH1D); 
+    ////////////////////////////////////////////////////////// done/Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nIndex,MESH1D);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CMs1CreOM::LeftUp_CSTITCH(CPoint point)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CString strCurr;
+	////////////////
+	int nResult;
+	///////////////////////////////////////////// See if any Existing MESH1D Hit
+	nResult = LeftUp_MESH1D_Accept(point);	// TRUE = Parent
+	///
+	if(nResult<0)
+		return nResult;
+	//////////////////////////////////////////////// Save it in the List
+	m_Mesh1DList.InsertObject(m_pCurrentMESH1D);
+	m_pLastMESH1D = m_pCurrentMESH1D; 
+	////////////////////////////////////////////////
+	strCurr = "Merging MESH1Ds. CLICK On Another";
+	strCurr += "@MESH1D or CLICK In Right Mouse Button";
+	/////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	///////////
+	return 0;
+}
+
+int CMs1CreOM::Update_Status_1STITCH()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CString strCurr;
+	////////////////////////////
+	strCurr = "Ready for Another Stitching";
+	strCurr += "@CLICK On a MESH1D to Stitch In";
+	/////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	///////////
+	return 0;
+}
+
+int CMs1CreOM::Show1ProfileToStitch()
+{
+
+	CDrGrafFrame*	pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString			strCurr;
+	////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CMsObjMgr* pMsObjMgr	= pDoc->GetMsObjMgr();
+	////////////////////////////////
+	strCurr = "Please Wait";
+	///////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	///////////////////
+	pObjectMgr->SetActiveObjectType(MESH1D);
+	//////////////////////////////////////////////////////////////////////////////
+	//			.Add to DataBase
+	/////////////////////////////////////
+	int nActiveIndex;
+	///////////////
+	m_p1Profile	= (CDrProf_1*)(pMsObjMgr->AddToDataBase(nActiveIndex,M1_PROFILE));
+	m_p1Profile->SetShow(FALSE);	// not quite ready
+	/////////////////////////////////////////////////////////////// ID
+	CDrProf_1* m_p1Profile = new CDrProf_1;
+	m_p1Profile->SetObjectID(m_SpawnedID);	
+	/////////////////////////////////////////////////////////////// Insert MESH1DList
+	(m_p1Profile->GetMesh1DList())->AddTail(&m_Mesh1DList);
+	m_Mesh1DList.RemoveAll();
+	/////////////////////////////////////////////////////////////// LMList
+	MATRIX		Mat;
+	pMATRIX		pM = &Mat;
+	///
+	C3DMath	Math3D;
+	Math3D.GetIdentityMATRIX(pM);
+	///////////////////////////////////////////////////// Save: Defaults	
+	CMatObj* pMatObj = new CMatObj;
+	///////
+	pMatObj->SetInstanced_Prof(FALSE);
+	pMatObj->SetMatrix(pM);
+	pMatObj->SetCurveLatch(CL_FORWARD);	// ALWAYS for Now
+	///////////////////////////////////////////////////// save in the list
+	int nCount = (m_p1Profile->GetMesh1DList())->GetCount();
+	for (int c=0;c<nCount;c++)
+		m_LMList.InsertObject(pMatObj);	// same One
+	///////////////////////////////////////////////////// Insert LMList
+	(m_p1Profile->GetLMList())->AddTail(&m_LMList);
+	m_LMList.RemoveAll();
+	/////////////////////////////////////////////////////////////// Using CMI_1Prof
+	CMI_1Prof MI_1Prof;
+	int nResult;
+	////
+	nResult = MI_1Prof.RBUp_1Profile(m_p1Profile); // NOT Using Dlg (Used for Now)
+	///
+	if(nResult<0)
+	{
+		/////////////////////////////////////// Reset
+		m_nInfoDone		= 0;
+		m_bDone			= TRUE;	//
+		m_Mesh1DList.RemoveAll();
+		////////////////////////// Delete
+		pObjectMgr->DeleteFromDataBase(nActiveIndex, M1_PROFILE);
+		m_p1Profile	= NULL;
+		//////////////////////////
+		return nResult;//
+	}
+	///////////////////////////////
+	m_p1Profile->SetShow(FALSE);
+	/////////////////////////////// 
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(MESH1D);
+	///////////////////////////////////////////////////////////////
+	CDrMesh1D* pMESH1D = m_p1Profile->GetMesh1D();
+	pMESH1D->SetShow(TRUE);
+	pMESH1D->SetDirty(TRUE);
+	//////////////////////////////////////////
+			pObjectMgr->ShowObject_On_Off(pCurve,MESH1D,TRUE);
+/*
+	CString CurveID	= pCurve->GetObjectID();
+	int nCurveIndex = pDListMgr->GetObjectIndex(MESH1D,CurveID); 
+	int nOldIndex 	= pObjectMgr->GetActiveObjectIndex();
+	pObjectMgr->SetActiveObjectIndex(nCurveIndex); 
+	pObjectMgr->SetActiveObjectType(MESH1D);
+    ////////////////////////////////////////////////////////// done/Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nCurveIndex,MESH1D);
+	/////////
+*/
+	/////////
+	return 0;
+}	 
+
+void CMs1CreOM::OnEBoxMouseMove_CUR(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{  
+
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CMouseMgr* pMouseMgr	= pWnd->GetMouseMgr(); 
+	////////////////////////// LOG: Log/DEScaled
+   	m_pdc->DPtoLP(&point);     
+	LPOINT LpLOG;
+	LpLOG.x = (long)point.x;
+	LpLOG.y = (long)point.y;
+   	m_pdc->LPtoDP(&point);
+    /////////////////////////////////////////////
+    if(!m_bDragging)  // not currently dragging 
+    { 
+    
+		//////////////////////////////////////
+		LPOINT3 MouseOldTempWIC = GetMouseOldWIC();
+	    LPOINT3 MouseTempWIC 	= GetMouseWIC();
+   		SetMouseOldWIC(MouseTempWIC);
+   		LPOINT3 MouseWIC;
+    	///////////////////////  LOG :DEScaled
+    	LOGtoWIC2(&MouseWIC,&LpLOG,&MouseTempWIC); //LOG/Scaled WIC
+    	////////////////////                 
+    	SetMouseWIC(MouseWIC);
+    	///////////////////////////
+//    	pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+		pMouseMgr->SetStatusMouseWIC(MouseWIC);
+		////////////////////////////
+		///////////////////// recover MouseWIC changed for statusbar update 
+	    SetMouseOldWIC(MouseOldTempWIC);
+	    SetMouseWIC(MouseTempWIC);
+
+		return;
+    }	
+}
+
+void CMs1CreOM::OnEBoxLButtonUp_CUR(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	////////////////////////////////
+    POINT Logpoint;
+    m_pdc->DPtoLP(&point);
+    Logpoint.x = point.x;
+    Logpoint.y = point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftUp_CUR(Logpoint);
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftUp_I();
+	/////////////////////////
+	
+}
+
+void CMs1CreOM::OnEBoxRButtonDown_CUR(CClientDC* pdc,CView* pView,GENERATE gener,
+									UINT nFlags, CPoint point)
+{ 
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+    /////////////////////////////  ELement Dialog On/Off Check
+	m_bDialogOn     = pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	/////////////////////////////////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	//////////////////////////////////////////
+	switch(m_nActiveTool) 
+	{
+		case MESH1D:
+			break;
+		////////////////////////////////////////////////// Patch
+		default:
+			break;
+	}  
+}
+
+void CMs1CreOM::OnEBoxRButtonUp_CUR(CClientDC* pdc,CView* pView,GENERATE gener,
+								UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMsObjMgr* pMsObjMgr 	= pDoc->GetMsObjMgr();
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	CString* pID = &ID;
+	///////////////////////////////////////////////////////// Is Enough Info?
+	if(RightUp_Premature()<0)
+		return;
+	///////////////////////////////////////////////////////// Not Auto Accept
+	if(m_bStitch)
+	{
+		if(RightUp_NotAutoAccept_1STITCH()<0)
+		{
+			Terminate_CUR(TRUE);
+			return;
+		}
+	}
+	else
+	{
+		////////////////////////////////////////////////// Update Info
+		UpdateDlg_TRUE();
+		/////////////////
+		if(RightUp_NotAutoAccept()<0)
+		{
+			Terminate_CUR(TRUE);
+			return;
+		}
+	}
+	///////////////////////////////////////////////////// Show Spawned Node 
+	switch(m_nActiveTool) 
+	{
+
+		case COP_TRANSLATE:
+						
+			
+			SetUpLocalM_XLATE();
+			/////////////////////////////
+			if(ShowMESH1DToSpawn(m_pParentMESH1D,FALSE)<0)		 //FALSE = NoDlg
+			////////////////
+			{
+				Terminate_CUR(TRUE);
+				return;
+			}
+			else
+			{
+				Terminate_CUR(FALSE);
+				Init_CUR();
+				/////////////////////////
+				UpdateDlg_FALSE_XLATE();
+				break;
+			}
+			///////////////////	
+			break;
+
+			
+		case COP_ROTATE:
+						
+			
+			SetUpLocalM_ROTATE();
+			/////////////////////////////
+			if(ShowMESH1DToSpawn(m_pParentMESH1D,FALSE)<0)		 //FALSE = NoDlg
+			////////////////
+			{
+				Terminate_CUR(TRUE);
+				return;
+			}
+			else
+			{
+				Terminate_CUR(FALSE);
+				Init_CUR();
+				/////////////////////////
+				UpdateDlg_FALSE_ROTATE();
+				break;
+			}
+			///////////////////	
+			break;
+		
+		case COP_SCALE:
+						
+			
+			SetUpLocalM_SCALE();
+			/////////////////////////////
+			if(ShowMESH1DToSpawn(m_pParentMESH1D,FALSE)<0)		 //FALSE = NoDlg
+			////////////////
+			{
+				Terminate_CUR(TRUE);
+				return;
+			}
+			else
+			{
+				Terminate_CUR(FALSE);
+				Init_CUR();
+				/////////////////////////
+				UpdateDlg_FALSE_SCALE();
+				break;
+			}
+			///////////////////	
+			break;
+		
+		case COP_REFLECT:
+						
+			
+			SetUpLocalM_REFLECT();
+			/////////////////////////////
+			if(ShowMESH1DToSpawn(m_pParentMESH1D,FALSE)<0)		 //FALSE = NoDlg
+			////////////////
+			{
+				Terminate_CUR(TRUE);
+				return;
+			}
+			else
+			{
+				Terminate_CUR(FALSE);
+				Init_CUR();
+				/////////////////////////
+				UpdateDlg_FALSE_REFLECT();
+				break;
+			}
+			///////////////////	
+			break;
+		
+		case COP_SHEAR:
+						
+			
+			SetUpLocalM_SHEAR();
+			/////////////////////////////
+			if(ShowMESH1DToSpawn(m_pParentMESH1D,FALSE)<0)		 //FALSE = NoDlg
+			////////////////
+			{
+				Terminate_CUR(TRUE);
+				return;
+			}
+			else
+			{
+				Terminate_CUR(FALSE);
+				Init_CUR();
+				/////////////////////////
+				UpdateDlg_FALSE_SHEAR();
+				break;
+			}
+			///////////////////	
+			break;
+
+
+
+		case COP_SPAWN:
+		
+			//////////////////////////// 	
+			return;
+		
+
+		
+		case COP_STITCH:
+			
+			/////////////////////////////
+			if(Show1ProfileToStitch()<0)		
+			////////////////
+			{
+				Terminate_CUR(TRUE);
+				return;
+			}
+			else
+			{
+				Terminate_CUR(FALSE);
+				Init_CUR();
+				/////////////////////////
+				Update_Status_1STITCH();
+				break;
+			}
+			///////////////////	
+			break;
+		//////////////	
+		default:  
+			return;
+	} 
+	/////////////////////////////
+	CMI_Gang0 Gang0;
+	Gang0.SetElemInfoID(m_SpawnedID,MESH1D);		
+	/////////////////////////////////////////// Node
+}
+
+int CMs1CreOM::RightUp_NotAutoAccept_1STITCH()
+{
+/*
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr*	pList;
+*/
+	////////////////////////////////////////////////////// 
+	int nAnswer = IDOK;
+	////////////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		///////////////////////////////////////////////////////////// show Info
+		nAnswer = ShowInputInfo_1STITCH();
+		if(nAnswer == -1)
+			return -1;
+		/////////////////////////
+		if(nAnswer == -2)
+		{
+			CString* str = new CString;
+			char* buf	= str->GetBuffer(BUFF_SIZE);
+			sprintf(buf,"Do You Want to Delete\nCurrent MESH1D Profile to Start Allover");
+			/////////////////////////	
+			nAnswer = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+			delete str;
+			/////////////////////////
+			if(nAnswer == IDYES)		//delete
+			{
+				/////////////////////////////////////// Reset
+				m_nInfoDone		= 0;	// 
+				m_bDone			= TRUE;	// 
+				/////////////////////////////////////
+				return -1;
+			}
+		}
+		/////////////////////
+		return 0; 
+	}
+	/////////
+	return 0;
+}
+
+int CMs1CreOM::ShowInputInfo_1STITCH()
+{
+	UINT nAnswer;
+	///////////////////////////////////////////////////////////// show Info:DoModal
+	CMMs1Mgr	MMs1Mgr;
+	nAnswer = MMs1Mgr.DoModal_Merge_1_ShowInfo(&m_SpawnedID,&m_Mesh1DList);  	//Profile
+	if(nAnswer == IDCANCEL)
+		return -2;	// CAncel
+	else
+		return 0;
+}
+
+long CMs1CreOM::CreateorActivateCreOp_CUR(UINT wParam, long lParam)
+{
+	/////////////////////////////////////////// Parent Info
+	m_ParentType	= MESH1D;
+	m_strParentType = "MESH1D";
+	/////////////////////////////////////////////////////////
+	GetCreOpDlg()->m_CreOp = m_CreOp;
+	///////////////////////////////////////
+	if(GetCreOpDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetCreOpDlg()->Create();
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetCreOpDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////////////////////////////////////
+		GetCreOpDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////
+		Init_CUR();
+
+	}
+	else
+	{
+		GetCreOpDlg()->SetActiveWindow();
+		GetCreOpDlg()->m_CreOp = m_CreOp;
+	}
+	////////////////
+	switch(m_CreOp)
+	{
+		case COP_TRANSLATE:
+			//////////////////////////////
+			UpdateDlg_FALSE_XLATE();
+			////
+			break;
+		case COP_ROTATE:
+			//////////////////////////////
+			UpdateDlg_FALSE_ROTATE();
+			////
+			break;
+		case COP_SCALE:
+			//////////////////////////////
+			UpdateDlg_FALSE_SCALE();
+			////
+			break;
+		case COP_REFLECT:
+			//////////////////////////////
+			UpdateDlg_FALSE_REFLECT();
+			////
+			break;
+		case COP_SHEAR:
+			//////////////////////////////
+			UpdateDlg_FALSE_SHEAR();
+			////
+			break;
+		case COP_SPAWN:
+			//////////////////////////////
+//			UpdateDlg_FALSE_SPAWN();
+			////
+			break;
+		case COP_STITCH:
+			//////////////////////////////
+//			UpdateDlg_FALSE_SPAWN();
+			////
+			break;
+		default:
+			break;
+	}
+	///////////////////////////////////////////////////////////////// if CreODlg Open
+	if(GetCreOpDlg()->m_hWnd)
+	{
+/*
+		CStatic* pCtl;
+		pCtl = (CStatic*)(GetCreOpDlg()->GetDlgItem(IDC_OTHER));
+		////////////////////////////////////////////////////////
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEW12)
+			pCtl->SetWindowText("Z");
+		else
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEW23)
+			pCtl->SetWindowText("X");
+		else
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEW31)
+			pCtl->SetWindowText("Y");
+		else
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_CREOP,IDOK);
+			return 0L;
+		}
+*/
+
+	}
+
+	return 0L;
+}
+	 
+long CMs1CreOM::GoodByeCreOp_CUR(UINT wParam, long lParam)
+{
+	
+	GetCreOpDlg()->DestroyWindow();
+	////////////////
+	{
+		Terminate_CUR(FALSE);
+		return 0L;
+	}
+	//////////
+	return 0L;
+}
+	 
+long CMs1CreOM::CancelCreOp_CUR(UINT wParam, long lParam)
+{
+	
+	GetCreOpDlg()->DestroyWindow();
+	////////////////
+	{
+		Terminate_CUR(FALSE);
+		return 0L;
+	}
+	//////////
+	return 0L;
+}
+	 
+/////////////////////////////////////////////////////////////////////////////////////// 
+UINT CMs1CreOM::ReSetToolID_CUR(UINT CntlID,UINT IGenID, UINT OperID)
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCur;
+	////////////////
+	CString str;
+	UINT ID;
+	///////////////////////////////////
+	if(IGenID != MESH1D)
+	{
+		str = "UNKNOWN";	ID	= UNONE;
+		pWnd->SetstrIGenID(str);
+		////////////////////////
+		return UNONE;
+	}
+	//////////////////////////////////////////// TaskID
+	if(OperID == COP_STITCH)
+		strCur = "Ready for Merging MESH1Ds@";
+	else
+		strCur = "Ready for Spawning a MESH1D@";
+	/////////////////////////////
+	switch(CntlID)
+	{
+		//////////////////////////////////////// Elements
+		case ELEMENT:
+//					pWnd->SetMouseBoxType(ELEMDIMBOX);
+			str = "ELEMENT";
+			pWnd->SetIGenBoxStatus(TRUE);
+			pWnd->SetCntlBoxStatus(FALSE);
+			pWnd->SetDrawBoxStatus(FALSE);
+			///////////
+			pWnd->SetstrCntlID(str);
+			////////////////////////
+			switch(OperID)
+			{
+				//////////////////////////////////////////// Create
+				case COP_TRANSLATE:
+					///////////////////////////// String
+					str = "TRANSLATE";
+					pWnd->SetstrOperID(str);
+					///////////////////////////////////// 
+					str	= "MESH1D";		ID	= COP_TRANSLATE;
+						strCur += "Click on a MESH1D to Translate";
+					break;
+				//////////////////////////////////////////// Create
+				case COP_ROTATE:
+					///////////////////////////// String
+					str = "ROTATE";
+					pWnd->SetstrOperID(str);
+					///////////////////////////////////// 
+					str	= "MESH1D";		ID	= COP_ROTATE;
+						strCur += "Click on a MESH1D to Rotate";
+					break;
+				//////////////////////////////////////////// Create
+				case COP_SCALE:
+					///////////////////////////// String
+					str = "SCALE";
+					pWnd->SetstrOperID(str);
+					///////////////////////////////////// 
+					str	= "MESH1D";		ID	= COP_SCALE;
+						strCur += "Click on a MESH1D to Scale";
+					break;
+				//////////////////////////////////////////// Create
+				case COP_REFLECT:
+					///////////////////////////// String
+					str = "REFLECT";
+					pWnd->SetstrOperID(str);
+					///////////////////////////////////// 
+					str	= "MESH1D";		ID	= COP_REFLECT;
+						strCur += "Click on a MESH1D to Reflect";
+					break;
+				//////////////////////////////////////////// Create
+				case COP_SHEAR:
+					///////////////////////////// String
+					str = "SHEAR";
+					pWnd->SetstrOperID(str);
+					///////////////////////////////////// 
+					str	= "MESH1D";		ID	= COP_SHEAR;
+						strCur += "Click on a MESH1D to Shear";
+					break;
+				//////////////////////////////////////////// Create
+				case COP_SPAWN:
+
+					Init_CUR();	// No Modeless Dlg, so Init Here
+					///////////////////////////// String
+					str = "SPAWN";
+					pWnd->SetstrOperID(str);
+					///////////////////////////////////// 
+					str	= "MESH1D";		ID	= COP_SPAWN;
+						strCur = "Composite Affine/Symmetry Transformations@";
+						strCur += "Click on a MESH1D to Spawn";
+					break;
+				//////////////////////////////////////////// Create
+				case COP_STITCH:
+
+					Init_CUR();	// No Modeless Dlg, so Init Here
+					///////////////////////////// String
+					str = "STITCH";
+					pWnd->SetstrOperID(str);
+					///////////////////////////////////// 
+					str	= "MESH1D";		ID	= COP_STITCH;
+						strCur += "Click on a MESH1D to Stitch In";
+					break;
+				//////////////////////////////////////////// Create
+				default:
+					///////////////////////////// String
+					str = "DON'T KNOW";
+					pWnd->SetstrOperID(str);
+					///////////////////////////////////// 
+					ID	= UNONE;
+					strCur = "UNKNOWN Spawing Option";
+					pWnd->SetstrCurrID(strCur);
+					break;
+			}
+			////////////////////////////////////////////////// Overriding everyID above
+			ID = OperID;		// afterthought
+			//////////////////////////////////////////// CreOp
+			m_CreOp = OperID;
+			////////////////////////////////////////////////// 
+			pWnd->SetstrIGenID(str);
+			pWnd->SetstrCurrID(strCur);
+			//////////
+			return ID;
+
+		default:
+			break;
+	}
+	return UNONE;
+}
+
+void CMs1CreOM::Serialize(CArchive& ar)
+{
+
+	CMs0CreOM::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" Ms1CreOM:    Storing\n");	
+		
+
+	}
+	else
+	{
+		TRACE(" Ms1CreOM:    Loading\n");	
+
+	
+	}        
+}
+///////////////////////////////////// end of Module //////////////////////		
+

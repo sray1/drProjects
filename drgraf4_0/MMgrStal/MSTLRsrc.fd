@@ -1,0 +1,33 @@
+!MS$FREEFORM
+! Microsoft Developer Studio generated include file.
+! Used by StaLMgr.rc
+!
+      integer, parameter :: IDD_STATIC_IN                   = 119
+      integer, parameter :: IDD_DANDR_IN                    = 121
+      integer, parameter :: IDD_MANY_COMPO                  = 121
+      integer, parameter :: IDD_ISOPAR                      = 125
+      integer, parameter :: IDD_CURVILINEAR                 = 126
+      integer, parameter :: IDD_PRESSURE_IN                 = 133
+      integer, parameter :: IDD_THERMAL_IN                  = 134
+      integer, parameter :: IDD_LUMPWT_IN                   = 135
+      integer, parameter :: IDD_ADVANCE                     = 136
+      integer, parameter :: IDC_NIDHEADB                    = 1001
+      integer, parameter :: IDC_NIDB                        = 1011
+      integer, parameter :: IDC_NONISO                      = 1016
+      integer, parameter :: IDC_MX                          = 1035
+      integer, parameter :: IDC_FX                          = 1036
+      integer, parameter :: IDC_FY                          = 1037
+      integer, parameter :: IDC_MY                          = 1038
+      integer, parameter :: IDC_FZ                          = 1039
+      integer, parameter :: IDC_MZ                          = 1040
+      integer, parameter :: IDC_GRAVMUL                     = 1053
+      integer, parameter :: IDC_START                       = 1057
+      integer, parameter :: IDC_SCALE                       = 1059
+      integer, parameter :: IDC_ITEMHEAD                    = 1062
+      integer, parameter :: IDC_ISOPAR                      = 1064
+      integer, parameter :: IDC_SCALEHEAD                   = 1066
+      integer, parameter :: IDC_LINEARHEAD                  = 1067
+      integer, parameter :: IDC_ORIENTHEAD                  = 1069
+      integer, parameter :: IDC_ROTHEAD                     = 1071
+      integer, parameter :: IDC_TRANHEAD                    = 1072
+      integer, parameter :: IDC_NONE                        = 1077

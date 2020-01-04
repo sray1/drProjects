@@ -1,0 +1,110 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "eboxrsrc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "eboxrsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_BUTTON              CURSOR  DISCARDABLE     "RES\\BUTTON.CUR"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_MESHBOX0            BITMAP  DISCARDABLE     "RES\\MeshBox0.bmp"
+IDB_MESHBOX1            BITMAP  DISCARDABLE     "RES\\MeshBox1.bmp"
+IDB_MESHBOX2            BITMAP  DISCARDABLE     "RES\\MeshBox2.bmp"
+IDB_MESHBOX3            BITMAP  DISCARDABLE     "RES\\MeshBox3.bmp"
+IDB_PIPEBOX             BITMAP  DISCARDABLE     "res\\pipebox.bmp"
+IDB_TRIBOX              BITMAP  DISCARDABLE     "res\\tribox.bmp"
+IDB_PENBOX              BITMAP  DISCARDABLE     "res\\penbox.bmp"
+IDB_HEXBBOX             BITMAP  DISCARDABLE     "res\\hexbox.bmp"
+IDB_TETBOX              BITMAP  DISCARDABLE     "res\\tetBox.bmp"
+IDB_BRICKBOX            BITMAP  DISCARDABLE     "res\\brickbox.bmp"
+IDB_QUADBOX             BITMAP  DISCARDABLE     "res\\quadbox.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "E_Box Resource String"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_NODE                "Selecting NODE Element"
+    IDS_PIPE                "Selecting PIPE Element"
+    IDS_ELBOW               "Selecting ELBOW Element"
+    IDS_BEAM                "Selecting BEAM Element"
+    IDS_TRUSS               "Selecting TRUSS Element"
+    IDS_PLANE               "Slelecting PLANE Element"
+    IDS_PLATE               "Selecting PLATE Element"
+    IDS_SHELL               "Selecting Shell Element"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

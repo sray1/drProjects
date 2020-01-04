@@ -1,0 +1,93 @@
+ // mp_Xtrude.h : header file
+//
+#ifndef _MS_XTRUD_H 
+#define _MS_XTRUD_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+                    
+#include "MI_GangS.h"
+#include "DrSolid.h"
+#include "Def_Type.h"                    
+/////////////////////////////////////////////////////////////////////////////
+class AFX_EXT_CLASS CMS_Xtrud : public CMI_GangS
+{
+public:
+
+	CMS_Xtrud();
+//////////////////////////////////////
+	DECLARE_SERIAL(CMS_Xtrud)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+
+	int			SetInfoBase							// dLen and FromID, ToID given;		(Type 1)default
+													// Axis Computed from FromID, ToID
+				(
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					CDListMgr*						pCurveList,
+					CList<PATCHLATCH,PATCHLATCH>*	pLatchList,
+					CDListMgr*						pNodeList,
+					CList<int,int>*					pElperSegList,
+					double							dLen,
+					double							Ratio,
+					CView*							pView
+				); 
+	int			SetInfoBase_Type2					// wLen(=Lx,Ly,Lz) given;dLen
+													// dLen & Axis Computed from these
+				(
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					CDListMgr*						pCurveList,
+					CList<PATCHLATCH,PATCHLATCH>*	pLatchList,
+					CDListMgr*						pNodeList,
+					CList<int,int>*					pElperSegList,
+					WORLD							wLen,
+					double							Ratio,
+					CView*							pView
+				); 
+	CDrSolid*	GoDoIt(); 
+	int			GoDoIt(CDrSolid* pDrSolid);
+ 
+    				
+		
+protected:
+
+	////////////////////////////////////////////////////////////
+	int 		Extrude(); 
+	CDrSolid* 	GetInfo();
+	int			GetInfo(CDrSolid* pDrSolid);
+	int 		GenerateCNodes();
+	/////////////////////////
+		          
+
+protected:  
+// Attributes
+
+//Operations
+public:
+
+	~CMS_Xtrud();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CMS_Xtrud)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

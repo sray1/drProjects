@@ -1,0 +1,171 @@
+#ifndef _ELGLOBAL_H
+#define _ELGLOBAL_H
+////////////////////////////////
+#define	MAXSTRINGLENGTH	20    // formatting string for Cards
+#define CARD_SIZE		200
+#define	ID_LEN	5             // Length of All IDs in Cards
+#define NUM_LEN	10            // No. of All Numbers in Cards
+#define COMBO_NIDJ_LOC 	9     // Location of NidJ in element ComboBox
+//****************************************************************/ 
+//////////////////////////////////////////// Objects
+///////////////////////////// ElementBox Objects
+#define	NODE				100
+#define	CNODE				101 		
+/////////////
+#define	PIPE				200 
+#define	ELBOW				300
+#define	BEAM				400 
+/////////////
+#define SUPPORT				500			// SUPPORT Library
+#define	LIN_SUPPORT			501
+#define RIGIDSUP			502 	
+#define TSPRING				503 	
+#define TSNUBBER			504 	
+#define RSPRING				505 	
+#define RSNUBBER			506 	
+
+#define NON_SUPPORT			551
+/////////////////// 
+#define	TRUSS 				600 		// TRUSS Library
+#define	PLANE 				700 		// PLANE Library
+#define	PLATE				800 		// PLATE Library
+#define	SHELL 				900 		// SHELL Library 
+///////////////////
+#define	META				1		
+#define	COMMENT				2	   
+#define	FIX					3 		
+#define	FREE				4 		
+#define	END					5						
+#define MASTER				6 		
+#define PIPEPROP			7 	
+////////////////////////////////////////////////////////
+typedef struct eltypes 
+	{
+		char*   	ObjName;  	// internal name
+		int			num;   		// number associated with element
+		int			type;  		// -1 	= metacard
+								// 0	= element
+								// 1	= cardtype
+								// 2	= elem+card both 
+		char*		cardName;  	// dreamPipe	
+		char*		otherName; 	// if different card name
+	}ELTYPES;
+/////////////////////////////////////////////////////////////////	
+ELTYPES	ElTypes[] =
+	{ 
+		"",				-1,			-2,		"",				"",
+		"NODE",			NODE,		2,		"NODE",			"",
+		"CNODE",		CNODE,		1,		"CNODE",		"",
+        ///////////////
+		"PIPE",			PIPE,		2,		"PIPE",			"",
+		"ELBOW",		ELBOW,		2,		"ELBOW",		"",
+		"BEAM",			BEAM,		2,		"BEAM",			"",
+		"TRUSS",		TRUSS,		0,		"TRUSS",		"",
+		"PLANE",		PLANE,		0,		"",				"",
+		"PLATE",		PLATE,		0,		"",				"",
+		"SHELL",		SHELL,		0,		"",				"",
+        ///////////////
+		"SUPPORT",		SUPPORT,	0,		"",				"",
+		"LIN_SUPPORT",	LIN_SUPPORT,0,		"",				"",
+    	"RIGIDSUP",		RIGIDSUP,	2,		"RIGIDSUP",		"",
+    	"TSPRING",		TSPRING,	2,		"TSPRING",		"",
+    	"TSNUBBER",		TSNUBBER,	2,		"TSNUBBER",		"",
+    	"RSPRING",		RSPRING,	2,		"RSPRING",		"",
+    	"RSNUBBER",		RSNUBBER,	2,		"RSNUBBER",		"",
+        ///////////////
+		"NON_SUPPORT",	NON_SUPPORT,0,		"",				"",
+        ///////////////
+		"META",			META,		-1,		"",				"",
+		"C",			COMMENT,	1,		"C",			"",
+		"FIXFORMAT",	FIX,		1,		"FIXFORMAT",	"",
+		"FREEFORMAT",	FREE,		1,		"FREEFORMAT",	"",
+		"END",			END,		1,		"END",			"",
+    	"MASTER",		MASTER,		1,		"MASTER",		"",
+    	"PIPEPROP",		PIPEPROP,	1,		"PIPEPROP",		""  
+    	
+};
+	int	nMax_ElementTypes = (sizeof (ElTypes)/ sizeof(ElTypes[0]) );  		
+//******* Node variables / data structure *************/
+struct NODECARD
+	{
+		CString		id;     		// Node Card
+		CString		sup_id;         // pad 10 char field
+		CString		nid_r;
+		long		x;
+		long		y;
+		long		z;
+		BOOL		bnid_c; 
+	};
+//******** Pipe variables/ data structure **************/
+struct PIPECARD
+	{
+    CString line_id;
+    CString nid_i,nid_j;
+    CString rid_i,rid_j;   //* pad 2 nos 5 char fields */
+    CString pid,mid;
+    CString sid_i,sid_j;   //* pad 5 char field */
+    int numseg;            //* pad 5 char field */
+    BOOL bValve;
+    };
+//******** Beam variables/ data structure **************/
+struct BEAMCARD
+	{
+	CString line_id;
+    CString nid_i,nid_j;
+    CString rid_i,rid_j,nid_k;   //* pad 5 char field */
+    CString pid,mid;             //* pad 3 nos 5 char fields */
+    int numseg;                  //* pad 5 char field */
+    };
+//****** Elbow variables/ data structure **************/
+struct ELBOWCARD
+	{
+    CString line_id;
+    CString nid_i,nid_j;
+    CString nid_cc,nid_ti;
+    CString nid_a,nid_b;
+    CString pid,mid;
+    CString sid_i,sid_j;   
+    CString rid_i,rid_j;   
+	};
+/******** Support variables/ data structure **************/
+struct SUPPORTCARD
+	{
+    CString sup_id;
+    int kode;
+    double stiffness;
+    CString nid_a;            /* pad 3 nos 10 char fields */
+    };
+//******** NonLin Support variables/ data structure **************/   TEMPORARY
+struct Non_support
+	{
+    CString sup_id;
+    int kode;
+    double stiffness;
+    CString nid_a;            /* pad 3 nos 10 char fields */
+    };
+//******** PipeProp       variables/ data structure **************/
+struct Pipeprop
+	{
+    CString gid;            //* pad 1 no 10 char field */
+    double od;
+    double thk;
+    double thki;
+    long   r;
+    double pres;
+    };
+/******** Master         variables/ data structure **************/
+struct Master {
+    CString xstat;
+    CString unit;
+    CString g;
+    long fac;
+    CString lambda;
+    CString damp;              /* pad 10 char field */
+    };
+/******** MetaCards ... unrecognised cards **********************/
+struct METACARD
+	{
+		CString		WholeCard;
+	};	
+/////////////////////////////////
+#endif

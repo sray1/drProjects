@@ -1,0 +1,165 @@
+ // ELMouse.h : header file
+//
+#ifndef _SOLMOUSE_H 
+#define _SOLMOUSE_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+#include <afxtempl.h>			// CList Template
+                    
+#include "PatMouse.h"
+///////////////////// Modeless
+#include "Dlg_SolI.h"
+/////////////////////
+#include "MI_Sol_I.h"
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class CSolMouse : public CPatMouse
+{
+public:
+
+	CSolMouse();
+//////////////////////////////////////
+	DECLARE_SERIAL(CSolMouse)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+
+	/////////////////////////////////////////////////////////////////////////// Solid Topology
+	int				SolTopo_Update(CDrSolid* pCurrentSolid,CDListMgr* pCurrentPatList,
+						CDListMgr* pCurrentCurList,CDListMgr* pCurrentNodList);
+	int				SolTopo_ConnectObjects(CDrSolid* pCurrentObject,CDListMgr* pList);
+	///////////////////////////////////////////////////////////////////////////
+	UINT			ReSetToolID_SOL(UINT CntlID,UINT IGenID, UINT OperID);
+	void			InitDlgIn_SOL();
+	void			ModeLessOff_SOL();
+	void			ModeLessOn_SOL();
+	////////////////////////////////////////////////////////
+	CDlg_SolI*		GetSolInDlg(){return m_pSolInDlg;};                                                                                
+	////////////////////////////////////////////////////////////////
+	void			ResetVuBasedVars_SolDlg();
+	long			CreateorActivateSolIn(UINT wParam, long lParam);
+	long			CancelSolIn(UINT wParam, long lParam);
+	long			GoodByeSolIn(UINT wParam, long lParam);
+	long			UpdateSolIn(UINT wParam, long lParam);
+	/////////////////////
+	void 			OnEBoxMouseMove_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonDown_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonDown_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonUp_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonUp_SOL(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	/////////////////////////////////////////////////////////////////////////// SOLID
+	virtual CString&	GetCurrentSolidID(){return m_CurrentSolidID;};
+	virtual void		SetCurrentSolidID(CString Pid){m_CurrentSolidID = Pid;};
+ 	virtual SOLSUBTYPE	GetSolSubType(){return m_SolSubType;};
+	virtual void		SetSolSubType(SOLSUBTYPE pst){m_SolSubType = pst;};
+	
+
+		
+protected:
+
+
+	int			Terminate_SOL(BOOL bError);
+	int			RightUp_Premature_SOL();
+	int			RightUp_NotAutoAccept_SOL();
+	int			ShowSolid(CString* pID);
+	//////////////////////////////////////////////
+	void		ElementLeftDown_SOL();				// described in derived also
+	void		ElementLeftUp_SOL(CPoint point);	// described in derived also
+	//////////////////////////////////////////////////////// Patch
+	int			LeftUp_Sol_Patch(POINT point);
+	int			LeftUp_Patch_Accept_OtherContext(CPoint point);
+	int			ShowPatchInfo(CDrPatch* pDrPatch, char* buf, int jStart);
+	int			LeftUp_Sol_Curve(POINT point);
+	int			LeftUp_Sol_Node(CPoint point,BOOL bCNode,BOOL bDistinct,BOOL bNoOtherType);
+	int			OldNode_N_Update_SOLContext(BOOL bCNode,BOOL bDistinct);
+	//////////////////
+	int			LeftDown_SOLID();
+	int			LeftUp_EXTRUDE_SOL(POINT point);
+	int			LeftUp_ROTATE_SOL(POINT point);
+	int			LeftUp_LOFT2_SOL(POINT point);
+	int			LeftUp_DUCT_SOL(POINT point);
+	int			LeftUp_SWEEP_SOL(POINT point);
+	int			LeftUp_COONS_SOL(POINT point);
+//todo	int			CheckCompatibility_COONS_Patch(CDrPatch* pDrPatch,PATCHLATCH& NewLat);
+	void		UpdateSDlg_TRUE();
+	void		UpdateSDlg_FALSE();
+	///////////////////////////////////////////
+	int			ShowSolidInfo(CDrSolid* pDrSolid);
+/*
+	//////////////////////////////////////////////////////// Spawn
+//	Moved to CreOMgr Dll   01/14/98 
+	int				LeftUp_SSPAWN(CPoint point);
+	int				ShowSolidToSpawn(CDrSolid* pDrSolid);
+//	Moved to CreOMgr Dll   01/14/98 end
+*/
+
+
+protected:  
+// Attributes
+
+
+	CDlg_SolI*				m_pSolInDlg; 
+	BOOL					m_bCurve; //Dlg.CID is used for both Patch or Curve			
+	/////////////////////////////////////////// MousePost:MeshGeneration
+//	CMI_Sol_P				m_MI_Sol_P;
+	/////////////////////////////////////////// MouseInsert:Interpolate
+	CMI_Sol_I				m_MI_Sol_I;
+	/////////////////////////////////////////// Solid
+	CDrSolid*				m_pCurrentSolid;
+	CDrPatch*				m_pCurSolPatch;
+	CDrPatch*				m_pOldSolPatch;
+	CDrCurve*				m_pCurSolCurve;
+	CDrCurve*				m_pOldSolCurve;
+	//////////
+	CDListMgr				m_PatchList;		// 
+	CList<PATCHLATCH,PATCHLATCH>	m_PLatchList;	
+//	CList<CURVELATCH,CURVELATCH>	m_LatchList;// already in PatMouse	
+//	CDListMgr				m_NodeList;			// already in CurMouse
+//	CList<int,int>			m_ElSegList			// already in CurMouse
+	//////////
+    int						m_LastSolidNum;		// internal
+	SOLSUBTYPE				m_SolSubType;
+	CString					m_CurrentSolidID;
+	CString					m_CurrentSolidIDOld;
+	BOOL					m_bSolidDone;		// for dragging
+	int						m_nPatchDone;
+	int						m_nInfoDone;
+	//////////////////////////////// Dlg_SolI
+	SOLIDPROC				m_SolProc;
+
+
+//Operations
+public:
+
+	~CSolMouse();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CSolMouse)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

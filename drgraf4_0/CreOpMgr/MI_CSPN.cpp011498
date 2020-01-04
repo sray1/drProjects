@@ -1,0 +1,449 @@
+// Rotate.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+
+#include "math.h"
+#include "XForm.h"
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "DListMgr.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrLabel.h"
+///////////////////// dialogMgr
+#include "MCurMgr.h"
+#include "Dlg_SpnC.h"
+////////////////////
+#include "MI_GangN.h"
+ 
+#include "MI_CSPN.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define new	DEBUG_NEW
+#define	BUFF_SIZE			1024
+#define MIN_CNODES_CURVE	4
+#define	NUM_LEN				12 
+#define	MAX_SEG_ANGLE		120
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_CSPN,CMI_NSPN,1)
+/////////////////////////////////////////////////////////////////////////////
+CMI_CSPN::CMI_CSPN()
+{
+	m_pContextCur = NULL;
+	m_pContextPat = NULL;
+	m_pContextSol = NULL;
+}
+
+CMI_CSPN::~CMI_CSPN()
+{
+}
+
+int CMI_CSPN::SpawnCurveShowingDlg(CDrCurve* pNewCurve,CDrCurve* pOldCurve, 
+									CDrObject* pContextObj, UINT nContextType) 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	////////////////////////////////////////////////////////////////
+	switch(nContextType)
+	{
+		case CURVE:
+			m_pContextCur = (CDrCurve*)pContextObj;
+			break;
+		case PATCH:
+			m_pContextPat = (CDrPatch*)pContextObj;
+			break;
+		case SOLID:
+			m_pContextSol = (CDrSolid*)pContextObj;
+			break;
+		case OBJ3D:
+			m_pContextO3D = (CDrObj3D*)pContextObj;
+			break;
+		default:
+			AfxMessageBox("ERROR:CMI_CSPN::CSpawn\nILLEGAL nContextType");
+			return -1;
+	}
+	/////////////////////
+	m_pDrCurve = pNewCurve;
+	////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	////////////////////////////////////////////////////////////////
+	int nResult = GetInfoFromDlg(m_pDrCurve,pOldCurve);
+	if(nResult<0)
+		return nResult;// error or cancel
+	///////////////////////////////////////////////////////////////////// Go Generate	
+	if(m_pDrCurve)
+	{
+		; // do nothing
+/*
+		CString* str = new CString;
+		char* buf = str->GetBuffer(80);
+				
+		sprintf(buf,"Got All Curve Spawning Info");
+		/////////////////////////	
+		AfxMessageBox(*str);
+		/////////////////////////
+		str->ReleaseBuffer();
+		delete str;
+*/
+	}	
+	else
+		return -1;	// error
+	///////////////////////////////// Spawn Curve
+	MATRIX Mat;
+	///////////
+	if(m_pDrCurve->IsInstanced())
+	{
+		CMatObj* pMatObj	= m_pDrCurve->GetMatObj();
+		Mat					= *(pMatObj->GetMatrix());
+		/////////////////////
+		if(SpawnCurve(&Mat)<0)
+			return -1;
+		/////////////////////
+	}
+	else
+	{
+		MATRIX Mat;
+		C3DMath Math3D;
+		Math3D.GetIdentityMATRIX(&Mat);
+		/////////////////////
+		if(SpawnCurve(&Mat)<0)
+			return -1;
+		/////////////////////
+	}
+	///////////////////////////// make it Unposted 
+	m_pDrCurve->SetPosted(FALSE);
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrCurve->Calc_3DBoundsLocal();
+	/////////
+	return 0;		 
+}			
+	 
+int CMI_CSPN::GetInfoFromDlg(CDrCurve* pNewCurve, CDrCurve* pOldCurve)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CMCurMgr* 	pCurMgr;
+	CString		Cid = pNewCurve->GetObjectID();
+	CString		ParentID = pOldCurve->GetObjectID(); 
+	///////////////////////////////////////////////////
+	if (pCurMgr->DoModal_Spawn_C(pNewCurve,&Cid,&ParentID) == IDCANCEL)
+		return -2; 
+	/////////
+	return 0;
+}
+	 
+int CMI_CSPN::SpawnCurve(pMATRIX pXFMat)
+{
+	CDListMgr*	pList;
+	int			nResult;
+	/////////////////////////////////////////////////////////// CNode
+    pList = m_pDrCurve->GetCNodeList();
+	if(pList)
+	{
+		if(!pList->IsEmpty())
+		{
+			nResult = SpawnNodeListinCurve(pList, pXFMat, TRUE);
+			if(nResult<0)
+				return -1;
+			////////////////////////////// Reciprocate
+//			ReciprocateCurveNodes(pList);
+		}
+	}
+/*
+	/////////////////////////////////////////////////////////// CN_BS
+    pList = m_pDrCurve->GetCN_BSList();
+	if(pList)
+	{
+		nResult = SpawnNodeListinCurve(pList, pXFMat, TRUE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocateCurveNodes(pList);
+	}
+*/
+	/////////////////////////////////////////////////////////// INode
+    pList = m_pDrCurve->GetINodeList();
+	if(pList)
+	{
+		if(!pList->IsEmpty())
+		{
+			nResult = SpawnNodeListinCurve(pList, pXFMat, FALSE);
+			if(nResult<0)
+				return -1;
+			////////////////////////////// Reciprocate
+			ReciprocateCurveNodes(pList);
+		}
+	}
+	/////////////////////////////////////////////////////////// ENode
+    pList = m_pDrCurve->GetENodeList();
+	if(pList)
+	{
+		if(!pList->IsEmpty())
+		{
+			nResult = SpawnNodeListinCurve(pList, pXFMat, FALSE);
+			if(nResult<0)
+				return -1;
+			////////////////////////////// Reciprocate
+			ReciprocateCurveNodes(pList);
+		}
+	}
+	/////////////////////////////////////////////////////////// Elem
+//	 01/13/1998 Stores Handle Nodes,
+//	Center for Circle_By_Rot/Circle_By_3No w/o Arc
+    pList = m_pDrCurve->GetElemList();
+	if(pList)
+	{
+		nResult = SpawnNodeListinCurve(pList, pXFMat, FALSE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocateCurveNodes(pList);
+	}
+	/////////////////////////////
+	return 0;
+}
+
+int CMI_CSPN::SpawnNodeListinCurve(CDListMgr* pFillList, pMATRIX pXFMat, BOOL bCNode)
+//	This bCNode is ignored
+{
+	if(pFillList->IsEmpty())
+		return 0;
+	////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CDListMgr TempList;
+	TempList.RemoveAll();
+	////////////////////////////////////////////////// copy
+	TempList.AddTail(pFillList);
+	////////////////////////////////////////////////// Empty it
+	pFillList->RemoveAll();
+	/////////////////////////////////////////////////////////////////// XForm 
+	int			nMaxNodes;
+	CString		NewNID;
+	int s;
+	/////////////////////////////////////////////////////////// Data
+	nMaxNodes		 	= TempList.GetCount();
+	////////////////////////////////////////// 	
+	for (s = 0; s<nMaxNodes; s++)
+	{
+		CDrNode* pOldNode = (CDrNode*)TempList.GetObject( s);
+		BOOL bCNode = pOldNode->IsControlNode();
+		/////////////////////////////////////////////////////////////////  New
+		CDrNode NewNode;
+		///////////////////////////////////////// Get ID
+		NewNID = "";	// force it to create a name
+		int nResult = SpawnNodeWithoutDlg(&NewNode,pOldNode,pXFMat,&NewNID,
+													bCNode,m_pDrCurve,CURVE);
+		///////////////////////////////////// in Curve 
+		if(nResult<0)
+			return -1;
+		///////////////////////////////////////////////////////////////
+		CDrNode*	pNewNode;
+		BOOL		bFinal = TRUE;;
+		CMI_GangN	GangN;
+		CDrLabel*	pLabel;
+		int			nNodeIndex = -12345;	//Create Anyway
+		int			nLabelIndex= 0;
+		///////////////////////////////
+		if(bCNode)		// Control Node
+		{
+			////////////////////////////
+			WORLD LocalPos = *(NewNode.GetLocalPos());
+			///////////////////////////////////// in THE List 
+			pNewNode = GangN.PostNode(NewNID,LocalPos,TRUE,FALSE);	// Create DrCNode
+			if(!pNewNode)	// Create DrCNode
+				return -1;
+			///////////////////////////////////// in Curve 	
+			pNewNode->SetLevelType((int)LEVEL_KIDDO);          // private
+			//////////
+			if(bFinal)
+			{
+				//////////////////////////////////////////// if New Node Change Level/Reciprocate
+				if(pNewNode->GetObjectID() == NewNID)
+				{
+					//////////////////////////////////////// Reciprocate
+					pNewNode->GetCurveList()->InsertObject(m_pDrCurve);
+					////////
+				}
+			}
+		}
+		else		// Input Nodes
+		{
+
+			/////////////////////////////////////////////////////////////////
+			//		NOTE:
+			//			Input Nodes in Curve could be the corner Node of a
+			//			Patch in which case we don't want to spawn more
+			//			than once. This is Taken care of later in MI_PSPN
+			/////////////////////////////////////////////////////////////////
+			WORLD LocalPos = *(NewNode.GetLocalPos());
+			///////////////////////////////////// in THE List 
+			pNewNode = GangN.CreateNode(NewNID,pLabel, LocalPos, bCNode, TRUE, FALSE,
+									nNodeIndex,nLabelIndex);// FALSE=Input/TRUE=InternallyGen
+			pNewNode->SetLevelType((int)LEVEL_GRAPA); // OverRide
+			pNewNode->SetCategory(CA_ELEMENT);
+			//////////////////////////////////////// Reciprocate
+//			pNewNode->GetCurveList()->InsertObject(m_pDrCurve);	// done later
+			///////////////////////////////////////////
+			//	Need To FinishObject for RectBound 
+			////////////////////////////////////////////////////////////////////// Show
+			pObjectMgr->SetActiveObjectIndex(nLabelIndex);		    // set Active Index for Label									
+			pObjectMgr->SetActiveObjectType(LABEL);					// set Active ObjectType									
+			pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nLabelIndex,LABEL);
+			//////////////////////////////////////////////////////////
+			pObjectMgr->SetActiveObjectIndex(nNodeIndex);	// set Active Index									
+			pObjectMgr->SetActiveObjectType(NODE);		    // set Active Type									
+			pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nNodeIndex,NODE);
+
+		}
+		//////////////
+		pFillList->InsertObject(pNewNode); //CNodeList 
+		////////
+	}				
+	///////////////////////////////////////////////////////// Empty it
+	TempList.RemoveAll();
+	////////////
+	return 0;
+}
+	 		
+void CMI_CSPN::ReciprocateCurveNodes(CDListMgr* pList)
+{
+	if(!pList || pList->IsEmpty())
+		return;
+	///////////////////////////////////
+	int s,nMaxNodes;
+	nMaxNodes = pList->GetCount();
+	/////////////////////////////
+	for (s = 0; s<nMaxNodes; s++)
+	{
+		CDrNode* pNewNode	= (CDrNode*)(pList->GetObject(s));
+		//////////////////////////////////////// Reciprocate
+		pNewNode->GetCurveList()->InsertObject(m_pDrCurve);
+		////////
+	}
+}
+	 		
+int CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve* pNewCurve,CDrCurve* pOldCurve,pMATRIX pXFMat,
+						CString* pCid,CDrObject* pContextObj,UINT nContextType)
+{
+	///////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////
+	CString		CurveID = "",PatchID="",SolidID="",Obj3DID="";
+	//////////////////////////////////////////////////////////////// Name
+	switch(nContextType)
+	{
+		case CURVE:
+			m_pContextCur	= (CDrCurve*)pContextObj;
+			CurveID			= m_pContextCur->GetObjectID();  	
+			break;
+		case PATCH:
+			m_pContextPat	= (CDrPatch*)pContextObj;
+			PatchID			= m_pContextPat->GetObjectID();  	
+			CurveID			= pOldCurve->GetObjectID();  	
+			break;
+		case SOLID:
+			m_pContextSol	= (CDrSolid*)pContextObj;
+			SolidID			= m_pContextSol->GetObjectID();  	
+			CurveID			= pOldCurve->GetObjectID();  	
+			break;
+		case OBJ3D:
+			m_pContextO3D	= (CDrObj3D*)pContextObj;
+			Obj3DID			= m_pContextO3D->GetObjectID();  	
+			CurveID			= pOldCurve->GetObjectID();  	
+			break;
+		default:
+			AfxMessageBox("ERROR:CMI_CSPN::SpawnCurveWithoutDlg\nILLEGAL nContextType");
+			return -1;
+	}
+	/////////////////////////////
+	if(*pCid == "")
+	{
+		char buf[50];
+		int nLastNum = pObjectMgr->GetLastObjectNo(CURVE);		// internal
+		sprintf(buf,"%d",nLastNum);
+		(*pCid) = "_C";
+		(*pCid)	+= buf;
+		pObjectMgr->BumpLastObjectNo(CURVE);		// bump it
+	}
+	////////////////////////////////////////////////////////////////// CREATE	
+	m_pDrCurve = pNewCurve;
+	/////////////////////
+	CURVEPROC	CProc;
+	CProc		= pOldCurve->GetCurveType_S();
+	//////////////////////////
+	m_pDrCurve->SetCurveType_S(CProc);	// New Curve
+	int nResult = FillSpawnedCurveDlgDataBase(m_pDrCurve,*pCid, CurveID);
+	if(nResult<0)
+		return nResult;
+	///////////////////
+	nResult = SpawnCurve(pXFMat);
+	////////////////////
+	if(nResult<0)
+		return nResult;
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrCurve->Calc_3DBoundsLocal();											
+	///////////////////
+	return 0;
+}
+
+int CMI_CSPN::FillSpawnedCurveDlgDataBase(CDrCurve* pDrCurve,CString& Cid,CString& ParentCid)
+{
+
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	////////////////////////////////////
+	CDlg_SpnC	Dlg_SpnC;		
+	////////////////////////////////////
+	Dlg_SpnC.m_SpawnID		= Cid;
+	Dlg_SpnC.m_bInstanced 	= FALSE;
+	Dlg_SpnC.m_CID		 	= ParentCid;
+	Dlg_SpnC.m_pMatObj 		= NULL;
+	///////////////////////////////////////
+	Dlg_SpnC.SetInfoForDataBase(pDrCurve);
+	///////////////
+    return 0;
+}
+
+void CMI_CSPN::Serialize(CArchive& ar)
+{
+
+	CMI_NSPN::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMI_CSPN:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMI_CSPN:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////// end of module //////////////////

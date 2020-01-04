@@ -1,0 +1,874 @@
+# Microsoft Developer Studio Project File - Name="DataBase" - Package Owner=<4>
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
+# ** DO NOT EDIT **
+
+# TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
+
+CFG=DataBase - Win32 Debug
+!MESSAGE This is not a valid makefile. To build this project using NMAKE,
+!MESSAGE use the Export Makefile command and run
+!MESSAGE 
+!MESSAGE NMAKE /f "DataBase.mak".
+!MESSAGE 
+!MESSAGE You can specify a configuration when running NMAKE
+!MESSAGE by defining the macro CFG on the command line. For example:
+!MESSAGE 
+!MESSAGE NMAKE /f "DataBase.mak" CFG="DataBase - Win32 Debug"
+!MESSAGE 
+!MESSAGE Possible choices for configuration are:
+!MESSAGE 
+!MESSAGE "DataBase - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "DataBase - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE 
+
+# Begin Project
+# PROP AllowPerConfigDependencies 0
+# PROP Scc_ProjName ""
+# PROP Scc_LocalPath ""
+CPP=cl.exe
+MTL=midl.exe
+RSC=rc.exe
+
+!IF  "$(CFG)" == "DataBase - Win32 Release"
+
+# PROP BASE Use_MFC 6
+# PROP BASE Use_Debug_Libraries 0
+# PROP BASE Output_Dir "Release"
+# PROP BASE Intermediate_Dir "Release"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 6
+# PROP Use_Debug_Libraries 0
+# PROP Output_Dir "Release"
+# PROP Intermediate_Dir "Release"
+# PROP Target_Dir ""
+F90=fl32.exe
+# ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /Yu"stdafx.h" /FD /c
+# ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o "NUL" /win32
+# ADD BASE RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
+# ADD RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386
+# ADD LINK32 /nologo /subsystem:windows /dll /machine:I386
+
+!ELSEIF  "$(CFG)" == "DataBase - Win32 Debug"
+
+# PROP BASE Use_MFC 6
+# PROP BASE Use_Debug_Libraries 1
+# PROP BASE Output_Dir "Debug"
+# PROP BASE Intermediate_Dir "Debug"
+# PROP BASE Target_Dir ""
+# PROP Use_MFC 6
+# PROP Use_Debug_Libraries 1
+# PROP Output_Dir "Debug"
+# PROP Intermediate_Dir "Debug"
+# PROP Ignore_Export_Lib 0
+# PROP Target_Dir ""
+F90=fl32.exe
+# ADD BASE CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /YX"stdafx.h" /FD /c
+# ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o "NUL" /win32
+# ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
+# ADD RSC /l 0x409 /fo".\Debug/DataBase.res" /d "_DEBUG" /d "_AFXDLL"
+BSC32=bscmake.exe
+# ADD BASE BSC32 /nologo
+# ADD BSC32 /nologo
+LINK32=link.exe
+# ADD BASE LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
+# ADD LINK32 Dr3D_D32.lib Spec_D32.lib OGen_D32.lib Draw_D32.lib Elem_D32.lib OMgr_D32.lib MMgr_D32.lib /nologo /subsystem:windows /dll /pdb:".\Debug/DBase_D32.pdb" /map /debug /machine:I386 /out:"c:\drgraf4_0\applic\Debug/DBase_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/DBase_D32.lib" /pdbtype:sept
+# SUBTRACT LINK32 /pdb:none
+
+!ENDIF 
+
+# Begin Target
+
+# Name "DataBase - Win32 Release"
+# Name "DataBase - Win32 Debug"
+# Begin Group "Source Files"
+
+# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# Begin Source File
+
+SOURCE=.\CNodeSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PLoadPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PRestPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PSuppPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PTopoPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveLoadPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveRestPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveSuppPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveTopoPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DataBase.def
+# End Source File
+# Begin Source File
+
+SOURCE=.\DataBase.rc
+# End Source File
+# Begin Source File
+
+SOURCE=.\DataVu.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DBaseDll.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DbObjMgr.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DrListVu.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DrPropSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\DrTreeVu.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mbj3DDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mbj3DGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mbj3DInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mbj3DSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MCNodeSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DLoadPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DRestPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DSuppPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DTopoPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DLoadPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DRestPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DSuppPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DTopoPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DLoadPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DRestPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DSuppPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MNodeSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeLoadPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeRestPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeSuppPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeTopoPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Obj3DDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Obj3DGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Obj3DInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Obj3DSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchLoadPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchRestPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchSuppPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchTopoPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidGeomPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidLoadPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidRestPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidSuppPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidTopoPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Splitter.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\StalDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\StalDefnPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\StalInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\StalSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\StdAfx.cpp
+# ADD CPP /Yc"stdafx.h"
+# End Source File
+# Begin Source File
+
+SOURCE=.\SuppDebugPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SuppDefnPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SuppInputPage.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\SuppSheet.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TreeHandler.cpp
+# End Source File
+# End Group
+# Begin Group "Header Files"
+
+# PROP Default_Filter "h;hpp;hxx;hm;inl"
+# Begin Source File
+
+SOURCE=.\CNodeSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PLoadPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PRestPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PSuppPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Cur_PTopoPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveLoadPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveRestPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveSuppPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CurveTopoPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DataVu.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DBaseDll.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DbObjMgr.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DBRsrc.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DrListVu.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DrPropSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DrTreeVu.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mbj3DDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mbj3DGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mbj3DInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mbj3DSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MCNodeSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DLoadPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DRestPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DSuppPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh1DTopoPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DLoadPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DRestPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DSuppPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh2DTopoPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DLoadPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DRestPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Mesh3DSuppPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MNodeSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeLoadPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeRestPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeSuppPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\NodeTopoPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Obj3DDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Obj3DGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Obj3DInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Obj3DSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchLoadPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchRestPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchSuppPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\PatchTopoPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidGeomPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidLoadPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidRestPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidSuppPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SolidTopoPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\splitter.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StalDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StalDefnPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StalInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StalSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\StdAfx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SuppDebugPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SuppDefnPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SuppInputPage.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SuppSheet.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TreeHandler.h
+# End Source File
+# End Group
+# Begin Group "Resource Files"
+
+# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe"
+# Begin Source File
+
+SOURCE=.\res\closed.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\database.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\DataBase.rc2
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\databaseDoc.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\open.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\res\Toolbar.bmp
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\ReadMe.txt
+# End Source File
+# End Target
+# End Project

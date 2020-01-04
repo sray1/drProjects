@@ -1,0 +1,73 @@
+//
+// Elem_Dlg.RC2 - resources App Studio does not edit directly
+//
+
+#ifdef APSTUDIO_INVOKED
+	#error this file is not editable by App Studio
+#endif //APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+// Add additional manually edited resources here...
+
+/////////////////////////////////////////////////////////////////////////////
+// extra dialogs not editable with App Studio
+
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+/////////////// The BELOW Dialog Box has been concocted by:                  ///////
+///////////////    1) get original from ControlTest:"CTRLtest.rc2"           ///////
+///////////////    2) get AppStudio created IDD_LMAT  	  Dlg:"Elem_Dlg.RC"  ///////
+///////////////    3) mix 1) & 2) together                                   ///////
+//////////////////////////////////////////////////////////////////////////////////// 
+#include "muscroll.h"       // for spin button styles
+#include "edlgrsrc.h"
+#include "otherids.h"
+///////////////////////////////
+// 3 standard edit controls, with spin buttons
+
+IDD_LOCALMATRIX DIALOG DISCARDABLE  0, 0, 208, 123
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Local Transformation Matrix"
+FONT 6, "System"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,172,100,32,
+                    20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,4,
+                    100,32,20
+    RTEXT           "Rotate",IDC_STATIC,16,68,24,8
+    EDITTEXT        IDC_ROT_X,48,64,24,12
+    EDITTEXT        IDC_ROT_Z,156,64,24,12
+    LTEXT           "Increment/Decrement",IDC_STATIC,72,24,75,8
+    EDITTEXT        IDC_ROT_Y,100,64,24,12
+    EDITTEXT        IDC_INCREMENT,148,20,19,12,ES_AUTOHSCROLL
+    RTEXT           "Translate",IDC_STATIC,8,52,32,8
+    EDITTEXT        IDC_TRAN_X,48,48,24,12
+    EDITTEXT        IDC_TRAN_Z,156,48,24,12
+    EDITTEXT        IDC_TRAN_Y,100,48,24,12
+    RTEXT           "Scale",IDC_STATIC,20,84,20,8
+    EDITTEXT        IDC_SCALE_X,48,80,24,12
+    EDITTEXT        IDC_SCALE_Z,156,80,24,12
+    EDITTEXT        IDC_SCALE_Y,100,80,24,12
+    CTEXT           "X",IDC_STATIC,52,36,12,8
+    CTEXT           "Y",IDC_STATIC,104,36,12,8
+    CTEXT           "Z",IDC_STATIC,160,36,12,8
+    RTEXT           "Rotation About ",IDC_STATIC,92,8,52,8
+    COMBOBOX        IDC_ROTPT,148,4,44,40,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+	CONTROL         "",IDC_IN,"MicroScroll",MSS_VERTICAL,172,20,20,12
+	CONTROL         "",IDC_TX,"MicroScroll",MSS_VERTICAL,72,48,20,12
+	CONTROL         "",IDC_RX,"MicroScroll",MSS_VERTICAL,72,64,20,12
+	CONTROL         "",IDC_SX,"MicroScroll",MSS_VERTICAL,72,80,20,12
+	CONTROL         "",IDC_TY,"MicroScroll",MSS_VERTICAL,124,48,20,12
+	CONTROL         "",IDC_RY,"MicroScroll",MSS_VERTICAL,124,64,20,12
+	CONTROL         "",IDC_SY,"MicroScroll",MSS_VERTICAL,124,80,20,12
+ 	CONTROL         "",IDC_TY,"MicroScroll",MSS_VERTICAL,180,48,20,12
+	CONTROL         "",IDC_RY,"MicroScroll",MSS_VERTICAL,180,64,20,12
+	CONTROL         "",IDC_SY,"MicroScroll",MSS_VERTICAL,180,80,20,12
+    ICON            "",IDC_STATIC,16,8,18,20
+END
+
+
+
+

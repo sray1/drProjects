@@ -1,0 +1,294 @@
+ // ELMouse.h : header file
+//
+#ifndef _EL_MOUSE_H 
+#define _EL_MOUSE_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+#include <afxtempl.h>			// CList Template
+                    
+#include "mouse.h"
+///////////////////// Modeless
+#include "Dlg_NodI.h"
+#include "Dlg_LQCI.h"
+#include "Dlg_CrcI.h"	//circle by NO3
+#include "Dlg_Cr2I.h"	//circle by ROT
+#include "Dlg_Co4I.h"
+/////////////////////
+#include "DrNode.h" 	
+#include "DrLabel.h" 	
+#include "DrCurve.h" 	
+#include "MI_Pat_P.h"
+#include "MI_Sol_I.h"
+#include "DListMgr.h"
+#include "glb_CuPS.h"                    
+#include "glb_Type.h"                    
+#include "glb_Mous.h"                    
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class CELMouse : public CMouse
+{
+public:
+
+	CELMouse();
+//////////////////////////////////////
+	DECLARE_SERIAL(CELMouse)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+
+	///////////////////////////////////////////////////////////////////////////
+	UINT			ReSetToolID(UINT CntlID,UINT IGenID, UINT OperID);
+	void			InitDlgIn();
+	void			ModeLessOff();
+	void			ModeLessOn();
+	////////////////////////////////////////////////////////
+	CDlg_NodI*		GetNodInDlg(){return m_pNodInDlg;};                                                                                
+	CDlg_LQCI*		GetLQCInDlg(){return m_pLQCInDlg;};                                                                                
+	CDlg_CrcI*		GetCrcInDlg(){return m_pCrcInDlg;};                                                                                
+	CDlg_Cr2I*		GetCr2InDlg(){return m_pCr2InDlg;};                                                                                
+	CDlg_Co4I*		GetCo4InDlg(){return m_pCo4InDlg;};                                                                                
+	////////////////////////////////////////////////////////////////
+	long			CreateorActivateNodIn(UINT wParam, long lParam);
+	long			GoodByeNodIn(UINT wParam, long lParam);
+	long			UpdateNodIn(UINT wParam, long lParam);
+	long			CreateorActivateLQCIn(UINT wParam, long lParam);
+	long			GoodByeLQCIn(UINT wParam, long lParam);
+	long			UpdateLQCIn(UINT wParam, long lParam);
+	long			CreateorActivateCrcIn(UINT wParam, long lParam);
+	long			GoodByeCrcIn(UINT wParam, long lParam);
+	long			UpdateCrcIn(UINT wParam, long lParam);
+	long			CreateorActivateCr2In(UINT wParam, long lParam);
+	long			GoodByeCr2In(UINT wParam, long lParam);
+	long			UpdateCr2In(UINT wParam, long lParam);
+	long			CreateorActivateCo4In(UINT wParam, long lParam);
+	long			GoodByeCo4In(UINT wParam, long lParam);
+	long			UpdateCo4In(UINT wParam, long lParam);
+	/////////////////////
+	void 			OnEBoxMouseMove(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonDown(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonDown(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonUp(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonUp(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	///////////////////////////////////////////////////// NODE
+	virtual	int 		ShowNode(CString* pID,BOOL bnid_c,int nHowMany);
+	virtual CString		GetCurrentNodeID(){return m_CurrentNodeID;};
+    virtual void		SetCurrentNodeID(CString NID)
+    					{
+    						m_CurrentNodeID = NID;
+    					}; 
+	virtual CString		GetAnchorNodeID(){return m_AnchorNodeID;};
+	virtual void		SetAnchorNodeID(CString NID)
+						{
+							m_AnchorNodeID = NID;
+						};
+	virtual CString		GetCurrentSupID(){return m_CurrentSupID;};
+    virtual void		SetCurrentSupID(CString SID)
+    					{
+    						m_CurrentSupID = SID;
+    					}; 
+	virtual CString		GetCurrentLoadID(){return m_CurrentLoadID;};
+    virtual void		SetCurrentLoadID(CString LID)
+    					{
+    						m_CurrentLoadID = LID;
+    					}; 
+	///////////////////////////////////////////////////// PIPE
+	virtual CString		GetCurrentPipeID(){return m_CurrentPipeID;}; 
+    virtual void		SetCurrentPipeID(CString CurrentID)
+    					{
+    						m_CurrentPipeID = CurrentID;
+    					};
+    ///////////////////////////////////////////////////// Curve
+	virtual CString		GetCurrentCurveID(){return m_CurrentCurveID;};
+    virtual void		SetCurrentCurveID(CString CurrentCurveID)
+    					{
+    						m_CurrentCurveID = CurrentCurveID;
+    					};
+	virtual CDrCurve*	GetCurrentCurvePtr(){return m_pCurrentCurve;};
+    virtual void		SetCurrentCurvePtr(CDrCurve* CurrentCurve)
+    					{
+    						m_pCurrentCurve = CurrentCurve;
+    					};
+	virtual int			GetCurrentElPerSeg(){return m_ElPerSeg;};
+	virtual double		GetCurrentRatio(){return m_Ratio;};
+	virtual void		SetCurrentElPerSeg(int nEl){m_ElPerSeg = nEl;};
+	virtual void		SetCurrentRatio(double rat){m_Ratio = rat;};
+	virtual BOOL		IsClosed(){return m_bClosed;};
+	virtual void		SetClosed(BOOL b){ m_bClosed = b;};
+	virtual BOOL		IsAdvanceOn(){return m_bAdvanceOn;};
+	virtual void		SetAdvanceOn(BOOL b){ m_bAdvanceOn = b;};
+	virtual BOOL		IsBLineOn(){return m_bBLineOn;};
+	virtual void		SetBLineOn(BOOL b){ m_bBLineOn = b;};
+	virtual BOOL		IsSingleSegOn(){return m_bSingleSegOn;};
+	virtual void		SetSingleSegOn(BOOL b){ m_bSingleSegOn = b;};
+	//////////////////////////////////////////////////////
+//	void 	DrawDirtyCurve(CDC* pdc);
+//	void 	DrawDirtyPatch(CDC* pdc);
+    /////////////////////////////////////////////
+	virtual CString&	GetCurrentPatchID(){return m_CurrentPatchID;};
+	virtual void		SetCurrentPatchID(CString Pid){m_CurrentPatchID = Pid;};
+	virtual CString&	GetPatCurveID(int i){return m_PatCurveID[i];};
+	virtual void		SetCurrentPatCurveID(CString Cid, int i){m_PatCurveID[i] = Cid;};
+	virtual CURVELATCH  GetPatCurveLat(int i){return m_PatCurveLatch[i];};
+	virtual void		SetPatCurveLat(CURVELATCH CLat, int i){m_PatCurveLatch[i] = CLat;};
+	virtual int			GetPatCurveElem(int i){return m_PatCurveElem[i];};
+	virtual void		SetPatCurveElem(int Elem, int i){m_PatCurveElem[i] = Elem;};
+ 	virtual PATSUBTYPE	GetCurrentPatSubType(){return m_CurrentPatSubType;};
+	virtual void		SetCurrentPatSubType(PATSUBTYPE pst){m_CurrentPatSubType = pst;};
+  				
+		
+protected:
+
+
+	void			SizeRectDlgIn(CRect& BoxRect);
+	//////////////////////////////////////////////
+	virtual void	ElementLeftDown();				// described in derived also
+	virtual void	ElementLeftUp(CPoint point);	// described in derived also
+	////////////
+	int			IsObjectHit(int nObjectType,POINT point, int startIndex);
+	//////////////////////////////////////////////////////// Patch
+	int			LeftDown_PATCH();
+	int			LeftUp_Coons(POINT point);
+	int			RightUp_PATCH();
+	void		UpdatePDlg_TRUE();
+	void		UpdatePDlg_FALSE();
+	//////////////////////////////////////////////////////// Curve
+	int			LeftDown_CURVE();
+	int			ShowCurve(CString* pID,BOOL bFinal);
+	void		UpdateCDlg_TRUE();
+	void		UpdateCDlg_FALSE();
+	int			LeftUp_CURVE(CPoint point);
+	int 		RightUp_CURVE();
+	///////////////////////////////////////////////////////// Node
+	CDrObject*	GetObjectFromID(CString& ID, int nObjType);
+	void		SetMouseWICFromNode(CString& NID,LPOINT3* pMouseWIC);
+	void		UpdateNDlg_TRUE();
+	void		UpdateNDlg_FALSE();
+	int 		LeftUp_NODE(BOOL bCNode);
+	/////////////////////////////////////////////////////////
+	int 		PutEndIdsInPipeList(CString nid[],int nEnds);
+	int 		PutEndIdsInPlateList(CString nid[],int nEnds);
+	int 		PutObjectinPatch(CDrObject* pAddObject,CString nid[],int nEnds);
+    ////////////////////////////////////////
+	void 		SerializeNode(CArchive& ar);
+	void		SerializePipe(CArchive& ar);
+	////////////////////////////////////
+	void 			PreLeftDown(CPoint point);
+	void 			PostLeft();
+	void 			PreLeftUp(CPoint point);
+
+
+protected:  
+// Attributes
+
+
+	CDlg_NodI*	m_pNodInDlg;                                                                                
+	CDlg_LQCI*	m_pLQCInDlg;                                                                                
+	CDlg_CrcI*	m_pCrcInDlg;                                                                                
+	CDlg_Cr2I*	m_pCr2InDlg;                                                                                
+	CDlg_Co4I*	m_pCo4InDlg;                                                                                
+	///////////////////////////////////////////////////
+	GENERATE	m_Gener;		// forward/reverse/auto					
+	/////////////////////////////////////////// MousePost:MeshGeneration
+	CMI_Pat_P	m_MI_Pat_P;
+	/////////////////////////////////////////// MouseInsert:Interpolate
+	CMI_Sol_I	m_MI_Sol_I;
+	///////////////////////////////////////////
+	BOOL    	m_bElementMode;
+	int			m_nActiveObject;
+	int			m_nActiveTool;
+	/////////////////////////////////////////// Node 
+	CDrNode*	m_pCurrentNode;
+	CDrLabel*	m_pCurrentLabel;
+
+    int			m_LastNodeNum;		// internal
+	CString 	m_CurrentNodeID;
+	CString 	m_CurrentSupID;
+	CString 	m_CurrentLoadID;
+	CString 	m_CurrentNodeIDOld;
+	CString 	m_AnchorNodeID;
+	int			m_nNodeDone;		// for dragging
+ 	/////////////////////////////////////////// CNode     
+	int		    m_nCNodeDone;		// for Curve & Patch
+	CString 	m_CurrentCNodeID;
+	/////////////////////////////////////////// Pipe     
+	CString 	m_CurrentPipeID;
+ 	/////////////////////////////////////////// Curve
+	CDrCurve*	m_pCurrentCurve;
+	CDListMgr	m_NodeList;
+	CList<int,int>	m_ElSegList;
+    int			m_LastCurveNum;		// internal
+	CURVEPROC	m_CurrentCurveType;
+	CString 	m_CurrentCurveID;
+	CString 	m_CurrentCurveIDOld;
+	BOOL		m_bCurveDone;		// for dragging
+	int			m_nCirMaxNode;		// = 3
+	int			m_ElPerSeg;
+	double		m_Ratio;
+	BOOL		m_bClosed;
+	BOOL		m_bAdvanceOn;
+	BOOL		m_bSingleSegOn;
+	BOOL		m_bBLineOn;
+	/////////////////////////////////////////// Circle
+	CIRCLETYPE	m_nType;
+	int			m_nMesh;
+	double		m_SegAngle;
+	BOOL		m_bAutoSeg;
+	double		m_dAngSpec;
+	BOOL		m_bArc;
+	double		m_dAng;
+	CString		m_FromID;
+	CString		m_ToID;
+	/////////////////////////////////////////// Patch
+	CDrPatch*	m_pCurrentPatch;
+	CDrCurve*	m_pCurPatCurve;
+	CDrCurve*	m_pOldPatCurve;
+//	CDListMgr	m_CurveList;		// will need this for Gordon Type
+//	CList<int,int>	m_ElemList;		// will need this for Gordon Type
+    int			m_LastPatchNum;		// internal
+	PATCHPROC	m_CurrentPatchType;
+	PATSUBTYPE	m_CurrentPatSubType;
+	CString		m_CurrentPatchID;
+	CString		m_CurrentPatchIDOld;
+	BOOL		m_bPatchDone;		// for dragging
+	int			m_nCurveDone;
+	CString		m_PatCurveID[4];
+	CURVELATCH	m_PatCurveLatch[4];
+	int			m_PatCurveElem[4];
+
+
+
+//Operations
+public:
+
+	~CELMouse();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CELMouse)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

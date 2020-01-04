@@ -1,0 +1,276 @@
+// dlg_rotp.cpp : implementation file
+//
+
+#include "stdafx.h"
+
+#include "glb_Objs.h"
+#include "glb_CuPS.h"
+/////////////////////
+#include "drgraf.h"
+#include "drgradoc.h" 
+/////////////////////
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// cards
+#include "crdefine.h"
+///////////////////// ElemObjs
+#include "eldefine.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+#include "DrSolid.h"
+///////////////////// SpecObjs
+#include "spdefine.h"
+#include "drpen.h"
+#include "Layer.h"
+////////////////////
+#include "dlg_Srot.h"
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CDlg_RotS dialog
+
+
+CDlg_RotS::CDlg_RotS(CWnd* pParent /*=NULL*/)
+	: CDialog(CDlg_RotS::IDD, pParent)
+{
+	buttonOK.LoadBitmaps("Image1Up","Image1Down","Image1Focus");
+	buttonCancel.LoadBitmaps("Image2Up","Image2Down","Image2Focus");
+	//{{AFX_DATA_INIT(CDlg_RotS)
+	m_dAng_1 	= 0.0;
+	m_dAng_2 	= 90.0;
+	m_FromID 	= "";
+	m_ToID 		= "";
+	m_CurveID 	= "";
+	m_PatchID 	= "";
+	m_nSegs 	= 1;
+	//}}AFX_DATA_INIT
+}
+
+void CDlg_RotS::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CDlg_RotS)
+	DDX_Text(pDX, IDC_ANG_INIT, m_dAng_1);
+	DDX_Text(pDX, IDC_ANG_END, m_dAng_2);
+	DDX_CBString(pDX, IDC_CNODE_FROM, m_FromID);
+	DDX_CBString(pDX, IDC_CNODE_TO, m_ToID);
+	DDX_CBString(pDX, IDC_CURVE_ID, m_CurveID);
+	DDX_Text(pDX, IDC_PID_ROT, m_PatchID);
+	DDX_Text(pDX, IDC_SEGS, m_nSegs);
+	DDV_MinMaxUInt(pDX, m_nSegs, 1, 9999);
+	//}}AFX_DATA_MAP
+}
+
+BEGIN_MESSAGE_MAP(CDlg_RotS, CDialog)
+	//{{AFX_MSG_MAP(CDlg_RotS)
+	ON_BN_DOUBLECLICKED(IDOK, OnOK)
+	ON_BN_DOUBLECLICKED(IDCANCEL, OnCancel)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+
+/////////////////////////////////////////////////////////////////////////////
+// CDlg_RotS message handlers
+BOOL CDlg_RotS::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+	
+	// TODO: Add extra initialization here
+	buttonOK.SubclassDlgItem(IDOK,this); 
+	buttonCancel.SubclassDlgItem(IDCANCEL,this);
+	buttonOK.SizeToContent();
+	buttonCancel.SizeToContent();
+	///////////////////////////////////////////////////////////////////
+	CWnd* pWndCtrl;
+	pWndCtrl = GetDlgItem(IDC_CURVE_ID);
+	((CComboBox*)pWndCtrl)->LimitText(ID_LEN); 
+	pWndCtrl = GetDlgItem(IDC_CNODE_FROM);
+	((CComboBox*)pWndCtrl)->LimitText(ID_LEN); 
+	pWndCtrl = GetDlgItem(IDC_CNODE_TO);
+	((CComboBox*)pWndCtrl)->LimitText(ID_LEN); 
+	///////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	///////////////////////////////////////////////
+	int nMax = pDListMgr->GetSpecificObjectCount(CURVE);
+	if(nMax)
+		FillListAllCurveIDs();   //  with Patches
+	nMax = pDListMgr->GetSpecificObjectCount(NODE);
+	if(nMax)
+		FillListAllNodeIDs();   //  with Nodes
+	/////////////////
+	pWndCtrl = GetDlgItem(IDC_PID_ROT);
+	pWndCtrl->SetFocus();
+    ////////////////////
+	UpdateData(FALSE);			//Update Screen(FALSE)    
+    ///////////////////	
+	return FALSE;  // return TRUE  unless you set the focus to a control
+}
+
+void CDlg_RotS::OnOK()
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+    ////////////////////
+	UpdateData(TRUE);			//FROM Screen(TRUE)    
+    ///////////////////	
+	/////////////////////////////////////////////////////////////////  ADD
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	/////////////////////////////////////////////
+   	CNewObjs* pNewObjs;
+   	CDrSolid* pAddPatch 	= (CDrSolid*)(pNewObjs->NewObject(SOLID));
+	///////////////////////////////////////////////
+   	SetInfoForDataBase(pAddPatch);
+	pDListMgr->InsertObject(pAddPatch);          				// add 
+   	pAddPatch->SetObjectNo(pObjectMgr->GetLastObjectNo());
+	pObjectMgr->BumpLastObjectNo();                         // bump it
+	pDoc->SetModifiedFlag();                   					// document modified
+	///////////////
+	CDialog::OnOK();
+}
+
+void CDlg_RotS::OnCancel()
+{
+	// TODO: Add extra cleanup here
+	
+	CDialog::OnCancel();
+}
+
+void CDlg_RotS::FillListAllCurveIDs() // actually Patch: Lazy!tired!!
+{
+			 
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	///////////////////////////////////////////////
+	CWnd* pWndCtrl;
+	//////////////////////////
+	CString CID;
+	
+	int nMaxCurves = pDListMgr->GetSpecificObjectCount(PATCH);//
+	if (nMaxCurves<=0)
+		return;
+    if(nMaxCurves)
+    {
+		CDrObject* 	pObject;			        
+	
+		POSITION pos = pDListMgr->GetFirstObjectPos();
+		for (;pos !=NULL;)
+		{
+			pObject = (CDrObject*)pDListMgr->GetNextObject( pos);
+			if(pObject->GetObjectType() == PATCH)
+			{ 
+				CDrPatch* pCurve = (CDrPatch*)pObject;
+	   			CString CID		 = pCurve->GetObjectID();
+	   			/////////////////////////////////
+				pWndCtrl = GetDlgItem(IDC_CURVE_ID);
+	   		    ((CComboBox*)(pWndCtrl))->AddString(CID);
+	   			/////////////////////////////////
+			}	   		     
+    	}
+	} 
+    
+}    
+
+void CDlg_RotS::FillListAllNodeIDs()
+{
+			 
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	///////////////////////////////////////////////
+	CWnd* pWndCtrl;
+	//////////////////////////
+	CString CID;
+	
+	int nMaxNodes = pDListMgr->GetSpecificObjectCount(NODE);//
+	if (nMaxNodes<=0)
+		return;
+    if(nMaxNodes)
+    {
+		CDrObject* 	pObject;			        
+	
+		POSITION pos = pDListMgr->GetFirstObjectPos();
+		for (;pos !=NULL;)
+		{
+			pObject = (CDrObject*)pDListMgr->GetNextObject( pos);
+			if(pObject->GetObjectType() == NODE)
+			{ 
+				CDrNode* pCurve = (CDrNode*)pObject;
+	   			CString CID		= pCurve->GetNodeCard()->id;
+	   			/////////////////////////////////
+				pWndCtrl = GetDlgItem(IDC_CNODE_FROM);
+	   		    ((CComboBox*)(pWndCtrl))->AddString(CID);
+	   			/////////////////////////////////
+				pWndCtrl = GetDlgItem(IDC_CNODE_TO);
+	   		    ((CComboBox*)(pWndCtrl))->AddString(CID);
+	   		    /////////////////////////////////
+			}	   		     
+    	}
+	} 
+    
+}    
+
+void CDlg_RotS::SetInfoForDataBase(CDrSolid* pDrObject)
+{
+
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* 	pDListMgr	= pObjectMgr->GetObjectList();
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+    pDrObject->SetObjectType((int)SOLID);
+    pDrObject->SetElemType((int)GENR_OBJECT);          // globals
+    pDrObject->SetLevelType((int)LEVEL_DADDY);          // globals
+    //////////////////////////////
+	pDrObject->SetObjectID(m_PatchID);
+	pDrObject->SetCurveID(m_CurveID,0);
+	pDrObject->SetToID(m_ToID);
+	////////////////////////////////////////// Reciprocate
+	int index;
+	CDrCurve* pDrCurve;
+	CDrPatch* pDrPatch;
+	index 		= pObjectMgr->GetObjectIndexfromKey(PATCH,m_PatchID,1);
+	pDrPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+	pDrPatch->GetSolidList()->InsertObject(pDrObject);
+	index 		= pObjectMgr->GetObjectIndexfromKey(CURVE,m_CurveID,1);
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+	pDrCurve->GetSolidList()->InsertObject(pDrObject);
+	////////////////////////////////////////// Reciprocate
+	CDrNode* pDrNode;
+	pDrObject->SetFromID(m_FromID); //used for AnchorID
+	index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_FromID,1);
+	pDrNode = (CDrNode*)(pDListMgr->GetObject(index));
+	pDrNode->GetSolidList()->InsertObject(pDrObject);
+	pDrObject->SetToID(m_ToID); //used for AnchorID
+	index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_ToID,1);
+	pDrNode = (CDrNode*)(pDListMgr->GetObject(index));
+	pDrNode->GetSolidList()->InsertObject(pDrObject);
+	/////////////////////////////////////////////////
+	pDrObject->SetSegs(m_nSegs);
+	pDrObject->SetAng_1(m_dAng_1);
+	pDrObject->SetAng_2(m_dAng_2);
+//	pDrObject->SetSolidType(SO_ROTATE);
+	pDrObject->NumberOfElements(S_ROTATE,1/*int nElemType*/); // temp:1=LINE
+	////////////////////////////////////////////////	
+	pDrObject->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pDrObject->SetLayer(pLayer->GetCurrentLayer());
+	//////////////////
+	return;
+	
+} 
+////////////////////////////////// end of module //////////////////////

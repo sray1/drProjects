@@ -1,0 +1,1609 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+
+#include "drgraf.h"
+#include "drgrafrm.h"
+#include "UserMsg.h"
+#include "drawView.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+/////////////////////
+#include "glb_Objs.h"                    
+#include "glb_Mous.h"                    
+#include "glb_CuPS.h"                    
+#include "Def_Ms.h" // Mesh Types for Patch
+///////////////////// dialogMgr
+#include "MPatMgr.h"  
+///////////////////// elements
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "Ext_Elem.h"
+#include "DrNode.h"
+#include "DrFE1D.h"
+#include "DrFE2D.h"
+//#include "DrPipe.h"
+//#include "DrPlate.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+#include "DrObj3D.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h" 	
+///////////////////// specials
+#include "Def_Spec.h"
+#include "Obj3DMnu.h"
+#include "PatchMnu.h"
+#include "DrPen.h"
+#include "Layer.h"
+#include "booleans.h"
+#include "precison.h"
+/////////////////////
+#include "mouse.h"
+#include "DListMgr.h"
+/////////////////////
+#include "MI_GangP.h" 
+#include "MI_PSPN.h" 
+////////////////////// 
+#include "Dlg_Co4I.h"
+//////////////////////
+#include "PatMouse.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////////////////////////////
+#define MIN_CURVES_PATCH	3        
+#define	new					DEBUG_NEW
+#define	BUFF_SIZE			1024
+#define MAX_NODES_FE2D		4
+////////////////////////////////////
+IMPLEMENT_SERIAL(CPatMouse,CCurMouse,1)
+/////////////////////////////////////////////////////////////////////////////
+CPatMouse::CPatMouse()
+{
+
+	////////////////////////////
+	m_pCo4InDlg			= NULL;                                                                                
+ 	/////////////////////////////////////////// Patch 
+	m_nCurveDone		= 0;
+    m_LastPatchNum		= 0;		// internal
+	m_CurrentPatchType	= PP_LOFT4;
+	m_CurrentPatSubType	= PS_QUADRILAT;
+	m_CurrentPatchID	= "P0";
+	m_bPatchDone		= TRUE;		// for dragging
+	for(int i=0;i<4;i++)
+	{
+		m_PatCurveID[i]			= "";
+		m_PatCurveLatch[i]	= CL_FORWARD;
+		m_PatCurveElem[i]		= 0;
+	}
+
+}
+
+CPatMouse::~CPatMouse()
+{
+	/////////////////////////////////// Modeless Dialogs
+	if(m_pCo4InDlg->m_hWnd)
+		m_pCo4InDlg->DestroyWindow();
+	///////////////////
+	delete m_pCo4InDlg; 
+	///////////////////
+}
+
+void CPatMouse::InitDlgIn_PAT()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////////////// System Sizes
+	m_pCo4InDlg		= new CDlg_Co4I(pWnd); 
+}
+	
+int CPatMouse::LeftDown_PATCH()
+{
+	return 0;
+}
+	
+void CPatMouse:: ElementLeftDown_PAT()
+{	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	/////////////////////////////////////////////////////////
+//	int nMeshType; 
+	/////////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		////////////////////////////////////////////////// PATCH
+		case P_COONS:
+		case P_EXTRUDE:				// 
+		case P_ROTATE: 
+		case P_LOFT: 
+		case P_DUCT: 
+		case P_SWEEP: 
+
+			LeftDown_PATCH();
+			return;
+
+		////////////////////////////////////////////////// POST	
+		case P_POST:				// PATCH 
+			///////		
+			m_MI_Pat_P.LBDownInit_PPost();
+			return;
+		
+/*		 
+		////////////////////////////////////////////////// EDIT	
+		case P_EDIT:				// PATCH 
+			///////		
+			m_MI_Pat_I.LBDownInit_PEdit();
+			return;
+		////////////////////////////////////////////////// MOVE	
+		case P_MOVE:				// PATCH 
+			///////		
+			m_MI_Pat_I.LBDownInit_PMove();
+			return;
+*/		
+		//////////////////////////////////////////////////
+		default:
+			break;
+	}  
+
+}
+
+void CPatMouse::OnEBoxLButtonDown_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	CDListMgr* pDListMgr;
+	/////////////////////////////////// 
+   	m_bDragOn 		= pBool->IsDragOn();
+	m_bDialogOn		= pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	if(!m_bBLineOn && m_bCurveDone)			// Reset
+		m_nNodeDone = 0;
+		////////////////
+/*
+	if(m_bCurveDone)						// Reset
+	{
+		////////////////
+		if(!m_ElSegList.IsEmpty())
+			m_ElSegList.RemoveAll();
+		if(!m_NodeList.IsEmpty())
+			m_NodeList.RemoveAll();
+	}
+*/
+	//////////////////////////////////////////////////////// LOG
+	m_pdc->DPtoLP(&point);
+	//////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////////////////////////////////// take care of Edit AllClear
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	if(!(pDListMgr->GetSpecificObjectCount(NODE)) ) m_nNodeDone = 0;
+	/////////////////////////////////////////////////////////////////
+    /////////////////////////////  ELement Dialog On/Off Check
+    if(m_Gener == FORWARD)
+		ElementLeftDown_PAT();
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftDown_I();
+	//////////////////////////////////
+}
+
+void CPatMouse::UpdatePDlg_TRUE()
+{
+	//////////////////////////////////
+	CString	sLat[4];
+	/////////////////
+	m_pCo4InDlg->UpdateData(TRUE); // from screen
+	//////////////////////////////
+	m_CurrentPatchID	= GetCo4InDlg()->m_PatchID;
+	m_PatCurveID[0]		= GetCo4InDlg()->m_CID_1;
+	m_PatCurveID[1]		= GetCo4InDlg()->m_CID_2;
+	m_PatCurveID[2]		= GetCo4InDlg()->m_CID_3;
+	m_PatCurveID[3]		= GetCo4InDlg()->m_CID_4;
+	m_PatCurveElem[0]	= GetCo4InDlg()->m_TotEl_1;
+	m_PatCurveElem[1]	= GetCo4InDlg()->m_TotEl_2;
+	m_PatCurveElem[2]	= GetCo4InDlg()->m_TotEl_3;
+	sLat[0]				= GetCo4InDlg()->m_Orient_1;
+	sLat[1]				= GetCo4InDlg()->m_Orient_2;
+	sLat[2]				= GetCo4InDlg()->m_Orient_3;
+	sLat[3]				= GetCo4InDlg()->m_Orient_4;
+	//////////////////////////////////////
+	int i;
+	for(i=0;i<4;i++)
+	{
+		m_PatCurveLatch[i] = CL_FORWARD;
+		/////////////////////////
+		if(sLat[i] == "BACKWARD")
+			m_PatCurveLatch[i] = CL_BACKWARD;
+	}
+	//////////////////////////////////////
+	if(m_nCurveDone>=1)
+		m_pCo4InDlg->GetDlgItem(IDC_PID)->EnableWindow(FALSE);
+	//////////////////////////////
+}			
+
+void CPatMouse::UpdatePDlg_FALSE()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	CString	sLat[4];
+	/////////////////
+	GetCo4InDlg()->m_PatchID	= m_CurrentPatchID;
+	GetCo4InDlg()->m_CID_1		= m_PatCurveID[0];
+	GetCo4InDlg()->m_CID_2		= m_PatCurveID[1];
+	GetCo4InDlg()->m_CID_3		= m_PatCurveID[2];
+	GetCo4InDlg()->m_CID_4		= m_PatCurveID[3];
+	GetCo4InDlg()->m_TotEl_1	= m_PatCurveElem[0];
+	GetCo4InDlg()->m_TotEl_2	= m_PatCurveElem[1];
+	GetCo4InDlg()->m_TotEl_3	= m_PatCurveElem[2];
+	GetCo4InDlg()->m_TotEl_4	= m_PatCurveElem[3];
+	//////////////////////////////////////
+	int i;
+	for(i=0;i<4;i++)
+	{
+		sLat[i] = "FORWARD";
+		/////////////////////////
+		if(m_PatCurveLatch[i] == CL_BACKWARD)
+			sLat[i] = "BACKWARD";
+	}
+	GetCo4InDlg()->m_Orient_1 = sLat[0];
+	GetCo4InDlg()->m_Orient_2 = sLat[1];
+	GetCo4InDlg()->m_Orient_3 = sLat[2];
+	GetCo4InDlg()->m_Orient_4 = sLat[3];
+	/////////////////////////////////////////////// CurrStat: Show
+	strCurr = "Select@";
+	if(m_nCurveDone == 1)
+		strCurr += "2nd Curve";
+	else
+	if(m_nCurveDone == 2)
+		strCurr += "3rd Curve";
+	else
+	if(m_nCurveDone == 3)
+		strCurr += "Last Curve";
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////////////////////
+	m_pCo4InDlg->UpdateData(FALSE); // To screen
+	////////////////////////////////////////////////
+}
+
+int CPatMouse::LeftUp_Coons(POINT point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	CDrCurve* pDrCurve;
+//	COLORREF OldColor,NewColor;
+//	UINT nWidth;
+//	UINT nStyle;	
+	int nActiveIndex;
+	CDListMgr* pList;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	int index = IsObjectHit(CURVE,point,0);
+	if(index>=0)
+	{
+		pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+		ID						= pDrCurve->GetObjectID();
+		///////////////////////////////////////// Check if matches previous curves,INADMISSIBLE
+		if(m_nCurveDone>1)
+		{
+			for(int i=0;i<m_nCurveDone;i++)
+			{
+				if(m_PatCurveID[i] == ID)
+				{
+					AfxMessageBox("Degenerate Patch:\nSame Curve More than Once!");
+					m_nCurveDone--;
+					return -1;
+				}
+			}
+		}
+/*
+		////////////////////////////////////////// Color Change Curve
+		pDrCurve->GetPenInfo(nWidth,OldColor,nStyle);
+		/////////////////////////////
+		NewColor = pDrPen->GetColor(); 
+		pDrCurve->SetPenInfo(1,NewColor,PS_DASH);
+*/
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(CURVE);
+		nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+		/////////////////////
+	}
+	else
+	{
+		m_nCurveDone--;
+		return 0;
+	}
+	//////////////////////////////////////////////////////////////// MultipleSearch
+	int startIndex = index+1;
+	/////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		for(;;)
+		{
+			CString* str = new CString;
+			char* buf = str->GetBuffer(BUFF_SIZE);
+			int j;
+			/////////////////////////////// total elems
+			int nIn		= pDrCurve->GetMaxINodes_S();
+			int nElems	= pDrCurve->GetMaxOutPts_S();
+			pList		= pDrCurve->GetINodeList();
+			//////////////////////////////
+			j = sprintf(buf,
+				"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+				ID,nIn,nElems);
+			j += sprintf(buf+j,"Nodes:\n");
+			//////////////////////////////
+			for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+			{
+				////
+				CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+				j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+			}
+			sprintf( buf + j-2, ";");
+			/////////////////////////	
+			j += sprintf(buf+j,"\n\nCancel: Find Next Matching Curve\n");
+			j += sprintf(buf+j,    "OK:     Accept This Curve");
+			////////////////////////////
+			int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+			/////////////
+			if(nResult == IDOK)
+			{
+				delete str;
+				break;
+			}
+			else
+			{
+				//////////////////////////////////////////////////////// restore Old Color/OldCurve
+//				pDrCurve->SetPenInfo(nWidth,OldColor,nStyle);
+				////////////////////////////////
+				index = IsObjectHit(CURVE,point,startIndex);
+				if(index>=0)
+				{
+					pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+					ID						= pDrCurve->GetObjectID();
+					///////////////////////////////////////// Check if matches previous curves,INADMISSIBLE
+					if(m_nCurveDone>1)
+					{
+						for(int i=0;i<m_nCurveDone;i++)
+						{
+							if(m_PatCurveID[i] == ID)
+							{
+								AfxMessageBox("Degenerate Patch:\nSame Curve More than Once!");
+								////////////////
+								m_nCurveDone--;
+								delete str;
+								return 0;
+							}
+						}
+					}
+/*
+					////////////////////////////////////////// Color Change Curve
+					pDrCurve->GetPenInfo(nWidth,OldColor,nStyle);
+					/////////////////////////////
+					NewColor = pDrPen->GetColor(); 
+					pDrCurve->SetPenInfo(1,NewColor,PS_DASH); //cpen
+*/
+					///////////////////////////////////////// 
+					pList = pObjectMgr->GetObjectList(CURVE);
+					nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+					pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+					pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+					pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+					////////////////////////////////////////
+					pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+					ID			= pDrCurve->GetObjectID();
+					startIndex  = index+1;
+					/////////////////////
+				}
+				else
+				{
+					////////////////
+					m_nCurveDone--;
+					delete str;
+					return 0;
+				}
+				/////////
+			}
+		}
+	}
+	//////////////////////////////////////////////////////// Compatibility Check
+	BOOL bClosed;
+	////////////////////////////////////// All must be OPEN
+	bClosed		= pDrCurve->IsClosed_S();
+	if(bClosed)
+	{
+		CString str;
+		LPTSTR buf = str.GetBuffer( 200 );
+		sprintf(buf,"%s Curve MUST BE OPEN",ID);
+		AfxMessageBox(str);
+		str.ReleaseBuffer();
+		////////////////
+		m_nCurveDone--;
+		//////////////////// 
+		return 0;
+	}
+	///////////////////////////////////////////////////// find Latch
+	if(	m_nCurveDone == 1)
+	{
+		///////////////////////////////////////////////// progress
+		m_pCurPatCurve					= pDrCurve;
+		m_pOldPatCurve					= m_pCurPatCurve;
+		m_PatCurveID[m_nCurveDone-1]	= ID;
+		m_PatCurveElem[m_nCurveDone-1]	= pDrCurve->GetMaxOutPts_S() - 1;
+		m_PatCurveLatch[m_nCurveDone-1]	= CL_FORWARD;
+		/////////////////////////////////////////////////
+		return 0;
+	}
+	///////////////////////////////////////////////////////////////// Check CONNECTIVITY
+	C3DMath Math3D;
+	///////////////
+	CDListMgr*	pINList;
+	WORLD		LocalPosOld,LocalPosB,LocalPosE,LocalPos;
+	CDrNode*	pNode_Old;
+	CDrNode*	pNode_Beg;
+	CDrNode*	pNode_End;
+	CURVELATCH	OldLat,NewLat;
+	//////////////////////////////////////////////////////// Curve Old
+ 	pINList		= m_pOldPatCurve->GetINodeList();
+	/////////////
+	OldLat		= m_PatCurveLatch[m_nCurveDone-2];
+	pNode_Old	= (CDrNode*)pINList->GetTail();
+	if(OldLat == CL_BACKWARD) 
+		pNode_Old	= (CDrNode*)pINList->GetHead();
+	////////////////////////////
+	LocalPosOld = *(pNode_Old->GetLocalPos());
+	//////////////////////////////////////////////////////// Curve New
+ 	pINList		= pDrCurve->GetINodeList(); 
+	pNode_Beg	= (CDrNode*)pINList->GetHead();
+	pNode_End	= (CDrNode*)pINList->GetTail();
+	/////////////
+	LocalPosB	= *(pNode_Beg->GetLocalPos());
+	LocalPosE	= *(pNode_End->GetLocalPos());
+	//////////////////////////////////////////////////////// Do Check
+	BOOL bDisJoint = TRUE;
+	double dLen;
+	//////////////////////
+	Math3D.Sub3DPts(&LocalPosOld,&LocalPosB,&LocalPos);
+	dLen = sqrt(fabs(Math3D.Len3DPts(&LocalPosOld)) * fabs(Math3D.Len3DPts(&LocalPosB)) ); 
+	if( fabs(Math3D.Len3DPts(&LocalPos)/dLen) < .01)	// 1%
+	{
+		bDisJoint	= FALSE;
+		NewLat		= CL_FORWARD;
+	}
+	else
+	{
+		//////////////////////////////////////// try with Other End
+		Math3D.Sub3DPts(&LocalPosOld,&LocalPosE,&LocalPos);
+		dLen = sqrt(fabs(Math3D.Len3DPts(&LocalPosOld)) * fabs(Math3D.Len3DPts(&LocalPosE)) ); 
+		if( fabs(Math3D.Len3DPts(&LocalPos)/dLen) < .01)	// 1%
+		{
+			bDisJoint	= FALSE;
+			NewLat		= CL_BACKWARD;
+		}
+	}
+	/////////////
+	if(bDisJoint)
+	{
+		CString str;
+		LPTSTR buf = str.GetBuffer( 200 );
+		sprintf(buf,
+			"ComPatibility Problem!\nCurve_%d(End) & Curve_%d(Begin) DisJoint!\nCURVES MUST MEET",
+			m_nCurveDone-1,m_nCurveDone);
+		AfxMessageBox(str);
+		str.ReleaseBuffer();
+		////////////////
+		m_nCurveDone--;
+		///////
+		return 0;
+	}
+	/////////////////////////////////////////////////  VALID:Progess
+	m_pCurPatCurve					= pDrCurve;
+	m_pOldPatCurve					= m_pCurPatCurve;
+	m_PatCurveID[m_nCurveDone-1]	= ID;
+	m_PatCurveElem[m_nCurveDone-1]	= pDrCurve->GetMaxOutPts_S() - 1;
+	m_PatCurveLatch[m_nCurveDone-1]	= NewLat;
+	/////////////////////////////////////////////////
+	return 0;
+}
+
+void CPatMouse::ElementLeftUp_PAT(CPoint point)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	//////////////////////////////////////////////////////////////////
+//	CString*	pID;
+	/////////////
+//	char buf[20];
+	CString Nid;
+	BOOL bRightOn = FALSE;
+	///////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		///////////////////////////////////////////////////// Patches Insert
+		case P_EXTRUDE:
+		case P_ROTATE: 
+		case P_LOFT: 
+		case P_DUCT: 
+		case P_SWEEP:
+				return;
+
+		case P_COONS:		// 
+			
+
+			m_nCurveDone++;
+			////////////////
+			if(m_nCurveDone > 4)
+			{
+				AfxMessageBox("Maximum of 4 Curves Allowed\n Please Use Right Button");
+				m_nCurveDone--;
+				return;
+			}
+			////////////////
+			UpdatePDlg_TRUE();
+			LeftUp_Coons(point);	
+			UpdatePDlg_FALSE();
+			///////
+			return;
+		////////////////////////////////////////////////// POST
+		case P_POST:				// PATCH 
+			///////		
+			m_MI_Pat_P.LBUpPatchPost();
+			return;
+/*		
+		////////////////////////////////////////////////// EDIT	
+		case P_EDIT:				// PATCH 
+			///////		
+			m_MI_Solid.LBUpPatchEdit();
+			return;
+		////////////////////////////////////////////////// MOVE	
+		case P_MOVE:				// PATCH 
+			///////		
+			m_MI_Solid.LBUpPatchMove();
+			return;
+*/		
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	} 
+}	
+
+void CPatMouse::OnEBoxMouseMove_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{  
+
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CMouseMgr* pMouseMgr	= pWnd->GetMouseMgr(); 
+	////////////////////////// LOG: Log/DEScaled
+   	m_pdc->DPtoLP(&point);     
+	LPOINT LpLOG;
+	LpLOG.x = (long)point.x;
+	LpLOG.y = (long)point.y;
+   	m_pdc->LPtoDP(&point);     
+    /////////////////////////////////////////////
+    if(!m_bDragging)  // not currently dragging 
+    { 
+    
+		//////////////////////////////////////
+		LPOINT3 MouseOldTempWIC = GetMouseOldWIC();
+	    LPOINT3 MouseTempWIC 	= GetMouseWIC();
+   		SetMouseOldWIC(MouseTempWIC);
+   		LPOINT3 MouseWIC;
+    	///////////////////////  LOG :DEScaled
+    	LOGtoWIC2(&MouseWIC,&LpLOG,&MouseTempWIC); //LOG/Scaled WIC
+    	////////////////////                 
+    	SetMouseWIC(MouseWIC);
+    	///////////////////////////
+//    	pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+		pMouseMgr->SetStatusMouseWIC(MouseWIC);
+		////////////////////////////
+		///////////////////// recover MouseWIC changed for statusbar update 
+	    SetMouseOldWIC(MouseOldTempWIC);
+	    SetMouseWIC(MouseTempWIC);
+
+		return;
+    }	
+   	//////////////////////////////      ***** START FROM HERE *****
+   	CPen    Pen;
+	CPen*   PtrOldPen;
+	//////////////////////////////
+	m_pdc->SetBkMode(TRANSPARENT);
+	//////////////////////////////	
+	// Create Black Pen 2 Pixel wide;
+	int two = 2;
+	COLORREF crColor = 0x000000;  
+	Pen.CreatePen ((int)PS_SOLID,two,crColor);
+	PtrOldPen = m_pdc->SelectObject(&Pen);
+	///////////////////////////
+	m_MouseLOG = point;              // Device
+	POINT MouseLOC;
+	/////////////////////////	
+	m_pdc->SetROP2 (R2_NOT); 
+	
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseOldLOG;        // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+	////////////////////////	  
+//	m_pdc->SetROP2 (R2_COPYPEN);
+
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseLOG;
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+
+	m_MouseOldLOG = m_MouseLOG;
+	///////////////////////////
+   	m_pdc->SelectObject(PtrOldPen);   
+	Pen.DeleteObject(); 
+	//////////////////////////////////////
+    LPOINT3 MouseWIC = GetMouseWIC();
+    SetMouseOldWIC(MouseWIC);
+   	///////////////////////
+   	LOGtoWIC(&MouseWIC,&LpLOG); //LOG/Scaled WIC
+   	////////////////////                 
+    SetMouseWIC(MouseWIC);
+    ///////////////////////////
+//  pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+	pMouseMgr->SetStatusMouseWIC(MouseWIC);
+	//////////////////////////////////////////////    
+}
+
+void CPatMouse::OnEBoxLButtonUp_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+  	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+    if(m_bDragging)  // not currently dragging
+    {
+		m_bDragging = FALSE; 
+		::ReleaseCapture();
+		//	ClipCursor(NULL);				TOBEDONE 
+	}	
+	///////////////////////////////////////////////////////// 
+	PreLeftUp(point);
+    /////////////////////////////  ELement Dialog On/Off Check
+    POINT Logpoint;
+    m_pdc->DPtoLP(&point);
+    Logpoint.x = point.x;
+    Logpoint.y = point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftUp_PAT(Logpoint);
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftUp_I();
+	/////////////////
+	PostLeft();
+	/////////////////////////
+	
+}
+
+void CPatMouse::OnEBoxRButtonDown_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+									UINT nFlags, CPoint point)
+{ 
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+    /////////////////////////////  ELement Dialog On/Off Check
+	m_bDialogOn     = pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	/////////////////////////////////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	//////////////////////////////////////////
+	switch(m_nActiveTool) 
+	{
+		case PATCH:
+			break;
+		////////////////////////////////////////////////// Patch
+		default:
+			break;
+	}  
+}
+
+int CPatMouse::RightUp_PATCH()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr*	pList;
+	////////////////////////////////////////////////////// Add to DataBase
+	CString* pID;
+	char	 buf[30];
+	int i;
+	int nAnswer = IDOK;
+	////////////////////////////////
+	pID			= &m_CurrentPatchID; 
+	//////////////////////////////////////////////////// Check Adequate Curve,or cancel
+	if(m_nCurveDone<3)
+	{
+		nAnswer = AfxMessageBox(
+			"Minimum of 3 Curves Needed\n Do You want to Continue to Get More Curves ?",
+				MB_YESNO|MB_ICONQUESTION );
+		/////////////////////////
+		if(nAnswer == IDNO)
+		{
+			CString* str = new CString;
+			char* buf = str->GetBuffer(BUFF_SIZE);
+			////////////////////
+			sprintf(buf,"Do You Want to Delete\nCurrent Patch to Start Allover");
+			/////////////////////////	
+			nAnswer = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+			/////////////////////////
+			if(nAnswer == IDYES)		//delete
+			{
+				///////////////////////////////////////// delete
+				pList = pObjectMgr->GetObjectList(PATCH);
+				int nActiveIndex = pList->GetObjectIndex(PATCH, *pID);
+				//////////////////////////////////////////////////// Reset
+				pObjectMgr->DeleteFromDataBase(nActiveIndex, PATCH);
+				/////////////////////////////////////// Reset
+				m_nCurveDone	= 0;	// 
+				m_bPatchDone	= TRUE;	// 
+				//////////////////////////
+				m_pCurrentPatch = NULL;
+				for(int i=0;i<4;i++)
+				{
+					m_PatCurveID[i]		= "";
+					m_PatCurveLatch[i]	= CL_FORWARD;
+					m_PatCurveElem[i]	= 0;
+				}
+				/////////////////// reset
+				if(m_pCo4InDlg->GetSafeHwnd())
+					m_pCo4InDlg->GetDlgItem(IDC_PID)->EnableWindow(TRUE);
+				/////////////////////////////////////
+				pDoc->UpdateAllViews(NULL);
+				///////////////////////////
+			}
+			delete str;
+			///////////
+		}
+		////////
+		return 0;
+	}	
+	////////////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		///////////////////////////////////////////////////////////// show Info
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+		////////////////////
+		int j;
+		//////////
+		j = sprintf(buf,"Patch %s contains %d Curves:\n",*pID,m_nCurveDone);
+		for(i=0;i<m_nCurveDone;i++)
+		{
+		   j += sprintf( buf + j, "%s, ",m_PatCurveID[i]);
+		}
+		sprintf( buf + j-2, ";");
+
+		if(j>BUFF_SIZE)
+		{
+			sprintf( buf, "Internal Error:\nIncrease buffer to %d",j);
+			 AfxMessageBox(*str);
+			 delete str;
+			 return -1;
+		}	 
+		///////////////////////////////////////////////////////////////	
+		nAnswer = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION );
+		/////////////////////////
+		if(nAnswer == IDCANCEL)
+		{
+			sprintf(buf,"Do You Want to Delete\nCurrent Patch to Start Allover");
+			/////////////////////////	
+			nAnswer = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+			/////////////////////////
+			if(nAnswer == IDYES)		//delete
+			{
+				///////////////////////////////////////// delete
+				pList = pObjectMgr->GetObjectList(PATCH);
+				int nActiveIndex = pList->GetObjectIndex(PATCH, *pID);
+				//////////////////////////////////////////////////// Reset
+				pObjectMgr->DeleteFromDataBase(nActiveIndex, PATCH);
+				/////////////////////////////////////// Reset
+				m_nCurveDone	= 0;	// 
+				m_bPatchDone	= TRUE;	// 
+				//////////////////////////
+				for(int i=0;i<4;i++)
+				{
+					m_PatCurveID[i]		= "";
+					m_PatCurveLatch[i]	= CL_FORWARD;
+					m_PatCurveElem[i]	= 0;
+				}
+				/////////////////////////////////////
+				pDoc->UpdateAllViews(NULL);
+				///////////////////////////
+				delete str;
+				///////////
+				return 0;
+			}
+		}
+		/////////////////////
+		delete str;
+	}
+	//////////////////////////////////////////////////// Show NewPatch
+	int nActiveIndex;
+	///////////////////////////
+	m_pCurrentPatch	= (CDrPatch*)(pObjectMgr->AddToDataBase(*pID,nActiveIndex,PATCH));
+	m_pCurrentPatch->SetShow(FALSE);	// not quite ready
+	//////////////////////////////////////////////////// Show Patch after Checking
+													  // Element Compatibility
+	if(m_MI_Pat_I.RBUpCoonInsert(
+							m_CurrentPatchType, 
+							m_CurrentPatchID,		
+							m_pCurrentPatch,
+							m_PatCurveID,
+							m_PatCurveLatch,
+							m_pView
+							) <0)
+	{
+		/////////////////////////////////////// Reset
+		m_nCurveDone	= 0;	// 
+		m_bPatchDone	= TRUE;	// 
+		//////////////////////////
+		for(int i=0;i<4;i++)
+		{
+			m_PatCurveID[i]		= "";
+			m_PatCurveLatch[i]	= CL_FORWARD;
+			m_PatCurveElem[i]	= 0;
+		}
+		/////////////////// reset
+		if(m_pCo4InDlg->GetSafeHwnd())
+		m_pCo4InDlg->GetDlgItem(IDC_PID)->EnableWindow(TRUE);
+		/////////////////////////////////////
+		return -1; 
+	}
+	/////////////////////////////////////// Set PatchID
+	if(*pID == m_CurrentPatchID)
+	{		
+		m_LastPatchNum++;		// internal
+		sprintf(buf,"%d",m_LastPatchNum);
+		m_CurrentPatchID	= "P";
+		m_CurrentPatchID	+= buf;
+	}
+	/////////////////////////////////////// Reset
+ 	//////////////////////////////////
+	m_nCurveDone	= 0;	// 
+	m_bPatchDone	= TRUE;	//   
+	//////////////////////////
+	for( i=0;i<4;i++)
+	{
+		m_PatCurveID[i]		= "";
+		m_PatCurveLatch[i]	= CL_FORWARD;
+		m_PatCurveElem[i]	= 0;
+	}
+	/////////////////// reset
+	if(m_pCo4InDlg->GetSafeHwnd())
+		m_pCo4InDlg->GetDlgItem(IDC_PID)->EnableWindow(TRUE);
+	/////////////////////////////////////
+	return 0;
+}
+
+void CPatMouse::OnEBoxRButtonUp_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+								UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CMI_PSPN	MI_PSPN;
+	/////////////////////
+	CString ID;
+	CString* pID = &ID;
+//	int nMeshType;
+	////////////////////
+	switch(m_nActiveTool) 
+	{
+
+		///////////////////////////////////////////////////// PATCHes Insert
+		case P_COONS:
+						
+			//////////////////////////////
+			if(m_nCurveDone == 3)
+				m_CurrentPatchType	= PP_LOFT3;
+			else
+			if(m_nCurveDone == 4)
+				m_CurrentPatchType	= PP_LOFT4;
+			////////////////////
+			UpdatePDlg_TRUE();
+			RightUp_PATCH();
+			UpdatePDlg_FALSE();
+			///////////////////	
+			return;
+
+			
+		case P_EXTRUDE:
+						
+			if(m_MI_Pat_I.RBUpExtrudeInsert(m_pView) <0)
+				return; 
+			//////////////////////////// 	
+			return;
+		
+		case P_ROTATE:
+						
+			if(m_MI_Pat_I.RBUpRotateInsert(m_pView) <0)
+				return; 
+			//////////////////////////// 	
+			return;
+		
+		case P_LOFT:
+						
+			if(m_MI_Pat_I.RBUpLoft2Insert(m_pView) <0)
+				return; 
+			//////////////////////////// 	
+			return;
+		
+		case P_DUCT:
+						
+			if(m_MI_Pat_I.RBUpDuctInsert(m_pView) <0)
+				return; 
+			//////////////////////////// 	
+			return;
+		
+		case P_SWEEP:
+						
+			if(m_MI_Pat_I.RBUpSweepInsert(m_pView) <0)
+				return; 
+			//////////////////////////// 	
+			return;
+
+
+
+		case P_SPAWN:
+		
+			if(MI_PSPN.RBUp_PSpawn(m_pView,m_nView) <0)
+				return; 
+			//////////////////////////// 	
+			return;
+
+		/////////////////////////////////////////////////// POST
+		case P_POST:				// PATCH 
+			///////		
+			m_MI_Pat_P.LBUpPatchPost();
+			return;
+		
+		
+		
+		
+		
+		default:  
+			break;
+	} 
+
+}
+
+
+int CPatMouse::PutEndIdsInPlateList(CString nid[],int nEnds)
+{
+	///////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER);
+	CPatchMnu* pPatchMnu	= (CPatchMnu*)pObjectMgr->GetSpecObject(PATCHMNU);
+	CObj3DMnu* pObj3DMnu	= (CObj3DMnu*)pObjectMgr->GetSpecObject(OBJ3DMNU);
+	/////////////////////////////////////////////////////////////////
+	static char NodeEnds[] = {'I','J','K','L'};
+	CString str;
+	char buf[100];
+	for (int i = 0;i<nEnds-1;i++)
+	{
+		for(int j = i+1;j<nEnds;j++)
+		{	 
+			if(nid[i] == nid[j])
+			{
+				sprintf(buf,"Node IDs for End: %c & End: %c must be different!!",
+								NodeEnds[i],NodeEnds[j]);
+				str = buf;
+				AfxMessageBox(str);
+   				return -1;
+   			}
+   		}
+   	}
+   	/////////////////////		 
+	int index;
+	CString EndNids;  
+	///////////////////////////////////////////// EndNids
+	CString blank(' ');
+	EndNids	= nid[0]; 	
+	for ( i=1; i < nEnds; i++)
+		EndNids += blank + nid[i]; 
+	/////////////////////////////////////////// already exists
+   	if(( index = pObjectMgr->GetObjectIndexfromKey(FE2D,EndNids,1))>=0)       
+   	{
+		AfxMessageBox("Plate with these NodeIDs Already Exists !!");
+   		return -1;
+	}
+	////////////////////////////////////////////////////////////////////// Object List
+    CDListMgr* pDListMgr;
+	/////////////////////////////////////////////////////////////////////////// add
+ 	int nActiveIndex;
+    CDrFE2D* pAddObject	= (CDrFE2D*)(pObjectMgr->AddToDataBase(nActiveIndex,FE2D));
+	/////////////////////////////////////////////////////////////
+	pAddObject->SetObjectType((int)FE2D);
+	pAddObject->SetLevelType((int)LEVEL_GRAPA);
+	pAddObject->SetElemType((int)ELEM_OBJECT);              // globals.h
+	////////////////////////////////////////////////////////////////////////////////													    
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(FE2D);		    // set Active Index									
+	pAddObject->SetObjectType((int)FE2D);
+	pAddObject->SetElemType((int)EL3D_OBJECT);              // globals.h
+    ///////////////////////////////// Set Info & Create
+	for (i=0; i < nEnds; i++)
+		(pAddObject->GetPlatCard())->nid[i]= nid[i];
+	//////////////////////////////////////////////////////////// Pen & Layer
+	pAddObject->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),
+											pDrPen->GetStyle());
+	pAddObject->SetLayer(pLayer->GetCurrentLayer());
+	///////////////////////////////////////////////////// store node pointers 
+	pDListMgr = pObjectMgr->GetObjectList(NODE);
+    for(i=0;i<nEnds;i++)
+    {
+		if(( index = pObjectMgr->GetObjectIndexfromKey(NODE,nid[i],1))>=0)
+		{
+			CDrNode* pDrNode = (CDrNode*)pDListMgr->GetObject(index);
+  			pAddObject->GetNodeList()->InsertObject(pDrNode);
+			//////////////////////////////// save Current Plate Pointer in Nodes
+			pDrNode->GetElemList()->InsertObject(pAddObject);
+		}			
+	
+  	}
+    ////////////////////////////////////////////////////////// Invalidate
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(FE2D);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,FE2D);
+	////////////////////////////////////////////////////////// 
+/*		
+	/////////////////////////////////////////////////////////////////////// Obj3D/Patch
+	if(PutObjectinPatch(pAddObject, nid,nEnds) <0)
+	{
+		AfxMessageBox("CouldNot Put in Patch!!");
+		return -1;
+	}
+*/		
+	//////////////////////////////////////////////////////////
+    return 0;
+}
+    
+int CPatMouse::PutObjectinPatch(CDrObject* pAddObject,CString nid[],int nEnds)
+{
+	///////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER);
+	CPatchMnu* pPatchMnu	= (CPatchMnu*)pObjectMgr->GetSpecObject(PATCHMNU);
+	CObj3DMnu* pObj3DMnu	= (CObj3DMnu*)pObjectMgr->GetSpecObject(OBJ3DMNU);
+	/////////////////////////////////////////////////////////////////////// Obj3D/Patch
+	CString strPatchID	= pPatchMnu->GetCurrentID();
+	CString strObj3DID	= pObj3DMnu->GetCurrentID();
+    ////////////////////////////////////////////////////////////////////// Obj3D
+    CDListMgr* pDListMgr  = pObjectMgr->GetObjectList(OBJ3D);
+    ///////////////////////
+    CDrObj3D*	pDrObj3D;
+    int index,i;
+    if((index = pDListMgr->GetObjectIndex(OBJ3D,strObj3DID) ) >=0)   // exists already
+		pDrObj3D = (CDrObj3D*)(pDListMgr->GetObject(index));
+	else
+	{
+    	CNewObjs* pNewObjs;
+    	pDrObj3D = (CDrObj3D*)(pNewObjs->NewObject(OBJ3D));   // New
+    	//////////////////////////////////////////////////////// Fill Info
+		pDrObj3D->SetObjectType((int)OBJ3D);
+		pDrObj3D->SetElemType((int)EL3D_OBJECT);              // globals.h
+    	pDrObj3D->SetObjectID(strObj3DID);
+		pDrObj3D->SetLayer(pLayer->GetCurrentLayer());
+    	/////////////////////
+    	pDListMgr->InsertObject(pDrObj3D);
+    	/////////////////////
+    }	 
+	////////////////////////////////////////////////////////////////////// Patch 
+	if(pDrObj3D)
+	{
+    	CDListMgr* pPatchList;
+    	//////////////////////
+	    CDrPatch*	pDrPatch;
+    	if((index = pPatchList->GetObjectIndex(PATCH,strPatchID) ) >=0)
+    	{	
+			pDrPatch = (CDrPatch*)pPatchList->GetObject(index);
+    	}	
+		else
+		{
+    		CNewObjs* pNewObjs;
+    		pDrPatch = (CDrPatch*)(pNewObjs->NewObject(PATCH));   // New
+    		//////////////////////////////////////////////////////// Fill Info
+			pDrPatch->SetObjectType((int)PATCH);
+			pDrPatch->SetElemType((int)EL3D_OBJECT);              // globals.h
+    		pDrPatch->SetObjectID(strPatchID);
+			pDrPatch->SetLayer(pLayer->GetCurrentLayer());
+    		/////////////////////
+    		pPatchList->InsertObject(pDrPatch);
+    		/////////////////////
+    	}	 
+		////////////////////////////////////////////////////////////////////// save in Patch
+    	if((index = pPatchList->GetObjectIndex(PATCH,strPatchID) ) >=0)
+    	{
+			pDrPatch = (CDrPatch*)pPatchList->GetObject(index);
+			///////////////////////////////////////////////////// PolyList
+			CDListMgr* pPolyList = pDrPatch->GetElemList();
+			if(pPolyList)
+			{
+				if((pPolyList->GetObjectIndex(pAddObject) ) <0) // new
+					pPolyList->InsertObject(pAddObject); 
+			}		
+			///////////////////////////////////////////////////// NodeList
+			CDListMgr* pNodeList = pDrPatch->GetNodeList();
+			if(pNodeList)
+			{
+				CDrNode* pDrNode; 
+	       		for(i=0;i<nEnds;i++)
+ 	      		{
+					if(( index = pObjectMgr->GetObjectIndexfromKey(NODE,nid[i],1))>=0)
+  						pDrNode = (CDrNode*)(pObjectMgr->GetObjectList(NODE)->GetObject(index)); // Object List
+  					else
+  					{
+  						AfxMessageBox("Internal at ObjectinPatch.586");
+  						return -1;
+  					}		
+					if((pNodeList->GetObjectIndex(pDrNode) ) <0) // new in NodeList 
+						pNodeList->InsertObject(pDrNode);
+				}
+			}			
+	  	}
+	}	  		
+	//////////////////////////////////////
+	else
+	{
+		AfxMessageBox("Internal Problem: PutObjectinPatch.ObjMgr.596"); 
+		return -1;
+	}	
+	return 0; 
+} 
+/////////////////////////////////////////////////////////////////////////////////////// F_M
+UINT CPatMouse::ReSetToolID_PAT(UINT CntlID,UINT IGenID, UINT OperID)
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString str;
+	UINT ID;
+	//////////////////////////////////////////// TaskID
+	switch(OperID)
+	{
+		//////////////////////////////////////////// Create
+		case CREATE:
+		{
+			pWnd->SetIGenBoxStatus(TRUE);
+			pWnd->SetCntlBoxStatus(FALSE);
+			pWnd->SetDrawBoxStatus(FALSE);
+			///////////////////////////// String
+			str = "CREATE";
+			pWnd->SetstrOperID(str);
+			/////////////////////////////
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Elements
+				case ELEMENT:
+				case EDIM_0:
+				case EDIM_1:
+				case EDIM_2:
+				case EDIM_3:
+
+//					pWnd->SetMouseBoxType(ELEMDIMBOX);
+					str = "ELEMENT";
+					pWnd->SetstrCntlID(str);
+					///////////////////////////////////// EDim0/EDim1...
+					switch(IGenID)
+					{
+						/////////
+
+						case PATCH:
+							str = "PATCH";
+							ID = PATCH;
+							break;
+//							m_bDoModalDone	= FALSE;
+
+							break;
+
+						case P_TENSOR:		str = "Tensor Product@PATCH";	ID = P_TENSOR; 		break;
+						case P_GORDONS:		str = "Gordons@PATCH";			ID = P_GORDONS; 	break;
+						case P_COONS:		str = "Coons@PATCH";			ID = P_COONS; 		break; 
+						case P_ROTATE:		str = "Rotational@PATCH";		ID = P_ROTATE; 		break;
+						case P_LOFT:		str = "Lofted@PATCH";			ID = P_LOFT; 		break; 
+						case P_EXTRUDE:		str = "Extruded@PATCH";			ID = P_EXTRUDE; 	break;
+						case P_DUCT:		str = "Ducted@PATCH";			ID = P_DUCT; 		break;
+						case P_SWEEP:		str = "Swept@PATCH";			ID = P_SWEEP; 		break;
+						case P_FLATPLATE:	str = "Flat@PATCH";				ID = P_FLATPLATE;	break;
+						case P_STITCH:      str = "Stich@PATCH";			ID = P_STITCH; 		break;
+						case P_SPAWN:       str = "Spawn@PATCH";			ID = P_SPAWN; 		break;
+						default:			str = "UNKNOWN@PATCH";			ID = UNONE; 		break;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				//////////////////
+/*
+				case DISPLACE:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "DISPLACE";
+					pWnd->SetstrCntlID(str);
+					////////////////// Displacement
+					switch(IGenID)
+					{
+						/////////
+						case PATCH:			str = "PATCH";		ID = PSL_DISPLACE; 		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				//////////////////
+				case PRESSURE:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "PRESSURE";
+					pWnd->SetstrCntlID(str);
+					////////////////// Pressure
+					switch(IGenID)
+					{
+						/////////
+						case PATCH:			str = "PATCH";		ID = PSL_PRESSURE; 		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////// 
+				case THERMAL:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "THERMAL";
+					pWnd->SetstrCntlID(str);
+					////////////////// Thermal
+					switch(IGenID)
+					{
+						/////////
+						case PATCH:			str = "PATCH";		ID = PSL_THERMAL; 		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////// 
+				case LUMPWT:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "LUMPWT";
+					pWnd->SetstrCntlID(str);
+					////////////////// LumpWt
+					switch(IGenID)
+					{
+						/////////
+						case PATCH:			str = "PATCH";		ID = PSL_LUMPWT; 		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+*/
+				/////////
+				default:					str = "UNKNOWN";	ID = UNONE;
+					pWnd->SetstrIGenID(str);
+					return ID;
+			}
+			pWnd->SetstrCntlID(str);
+			return ID;
+		////////
+		default:							str = "UNKNOWN";	ID = UNONE;
+		}
+		pWnd->SetstrOperID(str);
+		return ID;
+	}
+		/*		SAVE FOLLOWING :  TODO		
+		//////////////////////////////////////////// Edit
+		case EDIT:
+		{
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Mesh
+				case ELEMENT:
+				/////////////
+					switch(IGenID)
+					{
+						case PATCH:				return P_EDIT;
+						default:				return NONE;
+					}
+				//////////////////////////////////////// StaticLoad
+				case FORCE:
+				/////////////
+					switch(IGenID)
+					{
+						case PATCH:				return PSL_EDIT_FOR;
+						default:				return NONE;
+					}
+				case DISPLACE:
+				/////////////
+					switch(IGenID)
+					{
+						case PATCH:				return PSL_EDIT_DIS;
+						default:				return NONE;
+					}
+				case PRESSURE:
+				/////////////
+					switch(IGenID)
+					{
+						case PATCH:				return PSL_EDIT_PRS;
+						default:				return NONE;
+					}
+				case THERMAL:
+				/////////////
+					switch(IGenID)
+					{
+						case PATCH:				return PSL_EDIT_THR;
+						default:				return NONE;
+					}
+		case LUMPWT:
+				/////////////
+					switch(IGenID)
+					{
+						case PATCH:				return PSL_EDIT_LWT;
+						default:				return NONE;
+					}
+
+		
+				case PATCH:				return P_MOVE;
+				case PATCH:				return P_POST;
+				case PATCH:				return P_UNPOST;
+				case PATCH:				return P_DELETE;
+				//////////////////////////////////////// StaticLoad
+				case FORCE:
+				////////////////
+				case P_ROTATE_B:
+				case P_XLATE:
+				case P_SCALE:
+				case P_SHEAR:
+				case P_OPER:
+				case P_SUPP:
+				case P_STAL:
+				case P_DYNL:
+				case P_SPEL:
+
+		}
+
+*/
+}
+	
+void CPatMouse::ModeLessOff_PAT()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	if(GetCo4InDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_CO4IN,IDOK);
+}
+
+void CPatMouse::ModeLessOn_PAT()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	int aTool	= pWnd->GetActiveToolType();
+	int aObj	= pWnd->GetActiveObjectType();
+	/////////////////////////////////////////////////////////////////////////
+	if(aTool == P_COONS)
+	{
+		if(!(GetCo4InDlg()->m_hWnd))
+			pWnd->SendMessage(ID_ACTIVE_CO4IN,IDOK);
+	}
+
+}
+
+long CPatMouse::CreateorActivateCo4In(UINT wParam, long lParam)
+{
+	
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	if(GetCo4InDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetCo4InDlg()->Create();
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetCo4InDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////////////////////////////////////
+		GetCo4InDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetCo4InDlg()->SetActiveWindow();
+	////////////////////////////////////////////////////////////////// Set ID
+	CString Pid = GetCurrentPatchID();
+	////////////
+	CString PCid[4];
+	CURVELATCH CLat[4];
+	CString sLat[4];
+	int Elem[4];
+	////////////
+	for(int i=0;i<4;i++)
+	{
+		PCid[i] = GetPatCurveID(i);
+		CLat[i] = GetPatCurveLat(i);
+		Elem[i] = GetPatCurveElem(i);
+	}
+	//////////////////////////////////////
+	for(i=0;i<4;i++)
+	{
+		sLat[i] = "FORWARD";
+		/////////////////////////
+		if(CLat[i] == CL_BACKWARD)
+			sLat[i] = "BACKWARD";
+	}
+	////////////
+	GetCo4InDlg()->m_PatchID	= Pid;
+	GetCo4InDlg()->m_CID_1		= PCid[0];
+	GetCo4InDlg()->m_CID_2		= PCid[1];
+	GetCo4InDlg()->m_CID_3		= PCid[2];
+	GetCo4InDlg()->m_CID_4		= PCid[3];
+	GetCo4InDlg()->m_TotEl_1	= Elem[0];
+	GetCo4InDlg()->m_TotEl_2	= Elem[1];
+	GetCo4InDlg()->m_TotEl_3	= Elem[2];
+	GetCo4InDlg()->m_TotEl_4	= Elem[3];
+	GetCo4InDlg()->m_Orient_1	= sLat[0];
+	GetCo4InDlg()->m_Orient_2	= sLat[1];
+	GetCo4InDlg()->m_Orient_3	= sLat[2];
+	GetCo4InDlg()->m_Orient_4	= sLat[3];
+	////////////////////////////////
+	GetCo4InDlg()->UpdateData(FALSE);
+	///////////////////////// CurrStat: Show
+	strCurr = "Select@First Curve";
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CPatMouse::GoodByeCo4In(UINT wParam, long lParam)
+{
+	
+	GetCo4InDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CPatMouse::UpdateCo4In(UINT wParam, long lParam)
+{
+
+	GetCo4InDlg()->UpdateData(TRUE);
+	//////////////////////////////////////
+	CString Pid = GetCo4InDlg()->m_PatchID;
+	///////////
+	CString PCid[4];
+	CURVELATCH CLat[4];
+	CString sLat[4];
+	int Elem[4];
+	//////////////////////////////////////
+	PCid[0] = GetCo4InDlg()->m_CID_1;
+	PCid[1] = GetCo4InDlg()->m_CID_2;
+	PCid[2] = GetCo4InDlg()->m_CID_3;
+	PCid[3] = GetCo4InDlg()->m_CID_4;
+	Elem[0] = GetCo4InDlg()->m_TotEl_1;
+	Elem[1] = GetCo4InDlg()->m_TotEl_2;
+	Elem[2] = GetCo4InDlg()->m_TotEl_3;
+	Elem[3] = GetCo4InDlg()->m_TotEl_4;
+	sLat[0] = GetCo4InDlg()->m_Orient_1;
+	sLat[1] = GetCo4InDlg()->m_Orient_2;
+	sLat[2] = GetCo4InDlg()->m_Orient_3;
+	sLat[3] = GetCo4InDlg()->m_Orient_4;
+	//////////////////////////////////////
+	int i;
+	for(i=0;i<4;i++)
+	{
+		CLat[i] = CL_FORWARD;
+		/////////////////////////
+		if(sLat[i] == "BACKWARD")
+			CLat[i] = CL_BACKWARD;
+	}
+	///////////////////////////////// Reset data in ElMouse
+	SetCurrentPatchID(Pid);
+	for(i=0;i<4;i++)
+	{
+		SetCurrentPatCurveID(PCid[i],i);
+		SetPatCurveLat(CLat[i],i);
+		SetPatCurveElem(Elem[i],i);
+	}
+	//////////
+	return 0L;
+}
+void CPatMouse::Serialize(CArchive& ar)
+{
+
+	CCurMouse::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" PatMouse:    Storing\n");	
+		
+
+	}
+	else
+	{
+		TRACE(" PatMouse:    Loading\n");	
+
+	
+	}        
+}
+
+///////////////////////////////////// end of Module //////////////////////		
+

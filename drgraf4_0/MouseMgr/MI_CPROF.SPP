@@ -1,0 +1,815 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+
+#include "glb_Type.h"
+#include "glb_Objs.h"
+///////////////////// DrawOperationObjs
+#include "3DMath.h"
+#include "XForm.h"
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "EDlgMgr.h"  
+///////////////////// elements
+#include "eldefine.h"
+#include "elextern.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrProf_C.h"
+/////////////////////
+#include "MI_CProf.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define	NUM_LEN	12
+////////////////////////////////////
+IMPLEMENT_DYNAMIC(CMI_CProf,CMI_Cur_I)
+/////////////////////////////////////
+#define new	DEBUG_NEW
+#define	BUFF_SIZE	1024
+/////////////////////////////////////////////////////////////////////////////
+CMI_CProf::CMI_CProf()
+{
+}
+
+CMI_CProf::~CMI_CProf()
+{
+}	
+
+int CMI_CProf::RBUp_CProfile(CView* pView,UINT nView) 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	//////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	////////////////////////////////////////////////////////////////
+	m_pDrProf	= PR_GetInfo();                  	// 
+	///////////////////////////////////////////////////////////////////// Go Generate	
+	if(m_pDrProf)
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(80);
+				
+		sprintf(buf,"Got All Profile Info");
+		/////////////////////////	
+		AfxMessageBox(*str);
+		/////////////////////////
+		str->ReleaseBuffer();
+		delete str;
+	}	
+	else
+		return -1;	// Cancel
+	////////////////////////////////////////////////////////// Save
+	if(InsertProfileInfo()<0)
+		return -1;
+	///////////////////////////////////////////////////////// Generate Profile Curve
+//	GenerateCurve(); We will just copy INodes to CNodeList	
+	///////////////////////////////////////////////////////// CurveInfo
+	m_nMaxCurveCNodes 	= m_pDrCurve->GetnCon_BZ_S();
+	InsertAllInfo(m_nOrder_S);
+	///////////////////////////////////////////////////////// show Profile
+	m_pDrProf->SetDirty(FALSE);
+	m_pDrProf->SetShow(TRUE);	// make it visible
+	///////////////////////////////////////////
+	CString ProfID	= m_pDrProf->GetObjectID();
+	int nProfIndex = pDListMgr->GetObjectIndex(C_PROFILE,ProfID);
+	int nOldIndex 	= pObjectMgr->GetActiveObjectIndex();
+	pObjectMgr->SetActiveObjectIndex(nProfIndex);
+    ////////////////////////////////////////////////////////// done/Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nProfIndex);
+	/////////
+	return 0;		 
+}			
+	 
+CDrProf_C* CMI_CProf::PR_GetInfo()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	//////////////////////////////////////////////////////////////////
+	CEDlgMgr* 	pEDlgMgr;
+	CString		Cid;
+	int index;
+	///////////////////////////////////////////////////
+	if (pEDlgMgr->DoModal_Profile_C(&Cid,1) == IDCANCEL)
+				return (CDrProf_C*)NULL; 
+    /////////////////////////////////////////////////////// update
+	index 	= pObjectMgr->GetObjectIndexfromKey(C_PROFILE,Cid,1);
+	if(index<0)
+		return (CDrProf_C*)NULL;
+	else
+	{
+		CDrProf_C* pDrProf	= (CDrProf_C*)(pDListMgr->GetObject(index));
+		return pDrProf;
+	}	
+}
+	
+int CMI_CProf::InsertProfileInfo()
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	///////////////////////////////////////////////////////// Create a Curve
+   	CNewObjs* pNewObjs;
+   	m_pDrCurve 	= (CDrCurve*)(pNewObjs->NewObject(CURVE));
+	///////////////////////////////////////////////////////// HIDE FROM MAIN LIST
+/*	
+// 	SetInfoForDataBase(pAddCurve);
+	/////////////////////////////////////////////////////////
+	pDListMgr->InsertObject(m_pDrCurve);          				// addto THE list 
+	m_pDrCurve->SetObjectNo(pObjectMgr->GetLastObjectNo());
+	pObjectMgr->BumpLastObjectNo();                         // bump it
+	pDoc->SetModifiedFlag();               					// document modified 
+*/	
+	/////////////////////////////////////////////////////////
+	// Temporarily: Hide from drawing by View which will otherwise
+	// 					access The list 
+	//	and find pDrCurve which IS NOT  YET Massaged
+	/////////////////////////////////////////////////////////
+	m_pDrCurve->SetShow(FALSE);
+	////////////////////////////////
+	m_pDrProf->SetCurve(m_pDrCurve);          					// addto Profile 
+	///////////////////////////////////////////////////////// New Curve Info
+	if(1==1)
+		Generate_CurveDataInfo();
+	else
+		Generate_CurveControlInfo();	// This will be tested later
+	///////////////////////////////////////////////////////// save CurveInfo
+	SetInfoForDataBase(m_pDrCurve);
+	////////////////
+	return 0;
+}	
+
+int CMI_CProf::Generate_CurveDataInfo()
+{
+
+	m_CurveID	= "PC_";
+	m_CurveID	+= m_pDrProf->GetObjectID();
+	////////////////////////////////////////
+	m_nData_S	= FillProfileCurveINodes(); 
+	//////////////////////////////////////////////
+	m_bClosed_S	= IsClosed();
+	//////////////////////////////////////////////
+    m_nDim_S	= 3;	// Always NONRATIONAL				
+    /////////////////////////
+	m_nOrder_S	= 2;	// k: Always LINEAR
+	m_nSeg_DT_S	= m_nData_S-1;		// L 	= nData - 1	, Open
+	m_nSegsOut	= 1;	// ALWAYS
+	m_bUnifOT	= TRUE;	// ALWAYS
+	////////////////////
+	return 0;
+}
+	
+BOOL CMI_CProf::IsClosed()
+{
+	CDListMgr*	pCurveList = m_pDrProf->GetCurveList();	// Curves making up Profile
+	/////////////////////////////////////////////////////
+	CDrCurve* pCurve_Beg = (CDrCurve*)pCurveList->GetHead();
+	CDrCurve* pCurve_End = (CDrCurve*)pCurveList->GetTail();
+	////////////////////////////////////////////////////////
+ 	CDListMgr* pINList_Beg = pCurve_Beg->GetINodeList(); 
+ 	CDListMgr* pINList_End = pCurve_End->GetINodeList(); 
+	/////////////////////////////////////////////////////
+	CDrNode* pNode_Beg = (CDrNode*)pINList_Beg->GetHead();
+	CDrNode* pNode_End = (CDrNode*)pINList_End->GetTail();
+	////////////////////////////////////////////////////////
+	BOOL bClosed = FALSE;
+	if(  (pNode_Beg->GetObjectID()) == (pNode_End->GetObjectID()) )
+		bClosed = TRUE;
+	///////////////
+	return bClosed;
+	
+}
+
+int CMI_CProf::FillProfileCurveINodes()
+{
+	/////////////////////////////////// 
+ 	CDListMgr*	pINodeList = m_pDrCurve->GetINodeList(); // New Curve in Profile
+	CDListMgr*	pCurveList = m_pDrProf->GetCurveList();	// Curves making up Profile
+	int i=0,nINode=0,nINodeSave=0,nOut,nCurves,nMeshNodes;
+	BOOL bLast;
+	//////////////////////////////////////////////////////////// Total CNodes
+	nCurves = pCurveList->GetCount();
+	/////////////////////////////////
+	for (POSITION pos = pCurveList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pDrCurve = (CDrCurve*)pCurveList->GetNextObject(pos);
+		if(!pDrCurve)
+		{
+			AfxMessageBox("Internal Problem:\nCMI_CProf::GetNumberOfNodes_1");
+			return -1;
+		}
+   	 	///////////////////////////////////////////// MeshNode Exist? Find ALL the time
+   	 	CDListMgr* pNodeList = pDrCurve->GetNodeList();
+/*   	 	 
+		/////////////////////////////////////////////////////////////////
+		// IF the Curve Mesh Nodes ( in NodeList) NOT Created:
+		// 		Need to generate Curve Using Local CNodes
+		// ESLE( because THIS Curve Already in some Profile ):
+		//		Get Via NodeList  
+		/////////////////////////////////////////////////////////////////
+		nOut 		= (int)(pDrCurve->GetLongOutPts());
+   	 	nMeshNodes	= pNodeList->GetCount();
+   	 	if(nMeshNodes<=0)						// Not Posted yet 
+			FillMeshNodes(pDrCurve, nOut);
+*/			
+		nOut 			= (int)(pDrCurve->GetLongOutPts());
+   	 	nMeshNodes		= pNodeList->GetCount();
+		pWORLD pOut 	= new WORLD[nOut];			// provide memory
+		pDOUBLE pOutWts = new double[nOut];
+		FillMeshNodes(pDrCurve, pOut, pOutWts);
+   		///////////////////////////////////////////// Update Total  Nodes
+   		nINode	+= nOut;
+   		///////////////////////////////////////////// save MeshNodes As INodes of Profile	
+		i++;
+		bLast = FALSE;
+		if(i==nCurves)
+			bLast = TRUE;
+		/////////////////                
+		nINodeSave += SaveMeshAsNewINodes(pOut,nOut,i,bLast);
+		delete [] pOut;							// Free memory
+
+	}
+   	//////////////////////
+   	nINode	-= (nCurves-1);	// tie pts are common
+   	///////////////////////
+	if(nINodeSave != nINode)
+	{
+		AfxMessageBox("Internal Problem:\nCMI_CProf::GetNumberOfNodes_2");
+		return -1;
+	}
+   	//////////////
+	return nINode;
+
+}
+
+int CMI_CProf::FillMeshNodes(CDrCurve* pDrCurve, pWORLD pOut, pDOUBLE pOutWts )
+{
+    //////////////////////////////////////////////////////
+	pDrCurve->RefillCNLocalPosForPosting();	// for Posting
+	pDrCurve->GenerateCurve(pOut, pOutWts);
+	//////////////////////////////////////////		
+	return 0;
+}
+				
+int CMI_CProf::SaveMeshAsNewINodes(pWORLD pMNodes,int nMNodes, int nCur, BOOL bLast)
+{
+
+	C3DMath	Math3D;
+	CXForm	XForm(TRUE);	// TRUE = Parallel
+	////////////////////
+	MATRIX		LMP;	
+	pMATRIX		pLMP = &LMP;
+//	Math3D.GetIdentityMATRIX(pLMP);
+	/////////
+	BOOL bYesP = FALSE;	
+	CMatObj*	pMatObj = m_pDrProf->GetMatObj();
+	if(pMatObj->IsInstanced())
+	{	
+		LMP = *(pMatObj->GetMatrix());
+		bYesP	= TRUE;
+	}
+	////////////////////////////////////////// create New Control Nodes
+	WORLD		LocalPos;
+	CString		Nid,ObjID;
+	int			nChLen;
+	char		buf[20];
+	CDrNode* 	pAddNode;
+	int s,t=0,index;
+	//////////////////////////////////// Name
+	ObjID	= m_CurveID;	// ProfileCurve Name
+	nChLen	= ObjID.GetLength();
+	if(nChLen>NUM_LEN-2)
+	nChLen = NUM_LEN-2;
+	//////////////////////////////////// drop last pt. of all but LAST Curve
+	int nTot = nMNodes-1;
+	if(bLast)
+		nTot++;
+	//////////////////////////////	
+	for (s = 0; s<nTot; s++)
+	{
+		///////////////////////////////////////// CREATE	
+   		Nid = "M_";	// for Mesh 
+		Nid	+= ObjID.Left(nChLen);
+   		//////////////////////////////////// Name
+   		sprintf(buf,"%d_%d%d",nCur,s,t);
+   		Nid += buf; 
+		//////////////////////////////////// Node Index in m_pOut
+		index 		= s;
+		LocalPos 	= *(pMNodes+index);
+		///////////////////////////////////// Use Xform, if necessary to create Loc
+		if(bYesP)
+			XForm.Transform(&LocalPos, &LocalPos, pLMP);
+		///////////////////////////////////// in THE List 
+		pAddNode = PostNode(Nid,LocalPos,FALSE);	// Create DrNode
+		if(!pAddNode)	
+			return -1;
+		///////////////////////////////////////
+		m_pDrCurve->GetINodeList()->InsertObject(pAddNode);
+		m_pDrCurve->GetCNodeList()->InsertObject(pAddNode);	// also SAVE AS CONTROL NODES
+		//////////////////////////////////////// Reciprocate
+		pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+		////////
+	}
+	/////////
+	return nTot; 
+}
+
+void CMI_CProf::SetInfoForDataBase(CDrCurve* pDrObject)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CEBoxMgr* pEBoxMgr		= pObjectMgr->GetEBoxMgr();
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+    pDrObject->SetObjectType((int)CURVE);
+    pDrObject->SetElemType((int)GENR_OBJECT);          	// globals
+    pDrObject->SetLevelType((int)LEVEL_UNCLE);          // globals
+    //////////////////////////////
+	pDrObject->SetObjectID(m_CurveID);	
+	pDrObject->SetClosed_S(m_bClosed_S);
+ 	////////////////////////////////////////////////////////////// interpolation
+	pDrObject->SetData_S(m_nData_S);		// GIVEN: # of Data
+	pDrObject->SetMaxINodes_S(m_nData_S);
+	pDrObject->SetOrder_S(m_nOrder_S);				// k
+	//////////////////////////////////////////////// Update	 
+	m_nCon_BS_S 	= m_nData_S + m_nOrder_S - 2;	        // L + k - 1 = nData + k - 2 = n + 1
+	m_nSeg_DT_S		= m_nData_S - 1;
+	m_nKnots_S 	= m_nData_S;
+	m_nMKnots_S		= m_nData_S + (2 * m_nOrder_S - 2);	// n + k + 1 = nData + (2k - 2)
+	if(m_bClosed_S)
+	{
+		m_nSeg_DT_S++;
+		m_nKnots_S++;
+		m_nMKnots_S++;
+	}
+    ////////////////////////
+    m_CurveType	= CU_LINEAR;			// ALWAYS
+	pDrObject->SetCurveType_S(m_CurveType);
+	//////////////////////////////
+	pDrObject->SetnDim_S(m_nDim_S);
+	////////////////////////////////////////////////////////
+	pDrObject->SetnCon_BS_S(m_nCon_BS_S);	// L + k - 1
+											// = nData + k - 2
+											// = n + 1 (B-Spline));
+	pDrObject->SetnKnots_S(m_nKnots_S);
+	pDrObject->SetnMKnots_S(m_nMKnots_S);
+	////////////////////////////////////////
+	int nCon_BZ	= (m_nOrder_S - 1) * m_nSeg_DT_S + 1;	// (k-1) * L + 1 , Open
+	if(m_bClosed_S)
+		nCon_BZ--; 		
+	pDrObject->SetnCon_BZ_S(nCon_BZ); // = m_nMaxCurveCNodes(Eventually)
+	////////////////////////////////////////////////////////////////////// Mesh(Output)
+	pDrObject->SetUniform_S(m_bUnifOT);		// Output Distribution:
+	pDrObject->SetOutMethod_S(CO_HORNER);		// Output Method
+	///////////////////////////////////////////////////////////// ReDistribute
+	int i;
+	//////////////////////////////////////////////////// View Matrices
+	int m_nMaxOSeg = 1;
+	if(m_bUnifOT)
+	{
+		m_pOSeg = new int[m_nSeg_DT_S];
+		///////////////////////////////
+		for (i=0;i<m_nSeg_DT_S;i++)
+		{
+			m_pOSeg[i] = m_nMaxOSeg;
+		}
+	}
+	//////////////////////////////////////////		 
+	pDrObject->SetMaxOutSeg_S(m_nSeg_DT_S);	// Number of Output Segments
+											// = nData - 1 = L = m_nCurveSeg
+	pDrObject->SetNum_tPointer_S(m_pOSeg);	// Number of Outputs for
+											// each Curve Segment
+	//////////////////////////////////////////
+	pDrObject->SetSegmentCount_S(m_nMaxOSeg); 	// for Old Compatibility
+    ////////////////////////////////////////////// Total Evaluation Pts
+	int nOut = 0;
+	
+	for (i=0;i<m_nSeg_DT_S;i++)
+		nOut += *(m_pOSeg+i);
+    nOut++;
+	////////////////////////////////
+	pDrObject->SetMaxOutPts_S(nOut);
+	pDrObject->SetLongOutPts();
+	////////////////////////////////////////////////////////////////////////////////	
+	pDrObject->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pDrObject->SetLayer(pLayer->GetCurrentLayer());
+	//////////////////
+	return;
+	
+} 
+
+////////////////////////////////////////////////////////////////////////// CONTROL INFO
+int CMI_CProf::Generate_CurveControlInfo()
+{
+	/////////////////////////////////////////////////////////////// Rational?
+	m_nDim_S	= 3;
+	if(IsRational())
+		m_nDim_S	= 4;
+	/////////////////////////////////////////////////////////////// Degree Elevate 
+	int nDegree,nCon_BZ;
+	/////////////////////////////////////////// Find Highest Degree
+	nDegree = GetTopDegree();
+	/////////////////////////////////////////// Total Expected CNodes
+	nCon_BZ = GetNumberOfCNodes(nDegree);
+	/////////////////////////////////////////// Provide Memory
+	pWORLD  pCon_BZ = new WORLD [nCon_BZ]; 	
+	pDOUBLE pWts_BZ = new double[nCon_BZ];
+	//////////////////////////////////////
+	int nConActual = Elevate_Profile(pCon_BZ, pWts_BZ, nDegree);
+	if(nConActual != nCon_BZ)
+	{
+		AfxMessageBox("Internal Problem:\nCMI_CProf::Elevate_Profile");
+		return -1;
+	}									
+	/////////////////////////////////////////// Create CNodes
+	PostNewCNodes(pCon_BZ, nCon_BZ);
+	/////////////////////////////////////////////////////////////// ReParametrize 
+	return 0;
+}
+
+BOOL CMI_CProf::IsRational()
+{
+	/////////////////////////////////// 
+	CDListMgr*	pList = m_pDrProf->GetCurveList();	// Curves making up Profile
+	///////////////////////////////////s __far* __far __pascal CDrObj3D::GetRuntimeClass(void)const __far
+
+ 0001:94FC       ??5@ZCAEVCArchive@@AEV0@AEPEVCDrObj3D@@@Z
+                    class CArchive __far& __far __pascal operator>>(class CArchive __far&,class CDrObj3D __far* __far&)
+
+ 0001:953E       ??0CDrObj3D@@REC@XZ
+                    public: __far __pascal CDrObj3D::CDrObj3D(void)__far
+
+ 0001:95CE       ??1CDrObj3D@@VEC@XZ
+                    public: virtual __far __pascal CDrObj3D::~CDrObj3D(void)__far
+
+ 0001:9612       ?ReadyToDeleng up Profile
+	int nDegree=0,nDeg_C;
+	//////////////////////////////////////////////////////////// Find Highest Degree
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve = (CDrCurve*)pList->GetNextObject(pos);
+		if(!pCurve)
+			continue;
+   	 	///////////////////////////////////////////// Get Degree/Update
+		nDeg_C = (pCurve->GetOrder_S()) - 1;
+		if(nDeg_C>nDegree)
+			nDegree = nDeg_C;
+		/////	
+	}
+	return nDegree;
+}
+	
+int CMI_CProf::GetNumberOfCNodes(int nDegree)
+{
+	/////////////////////////////////// 
+	CDListMgr*	pList = m_pDrProf->GetCurveList();	// Curves making up Profile
+	int nCon_BZ=1,nDeg_C,nElev,nCurveSeg,nCon;
+	//////////////////////////////////////////////////////////// Total CNodes
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve = (CDrCurve*)pList->GetNextObject(pos);
+		if(!pCurve)
+			continue;
+   	 	///////////////////////////////////////////// Get Degree/Update
+		nDeg_C		= (pCurve->GetOrder_S()) - 1;
+		nElev		= nDegree - nDeg_C;	// How many Elevations	
+		nCon 		= pCurve->GetMaxCNodes_S();
+		nCurveSeg 	= pCurve->GetMaxCubicCurves(); // misleading name!
+   		///////////////////////////////////////////// Update Total Control Nodes
+   		nCon_BZ	+= (nCon-1);	// tie pts are common
+   		if(nElev>0)
+   			nCon_BZ	+= nElev * nCurveSeg;	// nElev Cnodes per Curve Segment 
+   		/////////////////////////////	
+	}
+	return nCon_BZ;
+
+}
+
+int CMI_CProf::GetCNodeCoords(CDrCurve* pCurve, pWORLD pConOld)
+{
+	CDListMgr* pList = pCurve->GetCNodeList();
+	/////////////////////////////////// 
+	int j=-1;
+	if(!pList->IsEmpty())
+	{
+		////////
+		for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+		{
+			CDrNode* pNode = (CDrNode*)pList->GetNextObject(pos);
+			//////////////////////////////////
+			pConOld[++j] = *(pNode->GetLocalPos());
+			//////////////////////////////////
+		}
+	}
+	/////////
+	return 0;
+}
+
+int CMI_CProf::Elevate_Profile(pWORLD pCon_BZ, pDOUBLE pWts_BZ, int nDegree)
+{
+	/////////////////////////////////// 
+	int m,nDegOld,nElev,nSeg_BZ,nConOld,nConNew,nConTot=0,nBegNew=0;
+	pWORLD pConOld, pConNew; 
+	pDOUBLE pWtsOld, pWtsNew;
+	/////////////////////////////////////// 	
+	CDListMgr*	pList = m_pDrProf->GetCurveList();	// Curves making up Profile
+	int nCurveMax = pList->GetCount();
+	int nCount=-1; 			
+	//////////////////////////////////////////////////////////// Controls
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve = (CDrCurve*)pList->GetNextObject(pos);
+		nCount++;
+		/////////
+		if(!pCurve)
+			continue;
+		/////////////////////////////////////// GetControl Nodes
+		nConOld 	= pCurve->GetMaxCNodes_S();
+		nDegOld		= (pCurve->GetOrder_S()) - 1;
+		nElev		= nDegree - nDegOld;	// How many Elevations	
+		nConOld		= pCurve->GetMaxCNodes_S();
+		nSeg_BZ 	= pCurve->GetMaxCubicCurves(); // misleading name!
+   		/////////////////////////////////////// 
+   		nConNew		= nConOld;	
+   		if(nElev>0)
+   			nConNew	+= nElev * nSeg_BZ;	// nElev Cnodes per Curve Segment 
+   		////////////////////////////////////////// memory	
+		pWORLD  pConOld 	= new WORLD [nConOld];
+		pDOUBLE pWtsOld 	= new double[nConOld];
+		pWORLD  pConNew 	= new WORLD [nConNew];
+		pDOUBLE pWtsNew 	= new double[nConNew];
+		////////////////////////////////////////// 
+		GetCNodeCoords(pCurve, pConOld);
+		pWtsOld = pCurve->GetpWts_BZ_S();
+   	 	///////////////////////////////// 
+		int nConActual = 
+				Elevate_Curve(pConOld, pWtsOld, nDegOld, nElev, pConNew, pWtsNew,
+								nSeg_BZ);
+		if(nConActual != nConNew)
+		{
+			AfxMessageBox("Internal Problem:\nCMI_CProf::Elevate_Profile");
+			return -1;
+		}									
+		/////////////////////////////////////// save
+		for(m=0;m<nConNew-1;m++)	// last Pt = tie Pt (common)
+		{
+			nConTot++;
+			///////////////
+			pCon_BZ[nBegNew+m].x = pConNew[m].x; 	
+			pCon_BZ[nBegNew+m].y = pConNew[m].y; 	
+			pCon_BZ[nBegNew+m].z = pConNew[m].z; 	
+			pWts_BZ[nBegNew+m]   = pWtsNew[m]; 	
+			///////////////////////////////////
+		}
+		nBegNew += (nConNew - 1);									
+   		////////////////////////////////////////// Free memory
+   		if(nCount<nCurveMax)
+   		{	
+			delete [] pConOld;
+			delete [] pWtsOld;
+			delete [] pConNew;
+			delete [] pWtsNew;
+		}	
+		////////////////////////////////////////// 
+	}
+	////////////////////////////////////////////// save Last Curve:Last CNode		
+	nConTot++;
+	///////////////
+	pCon_BZ[nBegNew+m].x = pConNew[nConNew-1].x; 	
+	pCon_BZ[nBegNew+m].y = pConNew[nConNew-1].y; 	
+	pCon_BZ[nBegNew+m].z = pConNew[nConNew-1].z; 	
+	pWts_BZ[nBegNew+m]   = pWtsNew[nConNew-1]; 	
+	////////////////////////////////////////// Free memory: last time
+	delete [] pConOld;
+	delete [] pWtsOld;
+	delete [] pConNew;
+	delete [] pWtsNew;
+	//////////////////
+	return nConTot;
+}
+
+int CMI_CProf::Elevate_Curve
+						(
+							pWORLD pConOld, pDOUBLE pWtsOld,int nDegOld,int nElev,
+							pWORLD pConNew, pDOUBLE pWtsNew,int nSeg_BZ
+						)
+{
+	//////////////////////////////////////// Elevate, if necessary
+	int m,nBegOld,nBegNew,nDegNew = nDegOld;
+	//////////////////////////////////////// Memory
+	pWORLD  pConOtem = new WORLD[4];
+	pWORLD  pConNtem = new WORLD[4]; 	// reserved for cubic
+	pDOUBLE pWtsOtem = new double[4];
+	pDOUBLE pWtsNtem = new double[4]; 	// reserved for cubic
+	/////////////////////////////// save Ist One
+	int nConNew = 0;
+	///////////////
+	pConNew[0].x = pConOld[0].x; 	
+	pConNew[0].y = pConOld[0].y; 	
+	pConNew[0].z = pConOld[0].z; 	
+	pWtsNew[0]    = pWtsOld[0]; 	
+	/////////////////////////////////////////////////// Loop Seg_BZ
+	for(int nc=0;nc<nSeg_BZ;nc++)
+	{
+		nBegOld = nc * nDegOld;
+		nBegNew = nc * nDegNew;
+		///////////////////////////
+		for(m=0;m<nDegOld;m++)
+		{
+			pConOtem[m] = pConOld[nBegOld+m];
+			pWtsOtem[m] = pWtsOld[nBegOld+m];
+		}
+		/////////////////////////////////////// Go Elevate	
+		nDegNew = Elevate_BezSeg(pConOtem, pWtsOtem, nDegOld, nElev,
+							pConNtem, pWtsNtem);
+		/////////////////////////////////////// save
+		for(m=1;m<=nDegNew;m++)
+		{
+			nConNew++;
+			///////////////
+			pConNew[nBegNew+m].x = pConNtem[m].x; 	
+			pConNew[nBegNew+m].y = pConNtem[m].y; 	
+			pConNew[nBegNew+m].z = pConNtem[m].z; 	
+			pWtsNew[nBegNew+m]    = pWtsNtem[m]; 	
+		}
+	}										
+	//////////////////////////////////////// Free Memory
+	delete [] pConOtem;
+	delete [] pConNtem; 
+	delete [] pWtsOtem;
+	delete [] pWtsNtem; 
+    ///////////////////
+    return nConNew;
+     
+}
+				
+int CMI_CProf::Elevate_BezSeg(
+							pWORLD pConOld, pDOUBLE pWtsOld,int nDegOld,int nElev,
+							pWORLD pConNew, pDOUBLE pWtsNew
+						)
+{
+	/////////////////////////////////////////////////////////////////////
+	//				 since Maximum Degree = 3 ( Cubic), 
+	//		nElev can only be:
+	//				 0 = Originally Cubic, No Elevation
+	//				 1 = Quad to Cubic
+	//				 2 = Linear to Quad to Cubic
+	/////////////////////////////////////////////////////////////////////
+	int nDegNew = nDegOld;				// for no Elevation
+	for(int m=0;m<nDegOld;m++)  		
+	{
+		pConNew[m] = pConOld[m];
+		pWtsNew[m] = pWtsOld[m];
+	}	
+	////////////////////////////////////// Once
+	if(nElev>0)
+	{	  
+		DegreeElevate(pConOld, pWtsOld, nDegOld, pConNew, pWtsNew);
+		nDegNew++;
+	}	
+	////////////////////////////////// Twice
+	if(nElev>1)
+	{	
+		DegreeElevate(pConNew, pWtsNew, nDegNew, pConOld, pWtsOld);
+		nDegNew++;
+		//////////////////////////////////////
+		for(int m=0;m<nDegNew;m++)
+			pConNew[m] = pConOld[m];		// put it back
+	}
+	///////////////
+	return nDegNew;
+			
+}
+
+int CMI_CProf::DegreeElevate(pWORLD Con_BZ, pDOUBLE Wts_BZ, int nDegree, 
+							 pWORLD NewCon_BZ, pDOUBLE NewWts_BZ)
+{
+
+	int	i,nNewDeg = nDegree + 1;
+	//////////////////////////////
+	NewCon_BZ[0].x 	= Con_BZ[0].x;  							  
+	NewCon_BZ[0].y 	= Con_BZ[0].y;  							  
+	NewCon_BZ[0].z 	= Con_BZ[0].z;
+	//////////////////////////////  							  
+	if(4 == m_nDim_S)					// Rational
+		NewWts_BZ[0]	= Wts_BZ[0];
+	else	  							  
+		NewWts_BZ[0]	= 1.;  							  
+	/////////////////////////////
+    for(i=1;i<=nDegree;i++)
+    {
+		double alfa = i/nNewDeg;
+		double alf1 = 1 - alfa;
+		//////////////////////////////
+		if(4 == m_nDim_S)					// Rational
+		{ 
+			NewWts_BZ[i]	= 	Wts_BZ[i-1] * alf1 + Wts_BZ[i] * alfa;
+			//////////////////////////////////////////////////////////  							  
+			NewCon_BZ[i].x 	= (	Wts_BZ[i-1] * Con_BZ[i-1].x * alf1 + 
+								Wts_BZ[i  ]	* Con_BZ[i  ].x * alfa	)/NewWts_BZ[i];  							  
+			NewCon_BZ[i].y 	= (	Wts_BZ[i-1] * Con_BZ[i-1].y * alf1 + 
+								Wts_BZ[i  ]	* Con_BZ[i  ].y * alfa	)/NewWts_BZ[i];  							  
+			NewCon_BZ[i].z 	= (	Wts_BZ[i-1] * Con_BZ[i-1].z * alf1 + 
+								Wts_BZ[i  ]	* Con_BZ[i  ].z * alfa	)/NewWts_BZ[i];
+			/////////////////
+		}
+		else								// Non-Rational
+		{	
+			//////////////////////////////////////////////////////////  							  
+			NewCon_BZ[i].x 	= (	Con_BZ[i-1].x * alf1 + 
+								Con_BZ[i  ].x * alfa	);  							  
+			NewCon_BZ[i].y 	= (	Con_BZ[i-1].y * alf1 + 
+								Con_BZ[i  ].y * alfa	);  							  
+			NewCon_BZ[i].z 	= (	Con_BZ[i-1].z * alf1 + 
+								Con_BZ[i  ].z * alfa	);
+			NewWts_BZ[i]	= 	1.;
+			/////////////////
+		}			
+	}
+	/////////////////////////////
+	NewCon_BZ[nNewDeg].x 	= Con_BZ[nDegree].x;  							  
+	NewCon_BZ[nNewDeg].y 	= Con_BZ[nDegree].y;  							  
+	NewCon_BZ[nNewDeg].z 	= Con_BZ[nDegree].z;
+	////////////////////////////////////////////  							  
+	if(4 == m_nDim_S) 
+		NewWts_BZ[nNewDeg]	= Wts_BZ[nDegree];  							  
+	else
+		NewWts_BZ[nNewDeg]	= 1.;
+	/////////////////////////////
+	return 0;
+}											  							  
+				
+int CMI_CProf::PostNewCNodes(pWORLD pCon_BZ, int nCon)
+{
+
+	////////////////////////////////////////// create New Control Nodes
+	WORLD		LocalPos;
+	CString		Nid,ObjID;
+	int			nChLen;
+	char		buf[20];
+	CDrNode* 	pAddNode;
+	int s,t=0,index;
+	//////////////////////////////////// Name
+	ObjID	= m_pDrProf->GetObjectID();	// Profile Name
+	nChLen	= ObjID.GetLength();
+	if(nChLen>NUM_LEN-2)
+	nChLen = NUM_LEN-2;
+	//////////////////////////////	
+	for (s = 0; s<nCon; s++)
+	{
+		///////////////////////////////////////// CREATE	
+		Nid	= ObjID.Left(nChLen);
+   		//////////////////////////////////// Name
+   		sprintf(buf,"%d%d",s,t);
+   		Nid += "P_"; 
+   		Nid += buf; 
+		//////////////////////////////////// Node Index in m_pOut
+		index 		= s;
+		LocalPos 	= *(pCon_BZ+index);
+		///////////////////////////////////// in THE List 
+		pAddNode = PostNode(Nid,LocalPos,TRUE);	// Create DrCNode
+		if(!pAddNode)	
+			return -1;
+		///////////////////////////////////////
+		m_pDrCurve->GetCNodeList()->InsertObject(pAddNode);
+		//////////////////////////////////////// Reciprocate
+		pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+		////////
+	}
+	/////////
+	return 0; 
+}
+
+CDrNode* CMI_CProf::PostNode(CString& Nid,WORLD Pt,BOOL bCNode)
+{
+
+	CEDlgMgr 	EDlgMgr;
+	CEDlgMgr* 	pEDlgMgr = &EDlgMgr;
+	CDrNode*	pNode;
+	/////////////////////////////////////////////
+	pNode = pEDlgMgr->CreateNode(Nid,Pt,bCNode);
+	//////////////////////////////////////////////
+	return pNode;
+}			
+///////////////////////////////////// end of Module //////////////////////		
+
+

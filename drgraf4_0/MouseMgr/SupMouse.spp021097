@@ -1,0 +1,2007 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+
+#include "drgraf.h"
+#include "drgrafrm.h"
+#include "UserMsg.h"
+#include "drawView.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_Lims.h"                    
+#include "Def_Objs.h"                    
+#include "Def_Mous.h"                    
+#include "Def_CuPS.h"                    
+#include "Def_Ms.h" // Mesh Types for Patch
+///////////////////// dialogMgr
+//#include "EDlgMgr.h"  
+///////////////////// elements
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+#include "DrSolid.h"
+#include "DrObj3D.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h" 	
+///////////////////// specials
+#include "Def_Spec.h"
+#include "Obj3DMnu.h"
+#include "PatchMnu.h"
+#include "DrPen.h"
+#include "Layer.h"
+#include "booleans.h"
+#include "precison.h"
+/////////////////////
+#include "mouse.h"
+#include "DListMgr.h"
+///////////////////// Supports
+#include "Str_Supp.h"
+#include "Def_Supp.h"
+#include "MI_LSupp.h" 
+////////////////////// 
+#include "CommRsrc.h"
+#include "Dlg_SupI.h"
+//////////////////////
+#include "SupMouse.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////////////////////////////
+#define	new					DEBUG_NEW
+#define	BUFF_SIZE			1024
+////////////////////////////////////
+IMPLEMENT_SERIAL(CSupMouse,CSolMouse,1)
+/////////////////////////////////////////////////////////////////////////////
+CSupMouse::CSupMouse()
+{
+
+	m_pSupInDlg	= NULL;                                                                                
+	/////////////////////////////////////////// Support
+	m_SuppProc		= SUP_RIGID;
+	m_SuppProcOld	= m_SuppProc;
+	m_bTx			= TRUE;
+	m_bTy			= TRUE;
+	m_bTz			= TRUE;
+	m_bRx			= TRUE;
+	m_bRy			= TRUE;
+	m_bRz			= TRUE;
+	/////
+	m_bTxG			= FALSE;
+	m_bTyG			= FALSE;
+	m_bTzG			= FALSE;
+	m_bRxG			= FALSE;
+	m_bRyG			= FALSE;
+	m_bRzG			= FALSE;
+	/////
+	m_CurrentStif	= DEFAULT_STIF;
+	m_aNid			= "";
+	m_bTan			= FALSE;
+	////////////////////////////////
+    m_LastSupNum		= 0;		// internal
+	m_CurrentSupID		= "Su0";
+	m_CurrentSupIDOld	= "Su0";
+
+}
+
+CSupMouse::~CSupMouse()
+{
+	if(m_pSupInDlg->m_hWnd)
+		m_pSupInDlg->DestroyWindow();
+	///////////////////
+	delete m_pSupInDlg;                                                                                
+	///////////////////
+}
+
+void CSupMouse::InitDlgIn_SUP()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////////////// System Sizes
+	m_pSupInDlg		= new CDlg_SupI(pWnd);                                                                                
+}
+
+void CSupMouse:: ElementLeftDown_SUP()
+{	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////////////////
+//	int nMeshType; 
+	/////////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		////////////////////////////////////////////////// Support	
+		case NSUP_RIGID:
+		case NSUP_RIG_NODE:
+		case NSUP_RIG_CNODE:
+
+			m_SuppProcOld	= m_SuppProc;
+			m_SuppProc		= SUP_RIGID;
+			////////////////////////
+			if(m_SuppProc != m_SuppProcOld)
+			{
+	
+				m_bTx			= TRUE;
+				m_bTy			= TRUE;
+				m_bTz			= TRUE;
+				m_bRx			= TRUE;
+				m_bRy			= TRUE;
+				m_bRz			= TRUE;
+				/////
+				m_bTxG			= FALSE;
+				m_bTyG			= FALSE;
+				m_bTzG			= FALSE;
+				m_bRxG			= FALSE;
+				m_bRyG			= FALSE;
+				m_bRzG			= FALSE;
+				/////
+				m_CurrentStif	= DEFAULT_STIF;
+				m_aNid			= "";
+				m_bTan			= FALSE;
+				////////////////////////////////////////
+				GetSupInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(FALSE);	
+				GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+				GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+				GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+				GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+				GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+				GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+			}
+			///////
+			return;
+
+		case NSUP_LINSPRING:
+		case NSUP_LSP_NODE:
+		case NSUP_LSP_CNODE:
+
+			m_SuppProcOld	= m_SuppProc;
+			m_SuppProc		= SUP_LINSPR;
+			////////////////////////
+			if(m_SuppProc != m_SuppProcOld)
+			{
+				m_bTx			= FALSE;
+				m_bTy			= FALSE;
+				m_bTz			= FALSE;
+				m_bRx			= FALSE;
+				m_bRy			= FALSE;
+				m_bRz			= FALSE;
+				/////
+				m_bTxG			= FALSE;
+				m_bTyG			= FALSE;
+				m_bTzG			= FALSE;
+				m_bRxG			= FALSE;
+				m_bRyG			= FALSE;
+				m_bRzG			= FALSE;
+				/////
+				m_CurrentStif	= DEFAULT_STIF;
+				m_aNid			= "";
+				m_bTan			= FALSE;
+				////////////////////////////////////////
+				GetSupInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(TRUE);	
+				GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+				GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+				GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+				GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(TRUE);	
+				GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(TRUE);	
+				GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(TRUE);
+			}
+			///////
+			return;
+
+		case NSUP_LINSNUBBER:
+		case NSUP_LSN_NODE:
+		case NSUP_LSN_CNODE:
+			m_SuppProc = SUP_LINSNU;
+			return;
+
+		///////////////////////////////////////////////////// LinSup: Curve Based										
+		case CSUP_RIGID:
+		case CSUP_RIG_CIRCLE:
+		case CSUP_RIG_ELLIPSE:
+		case CSUP_RIG_PARABOLA:
+		case CSUP_RIG_LINEAR:
+		case CSUP_RIG_QUADRATIC:
+		case CSUP_RIG_CUBIC:
+		case CSUP_RIG_HERMITE:
+		case CSUP_RIG_BEZIER:
+		case CSUP_RIG_BSPLINE:
+		case CSUP_RIG_NURB:
+		case CSUP_RIG_STITCH:
+		case CSUP_RIG_SPAWN:
+
+		case CSUP_LINSPRING:
+		case CSUP_LSP_CIRCLE:
+		case CSUP_LSP_ELLIPSE:
+		case CSUP_LSP_PARABOLA:
+		case CSUP_LSP_LINEAR:
+		case CSUP_LSP_QUADRATIC:
+		case CSUP_LSP_CUBIC:
+		case CSUP_LSP_HERMITE:
+		case CSUP_LSP_BEZIER:
+		case CSUP_LSP_BSPLINE:
+		case CSUP_LSP_NURB:
+		case CSUP_LSP_STITCH:
+		case CSUP_LSP_SPAWN:
+
+		case CSUP_LINSNUBBER:
+		case CSUP_LSN_CIRCLE:
+		case CSUP_LSN_ELLIPSE:
+		case CSUP_LSN_PARABOLA:
+		case CSUP_LSN_LINEAR:
+		case CSUP_LSN_QUADRATIC:
+		case CSUP_LSN_CUBIC:
+		case CSUP_LSN_HERMITE:
+		case CSUP_LSN_BEZIER:
+		case CSUP_LSN_BSPLINE:
+		case CSUP_LSN_NURB:
+		case CSUP_LSN_STITCH:
+		case CSUP_LSN_SPAWN:
+
+			////////////////////////////////////////
+			GetSupInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(FALSE);	
+			///////
+			return;
+
+		//////////////////////////////////////////////////
+		default:
+			break;
+	}  
+
+}
+
+int CSupMouse::FillSupCard(SUPPCARD& supCard,CString* pID)
+{
+	///////////////////////////////////
+	supCard.sup_id		= *pID;
+	supCard.SuppProc	= m_SuppProc;
+	supCard.kode[0]		= (BYTE)m_bTx;
+	supCard.kode[1]		= (BYTE)m_bTy;
+	supCard.kode[2]		= (BYTE)m_bTz;
+	supCard.kode[3]		= (BYTE)m_bRx;
+	supCard.kode[4]		= (BYTE)m_bRy;
+	supCard.kode[5]		= (BYTE)m_bRz;
+
+	supCard.pgap[0]		= (BYTE)m_bTxG;
+	supCard.pgap[1]		= (BYTE)m_bTyG;
+	supCard.pgap[2]		= (BYTE)m_bTzG;
+	supCard.pgap[3]		= (BYTE)m_bRxG;
+	supCard.pgap[4]		= (BYTE)m_bRyG;
+	supCard.pgap[5]		= (BYTE)m_bRzG;
+
+	supCard.stiffness	= m_CurrentStif;
+	supCard.nid_a		= m_aNid;				
+	supCard.bTan		= m_bTan;				
+	///////////////////////////////////
+	return 0;
+}
+
+int CSupMouse::ShowNodeLinSupp(CString* pID,int nHowMany)
+{
+	///////////////////////////////////////////////////////////////////////
+//	 nHowmany			// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateNodeLinSup
+						// even if same coords node exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowNode to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(LIN_SUPPORT);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_LSupp LSupp;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Support
+	if((m_bTx == TRUE) && (m_bTy == TRUE) && (m_bTz == TRUE)
+		 && (m_bRx == TRUE) && (m_bRy == TRUE) && (m_bRz == TRUE) )
+		m_SuppProc == SUP_RIGID;
+	/////////////////////
+	SUPPCARD supCard;
+	FillSupCard(supCard,pID);
+	/////////////////////
+	m_pCurrentSupp = LSupp.CreateNodeLinSup(m_SuppProc,supCard,m_pCurrentNode,NODE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();	// Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(LIN_SUPPORT);		    // set Active Type									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,LIN_SUPPORT);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSupMouse::ShowCurveLinSupp(CString* pID,int nHowMany)
+{
+	///////////////////////////////////////////////////////////////////////
+//	 nHowmany			// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateCurveLinSup
+						// even if same coords Curve exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowCurve to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(LIN_SUPPORT);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_LSupp LSupp;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Support
+	if((m_bTx == TRUE) && (m_bTy == TRUE) && (m_bTz == TRUE)
+		 && (m_bRx == TRUE) && (m_bRy == TRUE) && (m_bRz == TRUE) )
+		m_SuppProc == SUP_RIGID;
+	/////////////////////
+	SUPPCARD supCard;
+	FillSupCard(supCard,pID);
+	/////////////////////
+	m_pCurrentSupp = LSupp.CreateCurveLinSup(m_SuppProc,supCard,m_pCurrentCurve,CURVE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();	// Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(LIN_SUPPORT);		    // set Active Type									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,LIN_SUPPORT);
+	///////////////////////////////
+	return 0;
+}	 
+
+void CSupMouse::OnEBoxLButtonDown_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	CDListMgr* pDListMgr;
+	/////////////////////////////////// 
+   	m_bDragOn 		= pBool->IsDragOn();
+	m_bDialogOn		= pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	//////////////////////////////////////////////////////// LOG
+	m_pdc->DPtoLP(&point);
+	//////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////////////////////////////////// take care of Edit AllClear
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	if(!(pDListMgr->GetSpecificObjectCount(NODE)) ) m_nNodeDone = 0;
+	/////////////////////////////////////////////////////////////////
+    /////////////////////////////  ELement Dialog On/Off Check
+    if(m_Gener == FORWARD)
+		ElementLeftDown_SUP();
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftDown_I();
+	//////////////////////////////////
+}
+
+void CSupMouse::UpdateLinSupDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pSupInDlg->UpdateData(TRUE); // from screen
+	////////////
+	m_bRx			= GetSupInDlg()->m_bRx;
+	m_bRy			= GetSupInDlg()->m_bRy;
+	m_bRz			= GetSupInDlg()->m_bRz;
+	m_bTx			= GetSupInDlg()->m_bTx;
+	m_bTy			= GetSupInDlg()->m_bTy;
+	m_bTz			= GetSupInDlg()->m_bTz;
+	/////
+	m_bRxG			= GetSupInDlg()->m_bRxG;
+	m_bRyG			= GetSupInDlg()->m_bRyG;
+	m_bRzG			= GetSupInDlg()->m_bRzG;
+	m_bTxG			= GetSupInDlg()->m_bTxG;
+	m_bTyG			= GetSupInDlg()->m_bTyG;
+	m_bTzG			= GetSupInDlg()->m_bTzG;
+	//////
+	m_aNid			= GetSupInDlg()->m_NID;
+	m_bTan			= GetSupInDlg()->m_bTan;
+	m_CurrentStif	= GetSupInDlg()->m_dStif;
+	m_CurrentSupID	= GetSupInDlg()->m_SupID;
+	m_SuppProc		= GetSupInDlg()->m_SuppProc;
+	/////////////////////////////////////
+}
+			
+void CSupMouse::UpdateLinSupDlg_FALSE()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr; 
+	/////////////////////////////////////////////////////////
+	GetSupInDlg()->m_bRx		= m_bRx;
+	GetSupInDlg()->m_bRy		= m_bRy;
+	GetSupInDlg()->m_bRz		= m_bRz;
+	GetSupInDlg()->m_bTx		= m_bTx;
+	GetSupInDlg()->m_bTy		= m_bTy;
+	GetSupInDlg()->m_bTz		= m_bTz;
+	///
+	GetSupInDlg()->m_bRxG		= m_bRxG;
+	GetSupInDlg()->m_bRyG		= m_bRyG;
+	GetSupInDlg()->m_bRzG		= m_bRzG;
+	GetSupInDlg()->m_bTxG		= m_bTxG;
+	GetSupInDlg()->m_bTyG		= m_bTyG;
+	GetSupInDlg()->m_bTzG		= m_bTzG;
+	///
+	GetSupInDlg()->m_NID		= m_aNid;
+	GetSupInDlg()->m_bTan		= m_bTan;
+	GetSupInDlg()->m_dStif		= m_CurrentStif;
+	GetSupInDlg()->m_SupID		= m_CurrentSupID;
+	GetSupInDlg()->m_SuppProc	= m_SuppProc;
+	///////////////////////// CurrStat: Show
+	strCurr = "Ready for Selection@";
+	if(m_nActiveTool == NSUP_LINSPRING)
+			strCurr += "An Existing Input Node";
+	else
+	if(m_nActiveTool == CSUP_LINSPRING)
+			strCurr += "An Existing Curve";
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	////////////
+	m_pSupInDlg->UpdateData(FALSE); // to screen
+	////////////////////////////
+}
+
+int CSupMouse::ShowInfo_NodeLinSupport(CDrNode* pDrNode, char* buf, int jStart)
+{
+	int j = jStart;
+	////////////////////////////////////////
+	// The List Should Have ATMOST 2 items:
+	//			1	Lin_Spring 
+	//			1	Lin_Snubber
+	////////////////////////////////////////
+	CDListMgr* pList = pDrNode->GetSuppList();
+	///////////////////////////////
+	if(pList->GetCount() > 2)
+	{
+		AfxMessageBox("Internal ERROR:\nCSupMouse::FillInfo_NodeLinSupport\npList->GetCount() > 2"); 
+		return -2;
+	}
+	////////////////////////////////////////////////////////////////////////
+	int i;
+	CDrLinSup*	pDrLinSup;
+	SUPPCARD	supCard;
+	/////////////////////////////////////////////////////////// Go Over List
+	for(i=0;i<pList->GetCount();i++)
+	{
+		if(i==0)
+			pDrLinSup = (CDrLinSup*)pList->GetHead();
+		else
+			pDrLinSup = (CDrLinSup*)pList->GetTail();
+		////
+		if(pDrLinSup)
+			supCard = *(pDrLinSup->GetSuppCard());					
+		else
+		{
+			AfxMessageBox("Internal ERROR:\nCSupMouse::FillInfo_NodeLinSupport\npDrLinSup=NULL"); 
+			return -2;
+		}
+		//////
+		CString		Nid;
+		/////////////////////////////////////////
+		switch (supCard.SuppProc)
+		{
+			case SUP_RIGID:
+				j = FillInfo_Rigid(supCard, buf, j);
+				break;
+			case SUP_LINSPR:	// fall thro'
+			case SUP_LINSNU:
+				Nid = pDrNode->GetObjectID();
+				j	= FillInfo_SprOrSnu(Nid, supCard, buf, j);
+				break;
+/*	These will be in separate List: NSupList
+						case SUP_NONSPR:
+							j += sprintf(buf+j,"\n\nSupportType = NONLINEAR SPRING\n");
+							FillInfo_NonSpring(supCard,buf,j);
+							break;
+						case SUP_NONSNU:
+							j += sprintf(buf+j,"\n\nSupportType = NONLINEAR SNUBBER\n");
+							FillInfo_NonSnubber(supCard,buf,j);
+							break;
+*/ 
+			default:
+				break;
+		}
+	}
+	//////////
+	return j;
+}
+
+int CSupMouse::FillInfo_Rigid(SUPPCARD supCard,char* buf, int jStart)
+{
+
+	int j = jStart;
+	///////////////
+	j += sprintf(buf+j,"\nSupportID = %s\n",supCard.sup_id);
+	j += sprintf(buf+j,"\n\tStiffness = %s\n",supCard.stiffness);
+	/////////
+	return j;
+}
+
+int CSupMouse::FillInfo_SprOrSnu(CString& Nid,SUPPCARD supCard,char* buf, int jStart)
+{
+	CString dir[] = {"X","Y","Z"};
+
+	int i, j = jStart;
+	///////////////
+	if(supCard.SuppProc == SUP_LINSPR) 
+		j += sprintf(buf+j,"\n\nSupportType = LINEAR SPRING\n");
+	else
+	if(supCard.SuppProc == SUP_LINSPR) 
+		j += sprintf(buf+j,"\n\nSupportType = LINEAR SNUBBER\n");
+	else
+		return -2;
+	//////////////
+	j += sprintf(buf+j,"\nSupportID = %s\n",supCard.sup_id);
+	j += sprintf(buf+j,"\n\tStiffness = %f\n",supCard.stiffness);
+	/////////////////////////////////////////////////////////////////////// Translational
+	j += sprintf(buf+j,"\n\tTranslational:\n");
+	for(i=0;i<3;i++)
+	{
+		if((BOOL)supCard.kode[i])
+			j += sprintf(buf+j,"\t\tDirection %s = SUPPORTED\n", dir[i]);
+		else
+			j += sprintf(buf+j,"\t\tDirection %s = UNSUPPORTED\n", dir[i]);
+	}
+	/////////////////////////////////////////////////////////////////////// Rotational
+	j += sprintf(buf+j,"\n\tRotational:\n");
+	for(i=3;i<6;i++)
+	{
+		if((BOOL)supCard.kode[i])
+			j += sprintf(buf+j,"\t\tDirection %s = SUPPORTED\n", dir[i-3]);
+		else
+			j += sprintf(buf+j,"\t\tDirection %s = UNSUPPORTED\n", dir[i-3]);
+	}
+	/////////////////////////////////////////////////////////////////////// Skewed
+	if(supCard.nid_a != "")
+	{	
+			j += sprintf(buf+j,"\nJoint Coordinate is Skewed with\n");
+			j += sprintf(buf+j,"X-axis defined by:\n");
+			j += sprintf(buf+j,"\t%s and %s\n",Nid,supCard.nid_a);
+	}
+	else
+	if(m_bTan)
+	{	
+			j += sprintf(buf+j,"\nJoint Coordinate is Skewed with\n");
+			j += sprintf(buf+j,"X-axis along Tangents\n");
+	}
+	/////////////////////////////////////////////////////////////////////// PseudoGap
+	BOOL bGap = FALSE;
+	for(i=0;i<6;i++)
+	{
+		if((BOOL)supCard.pgap[i])
+		{
+			bGap = TRUE;
+			break;
+		}
+	}
+	////////
+	if(bGap)
+	{
+		j += sprintf(buf+j,"\nSupport Modeled as PseudoGap(s)\n");
+		////
+		j += sprintf(buf+j,"\n\tTranslational:\n");
+		for(i=0;i<3;i++)
+		{
+			if((BOOL)supCard.pgap[i])
+				j += sprintf(buf+j,"\t\tDirection %s = GAP\n", dir[i]);
+			else
+				j += sprintf(buf+j,"\t\tDirection %s = NONE\n", dir[i]);
+		}
+		////
+		j += sprintf(buf+j,"\n\tRotational:\n");
+		for(i=3;i<6;i++)
+		{
+			if((BOOL)supCard.pgap[i])
+				j += sprintf(buf+j,"\t\tDirection %s = GAP\n", dir[i-3]);
+			else
+				j += sprintf(buf+j,"\t\tDirection %s = NONE\n", dir[i-3]);
+		}
+		////
+	}
+	/////////
+	return j;
+}
+
+int CSupMouse::LeftUp_NodeLinSupp(CPoint point)
+{
+	///////////////////////////////////////////////////////////////////////
+	int nAnyway	= 0;	// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateNodeLinSup
+						// even if same coords node exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowNode to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 			= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString*	pID;
+	CString		ID;
+	CDrNode*	pDrNode;
+	int			nActiveIndex,index,nResult;
+	WORLD		wLoc;
+	BOOL		bNew	= TRUE;
+	///////////////////////////////////////////// See if any Existing Node Hit
+	index = IsObjectHit(NODE,point,0);
+	//////////////
+	if(index<0)
+		return -2;
+	//////////////////////////////////////////////////////////////// Existing Node
+	pDrNode				= (CDrNode*)pDListMgr->GetObject(index);
+	ID					= pDrNode->GetObjectID();
+	/////////////////////////////////////////
+	pList = pObjectMgr->GetObjectList(NODE);
+	nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+	//////////////////////////////////////////////////////////////// MultipleSearch
+	int startIndex = index+1;
+	/////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		for(;;)
+		{
+			CString* str = new CString;
+			char* buf = str->GetBuffer(BUFF_SIZE);
+			int j;
+			/////////////////////////////// Coords
+			wLoc = *(pDrNode->GetLocalPos());
+			WORtoWOP(&wLoc,&wLoc);	// to Physical
+			//////////////////////////////
+			pList = pDrNode->GetSuppList();
+			///////////////////////////////
+			if(pList->GetCount())
+			{
+				//////////////
+				j = sprintf(buf,"***** Selected Node is Already Supported  *****\n");
+				j += sprintf(buf+j,"\nNodeID = %s\nCoordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f\n",
+								ID,wLoc.x,wLoc.y,wLoc.z);
+				//////////////////////////
+				j = ShowInfo_NodeLinSupport(pDrNode, buf, j);
+				if(j<0)
+					return -2;
+				////////////////////////////
+				j += sprintf(buf+j,
+					"\n\nYES:\tAccept The Existing Nodal Support");
+				j += sprintf(buf+j,
+					"\nNO:\tFind Next Matching Node");
+				j += sprintf(buf+j,
+					"\nCANCEL:\tUpdate Node with New Support Anyway");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+				/////////////
+			}
+			else
+			{
+				//////////////////////////////
+				j = sprintf(buf,"***** Existing Node Selected *****\n");
+				j += sprintf(buf+j,"\nNodeID = %s\nCoordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f ",
+								ID,wLoc.x,wLoc.y,wLoc.z);
+				////////////////////////////
+				j += sprintf(buf+j,
+						"\n\nYES:\tAccept This Existing Node");
+				j += sprintf(buf+j,
+					"\nNO:\tFind Next Matching Node");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+				/////////////
+			}
+			/////////////
+			if(nResult == IDOK)
+			{
+				delete str;
+				break;
+			}
+			else
+			if(nResult == IDNO)
+			{
+				//////////////////////////////////////////////////////// Retry
+				index = IsObjectHit(NODE,&wLoc,startIndex);
+				////////////
+				if(index<0)
+				{
+					////////////////
+					delete str;
+					return -2;
+					//////////
+				}
+				//////////
+				pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+				ID		= pDrNode->GetObjectID();
+				///////////////////////////////////////// 
+				pList = pObjectMgr->GetObjectList(NODE);
+				nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+				pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+				pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+				pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+				////////////////////////////////////////
+				startIndex  = index+1;
+				/////////////////////
+			}
+			else				// Cancel
+			{
+				//////////////////////////////////////////////////////// Create New
+				bNew = TRUE;
+				nAnyway	= -12345;	// Create Anyway
+				/////////////
+				delete str;
+				break;
+			}
+		}
+	}
+	m_pCurrentNode			= (CDrNode*)pDListMgr->GetObject(index);
+	//////////////////////////////////////////////////////////////// Show LinSup
+	pID = &m_CurrentSupID;
+	//////////////////////////
+	if(ShowNodeLinSupp(pID,nAnyway)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSupMouse::LeftUp_NodeLinSup\nShowLinSup Problem");
+		return -1;
+	}
+	////////////////////////// Set SupID
+	m_CurrentSupIDOld = *pID;
+	if(*pID == m_CurrentSupID)
+	{		
+		char buf[30];
+		m_LastSupNum++;		// internal
+		sprintf(buf,"%d",m_LastSupNum);
+		m_CurrentSupID	= "Su";
+		m_CurrentSupID	+= buf;
+	}
+	////////////////////////////
+	return 0;
+}
+
+int CSupMouse::ShowInfo_CurveLinSupport(CDrCurve* pDrCurve, char* buf, int jStart)
+{
+	int j = jStart;
+	///////////////
+	CDListMgr* pList;
+	///////////////////////////////////////////////////////////// Support Info
+	pList = pDrCurve->GetSuppList();
+	///////////////////////////////
+	if(pList->GetCount() > 2)
+	{
+		AfxMessageBox("Internal ERROR:\nCSupMouse::ShowInfo_CurveLinSupport\npList->GetCount() > 2"); 
+		return -2;
+	}
+	////////////////////////////////////////////////////////////////////////
+	int i;
+	CDrLinSup*	pDrLinSup;
+	SUPPCARD	supCard;
+	/////////////////////////////////////////////////////////// Go Over List
+	for(i=0;i<pList->GetCount();i++)
+	{
+		if(i==0)
+			pDrLinSup = (CDrLinSup*)pList->GetHead();
+		else
+			pDrLinSup = (CDrLinSup*)pList->GetTail();
+		////
+		if(pDrLinSup)
+			supCard = *(pDrLinSup->GetSuppCard());					
+		else
+		{
+			AfxMessageBox("Internal ERROR:\nCSupMouse::FillInfo_CurveLinSupport\npDrLinSup=NULL"); 
+			return -2;
+		}
+		//////
+		CString		Cid;
+		/////////////////////////////////////////
+		switch (supCard.SuppProc)
+		{
+			case SUP_RIGID:
+				j = FillInfo_Rigid(supCard, buf, j);
+				break;
+			case SUP_LINSPR:	// fall thro'
+			case SUP_LINSNU:
+				Cid = pDrCurve->GetObjectID();
+				j	= FillInfo_SprOrSnu(Cid, supCard, buf, j);		//Cid ?????????????
+				break;
+/*	These will be in separate List: NSupList
+						case SUP_NONSPR:
+							j += sprintf(buf+j,"\n\nSupportType = NONLINEAR SPRING\n");
+							FillInfo_NonSpring(supCard,buf,j);
+							break;
+						case SUP_NONSNU:
+							j += sprintf(buf+j,"\n\nSupportType = NONLINEAR SNUBBER\n");
+							FillInfo_NonSnubber(supCard,buf,j);
+							break;
+*/ 
+			default:
+				break;
+		}
+	}
+	//////////
+	return j;
+}
+
+int CSupMouse::LeftUp_CurveLinSupp(CPoint point)
+{
+	///////////////////////////////////////////////////////////////////////
+	int nAnyway	= 0;	// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateCurveLinSup
+						// even if same coords Curve exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowCurve to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString*	pID;
+	CString		ID;
+	CDrCurve*	pDrCurve;
+	int			nActiveIndex,index,nResult;
+	BOOL		bNew	= TRUE;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	index = IsObjectHit(CURVE,point,0);
+	//////////////
+	if(index<0)
+		return -2;
+	//////////////////////////////////////////////////////////////// Existing Curve
+	pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+	ID						= pDrCurve->GetObjectID();
+	/////////////////////////////////////////
+	pList = pObjectMgr->GetObjectList(CURVE);
+	nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+	//////////////////////////////////////////////////////////////// MultipleSearch
+	int startIndex = index+1;
+	/////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		for(;;)
+		{
+			CString* str = new CString;
+			char* buf = str->GetBuffer(BUFF_SIZE);
+			int j;
+			///////////////////////////////////////// Check if This Curve is Already Supported
+			pList = pDrCurve->GetSuppList();
+			///////////////////////////////
+			if(pList->GetCount())
+			{
+				//////////////
+				j = sprintf(buf,"***** Selected Curve is Already Supported  *****\n\n");
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j += sprintf(buf+j,"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+								ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				////////////////////////////
+				j = ShowInfo_CurveLinSupport(pDrCurve, buf, j);
+				if(j<0)
+					return -2;
+				////////////////////////////
+				j += sprintf(buf+j,
+					"\n\nYES:\t\tAccept The Existing Curve-Based Support");
+				j += sprintf(buf+j,
+					"\nNO:\t\tFind Next Matching Curve");
+				j += sprintf(buf+j,
+					"\nCANCEL:\t\tUpdate Curve with New Support Anyway");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+				/////////////
+			}
+			else
+			{
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j = sprintf(buf,"***** Curve Selected *****\n\n");
+				j += sprintf(buf+j,"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+								ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				////////////////////////////
+				j += sprintf(buf+j,
+						"\n\nYES:\t\tAccept This Curve");
+				j += sprintf(buf+j,
+					"\nNO:\t\tFind Next Matching Curve");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+				/////////////
+			}
+			/////////////
+			if(nResult == IDOK)
+			{
+				delete str;
+				break;
+			}
+			else
+			if(nResult == IDNO)
+			{
+				////////////////////////////////
+				index = IsObjectHit(CURVE,point,startIndex);
+				if(index<0)
+				{
+					////////////////
+					delete str;
+					return -2;
+					//////////
+				}
+				//////////
+				pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+				ID			= pDrCurve->GetObjectID();
+				///////////////////////////////////////// 
+				pList = pObjectMgr->GetObjectList(CURVE);
+				nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+				pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+				pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+				pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+				////////////////////////////////////////
+				startIndex  = index+1;
+				/////////////////////
+			}
+			else				// Cancel
+			{
+				//////////////////////////////////////////////////////// Create New
+				bNew = TRUE;
+				nAnyway	= -12345;	// Create Anyway
+				/////////////
+				delete str;
+				break;
+			}
+		}
+	}
+	//////////////////////////////////////////////////// Gotch'a Curve/ Show LinSup
+	m_pCurrentCurve			= (CDrCurve*)pDListMgr->GetObject(index);
+	/////////////////////////////////////////////
+	pID = &m_CurrentSupID;
+	//////////////////////////
+	if(ShowCurveLinSupp(pID,nAnyway)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSupMouse::LeftUp_CurveLinSup\nShowLinSup Problem");
+		return -1;
+	}
+	////////////////////////// Set SupID
+	m_CurrentSupIDOld = *pID;
+	if(*pID == m_CurrentSupID)
+	{		
+		char buf[30];
+		m_LastSupNum++;		// internal
+		sprintf(buf,"%d",m_LastSupNum);
+		m_CurrentSupID	= "Su";
+		m_CurrentSupID	+= buf;
+	}
+	////////////////////////////
+	return 0;
+}
+
+void CSupMouse::ElementLeftUp_SUP(CPoint point)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	//////////////////////////////////////////////////////////////////
+//	CString*	pID;
+	/////////////
+//	char buf[20];
+	CString Nid;
+	///////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		///////////////////////////////////////////////////// LinSup: Node Based										
+		case NSUP_RIG_NODE:
+		case NSUP_LSP_NODE:
+		case NSUP_LSP_CNODE:
+		case NSUP_LSN_NODE:
+		case NSUP_LSN_CNODE:
+
+			////////////////
+			UpdateLinSupDlg_TRUE();
+			////////////////////
+			LeftUp_NodeLinSupp(point);	
+			////////////////////
+			UpdateLinSupDlg_FALSE();
+			//////////////////// 
+			break;
+
+		///////////////////////////////////////////////////// NonSup: Node Based										
+		case NSUP_NLSPRING:
+		case NSUP_NLSNUBBER:
+			break;
+
+		///////////////////////////////////////////////////// LinSup: Curve Based										
+		case CSUP_RIGID:
+		case CSUP_RIG_CIRCLE:
+		case CSUP_RIG_ELLIPSE:
+		case CSUP_RIG_PARABOLA:
+		case CSUP_RIG_LINEAR:
+		case CSUP_RIG_QUADRATIC:
+		case CSUP_RIG_CUBIC:
+		case CSUP_RIG_HERMITE:
+		case CSUP_RIG_BEZIER:
+		case CSUP_RIG_BSPLINE:
+		case CSUP_RIG_NURB:
+		case CSUP_RIG_STITCH:
+		case CSUP_RIG_SPAWN:
+
+		case CSUP_LINSPRING:
+		case CSUP_LSP_CIRCLE:
+		case CSUP_LSP_ELLIPSE:
+		case CSUP_LSP_PARABOLA:
+		case CSUP_LSP_LINEAR:
+		case CSUP_LSP_QUADRATIC:
+		case CSUP_LSP_CUBIC:
+		case CSUP_LSP_HERMITE:
+		case CSUP_LSP_BEZIER:
+		case CSUP_LSP_BSPLINE:
+		case CSUP_LSP_NURB:
+		case CSUP_LSP_STITCH:
+		case CSUP_LSP_SPAWN:
+
+		case CSUP_LINSNUBBER:
+		case CSUP_LSN_CIRCLE:
+		case CSUP_LSN_ELLIPSE:
+		case CSUP_LSN_PARABOLA:
+		case CSUP_LSN_LINEAR:
+		case CSUP_LSN_QUADRATIC:
+		case CSUP_LSN_CUBIC:
+		case CSUP_LSN_HERMITE:
+		case CSUP_LSN_BEZIER:
+		case CSUP_LSN_BSPLINE:
+		case CSUP_LSN_NURB:
+		case CSUP_LSN_STITCH:
+		case CSUP_LSN_SPAWN:
+
+			////////////////
+			UpdateLinSupDlg_TRUE();
+			////////////////////
+			LeftUp_CurveLinSupp(point);	
+			////////////////////
+			UpdateLinSupDlg_FALSE();
+			//////////////////// 
+			break;
+
+		///////////////////////////////////////////////////// NonSup: Node Based										
+		case CSUP_NLSPRING:
+		case CSUP_NLSNUBBER:
+			break;
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	} 
+}	
+
+void CSupMouse::OnEBoxMouseMove_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{  
+
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CMouseMgr* pMouseMgr	= pWnd->GetMouseMgr(); 
+	////////////////////////// LOG: Log/DEScaled
+   	m_pdc->DPtoLP(&point);     
+	LPOINT LpLOG;
+	LpLOG.x = (long)point.x;
+	LpLOG.y = (long)point.y;
+   	m_pdc->LPtoDP(&point);     
+    /////////////////////////////////////////////
+    if(!m_bDragging)  // not currently dragging 
+    { 
+    
+		//////////////////////////////////////
+		LPOINT3 MouseOldTempWIC = GetMouseOldWIC();
+	    LPOINT3 MouseTempWIC 	= GetMouseWIC();
+   		SetMouseOldWIC(MouseTempWIC);
+   		LPOINT3 MouseWIC;
+    	///////////////////////  LOG :DEScaled
+    	LOGtoWIC2(&MouseWIC,&LpLOG,&MouseTempWIC); //LOG/Scaled WIC
+    	////////////////////                 
+    	SetMouseWIC(MouseWIC);
+    	///////////////////////////
+//    	pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+		pMouseMgr->SetStatusMouseWIC(MouseWIC);
+		////////////////////////////
+		///////////////////// recover MouseWIC changed for statusbar update 
+	    SetMouseOldWIC(MouseOldTempWIC);
+	    SetMouseWIC(MouseTempWIC);
+
+		return;
+    }	
+   	//////////////////////////////      ***** START FROM HERE *****
+   	CPen    Pen;
+	CPen*   PtrOldPen;
+	//////////////////////////////
+	m_pdc->SetBkMode(TRANSPARENT);
+	//////////////////////////////	
+	// Create Black Pen 2 Pixel wide;
+	int two = 2;
+	COLORREF crColor = 0x000000;  
+	Pen.CreatePen ((int)PS_SOLID,two,crColor);
+	PtrOldPen = m_pdc->SelectObject(&Pen);
+	///////////////////////////
+	m_MouseLOG = point;              // Device
+	POINT MouseLOC;
+	/////////////////////////	
+	m_pdc->SetROP2 (R2_NOT); 
+	
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseOldLOG;        // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+	////////////////////////	  
+//	m_pdc->SetROP2 (R2_COPYPEN);
+
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseLOG;
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+
+	m_MouseOldLOG = m_MouseLOG;
+	///////////////////////////
+   	m_pdc->SelectObject(PtrOldPen);   
+	Pen.DeleteObject(); 
+	//////////////////////////////////////
+    LPOINT3 MouseWIC = GetMouseWIC();
+    SetMouseOldWIC(MouseWIC);
+   	///////////////////////
+   	LOGtoWIC(&MouseWIC,&LpLOG); //LOG/Scaled WIC
+   	////////////////////                 
+    SetMouseWIC(MouseWIC);
+    ///////////////////////////
+//  pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+	pMouseMgr->SetStatusMouseWIC(MouseWIC);
+	//////////////////////////////////////////////    
+}
+
+void CSupMouse::OnEBoxLButtonUp_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+  	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+    if(m_bDragging)  // not currently dragging
+    {
+		m_bDragging = FALSE; 
+		::ReleaseCapture();
+		//	ClipCursor(NULL);				TOBEDONE 
+	}	
+	///////////////////////////////////////////////////////// 
+	PreLeftUp(point);
+    /////////////////////////////  ELement Dialog On/Off Check
+    POINT Logpoint;
+    m_pdc->DPtoLP(&point);
+    Logpoint.x = point.x;
+    Logpoint.y = point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftUp_SUP(Logpoint);
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftUp_I();
+	/////////////////
+	PostLeft();
+	/////////////////////////
+	
+}
+
+void CSupMouse::OnEBoxRButtonDown_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+									UINT nFlags, CPoint point)
+{ 
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+    /////////////////////////////  ELement Dialog On/Off Check
+	m_bDialogOn     = pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	/////////////////////////////////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////
+//	CEDlgMgr* pEDlgMgr;
+	//////////////////////////////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		////////////////////////////////////////////////// Patch
+		case NONE:  
+		default:
+			break;
+	}  
+}
+
+void CSupMouse::OnEBoxRButtonUp_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+								UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	CString* pID = &ID;
+//	CEDlgMgr* pEDlgMgr;
+//	int nMeshType;
+	////////////////////
+	switch(m_nActiveTool) 
+	{
+
+		case NONE:  
+		default:  
+			break;
+	} 
+
+}
+////////////////////////////////////////////////////////////////////	
+UINT CSupMouse::ReSetToolID_SUP(UINT CntlID,UINT IGenID, UINT OperID)
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString str;
+	UINT ID;
+	//////////////////////////////////////////// TaskID
+	switch(OperID)
+	{
+		//////////////////////////////////////////// Create
+		case CREATE:
+		{
+			pWnd->SetIGenBoxStatus(TRUE);
+			pWnd->SetCntlBoxStatus(FALSE);
+			pWnd->SetDrawBoxStatus(FALSE);
+			///////////////////////////// String
+			str = "CREATE";
+			pWnd->SetstrOperID(str);
+			/////////////////////////////
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Support
+				case SUPPORT_RIGID:
+
+//					pWnd->SetMouseBoxType(SUPPORTBOX);
+					str = "Rigid@Support";
+					pWnd->SetstrCntlID(str);
+					///////////////////////////////////// RIGID
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "Input@NODE";		ID = NSUP_RIG_NODE;			break;
+						case CNODE:			str = "Control@CNODE";	ID = NSUP_RIG_CNODE;		break;
+
+						case CURVE:			str = "CURVE";			ID = CSUP_RIGID;			break;
+						case C_CIRCLE:		str = "CIRCULAR@CURVE";	ID = CSUP_RIG_CIRCLE;		break;
+						case C_ELLIPSE:		str = "ELLIPTIC@CURVE";	ID = CSUP_RIG_ELLIPSE;		break;
+						case C_PARABOLA:	str = "PARABOLIC@CURVE";ID = CSUP_RIG_PARABOLA;		break;
+						case C_LINEAR:		str = "LINEAR@CURVE";	ID = CSUP_RIG_LINEAR;		break;
+						case C_QUADRATIC:	str = "QUADRATIC@CURVE";ID = CSUP_RIG_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC@CURVE";	ID = CSUP_RIG_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE@CURVE";	ID = CSUP_RIG_HERMITE;		break;
+						case C_BEZIER:		str = "BEZIER@CURVE";	ID = CSUP_RIG_BEZIER;		break;
+						case C_BSPLINE:		str = "BSPLINE@CURVE";	ID = CSUP_RIG_BSPLINE;		break;
+						case C_NURB:		str = "NURB@CURVE";		ID = CSUP_RIG_NURB;			break;
+						case C_STITCH:		str = "STITCH@CURVE";	ID = CSUP_RIG_STITCH;		break;
+						case C_SPAWN:		str = "SPAWN@CURVE";	ID = CSUP_RIG_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSUP_RIGID; 			break;
+						case SOLID:			str = "SOLID";		ID = SSUP_RIGID;			break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////////////////////// LINSPRING
+				case SUPPORT_LINSPRING:
+
+					pWnd->SetMouseBoxType(SUPPORTBOX);
+					str = "Linear@Spring";
+					pWnd->SetstrCntlID(str);
+					////////////////////////////////// 
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSUP_LSP_NODE;			break;
+						case CNODE:			str = "CNODE";		ID = NSUP_LSP_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSUP_LINSPRING;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSUP_LSP_CIRCLE;		break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSUP_LSP_ELLIPSE;		break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSUP_LSP_PARABOLA;		break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSUP_LSP_LINEAR;		break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSUP_LSP_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSUP_LSP_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSUP_LSP_HERMITE;		break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSUP_LSP_BEZIER;		break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSUP_LSP_BSPLINE;		break;
+						case C_NURB:		str = "NURB";		ID = CSUP_LSP_NURB;			break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSUP_LSP_STITCH;		break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSUP_LSP_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSUP_LINSPRING;		break; 
+						case SOLID:			str = "SOLID";		ID = SSUP_LINSPRING;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;					break;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////////////////////// LINSNUBBER
+				case SUPPORT_LINSNUBBER:
+
+					pWnd->SetMouseBoxType(SUPPORTBOX);
+					str = "Linear@Snubber";
+					pWnd->SetstrCntlID(str);
+					////////////////////////////////// 
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSUP_LSN_NODE;			break;
+						case CNODE:			str = "CNODE";		ID = NSUP_LSN_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSUP_LINSNUBBER;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSUP_LSN_CIRCLE;		break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSUP_LSN_ELLIPSE;		break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSUP_LSN_PARABOLA;		break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSUP_LSN_LINEAR;		break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSUP_LSN_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSUP_LSN_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSUP_LSN_HERMITE;		break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSUP_LSN_BEZIER;		break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSUP_LSN_BSPLINE;		break;
+						case C_NURB:		str = "NURB";		ID = CSUP_LSN_NURB;			break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSUP_LSN_STITCH;		break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSUP_LSN_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSUP_LINSNUBBER;		break; 
+						case SOLID:			str = "SOLID";		ID = SSUP_LINSNUBBER;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;					break;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////////////////////// NONSPRING
+				case SUPPORT_NLSPRING:
+
+					pWnd->SetMouseBoxType(SUPPORTBOX);
+					str = "NonLinear@Spring";
+					pWnd->SetstrCntlID(str);
+					////////////////////////////////// 
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSUP_NSP_NODE;			break;
+						case CNODE:			str = "CNODE";		ID = NSUP_NSP_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSUP_NLSPRING;			break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSUP_NSP_CIRCLE;		break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSUP_NSP_ELLIPSE;		break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSUP_NSP_PARABOLA;		break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSUP_NSP_LINEAR;		break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSUP_NSP_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSUP_NSP_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSUP_NSP_HERMITE;		break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSUP_NSP_BEZIER;		break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSUP_NSP_BSPLINE;		break;
+						case C_NURB:		str = "NURB";		ID = CSUP_NSP_NURB;			break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSUP_NSP_STITCH;		break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSUP_NSP_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSUP_NLSPRING; 		break;
+						case SOLID:			str = "SOLID";		ID = SSUP_NLSPRING;			break;
+						default:			str = "UNKNOWN";	ID = UNONE;					break;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////////////////////// NONSNUBBER
+				case SUPPORT_NLSNUBBER:
+
+					pWnd->SetMouseBoxType(SUPPORTBOX);
+					str = "NonLinear@RESEVED";
+					pWnd->SetstrCntlID(str);
+					////////////////////////////////// 
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSUP_NSN_NODE;			break;
+						case CNODE:			str = "CNODE";		ID = NSUP_NSN_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSUP_NLSNUBBER;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSUP_NSN_CIRCLE;		break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSUP_NSN_ELLIPSE;		break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSUP_NSN_PARABOLA;		break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSUP_NSN_LINEAR;		break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSUP_NSN_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSUP_NSN_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSUP_NSN_HERMITE;		break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSUP_NSN_BEZIER;		break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSUP_NSN_BSPLINE;		break;
+						case C_NURB:		str = "NURB";		ID = CSUP_NSN_NURB;			break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSUP_NSN_STITCH;		break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSUP_NSN_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSUP_NLSNUBBER;		break; 
+						case SOLID:			str = "SOLID";		ID = SSUP_NLSNUBBER;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				/////////
+				default:					str = "UNKNOWN";	ID = UNONE;
+					pWnd->SetstrIGenID(str);
+					return ID;
+			}
+			pWnd->SetstrCntlID(str);
+			return ID;
+		////////
+		default:							str = "UNKNOWN";	ID = UNONE;
+		}
+		pWnd->SetstrOperID(str);
+		return ID;
+	}
+		/*		SAVE FOLLOWING :  TODO		
+		//////////////////////////////////////////// Edit
+		case EDIT:
+		{
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Mesh
+				case ELEMENT:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return N_EDIT;
+						case CURVE:				return C_EDIT;
+						case PATCH:				return P_EDIT;
+						case SOLID:				return S_EDIT;
+						default:				return NONE;
+					}
+				//////////////////////////////////////// StaticLoad
+				case SUPPORT_RIGID:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSUP_EDIT_RIG;
+						case CURVE:				return CSUP_EDIT_RIG;
+						case PATCH:				return PSUP_EDIT_RIG;
+						case SOLID:				return SSUP_EDIT_RIG;
+						default:				return NONE;
+					}
+				case SUPPORT_LINSPRING:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSUP_EDIT_LSP;
+						case CURVE:				return CSUP_EDIT_LSP;
+						case PATCH:				return PSUP_EDIT_LSP;
+						case SOLID:				return SSUP_EDIT_LSP;
+						default:				return NONE;
+					}
+				case SUPPORT_LINSNUBBER:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSUP_EDIT_LSN;
+						case CURVE:				return CSUP_EDIT_LSN;
+						case PATCH:				return PSUP_EDIT_LSN;
+						case SOLID:				return SSUP_EDIT_LSN;
+						default:				return NONE;
+					}
+				case SUPPORT_NLSPRING:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSUP_EDIT_NSP;
+						case CURVE:				return CSUP_EDIT_NSP;
+						case PATCH:				return PSUP_EDIT_NSP;
+						case SOLID:				return SSUP_EDIT_NSP;
+						default:				return NONE;
+					}
+		case SUPPORT_NLSNUBBER:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSUP_EDIT_NSN;
+						case CURVE:				return CSUP_EDIT_NSN;
+						case PATCH:				return PSUP_EDIT_NSN;
+						case SOLID:				return SSUP_EDIT_NSN;
+						default:				return NONE;
+					}
+
+		
+
+						case CURVE:				return C_MOVE;
+				case CURVE:				return C_POST;
+				case CURVE:				return C_UNPOST;
+				case CURVE:				return C_DELETE;
+				case PATCH:				return P_MOVE;
+				case PATCH:				return P_POST;
+				case PATCH:				return P_UNPOST;
+				case PATCH:				return P_DELETE;
+				case SOLID:				return S_MOVE;
+				case SOLID:				return S_POST;
+				case SOLID:				return S_UNPOST;
+				case SOLID:				return S_DELETE;
+//////////////////////////////
+				//////////////////////////////////////// StaticLoad
+				case RIGCE:
+				case C_ROTATE:
+				case C_XLATE:
+				case C_SCALE:
+				case C_SHEAR:
+				case C_OPER:
+				case C_SUPP:
+				case C_STAL:
+				case C_DYNL:
+				case C_SPEL:
+				////////////////
+				case P_ROTATE_B:
+				case P_XLATE:
+				case P_SCALE:
+				case P_SHEAR:
+				case P_OPER:
+				case P_SUPP:
+				case P_STAL:
+				case P_DYNL:
+				case P_SPEL:
+				////////////////
+				case S_ROTATE_B:
+				case S_XLATE:
+				case S_SCALE:
+				case S_SHEAR:
+				case S_OPER:
+				case S_SUPP:
+				case S_STAL:
+				case S_DYNL:
+				case S_SPEL:
+
+		}
+
+*/
+}
+
+void CSupMouse::ModeLessOff_SUP()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	if(GetSupInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_SUPIN,IDOK);
+}
+
+void CSupMouse::ModeLessOn_SUP()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	int aTool	= pWnd->GetActiveToolType();
+	int aObj	= pWnd->GetActiveObjectType();
+	/////////////////////////////////////////////////////////////////////////
+	if	(
+			aTool == NSUP_RIGID				||
+			aTool == NSUP_RIG_NODE			||	aTool == NSUP_RIG_CNODE		||
+			
+			aTool == CSUP_RIGID				||
+			aTool == CSUP_RIG_ELLIPSE		||	aTool == CSUP_RIG_PARABOLA	||
+			aTool == CSUP_RIG_LINEAR		||	aTool == CSUP_RIG_QUADRATIC	||
+			aTool == CSUP_RIG_CUBIC			||	aTool == CSUP_RIG_HERMITE	||
+			aTool == CSUP_RIG_BEZIER		||	aTool == CSUP_RIG_BSPLINE	||
+			aTool == CSUP_RIG_NURB			||	aTool == CSUP_RIG_STITCH	||
+			aTool == CSUP_RIG_SPAWN			||
+			
+			aTool == PSUP_RIGID				||
+
+			aTool == SSUP_RIGID				||
+
+			aTool == NSUP_LINSPRING			||	
+			aTool == NSUP_LSP_NODE			||	aTool == NSUP_LSP_CNODE		||
+			
+			aTool == CSUP_LINSPRING			||
+			aTool == CSUP_LSP_ELLIPSE		||	aTool == CSUP_LSP_PARABOLA	||
+			aTool == CSUP_LSP_LINEAR		||	aTool == CSUP_LSP_QUADRATIC	||
+			aTool == CSUP_LSP_CUBIC			||	aTool == CSUP_LSP_HERMITE	||
+			aTool == CSUP_LSP_BEZIER		||	aTool == CSUP_LSP_BSPLINE	||
+			aTool == CSUP_LSP_NURB			||	aTool == CSUP_LSP_STITCH	||
+			aTool == CSUP_LSP_SPAWN			||
+			
+			aTool == PSUP_LINSPRING			||
+			aTool == SSUP_LINSPRING				
+		)
+	{
+//		if(!(GetSupInDlg()->m_hWnd))
+			pWnd->SendMessage(ID_ACTIVE_SUPIN,IDOK); // always, because of different types
+	}
+
+}
+
+long CSupMouse::CreateorActivateSupIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetSupInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetSupInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetSupInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetSupInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetSupInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if SupeDlg Open
+	if(GetSupInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_SUPIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->ShowWindow(TRUE);
+	strCurr = "Ready for Selection@";
+	////////////////////////////////////////////////////////////////// Set Info
+	int aTool	= pWnd->GetActiveToolType();
+	//////////////////////////////////
+	switch(aTool) 
+	{
+		
+		///////////////////////////////////////////////////// RigSup: Node Based										
+		case NSUP_RIG_NODE:
+		case NSUP_RIG_CNODE:
+
+			m_SuppProc	= SUP_RIGID;
+			strCurr		+= "A Node";
+			//////////////////// 
+			break;
+		///////////////////////////////////////////////////// RigSup: Curve Based										
+		case CSUP_RIGID:
+		case CSUP_RIG_CIRCLE:
+		case CSUP_RIG_ELLIPSE:
+		case CSUP_RIG_PARABOLA:
+		case CSUP_RIG_LINEAR:
+		case CSUP_RIG_QUADRATIC:
+		case CSUP_RIG_CUBIC:
+		case CSUP_RIG_HERMITE:
+		case CSUP_RIG_BEZIER:
+		case CSUP_RIG_BSPLINE:
+		case CSUP_RIG_NURB:
+		case CSUP_RIG_STITCH:
+		case CSUP_RIG_SPAWN:
+
+			m_SuppProc	= SUP_RIGID;
+			strCurr		+= "A Curve";
+			//////////////////// 
+			break;
+		///////////////////////////////////////////////////// LinSup: Node Based										
+		case NSUP_LSP_NODE:
+		case NSUP_LSP_CNODE:
+
+			m_SuppProc	= SUP_LINSPR;
+			strCurr		+= "A Node";
+			//////////////////// 
+			break;
+		///////////////////////////////////////////////////// LinSpr: Curve Based										
+		case CSUP_LINSPRING:
+		case CSUP_LSP_CIRCLE:
+		case CSUP_LSP_ELLIPSE:
+		case CSUP_LSP_PARABOLA:
+		case CSUP_LSP_LINEAR:
+		case CSUP_LSP_QUADRATIC:
+		case CSUP_LSP_CUBIC:
+		case CSUP_LSP_HERMITE:
+		case CSUP_LSP_BEZIER:
+		case CSUP_LSP_BSPLINE:
+		case CSUP_LSP_NURB:
+		case CSUP_LSP_STITCH:
+		case CSUP_LSP_SPAWN:
+
+			m_SuppProc	= SUP_LINSPR;
+			strCurr		+= "A Curve";
+			//////////////////// 
+			break;
+		///////////////////////////////////////////////////// LinSnu: Node Based										
+		case NSUP_LSN_NODE:
+		case NSUP_LSN_CNODE:
+
+			m_SuppProc	= SUP_LINSNU;
+			strCurr		+= "A Node";
+			//////////////////// 
+			break;
+		///////////////////////////////////////////////////// LinSnu: Curve Based										
+		case CSUP_LINSNUBBER:
+		case CSUP_LSN_CIRCLE:
+		case CSUP_LSN_ELLIPSE:
+		case CSUP_LSN_PARABOLA:
+		case CSUP_LSN_LINEAR:
+		case CSUP_LSN_QUADRATIC:
+		case CSUP_LSN_CUBIC:
+		case CSUP_LSN_HERMITE:
+		case CSUP_LSN_BEZIER:
+		case CSUP_LSN_BSPLINE:
+		case CSUP_LSN_NURB:
+		case CSUP_LSN_STITCH:
+		case CSUP_LSN_SPAWN:
+
+			m_SuppProc	= SUP_LINSNU;
+			strCurr		+= "A Curve";
+			//////////////////// 
+			break;
+		///////////////////////////////////////////////////// NonSpr: Node Based	todo										
+		case NSUP_NLSPRING:
+		case CSUP_NLSPRING:
+		///////////////////////////////////////////////////// NonSup: Node Based										
+		case NSUP_NLSNUBBER:
+		case CSUP_NLSNUBBER:
+			break;
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	} 
+	/////////////////////////////////////////////////// Reset in SupMouse & Sup_Dlg
+	GetSupInDlg()->m_SuppProc = m_SuppProc;
+	GetSupInDlg()->UpdateData(FALSE);
+	///////////////////////////////////////////////////
+	GetSupInDlg()->m_bRx		= GetRx();
+	GetSupInDlg()->m_bRy		= GetRy();
+	GetSupInDlg()->m_bRz		= GetRz();
+	GetSupInDlg()->m_bTx		= GetTx();
+	GetSupInDlg()->m_bTy		= GetTy();
+	GetSupInDlg()->m_bTz		= GetTz();
+	///
+	GetSupInDlg()->m_bRxG		= GetRxG();
+	GetSupInDlg()->m_bRyG		= GetRyG();
+	GetSupInDlg()->m_bRzG		= GetRzG();
+	GetSupInDlg()->m_bTxG		= GetTxG();
+	GetSupInDlg()->m_bTyG		= GetTyG();
+	GetSupInDlg()->m_bTzG		= GetTzG();
+	///
+	GetSupInDlg()->m_NID		= m_aNid;
+	GetSupInDlg()->m_bTan		= m_bTan;
+	GetSupInDlg()->m_dStif		= m_CurrentStif;
+	GetSupInDlg()->m_SupID		= m_CurrentSupID;
+	GetSupInDlg()->m_SuppProc	= m_SuppProc;
+	///////////////////////////////////////
+	if(m_SuppProc == SUP_RIGID)
+	{
+		GetSupInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(FALSE);	
+		////////////////////////////////////////
+		GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetSupInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(TRUE);
+		////////////////////////////////////////
+		GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(TRUE);
+	}
+	////////////////////////////////
+	GetSupInDlg()->UpdateData(FALSE);
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSupMouse::CancelSupIn(UINT wParam, long lParam)
+{
+	
+	GetSupInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSupMouse::GoodByeSupIn(UINT wParam, long lParam)
+{
+	
+	if(GetSupInDlg()->m_hWnd)
+		GetSupInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSupMouse::UpdateSupIn(UINT wParam, long lParam)
+{
+
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	GetSupInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	int aTool	= pWnd->GetActiveToolType();
+	//////////////////////////////////
+	m_SuppProc	= SUP_RIGID;
+	if	(
+			aTool == NSUP_LINSPRING			||	
+			aTool == NSUP_LSP_NODE			||	aTool == NSUP_LSP_CNODE		||
+			
+			aTool == CSUP_LINSPRING			||
+			aTool == CSUP_LSP_ELLIPSE		||	aTool == CSUP_LSP_PARABOLA	||
+			aTool == CSUP_LSP_LINEAR		||	aTool == CSUP_LSP_QUADRATIC	||
+			aTool == CSUP_LSP_CUBIC			||	aTool == CSUP_LSP_HERMITE	||
+			aTool == CSUP_LSP_BEZIER		||	aTool == CSUP_LSP_BSPLINE	||
+			aTool == CSUP_LSP_NURB			||	aTool == CSUP_LSP_STITCH	||
+			aTool == CSUP_LSP_SPAWN			||
+			
+			aTool == PSUP_LINSPRING			||
+			aTool == SSUP_LINSPRING				
+		)
+		m_SuppProc	= SUP_LINSPR;
+	else
+	if	(
+			aTool == NSUP_LINSNUBBER		||	aTool == CSUP_LINSNUBBER	||
+			aTool == PSUP_LINSNUBBER		||	aTool == SSUP_LINSNUBBER	||	
+
+			aTool == NSUP_LINSNUBBER		||	
+			aTool == NSUP_LSN_NODE			||	aTool == NSUP_LSN_CNODE		||
+			
+			aTool == CSUP_LINSNUBBER		||
+			aTool == CSUP_LSN_ELLIPSE		||	aTool == CSUP_LSN_PARABOLA	||
+			aTool == CSUP_LSN_LINEAR		||	aTool == CSUP_LSN_QUADRATIC	||
+			aTool == CSUP_LSN_CUBIC			||	aTool == CSUP_LSN_HERMITE	||
+			aTool == CSUP_LSN_BEZIER		||	aTool == CSUP_LSN_BSPLINE	||
+			aTool == CSUP_LSN_NURB			||	aTool == CSUP_LSN_STITCH	||
+			aTool == CSUP_LSN_SPAWN			||
+			
+			aTool == PSUP_LINSNUBBER		||
+			aTool == SSUP_LINSNUBBER		
+		)
+		m_SuppProc	= SUP_LINSNU;
+	/////////////////////////////////////////////////// Reset in SupMouse & Sup_Dlg
+	GetSupInDlg()->m_SuppProc = m_SuppProc;
+	///////////////////////////////////////
+	if(m_SuppProc == SUP_RIGID)
+	{
+		////////////////////////////////////////
+		GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(TRUE);
+	}
+	////////////////////////////////
+	GetSupInDlg()->UpdateData(FALSE);
+	///////////////////////////////// Reset data in ElMouse
+	m_aNid			= GetSupInDlg()->m_NID;
+	m_bTan			= GetSupInDlg()->m_bTan;
+	m_CurrentSupID	= GetSupInDlg()->m_SupID;
+	SetCurrentStif(GetSupInDlg()->m_dStif);
+	///
+	SetTx(GetSupInDlg()->m_bTx);
+	SetTy(GetSupInDlg()->m_bTy);
+	SetTz(GetSupInDlg()->m_bTz);
+	SetRx(GetSupInDlg()->m_bRx);
+	SetRy(GetSupInDlg()->m_bRy);
+	SetRz(GetSupInDlg()->m_bRz);
+	///
+	SetTxG(GetSupInDlg()->m_bTxG);
+	SetTyG(GetSupInDlg()->m_bTyG);
+	SetTzG(GetSupInDlg()->m_bTzG);
+	SetRxG(GetSupInDlg()->m_bRxG);
+	SetRyG(GetSupInDlg()->m_bRyG);
+	SetRzG(GetSupInDlg()->m_bRzG);
+	///
+	SetSuppProc(m_SuppProc);
+	//////////
+	return 0L;
+}
+
+void CSupMouse::Serialize(CArchive& ar)
+{
+
+	CSolMouse::Serialize( ar);              // must call base class Serializer
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" SupMouse:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" SupMouse:    Loading\n");	
+
+			/////////////////////////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////////// end of Module //////////////////////		
+
+

@@ -1,0 +1,44 @@
+!MS$FREEFORM
+! Microsoft Developer Studio generated include file.
+! Used by View.rc
+!
+      integer, parameter :: IDS_CHECK_RESOURCE              = 1
+      integer, parameter :: IDUPDATE                        = 3
+      integer, parameter :: IDS_TOO_MANY_ROWS               = 15
+      integer, parameter :: IDW_AXISDRAW                    = 157
+      integer, parameter :: IDD_VIEWINFO                    = 158
+      integer, parameter :: IDD_AXISDRAW                    = 159
+      integer, parameter :: IDC_VRP_X                       = 160
+      integer, parameter :: IDC_VPN_X                       = 161
+      integer, parameter :: IDC_VUP_X                       = 162
+      integer, parameter :: IDC_UMIN                        = 163
+      integer, parameter :: IDC_VRP_Y                       = 164
+      integer, parameter :: IDC_VPN_Y                       = 165
+      integer, parameter :: IDC_VUP_Y                       = 166
+      integer, parameter :: IDC_VRP_Z                       = 167
+      integer, parameter :: IDC_VPN_Z                       = 168
+      integer, parameter :: IDC_VUP_Z                       = 169
+      integer, parameter :: IDC_PRP_X                       = 170
+      integer, parameter :: IDC_PRP_Y                       = 171
+      integer, parameter :: IDC_PRP_Z                       = 172
+      integer, parameter :: IDC_SPIN_INC                    = 175
+      integer, parameter :: IDC_UMAX                        = 176
+      integer, parameter :: IDC_SPIN_PIT_X                  = 176
+      integer, parameter :: IDC_VMIN                        = 177
+      integer, parameter :: IDC_SPIN_YAW_Y                  = 177
+      integer, parameter :: IDC_VMAX                        = 178
+      integer, parameter :: IDC_SPIN_ROLL_Z                 = 178
+      integer, parameter :: IDC_FRONT                       = 179
+      integer, parameter :: IDC_SPIN_UPROLL                 = 179
+      integer, parameter :: IDC_BACK                        = 180
+      integer, parameter :: IDC_SPIN_FOV                    = 180
+      integer, parameter :: ID_UPDATE_EYEPOS                = 181
+      integer, parameter :: IDC_WIDTH                       = 181
+      integer, parameter :: ID_GOODBYE_EYEPOS               = 182
+      integer, parameter :: IDC_HEIGHT                      = 182
+      integer, parameter :: IDC_SAMPLE                      = 183
+      integer, parameter :: IDC_PITCH                       = 184
+      integer, parameter :: IDC_YAW                         = 185
+      integer, parameter :: IDC_ROLL                        = 186
+      integer, parameter :: IDC_UPROLL                      = 187
+      integer, parameter :: IDC_FOV                         = 188

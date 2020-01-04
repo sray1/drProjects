@@ -1,0 +1,90 @@
+ // mp_Duct.h : header file
+//
+#ifndef _MP_DUCT_H 
+#define _MP_DUCT_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+                    
+#include "MI_GangP.h"
+#include "DrPatch.h"
+#include "Def_Type.h"                    
+//////////////////////////////////////////////////////
+//class AFX_EXT_CLASS CMP_Duct : public CMI_GangP
+class AFX_EXT_CLASS CMP_Duct : public CMI_GangP
+{
+public:
+
+	CMP_Duct();
+//////////////////////////////////////
+	DECLARE_SERIAL(CMP_Duct)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+
+	int			SetInfoBase
+				(
+					CString&						PatchID,		
+					CDrPatch*						pDrPatch,
+					CDListMgr*						pCurveList,
+					CDListMgr*						pNodeList,
+					CList<CURVELATCH,CURVELATCH>*	pLatchList,
+					double							TwistMult,
+					BOOL							bIncrement,
+					double							TwistStart,
+					CView*							pView
+				); 
+	CDrPatch*	GoDoIt(); 
+  	int			GoDoIt(CDrPatch* pDrPatch);
+
+ 				
+		
+protected:
+
+	void		SetInfoForDataBase(CDrPatch* pDrObject);
+	////////////////////////////////////////////////////////////
+	int 		Duct(); 
+	CDrPatch* 	GetInfo();
+	int			GetInfo(CDrPatch* pDrPatch);
+	int 		GenerateCNodes();
+	/////////////////////////
+	int			Pre_S_Direction(CDrCurve* pDrCurve, int i, BOOL bPutinCNodeList);
+	int			Pre_T_Direction(CDrCurve* pDrCurve,int i, int nOut_T);
+	int			SpineProcess(CDrCurve* pDrCurve);
+	int			TwistProcess(pWORLD pIn, int nOut, double ScaleMax, BOOL bIncremental);
+		          
+
+protected:  
+// Attributes
+
+	////////////////////////
+	CString		m_PatchID;
+	BOOL		m_bIncrement;
+
+
+//Operations
+public:
+
+	~CMP_Duct();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CMP_Duct)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

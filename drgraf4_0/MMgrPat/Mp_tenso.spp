@@ -1,0 +1,198 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+
+#include "glb_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+///////////////////// 
+//#include "drawview.h" //for curve/patch 
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "EBoxmgr.h" 
+#include "NewObjs.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_Ms.h" // Mesh Types for Patch
+///////////////////// dialogMgr
+#include "MPatMgr.h"
+//#include "Dlg_Node.h"  
+///////////////////// elements
+#include "Def_IGen.h"
+//#include "elextern.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/*
+#include "precison.h"
+#include "mapfacto.h"
+//#include "ScaleFac.h"
+#include "DrFont.h"
+*/
+/////////////////////
+//#include "elmouse.h"
+#include "MI_Patch.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define MIN_CNODES_CURVE	4
+#define MIN_CNODES_PATCH	16
+/////////////////////////////////////
+#define wEQL(a,b)	((a).x ==(b).x) && ((a).y ==(b).y) \
+					&& ((a).z ==(b).z)  
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_Patch,CMI_Curve,1)
+/////////////////////////////////////////////////////////////////////////////
+CMI_Patch::CMI_Patch()
+{
+	m_pOut = NULL;
+	for (int i=0;i<4;i++)
+		m_pIn_S[i] = NULL;
+	//////////////////////
+	m_nCNodeDone   		= 0;
+    /////////////////////////////////////////// Mesh/Patch
+	m_CurrentPatchID	= "BLANK";
+	m_nMaxPatchCNodes_S	= MIN_CNODES_CURVE;
+	m_nMaxPatchCNodes_T	= MIN_CNODES_CURVE;
+	m_nMaxPatchCNodes	= m_nMaxPatchCNodes_S * m_nMaxPatchCNodes_T;
+}
+
+CMI_Patch::~CMI_Patch()
+{
+	if(m_pOut != NULL)
+	{
+		FreeMem(m_pOut);
+		m_pOut = NULL;
+	}	   
+}
+
+int CMI_Patch::LBUpMeshInsert(enum CURVETYPE kind,CView* pView,UINT nView) 
+{
+
+	CDrGrafDoc* pDoc 	= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+    CELMouse* pELMouse	= pDoc->GetMouseMgr()->GetELMouse(nView);
+	//////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	////////////////////////////////////////////////////////////////
+	if(m_nCNodeDone <= 0) 								// Firsttime 
+	{
+		m_pDrPatch 		= Mesh_GetInfo(1);                  	// PGen Dialog
+		if(!m_pDrPatch)		// cancel
+			return -1;
+//		m_pCNodeList	= m_pDrPatch->GetCNodeList();
+	}	
+	///////////////////////////////////////////////////////////
+	if(!pELMouse->ShowNode(pID,TRUE,1))              	// Control Nodes
+	{
+		m_nCNodeDone++;
+		SetCurrentCNodeID(*pID);
+	}
+	else									// cancelled
+		return -1;
+	//////////////////////////////////////////		          
+	SaveCNode(m_pDrPatch->GetCNodeList(),pID);
+	int index 				= pObjectMgr->GetObjectIndexfromKey(NODE,*pID,1);
+	CDrNode* pDrNode 		= (CDrNode*)(pDListMgr->GetObject(index));
+	pDrNode->GetPatchList()->InsertObject(m_pDrPatch);
+	//////////////////////////////////////////////////
+	if(m_nCNodeDone < m_nMaxPatchCNodes)
+		return 0;
+	///////////////////////////////////////////////////////////////////// Go Generate	
+	m_nCNodeDone = 1; 	//reset
+	char buf[80];
+	CString str;
+				
+	sprintf(buf,"Got All %d Control Nodes",m_pDrPatch->GetCNodeList()->GetCount());
+	AfxMessageBox(str = buf);
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrPatch->Calc_3DBoundsLocal();											
+	//////////////////////////////// Compute Cubics & Fill DrPatch Info
+	m_pCNodeList = m_pDrPatch->GetCNodeList();
+	//////////////////////////////
+	if(kind == CU_BEZIER)	
+		m_PatchType = PA_BEZIER;
+	else	
+	if(kind == CU_BSPLINE)	
+		m_PatchType = PA_BSPLINE;
+	////////////	
+	m_pDrPatch->SetPatchType(m_PatchType);
+	m_pDrPatch->SetCurveType(kind);
+	//////////////////////////////////////////////////////////
+	// 	NumberOfCubicPatches() Computes & Sets in DrPatch:	//
+	//					m_nMaxCubicPatches_S            	//
+	//					m_nMaxCubicPatches_T            	//
+	//					m_nOut_S							//			
+	//					m_nOut_T							//							
+	//					m_nOut      						//
+	//////////////////////////////////////////////////////////							
+	m_pDrPatch->NumberOfCubicPatches();
+	//////////////////////////////////////////////////////////
+	CString PatchID	= m_pDrPatch->GetObjectID();
+	int nPatchIndex = pDListMgr->GetObjectIndex(PATCH,PatchID);
+	int nOldIndex 	= pObjectMgr->GetActiveObjectIndex();
+	pObjectMgr->SetActiveObjectIndex(nPatchIndex);
+    ////////////////////////////////////////////////////////// done/Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nPatchIndex);
+	/////////
+	return 0;		 
+}			
+
+CDrPatch* CMI_Patch::Mesh_GetInfo(int nButton)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList();
+	//////////////////////////////////////////////////////////////////
+	CMPatMgr* pMPatMgr;
+	CString		Cid;
+	int index;
+	///////////////////////////////////////////////////
+	if(nButton ==1)		//Left Button
+//todo		if (pMPatMgr->DoModal_MeshGen(&Cid,0) == IDCANCEL)
+			return (CDrPatch*)NULL;
+	if(nButton ==2)		//Right Button
+		if (pMPatMgr->DoModal_PatchCon(&Cid,4) == IDCANCEL)
+			return (CDrPatch*)NULL;
+/*			
+    /////////////////////////////////////////////////////// update
+	m_CurrentPatchID 	= Cid;
+*/	
+	index 				= pObjectMgr->
+							GetObjectIndexfromKey(PATCH,Cid,1);
+	if(index>=0)
+	{						
+		CDrPatch* pDrPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+		m_nMaxPatchCNodes_S	= pDrPatch->GetMaxCNodes_S();
+		m_nMaxPatchCNodes_T	= pDrPatch->GetMaxCNodes_T();
+		///////////////////////////////////////////////////
+		m_nMaxPatchCNodes	= m_nMaxPatchCNodes_S * m_nMaxPatchCNodes_T;
+		///////////////////////////////////////////////////
+		////////////////
+		return pDrPatch;
+	}
+	else
+		return (CDrPatch*)NULL;
+}			
+
+
+

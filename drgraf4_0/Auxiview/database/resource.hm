@@ -1,0 +1,10 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by database.rc
+//
+#define HIDC_STATIC                     0x8082ffff    // IDD_NODE_GEOM
+#define HIDD_LENGTH                     0x808a019f    // IDD_NODE_INPUT
+#define HIDD_NODE_DX                    0x80820194    // IDD_NODE_GEOM
+#define HIDD_NODE_DY                    0x80820196    // IDD_NODE_GEOM
+#define HIDD_NODE_DZ                    0x80820198    // IDD_NODE_GEOM
+#define HIDD_NODE_ID                    0x80820192    // IDD_NODE_GEOM
+#define HIDD_NODE_TYPE                  0x80820193    // IDD_NODE_GEOM

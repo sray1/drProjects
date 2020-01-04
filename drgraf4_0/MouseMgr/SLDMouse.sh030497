@@ -1,0 +1,274 @@
+ // ELMouse.h : header file
+//
+#ifndef _SLD_MOUSE_H 
+#define _SLD_MOUSE_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+                    
+#include "SupMouse.h"
+///////////////////// Modeless
+#include "Dlg_StLI.h"
+/////////////////////
+#include "DrStatic.h" 	
+#include "DrNode.h" 	
+#include "DrLabel.h" 	
+#include "DrCurve.h" 	
+#include "DListMgr.h"
+#include "Def_Type.h"                    
+#include "Def_StaL.h"	// support                    
+#include "Def_Mous.h"                    
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class CSLDMouse : public CSupMouse
+{
+public:
+
+	CSLDMouse();
+//////////////////////////////////////
+	DECLARE_SERIAL(CSLDMouse)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+
+	///////////////////////////////////////////////////////////////////////////
+	UINT			ReSetToolID_SLD(UINT CntlID,UINT IGenID, UINT OperID);
+	void			InitDlgIn_SLD();
+	void			ModeLessOff_SLD();
+	void			ModeLessOn_SLD();
+	CDlg_StLI*		GetStLInDlg(){return m_pStLInDlg;};	// NodeLinSup(NLS)                                                                                
+	/////////////////////
+	void 			OnEBoxMouseMove_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonDown_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonDown_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonUp_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonUp_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivateF_MIn(UINT wParam, long lParam);
+	long			CancelF_MIn(UINT wParam, long lParam);
+	long			GoodByeF_MIn(UINT wParam, long lParam);
+	long			UpdateF_MIn(UINT wParam, long lParam);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivateD_RIn(UINT wParam, long lParam);
+	long			CancelD_RIn(UINT wParam, long lParam);
+	long			GoodByeD_RIn(UINT wParam, long lParam);
+	long			UpdateD_RIn(UINT wParam, long lParam);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivatePrsIn(UINT wParam, long lParam);
+	long			CancelPrsIn(UINT wParam, long lParam);
+	long			GoodByePrsIn(UINT wParam, long lParam);
+	long			UpdatePrsIn(UINT wParam, long lParam);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivateThrIn(UINT wParam, long lParam);
+	long			CancelThrIn(UINT wParam, long lParam);
+	long			GoodByeThrIn(UINT wParam, long lParam);
+	long			UpdateThrIn(UINT wParam, long lParam);
+	/////////////////////////////////////////////////////////////////////////// Force_Moment
+	long			CreateorActivateLWtIn(UINT wParam, long lParam);
+	long			CancelLWtIn(UINT wParam, long lParam);
+	long			GoodByeLWtIn(UINT wParam, long lParam);
+	long			UpdateLWtIn(UINT wParam, long lParam);
+	//////////////////////////////////////////////////////
+	virtual STALPROC	GetStaLProc(){return m_StaLProc;};
+	virtual void		SetStaLProc(STALPROC b)
+						{
+							m_StaLProcOld	= m_StaLProc;
+							m_StaLProc		= b;
+						};
+	BOOL		GetTx(){return m_bTx;};
+	void		SetTx(BOOL b){ m_bTx = b;};
+	BOOL		GetTy(){return m_bTy;};
+	void		SetTy(BOOL b){ m_bTy = b;};
+	BOOL		GetTz(){return m_bTz;};
+	void		SetTz(BOOL b){ m_bTz = b;};
+	BOOL		GetRx(){return m_bRx;};
+	void		SetRx(BOOL b){ m_bRx = b;};
+	BOOL		GetRy(){return m_bRy;};
+	void		SetRy(BOOL b){ m_bRy = b;};
+	BOOL		GetRz(){return m_bRz;};
+	void		SetRz(BOOL b){ m_bRz = b;};
+
+  				
+		
+protected:
+
+
+	virtual void	ElementLeftDown_SLD();				// described in derived also
+	virtual void	ElementLeftUp_SLD(CPoint point);	// described in derived also
+	////////////////////////////////////////////////////////////////////////////////
+	void		SetMainType_SLD();
+	////////////////////////////////////////////////////////////////////////////////
+	int			Get_Values(STALPROC StaLProc);
+	int			Get_Values_ManyDirections(CString& Nid,STALPROC StaLProc);
+	void		UpdateStaticDlg_TRUE();
+	void		UpdateStaticDlg_FALSE();
+	int			FillStLCard(STALCARD& StLCard,CString* pID);
+	////////////////////////
+	int			FillInfo_3(CString& Nid,STALCARD stLCard,char* buf, int jStart);
+	int			FillInfo_6(CString& Nid,STALCARD stLCard,char* buf, int jStart);
+	/////////////////////////////////////////////////////////////////////////////// NodeStatic
+	int			ShowInfo_NodeStaticLoad(CDrNode* pDrNode, char* buf, int jStart);
+	int 		ShowNodeStaticLoad(CString* pID,int nHowMany);
+	int 		LeftUp_NodeStatic(CPoint point);
+	/////////////////////////////////////////////////////////////////////////////// CurveStatic
+	int			Get_Values_Iso_Node(CDrNode* pNodeIsoTo,STALPROC StaLProc);
+	int			Get_Values_NonIso_Cur(STALPROC StaLProc);
+	int			Get_Values_Iso_Cur(CDrCurve* pCurveIsoTo, STALPROC StaLProc);
+	int			ShowInfo_CurveStaticLoad(CDrCurve* pDrCurve, char* buf, int jStart);
+	int			ShowCurveStaticLoad(CString* pID,int nHowMany);
+	int			LeftUp_CurveStatic(CPoint point);
+	void		RemoveMostListsFromCurve(CDrCurve* pAdd);
+	int			Generate_IsoCurveControls(CDrCurve* pCurveIsoTo,int indexC,CString* pID,BOOL bTran);
+//	int			FillUp_ValList_Cur(CDrCurve* pCurve,CDrCurve* pSCurve);
+	/////////////////////////////////////////////////////////////////////////////// PatchStatic
+	int			Get_Values_NonIso_Pat(STALPROC StaLProc);
+	int			ShowInfo_PatchStaticLoad(CDrPatch* pDrPatch, char* buf, int jStart);
+	int			ShowPatchStaticLoad(CString* pID,int nHowMany);
+	int			LeftUp_PatchStatic(CPoint point);
+	void		RemoveMostListsFromPatch(CDrPatch* pAdd);
+//	int			FillUp_ValList_Pat(CDrPatch* pPatch,CDrPatch* pSPatch);
+	int			Get_Values_Iso_WORLD(CString& wid,WORLD& NodeT,WORLD& NodeR, STALPROC StaLProc);
+	int			Get_Values_Iso_Pat_Curve(CDrCurve* pCurveIsoTo,int indexCT,int indexCR
+																	,STALPROC StaLProc);
+	///////////////////////
+	int			Get_Values_Iso_Pat(CDrPatch* pPatchIsoTo, STALPROC StaLProc);
+	int			Get_Values_Iso_EXTRUDE_Type1(CDrPatch* pPatchIsoTo, STALPROC StaLProc);
+	int			Get_Values_Iso_EXTRUDE_Type2(CDrPatch* pPatchIsoTo, STALPROC StaLProc);
+	int			Get_Values_Iso_ROTATE(CDrPatch* pPatchIsoTo, STALPROC StaLProc);
+	int			Get_Values_Iso_LOFT2(CDrPatch* pPatchIsoTo, STALPROC StaLProc);
+	int			Get_Values_Iso_DUCT(CDrPatch* pPatchIsoTo, STALPROC StaLProc);
+	int			Get_Values_Iso_SWEEP(CDrPatch* pPatchIsoTo, STALPROC StaLProc);
+	int			Get_Values_Iso_COONS(CDrPatch* pPatchIsoTo, STALPROC StaLProc);
+	///////////////////////
+	int			Generate_IsoPatchControls(CDrPatch* pPatchIsoTo,CString* pID,BOOL bTran);
+	int			SetUp_IsoPatchControls(CDrPatch* pPatchIsoTo,int indexP,CString* pID,BOOL bTran);
+	int			Generate_IsoControls_EXTRUDE(CDrPatch* pCurrentSPatch,CString* pID);
+	int			Generate_IsoControls_ROTATE(CDrPatch* pCurrentSPatch,CString* pID);
+	int			Generate_IsoControls_LOFT2(CDrPatch* pCurrentSPatch,CString* pID);
+	int			Generate_IsoControls_DUCT(CDrPatch* pCurrentSPatch,CString* pID);
+	int			Generate_IsoControls_SWEEP(CDrPatch* pCurrentSPatch,CString* pID);
+	int			Generate_IsoControls_COONS(CDrPatch* pCurrentSPatch,CString* pID);
+	//////////////////////////////////////////////////////////////////////////////////// Solid
+	int			ShowSolidStaticLoad(CString* pID,int nHowMany);
+
+
+protected:  
+// Attributes
+
+
+//	UINT		m_nMainType;		// NSL_FORCE,CSL_FORCE etc ( Already in SupMouse.h)
+//	BOOL		m_bTanHide;			// for NodeBased Input = TRUE/ for CurveBased etc = FALSE
+//	BOOL		m_bIdBHide;			// NodeB defining skewed curve,patch etc., but NOT Node
+	//////////////////////////
+	CDrNode*	m_pSNodeT;
+	CDrNode*	m_pSNodeR;
+	////////////////////////////////////////////////////////////////// Curve
+	CDListMgr	m_NodeListT;
+	CDListMgr	m_NodeListR;
+	//////////////////////////
+	CDlg_StLI*	m_pStLInDlg;                                                                                
+    int			m_LastStLNum;	// Static Load Naming
+    int			m_LastStCNum;	// Iso or NonIso Curve Naming
+	/////////////////////////////////////////// Static
+	CString		m_CurrentStLID;
+	CString		m_CurrentStLIDOld;
+	CString		m_CurrentStCID;
+	CString		m_CurrentStCIDOld;
+	CDrCurve	*m_pCurrentSCurveT[4];	// Iso or NonIso curve
+	CDrCurve	*m_pCurrentSCurveR[4];	// Iso or NonIso curve
+	CDrStatic*	m_pCurrentStaL;
+	STALPROC	m_StaLProcOld;
+	STALPROC	m_StaLProc;
+	BOOL    	m_bTx;
+	BOOL    	m_bTy;
+	BOOL    	m_bTz;
+	BOOL    	m_bRx;
+	BOOL    	m_bRy;
+	BOOL    	m_bRz;
+	double    	m_dTx;			// also for Prs,Thr and LWt
+	double    	m_dTy;			// also for Prs,Thr and LWt
+	double    	m_dTz;			// also for             LWt
+	double    	m_dRx;
+	double    	m_dRy;
+	double    	m_dRz;
+	CString		m_cid_Iso;		// Iso  or NonIso to this Curve				
+	CString		m_cid_Parent;	// for both Iso & NonIso(m_CID) ( Generated or Input Curve)				
+//	CString		m_aNid;			// already in supMpouse
+								// NodeToID for StaticNodeInput (Skewed), but
+								// NodeFromID for StaticCurveInput (Skewed)
+//	CString		m_bNid;			// NodeToID for StaticCurveInput (Skewed)
+//	BOOL		m_bTan;			// already in supMpouse
+	BOOL		m_bIso;
+	BOOL		m_bSkewed;
+	/////////////////////// NonIso
+	BOOL		m_bNonIso;
+	CString		m_CID;
+	BOOL		m_bIncrement;
+	CString		m_Orient;
+	double		m_dScale;
+	double		m_dStep;
+	double		m_dStart;
+	/////////////////////////////////////////////////////////////////// Patch
+    int			m_LastStPNum;	// Iso or NonIso Patch Naming
+	CString		m_CurrentStPID;
+	CString		m_CurrentStPIDOld;
+	CDrPatch	*m_pCurrentSPatchT[6];	// Iso or NonIso Patch
+	CDrPatch	*m_pCurrentSPatchR[6];	// Iso or NonIso Patch
+	CDListMgr	m_CurveListT;
+	CDListMgr	m_CurveListR;
+	WORLD		m_Len_T;
+	WORLD		m_Len_R;
+	CString		m_FromID_T; 
+	CString		m_FromID_R; 
+	CString		m_ToID_T; 
+	CString		m_ToID_R; 
+	//////////////////////////
+
+/*
+	/////////////////////////////////////////// D_R
+	CDrD_R*		m_pCurrentD_R;
+	/////////////////////////////////////////// Prs
+	CDrPrs*		m_pCurrentPrs;
+	/////////////////////////////////////////// Thr
+	CDrThr*		m_pCurrentThr;
+	/////////////////////////////////////////// LWt
+	CDrLWt*		m_pCurrentLWt;
+*/
+	BOOL		m_bGravMul;
+
+
+
+//Operations
+public:
+
+	~CSLDMouse();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CSLDMouse)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

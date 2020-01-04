@@ -1,0 +1,13 @@
+#define IDD_OK             1
+#define IDD_ESC            2
+#define IDD_ADD            101
+#define IDD_DEL            102
+#define IDD_ID             103
+#define IDD_LIST           104
+#define IDD_EDIT           105
+#define IDD_NODE_X         201
+#define IDD_NODE_Y         202
+#define IDD_NODE_Z         203
+#define IDD_NODE_NID_R     204
+#define IDD_NODE_SUP_ID    205
+#define IDD_NODE_CONTROL   206

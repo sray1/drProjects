@@ -1,0 +1,66 @@
+; EBox_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	EBox_D32
+DESCRIPTION  'ElemBox DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitEBoxDLL												@2        										
+
+
+; CMeshBox0
+	; Constructor and Destructor
+
+	??1CMeshBox0@@UAE@XZ
+	??0CMeshBox0@@QAE@XZ
+
+
+; CMeshBox1
+	; Constructor and Destructor
+
+	??1CMeshBox1@@UAE@XZ
+	??0CMeshBox1@@QAE@XZ
+
+
+; CMeshBox2
+	; Constructor and Destructor
+
+	??1CMeshBox2@@UAE@XZ
+	??0CMeshBox2@@QAE@XZ
+
+
+; CMeshBox3
+	; Constructor and Destructor
+
+	??1CMeshBox3@@UAE@XZ
+	??0CMeshBox3@@QAE@XZ
+	
+
+; CEoxWnd
+
+?Create@CEoxWnd@@QAEHPAVCWnd@@VCRect@@I@Z
+?GetHeight@CEoxWnd@@QAEIXZ
+?GetWidth@CEoxWnd@@QAEIXZ
+
+
+
+
+	
+; CPaletteBar
+	
+;?classCPaletteBar@CPaletteBar@@2UCRuntimeClass@@A
+?messageMap@CPaletteBar@@1UAFX_MSGMAP@@B
+;public Hittest
+;?HitTest@CPaletteBar@@UAEHVCPoint@@@Z
+;protected Hittest
+?HitTest@CPaletteBar@@MAEHVCPoint@@@Z
+??1CPaletteBar@@UAE@XZ
+??0CPaletteBar@@QAE@XZ
+
+
+

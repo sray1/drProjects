@@ -1,0 +1,75 @@
+ // ELMouse.h : header file
+//
+#ifndef _MI_2SPN_H 
+#define _MI_2SPN_H 
+
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+                    
+#include "DrMesh2D.h"
+#include "MI_1SPN.h"
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class AFX_EXT_CLASS CMI_2SPN : public CMI_1SPN
+{
+public:
+
+	CMI_2SPN();
+//////////////////////////////////////
+	DECLARE_SERIAL(CMI_2SPN)
+//////////////////////////////////////
+
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+	int		SpawnMESH2DShowingDlg(CDrMesh2D* pNewMESH2D,CDrMesh2D* pOldMESH2D,
+											CDrObject* pContextObj,UINT nContextType); 
+	int		SpawnMESH2DWithoutDlg(CDrMesh2D* pNewMESH2D,CDrMesh2D* pOldMESH2D,pMATRIX pXFMat,
+										CString* pCid,CDrObject* pContextObj,UINT nContextType);
+	//////////////////////////////////////////////////////////////////////////////////
+	int		FillSpawnedMESH2DDlgDataBase(CDrMesh2D* pDrMESH2D,CString& Cid,CString& ParentCid);
+    				
+		
+protected:
+
+	int		GetInfoFromDlg(CDrMesh2D* pNewMESH2D, CDrMesh2D* pOldMESH2D);
+	int		SpawnMESH2D(CDrMesh2D* pOldMESH2D, pMATRIX pXFMat);
+	int		SpawnFE0DListinMESH2D(CDListMgr* pFillList, pMATRIX pXFMat, BOOL bCNode);
+	void	ReciprocateMESH2DNodes(CDListMgr* pList);
+
+	
+
+protected:
+	
+	CDrMesh2D*	m_pDrMESH2D;
+	//////////////////////
+
+    
+//Operations
+public:
+
+	~CMI_2SPN();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CMI_2SPN)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

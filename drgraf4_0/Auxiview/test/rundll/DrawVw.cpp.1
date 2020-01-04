@@ -1,0 +1,167 @@
+// DrawVw.cpp : implementation file
+//
+
+#include "stdafx.h"
+#include "rundll.h"
+#include "DrawVw.h"
+
+#ifdef _DEBUG
+#define new DEBUG_NEW
+#undef THIS_FILE
+static char THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+// CDrawVw
+
+IMPLEMENT_DYNCREATE(CDrawVw, CView)
+
+CDrawVw::CDrawVw()
+{
+	m_bDrag = FALSE;
+}
+
+CDrawVw::~CDrawVw()
+{
+}
+
+
+BEGIN_MESSAGE_MAP(CDrawVw, CView)
+	//{{AFX_MSG_MAP(CDrawVw)
+	ON_WM_LBUTTONDOWN()
+	ON_WM_LBUTTONUP()
+	ON_WM_MOUSEMOVE()
+	ON_WM_RBUTTONDOWN()
+	ON_WM_RBUTTONUP()
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CDrawVw drawing
+
+void CDrawVw::OnDraw(CDC* pDC)
+{
+	CDocument* pDoc = GetDocument();
+	// TODO: add draw code here
+	CRect rect;
+	CPen pen, *oldpen;
+	CBrush br,*oldbr;
+
+	pen.CreatePen(PS_SOLID,2,RGB(0,255,0));
+	br.CreateSolidBrush(RGB(0,0,255));
+	oldpen = pDC->SelectObject(&pen);
+	oldbr = pDC->SelectObject(&br);
+	GetClientRect(&rect);
+	rect.InflateRect(-1,-1);
+	pDC->Rectangle(&rect);
+	pDC->SelectObject(oldpen);
+	pen.DeleteObject();
+	pDC->SelectObject(oldbr);
+	br.DeleteObject();
+	pen.CreatePen(PS_SOLID,2,RGB(255,255,0));
+	oldpen = pDC->SelectObject(&pen);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CDrawVw diagnostics
+
+#ifdef _DEBUG
+void CDrawVw::AssertValid() const
+{
+	CView::AssertValid();
+}
+
+void CDrawVw::Dump(CDumpContext& dc) const
+{
+	CView::Dump(dc);
+}
+#endif //_DEBUG
+
+/////////////////////////////////////////////////////////////////////////////
+// CDrawVw message handlers
+
+void CDrawVw::OnLButtonDown(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	SetCapture();
+	m_OldPt = point;
+	m_NewPt = point;
+	m_bDrag = TRUE;
+
+	CView::OnLButtonDown(nFlags, point);
+}
+
+void CDrawVw::OnLButtonUp(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	ReleaseCapture();
+	if (m_bDrag == TRUE)
+		m_bDrag = FALSE;
+
+	Invalidate();
+	UpdateWindow();
+	
+	CClientDC dc(this);
+
+	int oldROP2 = dc.SetROP2(R2_NOT);		// inverted pen
+	CPen pen(PS_DASH, 1, RGB(255,255,255));	
+	CPen *oldpen = dc.SelectObject(&pen);
+
+	dc.MoveTo(m_OldPt);		// erase old line
+	dc.LineTo(m_NewPt);
+	dc.SetROP2(oldROP2);
+	
+	CRect rect(m_OldPt,m_NewPt);
+	CBrush brush;
+	brush.CreateSolidBrush(RGB(0,0,0));
+	CBrush *oldbrush = dc.SelectObject(&brush);
+	dc.Rectangle(&rect);
+
+	
+	dc.SelectObject(oldpen);
+	dc.SelectObject(oldbrush);
+	pen.DeleteObject();
+	brush.DeleteObject();
+
+	CView::OnLButtonUp(nFlags, point);
+
+}
+
+void CDrawVw::OnMouseMove(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	if (m_bDrag)
+	{
+		CClientDC dc(this);
+		int oldROP2 = dc.SetROP2(R2_NOT);                       // inverted pen
+		CPen pen(PS_DASH, 1, RGB(255,255,255));   // color doesn't matter
+		CPen *oldpen = dc.SelectObject(&pen);
+
+		dc.MoveTo(m_OldPt);		// erase old line
+		dc.LineTo(m_NewPt);
+
+		dc.MoveTo(m_OldPt);		// draw new line
+		dc.LineTo(point);
+
+		dc.SetROP2(oldROP2);	
+		dc.SelectObject(&oldpen);
+		pen.DeleteObject();
+		m_NewPt = point;		// save current mouse location
+	}		
+
+	CView::OnMouseMove(nFlags, point);
+}
+
+void CDrawVw::OnRButtonDown(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	CView::OnRButtonDown(nFlags, point);
+}
+
+void CDrawVw::OnRButtonUp(UINT nFlags, CPoint point) 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+	CView::OnRButtonUp(nFlags, point);
+}

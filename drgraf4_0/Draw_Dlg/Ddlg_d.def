@@ -1,0 +1,34 @@
+; DDlg_D.def -- for CDrawDlg stuff --  DEBUG version
+
+LIBRARY	DDlg_D32
+DESCRIPTION  'DrawDlgs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitDDlgDLL												@2 NONAME
+
+
+; CDDlgMgr
+;	; Constructor and Destructor
+
+?DoModal_Label_Edit@CDDlgMgr@@QAEIH@Z
+?DoModal_Label_Insert@CDDlgMgr@@QAEIHUtagPOINT@@@Z
+?DoModal_Grid_Insert@CDDlgMgr@@QAEIXZ
+
+
+
+; CEditLabel
+;	; Constructor and Destructor
+    
+
+
+; CInTextDlg
+;	; Constructor and Destructor
+
+
+  

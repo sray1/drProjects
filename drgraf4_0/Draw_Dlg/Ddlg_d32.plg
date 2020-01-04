@@ -1,0 +1,53 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Ddlg_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/Ddlgrsrc.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\DRAW_DLG\Ddlgrsrc.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP9.tmp" with contents
+[
+/nologo /MDd /W4 /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/Ddlg_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\DRAW_DLG\Ddlgdll.cpp"
+"C:\drgraf4_0\DRAW_DLG\Ddlgmgr.cpp"
+"C:\drgraf4_0\DRAW_DLG\Dlg_elab.cpp"
+"C:\drgraf4_0\DRAW_DLG\Dlg_grid.cpp"
+"C:\drgraf4_0\DRAW_DLG\Dlg_ilab.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP9.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSPA.tmp" with contents
+[
+OGen_D32.lib Draw_D32.lib Spec_D32.lib Mesh_D32.lib Elem_D32.lib OMgr_D32.lib Dr3D_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/Ddlg_d32.pdb" /map:".\Debug\Ddlg_d32..map" /debug /machine:IX86 /def:".\Ddlg_d.def" /out:"c:\drgraf4_0\applic\Debug\Ddlg_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Ddlg_d32.lib" 
+.\Debug\Ddlgdll.obj
+.\Debug\Ddlgmgr.obj
+.\Debug\Dlg_elab.obj
+.\Debug\Dlg_grid.obj
+.\Debug\Dlg_ilab.obj
+.\Debug\Ddlgrsrc.res
+\drgraf4_0\applic\Debug\Draw_d32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSPA.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Ddlgdll.cpp
+c:\drgraf4_0\draw_dlg\ddlgdll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Ddlgmgr.cpp
+Dlg_elab.cpp
+Dlg_grid.cpp
+Dlg_ilab.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\Ddlg_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Ddlg_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug\Ddlg_d32.lib and object c:\drgraf4_0\applic\Debug\Ddlg_d32.exp
+
+
+
+<h3>Results</h3>
+Ddlg_d32.dll - 0 error(s), 4 warning(s)
+</pre>
+</body>
+</html>

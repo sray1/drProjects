@@ -1,0 +1,255 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "sdlgrsrc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IMAGE1DOWN              BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "D:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1U.BMP"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PEN DIALOG DISCARDABLE  100, 60, 159, 78
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "PEN"
+FONT 12, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,120,4,36,20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,120,
+                    56,36,20
+    LISTBOX         IDC_LIST_COLOR,8,20,36,39,LBS_SORT | LBS_OWNERDRAWFIXED | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Color:",IDC_STATIC,8,8,32,7
+    LTEXT           "Style:",IDC_STATIC,48,8,30,7
+    COMBOBOX        IDC_COMBO_STYLE,48,20,60,64,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Width in pixels:",IDC_STATIC,8,68,52,7
+    EDITTEXT        IDC_EDIT_WIDTH,60,64,16,12,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_SPIN_WIDTH,"msctls_updown32",UDS_SETBUDDYINT | 
+                    UDS_ALIGNRIGHT | UDS_AUTOBUDDY | UDS_NOTHOUSANDS,95,64,7,
+                    12
+END
+
+IDD_OBJ3D DIALOG DISCARDABLE  0, 0, 271, 90
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "SubStructure "
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,216,4,50,29
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,216,
+                    56,50,30
+    LISTBOX         IDC_DRAW_LIST,8,24,120,60,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "SubStructures",IDC_STATIC,132,4,80,80
+    CONTROL         "ALL Active",IDC_DRAW_ALLACTIVE,"Button",
+                    BS_AUTORADIOBUTTON,142,20,65,10
+    CONTROL         "Toggle ALL",IDC_TOGGLE_ALL,"Button",BS_AUTORADIOBUTTON,
+                    142,34,65,10
+    CONTROL         "Active/InActive",IDC_CHANGE,"Button",BS_AUTORADIOBUTTON,
+                    142,49,65,10
+    CONTROL         "Set Current",IDC_CURRENT,"Button",BS_AUTORADIOBUTTON,
+                    142,65,60,10
+    LTEXT           " #          ID                 Status",IDC_STATIC,8,12,
+                    120,8
+END
+
+IDD_PATCH DIALOG DISCARDABLE  0, 0, 279, 122
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Finite Element Patch "
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,196,92,50,
+                    29
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,40,
+                    92,50,28
+    LISTBOX         IDC_DRAW_LIST,12,20,154,64,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Components",IDC_STATIC,196,8,80,80
+    CONTROL         "ALL Active",IDC_DRAW_ALLACTIVE,"Button",
+                    BS_AUTORADIOBUTTON,206,23,65,10
+    CONTROL         "Toggle ALL",IDC_TOGGLE_ALL,"Button",BS_AUTORADIOBUTTON,
+                    206,38,65,10
+    CONTROL         "Active/InActive",IDC_CHANGE,"Button",BS_AUTORADIOBUTTON,
+                    206,53,65,10
+    CONTROL         "Set Current",IDC_CURRENT,"Button",BS_AUTORADIOBUTTON,
+                    206,68,60,10
+    LTEXT           " #          ID                         Status",
+                    IDC_STATIC,12,8,152,8
+END
+
+IDD_UNIT DIALOG DISCARDABLE  0, 0, 149, 45
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Drawing Unit"
+FONT 12, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,110,5,34,16
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,110,
+                    26,34,16
+    COMBOBOX        IDC_COMBO_UNITS,13,27,83,60,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Available Units",IDC_STATIC,26,12,55,8
+END
+
+IDD_PRECISION DIALOG DISCARDABLE  0, 0, 132, 64
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Drawing Precision"
+FONT 12, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,76,36,40,20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,10,
+                    36,38,20
+    LTEXT           "Number of Decimal Places :",IDC_STATIC,10,10,95,8
+    EDITTEXT        IDC_PRECISION,110,5,10,15,ES_AUTOHSCROLL
+END
+
+IDD_SCALE_FACTOR DIALOG DISCARDABLE  0, 0, 109, 50
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Scale Factor"
+FONT 12, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,64,24,36,20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,5,
+                    25,35,19
+    LTEXT           "Scale Factor      1:",IDC_STATIC,9,8,60,12
+    EDITTEXT        IDC_SCALE_FACTOR,70,5,30,12,ES_AUTOHSCROLL
+END
+
+IDD_LAYER DIALOG DISCARDABLE  0, 0, 251, 92
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Object Layer Status"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,195,5,50,29
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,195,
+                    55,50,30
+    LISTBOX         IDC_DRAW_LIST,11,25,85,60,LBS_NOINTEGRALHEIGHT | 
+                    WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Layers",IDC_STATIC,100,5,80,80
+    CONTROL         "ALL Active",IDC_DRAW_ALLACTIVE,"Button",
+                    BS_AUTORADIOBUTTON,110,20,65,10
+    CONTROL         "Toggle ALL",IDC_TOGGLE_ALL,"Button",BS_AUTORADIOBUTTON,
+                    110,35,65,10
+    CONTROL         "Active/InActive",IDC_CHANGE,"Button",BS_AUTORADIOBUTTON,
+                    110,50,65,10
+    CONTROL         "Set Current",IDC_CURRENT,"Button",BS_AUTORADIOBUTTON,
+                    110,65,60,10
+    LTEXT           "Layer#     Status",IDC_STATIC,11,15,75,8
+END
+
+IDD_INSTANCE DIALOG DISCARDABLE  0, 0, 177, 114
+STYLE DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+CAPTION "Instance Transform "
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,104,8,50,28
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,104,
+                    56,50,28
+    EDITTEXT        IDC_IN_PITCH,52,8,40,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IN_ROLL,52,40,40,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_IN_YAW,52,24,40,12,ES_AUTOHSCROLL
+    RTEXT           "X: Pitch",IDC_STATIC,8,12,36,7
+    RTEXT           "Y: Yaw",IDC_STATIC,12,28,32,7
+    RTEXT           "Z: Roll",IDC_STATIC,8,44,36,7
+    EDITTEXT        IDC_IN_TRANS,52,56,40,12,ES_AUTOHSCROLL
+    RTEXT           "T: Translate",IDC_STATIC,4,60,40,7
+    LTEXT           "NOTE:  Input for X, Y && Z Rotations in Degrees",
+                    IDC_STATIC,4,88,160,7
+    LTEXT           "           Translations in World Coordinates",
+                    IDC_STATIC,4,100,172,7
+    EDITTEXT        IDC_IN_SCALE,52,72,40,12,ES_AUTOHSCROLL
+    RTEXT           "S: Scale",IDC_STATIC,4,76,40,7
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_UNIT DLGINIT
+BEGIN
+    IDC_COMBO_UNITS, 0x403, 7, 0
+0x6e49, 0x6863, 0x7365, "\000" 
+    IDC_COMBO_UNITS, 0x403, 20, 0
+0x6e49, 0x6863, 0x7365, 0x2d20, 0x4620, 0x4152, 0x5443, 0x4f49, 0x414e, 
+0x004c, 
+    IDC_COMBO_UNITS, 0x403, 5, 0
+0x6546, 0x7465, "\000" 
+    IDC_COMBO_UNITS, 0x403, 18, 0
+0x6546, 0x7465, 0x2d20, 0x4620, 0x4152, 0x5443, 0x4f49, 0x414e, 0x004c, 
+
+    IDC_COMBO_UNITS, 0x403, 6, 0
+0x694d, 0x656c, 0x0073, 
+    IDC_COMBO_UNITS, 0x403, 12, 0
+0x694d, 0x6c6c, 0x6d69, 0x7465, 0x7265, 0x0073, 
+    IDC_COMBO_UNITS, 0x403, 12, 0
+0x6543, 0x746e, 0x6d69, 0x7465, 0x7265, 0x0073, 
+    IDC_COMBO_UNITS, 0x403, 7, 0
+0x656d, 0x6574, 0x7372, "\000" 
+    IDC_COMBO_UNITS, 0x403, 11, 0
+0x694b, 0x6f6c, 0x656d, 0x6574, 0x7372, "\000" 
+    0
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "sdlgrsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "SDlgMgr Resource String"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////

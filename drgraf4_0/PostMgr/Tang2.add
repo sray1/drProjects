@@ -1,0 +1,670 @@
+int CMI_Tang2::Post_OneTriangularPatch_LIN(CDrMesh2D* pMesh,CDrPatch* pDrPatch,
+								int iOutGlo,int jOutGlo,int TriangularPatchType)
+{
+	CDListMgr* 	pTriList = m_pDrPatch->GetTriangleList();											
+	/////////////////////////////////////////////////////
+	int i,j,nP,nB1,nB2,nTri,nTr1,nTr2,nOutPerSeg,nDeg,nCount=0;
+	///////////////////////
+	nP	= nOutSeg + 1;		// No. of Vertices on each side	
+	////////////////////////////////////////
+	nDeg		= 1;
+	///////////////////////////
+	nB1		= (nP - 1)/nDeg;			// No. of Type1 Triangle Side Controls	
+	nB2		= (nP - 1 - nDeg)/nDeg;		// No. of Type2 Triangle Side Controls	
+	nTr1	= (nB1+1)*nB1/2;			// No. of Type1 Triangles	
+	nTr2	= (nB2+1)*nB2/2;			// No. of Type2 Triangles	
+	nTri	= nTr1 + nTr2;				// No. of Triangles	
+	///////////////////////////////////////////// Barycentric Coords
+	//
+	//
+	//			v,j
+	//			
+	//			|
+	//			|
+	//			o
+	//			| \
+	//		u=0 |   \ w=0
+	//			|     \
+	//			|-------o ----  u,i
+	//				v=0
+	///////////////////////////////////////////// Type 2 Triangles
+	//
+	//		Triangle K:
+	//
+	//				   i
+	//
+	//				   |
+	//				   |
+	//			N1     P2		
+	//			o------o------o N3
+	//			 \	K1 |\ K3  |
+	//			   \P1 o--oP4 o
+	//				 \ |-K--\ |
+	//				P0 o---o--o P5 ----- j
+	//					\ P3  |
+	//					  \K2 |
+	//						\ |
+	//						  o N2
+	///////////////////////////////////////////// Type 1 Triangles
+	//
+	//		Triangle K:
+	//						  i
+	//				   N2     
+	//				   o      |
+	//				   | \    |
+	//				   |K2 \  |
+	//			       | P3  \
+	//			    P5 o--o---o P0 ----- j
+	//			       |\--K--| \
+	//			       |P4o---oP1 \
+	//				   | K3 \-| K1  \
+	//				N3 o------o ----- o N1
+	//				          P2
+	//				        
+	//
+	/////////////////////////////////////////////////////////// LOOP
+	int nResult,nC,nCount1=0,nCount2=0,nPm1 = nP-nDeg-1;
+	///////////////////
+	for(i=0;i<=nPm1;i += nDeg)
+	{
+		////////////////////////////////
+		for(j=0;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Get:Type 1
+			GetTriangleVertexInfo_1_Lin(i, j, nP, pIndex);
+			///////////////////////////////////////////////////////
+			if(TriangularPatchType == 1)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_1_Lin(iGlo + i, jGlo + j , nP, pIndex);
+			else
+			if(TriangularPatchType == 2)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_1_Lin(iGlo - i, jGlo - j , nP, pIndex);
+			else
+			{
+				//////////////////
+				AfxMessageBox("CMI_Tang2::Post_PatchNodes_FE0D_3\nnType !==1 or 2");
+				return -1;
+			}
+			////////
+			if(nC<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nCall GetTriangleVertexInfo_1_Lin");
+				return - 1;
+			}
+			/////////////////////////////////////////////////// Post
+			nResult = Post_TRIANGLE(pMesh,pIndex,nElemType);
+			if(nResult<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nPost_TRIANGLE");
+				return - 1;
+			}
+			nCount1++;
+		}
+		///////////////////////////////////////////// Is Type2?
+		if(i==nPm1)
+			continue;
+		/////////////////////
+		for(j=nDeg;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Get:Type 2
+			GetTriangleVertexInfo_2_Lin(i, j, nP, pIndex);
+			///////////////////////////////////////////////////////
+			if(TriangularPatchType == 1)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_2_Lin(iGlo + i, jGlo + j , nP, pIndex);
+			else
+			if(TriangularPatchType == 2)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_2_Lin(iGlo - i, jGlo - j , nP, pIndex);
+			////////
+			if(nC<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nCallGetTriangleVertexInfo_2_Lin");
+				return - 1;
+			}
+			/////////////////////////////////////////////////// Post
+			nResult = Post_TRIANGLE(pMesh,pIndex,nElemType);
+			if(nResult<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nPost_TRIANGLE");
+				return - 1;
+			}
+			nCount2++;
+			/////////////////
+		}
+	}
+	//////////////////
+	if(nCount1 != nTr1)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount1 != nTr1!");
+		return - 1;
+	}
+	if(nCount2 != nTr2)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount2 != nTr2!");
+		return - 1;
+	}
+	///////////////////////////
+	nCount = nCount1 + nCount2;
+	if(nCount != nTri)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount != nTri!");
+		return - 1;
+	}
+	return 0;
+	
+}
+
+int CMI_Tang2::GetTriangleVertexInfo_1_Lin(int i, int j, int nP, pINT pIndex[])
+{
+	int nDeg		= 1;
+	////////////////////////////////
+	int P[3],m;
+//	int K;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  3 for Linear
+	//////////////////////////////////////////////// Current Triangle & Vertices
+//	K		= BARY2LIN_TRI_1_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j+1,nP);
+	P[2]	= BARY2LIN_PT(i+1	,j	,nP);
+	////////////////////////////////////// SAVE
+	for (m = 0;m<3;m++)
+		pIndex[m] = P[m];
+	/////////
+	return 0;
+
+}
+
+int CMI_Tang2::GetTriangleVertexInfo_2_Lin(int i, int j, int nP, pINT pIndex[])
+{
+	int P[3],m;
+//	int K;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  3 for Linear
+	//////////////////////////////////////////////// Current Triangle & Vertices
+//	K		= BARY2LIN_TRI_2_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j-1,nP);
+	P[2]	= BARY2LIN_PT(i-1	,j	,nP);
+	////////////////////////////////////// SAVE
+	for (m = 0;m<3;m++)
+		pIndex[m] = P[m];
+	/////////
+	return 0;
+}
+
+int CMI_Tang2::Post_OneTriangularPatch_QUAD(CDrMesh2D* pMesh,CDrPatch* pDrPatch,
+								int iOutGlo,int jOutGlo,int TriangularPatchType)
+{
+	CDListMgr* 	pTriList = m_pDrPatch->GetTriangleList();											
+	/////////////////////////////////////////////////////
+	int i,j,nP,nB1,nB2,nTri,nTr1,nTr2,nOutPerSeg,nDeg,nCount=0;
+	///////////////////////
+	nP	= m_nOut_SCon;		// No. of Controls on each side	
+	////////////////////////////////////////
+	nOutPerSeg	= m_pNum_t_S[0];
+	nDeg		= m_nOrder_S - 1;
+	///////////////////////////
+	nB1		= (nP - 1)/nDeg;			// No. of Type1 Triangle Side Controls	
+	nB2		= (nP - 1 - nDeg)/nDeg;		// No. of Type2 Triangle Side Controls	
+	nTr1	= (nB1+1)*nB1/2;			// No. of Type1 Triangles	
+	nTr2	= (nB2+1)*nB2/2;			// No. of Type2 Triangles	
+	nTri	= nTr1 + nTr2;				// No. of Triangles	
+	///////////////////////////////////////////// Barycentric Coords
+	//
+	//
+	//			v,j
+	//			
+	//			|
+	//			|
+	//			o
+	//			| \
+	//		u=0 |   \ w=0
+	//			|     \
+	//			|-------o ----  u,i
+	//				v=0
+	///////////////////////////////////////////// Type 2 Triangles
+	//
+	//		Triangle K:
+	//
+	//				   i
+	//
+	//				   |
+	//				   |
+	//			N1     P2		
+	//			o------o------o N3
+	//			 \	K1 |\ K3  |
+	//			   \P1 o--oP4 o
+	//				 \ |-K--\ |
+	//				P0 o---o--o P5 ----- j
+	//					\ P3  |
+	//					  \K2 |
+	//						\ |
+	//						  o N2
+	///////////////////////////////////////////// Type 1 Triangles
+	//
+	//		Triangle K:
+	//						  i
+	//				   N2     
+	//				   o      |
+	//				   | \    |
+	//				   |K2 \  |
+	//			       | P3  \
+	//			    P5 o--o---o P0 ----- j
+	//			       |\--K--| \
+	//			       |P4o---oP1 \
+	//				   | K3 \-| K1  \
+	//				N3 o------o ----- o N1
+	//				          P2
+	//				        
+	//
+	/////////////////////////////////////////////////////////// LOOP
+	int nResult,nC,nCount1=0,nCount2=0,nPm1 = nP-nDeg-1;
+	///////////////////
+	for(i=0;i<=nPm1;i += nDeg)
+	{
+		////////////////////////////////
+		for(j=0;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Get:Type 1
+			GetTriangleVertexInfo_1_Quad(i, j, nP, pIndex);
+			///////////////////////////////////////////////////////
+			if(TriangularPatchType == 1)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_1_Quad(iGlo + i, jGlo + j , nP, pIndex);
+			else
+			if(TriangularPatchType == 2)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_1_Quad(iGlo - i, jGlo - j , nP, pIndex);
+			////////
+			if(nC<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nCall GetTriangleVertexInfo_1_Quad");
+				return - 1;
+			}
+			/////////////////////////////////////////////////// Post
+			nResult = Post_TRIANGLE(pMesh,pIndex,nElemType);
+			if(nResult<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nPost_TRIANGLE");
+				return - 1;
+			}
+			nCount1++;
+		}
+		///////////////////////////////////////////// Is Type2?
+		if(i==nPm1)
+			continue;
+		/////////////////////
+		for(j=nDeg;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Get:Type 2
+			GetTriangleVertexInfo_2_Quad(i, j, nP, pIndex);
+			///////////////////////////////////////////////////////
+			if(TriangularPatchType == 1)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_2_Quad(iGlo + i, jGlo + j , nP, pIndex);
+			else
+			if(TriangularPatchType == 2)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_2_Quad(iGlo - i, jGlo - j , nP, pIndex);
+			////////
+			if(nC<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nCallGetTriangleVertexInfo_2_Quad");
+				return - 1;
+			}
+			/////////////////////////////////////////////////// Post
+			nResult = Post_TRIANGLE(pMesh,pIndex,nElemType);
+			if(nResult<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nPost_TRIANGLE");
+				return - 1;
+			}
+			nCount2++;
+			/////////////////
+		}
+	}
+	//////////////////
+	if(nCount1 != nTr1)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount1 != nTr1!");
+		return - 1;
+	}
+	if(nCount2 != nTr2)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount2 != nTr2!");
+		return - 1;
+	}
+	///////////////////////////
+	nCount = nCount1 + nCount2;
+	if(nCount != nTri)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount != nTri!");
+		return - 1;
+	}
+	return 0;
+}
+
+int CMI_Tang2::GetTriangleVertexInfo_1_Quad(int i, int j, int nP, pINT pIndex[])
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	////////////////////////////////
+	int P[6],m;
+//	int K;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  6 for Quad
+	//////////////////////////////////////////////// Current Triangle & Vertices
+//	K		= BARY2LIN_TRI_1_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j+1,nP);
+	P[2]	= BARY2LIN_PT(i		,j+2,nP);
+	P[3]	= BARY2LIN_PT(i+1	,j	,nP);
+	P[4]	= BARY2LIN_PT(i+1	,j+1,nP);
+	P[5]	= BARY2LIN_PT(i+2	,j	,nP);
+	////////////////////////////////////// SAVE
+	for (m = 0;m<6;m++)
+		pIndex[m] = P[m];
+	/////////
+	return 0;
+}
+
+int CMI_Tang2::GetTriangleVertexInfo_2_Quad(int i, int j, int nP, pINT pIndex[])
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	////////////////////////////////
+	int P[6],m;
+//	int K;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  6 for Quad
+	//////////////////////////////////////////////// Current Triangle & Vertices
+//	K		= BARY2LIN_TRI_2_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j-1,nP);
+	P[2]	= BARY2LIN_PT(i		,j-2,nP);
+	P[3]	= BARY2LIN_PT(i-1	,j	,nP);
+	P[4]	= BARY2LIN_PT(i-1	,j-1,nP);
+	P[5]	= BARY2LIN_PT(i-2	,j	,nP);
+	////////////////////////////////////// SAVE
+	for (m = 0;m<6;m++)
+		pIndex[m] = P[m];
+	/////////
+	return 0;
+}
+
+int CMI_Tang2::Post_OneTriangularPatch_CUBIC(CDrMesh2D* pMesh,CDrPatch* pDrPatch,
+								int iOutGlo,int jOutGlo,int TriangularPatchType)
+int CMI_Tang2::InsertTriangle_Cubic()
+{
+	CDListMgr* 	pTriList = m_pDrPatch->GetTriangleList();											
+	/////////////////////////////////////////////////////
+	int i,j,nP,nB1,nB2,nTri,nTr1,nTr2,nOutPerSeg,nDeg,nCount=0;
+	///////////////////////
+	nP	= m_nOut_SCon;		// No. of Controls on each side	
+	////////////////////////////////////////
+	nOutPerSeg	= m_pNum_t_S[0];
+	nDeg		= m_nOrder_S - 1;
+	///////////////////////////
+	nB1		= (nP - 1)/nDeg;			// No. of Type1 Triangle Side Controls	
+	nB2		= (nP - 1 - nDeg)/nDeg;		// No. of Type2 Triangle Side Controls	
+	nTr1	= (nB1+1)*nB1/2;			// No. of Type1 Triangles	
+	nTr2	= (nB2+1)*nB2/2;			// No. of Type2 Triangles	
+	nTri	= nTr1 + nTr2;				// No. of Triangles	
+	///////////////////////////////////////////// Barycentric Coords
+	//
+	//
+	//			v,j
+	//			
+	//			|
+	//			|
+	//			o
+	//			| \
+	//		u=0 |   \ w=0
+	//			|     \
+	//			|-------o ----  u,i
+	//				v=0
+	///////////////////////////////////////////// Type 2 Triangles
+	//
+	//		Triangle K:
+	//
+	//				   i
+	//
+	//				   |
+	//				   |
+	//			N1     P2		
+	//			o------o------o N3
+	//			 \	K1 |\ K3  |
+	//			   \P1 o--oP4 o
+	//				 \ |-K--\ |
+	//				P0 o---o--o P5 ----- j
+	//					\ P3  |
+	//					  \K2 |
+	//						\ |
+	//						  o N2
+	///////////////////////////////////////////// Type 1 Triangles
+	//
+	//		Triangle K:
+	//						  i
+	//				   N2     
+	//				   o      |
+	//				   | \    |
+	//				   |K2 \  |
+	//			       | P3  \
+	//			    P5 o--o---o P0 ----- j
+	//			       |\--K--| \
+	//			       |P4o---oP1 \
+	//				   | K3 \-| K1  \
+	//				N3 o------o ----- o N1
+	//				          P2
+	//				        
+	//
+	/////////////////////////////////////////////////////////// LOOP
+	int nResult,nC,nCount1=0,nCount2=0,nPm1 = nP-nDeg-1;
+	///////////////////
+	for(i=0;i<=nPm1;i += nDeg)
+	{
+		////////////////////////////////
+		for(j=0;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Get:Type 1
+			GetTriangleVertexInfo_1_Cubic(i, j, nP, pIndex);
+			///////////////////////////////////////////////////////
+			if(TriangularPatchType == 1)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_1_Cubic(iGlo + i, jGlo + j , nP, pIndex);
+			else
+			if(TriangularPatchType == 2)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_1_Cubic(iGlo - i, jGlo - j , nP, pIndex);
+			////////
+			if(nC<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nCall GetTriangleVertexInfo_1_Cubic");
+				return - 1;
+			}
+			/////////////////////////////////////////////////// Post
+			nResult = Post_TRIANGLE(pMesh,pIndex,nElemType);
+			if(nResult<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nPost_TRIANGLE");
+				return - 1;
+			}
+			nCount1++;
+		}
+		///////////////////////////////////////////// Is Type2?
+		if(i==nPm1)
+			continue;
+		/////////////////////
+		for(j=nDeg;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Get:Type 2
+			GetTriangleVertexInfo_2_Cubic(i, j, nP, pIndex);
+			///////////////////////////////////////////////////////
+			if(TriangularPatchType == 1)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_2_Cubic(iGlo + i, jGlo + j , nP, pIndex);
+			else
+			if(TriangularPatchType == 2)	// patch that is getting sub-divided
+				nC = GetTriangleVertexInfo_2_Cubic(iGlo - i, jGlo - j , nP, pIndex);
+			////////
+			if(nC<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nCallGetTriangleVertexInfo_2_Cubic");
+				return - 1;
+			}
+			/////////////////////////////////////////////////// Post
+			nResult = Post_TRIANGLE(pMesh,pIndex,nElemType);
+			if(nResult<0)
+			{
+				AfxMessageBox("Error:\nCMI_Tang2::\nPost_TRIANGLE");
+				return - 1;
+			}
+			nCount2++;
+			/////////////////
+		}
+	}
+	//////////////////
+	if(nCount1 != nTr1)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount1 != nTr1!");
+		return - 1;
+	}
+	if(nCount2 != nTr2)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount2 != nTr2!");
+		return - 1;
+	}
+	///////////////////////////
+	nCount = nCount1 + nCount2;
+	if(nCount != nTri)
+	{
+		AfxMessageBox("Error:\nCMI_Tang2::InsertTriangle_Linear\nnCount != nTri!");
+		return - 1;
+	}
+	return 0;
+}
+
+int CMI_Tang2::GetTriangleVertexInfo_1_Cubic(int i, int j, int nP, pINT pIndex[])
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	////////////////////////////////
+	int P[10],m;
+//	int K;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  10 for Cubic
+	//////////////////////////////////////////////// Current Triangle & Vertices
+//	K		= BARY2LIN_TRI_1_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j+1,nP);
+	P[2]	= BARY2LIN_PT(i		,j+2,nP);
+	P[3]	= BARY2LIN_PT(i		,j+3,nP);
+	P[4]	= BARY2LIN_PT(i+1	,j	,nP);
+	P[5]	= BARY2LIN_PT(i+1	,j+1,nP);
+	P[6]	= BARY2LIN_PT(i+1	,j+2,nP);
+	P[7]	= BARY2LIN_PT(i+2	,j	,nP);
+	P[8]	= BARY2LIN_PT(i+2	,j+1,nP);
+	P[9]	= BARY2LIN_PT(i+3	,j	,nP);
+	////////////////////////////////////// SAVE
+	for (m = 0;m<10;m++)
+		pIndex[m] = P[m];
+	/////////
+	return 0;
+}
+
+int CMI_Tang2::GetTriangleVertexInfo_2_Cubic(int i, int j, int nP, pINT pIndex[])
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	////////////////////////////////
+	int P[10],m;
+//	int K;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  10 for Cubic
+	//////////////////////////////////////////////// Current Triangle & Vertices
+//	K		= BARY2LIN_TRI_2_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j-1,nP);
+	P[2]	= BARY2LIN_PT(i		,j-2,nP);
+	P[3]	= BARY2LIN_PT(i		,j-3,nP);
+	P[4]	= BARY2LIN_PT(i-1	,j	,nP);
+	P[5]	= BARY2LIN_PT(i-1	,j-1,nP);
+	P[6]	= BARY2LIN_PT(i-1	,j-2,nP);
+	P[7]	= BARY2LIN_PT(i-2	,j	,nP);
+	P[8]	= BARY2LIN_PT(i-2	,j-1,nP);
+	P[9]	= BARY2LIN_PT(i-3	,j	,nP);
+	////////////////////////////////////// SAVE
+	for (m = 0;m<10;m++)
+		pIndex[m] = P[m];
+	/////////
+	return 0;
+}
+
+int CDrPatch::Post_TRIANGLE(CDrMesh2D* pMesh, pINT ix[],UINT nElemType)
+{ 
+
+	//////////////////////////////////////////////////////////////////////////////// Doit
+	CDListMgr*	pListV = pMesh->GetFE0DList();	// Mesh Vertex Pool
+	if(pListV->IsEmpty())
+		return -1;
+	//////////////////////////////////////////// Mesh Info
+	ORIENT		Orient	= ((CDrMesh2D*)pMesh)->GetOrient();
+	REF_TRI		REF_TRI	= ((CDrMesh2D*)pMesh)->GetRefTri();
+	//////////////////////////////////// Orient
+	if(Orient == OT_CLOCKWISE)
+	{
+		ntemp	= ix[1];
+		ix[1]	= ix[2];
+		ix[2]	= ntemp;
+	}
+	///////////////////////////////////////////////////////////// Vertex Info
+	CDrFE0D*	pVert[3];
+	WORLD		LocalPos[3];
+	////////////////////////////////////////
+	GetVertexInfo(pListV,ix,pVert,LocalPos,3);
+	///////////////////////////////////////////////////////////// Go Do it
+	switch(REF_TRI)
+	{
+		case RT_NOREF:			// leave alone						1 Quad 
+
+			nResult = Post_FE2D_3_NOREF((CDrMesh2D*)pMesh,pVert,LocalPos,nElemType);
+			///////
+			if(nResult<0)
+			{
+				AfxMessageBox("Internal ERROR:\nCMI_Tang2::Post_Patch_TRIANGLES\nRT_NOREF");
+				return -1;
+			}
+			break;
+
+		case RT_AUTO:			//				1 Tri
+
+			nResult = Post_FE2D_3_AUTO((CDrMesh2D*)pMesh,pVert,LocalPos,nElemType);
+			///////
+			if(nResult<0)
+			{
+				AfxMessageBox("Internal ERROR:\nCMI_Gang2::Post_Patch_TRIANGLES\nRT_AUTO");
+				return -1;
+			}
+			break;
+
+		case RT_CENTROID:		// Centroid							4 Tri
+
+			nResult = Post_FE2D_3_CENTROID((CDrMesh2D*)pMesh,pVert,LocalPos,nElemType);
+			///////
+			if(nResult<0)
+			{
+				AfxMessageBox("Internal ERROR:\nCMI_Gang2::Post_Patch_TRIANGLES\nRT_CENTROID");
+				return -1;
+			}
+			break;
+
+		case RT_MIDCEN:	// MidPtCentroidShortDiag			8 Tri
+
+//			nResult = Post_FE2D_3_MIDCEN((CDrMesh2D*)pMesh,pVert,LocalPos,nElemType);
+//			///////
+			nResult = -1;	// temporary
+			if(nResult<0)
+			{
+				AfxMessageBox("Internal ERROR:\nCMI_Tang2::Post_Patch_TRIANGLES\nRT_MIDCEN");
+				return -1;
+			}
+			break;
+
+		default:
+					return -1;
+	}
+	/////////
+	return 0;
+}

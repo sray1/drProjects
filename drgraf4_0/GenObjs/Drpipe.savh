@@ -1,0 +1,111 @@
+// Pipe.h : header file
+//
+#ifndef _DRPIPE_H
+#define _DRPIPE_H       
+
+#include "DrObject.h" 
+#include "DrNode.h" 
+#include "crextern.h"           // card structures
+#include "DListMgr.h"
+#include "glb_Type.h"
+//////////////////////////////
+#define	MAX_NODES_PIPE		2
+#define MAX_PIPE_DRAW_PT	2
+#define MAX_PIPE_DRAW_PT2	4
+/////////////////////////////////////////////////////////////////////////////
+// CDrPipe    ///////////////////////////////////////////////////////////////
+class AFX_EXT_CLASS CDrPipe: public CDrObject
+{
+public:
+// Construction                 
+	CDrPipe();
+	DECLARE_SERIAL(CDrPipe);
+	
+	
+// Operations
+public:
+
+	virtual	void 		ReadyToDelete();
+	//////////////////////////////////////////////// Card/Data
+	virtual void		Pack_drPipe(CString* pstrCard);
+	virtual PIPECARD*	Parse_drPipe(CString* pstrCard)
+						{return (PIPECARD*)NULL;};                    //  TOBE DONE
+	virtual PIPECARD*	GetPipeCard(){return &m_PipeCard;};
+	virtual int			GetCardNo(){return m_nCardNo;};
+	virtual void		SetCardNo(int nCardNo){m_nCardNo = nCardNo;}; 
+	////////////////////////////////////////////////
+	// overrides of virtuals in CDrObject;
+	virtual void		DoDataView(CDC* PtrDC, int y);
+	virtual void 		DoDrawView(CDC* PtrDC,BOOL bPenChange);
+	virtual void		InitDraw(CDC* PtrDC,BOOL bParallel,int nView,
+					 		pMATRIX pViewM,pMATRIX pvv3DM,double dzMin,
+							double dScale_U,double dScale_V);
+	virtual void		SetObjectInfo(CDrObject* pObject);
+	virtual void 		GetObjectInfo(CDrObject* pObject);
+	virtual int 		DealObjectDialog();
+	////////////////////////////////////////// for projection
+	virtual int			GetMaxCorners(){return (int)MAX_NODES_PIPE;};
+	//////////////////////////////////////////////////////////////
+	virtual	void 		TransformObjectToWorld(pMATRIX pLM,BOOL bYes);
+	virtual	void 		TransformObjectToView(pMATRIX pViewM);
+	virtual	BOOL 		RemoveHiddenObject(pMATRIX pViewM,WORLD VDir,int nType);
+	virtual	void 		ProjectObject
+							(pMATRIX pvv3DM,double dScale_U,double dScale_V);
+	virtual	void 		FinishObject();
+	virtual BOOL 		IsObjectHit(CDrObject* pObject,CClientDC* ptrDC,int nNet,
+									POINT point,RECT* pRect);
+	virtual BOOL 		IsKeyMatch(CDrObject* pObject, CString KeyID,UINT KeyNo);
+
+	virtual void		Serialize(CArchive& ar);	
+	////////////////////////////////////////////////
+	virtual CDListMgr*	GetNodeList(){return &m_NodeList;};
+	virtual CDListMgr*	GetCurveList(){return &m_CurveList;};
+	virtual CDListMgr*	GetPatchList(){return &m_PatchList;};
+	virtual CDListMgr*	GetSolidList(){return &m_SolidList;};
+    ////////////////////////////////////////////////////////////////////// helper
+	virtual	POINT 		GetCenter(){return m_nCenter;};
+	virtual	void		SetCenter(POINT ptCenter){m_nCenter = ptCenter;};
+	 
+protected:
+	
+			void 		TransformToWorldPos(pMATRIX pLM,BOOL bYes);
+			void 		TransformToEyePos(pMATRIX pViewM);
+			void 		ProjectToScreenPos
+							(pMATRIX pvv3DM,double dScale_U,double dScale_V);
+			void 		Calc_ScreenRectFromCNodes();
+			void 		GoDoIt(CDC* PtrDC,BOOL bPenChange);
+			
+			
+// Helper functions
+protected:
+// Attributes
+ 
+	///////////////////////////////// Render
+	CDListMgr	m_NodeList;
+	CDListMgr	m_CurveList;
+	CDListMgr	m_PatchList;
+	CDListMgr	m_SolidList;
+	/////////////////////////////////
+	PIPECARD	m_PipeCard;
+	int			m_nCardNo;
+	////////////////////////////// 
+	POINT 		m_nCenter; 
+
+public:
+	virtual ~CDrPipe();
+public:
+/*
+	// Generated message map functions
+	//{{AFX_MSG(CDrPipe)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+#undef AFX_DATA
+#define AFX_DATA
+/////////////////////////////////////////////
+#endif                                       
+
+
+

@@ -1,0 +1,577 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: MMgrMs0 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MMs0Mgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MMgrMs0\MMs0Mgr.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP2195.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs0.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs0\dlg_enoA.cpp"
+"C:\drgraf4_0\MMgrMs0\dlg_ENod.cpp"
+"C:\drgraf4_0\MMgrMs0\Mi_Gang0.cpp"
+"C:\drgraf4_0\MMgrMs0\MMs0dll.cpp"
+"C:\drgraf4_0\MMgrMs0\MMs0Mgr.cpp"
+"C:\drgraf4_0\MMgrMs0\Po_FE0D.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP2195.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP2196.TMP" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs0_d32.pdb" /map:".\Debug/MMs0_d32.map" /debug /machine:I386 /def:".\MMs0Mgr.def" /out:"c:\drgraf4_0\applic\Debug\MMs0_d32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs0_d32.lib" 
+.\Debug\dlg_enoA.obj
+.\Debug\dlg_ENod.obj
+.\Debug\Mi_Gang0.obj
+.\Debug\MMs0dll.obj
+.\Debug\MMs0Mgr.obj
+.\Debug\Po_FE0D.obj
+.\Debug\MMs0Mgr.res
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP2196.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+dlg_enoA.cpp
+c:\drgraf4_0\mmgrms0\dlg_enoa.cpp(166) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms0\dlg_enoa.cpp(610) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms0\dlg_enoa.cpp(805) : warning C4189: 'pWndCtrl' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms0\dlg_enoa.cpp(933) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+dlg_ENod.cpp
+C:\drgraf4_0\MMgrMs0\dlg_ENod.cpp(108) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs0\dlg_ENod.cpp(146) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs0\dlg_ENod.cpp(308) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+Mi_Gang0.cpp
+C:\drgraf4_0\MMgrMs0\Mi_Gang0.cpp(118) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs0\Mi_Gang0.cpp(333) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+MMs0dll.cpp
+C:\drgraf4_0\MMgrMs0\Mi_Gang0.cpp(126) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs0\MMs0dll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MMs0Mgr.cpp
+Po_FE0D.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MMs0Mgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MMs0Mgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Mi_Gang0.obj : warning LNK4197: export "?classCMI_Gang0@CMI_Gang0@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/MMs0_d32.lib and object c:\drgraf4_0\applic\Debug/MMs0_d32.exp
+<h3>
+--------------------Configuration: MMgrMs1 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MMs1Mgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MMgrMs1\MMs1Mgr.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP2261.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs1.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs1\Dlg_1Mrg.cpp"
+"C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp"
+"C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp"
+"C:\drgraf4_0\MMgrMs1\MMs1dll.cpp"
+"C:\drgraf4_0\MMgrMs1\MMs1Mgr.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_Beam.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_Elbow.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_Pipe.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_Truss.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP2261.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP2262.TMP" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib Mesh_D32.lib MMgr_D32.lib MMs0_D32.lib MNod_D32.lib MCur_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs1_D32.pdb" /map:".\Debug/MMs1_D32.map" /debug /machine:I386 /def:".\MMs1Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs1_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs1_D32.lib" 
+.\Debug\Dlg_1Mrg.obj
+.\Debug\Mi_1Prof.obj
+.\Debug\Mi_Gang1.obj
+.\Debug\MMs1dll.obj
+.\Debug\MMs1Mgr.obj
+.\Debug\Po_Beam.obj
+.\Debug\Po_Elbow.obj
+.\Debug\Po_FE1D.obj
+.\Debug\Po_Pipe.obj
+.\Debug\Po_Truss.obj
+.\Debug\MMs1Mgr.res
+\drgraf4_0\applic\Debug\MMs0_d32.lib
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP2262.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Dlg_1Mrg.cpp
+c:\drgraf4_0\mmgrms1\dlg_1mrg.cpp(144) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms1\dlg_1mrg.cpp(169) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_1Prof.cpp
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(66) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(63) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(133) : warning C4189: 'pFE0DListNew' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(139) : warning C4189: 'indexMesh1D' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(130) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_Gang1.cpp
+C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp(227) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp(359) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+MMs1dll.cpp
+C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp(268) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp(336) : warning C4700: local variable 'pAddLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs1\MMs1dll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MMs1Mgr.cpp
+Po_Beam.cpp
+Po_Elbow.cpp
+Po_FE1D.cpp
+C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp(54) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp(119) : warning C4189: 'pListV' : local variable is initialized but not referenced
+Po_Pipe.cpp
+C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp(99) : warning C4700: local variable 'pMI_Gang0' used without having been initialized
+C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp(183) : warning C4700: local variable 'pLabel' used without having been initialized
+Po_Truss.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MMs1Mgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MMs1Mgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Mi_Gang1.obj : warning LNK4197: export "?classCMI_Gang1@CMI_Gang1@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/MMs1_D32.lib and object c:\drgraf4_0\applic\Debug/MMs1_D32.exp
+<h3>
+--------------------Configuration: MMgrMs2 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MMs2Mgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MMgrMs2\MMs2Mgr.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP2362.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs2.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs2\Dlg_2Mrg.cpp"
+"C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp"
+"C:\drgraf4_0\MMgrMs2\Mi_Gang2.cpp"
+"C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp"
+"C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp"
+"C:\drgraf4_0\MMgrMs2\MMs2dll.cpp"
+"C:\drgraf4_0\MMgrMs2\MMs2Mgr.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_12.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_16.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_4.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_8.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_9.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Tr_10.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Tr_3.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Tr_6.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Tr_9.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP2362.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP2363.TMP" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib MMs0_D32.lib MMs1_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs2_D32.pdb" /map:".\Debug/MMs2_D32.map" /debug /machine:I386 /def:".\MMs2Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs2_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs2_D32.lib" 
+.\Debug\Dlg_2Mrg.obj
+.\Debug\Mi_2Prof.obj
+.\Debug\Mi_Gang2.obj
+.\Debug\Mi_Qang2.obj
+.\Debug\Mi_Tang2.obj
+.\Debug\MMs2dll.obj
+.\Debug\MMs2Mgr.obj
+.\Debug\Po_FE2D.obj
+.\Debug\Po_Qu_12.obj
+.\Debug\Po_Qu_16.obj
+.\Debug\Po_Qu_4.obj
+.\Debug\Po_Qu_8.obj
+.\Debug\Po_Qu_9.obj
+.\Debug\Po_Tr_10.obj
+.\Debug\Po_Tr_3.obj
+.\Debug\Po_Tr_6.obj
+.\Debug\Po_Tr_9.obj
+.\Debug\MMs2Mgr.res
+\drgraf4_0\applic\Debug\MMs1_D32.lib
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP2363.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Dlg_2Mrg.cpp
+c:\drgraf4_0\mmgrms2\dlg_2mrg.cpp(146) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms2\dlg_2mrg.cpp(171) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_2Prof.cpp
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(65) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(62) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(138) : warning C4189: 'indexMesh2D' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(132) : warning C4189: 'pFE0DListNew' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(129) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_Gang2.cpp
+Mi_Qang2.cpp
+C:\drgraf4_0\MMgrMs2\Mi_Gang2.cpp(330) : warning C4701: local variable 'pList' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Gang2.cpp(381) : warning C4700: local variable 'pAddLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Gang2.cpp(476) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp(79) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp(247) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_Tang2.cpp
+C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp(124) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(266) : warning C4189: 'nTriangle' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(489) : warning C4189: 'nTriangle' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(482) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(675) : warning C4189: 'nDeg' : local variable is initialized but not referenced
+MMs2dll.cpp
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(230) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(236) : warning C4701: local variable 'pAddNode' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(635) : warning C4701: local variable 'nC' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(825) : warning C4701: local variable 'nC' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(1017) : warning C4701: local variable 'nC' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\MMs2dll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MMs2Mgr.cpp
+Po_FE2D.cpp
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(48) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(61) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(226) : warning C4189: 'pDrPen' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(227) : warning C4189: 'pLayer' : local variable is initialized but not referenced
+Po_Qu_12.cpp
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(100) : warning C4700: local variable 'pMI_Gang0' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(150) : warning C4700: local variable 'pMI_Gang0' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(182) : warning C4700: local variable 'pMI_Gang0' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(447) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(470) : warning C4701: local variable 'pAddNode' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_Qu_12.cpp(90) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Qu_16.cpp
+C:\drgraf4_0\MMgrMs2\Po_Qu_16.cpp(90) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Qu_4.cpp
+Po_Qu_8.cpp
+C:\drgraf4_0\MMgrMs2\Po_Qu_8.cpp(90) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Qu_9.cpp
+C:\drgraf4_0\MMgrMs2\Po_Qu_9.cpp(89) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Tr_10.cpp
+C:\drgraf4_0\MMgrMs2\Po_Tr_10.cpp(89) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Tr_3.cpp
+Po_Tr_6.cpp
+C:\drgraf4_0\MMgrMs2\Po_Tr_6.cpp(90) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Tr_9.cpp
+C:\drgraf4_0\MMgrMs2\Po_Tr_9.cpp(89) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MMs2Mgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MMs2Mgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Mi_Gang2.obj : warning LNK4197: export "?classCMI_Gang2@CMI_Gang2@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/MMs2_D32.lib and object c:\drgraf4_0\applic\Debug/MMs2_D32.exp
+<h3>
+--------------------Configuration: CreOMMgr - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/CreM.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\CreOMMgr\CreM.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP31D1.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "_MBCS" /Fp".\Debug/CreOMMgr.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\CreOMMgr\CreMDlgM.cpp"
+"C:\drgraf4_0\CreOMMgr\CreMDll.cpp"
+"C:\drgraf4_0\CreOMMgr\CreOMMgr.cpp"
+"C:\drgraf4_0\CreOMMgr\CurCreOM.cpp"
+"C:\drgraf4_0\CreOMMgr\MI_0SPN.cpp"
+"C:\drgraf4_0\CreOMMgr\MI_1SPN.cpp"
+"C:\drgraf4_0\CreOMMgr\MI_2SPN.cpp"
+"C:\drgraf4_0\CreOMMgr\MI_3SPN.cpp"
+"C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_croi.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_LALL.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_LSy3.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_LSym.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_LSyT.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_RotT.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_SpnC.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_SpnN.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_spnO.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_SpnP.cpp"
+"C:\drgraf4_0\CreOMMgr\Mlg_SpnS.cpp"
+"C:\drgraf4_0\CreOMMgr\NodCreOM.cpp"
+"C:\drgraf4_0\CreOMMgr\PatCreOM.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP31D1.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP31D2.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "_MBCS" /Fp".\Debug/CreOMMgr.pch" /Yc"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\CreOMMgr\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP31D2.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP31D3.TMP" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_d32.lib Elem_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib EDlg_D32.lib DDlg_D32.lib Dr3D_D32.lib MMgr_D32.lib PMgr_D32.lib MMs0_D32.lib MMs1_D32.lib MMs2_D32.lib MMs3_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/CreM_D32.pdb" /debug /machine:I386 /def:".\CreOM_d.def" /out:"c:\drgraf4_0\applic\Debug/CreM_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/CreM_D32.lib" 
+.\Debug\CreMDlgM.obj
+.\Debug\CreMDll.obj
+.\Debug\CreOMMgr.obj
+.\Debug\CurCreOM.obj
+.\Debug\MI_0SPN.obj
+.\Debug\MI_1SPN.obj
+.\Debug\MI_2SPN.obj
+.\Debug\MI_3SPN.obj
+.\Debug\MI_MSPN.obj
+.\Debug\Mlg_croi.obj
+.\Debug\Mlg_LALL.obj
+.\Debug\Mlg_LSy3.obj
+.\Debug\Mlg_LSym.obj
+.\Debug\Mlg_LSyT.obj
+.\Debug\Mlg_RotT.obj
+.\Debug\Mlg_SpnC.obj
+.\Debug\Mlg_SpnN.obj
+.\Debug\Mlg_spnO.obj
+.\Debug\Mlg_SpnP.obj
+.\Debug\Mlg_SpnS.obj
+.\Debug\NodCreOM.obj
+.\Debug\PatCreOM.obj
+.\Debug\StdAfx.obj
+.\Debug\CreM.res
+\drgraf4_0\applic\Debug\MMs2_D32.lib
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP31D3.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+StdAfx.cpp
+Compiling...
+CreMDlgM.cpp
+CreMDll.cpp
+C:\drgraf4_0\CreOMMgr\CreMDll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+CreOMMgr.cpp
+CurCreOM.cpp
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(71) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(72) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(158) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(474) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(479) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(473) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(681) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(676) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(1298) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(1237) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(1331) : warning C4189: 'pDoc' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(1387) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(1432) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(1439) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(1435) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\CurCreOM.cpp(1436) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+MI_0SPN.cpp
+C:\drgraf4_0\CreOMMgr\MI_0SPN.cpp(86) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_0SPN.cpp(159) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_0SPN.cpp(180) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_0SPN.cpp(364) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+MI_1SPN.cpp
+C:\drgraf4_0\CreOMMgr\MI_0SPN.cpp(165) : warning C4700: local variable 'pNodMgr' used without having been initialized
+C:\drgraf4_0\CreOMMgr\MI_1SPN.cpp(85) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_1SPN.cpp(184) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_1SPN.cpp(414) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_1SPN.cpp(461) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_1SPN.cpp(606) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+MI_2SPN.cpp
+C:\drgraf4_0\CreOMMgr\MI_1SPN.cpp(190) : warning C4700: local variable 'pCurMgr' used without having been initialized
+C:\drgraf4_0\CreOMMgr\MI_1SPN.cpp(328) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\CreOMMgr\MI_2SPN.cpp(80) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_2SPN.cpp(147) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_2SPN.cpp(370) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_2SPN.cpp(417) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_2SPN.cpp(548) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+MI_3SPN.cpp
+C:\drgraf4_0\CreOMMgr\MI_2SPN.cpp(153) : warning C4700: local variable 'pMPatMgr' used without having been initialized
+C:\drgraf4_0\CreOMMgr\MI_2SPN.cpp(282) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\CreOMMgr\MI_3SPN.cpp(77) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_3SPN.cpp(144) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_3SPN.cpp(401) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_3SPN.cpp(437) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_3SPN.cpp(564) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+MI_MSPN.cpp
+C:\drgraf4_0\CreOMMgr\MI_3SPN.cpp(150) : warning C4700: local variable 'pMSolMgr' used without having been initialized
+C:\drgraf4_0\CreOMMgr\MI_3SPN.cpp(302) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp(71) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp(138) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp(153) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp(168) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp(526) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp(541) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp(792) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mlg_croi.cpp
+C:\drgraf4_0\CreOMMgr\MI_MSPN.cpp(144) : warning C4700: local variable 'pMO3DMgr' used without having been initialized
+Mlg_LALL.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_LALL.cpp(525) : warning C4552: '!=' : operator has no effect; expected operator with side-effect
+C:\drgraf4_0\CreOMMgr\Mlg_LALL.cpp(645) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mlg_LSy3.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_LALL.cpp(794) : warning C4701: local variable 'LocR' may be used without having been initialized
+C:\drgraf4_0\CreOMMgr\Mlg_LSy3.cpp(147) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mlg_LSym.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_LSym.cpp(170) : warning C4552: '!=' : operator has no effect; expected operator with side-effect
+C:\drgraf4_0\CreOMMgr\Mlg_LSym.cpp(252) : warning C4189: 'One80byPi' : local variable is initialized but not referenced
+Mlg_LSyT.cpp
+Mlg_RotT.cpp
+Mlg_SpnC.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_SpnC.cpp(162) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mlg_SpnN.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_SpnC.cpp(320) : warning C4701: local variable 'pDrCurve' may be used without having been initialized
+C:\drgraf4_0\CreOMMgr\Mlg_SpnN.cpp(163) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mlg_spnO.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_spnO.cpp(163) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mlg_SpnP.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_spnO.cpp(321) : warning C4701: local variable 'pDrObj3D' may be used without having been initialized
+C:\drgraf4_0\CreOMMgr\Mlg_SpnP.cpp(163) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mlg_SpnS.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_SpnP.cpp(322) : warning C4701: local variable 'pDrCurve' may be used without having been initialized
+C:\drgraf4_0\CreOMMgr\Mlg_SpnS.cpp(164) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+NodCreOM.cpp
+C:\drgraf4_0\CreOMMgr\Mlg_SpnS.cpp(321) : warning C4701: local variable 'pDrCurve' may be used without having been initialized
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(129) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(130) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(262) : warning C4189: 'cyMenuSize' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(261) : warning C4189: 'cxVScroll' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(264) : warning C4189: 'cyFrame' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(260) : warning C4189: 'cyBorder' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(285) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(389) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(978) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(2609) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(2614) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(2608) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(2810) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(2972) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(3951) : warning C4189: 'pDoc' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4007) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4045) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4051) : warning C4189: 'nAnswer' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4049) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4587) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4583) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4584) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4780) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(4878) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(5155) : warning C4189: 'One80byPi' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(5462) : warning C4189: 'aObj' : local variable is initialized but not referenced
+PatCreOM.cpp
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(2862) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(3031) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(3070) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(3195) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(5472) : warning C4700: local variable 'pMNodMgr' used without having been initialized
+C:\drgraf4_0\CreOMMgr\NodCreOM.cpp(5488) : warning C4700: local variable 'pMNodMgr' used without having been initialized
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(68) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(141) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(457) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(462) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(456) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(659) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(654) : warning C4189: 'pMsObjMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(1104) : warning C4189: 'pDoc' : local variable is initialized but not referenced
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(1160) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\CreOMMgr\PatCreOM.cpp(1213) : warning C4189: 'pID' : local variable is initialized but not referenced
+Linking...
+.\CreOM_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\CreOM_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug/CreM_D32.lib and object c:\drgraf4_0\applic\Debug/CreM_D32.exp
+<h3>
+--------------------Configuration: Mdit - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo"Debug/MditRsrc.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MditMgr\MditRsrc.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP4160.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp"Debug/Mdit.pch" /YX"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\drgraf4_0\MditMgr\CurMdit.cpp"
+"C:\drgraf4_0\MditMgr\MditDlgM.cpp"
+"C:\drgraf4_0\MditMgr\MditDll.cpp"
+"C:\drgraf4_0\MditMgr\MditMgr.cpp"
+"C:\drgraf4_0\MditMgr\Mlg_enoA.cpp"
+"C:\drgraf4_0\MditMgr\Mlg_ENod.cpp"
+"C:\drgraf4_0\MditMgr\NodMdit.cpp"
+"C:\drgraf4_0\MditMgr\PatMdit.cpp"
+"C:\drgraf4_0\MditMgr\RegenMs1.cpp"
+"C:\drgraf4_0\MditMgr\RegenMs2.cpp"
+"C:\drgraf4_0\MditMgr\RegenMs3.cpp"
+"C:\drgraf4_0\MditMgr\SolMdit.cpp"
+"C:\drgraf4_0\MditMgr\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP4160.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP4161.TMP" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib EDlg_D32.lib DDlg_D32.lib Dr3D_D32.lib MSup_D32.lib MStL_D32.lib MMs0_D32.lib MMs1_D32.lib MMs2_D32.lib MMs3_D32.lib MMgr_D32.lib CreM_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/Mdit_d32.pdb" /map:"Debug/Mdit_d32.map" /debug /machine:I386 /def:".\Mdit_d.def" /out:"c:\drgraf4_0\applic\Debug\Mdit_d32.dll" /implib:"c:\drgraf4_0\Applic\Debug\Mdit_d32.lib" /pdbtype:sept 
+.\Debug\CurMdit.obj
+.\Debug\MditDlgM.obj
+.\Debug\MditDll.obj
+.\Debug\MditMgr.obj
+.\Debug\Mlg_enoA.obj
+.\Debug\Mlg_ENod.obj
+.\Debug\NodMdit.obj
+.\Debug\PatMdit.obj
+.\Debug\RegenMs1.obj
+.\Debug\RegenMs2.obj
+.\Debug\RegenMs3.obj
+.\Debug\SolMdit.obj
+.\Debug\StdAfx.obj
+.\Debug\MditRsrc.res
+\drgraf4_0\applic\Debug\CreM_D32.lib
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP4161.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+CurMdit.cpp
+c:\drgraf4_0\mditmgr\curmdit.cpp(44) : warning C4189: 'pBool' : local variable is initialized but not referenced
+c:\drgraf4_0\mditmgr\curmdit.cpp(131) : warning C4390: ';' : empty controlled statement found; is this the intent?
+c:\drgraf4_0\mditmgr\curmdit.cpp(142) : warning C4189: 'pID' : local variable is initialized but not referenced
+c:\drgraf4_0\mditmgr\curmdit.cpp(237) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+c:\drgraf4_0\mditmgr\curmdit.cpp(243) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+c:\drgraf4_0\mditmgr\curmdit.cpp(236) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mditmgr\curmdit.cpp(283) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+c:\drgraf4_0\mditmgr\curmdit.cpp(317) : warning C4390: ';' : empty controlled statement found; is this the intent?
+MditDlgM.cpp
+MditDll.cpp
+C:\drgraf4_0\MditMgr\MditDlgM.cpp(113) : warning C4700: local variable 'nStatus' used without having been initialized
+C:\drgraf4_0\MditMgr\MditDlgM.cpp(132) : warning C4700: local variable 'nStatus' used without having been initialized
+C:\drgraf4_0\MditMgr\MditDlgM.cpp(151) : warning C4700: local variable 'nStatus' used without having been initialized
+C:\drgraf4_0\MditMgr\MditDll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MditMgr.cpp
+C:\drgraf4_0\MditMgr\MditMgr.cpp(84) : warning C4189: 'bMeshMode' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\MditMgr.cpp(150) : warning C4189: 'bMeshMode' : local variable is initialized but not referenced
+Mlg_enoA.cpp
+C:\drgraf4_0\MditMgr\Mlg_enoA.cpp(929) : warning C4189: 'pWndCtrl' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\Mlg_enoA.cpp(1057) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+Mlg_ENod.cpp
+C:\drgraf4_0\MditMgr\Mlg_enoA.cpp(475) : warning C4700: local variable 'index' used without having been initialized
+C:\drgraf4_0\MditMgr\Mlg_enoA.cpp(555) : warning C4700: local variable 'index' used without having been initialized
+C:\drgraf4_0\MditMgr\Mlg_ENod.cpp(347) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+NodMdit.cpp
+C:\drgraf4_0\MditMgr\NodMdit.cpp(83) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\NodMdit.cpp(210) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MditMgr\NodMdit.cpp(216) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\NodMdit.cpp(802) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\NodMdit.cpp(795) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\NodMdit.cpp(915) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MditMgr\NodMdit.cpp(1207) : warning C4189: 'pDoc' : local variable is initialized but not referenced
+PatMdit.cpp
+C:\drgraf4_0\MditMgr\NodMdit.cpp(117) : warning C4700: local variable 'pEditDlgM' used without having been initialized
+C:\drgraf4_0\MditMgr\NodMdit.cpp(343) : warning C4700: local variable 'pID' used without having been initialized
+C:\drgraf4_0\MditMgr\NodMdit.cpp(286) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\MditMgr\NodMdit.cpp(368) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\MditMgr\NodMdit.cpp(552) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\MditMgr\NodMdit.cpp(628) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\MditMgr\NodMdit.cpp(1095) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\MditMgr\PatMdit.cpp(45) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\PatMdit.cpp(132) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MditMgr\PatMdit.cpp(143) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\PatMdit.cpp(241) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\PatMdit.cpp(248) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\PatMdit.cpp(240) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\PatMdit.cpp(309) : warning C4390: ';' : empty controlled statement found; is this the intent?
+RegenMs1.cpp
+RegenMs2.cpp
+C:\drgraf4_0\MditMgr\RegenMs1.cpp(117) : warning C4700: local variable 'pGang' used without having been initialized
+RegenMs3.cpp
+C:\drgraf4_0\MditMgr\RegenMs2.cpp(76) : warning C4700: local variable 'pRegenMs1' used without having been initialized
+C:\drgraf4_0\MditMgr\RegenMs2.cpp(138) : warning C4700: local variable 'pGang' used without having been initialized
+SolMdit.cpp
+C:\drgraf4_0\MditMgr\RegenMs3.cpp(78) : warning C4700: local variable 'pRegenMs1' used without having been initialized
+C:\drgraf4_0\MditMgr\RegenMs3.cpp(94) : warning C4700: local variable 'pRegenMs2' used without having been initialized
+C:\drgraf4_0\MditMgr\RegenMs3.cpp(156) : warning C4700: local variable 'pGang' used without having been initialized
+C:\drgraf4_0\MditMgr\SolMdit.cpp(46) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\SolMdit.cpp(133) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\MditMgr\SolMdit.cpp(144) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\SolMdit.cpp(242) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\SolMdit.cpp(248) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\SolMdit.cpp(241) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MditMgr\SolMdit.cpp(308) : warning C4390: ';' : empty controlled statement found; is this the intent?
+StdAfx.cpp
+Linking...
+.\Mdit_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Mdit_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\Applic\Debug\Mdit_d32.lib and object c:\drgraf4_0\Applic\Debug\Mdit_d32.exp
+
+
+
+<h3>Results</h3>
+Mdit_d32.dll - 0 error(s), 243 warning(s)
+</pre>
+</body>
+</html>

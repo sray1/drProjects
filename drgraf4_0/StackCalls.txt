@@ -1,0 +1,293 @@
+///////////////////////
+// NODE Move: Rigid OFF 
+///////////////////////
+CMI_StaL::RegenCurveBased(CDrCurve * 0x012663a4 {CDrCurve}) line 1908
+CRegenCur::UpdateCurves(CDrNode * 0x012639f4 {CDrNode}) line 99
+CNodEdit::ShowNodeToEdit(CDrNode * 0x012639f4 {CDrNode}) line 136
+CNodEdit::LeftUp_NODE_DoneMove(CPoint {x=498 y=298}, int 0) line 629
+CNodEdit::ElementLeftUp_NOD(CPoint {x=498 y=298}) line 693
+CNodEdit::OnEBoxLButtonUp_NOD(CClientDC * 0x0120f988 {hDC=0x000005fa attrib=0x000005fa}, CView * 0x01262af0 {C12View hWnd=0x00000e70}, GENERATE FORWARD, unsigned int 0, CPoint {x=478 y=331}) line 738
+CDVM_Edit::LButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000e70}, unsigned int 0, CPoint {x=478 y=331}) line 223
+CDrawView::LButtonUp(unsigned int 0, CPoint {x=478 y=331}) line 4023
+C12View::OnLButtonUp(unsigned int 0, CPoint {x=478 y=331}) line 400
+CWnd::OnWndMsg(unsigned int 514, unsigned int 0, long 21692894, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 514, unsigned int 0, long 21692894) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000e70}, HWND__ * 0x00000e70, unsigned int 514, unsigned int 0, long 21692894) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000e70, unsigned int 514, unsigned int 0, long 21692894) line 371
+AfxWndProcBase(HWND__ * 0x00000e70, unsigned int 514, unsigned int 0, long 21692894) line 203 + 21 bytes
+KERNEL32! bff735d9()
+//////////////////////
+// NODE Move: Rigid ON 
+//////////////////////
+CMI_StaL::RegenCurveBased(CDrCurve * 0x012663a4 {CDrCurve}) line 1908
+CMI_CSPN::SpawnCurveCopyOff(MATRIX * 0x01343130) line 529
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x012663a4 {CDrCurve}, CDrCurve * 0x012663a4 {CDrCurve}, MATRIX * 0x01343130, CString * 0x0120f5c0 {"C2"}, CDrObject * 0x012663a4 {CDrCurve}, unsigned int 1025) line 655 + 12 bytes
+CNodCreOp::ShowObjectToSpawnCopyOff(CDrObject * 0x012663a4 {CDrCurve}, int 0, unsigned int 1025) line 3763 + 38 bytes
+CNodCreOp::CurTopo_SpawnConnectedCurves_CopyOff(CDrCurve * 0x012663a4 {CDrCurve}, int 0) line 3357 + 24 bytes
+CNodCreOp::NodeDependent_SpawnConnectedObjects_CopyOff(CDrNode * 0x012639f4 {CDrNode}, int 0, unsigned int 1025) line 3311 + 16 bytes
+CNodCreOp::ShowNodeToSpawnCopyOff(CDrNode * 0x012639f4 {CDrNode}, int 0) line 3146 + 21 bytes
+CNodCreOp::ShowNodeToSpawn(CDrNode * 0x012639f4 {CDrNode}, int 0) line 3043 + 19 bytes
+CNodEdit::ShowNodeToEdit(CDrNode * 0x012639f4 {CDrNode}) line 122 + 26 bytes
+CNodEdit::LeftUp_NODE_DoneMove(CPoint {x=252 y=411}, int 0) line 629
+CNodEdit::ElementLeftUp_NOD(CPoint {x=252 y=411}) line 693
+CNodEdit::OnEBoxLButtonUp_NOD(CClientDC * 0x0120f988 {hDC=0x000005fe attrib=0x000005fe}, CView * 0x01262af0 {C12View hWnd=0x00000e70}, GENERATE FORWARD, unsigned int 0, CPoint {x=242 y=222}) line 738
+CDVM_Edit::LButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000e70}, unsigned int 0, CPoint {x=242 y=222}) line 223
+CDrawView::LButtonUp(unsigned int 0, CPoint {x=242 y=222}) line 4023
+C12View::OnLButtonUp(unsigned int 0, CPoint {x=242 y=222}) line 400
+CWnd::OnWndMsg(unsigned int 514, unsigned int 0, long 14549234, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 514, unsigned int 0, long 14549234) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000e70}, HWND__ * 0x00000e70, unsigned int 514, unsigned int 0, long 14549234) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000e70, unsigned int 514, unsigned int 0, long 14549234) line 371
+AfxWndProcBase(HWND__ * 0x00000e70, unsigned int 514, unsigned int 0, long 14549234) line 203 + 21 bytes
+KERNEL32! bff735d9()
+///////////////////////////
+// Translate Curve: Copy ON 
+///////////////////////////
+CMI_StaL::CreateCurveBased(CDrCurve * 0x01281ed0 {CDrCurve}, CList<staLcard,staLcard> * 0x01282830 {UstaLcard::?$CList}) line 937
+CMI_CSPN::SpawnListsInCurve(MATRIX * 0x01343dc0) line 313
+CMI_CSPN::SpawnCurve(MATRIX * 0x01343dc0) line 176
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x01281ed0 {CDrCurve}, CDrCurve * 0x01273df8 {CDrCurve}, MATRIX * 0x01343dc0, CString * 0x012220c8 {"C4_Cu"}, CDrObject * 0x01273df8 {CDrCurve}, unsigned int 1025) line 649 + 12 bytes
+CCurCreOp::ShowCurveToSpawn(CDrCurve * 0x01273df8 {CDrCurve}, int 0) line 1029 + 51 bytes
+CCurCreOp::OnEBoxRButtonUp_CUR(CClientDC * 0x0120f988 {hDC=0x000005fe attrib=0x000005fe}, CView * 0x01262af0 {C12View hWnd=0x00000e70}, GENERATE FORWARD, unsigned int 0, CPoint {x=838 y=280}) line 1771 + 20 bytes
+CDVM_CreO::RButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000e70}, unsigned int 0, CPoint {x=838 y=280}) line 424
+CDrawView::RButtonUp(unsigned int 0, CPoint {x=838 y=280}) line 4108
+C12View::OnRButtonUp(unsigned int 0, CPoint {x=838 y=280}) line 412
+CWnd::OnWndMsg(unsigned int 517, unsigned int 0, long 18350918, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 517, unsigned int 0, long 18350918) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000e70}, HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 18350918) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 18350918) line 371
+AfxWndProcBase(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 18350918) line 203 + 21 bytes
+KERNEL32! bff735d9()
+////////////////////////////
+// Translate CURVE: Copy OFF 
+////////////////////////////
+CMI_StaL::RegenCurveBased(CDrCurve * 0x01281ed0 {CDrCurve}) line 1908
+CMI_CSPN::SpawnCurveCopyOff(MATRIX * 0x013585c0) line 529
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x01281ed0 {CDrCurve}, CDrCurve * 0x01281ed0 {CDrCurve}, MATRIX * 0x013585c0, CString * 0x01222100 {"C4_Cu"}, CDrObject * 0x01281ed0 {CDrCurve}, unsigned int 1025) line 655 + 12 bytes
+CCurCreOp::CurveSpawnCopyOff(CDrCurve * 0x01281ed0 {CDrCurve}, int 0) line 1292 + 39 bytes
+CCurCreOp::ShowCurveToSpawnCopyOff(CDrCurve * 0x01281ed0 {CDrCurve}, int 0) line 1120 + 16 bytes
+CCurCreOp::ShowCurveToSpawn(CDrCurve * 0x01281ed0 {CDrCurve}, int 0) line 999 + 19 bytes
+CCurCreOp::OnEBoxRButtonUp_CUR(CClientDC * 0x0120f988 {hDC=0x000005fe attrib=0x000005fe}, CView * 0x01262af0 {C12View hWnd=0x00000e70}, GENERATE FORWARD, unsigned int 0, CPoint {x=581 y=99}) line 1771 + 20 bytes
+CDVM_CreO::RButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000e70}, unsigned int 0, CPoint {x=581 y=99}) line 424
+CDrawView::RButtonUp(unsigned int 0, CPoint {x=581 y=99}) line 4108
+C12View::OnRButtonUp(unsigned int 0, CPoint {x=581 y=99}) line 412
+CWnd::OnWndMsg(unsigned int 517, unsigned int 0, long 6488645, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 517, unsigned int 0, long 6488645) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000e70}, HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 6488645) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 6488645) line 371
+AfxWndProcBase(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 6488645) line 203 + 21 bytes
+KERNEL32! bff735d9()
+////////////////////////////
+// Translate NODE: Copy OFF 
+////////////////////////////
+CMI_StaL::RegenCurveBased(CDrCurve * 0x01273df8 {CDrCurve}) line 1908
+CMI_CSPN::SpawnCurveCopyOff(MATRIX * 0x0135cc50) line 529
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x01273df8 {CDrCurve}, CDrCurve * 0x01273df8 {CDrCurve}, MATRIX * 0x0135cc50, CString * 0x012220c8 {"10"}, CDrObject * 0x01273df8 {CDrCurve}, unsigned int 1025) line 655 + 12 bytes
+CNodCreOp::ShowObjectToSpawnCopyOff(CDrObject * 0x01273df8 {CDrCurve}, int 0, unsigned int 1025) line 3763 + 38 bytes
+CNodCreOp::CurTopo_SpawnConnectedCurves_CopyOff(CDrCurve * 0x01273df8 {CDrCurve}, int 0) line 3357 + 24 bytes
+CNodCreOp::NodeDependent_SpawnConnectedObjects_CopyOff(CDrNode * 0x01276838 {CDrNode}, int 0, unsigned int 1025) line 3311 + 16 bytes
+CNodCreOp::ShowNodeToSpawnCopyOff(CDrNode * 0x01276838 {CDrNode}, int 0) line 3146 + 21 bytes
+CNodCreOp::ShowNodeToSpawn(CDrNode * 0x01276838 {CDrNode}, int 0) line 3043 + 19 bytes
+CNodCreOp::OnEBoxRButtonUp_NOD(CClientDC * 0x0120f988 {hDC=0x000005fe attrib=0x000005fe}, CView * 0x01262af0 {C12View hWnd=0x00000e70}, GENERATE FORWARD, unsigned int 0, CPoint {x=896 y=190}) line 4460 + 20 bytes
+CDVM_CreO::RButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000e70}, unsigned int 0, CPoint {x=896 y=190}) line 417
+CDrawView::RButtonUp(unsigned int 0, CPoint {x=896 y=190}) line 4108
+C12View::OnRButtonUp(unsigned int 0, CPoint {x=896 y=190}) line 412
+CWnd::OnWndMsg(unsigned int 517, unsigned int 0, long 12452736, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 517, unsigned int 0, long 12452736) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000e70}, HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 12452736) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 12452736) line 371
+AfxWndProcBase(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 12452736) line 203 + 21 bytes
+KERNEL32! bff735d9()
+////////////////////////////
+// Translate CURVE: Copy ON 
+////////////////////////////
+CMI_StaL::CreateCurveBased(CDrCurve * 0x01291d08 {CDrCurve}, CList<staLcard,staLcard> * 0x01292668 {UstaLcard::?$CList}) line 937
+CMI_CSPN::SpawnListsInCurve(MATRIX * 0x01356770) line 313
+CMI_CSPN::SpawnCurve(MATRIX * 0x01356770) line 176
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x01291d08 {CDrCurve}, CDrCurve * 0x01273df8 {CDrCurve}, MATRIX * 0x01356770, CString * 0x012220c8 {"C10_Cu"}, CDrObject * 0x01273df8 {CDrCurve}, unsigned int 1025) line 649 + 12 bytes
+CCurCreOp::ShowCurveToSpawn(CDrCurve * 0x01273df8 {CDrCurve}, int 0) line 1029 + 51 bytes
+CCurCreOp::OnEBoxRButtonUp_CUR(CClientDC * 0x0120f988 {hDC=0x000005ee attrib=0x000005ee}, CView * 0x01262af0 {C12View hWnd=0x00000e70}, GENERATE FORWARD, unsigned int 0, CPoint {x=937 y=211}) line 1771 + 20 bytes
+CDVM_CreO::RButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000e70}, unsigned int 0, CPoint {x=937 y=211}) line 424
+CDrawView::RButtonUp(unsigned int 0, CPoint {x=937 y=211}) line 4108
+C12View::OnRButtonUp(unsigned int 0, CPoint {x=937 y=211}) line 412
+CWnd::OnWndMsg(unsigned int 517, unsigned int 0, long 13829033, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 517, unsigned int 0, long 13829033) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000e70}, HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 13829033) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 13829033) line 371
+AfxWndProcBase(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 13829033) line 203 + 21 bytes
+KERNEL32! bff735d9()
+////////////////////////////
+// Translate CURVE: Copy OFF 
+////////////////////////////
+CMI_StaL::RegenCurveBased(CDrCurve * 0x01291d08 {CDrCurve}) line 1908
+CMI_CSPN::SpawnCurveCopyOff(MATRIX * 0x01361b80) line 529
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x01291d08 {CDrCurve}, CDrCurve * 0x01291d08 {CDrCurve}, MATRIX * 0x01361b80, CString * 0x01222100 {"C10_Cu"}, CDrObject * 0x01291d08 {CDrCurve}, unsigned int 1025) line 655 + 12 bytes
+CCurCreOp::CurveSpawnCopyOff(CDrCurve * 0x01291d08 {CDrCurve}, int 0) line 1292 + 39 bytes
+CCurCreOp::ShowCurveToSpawnCopyOff(CDrCurve * 0x01291d08 {CDrCurve}, int 0) line 1120 + 16 bytes
+CCurCreOp::ShowCurveToSpawn(CDrCurve * 0x01291d08 {CDrCurve}, int 0) line 999 + 19 bytes
+CCurCreOp::OnEBoxRButtonUp_CUR(CClientDC * 0x0120f988 {hDC=0x000005ee attrib=0x000005ee}, CView * 0x01262af0 {C12View hWnd=0x00000e70}, GENERATE FORWARD, unsigned int 0, CPoint {x=621 y=292}) line 1771 + 20 bytes
+CDVM_CreO::RButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000e70}, unsigned int 0, CPoint {x=621 y=292}) line 424
+CDrawView::RButtonUp(unsigned int 0, CPoint {x=621 y=292}) line 4108
+C12View::OnRButtonUp(unsigned int 0, CPoint {x=621 y=292}) line 412
+CWnd::OnWndMsg(unsigned int 517, unsigned int 0, long 19137133, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 517, unsigned int 0, long 19137133) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000e70}, HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 19137133) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 19137133) line 371
+AfxWndProcBase(HWND__ * 0x00000e70, unsigned int 517, unsigned int 0, long 19137133) line 203 + 21 bytes
+KERNEL32! bff735d9()
+//////////////////////////////////
+// Create  CURVE-based STATIC LOAD 
+//////////////////////////////////
+CMI_StaL::CreateCurveBased(CDrCurve * 0x0126c000 {CDrCurve}, CList<staLcard,staLcard> * 0x0120f0d0 {UstaLcard::?$CList}) line 937
+CSLDCur::ShowCurveStaticLoad(CDrCurve * 0x0126c000 {CDrCurve}, CString * 0x0122335c {"1"}) line 274 + 22 bytes
+CSLDMouse::ShowStatic_Curve(CString * 0x0122335c {"1"}) line 413 + 28 bytes
+CSLDMouse::ShowStatic(CString * 0x0122335c {"1"}) line 362 + 12 bytes
+CSLDMouse::OnEBoxRButtonUp_SLD(CClientDC * 0x0120f984 {hDC=0x000005f6 attrib=0x000005f6}, CView * 0x01262af0 {C12View hWnd=0x00000d94}, GENERATE FORWARD, unsigned int 0, CPoint {x=585 y=85}) line 3270 + 18 bytes
+CDVM_Genr::RButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000d94}, unsigned int 0, CPoint {x=585 y=85}) line 743
+CDrawView::RButtonUp(unsigned int 0, CPoint {x=585 y=85}) line 4094
+C12View::OnRButtonUp(unsigned int 0, CPoint {x=585 y=85}) line 412
+CWnd::OnWndMsg(unsigned int 517, unsigned int 0, long 5571145, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 517, unsigned int 0, long 5571145) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000d94}, HWND__ * 0x00000d94, unsigned int 517, unsigned int 0, long 5571145) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000d94, unsigned int 517, unsigned int 0, long 5571145) line 371
+AfxWndProcBase(HWND__ * 0x00000d94, unsigned int 517, unsigned int 0, long 5571145) line 203 + 21 bytes
+KERNEL32! bff735d9()
+////////////////////////////////////////////////////////////////////////////////////////////
+// Create CURVE PROFILE w/ STATIC: for the Example:Ist Curve w/o + Next Curve w/ Static 
+////////////////////////////////////////////////////////////////////////////////////////////
+// For Component Curve w/ STATIC Load("C3_Cu_1")
+//
+CMI_StaL::CreateCurveBased(CDrCurve * 0x012981c8 {CDrCurve}, CList<staLcard,staLcard> * 0x01298b28 {UstaLcard::?$CList}) line 937
+CMI_CSPN::SpawnListsInCurve(MATRIX * 0x0120f2b0) line 313
+CMI_CSPN::SpawnCurve(MATRIX * 0x0120f2b0) line 176
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x012981c8 {CDrCurve}, CDrCurve * 0x0126c000 {CDrCurve}, MATRIX * 0x0120f2b0, CString * 0x0120f250 {"C3_Cu_1"}, CDrObject * 0x0126c000 {CDrCurve}, unsigned int 1025) line 649 + 12 bytes
+CCurCreOp::CloneCurvesForPrivateListofCProf(CDrProf_C * 0x01271be0 {CDrProf_C}, CDListMgr * 0x012223a8 {CDListMgr}) line 1473 + 48 bytes
+CCurCreOp::ShowCProfileToStitch() line 1381 + 36 bytes
+CCurCreOp::OnEBoxRButtonUp_CUR(CClientDC * 0x0120f988 {hDC=0x000005fe attrib=0x000005fe}, CView * 0x01262af0 {C12View hWnd=0x00000d94}, GENERATE FORWARD, unsigned int 0, CPoint {x=700 y=194}) line 1890 + 8 bytes
+CDVM_CreO::RButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000d94}, unsigned int 0, CPoint {x=700 y=194}) line 424
+CDrawView::RButtonUp(unsigned int 0, CPoint {x=700 y=194}) line 4108
+C12View::OnRButtonUp(unsigned int 0, CPoint {x=700 y=194}) line 412
+CWnd::OnWndMsg(unsigned int 517, unsigned int 0, long 12714684, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 517, unsigned int 0, long 12714684) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000d94}, HWND__ * 0x00000d94, unsigned int 517, unsigned int 0, long 12714684) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000d94, unsigned int 517, unsigned int 0, long 12714684) line 371
+AfxWndProcBase(HWND__ * 0x00000d94, unsigned int 517, unsigned int 0, long 12714684) line 203 + 21 bytes
+//
+// For Profile Curve("PC_C3_Cu")
+//
+KERNEL32! bff735d9()
+CMI_StaL::CreateCurveBased(CDrCurve * 0x01286b0c {CDrCurve}, CList<staLcard,staLcard> * 0x0128746c {UstaLcard::?$CList}) line 937
+CMI_CProf::GenerateProfileStatic(CDrCurve * 0x01286b0c {CDrCurve}, CDrProf_C * 0x0126d990 {CDrProf_C}) line 1371
+CMI_CProf::SetInfoForProfileCurveBase_CONTROL(CDrCurve * 0x01286b0c {CDrCurve}) line 1460
+CMI_CProf::InsertProfileInfo() line 199
+CMI_CProf::RBUp_CProfile(CDrProf_C * 0x0126d990 {CDrProf_C}) line 97 + 8 bytes
+CCurCreOp::ShowCProfileToStitch() line 1416 + 24 bytes
+CCurCreOp::OnEBoxRButtonUp_CUR(CClientDC * 0x0120f988 {hDC=0x000005f6 attrib=0x000005f6}, CView * 0x01262af0 {C12View hWnd=0x00000f94}, GENERATE FORWARD, unsigned int 0, CPoint {x=887 y=180}) line 1890 + 8 bytes
+CDVM_CreO::RButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000f94}, unsigned int 0, CPoint {x=887 y=180}) line 424
+CDrawView::RButtonUp(unsigned int 0, CPoint {x=887 y=180}) line 4108
+C12View::OnRButtonUp(unsigned int 0, CPoint {x=887 y=180}) line 412
+CWnd::OnWndMsg(unsigned int 517, unsigned int 0, long 11797367, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 517, unsigned int 0, long 11797367) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000f94}, HWND__ * 0x00000f94, unsigned int 517, unsigned int 0, long 11797367) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000f94, unsigned int 517, unsigned int 0, long 11797367) line 371
+AfxWndProcBase(HWND__ * 0x00000f94, unsigned int 517, unsigned int 0, long 11797367) line 203 + 21 bytes
+KERNEL32! bff735d9()
+/////////////////////////////////////////////////////////////////////////////////////////
+// MOVE NODE Connected to CURVE PROFILE w/ STATIC : RIGID ON 
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+// For Profile Curve("PC_C3_Cu")
+//
+CMI_StaL::RegenCurveBased(CDrCurve * 0x012981c8 {CDrCurve}) line 1908
+CMI_CSPN::SpawnCurveCopyOff(MATRIX * 0x01385830) line 529
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x012981c8 {CDrCurve}, CDrCurve * 0x012981c8 {CDrCurve}, MATRIX * 0x01385830, CString * 0x0120f5c0 {"C7"}, CDrObject * 0x012981c8 {CDrCurve}, unsigned int 1025) line 655 + 12 bytes
+CNodCreOp::ShowObjectToSpawnCopyOff(CDrObject * 0x012981c8 {CDrCurve}, int 0, unsigned int 1025) line 3763 + 38 bytes
+CNodCreOp::CurTopo_SpawnConnectedCurves_CopyOff(CDrCurve * 0x012981c8 {CDrCurve}, int 0) line 3357 + 24 bytes
+CNodCreOp::NodeDependent_SpawnConnectedObjects_CopyOff(CDrNode * 0x0129c524 {CDrNode}, int 0, unsigned int 1025) line 3311 + 16 bytes
+CNodCreOp::ShowNodeToSpawnCopyOff(CDrNode * 0x0129c524 {CDrNode}, int 0) line 3146 + 21 bytes
+CNodCreOp::ShowNodeToSpawn(CDrNode * 0x0129c524 {CDrNode}, int 0) line 3043 + 19 bytes
+CNodEdit::ShowNodeToEdit(CDrNode * 0x0129c524 {CDrNode}) line 122 + 26 bytes
+CNodEdit::LeftUp_NODE_DoneMove(CPoint {x=466 y=285}, int 0) line 629
+CNodEdit::ElementLeftUp_NOD(CPoint {x=466 y=285}) line 693
+CNodEdit::OnEBoxLButtonUp_NOD(CClientDC * 0x0120f988 {hDC=0x000005fe attrib=0x000005fe}, CView * 0x01262af0 {C12View hWnd=0x00000d94}, GENERATE FORWARD, unsigned int 0, CPoint {x=447 y=343}) line 738
+CDVM_Edit::LButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000d94}, unsigned int 0, CPoint {x=447 y=343}) line 223
+CDrawView::LButtonUp(unsigned int 0, CPoint {x=447 y=343}) line 4023
+C12View::OnLButtonUp(unsigned int 0, CPoint {x=447 y=343}) line 400
+CWnd::OnWndMsg(unsigned int 514, unsigned int 0, long 22479295, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 514, unsigned int 0, long 22479295) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000d94}, HWND__ * 0x00000d94, unsigned int 514, unsigned int 0, long 22479295) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000d94, unsigned int 514, unsigned int 0, long 22479295) line 371
+AfxWndProcBase(HWND__ * 0x00000d94, unsigned int 514, unsigned int 0, long 22479295) line 203 + 21 bytes
+KERNEL32! bff735d9()
+KERNEL32! bff9222f()
+//
+// For Each Component Curve Loaded(for the example:"C3_Cu_1")
+//
+CMI_StaL::RegenCurveBased(CDrCurve * 0x0127d0c8 {CDrCurve}) line 1908
+CMI_CSPN::SpawnCurveCopyOff(MATRIX * 0x01357780) line 529
+CMI_CSPN::SpawnCurveWithoutDlg(CDrCurve * 0x0127d0c8 {CDrCurve}, CDrCurve * 0x0127d0c8 {CDrCurve}, MATRIX * 0x01357780, CString * 0x0120f5c0 {"C10"}, CDrObject * 0x0127d0c8 {CDrCurve}, unsigned int 1025) line 655 + 12 bytes
+CNodCreOp::ShowObjectToSpawnCopyOff(CDrObject * 0x0127d0c8 {CDrCurve}, int 0, unsigned int 1025) line 3763 + 38 bytes
+CNodCreOp::CurTopo_SpawnConnectedCurves_CopyOff(CDrCurve * 0x0127d0c8 {CDrCurve}, int 0) line 3357 + 24 bytes
+CNodCreOp::NodeDependent_SpawnConnectedObjects_CopyOff(CDrNode * 0x0127a628 {CDrNode}, int 0, unsigned int 1025) line 3311 + 16 bytes
+CNodCreOp::ShowNodeToSpawnCopyOff(CDrNode * 0x0127a628 {CDrNode}, int 0) line 3146 + 21 bytes
+CNodCreOp::ShowNodeToSpawn(CDrNode * 0x0127a628 {CDrNode}, int 0) line 3043 + 19 bytes
+CNodEdit::ShowNodeToEdit(CDrNode * 0x0127a628 {CDrNode}) line 122 + 26 bytes
+CNodEdit::LeftUp_NODE_DoneMove(CPoint {x=449 y=417}, int 0) line 629
+CNodEdit::ElementLeftUp_NOD(CPoint {x=449 y=417}) line 693
+CNodEdit::OnEBoxLButtonUp_NOD(CClientDC * 0x0120f988 {hDC=0x000005fe attrib=0x000005fe}, CView * 0x01262af0 {C12View hWnd=0x00000444}, GENERATE FORWARD, unsigned int 0, CPoint {x=431 y=217}) line 738
+CDVM_Edit::LButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000444}, unsigned int 0, CPoint {x=431 y=217}) line 223
+CDrawView::LButtonUp(unsigned int 0, CPoint {x=431 y=217}) line 4023
+C12View::OnLButtonUp(unsigned int 0, CPoint {x=431 y=217}) line 400
+CWnd::OnWndMsg(unsigned int 514, unsigned int 0, long 14221743, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 514, unsigned int 0, long 14221743) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000444}, HWND__ * 0x00000444, unsigned int 514, unsigned int 0, long 14221743) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000444, unsigned int 514, unsigned int 0, long 14221743) line 371
+AfxWndProcBase(HWND__ * 0x00000444, unsigned int 514, unsigned int 0, long 14221743) line 203 + 21 bytes
+KERNEL32! bff735d9()
+/////////////////////////////////////////////////////////////////////////////////////////
+// MOVE NODE Connected to CURVE PROFILE w/ STATIC	:RIGID OFF 
+/////////////////////////////////////////////////////////////////////////////////////////
+//
+// For Each Component Curve(for the example:"C3_Cu_1")
+//
+CMI_StaL::RegenCurveBased(CDrCurve * 0x0127f5e8 {CDrCurve}) line 1908
+CRegenCur::UpdateCurves(CDrNode * 0x0127cb48 {CDrNode}) line 136
+CNodEdit::ShowNodeToEdit(CDrNode * 0x0127cb48 {CDrNode}) line 136
+CNodEdit::LeftUp_NODE_DoneMove(CPoint {x=444 y=198}, int 0) line 629
+CNodEdit::ElementLeftUp_NOD(CPoint {x=444 y=198}) line 693
+CNodEdit::OnEBoxLButtonUp_NOD(CClientDC * 0x0120f988 {hDC=0x000005f6 attrib=0x000005f6}, CView * 0x01262af0 {C12View hWnd=0x00000970}, GENERATE FORWARD, unsigned int 0, CPoint {x=426 y=427}) line 738
+CDVM_Edit::LButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000970}, unsigned int 0, CPoint {x=426 y=427}) line 223
+CDrawView::LButtonUp(unsigned int 0, CPoint {x=426 y=427}) line 4023
+C12View::OnLButtonUp(unsigned int 0, CPoint {x=426 y=427}) line 400
+CWnd::OnWndMsg(unsigned int 514, unsigned int 0, long 27984298, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 514, unsigned int 0, long 27984298) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000970}, HWND__ * 0x00000970, unsigned int 514, unsigned int 0, long 27984298) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000970, unsigned int 514, unsigned int 0, long 27984298) line 371
+AfxWndProcBase(HWND__ * 0x00000970, unsigned int 514, unsigned int 0, long 27984298) line 203 + 21 bytes
+KERNEL32! bff735d9()
+//
+// For Profile Curve("PC_C3_Cu")
+//
+CMI_StaL::RegenCurveBased(CDrCurve * 0x012835a4 {CDrCurve}) line 1908
+CMI_CProf::GenerateProfileStatic(CDrCurve * 0x0128a074 {CDrCurve}, CDrProf_C * 0x0126d990 {CDrProf_C}) line 1371
+CMI_CProf::SetInfoForProfileCurveBase_CONTROL(CDrCurve * 0x0128a074 {CDrCurve}) line 1460
+CMI_CProf::GoDoIt(CDrProf_C * 0x0126d990 {CDrProf_C}) line 743
+CRegenProf_C::ReGen_EditedProf_C_Controls(CDrProf_C * 0x0126d990 {CDrProf_C}) line 70
+CRegenCur::UpdateCurves(CDrNode * 0x0127cb48 {CDrNode}) line 141
+CNodEdit::ShowNodeToEdit(CDrNode * 0x0127cb48 {CDrNode}) line 136
+CNodEdit::LeftUp_NODE_DoneMove(CPoint {x=444 y=198}, int 0) line 629
+CNodEdit::ElementLeftUp_NOD(CPoint {x=444 y=198}) line 693
+CNodEdit::OnEBoxLButtonUp_NOD(CClientDC * 0x0120f988 {hDC=0x000005f6 attrib=0x000005f6}, CView * 0x01262af0 {C12View hWnd=0x00000970}, GENERATE FORWARD, unsigned int 0, CPoint {x=426 y=427}) line 738
+CDVM_Edit::LButtonUp(CView * 0x01262af0 {C12View hWnd=0x00000970}, unsigned int 0, CPoint {x=426 y=427}) line 223
+CDrawView::LButtonUp(unsigned int 0, CPoint {x=426 y=427}) line 4023
+C12View::OnLButtonUp(unsigned int 0, CPoint {x=426 y=427}) line 400
+CWnd::OnWndMsg(unsigned int 514, unsigned int 0, long 27984298, long * 0x0120fb10) line 1934
+CWnd::WindowProc(unsigned int 514, unsigned int 0, long 27984298) line 1555 + 30 bytes
+AfxCallWndProc(CWnd * 0x01262af0 {C12View hWnd=0x00000970}, HWND__ * 0x00000970, unsigned int 514, unsigned int 0, long 27984298) line 217 + 26 bytes
+AfxWndProc(HWND__ * 0x00000970, unsigned int 514, unsigned int 0, long 27984298) line 371
+AfxWndProcBase(HWND__ * 0x00000970, unsigned int 514, unsigned int 0, long 27984298) line 203 + 21 bytes
+KERNEL32! bff735d9()
+///////////////////////////////////////////////////////////////////////////////
+// ???????????????
+///////////////////////////////////////////////////////////////////////////////
+

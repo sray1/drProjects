@@ -1,0 +1,55 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Snap - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/snapvw.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\Auxiview\SNAPVW\snapvw.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSPF.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp".\Debug/snapvw.pch" /Yu"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\Auxiview\SNAPVW\BkfstPg.cpp"
+"C:\drgraf4_0\Auxiview\SNAPVW\ChildFrm.cpp"
+"C:\drgraf4_0\Auxiview\SNAPVW\DinnerPg.cpp"
+"C:\drgraf4_0\Auxiview\SNAPVW\LunchPg.cpp"
+"C:\drgraf4_0\Auxiview\SNAPVW\MainFrm.cpp"
+"C:\drgraf4_0\Auxiview\SNAPVW\SnapDoc.cpp"
+"C:\drgraf4_0\Auxiview\SNAPVW\SnapView.cpp"
+"C:\drgraf4_0\Auxiview\SNAPVW\snapvw.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSPF.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP10.tmp" with contents
+[
+/nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /D "_MBCS" /Fp".\Debug/snapvw.pch" /Yc"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\Auxiview\SNAPVW\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP10.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP11.tmp" with contents
+[
+/nologo /subsystem:windows /incremental:yes /pdb:".\Debug/snapvw.pdb" /debug /machine:I386 /out:".\Debug/snapvw.exe" 
+.\Debug\BkfstPg.obj
+.\Debug\ChildFrm.obj
+.\Debug\DinnerPg.obj
+.\Debug\LunchPg.obj
+.\Debug\MainFrm.obj
+.\Debug\SnapDoc.obj
+.\Debug\SnapView.obj
+.\Debug\snapvw.obj
+.\Debug\StdAfx.obj
+.\Debug\snapvw.res
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP11.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+C:\drgraf4_0\Auxiview\SNAPVW\snapvw.rc(495) : fatal error RC1015: cannot open include file 'afxres.rc'.
+Error executing rc.exe.
+
+
+
+<h3>Results</h3>
+snapvw.exe - 1 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

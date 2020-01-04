@@ -1,0 +1,129 @@
+//
+// DRGRAF.RC2 - resources App Studio does not edit directly
+//
+
+#ifdef APSTUDIO_INVOKED
+	#error this file is not editable by App Studio
+#endif //APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+// Version stamp for this .EXE
+
+#include "ver.h"
+
+VS_VERSION_INFO     VERSIONINFO
+  FILEVERSION       1,0,0,1
+  PRODUCTVERSION    1,0,0,1
+  FILEFLAGSMASK     VS_FFI_FILEFLAGSMASK
+#ifdef _DEBUG
+  FILEFLAGS         VS_FF_DEBUG|VS_FF_PRIVATEBUILD|VS_FF_PRERELEASE
+#else
+  FILEFLAGS         0 // final version
+#endif
+  FILEOS            VOS_DOS_WINDOWS16
+  FILETYPE          VFT_APP
+  FILESUBTYPE       0   // not used
+BEGIN
+	BLOCK "StringFileInfo"
+	BEGIN
+		BLOCK "040904E4" // Lang=US English, CharSet=Windows Multilingual
+		BEGIN 
+			VALUE "CompanyName",     "\0"
+			VALUE "FileDescription", "DRGRAF MFC Application\0"
+			VALUE "FileVersion",     "1.0.001\0"
+			VALUE "InternalName",    "DRGRAF\0"
+			VALUE "LegalCopyright",  "\0"
+			VALUE "LegalTrademarks", "\0"
+			VALUE "OriginalFilename","DRGRAF.EXE\0"
+			VALUE "ProductName",     "DRGRAF\0"
+			VALUE "ProductVersion",  "1.0.001\0"
+		END
+	END
+	BLOCK "VarFileInfo" 
+	BEGIN 
+		VALUE "Translation", 0x409, 1252
+			// English language (0x409) and the Windows ANSI codepage (1252)
+	END
+END
+
+/////////////////////////////////////////////////////////////////////////////
+// Add additional manually edited resources here...
+
+/////////////////////////////////////////////////////////////////////////////
+// extra dialogs not editable with App Studio
+
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+/////////////// The BELOW Dialog Box has been concocted by:                  ///////
+///////////////    1) get original from ControlTest:"CTRLtest.rc2"           ///////
+///////////////    2) get AppStudio created IDD_EYEPOSITION Dlg:"DRGRAF.RC"  ///////
+///////////////    2) get AppStudio created IDD_PEN         Dlg:"DRGRAF.RC"  ///////
+///////////////    3) mix 1) & 2) together                                   ///////
+//////////////////////////////////////////////////////////////////////////////////// 
+#include "muscroll.h"       // for spin button styles
+// 3 standard edit controls, with spin buttons
+IDD_EYEPOSITION DIALOG DISCARDABLE  60, 40, 187, 140
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Viewer's Eye Position"
+FONT 12, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,130,10,40,
+                    24
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,130,
+                    50,40,25
+    GROUPBOX        "Sample",IDC_SAMPLE,10,5,75,70
+    LTEXT           "Tilt (Eye Level Up/Down)",IDC_STATIC,10,105,85,8
+    EDITTEXT        IDC_TILT,96,105,19,12
+    LTEXT           "Rotation ( about Vertical)",IDC_STATIC,10,125,85,8
+    EDITTEXT        IDC_ROTATION,96,125,19,12
+    LTEXT           "Spin Reset: ",IDC_STATIC,10,85,85,8
+    EDITTEXT        IDC_SPIN_INCREMENT,96,85,19,12,ES_AUTOHSCROLL
+    LTEXT           "degrees",IDC_STATIC,135,85,30,8
+    LTEXT           "degrees",IDC_STATIC,135,105,30,8
+    LTEXT           "degrees",IDC_STATIC,135,125,30,8
+	CONTROL         "", IDC_BUTTON_INCREMENT, "MicroScroll", MSS_VERTICAL , 115, 85,
+					11, 12
+	CONTROL         "", IDC_BUTTON_TILT, "MicroScroll", MSS_VERTICAL ,115,105, 11,
+					12
+	CONTROL         "", IDC_BUTTON_ROTATION, "MicroScroll", MSS_VERTICAL , 115, 125,
+					11, 12
+END
+
+IDD_PEN DIALOG DISCARDABLE  100, 60, 159, 78
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION 
+CAPTION "PEN"
+FONT 12, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,120,4,36,20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,120,
+                    56,36,20
+    LISTBOX         IDC_LIST_COLOR,8,20,36,39,LBS_SORT | LBS_OWNERDRAWFIXED | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Color:",IDC_STATIC,8,8,32,7
+    LTEXT           "Style:",IDC_STATIC,48,8,30,7
+    LTEXT           "Width in pixels:",IDC_STATIC,8,68,52,7
+    EDITTEXT        IDC_EDIT_WIDTH,64,64,16,12,ES_AUTOHSCROLL
+	CONTROL         "", IDC_BUTTON_WIDTH, "MicroScroll", MSS_VERTICAL , 80, 64,
+					11, 12
+    COMBOBOX        IDC_COMBO_STYLE,48,20,60,64,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_PEN DLGINIT
+BEGIN
+    158, 0x403, 6, 0
+0x6f53, 0x696c, 0x0064, 
+    158, 0x403, 5, 0
+0x6144, 0x6873, "\000" 
+    158, 0x403, 4, 0
+0x6f44, 0x0074, 
+    158, 0x403, 9, 0
+0x6144, 0x6873, 0x4420, 0x746f, "\000" 
+    158, 0x403, 13, 0
+0x6144, 0x6873, 0x4420, 0x746f, 0x4420, 0x746f, "\000" 
+    0
+END
+
+
+

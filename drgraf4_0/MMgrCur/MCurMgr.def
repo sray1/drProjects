@@ -1,0 +1,43 @@
+; MCurMgr_D.def -- DEBUG version
+
+LIBRARY	MCur_D32
+DESCRIPTION  'MCurMgr Debug DLL' 
+
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMCurDLL											@2 NONAME
+
+
+
+
+;CMI_GangC
+
+??0CMI_GangC@@QAE@XZ
+??1CMI_GangC@@UAE@XZ
+
+?classCMI_GangC@CMI_GangC@@2UCRuntimeClass@@A
+?FillMeshNodesCurve@CMI_GangC@@QAEHPAVCDrCurve@@PAUWORLD@@PANH@Z
+
+
+
+;CMI_CSPN
+
+;??0CMI_CSPN@@QAE@XZ
+;??1CMI_CSPN@@UAE@XZ
+
+;?classCMI_CSPN@CMI_CSPN@@2UCRuntimeClass@@A
+
+
+
+;CMI_Prof
+
+;??0CMI_CProf@@QAE@XZ
+;??1CMI_CProf@@UAE@XZ
+
+;?classCMI_CProf@CMI_CProf@@2UCRuntimeClass@@A
+;?RBUp_CProfile@CMI_CProf@@UAEHPAVCDrProf_C@@@Z

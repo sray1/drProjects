@@ -1,0 +1,204 @@
+ // ELMouse.h : header file
+//
+#ifndef _SUP_MOUSE_H 
+#define _SUP_MOUSE_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+                    
+#include "O3DMouse.h"
+///////////////////// Modeless
+#include "Dlg_SupI.h"
+/////////////////////
+#include "DrLinSup.h" 	
+#include "DrNode.h" 	
+#include "DrLabel.h" 	
+#include "DrCurve.h" 	
+#include "DListMgr.h"
+#include "Def_Type.h"                    
+#include "Def_Supp.h"	// support                    
+#include "Def_Mous.h"                    
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class CSupMouse : public CO3DMouse
+{
+public:
+
+	CSupMouse();
+//////////////////////////////////////
+	DECLARE_SERIAL(CSupMouse)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+
+	///////////////////////////////////////////////////////////////////////////
+	UINT			ReSetToolID_SUP(UINT CntlID,UINT IGenID, UINT OperID);
+	void			InitDlgIn_SUP();
+	void			ModeLessOff_SUP();
+	void			ModeLessOn_SUP();
+	CDlg_SupI*		GetSupInDlg(){return m_pSupInDlg;};	// NodeLinSup(NLS)                                                                                
+	//////////////////////////////
+	long			CreateorActivateSupIn(UINT wParam, long lParam);
+	long			CancelSupIn(UINT wParam, long lParam);
+	long			GoodByeSupIn(UINT wParam, long lParam);
+	long			UpdateSupIn(UINT wParam, long lParam);
+	/////////////////////
+	void 			OnEBoxMouseMove_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonDown_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonDown_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonUp_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonUp_SUP(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	/////////////////////////////////////////////////////////////////////////// SUPPORT
+	double		GetDfaltStif(){return m_DfaltStif;};
+    void		SetDfaltStif(double St)
+    					{
+    						m_DfaltStif = St;
+    					}; 
+	double		GetCurrentStif(int index){return m_CurrentStif[index];};
+    void		SetCurrentStif(double St,int index)
+    					{
+    						m_CurrentStif[index] = St;
+    					}; 
+	BOOL		GetTx(){return m_bTx;};
+	void		SetTx(BOOL b){ m_bTx = b;};
+	BOOL		GetTy(){return m_bTy;};
+	void		SetTy(BOOL b){ m_bTy = b;};
+	BOOL		GetTz(){return m_bTz;};
+	void		SetTz(BOOL b){ m_bTz = b;};
+	BOOL		GetRx(){return m_bRx;};
+	void		SetRx(BOOL b){ m_bRx = b;};
+	BOOL		GetRy(){return m_bRy;};
+	void		SetRy(BOOL b){ m_bRy = b;};
+	BOOL		GetRz(){return m_bRz;};
+	void		SetRz(BOOL b){ m_bRz = b;};
+
+	BOOL		GetTxG(){return m_bTxG;};
+	void		SetTxG(BOOL b){ m_bTxG = b;};
+	BOOL		GetTyG(){return m_bTyG;};
+	void		SetTyG(BOOL b){ m_bTyG = b;};
+	BOOL		GetTzG(){return m_bTzG;};
+	void		SetTzG(BOOL b){ m_bTzG = b;};
+	BOOL		GetRxG(){return m_bRxG;};
+	void		SetRxG(BOOL b){ m_bRxG = b;};
+	BOOL		GetRyG(){return m_bRyG;};
+	void		SetRyG(BOOL b){ m_bRyG = b;};
+	BOOL		GetRzG(){return m_bRzG;};
+	void		SetRzG(BOOL b){ m_bRzG = b;};
+
+	SUPPPROC	GetSuppProc(){return m_SuppProc;};
+	void		SetSuppProc(SUPPPROC b)
+						{
+							m_SuppProcOld	= m_SuppProc;
+							m_SuppProc		= b;
+						};
+  				
+		
+protected:
+
+
+	virtual void	ElementLeftDown_SUP();				// described in derived also
+	virtual void	ElementLeftUp_SUP(CPoint point);	// described in derived also
+	////////////////////////////////////////////////////////////////////////////////
+	void		SetMainType_SUP();
+	void		CurrentOperationString(UINT CntlID,UINT IGenID,CString& strCur);
+	////////////////////////////////////////////////////////////////////////////////
+	void		UpdateLinSupDlg_TRUE();
+	void		UpdateLinSupDlg_FALSE();
+	int			FillSupCard(SUPPCARD& supCard,CString* pID);
+	////////////////////////
+	int			FillInfo_Rigid(SUPPCARD supCard,char* buf, int jStart);
+	int			FillInfo_SprOrSnu(CString& Nid,SUPPCARD supCard,char* buf, int jStart,BOOL bPat);
+	///////////////////////////////////////////////////////// NodeLinSup
+	int			ShowInfo_NodeLinSupport(CDrNode* pDrNode, char* buf, int jStart);
+	int 		ShowNodeLinSupp(CString* pID,int nHowMany);
+	int 		LeftUp_NodeLinSupp(CPoint point);
+	///////////////////////////////////////////////////////// CurveLinSup
+	int			ShowInfo_CurveLinSupport(CDrCurve* pDrCurve, char* buf, int jStart);
+	int			ShowCurveLinSupp(CString* pID,int nHowMany);
+	int			LeftUp_CurveLinSupp(CPoint point);
+	///////////////////////////////////////////////////////// PatchLinSup
+	int			ShowInfo_PatchLinSupport(CDrPatch* pDrPatch, char* buf, int jStart);
+	int			ShowPatchLinSupp(CString* pID,int nHowMany);
+	int			LeftUp_PatchLinSupp(CPoint point);
+	///////////////////////////////////////////////////////// SolidLinSup
+	int			ShowInfo_SolidLinSupport(CDrSolid* pDrSolid, char* buf, int jStart);
+	int			ShowSolidLinSupp(CString* pID,int nHowMany);
+	int			LeftUp_SolidLinSupp(CPoint point);
+
+
+protected:  
+// Attributes
+
+
+	UINT		m_nMainType;		// NSUP_RIGID etc
+	BOOL		m_bTanHide;			// for NodeBased Input = TRUE/ for CurveBased etc = FALSE
+	BOOL		m_bIdBHide;			// NodeB defining skewed curve,patch etc., but NOT Node
+	//////////////////////////
+	CDlg_SupI*	m_pSupInDlg;                                                                                
+    int			m_LastSupNum;
+	/////////////////////////////////////////// Support
+	CString		m_CurrentSupID;
+	CString		m_CurrentSupIDOld;
+	CDrLinSup*	m_pCurrentSupp;
+	SUPPPROC	m_SuppProcOld;
+	SUPPPROC	m_SuppProc;
+ 	double		m_DfaltStif;
+	pDOUBLE		m_CurrentStif;
+	BOOL    	m_bTx;
+	BOOL    	m_bTy;
+	BOOL    	m_bTz;
+	BOOL    	m_bRx;
+	BOOL    	m_bRy;
+	BOOL    	m_bRz;
+	BOOL    	m_bTxG;
+	BOOL    	m_bTyG;
+	BOOL    	m_bTzG;
+	BOOL    	m_bRxG;
+	BOOL    	m_bRyG;
+	BOOL    	m_bRzG;
+	CString		m_aNid;
+								// NodeToID for NodeInput (Skewed), but
+								// NodeFromID for Curve/PatchInput (Skewed)
+	CString		m_bNid;			// NodeToID for Curve/PatchInput (Skewed)
+	BOOL		m_bTan;
+	/////////////////////// Curve
+	CATEGORY	m_Category;
+	/////////////////////// Patch
+	BOOL		m_bPat;		//Is it Patch Currently
+
+
+
+//Operations
+public:
+
+	~CSupMouse();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CSupMouse)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

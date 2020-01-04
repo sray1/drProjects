@@ -1,0 +1,4483 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+
+#include "drgraf.h"
+#include "drgrafrm.h"
+#include "UserMsg.h"
+#include "drawView.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_Lims.h"                    
+#include "Def_Objs.h"                    
+#include "Def_Mous.h"                    
+#include "Def_CuPS.h"                    
+#include "Def_Ms.h" // Mesh Types for Patch
+///////////////////// dialogMgr
+//#include "EDlgMgr.h"  
+///////////////////// elements
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+#include "DrSolid.h"
+#include "DrObj3D.h"
+/////////////////////
+#include "MP_Xtrud.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h" 	
+///////////////////// specials
+#include "Def_Spec.h"
+#include "Obj3DMnu.h"
+#include "PatchMnu.h"
+#include "DrPen.h"
+#include "Layer.h"
+#include "booleans.h"
+#include "precison.h"
+/////////////////////
+#include "mouse.h"
+#include "DListMgr.h"
+///////////////////// Static Loads
+#include "Str_StaL.h"
+#include "Def_StaL.h"
+#include "DrStatic.h" 
+#include "MI_StaL.h" 
+//////////////////////
+#include "MSTLMgr.h" 
+#include "CommRsrc.h" 
+////////////////////// 
+//#include "CommRsrc.h"
+#include "Dlg_StLI.h"
+//////////////////////
+#include "SLDMouse.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////////////////////////////
+#define	new					DEBUG_NEW
+#define	BUFF_SIZE			1024
+////////////////////////////////////
+IMPLEMENT_SERIAL(CSLDMouse,CSupMouse,1)
+/////////////////////////////////////////////////////////////////////////////
+CSLDMouse::CSLDMouse()
+{
+
+	///////////////////////
+	m_pStLInDlg	= NULL;                                                                                
+	/////////////////////////////////////////// Static
+	m_Category		= CA_FORCE;
+	m_StaLProc		= STL_FORCE;
+	m_StaLProcOld	= m_StaLProc;
+	m_bTx			= FALSE;
+	m_bTy			= FALSE;
+	m_bTz			= FALSE;
+	m_bRx			= FALSE;
+	m_bRy			= FALSE;
+	m_bRz			= FALSE;
+	///////////////////////
+	m_dTx			= 0.0;
+	m_dTy			= 0.0;
+	m_dTz			= 0.0;
+	m_dRx			= 0.0;
+	m_dRy			= 0.0;
+	m_dRz			= 0.0;
+	/////////////////////
+	m_bTanHide		= FALSE;
+	m_bIdBHide		= FALSE;
+	m_aNid			= "";
+	m_bNid			= "";
+	m_bTan			= FALSE;
+	m_bPat			= FALSE;
+	m_bIso			= FALSE;
+	m_bSkewed		= FALSE;
+	/////////////////////// NonIso
+	m_bNonIso		= FALSE;
+	m_cid_Parent	= "";
+	m_bIncrement	= FALSE;
+	m_Orient		= "FORWARD";
+	m_dScale		= 0.0;
+	m_dStep			= 0.0;
+	m_dStart		= 0.0;
+	////////////////////////////////
+    m_LastStLNum		= 0;		// internal
+	m_CurrentStLID		= "StL0";
+	m_CurrentStLIDOld	= "StL0";
+	////////////////////////////////
+    m_LastStCNum		= 0;		// internal
+	m_CurrentStCID		= "StC0";
+	m_CurrentStCIDOld	= "StC0";
+	////////////////////////////////
+    m_LastStPNum		= 0;		// internal
+	m_CurrentStPID		= "StP0";
+	m_CurrentStPIDOld	= "StP0";
+
+}
+
+CSLDMouse::~CSLDMouse()
+{
+	/////////////////////////////////// Modeless Dialogs
+	if(m_pStLInDlg->m_hWnd)
+		m_pStLInDlg->DestroyWindow();
+	///////////////////
+	delete m_pStLInDlg;                                                                                
+	///////////////////
+}
+
+void CSLDMouse::InitDlgIn_SLD()
+{
+	///////////////////////////
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////////////// System Sizes
+	m_pStLInDlg			= new CDlg_StLI(pWnd);                                                                                
+}
+
+void CSLDMouse:: ElementLeftDown_SLD()
+{	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////////////////
+	SetMainType_SLD();
+	///////////////////
+	switch(m_nMainType) 
+	{
+		
+		////////////////////////////////////////////////// Force	
+		case NSL_FORCE:
+		case CSL_FORCE:
+		case PSL_FORCE:
+		case SSL_FORCE:
+
+			m_Category		= CA_FORCE;
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_FORCE;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= FALSE;
+				m_bTy			= FALSE;
+				m_bTz			= FALSE;
+				m_bRx			= FALSE;
+				m_bRy			= FALSE;
+				m_bRz			= FALSE;
+				/////
+				m_aNid			= "";
+				m_bNid			= "";
+				m_bTanHide		= FALSE;
+				m_bIdBHide		= FALSE;
+				m_bTan			= FALSE;
+				m_bPat			= FALSE;
+				m_bIso			= FALSE;
+				m_bSkewed		= FALSE;
+				/////////////////////// NonIso
+				m_bNonIso		= FALSE;
+				m_cid_Parent	= "";
+				m_bIncrement	= FALSE;
+				m_Orient		= "FORWARD";
+				m_dScale		= 0.0;
+				m_dStep			= 0.0;
+				m_dStart		= 0.0;
+				////////////////////////////////////////
+			}
+			///////
+			return;
+
+
+		case NSL_DISPLACE:
+        case CSL_DISPLACE:
+		case PSL_DISPLACE:
+		case SSL_DISPLACE:
+
+			m_Category		= CA_DISPLACE;
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_DISPLACE;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= FALSE;
+				m_bTy			= FALSE;
+				m_bTz			= FALSE;
+				m_bRx			= FALSE;
+				m_bRy			= FALSE;
+				m_bRz			= FALSE;
+				/////
+				m_aNid			= "";
+				m_bNid			= "";
+				m_bTanHide		= FALSE;
+				m_bIdBHide		= FALSE;
+				m_bTan			= FALSE;
+				m_bPat			= FALSE;
+				m_bIso			= FALSE;
+				m_bSkewed		= FALSE;
+				/////////////////////// NonIso
+				m_bNonIso		= FALSE;
+				m_cid_Parent	= "";
+				m_bIncrement	= FALSE;
+				m_Orient		= "FORWARD";
+				m_dScale		= 0.0;
+				m_dStep			= 0.0;
+				m_dStart		= 0.0;
+				////////////////////////////////////////
+			}
+			///////
+			return;
+
+
+
+		case NSL_PRESSURE:
+        case CSL_PRESSURE:
+		case PSL_PRESSURE:
+		case SSL_PRESSURE:
+
+			m_Category		= CA_PRESSURE;
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_PRESSURE;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= FALSE;
+				m_bTy			= FALSE;
+				m_bTz			= FALSE;
+				/////
+				m_aNid			= "";
+				m_bNid			= "";
+				m_bTanHide		= FALSE;
+				m_bIdBHide		= FALSE;
+				m_bTan			= TRUE;
+				m_bPat			= FALSE;
+				m_bIso			= FALSE;
+				m_bSkewed		= TRUE;
+				/////////////////////// NonIso
+				m_bNonIso		= FALSE;
+				m_cid_Parent	= "";
+				m_bIncrement	= FALSE;
+				m_Orient		= "FORWARD";
+				m_dScale		= 0.0;
+				m_dStep			= 0.0;
+				m_dStart		= 0.0;
+				////////////////////////////////////////
+			}
+			///////
+			return;
+
+
+
+		case NSL_THERMAL:
+        case CSL_THERMAL:
+		case PSL_THERMAL:
+		case SSL_THERMAL:
+
+			m_Category		= CA_THERMAL;
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_THERMAL;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= FALSE;
+				m_bTy			= FALSE;
+				m_bTz			= FALSE;
+				/////
+				m_aNid			= "";
+				m_bNid			= "";
+				m_bTanHide		= FALSE;
+				m_bIdBHide		= FALSE;
+				m_bTan			= FALSE;
+				m_bPat			= FALSE;
+				m_bIso			= FALSE;
+				m_bSkewed		= FALSE;
+				/////////////////////// NonIso
+				m_bNonIso		= FALSE;
+				m_cid_Parent	= "";
+				m_bIncrement	= FALSE;
+				m_Orient		= "FORWARD";
+				m_dScale		= 0.0;
+				m_dStep			= 0.0;
+				m_dStart		= 0.0;
+				////////////////////////////////////////
+			}
+			///////
+			return;
+
+
+
+		case NSL_LUMPWT:
+        case CSL_LUMPWT:
+		case PSL_LUMPWT:
+		case SSL_LUMPWT:
+
+			m_Category		= CA_LUMPWT;
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_LUMPWT;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= FALSE;
+				m_bTy			= FALSE;
+				m_bTz			= FALSE;
+				/////
+				m_aNid			= "";
+				m_bNid			= "";
+				m_bTanHide		= FALSE;
+				m_bIdBHide		= FALSE;
+				m_bTan			= FALSE;
+				m_bPat			= FALSE;
+				m_bIso			= FALSE;
+				m_bSkewed		= FALSE;
+				/////////////////////// NonIso
+				m_bNonIso		= FALSE;
+				m_cid_Parent	= "";
+				m_bIncrement	= FALSE;
+				m_Orient		= "FORWARD";
+				m_dScale		= 0.0;
+				m_dStep			= 0.0;
+				m_dStart		= 0.0;
+				////////////////////////////////////////
+			}
+			///////
+			return;
+
+
+		//////////////////////////////////////////////////
+		default:
+			break;
+	}  
+	/////////////////////
+	switch(m_nMainType) 
+	{
+		
+		////////////////////////////////////////////////// Identify Patch for Switch:
+														// Tangent->Normals	
+		case PSL_FORCE:
+		case PSL_DISPLACE:
+		case PSL_PRESSURE:
+		case PSL_THERMAL:
+		case PSL_LUMPWT:
+			m_bPat			= TRUE;
+			break;
+		//////////////////////////////////////////////////
+		default:
+			break;
+	} 
+	/////////////
+
+}
+
+int CSLDMouse::FillStLCard(STALCARD& stLCard,CString* pID)
+{
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	stLCard.load_id		= *pID;
+	stLCard.StaLProc	= m_StaLProc;
+	stLCard.kode[0]		= (BYTE)m_bTx;
+	stLCard.kode[1]		= (BYTE)m_bTy;
+	stLCard.kode[2]		= (BYTE)m_bTz;
+	stLCard.kode[3]		= (BYTE)m_bRx;
+	stLCard.kode[4]		= (BYTE)m_bRy;
+	stLCard.kode[5]		= (BYTE)m_bRz;
+
+	stLCard.value[0]	= m_dTx;
+	stLCard.value[1]	= m_dTy;
+	stLCard.value[2]	= m_dTz;
+	stLCard.value[3]	= m_dRx;
+	stLCard.value[4]	= m_dRy;
+	stLCard.value[5]	= m_dRz;
+
+	stLCard.bIso		= m_bIso;				
+	/////////////////////////////////// NonIso
+	stLCard.bNonIso		= m_bNonIso;
+	stLCard.bIncrement	= m_bIncrement;
+	stLCard.Orient		= m_Orient;
+	stLCard.dScale		= m_dScale;
+	stLCard.dStep		= m_dStep;
+	stLCard.dStart		= m_dStart;
+	///////////////////////////////////
+	stLCard.cid_Iso		= m_cid_Iso;				
+	stLCard.cid_Parent	= m_cid_Parent;				
+	stLCard.nid_a		= m_aNid;
+	stLCard.nid_b		= m_bNid;			
+	stLCard.bTan		= m_bTan;				
+	/////////////////////////////////////////////////// Create, if Fixed Skewed Direction
+	if( stLCard.nid_a != "" && stLCard.nid_b != "")	
+	{
+		WORLD		NewX;
+		pWORLD		pNewX = &NewX;	// 
+	
+		int			index;
+		CDrNode*	pNodeA;
+		CDrNode*	pNodeB;
+		WORLD		CNodPosA,CNodPosB;		
+		////////////////
+		CDListMgr* pList	= pObjectMgr->GetObjectList(NODE);
+		index				= pList->GetObjectIndex(NODE,stLCard.nid_a);
+		pNodeA				= (CDrNode*)pList->GetObject(index);
+		CNodPosA			= *(pNodeA->GetLocalPos());
+		index				= pList->GetObjectIndex(NODE,stLCard.nid_b);
+		pNodeB				= (CDrNode*)pList->GetObject(index);
+		CNodPosB			= *(pNodeB->GetLocalPos());
+		////////////////////////////////////////////////////// Get NewX Direction
+		C3DMath Math3D;
+		Math3D.Sub3DPts(&CNodPosB,&CNodPosA,pNewX);
+		Math3D.Normalize(pNewX,pNewX);
+		////////////////////////////////////////////////////// Save
+		stLCard.SkewDir.x = pNewX->x;
+		stLCard.SkewDir.y = pNewX->y;
+		stLCard.SkewDir.z = pNewX->z;
+		/////////////////////////////
+	}
+	///////////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::ShowNodeStaticLoad(CString* pID,int nHowMany)
+{
+	///////////////////////////////////////////////////////////////////////
+//	 nHowmany			// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateNodeLinSup
+						// even if same coords node exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowNode to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(STATICLOAD);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_StaL Static;
+	/////////////////////
+	STALCARD stLCard;
+	FillStLCard(stLCard,pID);
+	/////////////////////
+	m_pCurrentStaL = Static.CreateNodeBased(m_StaLProc,stLCard,m_pCurrentNode,NODE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();	// Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(STATICLOAD);		    // set Active Type									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,STATICLOAD);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowCurveStaticLoad(CString* pID,int nHowMany)
+{
+	///////////////////////////////////////////////////////////////////////
+//	 nHowmany			// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateCurveLinSup
+						// even if same coords Curve exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowCurve to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(STATICLOAD);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_StaL Static;
+	/////////////////////
+	STALCARD stLCard;
+	/////////////////////////
+	if(m_bIso || m_bNonIso)
+	{
+		/////////////////////////
+		m_cid_Iso		= m_pCurrentCurve->GetObjectID();	// this staLcard IsoParametric(Non-Iso) to this Curve
+		m_cid_Parent	= m_pCurrentSCurveT[0]->GetObjectID();	// this staLcard part of this Curve of Category CA_FORCE
+																// this is m_CID in Iso-Generated Curve
+																// this is m_CID in NonIso Input
+		/////////////////////////
+		FillStLCard(stLCard,pID);
+		//////////////
+		m_pCurrentStaL = Static.CreateCurveBased(m_StaLProc,stLCard,m_pCurrentCurve,
+								TRUE,m_pCurrentSCurveT[0],m_pCurrentSCurveR[0],CURVE);	// TRUE = NonUniform
+	}
+	else
+	{
+		m_cid_Iso		= "";
+		m_cid_Parent	= "";
+		/////////////////////////
+		FillStLCard(stLCard,pID);
+		//////////////
+		m_pCurrentStaL = Static.CreateCurveBased(m_StaLProc,stLCard,m_pCurrentCurve,
+								FALSE,(CDrCurve*)NULL,(CDrCurve*)NULL,CURVE);	// FALSE = Uniform
+	}
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();	// Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(STATICLOAD);		    // set Active Type									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,STATICLOAD);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowPatchStaticLoad(CString* pID,int nHowMany)
+{
+	///////////////////////////////////////////////////////////////////////
+//	 nHowmany			// Used as an afterthought for Updating Static anyway
+						// in CMI_LSupp.CreatePatchLinSup
+						// even if same coords Patch exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowPatch to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(STATICLOAD);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_StaL Static;
+	/////////////////////
+	STALCARD stLCard;
+	/////////////////////////
+	if(m_bIso || m_bNonIso)
+	{
+		/////////////////////////
+		m_cid_Iso		= m_pCurrentPatch->GetObjectID();	// this staLcard IsoParametric(Non-Iso) to this Patch
+		m_cid_Parent	= m_pCurrentSPatchT[0]->GetObjectID();	// this staLcard part of this Patch of Category CA_FORCE
+																// this is m_CID in Iso-Generated Patch
+																// this is m_CID in NonIso Input
+		/////////////////////////
+		FillStLCard(stLCard,pID);
+		//////////////
+		if(m_pCurrentPatch->GetPatSubType() == PS_QUADRILAT)
+			m_pCurrentStaL = Static.CreatePatchBased_4(m_StaLProc,stLCard,m_pCurrentPatch,
+								TRUE,m_pCurrentSPatchT[0],m_pCurrentSPatchR[0],PATCH);	// TRUE = NonUniform
+		if(m_pCurrentPatch->GetPatSubType() == PS_TRIANGLE)
+			m_pCurrentStaL = Static.CreatePatchBased_3(m_StaLProc,stLCard,m_pCurrentPatch,
+								TRUE,m_pCurrentSPatchT[0],m_pCurrentSPatchR[0],PATCH);	// TRUE = NonUniform
+	}
+	else
+	{
+		m_cid_Iso		= "";
+		m_cid_Parent	= "";
+		/////////////////////////
+		FillStLCard(stLCard,pID);
+		//////////////
+		if(m_pCurrentPatch->GetPatSubType() == PS_QUADRILAT)
+			m_pCurrentStaL = Static.CreatePatchBased_4(m_StaLProc,stLCard,m_pCurrentPatch,
+								FALSE,(CDrPatch*)NULL,(CDrPatch*)NULL,PATCH);	// FALSE = Uniform
+		if(m_pCurrentPatch->GetPatSubType() == PS_TRIANGLE)
+			m_pCurrentStaL = Static.CreatePatchBased_3(m_StaLProc,stLCard,m_pCurrentPatch,
+								FALSE,(CDrPatch*)NULL,(CDrPatch*)NULL,PATCH);	// FALSE = Uniform
+	}
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();	// Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(STATICLOAD);		    // set Active Type									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,STATICLOAD);
+	///////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::ShowSolidStaticLoad(CString* pID,int nHowMany)
+{
+	return -1;
+}
+
+void CSLDMouse::OnEBoxLButtonDown_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	CDListMgr* pDListMgr;
+	/////////////////////////////////// 
+   	m_bDragOn 		= pBool->IsDragOn();
+	m_bDialogOn		= pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	//////////////////////////////////////////////////////// LOG
+	m_pdc->DPtoLP(&point);
+	//////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////////////////////////////////// take care of Edit AllClear
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	if(!(pDListMgr->GetSpecificObjectCount(NODE)) ) m_nNodeDone = 0;
+	/////////////////////////////////////////////////////////////////
+    /////////////////////////////  ELement Dialog On/Off Check
+    if(m_Gener == FORWARD)
+		ElementLeftDown_SLD();
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftDown_I();
+	//////////////////////////////////
+}
+
+void CSLDMouse::UpdateStaticDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pStLInDlg->UpdateData(TRUE); // from screen
+	////////////
+	m_bRx			= GetStLInDlg()->m_bRx;
+	m_bRy			= GetStLInDlg()->m_bRy;
+	m_bRz			= GetStLInDlg()->m_bRz;
+	m_bTx			= GetStLInDlg()->m_bTx;
+	m_bTy			= GetStLInDlg()->m_bTy;
+	m_bTz			= GetStLInDlg()->m_bTz;
+	//////
+	m_aNid			= GetStLInDlg()->m_aNid;
+	m_bNid			= GetStLInDlg()->m_bNid;
+	m_bTan			= GetStLInDlg()->m_bTan;
+	m_bPat			= GetStLInDlg()->m_bPat;
+	m_bIso			= GetStLInDlg()->m_bIso;
+	m_bSkewed		= GetStLInDlg()->m_bSkewed;
+	m_CurrentStLID	= GetStLInDlg()->m_LoadID;
+	m_StaLProc		= GetStLInDlg()->m_StaLProc;
+	////////////////////////////////////////////// NonIso
+	m_bNonIso		= GetStLInDlg()->m_bNonIso;
+	m_cid_Parent	= GetStLInDlg()->m_CID;
+	m_bIncrement	= GetStLInDlg()->m_bIncrement;
+	m_Orient		= GetStLInDlg()->m_Orient;
+	m_dScale		= GetStLInDlg()->m_dScale;
+	m_dStep			= GetStLInDlg()->m_dStep;
+	m_dStart		= GetStLInDlg()->m_dStart;
+	/////////////////////////////////////
+}
+			
+void CSLDMouse::UpdateStaticDlg_FALSE()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr; 
+	/////////////////////////////////////////////////////////
+	GetStLInDlg()->m_bRx		= m_bRx;
+	GetStLInDlg()->m_bRy		= m_bRy;
+	GetStLInDlg()->m_bRz		= m_bRz;
+	GetStLInDlg()->m_bTx		= m_bTx;
+	GetStLInDlg()->m_bTy		= m_bTy;
+	GetStLInDlg()->m_bTz		= m_bTz;
+	///
+	GetStLInDlg()->m_aNid		= m_aNid;
+	GetStLInDlg()->m_bNid		= m_bNid;
+	GetStLInDlg()->m_bTan		= m_bTan;
+	GetStLInDlg()->m_bPat		= m_bPat;
+	GetStLInDlg()->m_bIso		= m_bIso;
+	GetStLInDlg()->m_bSkewed	= m_bSkewed;
+	GetStLInDlg()->m_LoadID		= m_CurrentStLID;
+	GetStLInDlg()->m_StaLProc	= m_StaLProc;
+	////////////////////////////////////////////// NonIso
+	GetStLInDlg()->m_bNonIso	= m_bNonIso;
+	GetStLInDlg()->m_CID		= m_cid_Parent;
+	GetStLInDlg()->m_bIncrement	= m_bIncrement;
+	GetStLInDlg()->m_Orient		= m_Orient;
+	GetStLInDlg()->m_dScale		= m_dScale;
+	GetStLInDlg()->m_dStep		= m_dStep;
+	GetStLInDlg()->m_dStart		= m_dStart;
+	////////////////////////////////////////////// CurrStat: Show
+	strCurr = "Ready for Selection@";
+	if(
+		m_nMainType == NSL_FORCE	|| m_nMainType == NSL_DISPLACE	||
+		m_nMainType == NSL_PRESSURE	|| m_nMainType == NSL_THERMAL	||
+		m_nMainType == NSL_LUMPWT
+	)
+		strCurr += "An Existing Input Node";
+	else
+	if(
+		m_nMainType == CSL_FORCE	|| m_nMainType == CSL_DISPLACE	||
+		m_nMainType == CSL_PRESSURE	|| m_nMainType == CSL_THERMAL	||
+		m_nMainType == CSL_LUMPWT
+	)
+			strCurr += "An Existing Curve";
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	////////////
+	m_pStLInDlg->UpdateData(FALSE); // to screen
+	////////////////////////////
+}
+
+int CSLDMouse::ShowInfo_NodeStaticLoad(CDrNode* pDrNode, char* buf, int jStart)
+{
+	int j = jStart;
+	////////////////////////////////////////
+	CDListMgr* pList = pDrNode->GetStaLList();
+	////////////////////////////////////////////////////////////////////////
+	int i;
+	CDrStatic*	pDrStatic;
+	STALCARD	stLCard;
+	POSITION	pos;
+	/////////////////////////////////////////////////////////// Go Over List for correct LID
+	for(i=0;i<pList->GetCount();i++)
+	{
+		pos			= pList->FindIndex(i);
+		pDrStatic	= (CDrStatic*)pList->GetAt(pos);
+		////
+		if(pDrStatic)
+			stLCard = *(pDrStatic->GetStaLCard());					
+		else
+		{
+			AfxMessageBox("Internal ERROR:\nCSLDMouse::FillInfo_NodeStaticLoad\npDrLinSup=NULL"); 
+			return -2;
+		}
+		/////////////////////////////////////////
+		if(stLCard.load_id != m_CurrentStLID)
+			continue;
+		////////////////////////////////////////////////////// Same LID
+		CString		Nid;
+		Nid = pDrNode->GetObjectID();
+		/////////////////////////////////////////
+		switch (stLCard.StaLProc)
+		{
+			case STL_FORCE:
+			case STL_DISPLACE:	// fall thro'
+				j	= FillInfo_6(Nid, stLCard, buf, j);
+				break;
+			case STL_LUMPWT:	// fall thro'
+			case STL_THERMAL:
+			case STL_PRESSURE:
+				j	= FillInfo_3(Nid, stLCard, buf, j);
+				break;
+			default:
+				break;
+		}
+	}
+	//////////
+	return j;
+}
+
+int CSLDMouse::FillInfo_3(CString& Nid,STALCARD stLCard,char* buf, int jStart)
+{
+	CString dir[] = {"X","Y","Z"};
+
+	int i, j = jStart;
+	//////////////////
+	switch(stLCard.StaLProc)
+	{
+		case STL_THERMAL:
+			j += sprintf(buf+j,"\n\nLoadType = THERMAL\n");
+			break;
+		case STL_PRESSURE:
+			j += sprintf(buf+j,"\n\nLoadType = PRESSURE (Normal/Shear)\n");
+			break;
+		case STL_LUMPWT:
+			j += sprintf(buf+j,"\n\nLoadType = LUMPWT\n");
+			break;
+		default:
+			break;
+	}
+	//////////////
+	j += sprintf(buf+j,"\nLoadID = %s\n",stLCard.load_id);
+	/////////////////////////////////////////////////////////////////////// Translational
+	j += sprintf(buf+j,"\n\tTranslational:\n");
+	for(i=0;i<3;i++)
+	{
+		if((BOOL)stLCard.kode[i])
+			j += sprintf(buf+j,"\t\tDirection %s = Loaded with %f \n", dir[i],stLCard.value[i]);
+		else
+			j += sprintf(buf+j,"\t\tDirection %s = NOLOAD\n", dir[i]);
+	}
+	/////////////////////////////////////////////////////////////////////// Skewed
+	if(stLCard.nid_a != "")
+	{	
+			j += sprintf(buf+j,"\nLoading Coordinate is Skewed with\n");
+			j += sprintf(buf+j,"X-axis defined by:\n");
+			j += sprintf(buf+j,"\t%s and %s\n",Nid,stLCard.nid_a);
+	}
+	else
+	if(m_bTan)
+	{	
+			j += sprintf(buf+j,"\nLoading Input is Skewed with\n");
+			j += sprintf(buf+j,"X-axis along Tangents\n");
+	}
+	/////////////////////////////////////////////////////////////////////// IsoParametric
+	if(stLCard.bIso)
+		j += sprintf(buf+j,"\nLoading Input Model:\nIsoParametric\nto %s Curve\n",
+						stLCard.cid_Parent);
+	else
+	if(stLCard.bNonIso)
+		j += sprintf(buf+j,"\nLoading Input Model:\nNon-IsoParametric\nto %s Curve\n",
+						stLCard.cid_Parent);
+	else
+		j += sprintf(buf+j,"\nLoading Input Model:\nUniform over\n%s Curve\n",
+						stLCard.cid_Parent);
+	/////////
+	return j;
+}
+
+int CSLDMouse::FillInfo_6(CString& Nid,STALCARD stLCard,char* buf, int jStart)
+{
+	CString dir[] = {"X","Y","Z"};
+
+	int i, j = jStart;
+	//////////////////
+	switch(stLCard.StaLProc)
+	{
+		case STL_DISPLACE:
+			j += sprintf(buf+j,"\n\nLoadType = DISPLACEMENT/ROTATION\n");
+			break;
+		case STL_FORCE:
+			j += sprintf(buf+j,"\n\nLoadType = FORCE/MOMENT\n");
+			break;
+		default:
+			break;
+	}
+	//////////////
+	j += sprintf(buf+j,"\nLoadID = %s\n",stLCard.load_id);
+	/////////////////////////////////////////////////////////////////////// Translational
+	j += sprintf(buf+j,"\n\tTranslational:\n");
+	for(i=0;i<3;i++)
+	{
+		if((BOOL)stLCard.kode[i])
+			j += sprintf(buf+j,"\t\tDirection %s = Loaded with %f \n", dir[i],stLCard.value[i]);
+		else
+			j += sprintf(buf+j,"\t\tDirection %s = NOLOAD\n", dir[i]);
+	}
+	/////////////////////////////////////////////////////////////////////// Rotational
+	j += sprintf(buf+j,"\n\tRotational:\n");
+	for(i=3;i<6;i++)
+	{
+		if((BOOL)stLCard.kode[i])
+			j += sprintf(buf+j,"\t\tDirection %s = Loaded with %f \n", dir[i-3],stLCard.value[i]);
+		else
+			j += sprintf(buf+j,"\t\tDirection %s = NOLOAD\n", dir[i-3]);
+	}
+	/////////////////////////////////////////////////////////////////////// Skewed
+	if(stLCard.nid_a != "")
+	{	
+			j += sprintf(buf+j,"\nLoading Coordinate is Skewed with\n");
+			j += sprintf(buf+j,"X-axis defined by:\n");
+			j += sprintf(buf+j,"\t%s and %s\n",Nid,stLCard.nid_a);
+	}
+	else
+	if(m_bTan)
+	{	
+			j += sprintf(buf+j,"\nLoading Input is Skewed with\n");
+			j += sprintf(buf+j,"X-axis along Tangents\n");
+	}
+	/////////////////////////////////////////////////////////////////////// IsoParametric
+	if(stLCard.bIso)
+		j += sprintf(buf+j,"\nLoading Input Model:\nIsoParametric\nto %s Curve\n",
+						stLCard.cid_Parent);
+	else
+	if(stLCard.bNonIso)
+		j += sprintf(buf+j,"\nLoading Input Model:\nNon-IsoParametric\nto %s Curve\n",
+						stLCard.cid_Parent);
+	else
+		j += sprintf(buf+j,"\nLoading Input Model:\nUniform over\n%s Curve\n",
+						stLCard.cid_Parent);
+	/////////
+	return j;
+}
+
+int CSLDMouse::LeftUp_NodeStatic(CPoint point)
+{
+	///////////////////////////////////////////////////////////////////////
+	int nAnyway	= 0;	// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateNodeLinSup
+						// even if same coords node exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowNode to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 			= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString*	pID;
+	CString		ID;
+	CDrNode*	pDrNode;
+	int			nActiveIndex,index,nResult;
+	WORLD		wLoc;
+	BOOL		bNew	= TRUE;
+	///////////////////////////////////////////// See if any Existing Node Hit
+	index = IsObjectHit(NODE,point,0);
+	//////////////
+	if(index<0)	
+		return -2;
+	//////////////////////////////////////////////////////////////// Existing Node
+	pDrNode				= (CDrNode*)pDListMgr->GetObject(index);
+	ID					= pDrNode->GetObjectID();
+	/////////////////////////////////////////
+	pList = pObjectMgr->GetObjectList(NODE);
+	nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+	//////////////////////////////////////////////////////////////// MultipleSearch
+	int startIndex = index+1;
+	/////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		for(;;)
+		{
+			CString* str = new CString;
+			char* buf = str->GetBuffer(BUFF_SIZE);
+			int j;
+			/////////////////////////////// Coords
+			wLoc = *(pDrNode->GetLocalPos());
+			WORtoWOP(&wLoc,&wLoc);	// to Physical
+			//////////////////////////////
+			pList = pDrNode->GetStaLList();
+// to do********/////////////////////////////// if Supported, only Displace/rot Allowed 
+			if(pList->GetCount())
+			{
+				//////////////
+				j = sprintf(buf,"***** Selected Node is Already Loaded  *****\n");
+				j += sprintf(buf+j,"\nNodeID = %s\nCoordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f\n",
+								ID,wLoc.x,wLoc.y,wLoc.z);
+				//////////////////////////
+				j = ShowInfo_NodeStaticLoad(pDrNode, buf, j);
+				if(j<0)
+					return -2;
+				////////////////////////////
+				j += sprintf(buf+j,
+					"\n\nYES:\tAccept The Existing Nodal Load");
+				j += sprintf(buf+j,
+					"\nNO:\tFind Next Matching Node");
+				j += sprintf(buf+j,
+					"\nCANCEL:\tUpdate Node with New Load Anyway");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+				/////////////
+			}
+			else
+			{
+				//////////////////////////////
+				j = sprintf(buf,"***** Existing Node Selected *****\n");
+				j += sprintf(buf+j,"\nNodeID = %s\nCoordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f ",
+								ID,wLoc.x,wLoc.y,wLoc.z);
+				////////////////////////////
+				j += sprintf(buf+j,
+						"\n\nYES:\tAccept This Existing Node");
+				j += sprintf(buf+j,
+					"\nNO:\tFind Next Matching Node");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+				/////////////
+			}
+			/////////////
+			if(nResult == IDOK)
+			{
+				delete str;
+				break;
+			}
+			else
+			if(nResult == IDNO)
+			{
+				//////////////////////////////////////////////////////// Retry
+				index = IsObjectHit(NODE,&wLoc,startIndex);
+				////////////
+				if(index<0)
+				{
+					////////////////
+					delete str;
+					return -2;
+					//////////
+				}
+				//////////
+				pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+				ID		= pDrNode->GetObjectID();
+				///////////////////////////////////////// 
+				pList = pObjectMgr->GetObjectList(NODE);
+				nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+				pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+				pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+				pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+				////////////////////////////////////////
+				startIndex  = index+1;
+				/////////////////////
+			}
+			else				// Cancel
+			{
+				//////////////////////////////////////////////////////// Create New
+				bNew = TRUE;
+				nAnyway	= -12345;	// Create Anyway
+				/////////////
+				delete str;
+				break;
+			}
+		}
+	}
+	m_pCurrentNode			= (CDrNode*)pDListMgr->GetObject(index);
+	//////////////////////////////////////////////////////////////// Get Values
+	Get_Values(m_StaLProc);
+	//////////////////////////////////////////////////////////////// Show LinSup
+	pID = &m_CurrentStLID;
+	//////////////////////////
+	if(ShowNodeStaticLoad(pID,nAnyway)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_NodeStatic\nShowNodeStaticLoad Problem");
+		return -1;
+	}
+	////////////////////////// Set StLID
+	m_CurrentStLIDOld = *pID;
+	if(*pID == m_CurrentStLID)
+	{		
+		char buf[30];
+		m_LastStLNum++;		// internal
+		sprintf(buf,"%d",m_LastStLNum);
+		m_CurrentStLID	= "StL";
+		m_CurrentStLID	+= buf;
+	}
+	////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::Get_Values(STALPROC StaLProc)
+{
+	CMStLMgr	Mgr;
+	CString		heading;
+	UINT		nStatus;
+	int i;
+	/////////////////////
+	BOOL		bKode[6];
+	double		dValu[6];
+	/////////////////////
+	bKode[0]	= m_bTx;
+	bKode[1]	= m_bTy;
+	bKode[2]	= m_bTz;
+	bKode[3]	= m_bRx;
+	bKode[4]	= m_bRy;
+	bKode[5]	= m_bRz;
+	///////////////////////////
+	dValu[0]	= m_dTx;
+	dValu[1]	= m_dTy;
+	dValu[2]	= m_dTz;
+	dValu[3]	= m_dRx;
+	dValu[4]	= m_dRy;
+	dValu[5]	= m_dRz;
+	//////////////////////////////////////////////////////////////////
+	if(
+		m_nMainType == NSL_FORCE	|| m_nMainType == NSL_DISPLACE	||
+		m_nMainType == NSL_PRESSURE	|| m_nMainType == NSL_THERMAL	||
+		m_nMainType == NSL_LUMPWT
+	)
+		heading = "Node_" + m_pCurrentNode->GetObjectID();
+	else
+	if(
+		m_nMainType == CSL_FORCE	|| m_nMainType == CSL_DISPLACE	||
+		m_nMainType == CSL_PRESSURE	|| m_nMainType == CSL_THERMAL	||
+		m_nMainType == CSL_LUMPWT
+	)
+		heading = "Curve_" + m_pCurrentCurve->GetObjectID();
+	else
+	if(
+		m_nMainType == PSL_FORCE	|| m_nMainType == PSL_DISPLACE	||
+		m_nMainType == PSL_PRESSURE	|| m_nMainType == PSL_THERMAL	||
+		m_nMainType == PSL_LUMPWT
+	)
+		heading = "Patch_" + m_pCurrentPatch->GetObjectID();
+	else
+	if(
+		m_nMainType == SSL_FORCE	|| m_nMainType == SSL_DISPLACE	||
+		m_nMainType == SSL_PRESSURE	|| m_nMainType == SSL_THERMAL	||
+		m_nMainType == SSL_LUMPWT
+	)
+//		heading = "Solid_" + m_pCurrentSolid->GetObjectID();				// todo ////////
+		heading = "Solid_";				// temporary ////////
+	///////////////////////////////////////////////////////////////////
+	switch(StaLProc)
+	{
+		case STL_DISPLACE:	// fall thro'
+		case STL_FORCE:
+
+			for(i=0;i<6;i++)
+			{
+				///////////////
+				if(bKode[i])
+				{
+					nStatus = Mgr.DoModal_Value_In(heading,&(dValu[i]),i,StaLProc);
+					////////////////////////////////////////////////////////////////
+					if(nStatus == IDCANCEL)
+						dValu[i] = 0.0;
+				}
+			}
+			break;
+
+
+		case STL_PRESSURE:
+		case STL_THERMAL:
+		case STL_LUMPWT:
+
+			for(i=0;i<3;i++)
+			{
+				///////////////
+				if(bKode[i])
+				{
+					nStatus = Mgr.DoModal_Value_In(heading,&(dValu[i]),i,StaLProc);
+					/////////////////////////////////////////////////////////
+					if(nStatus == IDCANCEL)
+						dValu[i] = 0.0;
+				}
+			}
+			break;
+
+
+		default:
+			break;
+	}
+	///////////////////////////
+	m_dTx = dValu[0];
+	m_dTy = dValu[1];
+	m_dTz = dValu[2];
+	m_dRx = dValu[3];
+	m_dRy = dValu[4];
+	m_dRz = dValu[5];
+	/////////////////
+	return 0;
+}
+
+int CSLDMouse::Get_Values_ManyDirections(CString& Nid,STALPROC StaLProc)
+{
+	CMStLMgr	Mgr;
+	UINT		nStatus;
+	/////////////////////
+	BOOL		bKode[6];
+	double		dValu[6];
+	/////////////////////
+	bKode[0]	= m_bTx;
+	bKode[1]	= m_bTy;
+	bKode[2]	= m_bTz;
+	bKode[3]	= m_bRx;
+	bKode[4]	= m_bRy;
+	bKode[5]	= m_bRz;
+	///////////////////////////
+	dValu[0]	= m_dTx;
+	dValu[1]	= m_dTy;
+	dValu[2]	= m_dTz;
+	dValu[3]	= m_dRx;
+	dValu[4]	= m_dRy;
+	dValu[5]	= m_dRz;
+	/////////////////////
+	nStatus = Mgr.DoModal_ManyValue_In(Nid,dValu,bKode,StaLProc);
+	/////////////////////////////////////////////////////////
+	if(nStatus == IDCANCEL)
+		return -2;
+	///////////////////////////
+	m_dTx = dValu[0];
+	m_dTy = dValu[1];
+	m_dTz = dValu[2];
+	m_dRx = dValu[3];
+	m_dRy = dValu[4];
+	m_dRz = dValu[5];
+	/////////////////
+	return 0;
+}
+
+int CSLDMouse::Get_Values_Iso_WORLD(CString& wid,WORLD& NodeT,WORLD& NodeR, STALPROC StaLProc)
+{
+	/////////////////////////////////////// GetValues
+	int nResult = Get_Values_ManyDirections(wid,StaLProc);
+	///////////////////////////////////////
+	if(nResult<0)
+		return nResult; 
+	/////////////////////////////////////// LocalPos for Node as Forces/Moments
+	NodeT.x	= m_dTx;
+	NodeT.y	= m_dTy;
+	NodeT.z	= m_dTz;
+	NodeR.x	= m_dRx;
+	NodeR.y	= m_dRy;
+	NodeR.z	= m_dRz;
+	/////////////
+	return 0;
+}
+
+int CSLDMouse::Get_Values_Iso_Node(CDrNode* pNodeIsoTo, STALPROC StaLProc)
+{
+	m_pSNodeT = NULL;
+	m_pSNodeR = NULL;
+	/////////////////////////////////////////////////////////////////////////
+	WORLD	NodeT,NodeR;
+	CString	Nid,StNID;
+	////////////////////////////////////////////
+	Nid		= pNodeIsoTo->GetObjectID();
+	StNID	= Nid;
+	/////////////////////////////////////// GetValues
+	int nResult = Get_Values_ManyDirections(Nid,StaLProc);
+	///////////////////////////////////////
+	if(nResult<0)
+		return nResult; 
+	/////////////////////////////////////// LocalPos for Node as Forces/Moments
+	NodeT.x	= m_dTx;
+	NodeT.y	= m_dTy;
+	NodeT.z	= m_dTz;
+	NodeR.x	= m_dRx;
+	NodeR.y	= m_dRy;
+	NodeR.z	= m_dRz;
+	/////////////////////////////////////// Create Nodes Using GangN
+	int			nNodeIndex = -12345;	//create Anyway (ALWAYS)
+	int			nLabelIndex= 0;
+	CMI_GangN	GangN;
+	////////////////////////////
+	if(m_bTx||m_bTy||m_bTz)
+	{
+		StNID += ("_T_" + m_CurrentStLID); 
+		m_pSNodeT = GangN.CreateNode(StNID,m_pCurrentLabel, NodeT, TRUE,FALSE,FALSE,
+									nNodeIndex,nLabelIndex);// FALSE=Input/TRUE=InternallyGen
+	}
+	if(m_bRx||m_bRy||m_bRz)
+	{
+		StNID += ("_R_" + m_CurrentStLID); 
+		m_pSNodeR = GangN.CreateNode(StNID,m_pCurrentLabel, NodeR, TRUE,FALSE,FALSE,
+									nNodeIndex,nLabelIndex);// FALSE=Input/TRUE=InternallyGen
+	}
+	///////////////////////////////////////////////////////// OverRide Category & ID 
+	CATEGORY	cat;
+	///////////////////
+	switch(m_StaLProc)
+	{
+		case STL_FORCE:		cat		= CA_FORCE;		break;
+		case STL_DISPLACE:	cat		= CA_DISPLACE;	break;
+		case STL_PRESSURE:	cat		= CA_PRESSURE;	break;
+		case STL_THERMAL:	cat		= CA_THERMAL;	break;
+		case STL_LUMPWT:	cat		= CA_LUMPWT;	break;
+		default:break;
+	}
+	/////////////////////////////////////// Reciprocate :todo
+	if(m_pSNodeT)
+	{
+		m_pSNodeT->SetCategory(cat);
+		m_pSNodeT->SetSubCat(SC_TRAN);
+		///////////////////////////////////// ID
+		(m_pSNodeT->GetNodeCard())->id = StNID;
+	}
+	if(m_pSNodeR)
+	{
+		m_pSNodeR->SetCategory(cat);
+		m_pSNodeR->SetSubCat(SC_ROT);
+		///////////////////////////////////// ID
+		(m_pSNodeR->GetNodeCard())->id = StNID;
+	}
+	/////////////
+	return 0;
+}
+
+int CSLDMouse::Get_Values_Iso_Cur(CDrCurve* pCurveIsoTo, STALPROC StaLProc)
+{
+	/////////////////////////////////////////////////////////////////////////
+	CDListMgr* pINodeList = pCurveIsoTo->GetINodeList();
+	CURVEPROC SCurveType = pCurveIsoTo->GetCurveType_S();
+	/////////////////////////////////////////////////////
+	int i;
+	POSITION	pos;
+	CDrNode*	pNode;
+	CString		Nid,StNID;
+	int			nNodes = pINodeList->GetCount();
+	////////////////////////////////////////////
+	if(!m_NodeListT.IsEmpty())
+		m_NodeListT.RemoveAll();
+	if(!m_NodeListR.IsEmpty())
+		m_NodeListR.RemoveAll();
+	///////////////////////////////////////////////////////// LOOP: Curve Nodes
+	for(i=0;i<nNodes;i++)
+	{
+		pos		= pINodeList->FindIndex( i );
+		pNode	= (CDrNode*)(pINodeList->GetAt(pos));
+		//////////////////////////////
+		switch(SCurveType)
+		{
+			case CP_LINEAR:
+			case CP_QUADRATIC:
+			case CP_BEZIER:
+			case CP_BSPLINE:
+			case CP_NURB:
+				///////////////////////// CntlStat
+				/////////////////////////
+				break;
+
+			case CP_CIRCLE:	
+			//////////////////////////////
+				switch(m_CircType)
+				{
+					case CIRCLE_BY_NO3:
+						break;
+					case CIRCLE_BY_ROT:
+						break;
+					case CIRCLE_BY_2N_TI:
+					case CIRCLE_BY_2N_CC:
+						break;
+					case CIRCLE_BY_2CN_TI_R:
+					default:
+						break;
+				}
+		}
+		/////////////////////////////////////////
+		int nResult = Get_Values_Iso_Node(pNode, StaLProc);
+		if(nResult<0)
+			return nResult;
+		/////////////////////////////////////// Save in the NodeList
+		if(m_pSNodeT)
+			m_NodeListT.AddTail(m_pSNodeT);
+		if(m_pSNodeR)
+			m_NodeListR.AddTail(m_pSNodeR);
+		////////////////////////////
+	}
+	//////////////
+	return 0;
+}
+			
+void CSLDMouse::RemoveMostListsFromPatch(CDrPatch* pAdd)
+{
+	//m_ElperSegList and LatchList donot remove	 
+	/////////////////////////////////////// RemoveList
+	if(!(pAdd->GetLabelList()->IsEmpty())	)
+		pAdd->GetLabelList()->RemoveAll(); 
+	if(!(pAdd->GetSolidList()->IsEmpty())	)
+		pAdd->GetSolidList()->RemoveAll(); 
+	if(!(pAdd->GetENodeList()->IsEmpty())	)
+		pAdd->GetENodeList()->RemoveAll(); 
+	if(!(pAdd->GetINodeList()->IsEmpty())	)
+		pAdd->GetINodeList()->RemoveAll(); 
+	if(!(pAdd->GetCNodeList()->IsEmpty())	)
+		pAdd->GetCNodeList()->RemoveAll(); 
+	if(!(pAdd->GetCN_BSList()->IsEmpty())	)
+		pAdd->GetCN_BSList()->RemoveAll(); 
+	if(!(pAdd->GetNodeList()->IsEmpty())	)
+		pAdd->GetNodeList()->RemoveAll(); 
+	if(!(pAdd->GetElemList()->IsEmpty())	)
+		pAdd->GetElemList()->RemoveAll();
+	if(!(pAdd->GetCurveList()->IsEmpty())	)
+		pAdd->GetCurveList()->RemoveAll(); 
+	if(!(pAdd->GetObj3DList()->IsEmpty())	)
+		pAdd->GetObj3DList()->RemoveAll(); 
+//	if(!(pAdd->GetPProfList()->IsEmpty())	)
+//		pAdd->GetPProfList()->RemoveAll(); 
+	//////////////////////////////////////
+	return;
+}
+			
+void CSLDMouse::RemoveMostListsFromCurve(CDrCurve* pAdd)
+{
+	//m_ElperSegList donot remove	 
+	/////////////////////////////////////// RemoveList
+	if(!(pAdd->GetLabelList()->IsEmpty())	)
+		pAdd->GetLabelList()->RemoveAll(); 
+	if(!(pAdd->GetSolidList()->IsEmpty())	)
+		pAdd->GetSolidList()->RemoveAll(); 
+	if(!(pAdd->GetENodeList()->IsEmpty())	)
+		pAdd->GetENodeList()->RemoveAll(); 
+	if(!(pAdd->GetINodeList()->IsEmpty())	)
+		pAdd->GetINodeList()->RemoveAll(); 
+	if(!(pAdd->GetCNodeList()->IsEmpty())	)
+		pAdd->GetCNodeList()->RemoveAll(); 
+	if(!(pAdd->GetCN_BSList()->IsEmpty())	)
+		pAdd->GetCN_BSList()->RemoveAll(); 
+	if(!(pAdd->GetNodeList()->IsEmpty())	)
+		pAdd->GetNodeList()->RemoveAll(); 
+	if(!(pAdd->GetElemList()->IsEmpty())	)
+		pAdd->GetElemList()->RemoveAll();
+	if(!(pAdd->GetPatchList()->IsEmpty())	)
+		pAdd->GetPatchList()->RemoveAll(); 
+	if(!(pAdd->GetObj3DList()->IsEmpty())	)
+		pAdd->GetObj3DList()->RemoveAll(); 
+	if(!(pAdd->GetCProfList()->IsEmpty())	)
+		pAdd->GetCProfList()->RemoveAll(); 
+	//////////////////////////////////////
+	return;
+}
+
+int CSLDMouse::Generate_IsoCurveControls(CDrCurve* pCurveIsoTo,int indexC,CString* pID,BOOL bTran)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr*	pList;
+	int			nActiveIndex;
+	//////////////////////////////////////////////////////////////////
+	CDrCurve* pCurrentSCurve; 
+	////////////////////////////////////////////////////////////////// Save ObjectType/Index
+//	UINT nTypeOld			= pObjectMgr->GetActiveObjectType();
+// 	int nActiveIndexOld		= pObjectMgr->GetActiveObjectIndex();    // for Calling Object
+	///////////////////
+	pObjectMgr->SetActiveObjectType(CURVE);
+	////////////////////////////////////////////////////// Add to DataBase, if not Existing
+	///////////////////////////////////////// delete, if Same Category & Add
+	pList = pObjectMgr->GetObjectList(CURVE);
+	nActiveIndex = pList->GetObjectIndex(CURVE, *pID);
+	if(nActiveIndex>=0)
+	{
+		pObjectMgr->DeleteFromDataBase(nActiveIndex, CURVE);
+		pCurrentSCurve = (CDrCurve*)NULL;
+	}
+	pCurrentSCurve	= (CDrCurve*)(pObjectMgr->AddToDataBase(*pID,nActiveIndex,CURVE));
+	pCurrentSCurve->SetShow(FALSE);	// not quite ready
+	///////////////////////////////////////////////////////// SetIso Tag
+	pCurrentSCurve->SetIso(TRUE);	
+	///////////////////////////////////////////////////////// OverRide Category 
+	CATEGORY	cat;
+	///////////////////
+	switch(m_StaLProc)
+	{
+		case STL_FORCE:		cat		= CA_FORCE;		break;
+		case STL_DISPLACE:	cat		= CA_DISPLACE;	break;
+		case STL_PRESSURE:	cat		= CA_PRESSURE;	break;
+		case STL_THERMAL:	cat		= CA_THERMAL;	break;
+		case STL_LUMPWT:	cat		= CA_LUMPWT;	break;
+		default:break;
+	}
+	////////////////////////////////
+	pCurrentSCurve->SetCategory(cat);
+	if(bTran)
+	{
+		pCurrentSCurve->SetSubCat(SC_TRAN);
+	}
+	else
+	{
+		pCurrentSCurve->SetSubCat(SC_ROT);
+	}
+	//////////////////////////////////////////////////////////////////////// Clone
+	pCurrentSCurve->SetObjectInfo(pCurveIsoTo);
+	/////////////////////////////
+	pCurrentSCurve->SetShow(FALSE);	// not to show might have been changed by Clone
+	pCurrentSCurve->SetIso(TRUE);
+	CString id;
+	id = pCurveIsoTo->GetObjectID(); 
+	pCurrentSCurve->SetIsoToID(id);
+	//////////////
+	RemoveMostListsFromCurve(pCurrentSCurve);				// except ElperSegList
+	/////////////////////////////////////////////////////// Copy ElperSegList
+	m_ElSegList.RemoveAll();
+	m_ElSegList.AddTail(pCurrentSCurve->GetElperSegList());
+	(pCurrentSCurve->GetElperSegList())->RemoveAll();		// now Remove, later stored in GangC
+	/////////////////////////////////////////////////////////////// Fill Input Nodes
+	CDListMgr* pINodeList = pCurrentSCurve->GetINodeList();
+	m_NodeList.RemoveAll();
+	if(bTran)
+	{
+		m_NodeList.AddTail(&m_NodeListT);	// copy Translational
+	}
+	else
+	{
+		m_NodeList.AddTail(&m_NodeListR);	// copy Rotational
+	}
+	pINodeList->AddTail(&m_NodeList);	
+	/////////////////////////////////////////////////////////////// Using GangC
+	CMI_GangC	GangC;
+	CDrNode*	pAddNode;
+	POSITION	pos;
+	///////////////////////////
+	CURVEPROC SCurveType = pCurrentSCurve->GetCurveType_S();
+	////////////////////////////////////////////////////////
+	switch(SCurveType)
+	{
+		case CP_CIRCLE:
+
+			m_SegAngle		= pCurrentSCurve->GetSegAngle_S(); 
+			///////////////////////////////////////
+			switch(m_CircType)
+			{
+				
+				case CIRCLE_BY_ROT:
+
+					m_dAng			= pCurrentSCurve->GetTheta_S();
+					//////////////////////////////////////////// FromID & ToID
+					pos			= pINodeList->FindIndex( 1 );
+					pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+					m_FromID	= pAddNode->GetObjectID();
+					pINodeList->RemoveAt(pos);
+					//////////
+					pAddNode	= (CDrNode*)(pINodeList->GetTail());
+					m_ToID		= pAddNode->GetObjectID();
+					pINodeList->RemoveTail();
+					////////////////////////////////////
+					pCurrentSCurve = GangC.CreateCircleByRot(
+						*pID,pCurrentSCurve,&m_NodeList,SCurveType,
+						&m_ElSegList,CIRCLE_BY_ROT,m_dAng,m_FromID,m_ToID,m_SegAngle);
+
+					break;
+
+					
+				case CIRCLE_BY_NO3:
+
+					m_dAngSpec		= pCurrentSCurve->GetTheta_S();
+					m_bArc			= pCurrentSCurve->IsArcType();
+					//////////////////////////////////////////////				
+					pCurrentSCurve = GangC.CreateCircleBy3Node(
+						*pID,pCurrentSCurve,&m_NodeList,SCurveType,
+						&m_ElSegList,CIRCLE_BY_NO3,m_SegAngle,m_dAngSpec,m_bArc);
+
+					break;
+
+					
+				case CIRCLE_BY_2N_TI:
+		
+					//////////////////////////////////////////// TIID
+					pos			= pINodeList->FindIndex( 1 );
+					pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+					m_TIID		= pAddNode->GetObjectID();
+//					pINodeList->RemoveAt(pos);
+					////////////////////////////////////
+					pCurrentSCurve = GangC.CreateCircleBy_2N_TI(
+						*pID,pCurrentSCurve,&m_NodeList,SCurveType,
+						&m_ElSegList,CIRCLE_BY_2N_TI,m_SegAngle);
+
+					break;
+
+					
+				case CIRCLE_BY_2N_CC:
+
+					//////////////////////////////////////////// CCID
+					pos			= pINodeList->FindIndex( 1 );
+					pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+					m_CCID		= pAddNode->GetObjectID();
+//					pINodeList->RemoveAt(pos);
+					////////////////////////////////////
+					pCurrentSCurve = GangC.CreateCircleBy_2N_CC(
+						*pID,pCurrentSCurve,&m_NodeList,SCurveType,
+						&m_ElSegList,CIRCLE_BY_2N_CC,m_SegAngle);
+
+					break;
+
+					
+				case CIRCLE_BY_2CN_TI_R:
+
+					m_dRadius	= pCurrentSCurve->GetRadius_S();
+					//////////////////////////////////////////// TIID
+					pos			= pINodeList->FindIndex( 1 );
+					pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+					m_TIID		= pAddNode->GetObjectID();
+//					pINodeList->RemoveAt(pos);
+					//////////////////////////////////////////// CAID
+					pAddNode	= (CDrNode*)(pINodeList->GetHead());
+					m_CAID		= pAddNode->GetObjectID();
+//					pINodeList->RemoveHead();
+					//////////////////////////////////////////// CBID
+					pAddNode	= (CDrNode*)(pINodeList->GetTail());
+					m_CBID		= pAddNode->GetObjectID();
+//					pINodeList->RemoveTail();
+					////////////////////////////////////
+					pCurrentSCurve = GangC.CreateCircleBy_2CN_TI_R(
+						*pID,pCurrentSCurve,&m_NodeList,SCurveType,
+						&m_ElSegList,CIRCLE_BY_2CN_TI_R,m_dRadius,m_SegAngle);
+
+					break;
+				
+				default:
+
+					break;
+
+			}
+			break;
+				
+		default:
+			
+			m_bAdvanceOn = FALSE; // because cloned  data already obtained
+			/////////////////////
+			pCurrentSCurve = GangC.CreateCurve(*pID,pCurrentSCurve,&m_NodeList,SCurveType,
+											&m_ElSegList,m_bAdvanceOn,TRUE);// TRUE = Final
+	}
+////////////////////////////////////////////////////////////////////// Debug
+#ifdef _DEBUG 
+/*
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+		int j;
+		/////////////////////////
+		j  = sprintf(buf,"CCurMouse::ShowCurve\nAfter CreateCurve\nBefore UpdateViews:\n");
+		j += sprintf(buf+j,"Nodes in the CNodeList:\n\t");
+		//////////////////////////////
+		pList = m_pCurrentCurve->GetCNodeList();
+		////////////////////////////////////////
+		for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+		{
+			////
+			CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+			j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+		}
+		sprintf( buf + j-2, ";");
+		/////////////////////////	
+		AfxMessageBox(*str);
+		/////
+		delete str;
+*/
+#endif
+/////////////////////////////////////////////////////////////////// Debug End
+	/////////////////////////////////////// Override Knot Type
+//	pCurrentSCurve->SetKnotType_S(KN_UNIFORM);
+	if(bTran)
+	{
+		m_pCurrentSCurveT[indexC] = pCurrentSCurve;
+	}
+	else
+	{
+		m_pCurrentSCurveR[indexC] = pCurrentSCurve;
+	}
+	//////////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::Get_Values_NonIso_Cur(STALPROC StaLProc)
+{
+	AfxMessageBox("Get_Values_NonIso_Cur\nNOT IMPLEMENTED YET");
+	return -1;
+}
+
+int CSLDMouse::ShowInfo_CurveStaticLoad(CDrCurve* pDrCurve, char* buf, int jStart)
+{
+	int j = jStart;
+	///////////////
+	CDListMgr* pList;
+	///////////////////////////////////////////////////////////// Support Info
+	pList = pDrCurve->GetStaLList();
+	////////////////////////////////////////////////////////////////////////
+	int i;
+	CDrStatic*	pDrStatic;
+	STALCARD	stLCard;
+	POSITION	pos;
+	/////////////////////////////////////////////////////////// Go Over List
+	for(i=0;i<pList->GetCount();i++)
+	{
+		pos			= pList->FindIndex(i);
+		pDrStatic	= (CDrStatic*)pList->GetAt(pos);
+		////
+		if(pDrStatic)
+			stLCard = *(pDrStatic->GetStaLCard());					
+		else
+		{
+			AfxMessageBox("Internal ERROR:\nCSLDMouse::FillInfo_CurveStaticLoad\npDrLinSup=NULL"); 
+			return -2;
+		}
+		/////////////////////////////////////////
+		if(stLCard.load_id != m_CurrentStLID)
+			continue;
+		////////////////////////////////////////////////////// Same LID
+		CString		Cid;
+		Cid = pDrCurve->GetObjectID();
+		/////////////////////////////////////////
+		switch (stLCard.StaLProc)
+		{
+			case STL_FORCE:
+			case STL_DISPLACE:	// fall thro'
+				j	= FillInfo_6(Cid, stLCard, buf, j);	
+				break;
+			case STL_PRESSURE:
+			case STL_THERMAL:
+			case STL_LUMPWT:	// fall thro'
+				j	= FillInfo_3(Cid, stLCard, buf, j);	
+				break;
+			default:
+				break;
+		}
+	}
+	//////////
+	return j;
+}
+
+int CSLDMouse::LeftUp_CurveStatic(CPoint point)
+{
+	///////////////////////////////////////////////////////////////////////
+	int nAnyway	= 0;	// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateCurveLinSup
+						// even if same coords Curve exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowCurve to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString*	pID;
+	CString		ID;
+	CDrCurve*	pDrCurve;
+	int			nActiveIndex,index,nResult;
+	BOOL		bNew	= TRUE;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	index = IsObjectHit(CURVE,point,0);
+	//////////////
+	if(index<0)
+		return -2;
+	//////////////////////////////////////////////////////////////// Existing Curve
+	pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+	ID						= pDrCurve->GetObjectID();
+	/////////////////////////////////////////
+	pList = pObjectMgr->GetObjectList(CURVE);
+	nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+	//////////////////////////////////////////////////////////////// MultipleSearch
+	int startIndex = index+1;
+	/////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		for(;;)
+		{
+			CString* str = new CString;
+			char* buf = str->GetBuffer(BUFF_SIZE);
+			int j;
+			///////////////////////////////////////// Check if This Curve is Already Loaded
+			pList = pDrCurve->GetStaLList();
+// to do********/////////////////////////////// if Supported, only Displace/rot Allowed 
+			if(pList->GetCount())
+			{
+				//////////////
+				j = sprintf(buf,"***** Selected Curve is Already Loaded  *****\n\n");
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j += sprintf(buf+j,"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+								ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				////////////////////////////
+				j = ShowInfo_CurveStaticLoad(pDrCurve, buf, j);
+				if(j<0)
+					return -2;
+				////////////////////////////
+				j += sprintf(buf+j,
+					"\n\nYES:\t\tAccept The Existing Curve-Based Loading");
+				j += sprintf(buf+j,
+					"\nNO:\t\tFind Next Matching Curve");
+				j += sprintf(buf+j,
+					"\nCANCEL:\t\tUpdate Curve with New Loading Anyway");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+				/////////////
+			}
+			else
+			{
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j = sprintf(buf,"***** Existing Curve Selected *****\n\n");
+				j += sprintf(buf+j,"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+								ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				////////////////////////////
+				j += sprintf(buf+j,
+						"\n\nYES:\t\tAccept This Curve");
+				j += sprintf(buf+j,
+					"\nNO:\t\tFind Next Matching Curve");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+				/////////////
+			}
+			/////////////
+			if(nResult == IDOK)
+			{
+				delete str;
+				break;
+			}
+			else
+			if(nResult == IDNO)
+			{
+				////////////////////////////////
+				index = IsObjectHit(CURVE,point,startIndex);
+				if(index<0)
+				{
+					////////////////
+					delete str;
+					return -2;
+					//////////
+				}
+				//////////
+				pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+				ID			= pDrCurve->GetObjectID();
+				///////////////////////////////////////// 
+				pList = pObjectMgr->GetObjectList(CURVE);
+				nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+				pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+				pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+				pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+				////////////////////////////////////////
+				startIndex  = index+1;
+				/////////////////////
+			}
+			else				// Cancel
+			{
+				//////////////////////////////////////////////////////// Create New
+				bNew = TRUE;
+				nAnyway	= -12345;	// Create Anyway
+				/////////////
+				delete str;
+				break;
+			}
+		}
+	}
+	//////////////////////////////////////////////////// Gotch'a Curve/ Show LinSup
+	m_pCurrentCurve			= (CDrCurve*)pDListMgr->GetObject(index);
+	/////////////////////////////////////////////
+	pID = &m_CurrentStLID;
+	//////////////////////////////////////////////////////////////// Get Values
+	if(m_bIso)
+	{
+		///////////////////////////// Iso
+		Get_Values_Iso_Cur(m_pCurrentCurve,m_StaLProc);	
+		//////////////
+		if(m_bTx ||m_bTy ||m_bTz)
+			Generate_IsoCurveControls(m_pCurrentCurve,0,&m_CurrentStCID,TRUE);	// TRUE = Translation
+		//////////////
+		if(m_bRx ||m_bRy ||m_bRz)
+			Generate_IsoCurveControls(m_pCurrentCurve,0,&m_CurrentStCID,FALSE);	// FALSE = Rotation
+		/////////////////////////////////// Update Curve Name
+		m_CurrentStCIDOld = m_CurrentStCID;
+		char buf[30];
+		m_LastStCNum++;		// internal
+		sprintf(buf,"%d",m_LastStCNum);
+		m_CurrentStCID	= "StC";
+		m_CurrentStCID	+= buf;
+		///////////////////////
+	}
+	else
+	if(m_bNonIso)
+		///////////////////////////// NonIso
+		Get_Values_NonIso_Cur(m_StaLProc);
+		//////////////
+	else
+		///////////////////////////// Uniform
+		Get_Values(m_StaLProc);
+	////////////////////////////////////////////////////////////////
+	if(ShowCurveStaticLoad(pID,nAnyway)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_CurveStatic\nShowCurveStaticLoad Problem");
+		return -1;
+	}
+	////////////////////////// Set StLID
+	m_CurrentStLIDOld = *pID;
+	if(*pID == m_CurrentStLID)
+	{		
+		char buf[30];
+		m_LastStLNum++;		// internal
+		sprintf(buf,"%d",m_LastStLNum);
+		m_CurrentStLID	= "StL";
+		m_CurrentStLID	+= buf;
+	}
+	////////////////////////////
+	return 0;
+}
+
+
+int CSLDMouse::ShowInfo_PatchStaticLoad(CDrPatch* pDrPatch, char* buf, int jStart)
+{
+	int j = jStart;
+	///////////////
+	CDListMgr* pList;
+	///////////////////////////////////////////////////////////// Support Info
+	pList = pDrPatch->GetStaLList();
+	////////////////////////////////////////////////////////////////////////
+	int i;
+	CDrStatic*	pDrStatic;
+	STALCARD	stLCard;
+	POSITION	pos;
+	/////////////////////////////////////////////////////////// Go Over List
+	for(i=0;i<pList->GetCount();i++)
+	{
+		pos			= pList->FindIndex(i);
+		pDrStatic	= (CDrStatic*)pList->GetAt(pos);
+		////
+		if(pDrStatic)
+			stLCard = *(pDrStatic->GetStaLCard());					
+		else
+		{
+			AfxMessageBox("Internal ERROR:\nCSLDMouse::FillInfo_PatchStaticLoad\npDrLinSup=NULL"); 
+			return -2;
+		}
+		/////////////////////////////////////////
+		if(stLCard.load_id != m_CurrentStLID)
+			continue;
+		////////////////////////////////////////////////////// Same LID
+		CString		Cid;
+		Cid = pDrPatch->GetObjectID();
+		/////////////////////////////////////////
+		switch (stLCard.StaLProc)
+		{
+			case STL_FORCE:
+			case STL_DISPLACE:	// fall thro'
+				j	= FillInfo_6(Cid, stLCard, buf, j);	
+				break;
+			case STL_PRESSURE:
+			case STL_THERMAL:
+			case STL_LUMPWT:	// fall thro'
+				j	= FillInfo_3(Cid, stLCard, buf, j);	
+				break;
+			default:
+				break;
+		}
+	}
+	//////////
+	return j;
+}
+
+int CSLDMouse::LeftUp_PatchStatic(CPoint point)
+{
+	///////////////////////////////////////////////////////////////////////
+	int nAnyway	= 0;	// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreatePatchLinSup
+						// even if same coords Patch exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowPatch to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(PATCH);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString*	pID;
+	CString		ID;
+	CDrPatch*	pDrPatch;
+	int			nActiveIndex,index,nResult;
+	BOOL		bNew	= TRUE;
+	///////////////////////////////////////////// See if any Existing Patch Hit
+	index = IsObjectHit(PATCH,point,0);
+	//////////////
+	if(index<0)
+		return -2;
+	//////////////////////////////////////////////////////////////// Existing Patch
+	pDrPatch				= (CDrPatch*)pDListMgr->GetObject(index);
+	ID						= pDrPatch->GetObjectID();
+	/////////////////////////////////////////
+	pList = pObjectMgr->GetObjectList(PATCH);
+	nActiveIndex = pList->GetObjectIndex(PATCH, ID);;
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(PATCH);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,PATCH);
+	//////////////////////////////////////////////////////////////// MultipleSearch
+	int startIndex = index+1;
+	/////////////////////////
+	if(!m_bAutoAcceptOn)
+	{
+		for(;;)
+		{
+			CString* str = new CString;
+			char* buf = str->GetBuffer(BUFF_SIZE);
+			int j;
+			///////////////////////////////////////// Check if This Patch is Already Loaded with same LoadID
+			pList = pDrPatch->GetStaLList();
+			///////////////////////////////
+			if(pList->GetCount())
+			{
+				//////////////
+				j = sprintf(buf,"***** Selected Patch is Already Loaded  *****\n\n");
+				//////////////////////////////
+				if(pDrPatch->GetPatSubType() == PS_QUADRILAT)
+					j += sprintf(buf+j,"Patch %s is \n\tQuadrilateral Type\n",ID);
+				if(pDrPatch->GetPatSubType() == PS_TRIANGLE)
+					j += sprintf(buf+j,"Patch %s is \n\tTriangular Type\n",ID);
+				////////////////////////////
+				j = ShowInfo_PatchStaticLoad(pDrPatch, buf, j);
+				if(j<0)
+					return -2;
+				////////////////////////////
+				j += sprintf(buf+j,
+					"\n\nYES:\t\tAccept The Existing Patch-Based Loading");
+				j += sprintf(buf+j,
+					"\nNO:\t\tFind Next Matching Patch");
+				j += sprintf(buf+j,
+					"\nCANCEL:\t\tUpdate Patch with New Loading Anyway");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+				/////////////
+			}
+			else
+			{
+				//////////////
+				j = sprintf(buf,"***** Selected Non-Loaded Patch Info  *****\n\n");
+				/////////////////////////////// 
+				if(pDrPatch->GetPatSubType() == PS_QUADRILAT)
+					j += sprintf(buf+j,"Patch %s is \n\tQuadrilateral Type\n",ID);
+				if(pDrPatch->GetPatSubType() == PS_TRIANGLE)
+					j += sprintf(buf+j,"Patch %s is \n\tTriangular Type\n",ID);
+				//////////////////////////////
+				j += sprintf(buf+j,
+						"\n\nYES:\t\tAccept This Patch");
+				j += sprintf(buf+j,
+					"\nNO:\t\tFind Next Matching Patch");
+				////////////////////////////
+				nResult = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+				/////////////
+			}
+			/////////////
+			if(nResult == IDOK)
+			{
+				delete str;
+				break;
+			}
+			else
+			if(nResult == IDNO)
+			{
+				////////////////////////////////
+				index = IsObjectHit(PATCH,point,startIndex);
+				if(index<0)
+				{
+					////////////////
+					delete str;
+					return -2;
+					//////////
+				}
+				//////////
+				pDrPatch	= (CDrPatch*)pDListMgr->GetObject(index);
+				ID			= pDrPatch->GetObjectID();
+				///////////////////////////////////////// 
+				pList = pObjectMgr->GetObjectList(PATCH);
+				nActiveIndex = pList->GetObjectIndex(PATCH, ID);;
+				pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+				pObjectMgr->SetActiveObjectType(PATCH);		    // set Active Index									
+				pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,PATCH);
+				////////////////////////////////////////
+				startIndex  = index+1;
+				/////////////////////
+			}
+			else				// Cancel
+			{
+				//////////////////////////////////////////////////////// Create New
+				bNew = TRUE;
+				nAnyway	= -12345;	// Create Anyway
+				/////////////
+				delete str;
+				break;
+			}
+		}
+	}
+	//////////////////////////////////////////////////// Gotch'a Patch/ Show LinSup
+	m_pCurrentPatch			= (CDrPatch*)pDListMgr->GetObject(index);
+	/////////////////////////////////////////////
+	pID = &m_CurrentStLID;
+	//////////////////////////////////////////////////////////////// Get Values
+	if(m_bIso)
+	{
+		///////////////////////////// Iso
+		Get_Values_Iso_Pat(m_pCurrentPatch,m_StaLProc);	
+		//////////////
+		if(m_bTx ||m_bTy ||m_bTz)
+			Generate_IsoPatchControls(m_pCurrentPatch,&m_CurrentStPID,TRUE);	// TRUE = Translation
+		//////////////
+		if(m_bRx ||m_bRy ||m_bRz)
+			Generate_IsoPatchControls(m_pCurrentPatch,&m_CurrentStPID,FALSE);	// FALSE = Rotation
+		/////////////////////////////////// Update Curve Name
+		m_CurrentStPIDOld = m_CurrentStPID;
+		char buf[30];
+		m_LastStPNum++;		// internal
+		sprintf(buf,"%d",m_LastStPNum);
+		m_CurrentStPID	= "StP";
+		m_CurrentStPID	+= buf;
+		///////////////////////
+	}
+	else
+	if(m_bNonIso)
+		///////////////////////////// NonIso
+		Get_Values_NonIso_Pat(m_StaLProc);
+		//////////////
+	else
+		///////////////////////////// Uniform
+		Get_Values(m_StaLProc);
+	////////////////////////////////////////////////////////////////
+	if(ShowPatchStaticLoad(pID,nAnyway)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_PatchStatic\nShowPatchStaticLoad Problem");
+		return -1;
+	}
+	////////////////////////// Set StLID
+	m_CurrentStLIDOld = *pID;
+	if(*pID == m_CurrentStLID)
+	{		
+		char buf[30];
+		m_LastStLNum++;		// internal
+		sprintf(buf,"%d",m_LastStLNum);
+		m_CurrentStLID	= "StL";
+		m_CurrentStLID	+= buf;
+	}
+	////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::Get_Values_Iso_Pat_Curve(CDrCurve* pCurveIsoTo,int indexCT,int indexCR,STALPROC StaLProc)
+{
+	/////////////////////////////////////////////// Iso
+	Get_Values_Iso_Cur(pCurveIsoTo,StaLProc);	
+	/////////////////////////////////////////////// Curve Name
+	CString	strPat_Cur = m_CurrentStPID;
+	strPat_Cur		   += "_PC"; // P =Pat/C=Cur 
+	////////////////////////////////////////////
+	if(m_bTx ||m_bTy ||m_bTz)
+	{
+		strPat_Cur	+= "_T"; // T =Translation 	
+		Generate_IsoCurveControls(pCurveIsoTo,indexCT,&strPat_Cur,TRUE);// TRUE = Translation
+	}
+		//////////////
+	if(m_bRx ||m_bRy ||m_bRz)
+	{
+		strPat_Cur	+= "_R"; // R =Rotation 	
+		Generate_IsoCurveControls(pCurveIsoTo,indexCR,&strPat_Cur,FALSE);// FALSE = Rotation
+	}
+	/////////////////////////////////// Update Curve Name
+	m_CurrentStPIDOld = m_CurrentStPID;
+	char buf[30];
+	m_LastStCNum++;		// internal
+	sprintf(buf,"%d",m_LastStPNum);
+	m_CurrentStPID	= "StP";
+	m_CurrentStPID	+= buf;
+	//////////////
+	return 0;
+}
+
+int CSLDMouse::Get_Values_NonIso_Pat(STALPROC StaLProc)
+{
+	AfxMessageBox("Get_Values_NonIso_Pat\nNOT IMPLEMENTED YET");
+	return -1;
+}
+			
+int CSLDMouse::Get_Values_Iso_Pat(CDrPatch* pPatch,STALPROC StaLProc)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CString strCurr;
+	int nResult;
+	//////////////////////////////////////////////////////////////////
+	PATCHPROC PatchProc = pPatch->GetPatchProc();	// How was it Generated?
+	///////////////////
+	switch(PatchProc) 
+	{
+		
+		///////////////////////////////////////////////////// Patches Insert
+		case PP_EXTRUDE:
+
+			nResult = Get_Values_Iso_EXTRUDE_Type2(pPatch, StaLProc);
+			//////////////////////////////////////
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_ROTATE: 
+
+			Get_Values_Iso_ROTATE(pPatch, StaLProc);
+			//////////////////////////////////////
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_LOFT2: 
+
+			Get_Values_Iso_LOFT2(pPatch, StaLProc);
+			//////////////////////////////////////
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_DUCT: 
+
+			Get_Values_Iso_DUCT(pPatch, StaLProc);
+			//////////////////////////////////////
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_SWEEP:
+
+			Get_Values_Iso_SWEEP(pPatch, StaLProc);
+			//////////////////////////////////////
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_LOFT3:		// COONS:		// 
+		case PP_LOFT4:
+			
+			Get_Values_Iso_COONS(pPatch, StaLProc);
+			//////////////////////////////////////
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_TENSOR:
+		case PP_COONS:
+		case PP_GORDON:		// GORDONS
+		case PP_FLAT:
+		case PP_SPAWN:		// Spawn
+		case PP_STITCH:		// Stitch
+		case PP_LOFTMANY:	
+			return -1;
+
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	}
+	return 0;
+}	
+
+int CSLDMouse::Get_Values_Iso_EXTRUDE_Type1(CDrPatch* pPatchIsoTo, STALPROC StaLProc)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CDListMgr*	pDListMgr;
+	int nResult,index;
+	//////////////////////////////////////////////////////////////////
+	CDrNode*	pNodeIsoTo;
+	CDrCurve*	pCurveIsoTo;
+	CString		NodeID,CurveID;
+	///////////////////////////
+	m_CurveListT.RemoveAll();
+	m_CurveListR.RemoveAll();
+	m_NodeListT.RemoveAll();
+	m_NodeListR.RemoveAll();
+	///////////////////////////////////////////////////////////////////////// Curve
+	CurveID	= pPatchIsoTo->GetCurveID(0);
+	/////////////////////////////////////
+	pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+	index		= pDListMgr->GetObjectIndex(CURVE, CurveID);
+	if(index<0)
+	{
+		AfxMessageBox("CSLDMouse::Get_Values_Iso_EXTRUDE\nCurveIndex<0!");
+		return -1;
+	}
+	pCurveIsoTo	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pCurveIsoTo)
+	{
+		AfxMessageBox("CSLDMouse::Get_Values_Iso_EXTRUDE\nCurvePtr = NULL!");
+		return -1;
+	}
+	///////////////////////////////////////////////////////////// Get Info 
+	nResult = Get_Values_Iso_Pat_Curve(pCurveIsoTo,0,0,StaLProc); 
+	if( nResult<0)// -2 = Cancel 
+		return nResult;
+	///////////////////////////////////////////////////////////////////////// From ID
+	NodeID = pPatchIsoTo->GetFromID_T();
+	/////////////////////////////////////	
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	index		= pDListMgr->GetObjectIndex(NODE, NodeID);
+/*
+	int index	= pObjectMgr->
+					GetObjectIndexfromKey(NODE,NodeID,1);
+*/
+	if(index<0)
+	{
+		AfxMessageBox("CSLDMouse::Get_Values_Iso_EXTRUDE\nNodeIndex Failure!");
+		return -1;
+	}
+	pNodeIsoTo	= (CDrNode*)(pDListMgr->GetObject(index));
+	if(!pNodeIsoTo)
+	{
+		AfxMessageBox("CSLDMouse::Get_Values_Iso_EXTRUDE\nNodePtr = NULL!");
+		return -1;
+	}
+	//////////////////////////////////////////// Get Info 
+	nResult = Get_Values_Iso_Node(pNodeIsoTo,StaLProc);
+	if( nResult <0) //  - 2 = Cancel
+		return nResult;
+	/////////////////////
+	m_FromID_T = m_pSNodeT->GetObjectID(); 
+	m_FromID_R = m_pSNodeR->GetObjectID(); 
+	///////////////////////////////////////////////////////////////////////// To ID
+	NodeID = pPatchIsoTo->GetToID_T();
+	/////////////////////////////////////	
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	index		= pDListMgr->GetObjectIndex(NODE, NodeID);
+/*
+	int index	= pObjectMgr->
+					GetObjectIndexfromKey(NODE,NodeID,1);+
+*/
+	if(index<0)
+	{
+		AfxMessageBox("CSLDMouse::Get_Values_Iso_EXTRUDE\nNodeIndex Failure!");
+		return -1;
+	}
+	pNodeIsoTo	= (CDrNode*)(pDListMgr->GetObject(index));
+	if(!pNodeIsoTo)
+	{
+		AfxMessageBox("CSLDMouse::Get_Values_Iso_EXTRUDE\nNodePtr = NULL!");
+		return -1;
+	}
+	//////////////////////////////////////////// Get Info 
+	nResult = Get_Values_Iso_Node(pNodeIsoTo,StaLProc);
+	if( nResult <0) //  - 2 = Cancel
+		return nResult;
+	/////////////////////
+	m_ToID_T = m_pSNodeT->GetObjectID(); 
+	m_ToID_R = m_pSNodeR->GetObjectID(); 
+	///////////////////////////////////////////////////////////////////////// Length (T & R)
+/*
+	CString wID = "Lengths"
+	nResult = Get_Values_Iso_WORLD(wID,pSWorldT,pSWorldR,StaLProc);
+	if( nResult <0) //  - 2 = Cancel
+		return nResult;
+	/////////////////////
+	m_Length_T = *pSWorldT; 
+	m_Length_R = *pSWorldR;
+*/	
+	///////////////////////////////////////////////////////////////////////// Save in Lists
+	if(m_pCurrentSCurveT[0])
+		m_CurveListT.AddTail(m_pCurrentSCurveT[0]);
+	if(m_pCurrentSCurveR[0])
+		m_CurveListR.AddTail(m_pCurrentSCurveR[0]);
+	////////////////////////////////////////////////
+	return 0;
+
+}
+
+int CSLDMouse::Get_Values_Iso_EXTRUDE_Type2(CDrPatch* pPatchIsoTo, STALPROC StaLProc)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CDListMgr*	pDListMgr;
+	int nResult,index;
+	//////////////////////////////////////////////////////////////////
+	CDrCurve*	pCurveIsoTo;
+	CString		NodeID,CurveID;
+	///////////////////////////
+	m_CurveListT.RemoveAll();
+	m_CurveListR.RemoveAll();
+	m_NodeListT.RemoveAll();
+	m_NodeListR.RemoveAll();
+	///////////////////////////////////////////////////////////////////////// Curve
+	CurveID	= pPatchIsoTo->GetCurveID(0);
+	/////////////////////////////////////	
+	pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+	index		= pDListMgr->GetObjectIndex(CURVE, CurveID);
+	if(index<0)
+	{
+		AfxMessageBox("CSLDMouse::Get_Values_Iso_EXTRUDE\nCurveIndex<0!");
+		return -1;
+	}
+	pCurveIsoTo	= (CDrCurve*)(pDListMgr->GetObject(index));
+	if(!pCurveIsoTo)
+	{
+		AfxMessageBox("CSLDMouse::Get_Values_Iso_EXTRUDE\nCurvePtr = NULL!");
+		return -1;
+	}
+	///////////////////////////////////////////////////////////// Get Info 
+	nResult = Get_Values_Iso_Pat_Curve(pCurveIsoTo,0,0,StaLProc); 
+	if( nResult<0)// -2 = Cancel 
+		return nResult;
+	///////////////////////////////////////////////////////////////////////// Length (T & R)
+	CString wID = "Extru.Len";
+	nResult = Get_Values_Iso_WORLD(wID,m_Len_T,m_Len_R,StaLProc);
+	if( nResult <0) //  - 2 = Cancel
+		return nResult;
+	///////////////////////////////////////////////////////////////////////// Save in Lists
+	if(m_pCurrentSCurveT[0])
+		m_CurveListT.AddTail(m_pCurrentSCurveT[0]);
+	if(m_pCurrentSCurveR[0])
+		m_CurveListR.AddTail(m_pCurrentSCurveR[0]);
+	////////////////////////////////////////////////
+	return 0;
+
+}
+int CSLDMouse::Get_Values_Iso_ROTATE(CDrPatch* pPatchIsoTo, STALPROC StaLProc)
+{
+/*
+		case 1:	m_nCurveDone++;
+		case 2:	// fall thro'
+		case 3:	m_nNodeDone++;
+*/
+	return -1;
+}
+
+int CSLDMouse::Get_Values_Iso_LOFT2(CDrPatch* pPatchIsoTo, STALPROC StaLProc)
+{
+/*
+		case 1:	// fall thro'
+		case 2:	m_nCurveDone++;
+*/
+	return -1;
+}
+
+int CSLDMouse::Get_Values_Iso_COONS(CDrPatch* pPatchIsoTo, STALPROC StaLProc)
+{
+/*
+		case 1:	// fall thro'
+		case 2:	// fall thro'
+		case 3:	// fall thro'
+		case 4:	m_nCurveDone++;
+*/
+	return -1;
+}
+
+int CSLDMouse::Get_Values_Iso_DUCT(CDrPatch* pPatchIsoTo, STALPROC StaLProc)
+{
+/*
+		case 1:	// fall thro'
+		case 2:	// fall thro'
+		case 3:	m_nCurveDone++;
+		case 4:	m_nNodeDone++;
+*/
+	return -1;
+}
+
+int CSLDMouse::Get_Values_Iso_SWEEP(CDrPatch* pPatchIsoTo, STALPROC StaLProc)
+{
+/*
+		case 1:	// fall thro'
+		case 2:	// fall thro'
+		case 3:	// fall thro'
+		case 4:	m_nCurveDone++;
+		case 5:	m_nNodeDone++;
+*/
+	return -1;
+}
+
+int CSLDMouse::Generate_IsoPatchControls(CDrPatch* pPatchIsoTo,CString* pID,BOOL bTran)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	CString strCurr;
+	int nResult;
+	//////////////////////////////////////////////////////////////////
+	PATCHPROC PatchProc = pPatchIsoTo->GetPatchProc();	// How was it Generated?
+	//////////////////////////////////////////////
+	nResult = SetUp_IsoPatchControls(pPatchIsoTo,0,pID,bTran);	// TRUE = Translation
+	if(nResult<0)
+		return nResult;
+	///////////////////
+	WORLD		wLen;
+	CDrPatch*	pCurrentSPatch;
+	///////////////////////////
+	if(bTran)
+		pCurrentSPatch = m_pCurrentSPatchT[0];
+	else
+		pCurrentSPatch = m_pCurrentSPatchR[0];
+	///////////////////
+	switch(PatchProc) 
+	{
+		
+		///////////////////////////////////////////////////// Patches Insert
+		case PP_EXTRUDE:
+
+			wLen = m_Len_T;
+			if(!bTran)
+			wLen = m_Len_R;
+			///////////////////////////////////// Save
+			pCurrentSPatch->SetWorldLength_T(wLen);
+			///////////////////
+			nResult = Generate_IsoControls_EXTRUDE(pCurrentSPatch,pID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_ROTATE: 
+
+			///////////////////
+			nResult = Generate_IsoControls_ROTATE(pCurrentSPatch,pID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_LOFT2: 
+
+			///////////////////
+			nResult = Generate_IsoControls_LOFT2(pCurrentSPatch,pID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_DUCT: 
+
+			///////////////////
+			nResult = Generate_IsoControls_DUCT(pCurrentSPatch,pID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_SWEEP:
+
+			///////////////////
+			nResult = Generate_IsoControls_SWEEP(pCurrentSPatch,pID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_LOFT3:		// COONS:		// 
+		case PP_LOFT4:
+			
+			///////////////////
+			nResult = Generate_IsoControls_COONS(pCurrentSPatch,pID);
+			if(nResult<0)
+				return nResult;
+			/////////
+			return 0;
+
+		case PP_TENSOR:
+		case PP_COONS:
+		case PP_GORDON:		// GORDONS
+		case PP_FLAT:
+		case PP_SPAWN:		// Spawn
+		case PP_STITCH:		// Stitch
+		case PP_LOFTMANY:	
+			return -1;
+
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	}
+	///////////
+	return -1;
+}	
+
+int CSLDMouse::SetUp_IsoPatchControls(CDrPatch* pPatchIsoTo,int indexP,CString* pID,BOOL bTran)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr*	pList;
+	int			nActiveIndex;
+	//////////////////////////////////////////////////////////////////
+	CDrPatch* pCurrentSPatch; 
+	////////////////////////////////////////////////////////////////// Save ObjectType/Index
+//	UINT nTypeOld			= pObjectMgr->GetActiveObjectType();
+// 	int nActiveIndexOld		= pObjectMgr->GetActiveObjectIndex();    // for Calling Object
+	///////////////////
+	pObjectMgr->SetActiveObjectType(PATCH);
+	////////////////////////////////////////////////////// Add to DataBase, if not Existing
+	///////////////////////////////////////// delete, if Same Category & Add
+	pList = pObjectMgr->GetObjectList(PATCH);
+	nActiveIndex = pList->GetObjectIndex(PATCH, *pID);
+	if(nActiveIndex>=0)
+	{
+		pObjectMgr->DeleteFromDataBase(nActiveIndex, PATCH);
+		pCurrentSPatch = (CDrPatch*)NULL;
+	}
+	pCurrentSPatch	= (CDrPatch*)(pObjectMgr->AddToDataBase(*pID,nActiveIndex,PATCH));
+	pCurrentSPatch->SetShow(FALSE);	// not quite ready
+	///////////////////////////////////////////////////////// SetIso Tag
+	pCurrentSPatch->SetIso(TRUE);	
+	///////////////////////////////////////////////////////// OverRide Category 
+	CATEGORY	cat;
+	///////////////////
+	switch(m_StaLProc)
+	{
+		case STL_FORCE:		cat		= CA_FORCE;		break;
+		case STL_DISPLACE:	cat		= CA_DISPLACE;	break;
+		case STL_PRESSURE:	cat		= CA_PRESSURE;	break;
+		case STL_THERMAL:	cat		= CA_THERMAL;	break;
+		case STL_LUMPWT:	cat		= CA_LUMPWT;	break;
+		default:break;
+	}
+	////////////////////////////////
+	pCurrentSPatch->SetCategory(cat);
+	if(bTran)
+	{
+		pCurrentSPatch->SetSubCat(SC_TRAN);
+		m_pCurrentSPatchT[indexP] = pCurrentSPatch;
+	}
+	else
+	{
+		pCurrentSPatch->SetSubCat(SC_ROT);
+		m_pCurrentSPatchR[indexP] = pCurrentSPatch;
+	}
+	//////////////////////////////////////////////////////////////////////// Clone
+	pCurrentSPatch->SetObjectInfo(pPatchIsoTo);
+	pCurrentSPatch->SetShow(FALSE);	// Cloning might have changed it!
+	pCurrentSPatch->SetIso(TRUE);
+	CString id;
+	id = pPatchIsoTo->GetObjectID(); 
+	pCurrentSPatch->SetIsoToID(id);
+	//////////////
+	RemoveMostListsFromPatch(pCurrentSPatch);				//
+	/////////////////////////////////////////////////////////////// Fill Input Curves
+	m_CurveList.RemoveAll();
+	if(bTran)
+	{
+		m_CurveList.AddTail(&m_CurveListT);	// copy Translational
+	}
+	else
+	{
+		m_CurveList.AddTail(&m_CurveListR);	// copy Rotational
+	}
+	/////////////////////////////////////////////////////////////// Fill Input Nodes
+	m_NodeList.RemoveAll();
+	if(bTran)
+	{
+		m_NodeList.AddTail(&m_NodeListT);	// copy Translational
+	}
+	else
+	{
+		m_NodeList.AddTail(&m_NodeListR);	// copy Rotational
+	}
+	//////////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::Generate_IsoControls_EXTRUDE(CDrPatch* pCurrentSPatch,CString* pID)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	//////////////////////////////////////////////////////////////// Set up
+	CURVELATCH	CurveLatch		= pCurrentSPatch->GetCurveLatch(0);
+	m_LatchList.RemoveAll();
+	m_LatchList.AddTail(CurveLatch);
+	//////////
+	int m_nMesh					= pCurrentSPatch->GetMaxOutSeg_T();	// Number of Output Segments
+	m_ElSegList.RemoveAll();
+	m_ElSegList.AddTail(m_nMesh);
+	//////////
+	WORLD		wLen			= pCurrentSPatch->GetWorldLength_T();
+	double		Ratio			= pCurrentSPatch->GetRatio_T();		
+	//////////////////////////////////////////////////////////////// Fill Info
+	CMP_Xtrud	MP_Xtrud;
+	int nResult = MP_Xtrud.SetInfoBase_Type2(*pID,pCurrentSPatch,&m_CurveList,&m_LatchList,
+							&m_NodeList,&m_ElSegList,wLen,Ratio,m_pView);
+	//////////////
+	if(nResult<0)
+		return -1;
+	////////////////////////////////////////////////// Do It
+	nResult = MP_Xtrud.GoDoIt(pCurrentSPatch);
+	//////////////
+	if(nResult<0)
+		return -1;
+	//////////////////////////////////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::Generate_IsoControls_ROTATE(CDrPatch* pCurrentSPatch,CString* pID)
+{
+	AfxMessageBox("CSLDMouse::Generate_IsoControls_ROTATE\nNOT IMPLEMENTED YET");
+	return -1;
+}
+
+int CSLDMouse::Generate_IsoControls_LOFT2(CDrPatch* pCurrentSPatch,CString* pID)
+{
+	AfxMessageBox("CSLDMouse::Generate_IsoControls_LOFT2\nNOT IMPLEMENTED YET");
+	return -1;
+}
+
+int CSLDMouse::Generate_IsoControls_DUCT(CDrPatch* pCurrentSPatch,CString* pID)
+{
+	AfxMessageBox("CSLDMouse::Generate_IsoControls_DUCT\nNOT IMPLEMENTED YET");
+	return -1;
+}
+
+int CSLDMouse::Generate_IsoControls_SWEEP(CDrPatch* pCurrentSPatch,CString* pID)
+{
+	AfxMessageBox("CSLDMouse::Generate_IsoControls_SWEEP\nNOT IMPLEMENTED YET");
+	return -1;
+}
+
+int CSLDMouse::Generate_IsoControls_COONS(CDrPatch* pCurrentSPatch,CString* pID)
+{
+	AfxMessageBox("CSLDMouse::Generate_IsoControls_COONS\nNOT IMPLEMENTED YET");
+	return -1;
+}
+
+void CSLDMouse::ElementLeftUp_SLD(CPoint point)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	//////////////////////////////////////////////////////////////////
+//	CString*	pID;
+	/////////////
+//	char buf[20];
+	CString Nid;
+	///////////////////
+	SetMainType_SLD();
+	///////////////////
+	switch(m_nMainType) 
+	{
+		
+		///////////////////////////////////////////////////// Static: Node Based										
+		case NSL_FORCE:
+		case NSL_DISPLACE:
+		case NSL_PRESSURE:
+		case NSL_THERMAL:
+		case NSL_LUMPWT:
+
+			////////////////
+			UpdateStaticDlg_TRUE();
+			////////////////////
+			LeftUp_NodeStatic(point);	
+			////////////////////
+			UpdateStaticDlg_FALSE();
+			//////////////////// 
+			break;
+
+		///////////////////////////////////////////////////// Static: Curve Based										
+		case CSL_FORCE:
+		case CSL_DISPLACE:
+		case CSL_PRESSURE:
+		case CSL_THERMAL:
+		case CSL_LUMPWT:
+
+			////////////////
+			UpdateStaticDlg_TRUE();
+			////////////////////
+			LeftUp_CurveStatic(point);	
+			////////////////////
+			UpdateStaticDlg_FALSE();
+			//////////////////// 
+			break;
+
+		///////////////////////////////////////////////////// Static: Patch Based										
+		case PSL_FORCE:
+		case PSL_DISPLACE:
+		case PSL_PRESSURE:
+		case PSL_THERMAL:
+		case PSL_LUMPWT:
+
+			////////////////
+			UpdateStaticDlg_TRUE();
+			////////////////////
+			LeftUp_PatchStatic(point);	
+			////////////////////
+			UpdateStaticDlg_FALSE();
+			//////////////////// 
+			break;
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	} 
+}	
+
+void CSLDMouse::OnEBoxMouseMove_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{  
+
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CMouseMgr* pMouseMgr	= pWnd->GetMouseMgr(); 
+	////////////////////////// LOG: Log/DEScaled
+   	m_pdc->DPtoLP(&point);     
+	LPOINT LpLOG;
+	LpLOG.x = (long)point.x;
+	LpLOG.y = (long)point.y;
+   	m_pdc->LPtoDP(&point);     
+    /////////////////////////////////////////////
+    if(!m_bDragging)  // not currently dragging 
+    { 
+    
+		//////////////////////////////////////
+		LPOINT3 MouseOldTempWIC = GetMouseOldWIC();
+	    LPOINT3 MouseTempWIC 	= GetMouseWIC();
+   		SetMouseOldWIC(MouseTempWIC);
+   		LPOINT3 MouseWIC;
+    	///////////////////////  LOG :DEScaled
+    	LOGtoWIC2(&MouseWIC,&LpLOG,&MouseTempWIC); //LOG/Scaled WIC
+    	////////////////////                 
+    	SetMouseWIC(MouseWIC);
+    	///////////////////////////
+//    	pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+		pMouseMgr->SetStatusMouseWIC(MouseWIC);
+		////////////////////////////
+		///////////////////// recover MouseWIC changed for statusbar update 
+	    SetMouseOldWIC(MouseOldTempWIC);
+	    SetMouseWIC(MouseTempWIC);
+
+		return;
+    }	
+   	//////////////////////////////      ***** START FROM HERE *****
+   	CPen    Pen;
+	CPen*   PtrOldPen;
+	//////////////////////////////
+	m_pdc->SetBkMode(TRANSPARENT);
+	//////////////////////////////	
+	// Create Black Pen 2 Pixel wide;
+	int two = 2;
+	COLORREF crColor = 0x000000;  
+	Pen.CreatePen ((int)PS_SOLID,two,crColor);
+	PtrOldPen = m_pdc->SelectObject(&Pen);
+	///////////////////////////
+	m_MouseLOG = point;              // Device
+	POINT MouseLOC;
+	/////////////////////////	
+	m_pdc->SetROP2 (R2_NOT); 
+	
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseOldLOG;        // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+	////////////////////////	  
+//	m_pdc->SetROP2 (R2_COPYPEN);
+
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseLOG;
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+
+	m_MouseOldLOG = m_MouseLOG;
+	///////////////////////////
+   	m_pdc->SelectObject(PtrOldPen);   
+	Pen.DeleteObject(); 
+	//////////////////////////////////////
+    LPOINT3 MouseWIC = GetMouseWIC();
+    SetMouseOldWIC(MouseWIC);
+   	///////////////////////
+   	LOGtoWIC(&MouseWIC,&LpLOG); //LOG/Scaled WIC
+   	////////////////////                 
+    SetMouseWIC(MouseWIC);
+    ///////////////////////////
+//  pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+	pMouseMgr->SetStatusMouseWIC(MouseWIC);
+	//////////////////////////////////////////////    
+}
+
+void CSLDMouse::OnEBoxLButtonUp_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+  	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+    if(m_bDragging)  // not currently dragging
+    {
+		m_bDragging = FALSE; 
+		::ReleaseCapture();
+		//	ClipCursor(NULL);				TOBEDONE 
+	}	
+	///////////////////////////////////////////////////////// 
+	PreLeftUp(point);
+    /////////////////////////////  ELement Dialog On/Off Check
+    POINT Logpoint;
+    m_pdc->DPtoLP(&point);
+    Logpoint.x = point.x;
+    Logpoint.y = point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftUp_SLD(Logpoint);
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftUp_I();
+	/////////////////
+	PostLeft();
+	/////////////////////////
+	
+}
+
+void CSLDMouse::OnEBoxRButtonDown_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+									UINT nFlags, CPoint point)
+{ 
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+    /////////////////////////////  ELement Dialog On/Off Check
+	m_bDialogOn     = pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	/////////////////////////////////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////
+//	CEDlgMgr* pEDlgMgr;
+	//////////////////////////////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		case FORCE:
+			break;
+		////////////////////////////////////////////////// Patch
+		case NONE:  
+		default:
+			break;
+	}  
+}
+
+void CSLDMouse::OnEBoxRButtonUp_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+								UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	CString* pID = &ID;
+//	CEDlgMgr* pEDlgMgr;
+//	int nMeshType;
+	////////////////////
+	switch(m_nActiveTool) 
+	{
+
+		case FORCE:
+			break;
+		/////////////
+		default:  
+			break;
+	} 
+
+}
+////////////////////////////////////////////////////////////////////	
+UINT CSLDMouse::ReSetToolID_SLD(UINT CntlID,UINT IGenID, UINT OperID)
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString str;
+	UINT ID;
+	//////////////////////////////////////////// TaskID
+	switch(OperID)
+	{
+		//////////////////////////////////////////// Create
+		case CREATE:
+		{
+			pWnd->SetIGenBoxStatus(TRUE);
+			pWnd->SetCntlBoxStatus(FALSE);
+			pWnd->SetDrawBoxStatus(FALSE);
+			///////////////////////////// String
+			str = "CREATE";
+			pWnd->SetstrOperID(str);
+			/////////////////////////////
+			switch(CntlID)
+			{
+				//////////////////////////////////////// StaticLoad
+				case FORCE:
+
+//					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "FORCE";
+					pWnd->SetstrCntlID(str);
+					///////////////////////////////////// Force
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "Input@NODE";		ID = NSL_FOR_NODE;		break;
+						case CNODE:			str = "Control@CNODE";	ID = NSL_FOR_CNODE;		break;
+						/////////////
+						case CURVE:			str = "CURVE";			ID = CSL_FORCE;			break;
+						case C_CIRCLE:		str = "CIRCULAR@CURVE";	ID = CSL_FOR_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPTIC@CURVE";	ID = CSL_FOR_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLIC@CURVE";ID = CSL_FOR_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR@CURVE";	ID = CSL_FOR_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC@CURVE";ID = CSL_FOR_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC@CURVE";	ID = CSL_FOR_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE@CURVE";	ID = CSL_FOR_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER@CURVE";	ID = CSL_FOR_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE@CURVE";	ID = CSL_FOR_BSPLINE;	break;
+						case C_NURB:		str = "NURB@CURVE";		ID = CSL_FOR_NURB;		break;
+						case C_STITCH:		str = "STITCH@CURVE";	ID = CSL_FOR_STITCH;	break;
+						case C_SPAWN:		str = "SPAWN@CURVE";	ID = CSL_FOR_SPAWN;		break;
+						/////////////
+						case PATCH:			str = "PATCH";					ID = PSL_FORCE; 		break;
+						case P_TENSOR:		str = "TENSOR PRODUCT@PATCH";	ID = PSL_FOR_TENSOR; 	break;
+						case P_GORDONS:		str = "GORDONS@PATCH";			ID = PSL_FOR_GORDONS;	break;  
+						case P_COONS:		str = "COONS@PATCH";			ID = PSL_FOR_COONS; 	break; 
+						case P_LOFT:		str = "LOFT@PATCH";				ID = PSL_FOR_LOFT; 		break;
+						case P_EXTRUDE:		str = "EXTRUDE@PATCH";			ID = PSL_FOR_EXTRUDE;	break;
+						case P_DUCT:		str = "DUCT@PATCH";				ID = PSL_FOR_DUCT; 		break; 
+						case P_SWEEP:		str = "SWEEP@PATCH";			ID = PSL_FOR_SWEEP; 	break; 
+						case P_FLATPLATE:	str = "TRIANGULATE@PATCH";		ID = PSL_FOR_FLATPLATE;	break;  
+						case P_STITCH:		str = "STITCH@PATCH";			ID = PSL_FOR_STITCH; 	break;
+						case P_SPAWN:		str = "SPAWN@PATCH";			ID = PSL_FOR_SPAWN; 	break;
+						/////////////
+						case SOLID:			str = "SOLID";		ID = SSL_FORCE;			break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				//////////////////
+				case DISPLACE:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "DISPLACE";
+					pWnd->SetstrCntlID(str);
+					////////////////// Displacement
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSL_DIS_NODE;		break;
+						case CNODE:			str = "CNODE";		ID = NSL_DIS_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSL_DISPLACE;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSL_DIS_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSL_DIS_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSL_DIS_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSL_DIS_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSL_DIS_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSL_DIS_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSL_DIS_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSL_DIS_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSL_DIS_BSPLINE;	break;
+						case C_NURB:		str = "NURB";		ID = CSL_DIS_NURB;		break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSL_DIS_STITCH;	break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSL_DIS_SPAWN;		break;
+						/////////////
+						case PATCH:			str = "PATCH";					ID = PSL_DISPLACE; 		break;
+						case P_TENSOR:		str = "TENSOR PRODUCT@PATCH";	ID = PSL_DIS_TENSOR; 	break;
+						case P_GORDONS:		str = "GORDONS@PATCH";			ID = PSL_DIS_GORDONS;	break;  
+						case P_COONS:		str = "COONS@PATCH";			ID = PSL_DIS_COONS; 	break; 
+						case P_LOFT:		str = "LOFT@PATCH";				ID = PSL_DIS_LOFT; 		break;
+						case P_EXTRUDE:		str = "EXTRUDE@PATCH";			ID = PSL_DIS_EXTRUDE;	break;
+						case P_DUCT:		str = "DUCT@PATCH";				ID = PSL_DIS_DUCT; 		break; 
+						case P_SWEEP:		str = "SWEEP@PATCH";			ID = PSL_DIS_SWEEP; 	break; 
+						case P_FLATPLATE:	str = "TRIANGULATE@PATCH";		ID = PSL_DIS_FLATPLATE;	break;  
+						case P_STITCH:		str = "STITCH@PATCH";			ID = PSL_DIS_STITCH; 	break;
+						case P_SPAWN:		str = "SPAWN@PATCH";			ID = PSL_DIS_SPAWN; 	break;
+						/////////////
+						case SOLID:			str = "SOLID";		ID = SSL_DISPLACE;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				//////////////////
+				case PRESSURE:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "PRESSURE";
+					pWnd->SetstrCntlID(str);
+					////////////////// Pressure
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSL_PRS_NODE;		break;
+						case CNODE:			str = "CNODE";		ID = NSL_PRS_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSL_PRESSURE;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSL_PRS_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSL_PRS_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSL_PRS_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSL_PRS_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSL_PRS_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSL_PRS_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSL_PRS_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSL_PRS_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSL_PRS_BSPLINE;	break;
+						case C_NURB:		str = "NURB";		ID = CSL_PRS_NURB;		break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSL_PRS_STITCH;	break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSL_PRS_SPAWN;		break;
+						/////////////
+						case PATCH:			str = "PATCH";					ID = PSL_PRESSURE; 		break;
+						case P_TENSOR:		str = "TENSOR PRODUCT@PATCH";	ID = PSL_PRS_TENSOR; 	break;
+						case P_GORDONS:		str = "GORDONS@PATCH";			ID = PSL_PRS_GORDONS;	break;  
+						case P_COONS:		str = "COONS@PATCH";			ID = PSL_PRS_COONS; 	break; 
+						case P_LOFT:		str = "LOFT@PATCH";				ID = PSL_PRS_LOFT; 		break;
+						case P_EXTRUDE:		str = "EXTRUDE@PATCH";			ID = PSL_PRS_EXTRUDE;	break;
+						case P_DUCT:		str = "DUCT@PATCH";				ID = PSL_PRS_DUCT; 		break; 
+						case P_SWEEP:		str = "SWEEP@PATCH";			ID = PSL_PRS_SWEEP; 	break; 
+						case P_FLATPLATE:	str = "TRIANGULATE@PATCH";		ID = PSL_PRS_FLATPLATE;	break;  
+						case P_STITCH:		str = "STITCH@PATCH";			ID = PSL_PRS_STITCH; 	break;
+						case P_SPAWN:		str = "SPAWN@PATCH";			ID = PSL_PRS_SPAWN; 	break;
+						/////////////
+						case SOLID:			str = "SOLID";		ID = SSL_PRESSURE;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////// 
+				case THERMAL:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "THERMAL";
+					pWnd->SetstrCntlID(str);
+					////////////////// Thermal
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSL_THR_NODE;		break;
+						case CNODE:			str = "CNODE";		ID = NSL_THR_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSL_THERMAL;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSL_THR_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSL_THR_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSL_THR_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSL_THR_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSL_THR_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSL_THR_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSL_THR_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSL_THR_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSL_THR_BSPLINE;	break;
+						case C_NURB:		str = "NURB";		ID = CSL_THR_NURB;		break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSL_THR_STITCH;	break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSL_THR_SPAWN;		break;
+						/////////////
+						case PATCH:			str = "PATCH";					ID = PSL_THERMAL; 		break;
+						case P_TENSOR:		str = "TENSOR PRODUCT@PATCH";	ID = PSL_THR_TENSOR; 	break;
+						case P_GORDONS:		str = "GORDONS@PATCH";			ID = PSL_THR_GORDONS;	break;  
+						case P_COONS:		str = "COONS@PATCH";			ID = PSL_THR_COONS; 	break; 
+						case P_LOFT:		str = "LOFT@PATCH";				ID = PSL_THR_LOFT; 		break;
+						case P_EXTRUDE:		str = "EXTRUDE@PATCH";			ID = PSL_THR_EXTRUDE;	break;
+						case P_DUCT:		str = "DUCT@PATCH";				ID = PSL_THR_DUCT; 		break; 
+						case P_SWEEP:		str = "SWEEP@PATCH";			ID = PSL_THR_SWEEP; 	break; 
+						case P_FLATPLATE:	str = "TRIANGULATE@PATCH";		ID = PSL_THR_FLATPLATE;	break;  
+						case P_STITCH:		str = "STITCH@PATCH";			ID = PSL_THR_STITCH; 	break;
+						case P_SPAWN:		str = "SPAWN@PATCH";			ID = PSL_THR_SPAWN; 	break;
+						/////////////
+						case SOLID:			str = "SOLID";		ID = SSL_THERMAL;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////// 
+				case LUMPWT:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "LUMPWT";
+					pWnd->SetstrCntlID(str);
+					////////////////// LumpWt
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSL_LWT_NODE;		break;
+						case CNODE:			str = "CNODE";		ID = NSL_LWT_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSL_LUMPWT;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSL_LWT_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSL_LWT_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSL_LWT_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSL_LWT_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSL_LWT_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSL_LWT_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSL_LWT_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSL_LWT_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSL_LWT_BSPLINE;	break;
+						case C_NURB:		str = "NURB";		ID = CSL_LWT_NURB;		break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSL_LWT_STITCH;	break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSL_LWT_SPAWN;		break;
+						/////////////
+						case PATCH:			str = "PATCH";					ID = PSL_LUMPWT; 		break;
+						case P_TENSOR:		str = "TENSOR PRODUCT@PATCH";	ID = PSL_LWT_TENSOR; 	break;
+						case P_GORDONS:		str = "GORDONS@PATCH";			ID = PSL_LWT_GORDONS;	break;  
+						case P_COONS:		str = "COONS@PATCH";			ID = PSL_LWT_COONS; 	break; 
+						case P_LOFT:		str = "LOFT@PATCH";				ID = PSL_LWT_LOFT; 		break;
+						case P_EXTRUDE:		str = "EXTRUDE@PATCH";			ID = PSL_LWT_EXTRUDE;	break;
+						case P_DUCT:		str = "DUCT@PATCH";				ID = PSL_LWT_DUCT; 		break; 
+						case P_SWEEP:		str = "SWEEP@PATCH";			ID = PSL_LWT_SWEEP; 	break; 
+						case P_FLATPLATE:	str = "TRIANGULATE@PATCH";		ID = PSL_LWT_FLATPLATE;	break;  
+						case P_STITCH:		str = "STITCH@PATCH";			ID = PSL_LWT_STITCH; 	break;
+						case P_SPAWN:		str = "SPAWN@PATCH";			ID = PSL_LWT_SPAWN; 	break;
+						/////////////
+						case SOLID:			str = "SOLID";		ID = SSL_LUMPWT;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				/////////
+				default:					str = "UNKNOWN";	ID = UNONE;
+					pWnd->SetstrIGenID(str);
+					return ID;
+			}
+			pWnd->SetstrCntlID(str);
+			return ID;
+		////////
+		default:							str = "UNKNOWN";	ID = UNONE;
+		}
+		pWnd->SetstrOperID(str);
+		return ID;
+	}
+		/*		SAVE FOLLOWING :  TODO		
+		//////////////////////////////////////////// Edit
+		case EDIT:
+		{
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Mesh
+				case ELEMENT:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return N_EDIT;
+						case CURVE:				return C_EDIT;
+						case PATCH:				return P_EDIT;
+						case SOLID:				return S_EDIT;
+						default:				return NONE;
+					}
+				//////////////////////////////////////// StaticLoad
+				case FORCE:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_FOR;
+						case CURVE:				return CSL_EDIT_FOR;
+						case PATCH:				return PSL_EDIT_FOR;
+						case SOLID:				return SSL_EDIT_FOR;
+						default:				return NONE;
+					}
+				case DISPLACE:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_DIS;
+						case CURVE:				return CSL_EDIT_DIS;
+						case PATCH:				return PSL_EDIT_DIS;
+						case SOLID:				return SSL_EDIT_DIS;
+						default:				return NONE;
+					}
+				case PRESSURE:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_PRS;
+						case CURVE:				return CSL_EDIT_PRS;
+						case PATCH:				return PSL_EDIT_PRS;
+						case SOLID:				return SSL_EDIT_PRS;
+						default:				return NONE;
+					}
+				case THERMAL:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_THR;
+						case CURVE:				return CSL_EDIT_THR;
+						case PATCH:				return PSL_EDIT_THR;
+						case SOLID:				return SSL_EDIT_THR;
+						default:				return NONE;
+					}
+		case LUMPWT:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_LWT;
+						case CURVE:				return CSL_EDIT_LWT;
+						case PATCH:				return PSL_EDIT_LWT;
+						case SOLID:				return SSL_EDIT_LWT;
+						default:				return NONE;
+					}
+
+		
+
+						case CURVE:				return C_MOVE;
+				case CURVE:				return C_POST;
+				case CURVE:				return C_UNPOST;
+				case CURVE:				return C_DELETE;
+				case PATCH:				return P_MOVE;
+				case PATCH:				return P_POST;
+				case PATCH:				return P_UNPOST;
+				case PATCH:				return P_DELETE;
+				case SOLID:				return S_MOVE;
+				case SOLID:				return S_POST;
+				case SOLID:				return S_UNPOST;
+				case SOLID:				return S_DELETE;
+//////////////////////////////
+				//////////////////////////////////////// StaticLoad
+				case FORCE:
+				case C_ROTATE:
+				case C_XLATE:
+				case C_SCALE:
+				case C_SHEAR:
+				case C_OPER:
+				case C_SUPP:
+				case C_STAL:
+				case C_DYNL:
+				case C_SPEL:
+				////////////////
+				case P_ROTATE_B:
+				case P_XLATE:
+				case P_SCALE:
+				case P_SHEAR:
+				case P_OPER:
+				case P_SUPP:
+				case P_STAL:
+				case P_DYNL:
+				case P_SPEL:
+				////////////////
+				case S_ROTATE_B:
+				case S_XLATE:
+				case S_SCALE:
+				case S_SHEAR:
+				case S_OPER:
+				case S_SUPP:
+				case S_STAL:
+				case S_DYNL:
+				case S_SPEL:
+
+		}
+
+*/
+}
+
+void CSLDMouse::ModeLessOff_SLD()
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	if(GetStLInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_FANDMIN,IDOK);
+	if(GetStLInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_DANDRIN,IDOK);
+	if(GetStLInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_PRESSIN,IDOK);
+	if(GetStLInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_THERMIN,IDOK);
+	if(GetStLInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_LUMPWTIN,IDOK);
+}
+
+void CSLDMouse::SetMainType_SLD()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	m_nActiveTool	= pWnd->GetActiveToolType();
+	///////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		///////////////////////////////////////////////////// Static: Node Based										
+		case NSL_FORCE:
+		case NSL_FOR_NODE:
+		case NSL_FOR_CNODE:
+
+			m_nMainType	= NSL_FORCE;
+			break;
+
+		case NSL_DISPLACE:
+		case NSL_DIS_NODE:
+		case NSL_DIS_CNODE:
+
+			m_nMainType	= NSL_DISPLACE;
+			break;
+
+		case NSL_PRESSURE:
+		case NSL_PRS_NODE:
+		case NSL_PRS_CNODE:
+
+			m_nMainType	= NSL_PRESSURE;
+			break;
+
+		case NSL_THERMAL:
+		case NSL_THR_NODE:
+		case NSL_THR_CNODE:
+
+			m_nMainType	= NSL_THERMAL;
+			break;
+
+		case NSL_LUMPWT:
+		case NSL_LWT_NODE:
+		case NSL_LWT_CNODE:
+
+			m_nMainType	= NSL_LUMPWT;
+			break;
+		////////////////////////////////////////////////////// Static: Curve Based										
+		case CSL_FORCE:
+		case CSL_FOR_CIRCLE:
+		case CSL_FOR_ELLIPSE:
+		case CSL_FOR_PARABOLA:
+		case CSL_FOR_LINEAR:
+		case CSL_FOR_QUADRATIC:
+		case CSL_FOR_CUBIC:
+		case CSL_FOR_HERMITE:
+		case CSL_FOR_BEZIER:
+		case CSL_FOR_BSPLINE:
+		case CSL_FOR_NURB:
+		case CSL_FOR_STITCH:
+		case CSL_FOR_SPAWN:
+
+			m_nMainType	= CSL_FORCE;
+			break;
+
+
+		case CSL_DISPLACE:
+		case CSL_DIS_CIRCLE:
+		case CSL_DIS_ELLIPSE:
+		case CSL_DIS_PARABOLA:
+		case CSL_DIS_LINEAR:
+		case CSL_DIS_QUADRATIC:
+		case CSL_DIS_CUBIC:
+		case CSL_DIS_HERMITE:
+		case CSL_DIS_BEZIER:
+		case CSL_DIS_BSPLINE:
+		case CSL_DIS_NURB:
+		case CSL_DIS_STITCH:
+		case CSL_DIS_SPAWN:
+
+			m_nMainType	= CSL_DISPLACE;
+			break;
+
+
+		case CSL_PRESSURE:
+		case CSL_PRS_CIRCLE:
+		case CSL_PRS_ELLIPSE:
+		case CSL_PRS_PARABOLA:
+		case CSL_PRS_LINEAR:
+		case CSL_PRS_QUADRATIC:
+		case CSL_PRS_CUBIC:
+		case CSL_PRS_HERMITE:
+		case CSL_PRS_BEZIER:
+		case CSL_PRS_BSPLINE:
+		case CSL_PRS_NURB:
+		case CSL_PRS_STITCH:
+		case CSL_PRS_SPAWN:
+
+			m_nMainType	= CSL_PRESSURE;
+			break;
+
+		case CSL_THERMAL:
+		case CSL_THR_CIRCLE:
+		case CSL_THR_ELLIPSE:
+		case CSL_THR_PARABOLA:
+		case CSL_THR_LINEAR:
+		case CSL_THR_QUADRATIC:
+		case CSL_THR_CUBIC:
+		case CSL_THR_HERMITE:
+		case CSL_THR_BEZIER:
+		case CSL_THR_BSPLINE:
+		case CSL_THR_NURB:
+		case CSL_THR_STITCH:
+		case CSL_THR_SPAWN:
+
+			m_nMainType	= CSL_THERMAL;
+			break;
+
+		case CSL_LUMPWT:
+		case CSL_LWT_CIRCLE:
+		case CSL_LWT_ELLIPSE:
+		case CSL_LWT_PARABOLA:
+		case CSL_LWT_LINEAR:
+		case CSL_LWT_QUADRATIC:
+		case CSL_LWT_CUBIC:
+		case CSL_LWT_HERMITE:
+		case CSL_LWT_BEZIER:
+		case CSL_LWT_BSPLINE:
+		case CSL_LWT_NURB:
+		case CSL_LWT_STITCH:
+		case CSL_LWT_SPAWN:
+
+			m_nMainType	= CSL_LUMPWT;
+			break;
+		////////////////////////////////////////////////////// Static: Patch Based										
+		case PSL_FORCE:
+		case PSL_FOR_TENSOR: 	
+		case PSL_FOR_GORDONS:	  
+		case PSL_FOR_COONS: 	 
+		case PSL_FOR_LOFT: 		
+		case PSL_FOR_EXTRUDE:	
+		case PSL_FOR_DUCT: 		 
+		case PSL_FOR_SWEEP: 	 
+		case PSL_FOR_FLATPLATE:	  
+		case PSL_FOR_STITCH: 	
+		case PSL_FOR_SPAWN: 	
+
+			m_nMainType	= PSL_FORCE;
+			break;
+
+
+		case PSL_DISPLACE:
+		case PSL_DIS_TENSOR: 	
+		case PSL_DIS_GORDONS:	  
+		case PSL_DIS_COONS: 	 
+		case PSL_DIS_LOFT: 		
+		case PSL_DIS_EXTRUDE:	
+		case PSL_DIS_DUCT: 		 
+		case PSL_DIS_SWEEP: 	 
+		case PSL_DIS_FLATPLATE:	  
+		case PSL_DIS_STITCH: 	
+		case PSL_DIS_SPAWN: 	
+
+			m_nMainType	= PSL_DISPLACE;
+			break;
+
+
+		case PSL_PRESSURE:
+		case PSL_PRS_TENSOR: 	
+		case PSL_PRS_GORDONS:	  
+		case PSL_PRS_COONS: 	 
+		case PSL_PRS_LOFT: 		
+		case PSL_PRS_EXTRUDE:	
+		case PSL_PRS_DUCT: 		 
+		case PSL_PRS_SWEEP: 	 
+		case PSL_PRS_FLATPLATE:	  
+		case PSL_PRS_STITCH: 	
+		case PSL_PRS_SPAWN: 	
+
+			m_nMainType	= PSL_PRESSURE;
+			break;
+
+		case PSL_THERMAL:
+		case PSL_THR_TENSOR: 	
+		case PSL_THR_GORDONS:	  
+		case PSL_THR_COONS: 	 
+		case PSL_THR_LOFT: 		
+		case PSL_THR_EXTRUDE:	
+		case PSL_THR_DUCT: 		 
+		case PSL_THR_SWEEP: 	 
+		case PSL_THR_FLATPLATE:	  
+		case PSL_THR_STITCH: 	
+		case PSL_THR_SPAWN: 	
+
+			m_nMainType	= PSL_THERMAL;
+			break;
+
+		case PSL_LUMPWT: 		
+		case PSL_LWT_TENSOR: 	
+		case PSL_LWT_GORDONS:	  
+		case PSL_LWT_COONS: 	 
+		case PSL_LWT_LOFT: 		
+		case PSL_LWT_EXTRUDE:	
+		case PSL_LWT_DUCT: 		 
+		case PSL_LWT_SWEEP: 	 
+		case PSL_LWT_FLATPLATE:	  
+		case PSL_LWT_STITCH: 	
+		case PSL_LWT_SPAWN: 	
+
+			m_nMainType	= PSL_LUMPWT;
+			break;
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	}
+	////////
+	return;
+}
+
+void CSLDMouse::ModeLessOn_SLD()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	///////////////////
+	SetMainType_SLD();
+	/////////////////////////////////////////////////////////////////// Open
+	switch(m_nMainType)
+	{
+		case NSL_FORCE:
+		case CSL_FORCE:
+		case PSL_FORCE:
+		case SSL_FORCE:
+
+//			if(!(GetStLInDlg()->m_hWnd))
+				pWnd->SendMessage(ID_ACTIVE_FANDMIN,IDOK);
+			break;
+
+		case NSL_DISPLACE:
+		case CSL_DISPLACE:
+		case PSL_DISPLACE:
+		case SSL_DISPLACE:
+
+//			if(!(GetStLInDlg()->m_hWnd))
+				pWnd->SendMessage(ID_ACTIVE_DANDRIN,IDOK);
+			break;
+
+		case NSL_PRESSURE:
+		case CSL_PRESSURE:
+		case PSL_PRESSURE:
+		case SSL_PRESSURE:
+
+//			if(!(GetStLInDlg()->m_hWnd))
+				pWnd->SendMessage(ID_ACTIVE_PRESSIN,IDOK);
+			break;
+
+		case NSL_THERMAL:
+		case CSL_THERMAL:
+		case PSL_THERMAL:
+		case SSL_THERMAL:
+
+//			if(!(GetStLInDlg()->m_hWnd))
+				pWnd->SendMessage(ID_ACTIVE_THERMIN,IDOK);
+			break;
+
+		case NSL_LUMPWT:
+		case CSL_LUMPWT:
+		case PSL_LUMPWT:
+		case SSL_LUMPWT:
+
+//			if(!(GetStLInDlg()->m_hWnd))
+				pWnd->SendMessage(ID_ACTIVE_LUMPWTIN,IDOK);
+			break;
+
+		default:
+			break;
+	}
+	////////
+	return;
+}
+
+long CSLDMouse::CreateorActivateF_MIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if F_MDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_FANDMIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	m_StaLProc = STL_FORCE;
+	/////////////////////////
+	GetStLInDlg()->SetWindowText("Forces & Moments");	
+	GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(TRUE);
+
+	GetStLInDlg()->GetDlgItem(IDC_TX)->SetWindowText("Fx");
+	GetStLInDlg()->GetDlgItem(IDC_TY)->SetWindowText("Fy");
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->SetWindowText("Fz");
+	GetStLInDlg()->GetDlgItem(IDC_RX)->SetWindowText("Mx");
+	GetStLInDlg()->GetDlgItem(IDC_RY)->SetWindowText("My");
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->SetWindowText("Mz");
+	////////////////////////////////////////////////////////////////// Nodal Exceptions
+	if(m_nMainType == PSL_FORCE)
+		m_bPat		= TRUE;
+	////////////////////////////
+	if(m_nMainType == NSL_FORCE)
+	{
+		GetStLInDlg()->m_bTanHide = TRUE;	
+		GetStLInDlg()->m_bIdBHide = TRUE;
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(FALSE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetStLInDlg()->m_bTanHide = FALSE;	
+		GetStLInDlg()->m_bIdBHide = FALSE;	
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("IsoParametric");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(TRUE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("NonIso");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(TRUE);
+	}
+
+	GetStLInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(TRUE);
+	/////////////////////////////////////////////
+	GetStLInDlg()->m_LoadID		= m_CurrentStLID;
+	GetStLInDlg()->m_bTx		= GetTx();
+	GetStLInDlg()->m_bTy		= GetTy();
+	GetStLInDlg()->m_bTz		= GetTz();
+	GetStLInDlg()->m_bRx		= GetRx();
+	GetStLInDlg()->m_bRy		= GetRy();
+	GetStLInDlg()->m_bRz		= GetRz();
+	GetStLInDlg()->m_aNid		= m_aNid;
+	GetStLInDlg()->m_bNid		= m_bNid;
+	GetStLInDlg()->m_bTan		= m_bTan;
+	GetStLInDlg()->m_bIso		= m_bIso;
+	GetStLInDlg()->m_bSkewed	= m_bSkewed;
+	GetStLInDlg()->m_StaLProc	= m_StaLProc;
+	////////////////////////////////////////////// NonIso
+	GetStLInDlg()->m_bNonIso	= m_bNonIso;
+	GetStLInDlg()->m_CID		= m_cid_Parent;
+	GetStLInDlg()->m_bIncrement	= m_bIncrement;
+	GetStLInDlg()->m_Orient		= m_Orient;
+	GetStLInDlg()->m_dScale		= m_dScale;
+	GetStLInDlg()->m_dStep		= m_dStep;
+	GetStLInDlg()->m_dStart		= m_dStart;
+	////////////////////////////////////////////// Curve
+	GetStLInDlg()->m_pDrCurve	= m_pCurrentCurve;
+	GetStLInDlg()->m_Category	= m_Category;
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->ShowWindow(TRUE);
+	strCurr = "Ready for Selection@";
+	if(m_nMainType == NSL_FORCE)
+			strCurr += "An Existing Input Node";
+	else
+	if(m_nMainType == CSL_FORCE)
+			strCurr += "An Existing Curve";
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelF_MIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByeF_MIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdateF_MIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	m_CurrentStLID = GetStLInDlg()->m_LoadID;
+	SetTx(GetStLInDlg()->m_bTx);
+	SetTy(GetStLInDlg()->m_bTy);
+	SetTz(GetStLInDlg()->m_bTz);
+	SetRx(GetStLInDlg()->m_bRx);
+	SetRy(GetStLInDlg()->m_bRy);
+	SetRz(GetStLInDlg()->m_bRz);
+	m_bTan			= GetStLInDlg()->m_bTan;
+	m_bIso			= GetStLInDlg()->m_bIso;
+	m_bSkewed		= GetStLInDlg()->m_bSkewed;
+	m_aNid			= GetStLInDlg()->m_aNid;
+	m_bNid			= GetStLInDlg()->m_bNid;
+	////////////////////////////////////////////// NonIso
+	m_bNonIso		= GetStLInDlg()->m_bNonIso;
+	m_cid_Parent	= GetStLInDlg()->m_CID;
+	m_bIncrement	= GetStLInDlg()->m_bIncrement;
+	m_Orient		= GetStLInDlg()->m_Orient;
+	m_dScale		= GetStLInDlg()->m_dScale;
+	m_dStep			= GetStLInDlg()->m_dStep;
+	m_dStart		= GetStLInDlg()->m_dStart;
+	/////////////////////////////////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////// D_R
+long CSLDMouse::CreateorActivateD_RIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if D_RDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_DANDRIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	m_StaLProc = STL_DISPLACE;
+	/////////////////////////
+	GetStLInDlg()->SetWindowText("Displacements & Rotations");	
+	GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(TRUE);
+
+	GetStLInDlg()->GetDlgItem(IDC_TX)->SetWindowText("Dx");
+	GetStLInDlg()->GetDlgItem(IDC_TY)->SetWindowText("Dy");
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->SetWindowText("Dz");
+	GetStLInDlg()->GetDlgItem(IDC_RX)->SetWindowText("Rx");
+	GetStLInDlg()->GetDlgItem(IDC_RY)->SetWindowText("Ry");
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->SetWindowText("Rz");
+
+	GetStLInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(TRUE);
+	////////////////////////////////////////////////////////////////// Nodal Exceptions
+	if(m_nMainType == PSL_DISPLACE)
+		m_bPat		= TRUE;
+	////////////////////////////
+	if(m_nMainType == NSL_DISPLACE)
+	{
+		GetStLInDlg()->m_bTanHide = TRUE;	
+		GetStLInDlg()->m_bIdBHide = TRUE;
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(FALSE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetStLInDlg()->m_bTanHide = FALSE;	
+		GetStLInDlg()->m_bIdBHide = FALSE;	
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("IsoParametric");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(TRUE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("NonIso");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(TRUE);
+	}
+	/////////////////////////////////////////////
+	GetStLInDlg()->m_LoadID		= m_CurrentStLID;
+	GetStLInDlg()->m_bTx		= GetTx();
+	GetStLInDlg()->m_bTy		= GetTy();
+	GetStLInDlg()->m_bTz		= GetTz();
+	GetStLInDlg()->m_bRx		= GetRx();
+	GetStLInDlg()->m_bRy		= GetRy();
+	GetStLInDlg()->m_bRz		= GetRz();
+	GetStLInDlg()->m_aNid		= m_aNid;
+	GetStLInDlg()->m_bNid		= m_bNid;
+	GetStLInDlg()->m_bTan		= m_bTan;
+	GetStLInDlg()->m_bIso		= m_bIso;
+	GetStLInDlg()->m_bSkewed	= m_bSkewed;
+	GetStLInDlg()->m_StaLProc	= m_StaLProc;
+	////////////////////////////////////////////// NonIso
+	GetStLInDlg()->m_bNonIso	= m_bNonIso;
+	GetStLInDlg()->m_CID		= m_cid_Parent;
+	GetStLInDlg()->m_bIncrement	= m_bIncrement;
+	GetStLInDlg()->m_Orient		= m_Orient;
+	GetStLInDlg()->m_dScale		= m_dScale;
+	GetStLInDlg()->m_dStep		= m_dStep;
+	GetStLInDlg()->m_dStart		= m_dStart;
+	////////////////////////////////////////////// Curve
+	GetStLInDlg()->m_pDrCurve	= m_pCurrentCurve;
+	GetStLInDlg()->m_Category	= m_Category;
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->ShowWindow(TRUE);
+	strCurr = "Ready for Selection@";
+	if(m_nMainType == NSL_DISPLACE)
+			strCurr += "An Existing Input Node";
+	else
+	if(m_nMainType == CSL_DISPLACE)
+			strCurr += "An Existing Curve";
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelD_RIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByeD_RIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdateD_RIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	m_CurrentStLID = GetStLInDlg()->m_LoadID;
+	SetTx(GetStLInDlg()->m_bTx);
+	SetTy(GetStLInDlg()->m_bTy);
+	SetTz(GetStLInDlg()->m_bTz);
+	SetRx(GetStLInDlg()->m_bRx);
+	SetRy(GetStLInDlg()->m_bRy);
+	SetRz(GetStLInDlg()->m_bRz);
+	m_bTan			= GetStLInDlg()->m_bTan;
+	m_bIso			= GetStLInDlg()->m_bIso;
+	m_bSkewed		= GetStLInDlg()->m_bSkewed;
+	m_aNid			= GetStLInDlg()->m_aNid;
+	m_bNid			= GetStLInDlg()->m_bNid;
+	////////////////////////////////////////////// NonIso
+	m_bNonIso		= GetStLInDlg()->m_bNonIso;
+	m_cid_Parent	= GetStLInDlg()->m_CID;
+	m_bIncrement	= GetStLInDlg()->m_bIncrement;
+	m_Orient		= GetStLInDlg()->m_Orient;
+	m_dScale		= GetStLInDlg()->m_dScale;
+	m_dStep			= GetStLInDlg()->m_dStep;
+	m_dStart		= GetStLInDlg()->m_dStart;
+	/////////////////////////////////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////// Prs
+long CSLDMouse::CreateorActivatePrsIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if PrsDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_PRESSIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	m_StaLProc = STL_PRESSURE;
+	/////////////////////////
+	GetStLInDlg()->SetWindowText("Pressures & Tractions");	
+	GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+	GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+
+	GetStLInDlg()->GetDlgItem(IDC_TX)->SetWindowText("Px");
+	GetStLInDlg()->GetDlgItem(IDC_TY)->SetWindowText("Py");
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->SetWindowText("Pz");
+	GetStLInDlg()->GetDlgItem(IDC_RX)->SetWindowText("");	
+	GetStLInDlg()->GetDlgItem(IDC_RY)->SetWindowText("");	
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->SetWindowText("");
+
+	((CButton*)(GetStLInDlg()->GetDlgItem(IDC_ADVANCED)))->SetCheck(TRUE);
+	GetStLInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(FALSE);
+	////////////////////////////////////////////////////////////////// Nodal Exceptions
+	if(m_nMainType == PSL_PRESSURE)
+		m_bPat		= TRUE;
+	////////////////////////////
+	if(m_nMainType == NSL_PRESSURE)
+	{
+		GetStLInDlg()->m_bTanHide = TRUE;	
+		GetStLInDlg()->m_bIdBHide = TRUE;
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(FALSE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetStLInDlg()->m_bTanHide = FALSE;	
+		GetStLInDlg()->m_bIdBHide = FALSE;	
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("IsoParametric");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(TRUE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("NonIso");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(TRUE);
+	}
+	/////////////////////////////////////////////
+	GetStLInDlg()->m_LoadID		= m_CurrentStLID;
+	GetStLInDlg()->m_bTx		= GetTx();
+	GetStLInDlg()->m_bTy		= GetTy();
+	GetStLInDlg()->m_bTz		= GetTz();
+	////////////////////////////////////// Always False
+	GetStLInDlg()->m_bRx		= FALSE;
+	GetStLInDlg()->m_bRy		= FALSE;
+	GetStLInDlg()->m_bRz		= FALSE;
+	////////////////////////////////////
+	GetStLInDlg()->m_aNid		= m_aNid;
+	GetStLInDlg()->m_bNid		= m_bNid;
+	////////////////////////////////////// Always skewed tangentially
+	GetStLInDlg()->m_bTan		= TRUE;
+	GetStLInDlg()->m_bIso		= m_bIso;
+	GetStLInDlg()->m_bSkewed	= TRUE;
+	GetStLInDlg()->m_StaLProc	= m_StaLProc;
+	////////////////////////////////////////////// NonIso
+	GetStLInDlg()->m_bNonIso	= m_bNonIso;
+	GetStLInDlg()->m_CID		= m_cid_Parent;
+	GetStLInDlg()->m_bIncrement	= m_bIncrement;
+	GetStLInDlg()->m_Orient		= m_Orient;
+	GetStLInDlg()->m_dScale		= m_dScale;
+	GetStLInDlg()->m_dStep		= m_dStep;
+	GetStLInDlg()->m_dStart		= m_dStart;
+	////////////////////////////////////////////// Curve
+	GetStLInDlg()->m_pDrCurve	= m_pCurrentCurve;
+	GetStLInDlg()->m_Category	= m_Category;
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->ShowWindow(TRUE);
+	strCurr = "Ready for Selection@";
+	if(m_nMainType == NSL_PRESSURE)
+			strCurr += "An Existing Input Node";
+	else
+	if(m_nMainType == CSL_PRESSURE)
+			strCurr += "An Existing Curve";
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelPrsIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByePrsIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdatePrsIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	m_CurrentStLID = GetStLInDlg()->m_LoadID;
+	SetTx(GetStLInDlg()->m_bTx);
+	SetTy(GetStLInDlg()->m_bTy);
+	SetTz(GetStLInDlg()->m_bTz);
+	m_bTan			= GetStLInDlg()->m_bTan;
+	m_bIso			= GetStLInDlg()->m_bIso;
+	m_bSkewed		= GetStLInDlg()->m_bSkewed;
+	m_aNid			= GetStLInDlg()->m_aNid;
+	m_bNid			= GetStLInDlg()->m_bNid;
+	////////////////////////////////////////////// NonIso
+	m_bNonIso		= GetStLInDlg()->m_bNonIso;
+	m_cid_Parent	= GetStLInDlg()->m_CID;
+	m_bIncrement	= GetStLInDlg()->m_bIncrement;
+	m_Orient		= GetStLInDlg()->m_Orient;
+	m_dScale		= GetStLInDlg()->m_dScale;
+	m_dStep			= GetStLInDlg()->m_dStep;
+	m_dStart		= GetStLInDlg()->m_dStart;
+	/////////////////////////////////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////// Thr
+long CSLDMouse::CreateorActivateThrIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if ThrDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_THERMIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	m_StaLProc = STL_THERMAL;
+	/////////////////////////
+	GetStLInDlg()->SetWindowText("Thermal Loadings");	
+	GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+	GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+
+	GetStLInDlg()->GetDlgItem(IDC_TX)->SetWindowText("Tx");
+	GetStLInDlg()->GetDlgItem(IDC_TY)->SetWindowText("Ty");
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->SetWindowText("Tz");
+	GetStLInDlg()->GetDlgItem(IDC_RX)->SetWindowText("");	
+	GetStLInDlg()->GetDlgItem(IDC_RY)->SetWindowText("");	
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->SetWindowText("");
+
+	GetStLInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(TRUE);
+	////////////////////////////////////////////////////////////////// Nodal Exceptions
+	if(m_nMainType == PSL_THERMAL)
+		m_bPat		= TRUE;
+	////////////////////////////
+	if(m_nMainType == NSL_THERMAL)
+	{
+		GetStLInDlg()->m_bTanHide = TRUE;	
+		GetStLInDlg()->m_bIdBHide = TRUE;
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(FALSE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetStLInDlg()->m_bTanHide = FALSE;	
+		GetStLInDlg()->m_bIdBHide = FALSE;	
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("IsoParametric");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(TRUE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("NonIso");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(TRUE);
+	}
+	/////////////////////////////////////////////
+	GetStLInDlg()->m_LoadID		= m_CurrentStLID;
+	GetStLInDlg()->m_bTx		= GetTx();
+	GetStLInDlg()->m_bTy		= GetTy();
+	GetStLInDlg()->m_bTz		= GetTz();
+	////////////////////////////////////// Always False
+	GetStLInDlg()->m_bRx		= FALSE;
+	GetStLInDlg()->m_bRy		= FALSE;
+	GetStLInDlg()->m_bRz		= FALSE;
+	////////////////////////////////////
+	GetStLInDlg()->m_aNid		= m_aNid;
+	GetStLInDlg()->m_bNid		= m_bNid;
+	GetStLInDlg()->m_bTan		= m_bTan;
+	GetStLInDlg()->m_bIso		= m_bIso;
+	GetStLInDlg()->m_bSkewed	= m_bSkewed;
+	GetStLInDlg()->m_StaLProc	= m_StaLProc;
+	////////////////////////////////////////////// NonIso
+	GetStLInDlg()->m_bNonIso	= m_bNonIso;
+	GetStLInDlg()->m_CID		= m_cid_Parent;
+	GetStLInDlg()->m_bIncrement	= m_bIncrement;
+	GetStLInDlg()->m_Orient		= m_Orient;
+	GetStLInDlg()->m_dScale		= m_dScale;
+	GetStLInDlg()->m_dStep		= m_dStep;
+	GetStLInDlg()->m_dStart		= m_dStart;
+	////////////////////////////////////////////// Curve
+	GetStLInDlg()->m_pDrCurve	= m_pCurrentCurve;
+	GetStLInDlg()->m_Category	= m_Category;
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->ShowWindow(TRUE);
+	strCurr = "Ready for Selection@";
+	if(m_nMainType == NSL_THERMAL)
+			strCurr += "An Existing Input Node";
+	else
+	if(m_nMainType == CSL_THERMAL)
+			strCurr += "An Existing Curve";
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelThrIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByeThrIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdateThrIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	m_CurrentStLID = GetStLInDlg()->m_LoadID;
+	SetTx(GetStLInDlg()->m_bTx);
+	SetTy(GetStLInDlg()->m_bTy);
+	SetTz(GetStLInDlg()->m_bTz);
+	m_bTan			= GetStLInDlg()->m_bTan;
+	m_bIso			= GetStLInDlg()->m_bIso;
+	m_bSkewed		= GetStLInDlg()->m_bSkewed;
+	m_aNid			= GetStLInDlg()->m_aNid;
+	m_bNid			= GetStLInDlg()->m_bNid;
+	////////////////////////////////////////////// NonIso
+	m_bNonIso		= GetStLInDlg()->m_bNonIso;
+	m_cid_Parent	= GetStLInDlg()->m_CID;
+	m_bIncrement	= GetStLInDlg()->m_bIncrement;
+	m_Orient		= GetStLInDlg()->m_Orient;
+	m_dScale		= GetStLInDlg()->m_dScale;
+	m_dStep			= GetStLInDlg()->m_dStep;
+	m_dStart		= GetStLInDlg()->m_dStart;
+	/////////////////////////////////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////// LWt
+long CSLDMouse::CreateorActivateLWtIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if LWtDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_LUMPWTIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	m_StaLProc = STL_LUMPWT;
+	/////////////////////////
+	GetStLInDlg()->SetWindowText("Lump Weights");	
+	GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+	GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+	GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+
+	GetStLInDlg()->GetDlgItem(IDC_TX)->SetWindowText("Wx");
+	GetStLInDlg()->GetDlgItem(IDC_TY)->SetWindowText("Wy");
+	GetStLInDlg()->GetDlgItem(IDC_TZ)->SetWindowText("Wz");
+	GetStLInDlg()->GetDlgItem(IDC_RX)->SetWindowText("");	
+	GetStLInDlg()->GetDlgItem(IDC_RY)->SetWindowText("");	
+	GetStLInDlg()->GetDlgItem(IDC_RZ)->SetWindowText("");
+
+	GetStLInDlg()->GetDlgItem(IDC_ADVANCED)->EnableWindow(TRUE);
+	////////////////////////////////////////////////////////////////// Nodal Exceptions
+	if(m_nMainType == PSL_LUMPWT)
+		m_bPat		= TRUE;
+	////////////////////////////
+	if(m_nMainType == NSL_LUMPWT)
+	{
+		GetStLInDlg()->m_bTanHide = TRUE;	
+		GetStLInDlg()->m_bIdBHide = TRUE;
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(FALSE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetStLInDlg()->m_bTanHide = FALSE;	
+		GetStLInDlg()->m_bIdBHide = FALSE;	
+		/////////////////////////////////
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->SetWindowText("IsoParametric");
+		GetStLInDlg()->GetDlgItem(IDC_ISOPAR)->EnableWindow(TRUE);
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->SetWindowText("NonIso");
+		GetStLInDlg()->GetDlgItem(IDC_NONISO)->EnableWindow(TRUE);
+	}
+	/////////////////////////////////////////////
+	GetStLInDlg()->m_LoadID		= m_CurrentStLID;
+	GetStLInDlg()->m_bTx		= GetTx();
+	GetStLInDlg()->m_bTy		= GetTy();
+	GetStLInDlg()->m_bTz		= GetTz();
+	////////////////////////////////////// Always False
+	GetStLInDlg()->m_bRx		= FALSE;
+	GetStLInDlg()->m_bRy		= FALSE;
+	GetStLInDlg()->m_bRz		= FALSE;
+	////////////////////////////////////
+	GetStLInDlg()->m_aNid		= m_aNid;
+	GetStLInDlg()->m_bNid		= m_bNid;
+	GetStLInDlg()->m_bTan		= m_bTan;
+	GetStLInDlg()->m_bIso		= m_bIso;
+	GetStLInDlg()->m_bSkewed	= m_bSkewed;
+	GetStLInDlg()->m_StaLProc	= m_StaLProc;
+//	GetStLInDlg()->m_bGravMul	= IsGravMulOn();
+	////////////////////////////////////////////// NonIso
+	GetStLInDlg()->m_bNonIso	= m_bNonIso;
+	GetStLInDlg()->m_CID		= m_cid_Parent;
+	GetStLInDlg()->m_bIncrement	= m_bIncrement;
+	GetStLInDlg()->m_Orient		= m_Orient;
+	GetStLInDlg()->m_dScale		= m_dScale;
+	GetStLInDlg()->m_dStep		= m_dStep;
+	GetStLInDlg()->m_dStart		= m_dStart;
+	////////////////////////////////////////////// Curve
+	GetStLInDlg()->m_pDrCurve	= m_pCurrentCurve;
+	GetStLInDlg()->m_Category	= m_Category;
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->ShowWindow(TRUE);
+	strCurr = "Ready for Selection@";
+	if(m_nMainType == NSL_LUMPWT)
+			strCurr += "An Existing Input Node";
+	else
+	if(m_nMainType == CSL_LUMPWT)
+			strCurr += "An Existing Curve";
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelLWtIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByeLWtIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdateLWtIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	m_CurrentStLID = GetStLInDlg()->m_LoadID;
+	SetTx(GetStLInDlg()->m_bTx);
+	SetTy(GetStLInDlg()->m_bTy);
+	SetTz(GetStLInDlg()->m_bTz);
+	m_bTan			= GetStLInDlg()->m_bTan;
+	m_bSkewed		= GetStLInDlg()->m_bSkewed;
+	m_bIso			= GetStLInDlg()->m_bIso;
+	m_bSkewed		= GetStLInDlg()->m_bSkewed;
+	m_aNid			= GetStLInDlg()->m_aNid;
+	m_bNid			= GetStLInDlg()->m_bNid;
+	////////////////////////////////////////////// NonIso
+	m_bNonIso		= GetStLInDlg()->m_bNonIso;
+	m_cid_Parent	= GetStLInDlg()->m_CID;
+	m_bIncrement	= GetStLInDlg()->m_bIncrement;
+	m_Orient		= GetStLInDlg()->m_Orient;
+	m_dScale		= GetStLInDlg()->m_dScale;
+	m_dStep			= GetStLInDlg()->m_dStep;
+	m_dStart		= GetStLInDlg()->m_dStart;
+	/////////////////////////////////////
+	return 0L;
+}
+	
+void CSLDMouse::Serialize(CArchive& ar)
+{
+
+	CSupMouse::Serialize( ar);              // must call base class Serializer
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" SLDMouse:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" SLDMouse:    Loading\n");	
+
+			/////////////////////////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////////// end of Module //////////////////////		
+
+

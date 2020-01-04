@@ -1,0 +1,23 @@
+// MAKEHELP.BAT generated Help Map file.  Used by RUNDLL.HPJ. 
+ 
+// Commands (ID_* and IDM_*) 
+HIDM_CHANGEDATA                         0x103E9
+HID_VIEW_NEWDIALOG                      0x18003
+ 
+// Prompts (IDP_*) 
+ 
+// Resources (IDR_*) 
+HIDR_COLORTYPE                          0x20004
+HIDR_INPUTTYPE                          0x20005
+HIDR_MAINFRAME                          0x20080
+HIDR_RUNDLLTYPE                         0x20081
+HIDR_TEXTTYPE                           0x20081
+ 
+// Dialogs (IDD_*) 
+HIDD_ABOUTBOX                           0x20064
+HIDD_INPUTFORM1                         0x20066
+HIDD_ODDIALOG                           0x20083
+HIDD_INPUTFORM                          0x207D1
+HIDD_CHANGEDATA                         0x207D2
+ 
+// Frame Controls (IDW_*) 

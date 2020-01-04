@@ -1,0 +1,57 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: CreOpMgr - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP51.tmp" with contents
+[
+IGBx_D32.lib OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_d32.lib Elem_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib EDlg_D32.lib DDlg_D32.lib Dr3D_D32.lib MSup_D32.lib MStL_D32.lib MNod_D32.lib MCur_D32.lib MPat_D32.lib MSol_D32.lib MO3D_D32.lib MMgr_D32.lib EMgr_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/CMgr_D32.pdb" /map:".\Debug/CMgr_D32.map" /debug /machine:I386 /def:".\CMgr_d.def" /out:"c:\drgraf4_0\applic\Debug/CMgr_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/CMgr_D32.lib" 
+.\Debug\CMgrDll.obj
+.\Debug\CreODlgM.obj
+.\Debug\CreOpMgr.obj
+.\Debug\CurCreOp.obj
+.\Debug\DegElevate.obj
+.\Debug\dlg_croi.obj
+.\Debug\Dlg_CurveBlend.obj
+.\Debug\Dlg_LALL.obj
+.\Debug\Dlg_LSy3.obj
+.\Debug\Dlg_LSym.obj
+.\Debug\Dlg_SpnC.obj
+.\Debug\dlg_spnn.obj
+.\Debug\dlg_spnO.obj
+.\Debug\Dlg_SpnP.obj
+.\Debug\Dlg_SpnS.obj
+.\Debug\Mi_cprof.obj
+.\Debug\MI_CSPN.obj
+.\Debug\MI_NSPN.obj
+.\Debug\MI_OSPN.obj
+.\Debug\MI_PSPN.obj
+.\Debug\MI_SSPN.obj
+.\Debug\NodCreOp.obj
+.\Debug\O3DCreOp.obj
+.\Debug\PatCreOp.obj
+.\Debug\RegenCur.obj
+.\Debug\RegenNod.obj
+.\Debug\RegenPat.obj
+.\Debug\RegenProf_C.obj
+.\Debug\RegenSol.obj
+.\Debug\SolCreOp.obj
+.\Debug\CMgr.res
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP51.tmp"
+<h3>Output Window</h3>
+Linking...
+.\CMgr_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\CMgr_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug/CMgr_D32.lib and object c:\drgraf4_0\applic\Debug/CMgr_D32.exp
+
+
+
+<h3>Results</h3>
+CMgr_D32.dll - 0 error(s), 2 warning(s)
+</pre>
+</body>
+</html>

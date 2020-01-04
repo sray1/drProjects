@@ -1,0 +1,34 @@
+; DBox_R.def -- for CDrawBox stuff --  RELEASE version
+
+LIBRARY	DBox_R
+DESCRIPTION  'DrawBox DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitDBoxDLL												@2 NONAME
+
+; CDrawBox
+	; Constructor and Destructor
+ 	??0CDrawBox@@REC@XZ 									@101 NONAME
+ 	??1CDrawBox@@VEC@XZ                                     @102 NONAME
+ 	?Create@CDrawBox@@RECHPEVCMDIFrameWnd@@VCRect@@@Z       @103 NONAME
+ 	?GetBackColor@CDrawBox@@RECKXZ                          @104 NONAME
+ 	?GetForeColor@CDrawBox@@RECKXZ                          @105 NONAME
+ 	?GetHeight@CDrawBox@@RECIXZ                             @106 NONAME
+ 	?GetWidth@CDrawBox@@RECIXZ                              @107 NONAME
+ 	?GetActiveTool@CDrawBox@@RECHXZ                         @108 NONAME
+ 	?GetActiveDrawObject@CDrawBox@@RECHXZ                   @109 NONAME
+	?messageMap@CDrawBox@@1UAFX_MSGMAP@@A					@222 NONAME
+
+  

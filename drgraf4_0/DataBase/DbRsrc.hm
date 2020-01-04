@@ -1,0 +1,43 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by DataBase.rc
+//
+#define HIDC_COORD                      0x808a0190    // IDD_NODE_INPUT
+#define HIDC_CURVEORSPINE               0x84ce043f    // IDD_PATCH_GEOM
+#define HIDC_CURVEUORXSEC               0x84ce0440    // IDD_PATCH_GEOM
+#define HIDC_CURVEVORTWIST              0x84ce0441    // IDD_PATCH_GEOM
+#define HIDC_CURVEWORRAD                0x84ce0442    // IDD_PATCH_GEOM
+#define HIDC_DIRECTION                  0x808a0191    // IDD_NODE_INPUT
+#define HIDC_STATIC                     0x846affff    // IDD_CURVE_GEOM
+#define HIDD_COORD_DX                   0x808a0416    // IDD_NODE_INPUT
+#define HIDD_COORD_DY                   0x808a0417    // IDD_NODE_INPUT
+#define HIDD_COORD_DZ                   0x808a0418    // IDD_NODE_INPUT
+#define HIDD_CPOOLLIST                  0x84780091    // IDD_CUR_P_GEOM
+#define HIDD_CURVE_ID                   0x846a03eb    // IDD_CURVE_GEOM
+#define HIDD_CURVE_TYPE                 0x846a03ec    // IDD_CURVE_GEOM
+#define HIDD_CUR_P_ID                   0x847803f9    // IDD_CUR_P_GEOM
+#define HIDD_LENGTH                     0x808a019f    // IDD_NODE_INPUT
+#define HIDD_MBJ3D_ID                   0xffff03f5    // IDD_MBJ3D_GEOM
+#define HIDD_MBJ3D_TYPE                 0xffff03f6    // IDD_MBJ3D_GEOM
+#define HIDD_MESH1D_ID                  0xffff03ed    // IDD_MESH1D_GEOM
+#define HIDD_MESH1D_TYPE                0xffff03ee    // IDD_MESH1D_GEOM
+#define HIDD_MESH2D_ID                  0xffff03ef    // IDD_MESH2D_GEOM
+#define HIDD_MESH2D_TYPE                0xffff03f0    // IDD_MESH2D_GEOM
+#define HIDD_MESH3D_ID                  0xffff03f1    // IDD_MESH3D_GEOM
+#define HIDD_MESH3D_TYPE                0xffff03f2    // IDD_MESH3D_GEOM
+#define HIDD_NODE_DX                    0x84740194    // IDD_CURVE_LOAD
+#define HIDD_NODE_DX2                   0x84740195    // IDD_CURVE_LOAD
+#define HIDD_NODE_DY                    0x84740196    // IDD_CURVE_LOAD
+#define HIDD_NODE_DY2                   0x84740197    // IDD_CURVE_LOAD
+#define HIDD_NODE_DZ                    0x84740198    // IDD_CURVE_LOAD
+#define HIDD_NODE_DZ2                   0x84740199    // IDD_CURVE_LOAD
+#define HIDD_NODE_ID                    0x80820192    // IDD_NODE_GEOM
+#define HIDD_NODE_TYPE                  0x80820193    // IDD_NODE_GEOM
+#define HIDD_OBJ3D_ID                   0xffff03f5    // IDD_OBJ3D_GEOM
+#define HIDD_OBJ3D_TYPE                 0xffff03f6    // IDD_OBJ3D_GEOM
+#define HIDD_PATCH_ID                   0x84ce03f3    // IDD_PATCH_GEOM
+#define HIDD_PATCH_PROC                 0x84ce03f4    // IDD_PATCH_GEOM
+#define HIDD_PATCH_SUBTYPE              0x84ce03f5    // IDD_PATCH_GEOM
+#define HIDD_SOLID_ID                   0xffff03f5    // IDD_SOLID_GEOM
+#define HIDD_SOLID_TYPE                 0xffff03f6    // IDD_SOLID_GEOM
+#define HIDD_STAL_ID                    0x854303f7    // IDD_STAL_DEFN
+#define HIDD_SUPPORT_ID                 0x85400443    // IDD_SUPP_DEFN

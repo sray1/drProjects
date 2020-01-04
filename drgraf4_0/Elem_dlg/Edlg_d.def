@@ -1,0 +1,21 @@
+; EDlg_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	EDlg_D32
+DESCRIPTION  'ElemDlgs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitEDlgDLL												@2 NONAME
+
+; CEDlgMgr
+;	; Constructor and Destructor
+
+		??0CEDlgMgr@@QAE@XZ
+		??1CEDlgMgr@@UAE@XZ
+
+  

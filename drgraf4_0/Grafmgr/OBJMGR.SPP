@@ -1,0 +1,998 @@
+// GrafObj.cpp : implementation file
+//
+
+#include "stdafx.h"     
+
+#include "globals.h" 
+
+#include "drgraf.h"
+#include "drgradoc.h"
+
+#include "NewObjs.h"
+/////////////////////
+/*
+#include "eldefine.h"
+#include "elglobal.h"
+#include "DrNode.h"
+#include "DrPipe.h"
+#include "DrPlate.h"
+#include "DrPatch.h"
+#include "DrObj3D.h"
+*/
+/////////////////////
+#include "drdefine.h"	// for LABEL
+///////////////////// 
+#include "3Ddefine.h"   // for initialization of the Drawing Operations
+#include "Dr3DMgr.h"
+///////////////////// 
+#include "spdefine.h"   // for initialization of the specials
+#include "Booleans.h"
+#include "DataWind.h"
+#include "DrFont.h"
+#include "DrPen.h"
+#include "HitNet.h"
+#include "Layer.h"
+#include "MapFacto.h"
+#include "Precison.h"
+#include "ScaleFac.h"
+#include "Unit.h"
+#include "patchMnu.h"
+#include "Obj3DMnu.h"
+/////////////////////
+#include "dListMgr.h"
+#include "drobject.h"
+/////////////////////
+#include "ObjMgr.h"
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////////////////////////////////////////////////
+IMPLEMENT_DYNAMIC(CDataRowHint, CObject)
+////////////////////////////////////////////// CDataRowHint class
+CDataRowHint::CDataRowHint()
+{
+}
+/////////////////////////////////////////////////////////////////////////////
+// CGrafObj
+IMPLEMENT_SERIAL(CObjectMgr,CObject,1)
+/*
+BEGIN_MESSAGE_MAP(CObjectMgr,CObject)
+//BEGIN_MESSAGE_MAP
+	//{{AFX_MSG_MAP(CObjectMgr)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/
+/////////////////////////////////////////////////////////////////////////////
+CObjectMgr::CObjectMgr()
+{
+}
+
+CObjectMgr::~CObjectMgr()
+{
+	while(!(GetObjectList()->IsEmpty()) )// delete all left
+		delete (CDrObject*)(GetObjectList()->RemoveHead());  //specials
+
+}
+
+void CObjectMgr::Init()
+{ 
+	SetMeshGenOn(FALSE);
+	////////////////////////
+	m_bViewChanged		= TRUE;
+	////////////////////////
+	m_nLastObjectNo 	= 0;
+	m_nActiveObjectNo	= 0;
+	m_nActiveObjectIndex=-1; 
+	//////////////////////// init all the Special Objects
+	InitBooleans();
+	InitDataWindow();
+	InitDrFont();
+	InitDrPen();
+	InitHitNet();
+	InitLayer();
+	InitMapFactor();
+	InitPrecision();
+	InitScaleFactor();
+	InitUnit();
+	InitPatchMnu();
+	InitObj3DMnu();
+	/////////////////
+	return;
+}
+/////////////////////////////////////////////////////////
+//CSize CDrawView::GetDocSize(LPOINT3 WinExtWIC,int nViewNumber)
+CSize CObjectMgr::GetDocSize()
+{ 
+
+	//	CDrGrafDoc* pDoc = (CDrGrafDoc*)(theApp.m_pDoc );
+	//  m_pDoc not set yet(from OnInitialUpdate call: setscrollsizes
+	//	LPOINT3		WinExtWIC = pDoc->GetWinExtWIC();
+	////////////////////////////////////////////////
+/*
+	if(nViewNumber == VIEW12)      // hor = x; ver = y;
+	{
+		m_sizeDoc.cx = (int)WinExtWIC.x;
+		m_sizeDoc.cy = (int)WinExtWIC.y; 
+	}
+	else if(nViewNumber == VIEW23) // hor = z; ver = y;
+	{
+		m_sizeDoc.cx = (int)WinExtWIC.z;
+		m_sizeDoc.cy = (int)WinExtWIC.y; 
+	}
+	else if(nViewNumber == VIEW31) // hor = x; ver = z;
+	{
+		m_sizeDoc.cx = (int)WinExtWIC.x;
+		m_sizeDoc.cy = (int)WinExtWIC.z; 
+	}
+	else if(nViewNumber == VIEWISO) // hor = ? ver = ?;
+	{
+		m_sizeDoc.cx = (int)WinExtWIC.x;    // TEMPORARILY as VIEW12
+		m_sizeDoc.cy = (int)WinExtWIC.y; 
+	}
+*/	
+    ////////////////////////  MMLOENGLISH   8 1/2 x 11 inch
+		m_sizeDoc.cx =  850;
+		m_sizeDoc.cy = 1100; 
+        ////////////////////
+
+
+	return m_sizeDoc;
+	
+}
+///////////////////////////////////////////////////////// helpers 
+//void CDrObject::Do_Object_Dialog()
+void CObjectMgr::Do_Object_Dialog()
+{ 
+
+	int nActiveObjIndex = GetActiveObjectIndex();		 // Get Index
+	///////////////////////   
+	CDListMgr*	pDListMgr = GetObjectList();
+	CDrObject* pObject = (CDrObject*)pDListMgr->GetObject(nActiveObjIndex);
+    ////////////////////////// Draw Elem Data
+	pObject->DealObjectDialog();
+	//////////////////////////   	
+	
+} 
+
+//void CDrObject::Do_Object_DataView(CDC* PtrDC,int y,int nRowIndex)
+void CObjectMgr::Do_Object_DataView(CDC* PtrDC,int y,int nRowIndex)
+{ 
+
+	CDListMgr*	pDListMgr = GetObjectList();
+	///////////////////////   
+	CDrObject* pObject = (CDrObject*)pDListMgr->GetObject(nRowIndex);
+    ////////////////////////// Draw Elem Data
+	pObject->DoDataView(PtrDC,y);
+	//////////////////////////   	
+	
+} 
+
+//void CDrObject::Do_Object_DrawView(CDC* PtrDC,BOOL bPenChange,int nObjectIndex,
+//																int nViewNumber)
+void CObjectMgr::Do_Object_DrawView(CDC* PtrDC,BOOL bPenChange,int nObjectIndex,
+																int nViewNumber)
+{ 
+
+	CDListMgr*	pDListMgr = GetObjectList();
+	///////////////////////   
+	CDrObject* pObject = (CDrObject*)pDListMgr->GetObject(nObjectIndex);
+	int nObjType  = pObject->GetObjectType();
+	int nElemType = pObject->GetElemType();
+    //////////////////////////////////// Zoom 
+//    POINT ptZoom;
+//    ptZoom.x = 1;
+//    ptZoom.y = 1;
+//    if (nViewNumber == VIEWISO)
+//    		ScalebyZoomFactor(ptZoom,1,nViewNumber);
+    //////////////////////////////////////////////// Draw THE Object
+    if (nElemType <0) return;  // not viewable 
+    /////////////////////////////////////////
+    if (nElemType == (int)DRAW_OBJECT)
+		pObject->DoDrawView(PtrDC,bPenChange,nViewNumber);
+    else
+//    if (nElemType == (int)ELEM_OBJECT)
+		pObject->DoDrawView(PtrDC,bPenChange);
+	////////////////////////////////////////////////   	
+                               
+}
+
+////////////////////////////////////////////////////////// Data/Card View
+//void CDrObject::ChangeSelectionNextObjectIndex(BOOL bNext)
+void CObjectMgr::ChangeSelectionNextObjectIndex(BOOL bNext)
+{
+	//////////////////////////////////////////////
+	int nActiveObjectIndex = GetActiveObjectIndex();
+	
+	if (bNext)
+	{
+		if (nActiveObjectIndex < (GetObjectCount() - 1))
+		{ 
+			SetActiveObjectIndex(++nActiveObjectIndex);
+			UpdateAllViewsWithActiveIndex(NULL, nActiveObjectIndex);
+		}
+	}
+	else
+	{
+		if (nActiveObjectIndex > 0)
+		{
+			SetActiveObjectIndex(--nActiveObjectIndex);
+			UpdateAllViewsWithActiveIndex(NULL, nActiveObjectIndex);
+		}
+	}
+}
+
+//void CDrObject::ChangeSelectionToObjectIndex(UINT nNewActiveObjectIndex)
+void CObjectMgr::ChangeSelectionToObjectIndex(UINT nNewActiveObjectIndex)
+{
+	//////////////////////////////////////////////
+	SetActiveObjectIndex(nNewActiveObjectIndex);
+	UpdateAllViewsWithActiveIndex(NULL, nNewActiveObjectIndex);
+}
+
+
+//void CDrObject::UpdateAllViewsWithActiveIndex(CView* pSourceView,
+//													UINT nActiveIndex)
+void CObjectMgr::UpdateAllViewsWithActiveIndex(CView* pSourceView,
+													UINT nActiveIndex)
+{ 
+
+//	CDrGrafDoc* pDoc = (CDrGrafDoc*)(theApp.m_pDoc);
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	/////////////////// get ObjectType for view 
+	CDListMgr* pDListMgr = GetObjectList();
+	CDrObject* pObject = (CDrObject*)pDListMgr->GetObject(nActiveIndex);
+    int nType = pObject->GetObjectType();
+    ///////////////////////////////////// set SceneChanged
+    SetSceneChanged(TRUE);
+    //////////////////////
+	CDataRowHint hint;
+	pDoc->UpdateAllViews(pSourceView, MAKELONG(nActiveIndex,nType), &hint);
+	/////////////////////
+} 
+
+//int	CDrLabel::GetObjectIndexfromKey(CString KeyID,UINT KeyNo)
+int	CObjectMgr::GetObjectIndexfromKey(int nObjectType,CString KeyID,UINT KeyNo)
+{
+
+	CDListMgr* pDListMgr = GetObjectList();
+	///////////////////////////////////////////// 
+	if((GetObjectList() )->IsEmpty() || KeyNo<=0) 
+	{
+
+		if((GetObjectList() )->IsEmpty())
+		return -1;
+	}	
+	////////////////////////////////////////////////
+	if(pDListMgr->GetSpecificObjectCount(nObjectType) <= 0)
+		return -1;
+	///////////////////////////////////////////////// 
+	BOOL bYes;			
+ 	POSITION pos = pDListMgr->GetFirstObjectPos();
+	int i;
+	for (i=0;pos !=NULL ;i++)
+	{
+		CDrObject* pObject = (CDrObject*)pDListMgr->GetNextObject( pos);
+		if(pObject->GetObjectType() == nObjectType)
+		{ 
+			bYes = pObject->IsKeyMatch(pObject,KeyID,KeyNo);
+			if(bYes)
+				return i;				
+        }
+	}
+	return -1;
+}
+
+//int	CDrLabel::IsObjectHit(CClientDC* ptrDC,POINT point,RECT* pRect,int nViewNumber)
+int	CObjectMgr::IsObjectHit(int nObjectType,CClientDC* ptrDC,POINT point,
+								RECT* pRect,int nViewNumber)
+{
+	////////////////// Return >=0 ->index (Yes Hit)
+	//////////////////         <0 -> No Hit
+	CDListMgr* pDListMgr = GetObjectList();
+	////////////////////////////////////////////////
+	if(pDListMgr->GetSpecificObjectCount(nObjectType) <= 0)
+		return -1;
+	///////////////////////////////////////////////////
+	CHitNet* pHitNet = (CHitNet*)GetSpecObject(HITNET);
+	int nNet = pHitNet->GetSearchNet();
+	////////////////////////////////
+	BOOL bYes;			
+	int i=0;
+	for (POSITION pos = pDListMgr->GetFirstObjectPos();pos !=NULL;i++)
+	{
+	
+		CDrObject* pObject = (CDrObject*)pDListMgr->GetNextObject( pos);
+		if(pObject->GetObjectType() == nObjectType);
+		{
+			if(nObjectType == LABEL) 
+				bYes = pObject->IsObjectHit(pObject,ptrDC,nNet,
+									point,pRect,nViewNumber);	// viewdependent
+			else
+				bYes = pObject->IsObjectHit(pObject,ptrDC,nNet,
+									point,pRect);				// all else
+			if(bYes)
+				return i;				
+        }
+	}	
+	return -1;
+}
+///////////////////////////////////////////////////////////////////// Helper
+/*
+UINT CElemObject::GetLength(LPOINT3 WIC_I,LPOINT3 WIC_J)
+{
+	////////////////////////////////////////////////  Get Doc Info
+	CDrGrafDoc* pDoc = (CDrGrafDoc*)(theApp.m_pDoc);
+	CPrecision* pPrecision     = pDoc->GetPrecision();
+	///////////////////////////////////////////////////////////////////   
+		WORLD I,J;
+		double wLength;
+
+		I.x = (double)WIC_I.x;
+		I.y = (double)WIC_I.y;
+		I.z = (double)WIC_I.z;
+
+		J.x = (double)WIC_J.x;
+		J.y = (double)WIC_J.y;
+		J.z = (double)WIC_J.z;
+		
+		wLength  = fabs((I.x * I.x) - (J.x * J.x) );
+		wLength += fabs((I.y * I.y) - (J.y * J.y) );
+		wLength += fabs((I.z * I.z) - (J.z * J.z) );
+		wLength  = fabs(sqrt(wLength) );
+		/////////////////////////////
+    	long LLength = (long)wLength;
+		///////////////////////////// DEScale it
+///		pDoc->SCtoDS(&LLength);                   
+		long  LWorldBase  = pPrecision->GetWorldBase();
+		LLength /= LWorldBase;                    // Take out Precision 
+		UINT nLength = (UINT) LLength;            // LOG/DeScaled
+		///////////////
+		return nLength;
+		///////////////    
+} 
+*/
+/*                               
+void CDrObject::ScalebyZoomFactor(POINT* pt,UINT nMaxPt,UINT nViewNumber)
+{
+
+	
+//	CDrGrafFrame* pWnd = (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd );
+	CDrGrafDoc* pDoc   = (CDrGrafDoc*)(theApp.m_pDoc ); 
+	CZoom* pZoom = pDoc->GetZoom();
+	/////////////////////////////////////////////////////////
+	WORLD	ZoomFactor = pZoom->GetZoomFactor(nViewNumber); 
+	//////////////////////////////////////////////////
+    for (int i = 0;(UINT)i< nMaxPt; i++)
+    { 
+    	double	ptX  = (double)(pt[i].x);
+        double  ptY  = (double)(pt[i].y);
+          
+    	if (nViewNumber == VIEW12) //View12:rot=0;tilt=0
+    	{ 
+	    	ptX *= ZoomFactor.x;
+	    	ptY *= ZoomFactor.y; 
+		}
+	    else if (nViewNumber == VIEW23) //View23:rot=90;tilt=0;
+		{
+	    	ptX *= ZoomFactor.z;
+	    	ptY *= ZoomFactor.y; 
+	    }
+	    else if (nViewNumber == VIEW31) //View31:rot=0;tilt=270;
+		{
+	    	ptX *= ZoomFactor.x;
+	    	ptY *= ZoomFactor.z; 
+		}
+ 	  	else if (nViewNumber == VIEWISO) //ViewISO:rot=?;tilt=?;
+		{
+	    	ptX *= ZoomFactor.x;
+	    	ptY *= ZoomFactor.y; 
+		}
+    	///////////////////
+    	pt[i].x = (int)ptX;    
+    	pt[i].y = (int)ptY;
+    	///////////////////
+    }  
+
+}
+*/
+/////////////////////////////////////
+static char FmtStr[] = "% 4d.%.2d  ";
+///////////////////////////////////// 
+//void CDrObject::SetFormatParam()
+void CObjectMgr::SetFormatParam(UINT nDecPlaces,long lWorldBase)
+{
+
+	/////////////////////////////////////////////
+	char c0;
+	
+	c0 = (9 - nDecPlaces) + '0';
+	FmtStr[2] = c0;
+	
+	c0 = nDecPlaces + '0';
+	FmtStr[7] = c0;
+	////////////////////////////// set format
+	m_strFormat = FmtStr;
+	/////////////////////
+	return;
+	
+}
+////////////////////////////////////////////////////////// Get: Specials
+CDrObject* CObjectMgr::GetSpecObject(int nObjectType)
+{ 
+    /////////////////////////////////////////////////////////////////////// 
+    CDListMgr* pDListMgr = GetObjectList();
+	//////////////////////////////////////////////////////// get pointer/Info
+	int index = pDListMgr->GetObjectFirstIndex(nObjectType);
+	if(index>=0)
+	{	  
+		return (CDrObject*)pDListMgr->GetObject(index);
+	}
+	else
+	{
+		AfxMessageBox(
+			"Error:CObjectMgr::GetSpecials\n Pointer Not Found");
+	}		 	 
+    ///////////////////////////////
+	return (CDrObject*)NULL;
+}	
+////////////////////////////////////////////////////////// Init : Specials	
+void CObjectMgr::InitBooleans()
+{ 
+											//   Should be read from .Ini file			
+   	CNewObjs* pNewObjs;
+    CBooleans* pObject = (CBooleans*)pNewObjs->NewObject(BOOLEANS);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultBooleans(); 
+	pObject->InitBooleans();
+	//////////////////////
+}
+
+void CObjectMgr::InitDataWindow()
+{
+
+   	CNewObjs* pNewObjs;
+    CDataWindow* pObject = (CDataWindow*)pNewObjs->NewObject(DATAWINDOW);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultDataWindow(); 
+	pObject->InitDataWindow();
+    ///////////////////////////////
+    
+}
+	
+void CObjectMgr::InitDrFont()
+{
+
+   	CNewObjs* pNewObjs;
+    CDrFont* pObject = (CDrFont*)pNewObjs->NewObject(DRFONT);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultDrFont(); 
+	pObject->InitDrFont();
+    ///////////////////////////////
+
+}
+
+void CObjectMgr::InitDrPen()
+{
+
+   	CNewObjs* pNewObjs;
+    CDrPen* pObject = (CDrPen*)pNewObjs->NewObject(DRPEN);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultDrPen(); 
+	pObject->InitDrPen();
+    ///////////////////////////////
+} 
+
+void CObjectMgr::InitHitNet()
+{
+
+   	CNewObjs* pNewObjs;
+    CHitNet* pObject = (CHitNet*)pNewObjs->NewObject(HITNET);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultHitNet(); 
+	pObject->InitHitNet();
+    ///////////////////////////////
+	
+}
+
+void CObjectMgr::InitLayer()
+{
+
+
+   	CNewObjs* pNewObjs;
+    CLayer* pObject = (CLayer*)pNewObjs->NewObject(LAYER);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultLayer(); 
+	pObject->InitLayer();
+    ///////////////////////////////
+    
+}
+
+void CObjectMgr::InitMapFactor()
+{
+
+   	CNewObjs* pNewObjs;
+    CMapFactor* pObject = (CMapFactor*)pNewObjs->NewObject(MAPFACTOR);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultMapFactor(); 
+	pObject->InitMapFactor();
+    ///////////////////////////////
+}
+
+void CObjectMgr::InitPrecision()
+{
+
+   	CNewObjs* pNewObjs;
+    CPrecision* pObject = (CPrecision*)pNewObjs->NewObject(PRECISION);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultPrecision(); 
+	pObject->InitPrecision();
+    ///////////////////////////////
+    
+}
+
+void CObjectMgr::InitScaleFactor()
+{
+
+   	CNewObjs* pNewObjs;
+    CScaleFactor* pObject = (CScaleFactor*)pNewObjs->NewObject(SCALEFACTOR);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultScaleFactor(); 
+	pObject->InitScaleFactor();
+    ///////////////////////////////
+	  	
+} 
+
+void CObjectMgr::InitUnit()
+{
+
+   	CNewObjs* pNewObjs;
+    CUnit* pObject = (CUnit*)pNewObjs->NewObject(UNIT);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultUnit(); 
+	pObject->InitUnit();
+    ///////////////////////////////
+    
+}
+
+void CObjectMgr::InitPatchMnu()
+{
+
+
+   	CNewObjs* pNewObjs;
+    CPatchMnu* pObject = (CPatchMnu*)pNewObjs->NewObject(PATCHMNU);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultPatchMnu(); 
+	pObject->InitPatchMnu();
+    ///////////////////////////////
+    
+}
+
+void CObjectMgr::InitObj3DMnu()
+{
+
+
+   	CNewObjs* pNewObjs;
+    CObj3DMnu* pObject = (CObj3DMnu*)pNewObjs->NewObject(OBJ3DMNU);
+    /////////////////////////////////////////// create permanent
+    CDListMgr* pDListMgr = GetObjectList();
+    pDListMgr->InsertObject(pObject);
+   	pObject->SetObjectNo(GetLastObjectNo());
+	BumpLastObjectNo();                         // bump it
+	////////////////////////////////////////////////////////
+	pObject->ReadDefaultObj3DMnu(); 
+	pObject->InitObj3DMnu();
+    ///////////////////////////////
+    
+}
+///////////////////////////////////////////////////////////// Helpers	
+void CObjectMgr::DStoSC(double* dpt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    *dpt = (*dpt) * dScaleFactor;    
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::SCtoDS(double* dpt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    *dpt = (*dpt) / dScaleFactor;    
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::DStoSC(int* npt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    *npt = (int)( ((double)(*npt))*dScaleFactor);    
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::SCtoDS(int* npt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    *npt = (int)( ((double)(*npt))/dScaleFactor);    
+    ///////////////////////////////////////////// 
+    return;
+}    
+void CObjectMgr::DStoSC(LONG* npt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    *npt = (LONG)( ((double)(*npt))*dScaleFactor);    
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::SCtoDS(LONG* npt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    *npt = (LONG)( ((double)(*npt))/dScaleFactor);    
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::DStoSC(POINT* pt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    pt->x = (int)( ((double)(pt->x))*dScaleFactor);    
+    pt->y = (int)( ((double)(pt->y))*dScaleFactor); 
+    ///////////////////////////////////////////// 
+    return;
+}    
+void CObjectMgr::SCtoDS(POINT* pt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    pt->x = (int)( ((double)(pt->x))/dScaleFactor);    
+    pt->y = (int)( ((double)(pt->y))/dScaleFactor); 
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::DStoSC(LPOINT3* pt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    pt->x = (LONG)( ((double)(pt->x))*dScaleFactor);    
+    pt->y = (LONG)( ((double)(pt->y))*dScaleFactor); 
+    pt->z = (LONG)( ((double)(pt->z))*dScaleFactor); 
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::SCtoDS(LPOINT3* pt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    pt->x = (LONG)( ((double)(pt->x))/dScaleFactor);    
+    pt->y = (LONG)( ((double)(pt->y))/dScaleFactor); 
+    pt->z = (LONG)( ((double)(pt->z))/dScaleFactor); 
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+
+void CObjectMgr::DStoSC(LPOINT* pt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    pt->x = (LONG)( ((double)(pt->x))*dScaleFactor);    
+    pt->y = (LONG)( ((double)(pt->y))*dScaleFactor); 
+    ///////////////////////////////////////////// 
+    return;
+}    
+void CObjectMgr::SCtoDS(LPOINT* pt)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    pt->x = (LONG)( ((double)(pt->x))/dScaleFactor);    
+    pt->y = (LONG)( ((double)(pt->y))/dScaleFactor); 
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::DStoSC(RECT* rect)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+ //    dScaleFactor       *= pDoc->GetMapFactor();
+    rect->left   = (int)( ((double)(rect->left))*dScaleFactor);    
+    rect->top    = (int)( ((double)(rect->top))*dScaleFactor); 
+    rect->right  = (int)( ((double)(rect->right))*dScaleFactor);    
+    rect->bottom = (int)( ((double)(rect->bottom))*dScaleFactor);    
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::SCtoDS(RECT* rect)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    rect->left   = (int)( ((double)(rect->left))/dScaleFactor);    
+    rect->top    = (int)( ((double)(rect->top))/dScaleFactor); 
+    rect->right  = (int)( ((double)(rect->right))/dScaleFactor);    
+    rect->bottom = (int)( ((double)(rect->bottom))/dScaleFactor);    
+    ///////////////////////////////////////////// 
+    return;
+}    
+void CObjectMgr::DStoSC(LRECT* rect)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    rect->left   = (long)( ((double)(rect->left))*dScaleFactor);    
+    rect->top    = (long)( ((double)(rect->top))*dScaleFactor); 
+    rect->right  = (long)( ((double)(rect->right))*dScaleFactor);    
+    rect->bottom = (long)( ((double)(rect->bottom))*dScaleFactor);    
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+void CObjectMgr::SCtoDS(LRECT* rect)
+{
+	/////////////////////////////////////////////////////////
+	CScaleFactor* pScaleFactor = (CScaleFactor*)GetSpecObject(SCALEFACTOR);
+	/////////////////////////////////////////////////////////
+    double dScaleFactor = pScaleFactor->GetScaleFactor();
+	///////////////////////////////////////////////// 
+//    dScaleFactor       *= pDoc->GetMapFactor();
+    rect->left   = (long)( ((double)(rect->left))/dScaleFactor);    
+    rect->top    = (long)( ((double)(rect->top))/dScaleFactor); 
+    rect->right  = (long)( ((double)(rect->right))/dScaleFactor);    
+    rect->bottom = (long)( ((double)(rect->bottom))/dScaleFactor);    
+    ///////////////////////////////////////////// 
+    return;
+}    
+
+/////////////////////////////////////////////////////////////////// Helper/Specials
+void CObjectMgr::SetMapFactorInfo()
+{
+	///////////////////////////////////////////////////// Unit
+//	char* MapModes[] ={"","MM_TEXT","MM_LOMETRIC","MM_HIMETRIC","MM_LOENGLISH",
+//					  "MM_HIENGLISH","MM_TWIPS","MM_ISOMETRIC","MM-ANISOMETRIC"};
+/*
+	CDrGrafDoc* pDoc = (CDrGrafDoc*)(theApp.m_pDoc);  
+	CUnit* pUnit = (CUnit*)pObject->GetUnit();
+	UINT nUnitIndex = pUnit->GetUnitIndex(); 
+*/
+	double MapValues[]={0.,1.0,.1,.01,.01,.001,.000694,1.,1.};
+	/////////////////////////////////////////////////////	
+	CUnit* pUnit = (CUnit*)GetSpecObject(UNIT);
+	int nUnitIndex = pUnit->GetUnitIndex();
+	/////////////////////////////////////////////////////
+	int nMapIndex;
+	switch(nUnitIndex)
+	{
+		case 0:
+			nMapIndex = MM_HIENGLISH;                
+			break;
+				
+		case 1:				// inches - Fractional	// TEMPORARY later
+													// 1/16 or 1/32 etc.
+													// Isotropic Mode Needed  
+			nMapIndex = MM_HIENGLISH;                
+			break;
+				
+		case 2:				// Feet
+			nMapIndex = MM_LOENGLISH;                
+			break;
+				
+		case 3:				// Feet - Fractional	// TEMPORARY later
+													// 1/16 or 1/32 etc.
+													// Isotropic Mode Needed  
+			nMapIndex = MM_LOENGLISH;                
+			break;
+				
+		case 4:				// Miles
+			nMapIndex = MM_LOENGLISH;                
+			break;	
+			
+		case 5:				// Millimeters
+			nMapIndex = MM_HIMETRIC;                
+			break;	
+			
+		case 6:				// Centimeters
+			nMapIndex = MM_LOMETRIC;                
+			break;	
+			
+		case 7: 			// Meters
+			nMapIndex = MM_LOMETRIC;                
+			break;	
+			
+		case 8: 			// Kilometers
+			nMapIndex = MM_LOMETRIC;                
+			break;	
+			
+	    default:
+	        break;
+	}
+	/////////////////////////////////////////////////////// set Map Index	
+	double dMapFactor;
+	CMapFactor* pMapFactor = (CMapFactor*)GetSpecObject(MAPFACTOR);
+	pMapFactor->SetMapModeIndex(nMapIndex);
+	dMapFactor 	= MapValues[nMapIndex];
+	pMapFactor->SetMapFactor(dMapFactor);
+	///////////////////////////////////////////////
+}
+/////////////////////////////////////////////////////////////////////////////////////////		
+// CObjectMgr serialization
+
+void CObjectMgr::Serialize(CArchive& ar)
+{
+
+	CObject::Serialize( ar);              // must call base class Serializer
+	//////////////////////////////////////
+	WORD w;
+	/////// 
+	if (ar.IsStoring())
+	{
+		TRACE(" ObjectMgr		:Storing\n");	// TODO: add storing code here 
+	    /////////////////////////////////////////
+		ar.Write(&m_bViewChanged, sizeof(BOOL) );
+		ar.Write(&m_sizeDoc, sizeof(CSize) );
+//		ar.WriteObject(&m_EBoxMgr );
+//		ar.WriteObject(&m_DBoxMgr );
+//		ar.WriteObject(&m_ObjectList );
+		/////////////////////////////////	
+		ar  <</*CString*/     m_strFormat
+			<</*UINT*/	(WORD)m_nLastObjectNo		// Master Object Number:to be assigned to: 
+									  				// All Elements & Non-Elements
+			<</*UINT*/	(WORD)m_nActiveObjectNo     // Selected Object No
+			<</*int*/	(WORD)m_nActiveObjectIndex  // Selected Object Index in List
+			<</*int*/	(WORD)m_nActiveObjectType;	// Selected ObjectType;
+
+	}
+	else
+	{
+		TRACE(" ObjectMgr		:Loading\n");	// TODO: add loading code here
+
+	    /////////////////////////////////////////
+		ar.Read(&m_bViewChanged, sizeof(BOOL) );
+		ar.Read(&m_sizeDoc, sizeof(CSize) );
+//		m_pEBoxMgr 		= ((CEBoxMgr*)ar.ReadObject(RUNTIME_CLASS(CEBoxMgr)) );
+//		m_pDBoxMgr 		= ((CDBoxMgr*)ar.ReadObject(RUNTIME_CLASS(CDBoxMgr)) );
+//		m_pObjectList	= ((CObList*)ar.ReadObject(RUNTIME_CLASS(CObList)) );
+		/////////////////////////////////	
+		ar  >>/*CString*/     m_strFormat;
+		ar	>>	w;
+		m_nLastObjectNo = (UINT)w;		// Master Object Number:to be assigned to: 
+								  				// All Elements & Non-Elements
+		ar	>>	w;
+		m_nActiveObjectNo = (UINT)w;     // Selected Object No
+		ar	>>	w;
+		m_nActiveObjectIndex = (int)w;  // Selected Object Index in List
+		ar	>>	w;
+		m_nActiveObjectType = (int)w;	// Selected ObjectType;
+		
+	} 
+	//////////////////////////////////////////// ToolBoxes
+//	GetEBoxMgr()->Serialize(ar);
+//	GetDBoxMgr()->Serialize(ar);
+	//////////////////////////////////////////// Object List
+//	GetObjectList()->Serialize(ar);
+	/////////////////////////////////		
+
+}
+/////////////////////////// End of Module /////////////////

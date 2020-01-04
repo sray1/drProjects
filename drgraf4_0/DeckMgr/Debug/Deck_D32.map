@@ -1,0 +1,2083 @@
+ Deck_D32
+
+ Timestamp is 444d8131 (Mon Apr 24 18:53:53 2006)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 000195a3H .text                   CODE
+ 0001:000195b0 0000101fH .text$AFX_COL1          CODE
+ 0001:0001a5d0 00001878H .text$x                 CODE
+ 0001:0001be48 00010008H .textbss                CODE
+ 0002:00000000 00001f3fH .rdata                  DATA
+ 0002:00001f40 00000965H .rdata$r                DATA
+ 0002:000028a8 00000caeH .xdata$x                DATA
+ 0002:00003560 00011fceH .edata                  DATA
+ 0003:00000000 00000104H .CRT$XCA                DATA
+ 0003:00000104 00000104H .CRT$XCU                DATA
+ 0003:00000208 00000104H .CRT$XCZ                DATA
+ 0003:0000030c 00000104H .CRT$XIA                DATA
+ 0003:00000410 00000104H .CRT$XIZ                DATA
+ 0003:00000520 000004eeH .data                   DATA
+ 0003:00000a10 0000006cH .bss                    DATA
+ 0004:00000000 0000008cH .idata$2                DATA
+ 0004:0000008c 00000014H .idata$3                DATA
+ 0004:000000a0 00000550H .idata$4                DATA
+ 0004:000005f0 00000550H .idata$5                DATA
+ 0004:00000b40 00002064H .idata$6                DATA
+ 0005:00000000 000001f9H .rsrc$01                DATA
+ 0005:00000200 00000a39H .rsrc$02                DATA
+
+  Address         Publics by Value              Rva+Base     Lib:Object
+
+ 0001:000036c0       _ExtRawDllMain@12          100046c0 f   DeckDll.obj
+ 0001:00003740       _InitDeckDLL@0             10004740 f   DeckDll.obj
+ 0001:000037b0       _DllMain@12                100047b0 f   DeckDll.obj
+ 0001:00003830       ??B?$CTypedSimpleList@PAUCRuntimeClass@@@@QAEPAUCRuntimeClass@@XZ 10004830 f i DeckDll.obj
+ 0001:00003860       ??B?$CTypedSimpleList@PAVCOleObjectFactory@@@@QAEPAVCOleObjectFactory@@XZ 10004860 f i DeckDll.obj
+ 0001:00003890       ?GetHead@CSimpleList@@QBEPAXXZ 10004890 f i DeckDll.obj
+ 0001:000038b0       ?Set3DPts@C3DMath@@QAEXPAULPOINT3@@JJJ@Z 100048b0 f i DeckMgr.obj
+ 0001:000038f0       ?Set3DPts@C3DMath@@QAEXPAUWORLD@@NNN@Z 100048f0 f i DeckMgr.obj
+ 0001:00003950       ?Len3DPts@C3DMath@@QAENPAUWORLD@@@Z 10004950 f i DeckMgr.obj
+ 0001:000039b0       ??1C3DMath@@UAE@XZ         100049b0 f i DeckMgr.obj
+ 0001:000039e0       ??_GC3DMath@@UAEPAXI@Z     100049e0 f i DeckMgr.obj
+ 0001:00003a20       ??_EC3DMath@@UAEPAXI@Z     10004a20 f i DeckMgr.obj
+ 0001:00003ac0       ?GetMatrix@CMatObj@@UAEPAUMATRIX@@XZ 10004ac0 f i DeckMgr.obj
+ 0001:00003ae0       ?SetMatrix@CMatObj@@UAEXPAUMATRIX@@@Z 10004ae0 f i DeckMgr.obj
+ 0001:00003b70       ?GetCurveLatch@CMatObj@@UAE?AW4CURVELATCH@@XZ 10004b70 f i DeckMgr.obj
+ 0001:00003b90       ?SetCurveLatch@CMatObj@@UAEXW4CURVELATCH@@@Z 10004b90 f i DeckMgr.obj
+ 0001:00003bc0       ?IsInstanced_Prof@CMatObj@@UAEHXZ 10004bc0 f i DeckMgr.obj
+ 0001:00003be0       ?SetInstanced_Prof@CMatObj@@UAEXH@Z 10004be0 f i DeckMgr.obj
+ 0001:00003c10       ?GetFromID@CMatObj@@UAE?AVCString@@XZ 10004c10 f i DeckMgr.obj
+ 0001:00003c60       ?SetFromID@CMatObj@@UAEXVCString@@@Z 10004c60 f i DeckMgr.obj
+ 0001:00003ce0       ?GetFromPt@CMatObj@@UAE?AUWORLD@@XZ 10004ce0 f i DeckMgr.obj
+ 0001:00003d20       ?SetFromPt@CMatObj@@UAEXUWORLD@@@Z 10004d20 f i DeckMgr.obj
+ 0001:00003d60       ?GetToID@CMatObj@@UAE?AVCString@@XZ 10004d60 f i DeckMgr.obj
+ 0001:00003db0       ?SetToID@CMatObj@@UAEXVCString@@@Z 10004db0 f i DeckMgr.obj
+ 0001:00003e30       ?GetToPt@CMatObj@@UAE?AUWORLD@@XZ 10004e30 f i DeckMgr.obj
+ 0001:00003e70       ?SetToPt@CMatObj@@UAEXUWORLD@@@Z 10004e70 f i DeckMgr.obj
+ 0001:00003eb0       ?GetRotPtID@CMatObj@@UAE?AVCString@@XZ 10004eb0 f i DeckMgr.obj
+ 0001:00003f00       ?SetRotPtID@CMatObj@@UAEXVCString@@@Z 10004f00 f i DeckMgr.obj
+ 0001:00003f80       ?GetRotPt@CMatObj@@UAE?AUWORLD@@XZ 10004f80 f i DeckMgr.obj
+ 0001:00003fc0       ?SetRotPt@CMatObj@@UAEXUWORLD@@@Z 10004fc0 f i DeckMgr.obj
+ 0001:00004000       ?IsCoordIn@CMatObj@@UAEHXZ 10005000 f i DeckMgr.obj
+ 0001:00004030       ?SetCoordIn@CMatObj@@UAEXH@Z 10005030 f i DeckMgr.obj
+ 0001:00004060       ?GetTranPtID@CMatObj@@UAE?AVCString@@XZ 10005060 f i DeckMgr.obj
+ 0001:000040b0       ?SetTranPtID@CMatObj@@UAEXVCString@@@Z 100050b0 f i DeckMgr.obj
+ 0001:00004130       ?GetTranslation@CMatObj@@UAE?AUWORLD@@XZ 10005130 f i DeckMgr.obj
+ 0001:00004170       ?SetTranslation@CMatObj@@UAEXUWORLD@@@Z 10005170 f i DeckMgr.obj
+ 0001:000041b0       ?IsAngleIn@CMatObj@@UAEHXZ 100051b0 f i DeckMgr.obj
+ 0001:000041e0       ?SetAngleIn@CMatObj@@UAEXH@Z 100051e0 f i DeckMgr.obj
+ 0001:00004210       ?IsDirCos@CMatObj@@UAEHXZ  10005210 f i DeckMgr.obj
+ 0001:00004240       ?SetDirCos@CMatObj@@UAEXH@Z 10005240 f i DeckMgr.obj
+ 0001:00004270       ?GetDirCosDirect@CMatObj@@UAE?AUWORLD@@XZ 10005270 f i DeckMgr.obj
+ 0001:000042b0       ?SetDirCosDirect@CMatObj@@UAEXUWORLD@@@Z 100052b0 f i DeckMgr.obj
+ 0001:000042f0       ?GetRotation@CMatObj@@UAE?AUWORLD@@XZ 100052f0 f i DeckMgr.obj
+ 0001:00004330       ?SetRotation@CMatObj@@UAEXUWORLD@@@Z 10005330 f i DeckMgr.obj
+ 0001:00004370       ?GetScale@CMatObj@@UAE?AUWORLD@@XZ 10005370 f i DeckMgr.obj
+ 0001:000043b0       ?SetScale@CMatObj@@UAEXUWORLD@@@Z 100053b0 f i DeckMgr.obj
+ 0001:000043f0       ?GetShear@CMatObj@@UAE?AUWORLD@@XZ 100053f0 f i DeckMgr.obj
+ 0001:00004430       ?SetShear@CMatObj@@UAEXUWORLD@@@Z 10005430 f i DeckMgr.obj
+ 0001:00004470       ?IsNoRot@CMatObj@@UAEHXZ   10005470 f i DeckMgr.obj
+ 0001:000044a0       ?SetNoRot@CMatObj@@UAEXH@Z 100054a0 f i DeckMgr.obj
+ 0001:000044d0       ?IsNoTran@CMatObj@@UAEHXZ  100054d0 f i DeckMgr.obj
+ 0001:00004500       ?SetNoTran@CMatObj@@UAEXH@Z 10005500 f i DeckMgr.obj
+ 0001:00004530       ?IsNoScale@CMatObj@@UAEHXZ 10005530 f i DeckMgr.obj
+ 0001:00004560       ?SetNoScale@CMatObj@@UAEXH@Z 10005560 f i DeckMgr.obj
+ 0001:00004590       ?IsNoShear@CMatObj@@UAEHXZ 10005590 f i DeckMgr.obj
+ 0001:000045c0       ?SetNoShear@CMatObj@@UAEXH@Z 100055c0 f i DeckMgr.obj
+ 0001:000045f0       ?GetXformType@CMatObj@@UAE?AW4XFORMTYPE@@XZ 100055f0 f i DeckMgr.obj
+ 0001:00004620       ?SetXformType@CMatObj@@UAEXW4XFORMTYPE@@@Z 10005620 f i DeckMgr.obj
+ 0001:00004650       ?GetSpawnType@CMatObj@@UAE?AW4SPAWNTYPE@@XZ 10005650 f i DeckMgr.obj
+ 0001:00004680       ?SetSpawnType@CMatObj@@UAEXW4SPAWNTYPE@@@Z 10005680 f i DeckMgr.obj
+ 0001:000046b0       ?GetCreOp@CMatObj@@UAEIXZ  100056b0 f i DeckMgr.obj
+ 0001:000046e0       ?SetCreOp@CMatObj@@UAEXI@Z 100056e0 f i DeckMgr.obj
+ 0001:00004710       ??1CMatObj@@UAE@XZ         10005710 f i DeckMgr.obj
+ 0001:000047d0       ??_GCMatObj@@UAEPAXI@Z     100057d0 f i DeckMgr.obj
+ 0001:00004810       ??_ECMatObj@@UAEPAXI@Z     10005810 f i DeckMgr.obj
+ 0001:000048b0       ?ReadyToDelete@CDrObject@@UAEXXZ 100058b0 f i DeckMgr.obj
+ 0001:000048d0       ?DoFormattedCardView@CDrObject@@UAEXPAVCString@@AAV2@@Z 100058d0 f i DeckMgr.obj
+ 0001:000048f0       ?DoUnFormattedCardView@CDrObject@@UAEXPAVCString@@@Z 100058f0 f i DeckMgr.obj
+ 0001:00004910       ?DoDataView@CDrObject@@UAEXPAVCDC@@H@Z 10005910 f i DeckMgr.obj
+ 0001:00004930       ?InitDraw@CDrObject@@UAEXPAVCDC@@HHPAUMATRIX@@1NNN@Z 10005930 f i DeckMgr.obj
+ 0001:00004950       ?InitDraw@CDrObject@@UAEXPAVCDC@@HHPAUMATRIX@@1NNNN@Z 10005950 f i DeckMgr.obj
+ 0001:00004970       ?Corner_3Dto2D@CDrObject@@UAEXXZ 10005970 f i DeckMgr.obj
+ 0001:00004990       ?DoDrawView@CDrObject@@UAEXPAVCDC@@@Z 10005990 f i DeckMgr.obj
+ 0001:000049b0       ?DoDrawView@CDrObject@@UAEXPAVCDC@@H@Z 100059b0 f i DeckMgr.obj
+ 0001:000049d0       ?DoDrawView@CDrObject@@UAEXPAVCDC@@HH@Z 100059d0 f i DeckMgr.obj
+ 0001:000049f0       ?DealObjectDialog@CDrObject@@UAEHXZ 100059f0 f i DeckMgr.obj
+ 0001:00004a10       ?TransformObjectToWorld@CDrObject@@UAEXPAUMATRIX@@H@Z 10005a10 f i DeckMgr.obj
+ 0001:00004a30       ?TransformObjectToView@CDrObject@@UAEXPAUMATRIX@@@Z 10005a30 f i DeckMgr.obj
+ 0001:00004a50       ?TransformObjectToViewDirect@CDrObject@@UAEXPAUMATRIX@@00H@Z 10005a50 f i DeckMgr.obj
+ 0001:00004a70       ?RemoveHiddenObject@CDrObject@@UAEHPAUMATRIX@@UWORLD@@H@Z 10005a70 f i DeckMgr.obj
+ 0001:00004a90       ?ProjectObject@CDrObject@@UAEXPAUMATRIX@@NN@Z 10005a90 f i DeckMgr.obj
+ 0001:00004ab0       ?Calc_2DBoundsScreen@CDrObject@@UAEHXZ 10005ab0 f i DeckMgr.obj
+ 0001:00004ad0       ?Calc_3DBoundsLocal@CDrObject@@UAEHXZ 10005ad0 f i DeckMgr.obj
+ 0001:00004af0       ?FinishObject@CDrObject@@UAEXPAVCClientDC@@H@Z 10005af0 f i DeckMgr.obj
+ 0001:00004b10       ?FinishObject@CDrObject@@UAEXH@Z 10005b10 f i DeckMgr.obj
+ 0001:00004b30       ?FinishObject@CDrObject@@UAEXXZ 10005b30 f i DeckMgr.obj
+ 0001:00004b50       ?GetMaxCorners@CDrObject@@UAEHXZ 10005b50 f i DeckMgr.obj
+ 0001:00004b70       ?GetRawCoords@CDrObject@@UAEXPAJPAHH@Z 10005b70 f i DeckMgr.obj
+ 0001:00004b90       ?SetProjectedCoords@CDrObject@@UAEXUtagPOINT@@H@Z 10005b90 f i DeckMgr.obj
+ 0001:00004bb0       ?RearrangeProjectedCoords@CDrObject@@UAEXXZ 10005bb0 f i DeckMgr.obj
+ 0001:00004bd0       ?IsObjectHit@CDrObject@@UAEHNUWORLD@@@Z 10005bd0 f i DeckMgr.obj
+ 0001:00004bf0       ?IsObjectHit@CDrObject@@UAEHHUtagPOINT@@H@Z 10005bf0 f i DeckMgr.obj
+ 0001:00004c10       ?IsObjectHit@CDrObject@@UAEHHUtagPOINT@@@Z 10005c10 f i DeckMgr.obj
+ 0001:00004c30       ?IsObjectHit@CDrObject@@UAEHPAVCClientDC@@HUtagPOINT@@PAVCRect@@H@Z 10005c30 f i DeckMgr.obj
+ 0001:00004c50       ?IsKeyMatch@CDrObject@@UAEHPAV1@VCString@@I@Z 10005c50 f i DeckMgr.obj
+ 0001:00004c80       ?IsKeyMatch@CDrObject@@UAEHVCString@@I@Z 10005c80 f i DeckMgr.obj
+ 0001:00004cb0       ?IsControlShapeNeeded@CDrObject@@UAEHXZ 10005cb0 f i DeckMgr.obj
+ 0001:00004cd0       ?SetControlShapeNeed@CDrObject@@UAEXH@Z 10005cd0 f i DeckMgr.obj
+ 0001:00004cf0       ?IsNormalNeeded@CDrObject@@UAEHXZ 10005cf0 f i DeckMgr.obj
+ 0001:00004d10       ?SetNormalNeed@CDrObject@@UAEXH@Z 10005d10 f i DeckMgr.obj
+ 0001:00004d30       ?IsCulled@CDrObject@@UAEHXZ 10005d30 f i DeckMgr.obj
+ 0001:00004d50       ?SetCulled@CDrObject@@UAEXH@Z 10005d50 f i DeckMgr.obj
+ 0001:00004d70       ?IsSkewed@CDrObject@@UAEHXZ 10005d70 f i DeckMgr.obj
+ 0001:00004d90       ?SetSkewed@CDrObject@@UAEXH@Z 10005d90 f i DeckMgr.obj
+ 0001:00004db0       ?IsLinSpr@CDrObject@@UAEHXZ 10005db0 f i DeckMgr.obj
+ 0001:00004dd0       ?SetLinSpr@CDrObject@@UAEXH@Z 10005dd0 f i DeckMgr.obj
+ 0001:00004df0       ?IsLinSnu@CDrObject@@UAEHXZ 10005df0 f i DeckMgr.obj
+ 0001:00004e10       ?SetLinSnu@CDrObject@@UAEXH@Z 10005e10 f i DeckMgr.obj
+ 0001:00004e30       ?CullWorld@CDrObject@@UAEHUWORLD@@@Z 10005e30 f i DeckMgr.obj
+ 0001:00004e50       ?CullScreen@CDrObject@@UAEHPAUMATRIX@@@Z 10005e50 f i DeckMgr.obj
+ 0001:00004e70       ?Calc_CentroidWorld@CDrObject@@UAEXXZ 10005e70 f i DeckMgr.obj
+ 0001:00004e90       ?Calc_CentroidEye@CDrObject@@UAEXXZ 10005e90 f i DeckMgr.obj
+ 0001:00004eb0       ?Calc_CentroidScreen3D@CDrObject@@UAEXNN@Z 10005eb0 f i DeckMgr.obj
+ 0001:00004ed0       ?Calc_NormalWorld@CDrObject@@UAEXXZ 10005ed0 f i DeckMgr.obj
+ 0001:00004ef0       ?TransformNormalToEye@CDrObject@@UAEXPAUMATRIX@@@Z 10005ef0 f i DeckMgr.obj
+ 0001:00004f10       ?ProjectNormalToScreen3D@CDrObject@@UAEXPAUMATRIX@@NN@Z 10005f10 f i DeckMgr.obj
+ 0001:00004f30       ?GetNormalWorld@CDrObject@@UAEPAUWORLD@@XZ 10005f30 f i DeckMgr.obj
+ 0001:00004f50       ?SetNormalWorld@CDrObject@@UAEXUWORLD@@@Z 10005f50 f i DeckMgr.obj
+ 0001:00004f70       ?GetNormalEye@CDrObject@@UAEPAUWORLD@@XZ 10005f70 f i DeckMgr.obj
+ 0001:00004f90       ?SetNormalEye@CDrObject@@UAEXUWORLD@@@Z 10005f90 f i DeckMgr.obj
+ 0001:00004fb0       ?GetNormalScreen3D@CDrObject@@UAEPAUWORLD@@XZ 10005fb0 f i DeckMgr.obj
+ 0001:00004fd0       ?SetNormalScreen3D@CDrObject@@UAEXUWORLD@@@Z 10005fd0 f i DeckMgr.obj
+ 0001:00004ff0       ?GetNormalScreen2D@CDrObject@@UAEPAUtagPOINT@@XZ 10005ff0 f i DeckMgr.obj
+ 0001:00005010       ?SetNormalScreen2D@CDrObject@@UAEXUtagPOINT@@@Z 10006010 f i DeckMgr.obj
+ 0001:00005030       ?GetObjectList@CDrObject@@UAEPAVCDListMgr@@XZ 10006030 f i DeckMgr.obj
+ 0001:00005050       ?GetBoundingRect@CDrObject@@QAE?AVCRect@@XZ 10006050 f i DeckMgr.obj
+ 0001:000050a0       ?GetRInfo@CDrObject@@QAEPAURENDINFO@@XZ 100060a0 f i DeckMgr.obj
+ 0001:000050c0       ?IsParallel@CDrObject@@QAEHXZ 100060c0 f i DeckMgr.obj
+ 0001:000050f0       ?GetnView@CDrObject@@QAEHXZ 100060f0 f i DeckMgr.obj
+ 0001:00005120       ?GetdzMin@CDrObject@@QAENXZ 10006120 f i DeckMgr.obj
+ 0001:00005150       ?GetdScale_U@CDrObject@@QAENXZ 10006150 f i DeckMgr.obj
+ 0001:00005180       ?GetdScale_V@CDrObject@@QAENXZ 10006180 f i DeckMgr.obj
+ 0001:000051b0       ?GetpViewM@CDrObject@@QAEPAUMATRIX@@XZ 100061b0 f i DeckMgr.obj
+ 0001:000051e0       ?Getpvv3DM@CDrObject@@QAEPAUMATRIX@@XZ 100061e0 f i DeckMgr.obj
+ 0001:00005210       ?GetpComposedM@CDrObject@@QAEPAUMATRIX@@XZ 10006210 f i DeckMgr.obj
+ 0001:00005240       ?SetParallel@CDrObject@@QAEXH@Z 10006240 f i DeckMgr.obj
+ 0001:00005270       ?SetnView@CDrObject@@QAEXH@Z 10006270 f i DeckMgr.obj
+ 0001:000052a0       ?SetdzMin@CDrObject@@QAEXN@Z 100062a0 f i DeckMgr.obj
+ 0001:000052e0       ?SetdScale_U@CDrObject@@QAEXN@Z 100062e0 f i DeckMgr.obj
+ 0001:00005320       ?SetdScale_V@CDrObject@@QAEXN@Z 10006320 f i DeckMgr.obj
+ 0001:00005360       ?SetpViewM@CDrObject@@QAEXPAUMATRIX@@@Z 10006360 f i DeckMgr.obj
+ 0001:000053a0       ?Setpvv3DM@CDrObject@@QAEXPAUMATRIX@@@Z 100063a0 f i DeckMgr.obj
+ 0001:000053e0       ?SetpComposedM@CDrObject@@QAEXPAUMATRIX@@@Z 100063e0 f i DeckMgr.obj
+ 0001:00005420       ?GetLevelType@CDrObject@@QAEHXZ 10006420 f i DeckMgr.obj
+ 0001:00005450       ?SetLevelType@CDrObject@@QAEXH@Z 10006450 f i DeckMgr.obj
+ 0001:00005480       ?GetObjectID@CDrObject@@QAE?AVCString@@XZ 10006480 f i DeckMgr.obj
+ 0001:000054d0       ?SetObjectID@CDrObject@@QAEXVCString@@@Z 100064d0 f i DeckMgr.obj
+ 0001:00005550       ?GetObjectNo@CDrObject@@QAEJXZ 10006550 f i DeckMgr.obj
+ 0001:00005580       ?SetObjectNo@CDrObject@@QAEXJ@Z 10006580 f i DeckMgr.obj
+ 0001:000055b0       ?GetObjectType@CDrObject@@QAEHXZ 100065b0 f i DeckMgr.obj
+ 0001:000055e0       ?SetObjectType@CDrObject@@QAEXH@Z 100065e0 f i DeckMgr.obj
+ 0001:00005610       ?GetElemType@CDrObject@@QAEHXZ 10006610 f i DeckMgr.obj
+ 0001:00005640       ?SetElemType@CDrObject@@QAEXH@Z 10006640 f i DeckMgr.obj
+ 0001:00005670       ?GetPenInfo@CDrObject@@QAEXAAIAAK0@Z 10006670 f i DeckMgr.obj
+ 0001:000056c0       ?SetPenInfo@CDrObject@@QAEXIKI@Z 100066c0 f i DeckMgr.obj
+ 0001:00005710       ?GetPenInfoHi@CDrObject@@QAEXAAIAAK0@Z 10006710 f i DeckMgr.obj
+ 0001:00005760       ?SetPenInfoHi@CDrObject@@QAEXIKI@Z 10006760 f i DeckMgr.obj
+ 0001:000057b0       ?GetLayer@CDrObject@@QAEIXZ 100067b0 f i DeckMgr.obj
+ 0001:000057e0       ?SetLayer@CDrObject@@QAEXI@Z 100067e0 f i DeckMgr.obj
+ 0001:00005810       ?IsClipped@CDrObject@@QAEHXZ 10006810 f i DeckMgr.obj
+ 0001:00005840       ?SetClipped@CDrObject@@QAEXH@Z 10006840 f i DeckMgr.obj
+ 0001:00005870       ?IsVirtual@CDrObject@@QAEHXZ 10006870 f i DeckMgr.obj
+ 0001:00005890       ?SetVirtual@CDrObject@@QAEXH@Z 10006890 f i DeckMgr.obj
+ 0001:000058c0       ?IsShow@CDrObject@@QAEHXZ  100068c0 f i DeckMgr.obj
+ 0001:000058f0       ?SetShow@CDrObject@@QAEXH@Z 100068f0 f i DeckMgr.obj
+ 0001:00005920       ?GetParentID@CDrObject@@QAEAAVCString@@XZ 10006920 f i DeckMgr.obj
+ 0001:00005940       ?SetParentID@CDrObject@@QAEXAAVCString@@@Z 10006940 f i DeckMgr.obj
+ 0001:00005970       ?GetParentType@CDrObject@@QAEIXZ 10006970 f i DeckMgr.obj
+ 0001:00005990       ?SetParentType@CDrObject@@QAEXI@Z 10006990 f i DeckMgr.obj
+ 0001:000059c0       ?IsInstanced@CDrObject@@QAEHXZ 100069c0 f i DeckMgr.obj
+ 0001:000059e0       ?SetInstanced@CDrObject@@QAEXH@Z 100069e0 f i DeckMgr.obj
+ 0001:00005a10       ?GetMatObj@CDrObject@@QAEPAVCMatObj@@XZ 10006a10 f i DeckMgr.obj
+ 0001:00005a30       ?SetMatObj@CDrObject@@QAEXPAVCMatObj@@@Z 10006a30 f i DeckMgr.obj
+ 0001:00005a60       ?GetSpeLList@CDrObject@@QAEPAVCDListMgr@@XZ 10006a60 f i DeckMgr.obj
+ 0001:00005a90       ?GetDynLList@CDrObject@@QAEPAVCDListMgr@@XZ 10006a90 f i DeckMgr.obj
+ 0001:00005ac0       ?GetStaLList@CDrObject@@QAEPAVCDListMgr@@XZ 10006ac0 f i DeckMgr.obj
+ 0001:00005af0       ?GetSuppList@CDrObject@@QAEPAVCDListMgr@@XZ 10006af0 f i DeckMgr.obj
+ 0001:00005b20       ?GetElemList@CDrObject@@QAEPAVCDListMgr@@XZ 10006b20 f i DeckMgr.obj
+ 0001:00005b50       ?GetCurveList@CDrObject@@QAEPAVCDListMgr@@XZ 10006b50 f i DeckMgr.obj
+ 0001:00005b80       ?GetCProfList@CDrObject@@QAEPAVCDListMgr@@XZ 10006b80 f i DeckMgr.obj
+ 0001:00005bb0       ?GetPatchList@CDrObject@@QAEPAVCDListMgr@@XZ 10006bb0 f i DeckMgr.obj
+ 0001:00005be0       ?GetSolidList@CDrObject@@QAEPAVCDListMgr@@XZ 10006be0 f i DeckMgr.obj
+ 0001:00005c10       ?GetObj3DList@CDrObject@@QAEPAVCDListMgr@@XZ 10006c10 f i DeckMgr.obj
+ 0001:00005c40       ?GetCNodeList@CDrObject@@QAEPAVCDListMgr@@XZ 10006c40 f i DeckMgr.obj
+ 0001:00005c70       ?GetINodeList@CDrObject@@QAEPAVCDListMgr@@XZ 10006c70 f i DeckMgr.obj
+ 0001:00005ca0       ?GetNodeList@CDrObject@@QAEPAVCDListMgr@@XZ 10006ca0 f i DeckMgr.obj
+ 0001:00005cd0       ?GetLabelList@CDrObject@@QAEPAVCDListMgr@@XZ 10006cd0 f i DeckMgr.obj
+ 0001:00005d00       ?GetFE0DList@CDrObject@@QAEPAVCDListMgr@@XZ 10006d00 f i DeckMgr.obj
+ 0001:00005d30       ?GetFE1DList@CDrObject@@QAEPAVCDListMgr@@XZ 10006d30 f i DeckMgr.obj
+ 0001:00005d60       ?GetFE2DList@CDrObject@@QAEPAVCDListMgr@@XZ 10006d60 f i DeckMgr.obj
+ 0001:00005d90       ?GetFE3DList@CDrObject@@QAEPAVCDListMgr@@XZ 10006d90 f i DeckMgr.obj
+ 0001:00005dc0       ?GetMs0List@CDrObject@@QAEPAVCDListMgr@@XZ 10006dc0 f i DeckMgr.obj
+ 0001:00005df0       ?GetMs1List@CDrObject@@QAEPAVCDListMgr@@XZ 10006df0 f i DeckMgr.obj
+ 0001:00005e20       ?GetMs2List@CDrObject@@QAEPAVCDListMgr@@XZ 10006e20 f i DeckMgr.obj
+ 0001:00005e50       ?GetMs3List@CDrObject@@QAEPAVCDListMgr@@XZ 10006e50 f i DeckMgr.obj
+ 0001:00005e80       ?GetMbj3DList@CDrObject@@QAEPAVCDListMgr@@XZ 10006e80 f i DeckMgr.obj
+ 0001:00005eb0       ?GetM2DProfList@CDrObject@@QAEPAVCDListMgr@@XZ 10006eb0 f i DeckMgr.obj
+ 0001:00005ee0       ?GetM3DProfList@CDrObject@@QAEPAVCDListMgr@@XZ 10006ee0 f i DeckMgr.obj
+ 0001:00005f10       ?GetMbjProfList@CDrObject@@QAEPAVCDListMgr@@XZ 10006f10 f i DeckMgr.obj
+ 0001:00005f40       ?GetScreen2DCorner@CDrObject@@UAE?AUtagPOINT@@H@Z 10006f40 f i DeckMgr.obj
+ 0001:00005f90       ?SetScreen2DCorner@CDrObject@@UAEXUtagPOINT@@H@Z 10006f90 f i DeckMgr.obj
+ 0001:00005fd0       ?GetSpawnType@CDrObject@@QAE?AW4SPAWNTYPE@@XZ 10006fd0 f i DeckMgr.obj
+ 0001:00005ff0       ?SetSpawnType@CDrObject@@QAEXW4SPAWNTYPE@@@Z 10006ff0 f i DeckMgr.obj
+ 0001:00006020       ?GetCategory@CDrObject@@QAE?AW4CATEGORY@@XZ 10007020 f i DeckMgr.obj
+ 0001:00006040       ?SetCategory@CDrObject@@QAEXW4CATEGORY@@@Z 10007040 f i DeckMgr.obj
+ 0001:00006070       ?GetSubCat@CDrObject@@QAE?AW4SUBCAT@@XZ 10007070 f i DeckMgr.obj
+ 0001:00006090       ?SetSubCat@CDrObject@@QAEXW4SUBCAT@@@Z 10007090 f i DeckMgr.obj
+ 0001:000060c0       ?GetElemDimLim@CDrObject@@QAE?AW4ELEMDIMLIM@@XZ 100070c0 f i DeckMgr.obj
+ 0001:000060e0       ?SetElemDimLim@CDrObject@@QAEXW4ELEMDIMLIM@@@Z 100070e0 f i DeckMgr.obj
+ 0001:00006110       ?IsDirty@CDrObject@@QAEHXZ 10007110 f i DeckMgr.obj
+ 0001:00006140       ?SetDirty@CDrObject@@QAEXH@Z 10007140 f i DeckMgr.obj
+ 0001:00006170       ?IsMoved@CDrObject@@QAEHXZ 10007170 f i DeckMgr.obj
+ 0001:000061a0       ?SetMoved@CDrObject@@QAEXH@Z 100071a0 f i DeckMgr.obj
+ 0001:000061d0       ?IsEdited@CDrObject@@QAEHXZ 100071d0 f i DeckMgr.obj
+ 0001:00006200       ?SetEdited@CDrObject@@QAEXH@Z 10007200 f i DeckMgr.obj
+ 0001:00006230       ?IsPosted@CDrObject@@QAEHXZ 10007230 f i DeckMgr.obj
+ 0001:00006260       ?SetPosted@CDrObject@@QAEXH@Z 10007260 f i DeckMgr.obj
+ 0001:00006290       ?IsDeleted@CDrObject@@QAEHXZ 10007290 f i DeckMgr.obj
+ 0001:000062c0       ?SetDeleted@CDrObject@@QAEXH@Z 100072c0 f i DeckMgr.obj
+ 0001:000062f0       ?IsToBeMoved@CDrObject@@QAEHXZ 100072f0 f i DeckMgr.obj
+ 0001:00006320       ?SetToBeMoved@CDrObject@@QAEXH@Z 10007320 f i DeckMgr.obj
+ 0001:00006340       ?IsToBeEdited@CDrObject@@QAEHXZ 10007340 f i DeckMgr.obj
+ 0001:00006370       ?SetToBeEdited@CDrObject@@QAEXH@Z 10007370 f i DeckMgr.obj
+ 0001:00006390       ?IsToBePosted@CDrObject@@QAEHXZ 10007390 f i DeckMgr.obj
+ 0001:000063c0       ?SetToBePosted@CDrObject@@QAEXH@Z 100073c0 f i DeckMgr.obj
+ 0001:000063e0       ?IsToBeUnPosted@CDrObject@@QAEHXZ 100073e0 f i DeckMgr.obj
+ 0001:00006410       ?SetToBeUnPosted@CDrObject@@QAEXH@Z 10007410 f i DeckMgr.obj
+ 0001:00006430       ?IsToBeDeleted@CDrObject@@QAEHXZ 10007430 f i DeckMgr.obj
+ 0001:00006460       ?SetToBeDeleted@CDrObject@@QAEXH@Z 10007460 f i DeckMgr.obj
+ 0001:00006480       ?IsFormatted@CDrObject@@QAEHXZ 10007480 f i DeckMgr.obj
+ 0001:000064a0       ?SetFormatted@CDrObject@@QAEXH@Z 100074a0 f i DeckMgr.obj
+ 0001:000064d0       ??1CDeckWalk@@UAE@XZ       100074d0 f i DeckMgr.obj
+ 0001:00006500       ??_GCDeckWalk@@UAEPAXI@Z   10007500 f i DeckMgr.obj
+ 0001:00006540       ??_ECDeckWalk@@UAEPAXI@Z   10007540 f i DeckMgr.obj
+ 0001:000065e0       ?CreateObject@CDeckMgr@@SGPAVCObject@@XZ 100075e0 f   DeckMgr.obj
+ 0001:00006670       ?_GetBaseClass@CDeckMgr@@KGPAUCRuntimeClass@@XZ 10007670 f   DeckMgr.obj
+ 0001:00006690       ?GetRuntimeClass@CDeckMgr@@UBEPAUCRuntimeClass@@XZ 10007690 f   DeckMgr.obj
+ 0001:00006700       ??0AFX_CLASSINIT@@QAE@PAUCRuntimeClass@@@Z 10007700 f i DeckMgr.obj
+ 0001:00006730       ??5@YGAAVCArchive@@AAV0@AAPAVCDeckMgr@@@Z 10007730 f   DeckMgr.obj
+ 0001:00006760       ??0CDeckMgr@@QAE@XZ        10007760 f   DeckMgr.obj
+ 0001:000067f0       ??_GCDeckMgr@@UAEPAXI@Z    100077f0 f i DeckMgr.obj
+ 0001:000067f0       ??_ECDeckMgr@@UAEPAXI@Z    100077f0 f i DeckMgr.obj
+ 0001:00006830       ??1CDeckMgr@@UAE@XZ        10007830 f   DeckMgr.obj
+ 0001:000068b0       ?UpdateDeckList@CDeckMgr@@QAEXXZ 100078b0 f   DeckMgr.obj
+ 0001:00006980       ?IsFormatted@CDeckMgr@@QAEHXZ 10007980 f i DeckMgr.obj
+ 0001:000069a0       ?GetDeckList@CDeckMgr@@QAEPAV?$CList@VCString@@V1@@@XZ 100079a0 f i DeckMgr.obj
+ 0001:000069c0       ?Serialize@CDeckMgr@@UAEXAAVCArchive@@@Z 100079c0 f   DeckMgr.obj
+ 0001:00006a20       ??0?$CList@VCString@@V1@@@QAE@H@Z 10007a20 f i DeckMgr.obj
+ 0001:00006b00       ?IsEmpty@?$CList@VCString@@V1@@@QBEHXZ 10007b00 f i DeckMgr.obj
+ 0001:00006b30       ?RemoveHead@?$CList@VCString@@V1@@@QAE?AVCString@@XZ 10007b30 f i DeckMgr.obj
+ 0001:00006c90       ??1?$CList@VCString@@V1@@@UAE@XZ 10007c90 f i DeckMgr.obj
+ 0001:00006d30       ?Serialize@?$CList@VCString@@V1@@@UAEXAAVCArchive@@@Z 10007d30 f i DeckMgr.obj
+ 0001:00006eb0       ?Dump@?$CList@VCString@@V1@@@UBEXAAVCDumpContext@@@Z 10007eb0 f i DeckMgr.obj
+ 0001:00006f70       ?AssertValid@?$CList@VCString@@V1@@@UBEXXZ 10007f70 f i DeckMgr.obj
+ 0001:00007070       ??_G?$CList@VCString@@V1@@@UAEPAXI@Z 10008070 f i DeckMgr.obj
+ 0001:00007070       ??_E?$CList@VCString@@V1@@@UAEPAXI@Z 10008070 f i DeckMgr.obj
+ 0001:000070b0       ?AddTail@?$CList@VCString@@V1@@@QAEPAU__POSITION@@VCString@@@Z 100080b0 f i DeckMgr.obj
+ 0001:00007190       ?RemoveAll@?$CList@VCString@@V1@@@QAEXXZ 10008190 f i DeckMgr.obj
+ 0001:00007240       ?GetHeadPosition@?$CList@VCString@@V1@@@QBEPAU__POSITION@@XZ 10008240 f i DeckMgr.obj
+ 0001:00007260       ?GetNext@?$CList@VCString@@V1@@@QAEAAVCString@@AAPAU__POSITION@@@Z 10008260 f i DeckMgr.obj
+ 0001:000072d0       ?FreeNode@?$CList@VCString@@V1@@@IAEXPAUCNode@1@@Z 100082d0 f i DeckMgr.obj
+ 0001:00007370       ?DumpElements@@YGXAAVCDumpContext@@PBVCString@@H@Z 10008370 f i DeckMgr.obj
+ 0001:000073d0       ?NewNode@?$CList@VCString@@V1@@@IAEPAUCNode@1@PAU21@0@Z 100083d0 f i DeckMgr.obj
+ 0001:00007540       ?GetObjectType@CBooleans@@UAEHXZ 10008540 f i DeckWalk.obj
+ 0001:00007570       ?SetObjectType@CBooleans@@UAEXH@Z 10008570 f i DeckWalk.obj
+ 0001:000075a0       ?GetElemType@CBooleans@@UAEHXZ 100085a0 f i DeckWalk.obj
+ 0001:000075d0       ?SetElemType@CBooleans@@UAEXH@Z 100085d0 f i DeckWalk.obj
+ 0001:00007600       ?GetObjectNo@CBooleans@@UAEJXZ 10008600 f i DeckWalk.obj
+ 0001:00007630       ?SetObjectNo@CBooleans@@UAEXJ@Z 10008630 f i DeckWalk.obj
+ 0001:00007660       ?IsSoundOn@CBooleans@@UAEHXZ 10008660 f i DeckWalk.obj
+ 0001:00007690       ?ToggleSoundOn@CBooleans@@UAEXXZ 10008690 f i DeckWalk.obj
+ 0001:000076d0       ?IsCoonSocksOff@CBooleans@@UAEHXZ 100086d0 f i DeckWalk.obj
+ 0001:00007700       ?ToggleCoonSocksOff@CBooleans@@UAEXXZ 10008700 f i DeckWalk.obj
+ 0001:00007740       ?IsSnapOn@CBooleans@@UAEHXZ 10008740 f i DeckWalk.obj
+ 0001:00007770       ?ToggleSnapOn@CBooleans@@UAEXXZ 10008770 f i DeckWalk.obj
+ 0001:000077b0       ?IsHorSnapOn@CBooleans@@UAEHXZ 100087b0 f i DeckWalk.obj
+ 0001:000077e0       ?ToggleHorSnapOn@CBooleans@@UAEXXZ 100087e0 f i DeckWalk.obj
+ 0001:00007820       ?IsVerSnapOn@CBooleans@@UAEHXZ 10008820 f i DeckWalk.obj
+ 0001:00007850       ?ToggleVerSnapOn@CBooleans@@UAEXXZ 10008850 f i DeckWalk.obj
+ 0001:00007890       ?IsSpawnOn@CBooleans@@UAEHXZ 10008890 f i DeckWalk.obj
+ 0001:000078c0       ?ToggleSpawnOn@CBooleans@@UAEXXZ 100088c0 f i DeckWalk.obj
+ 0001:00007900       ?IsBLineOn@CBooleans@@UAEHXZ 10008900 f i DeckWalk.obj
+ 0001:00007930       ?ToggleBLineOn@CBooleans@@UAEXXZ 10008930 f i DeckWalk.obj
+ 0001:00007970       ?IsSingleSegOn@CBooleans@@UAEHXZ 10008970 f i DeckWalk.obj
+ 0001:000079a0       ?ToggleSingleSegOn@CBooleans@@UAEXXZ 100089a0 f i DeckWalk.obj
+ 0001:000079e0       ?IsAutoAcceptOn@CBooleans@@UAEHXZ 100089e0 f i DeckWalk.obj
+ 0001:00007a10       ?ToggleAutoAcceptOn@CBooleans@@UAEXXZ 10008a10 f i DeckWalk.obj
+ 0001:00007a50       ?IsDialogOn@CBooleans@@UAEHXZ 10008a50 f i DeckWalk.obj
+ 0001:00007a80       ?ToggleDialogOn@CBooleans@@UAEXXZ 10008a80 f i DeckWalk.obj
+ 0001:00007ac0       ?IsElementOn@CBooleans@@UAEHXZ 10008ac0 f i DeckWalk.obj
+ 0001:00007af0       ?ToggleElementOn@CBooleans@@UAEXXZ 10008af0 f i DeckWalk.obj
+ 0001:00007b30       ?IsDragOn@CBooleans@@UAEHXZ 10008b30 f i DeckWalk.obj
+ 0001:00007b60       ?ToggleDragOn@CBooleans@@UAEXXZ 10008b60 f i DeckWalk.obj
+ 0001:00007ba0       ?IsRefreshOn@CBooleans@@UAEHXZ 10008ba0 f i DeckWalk.obj
+ 0001:00007bd0       ?ToggleRefreshOn@CBooleans@@UAEXXZ 10008bd0 f i DeckWalk.obj
+ 0001:00007c10       ?IsRubberBandOn@CBooleans@@UAEHXZ 10008c10 f i DeckWalk.obj
+ 0001:00007c40       ?ToggleRubberBandOn@CBooleans@@UAEXXZ 10008c40 f i DeckWalk.obj
+ 0001:00007c80       ?IsStViewActive@CBooleans@@UAEHXZ 10008c80 f i DeckWalk.obj
+ 0001:00007cb0       ?ToggleStViewActive@CBooleans@@UAEXXZ 10008cb0 f i DeckWalk.obj
+ 0001:00007cf0       ?IsSpViewActive@CBooleans@@UAEHXZ 10008cf0 f i DeckWalk.obj
+ 0001:00007d20       ?ToggleSpViewActive@CBooleans@@UAEXXZ 10008d20 f i DeckWalk.obj
+ 0001:00007d60       ?IsHsViewActive@CBooleans@@UAEHXZ 10008d60 f i DeckWalk.obj
+ 0001:00007d90       ?ToggleHsViewActive@CBooleans@@UAEXXZ 10008d90 f i DeckWalk.obj
+ 0001:00007dd0       ?Is12ViewActive@CBooleans@@UAEHXZ 10008dd0 f i DeckWalk.obj
+ 0001:00007e00       ?Toggle12ViewActive@CBooleans@@UAEXXZ 10008e00 f i DeckWalk.obj
+ 0001:00007e40       ?Is23ViewActive@CBooleans@@UAEHXZ 10008e40 f i DeckWalk.obj
+ 0001:00007e70       ?Toggle23ViewActive@CBooleans@@UAEXXZ 10008e70 f i DeckWalk.obj
+ 0001:00007eb0       ?Is31ViewActive@CBooleans@@UAEHXZ 10008eb0 f i DeckWalk.obj
+ 0001:00007ee0       ?Toggle31ViewActive@CBooleans@@UAEXXZ 10008ee0 f i DeckWalk.obj
+ 0001:00007f20       ?IsIsoViewActive@CBooleans@@UAEHXZ 10008f20 f i DeckWalk.obj
+ 0001:00007f50       ?ToggleIsoViewActive@CBooleans@@UAEXXZ 10008f50 f i DeckWalk.obj
+ 0001:00007f90       ?IsDataViewActive@CBooleans@@UAEHXZ 10008f90 f i DeckWalk.obj
+ 0001:00007fc0       ?ToggleDataViewActive@CBooleans@@UAEXXZ 10008fc0 f i DeckWalk.obj
+ 0001:00008000       ?IsMeshDataViewActive@CBooleans@@UAEHXZ 10009000 f i DeckWalk.obj
+ 0001:00008030       ?ToggleMeshDataViewActive@CBooleans@@UAEXXZ 10009030 f i DeckWalk.obj
+ 0001:00008070       ?IsDeckViewActive@CBooleans@@UAEHXZ 10009070 f i DeckWalk.obj
+ 0001:000080a0       ?ToggleDeckViewActive@CBooleans@@UAEXXZ 100090a0 f i DeckWalk.obj
+ 0001:000080e0       ?IsFormDataViewActive@CBooleans@@UAEHXZ 100090e0 f i DeckWalk.obj
+ 0001:00008110       ?ToggleFormDataViewActive@CBooleans@@UAEXXZ 10009110 f i DeckWalk.obj
+ 0001:00008150       ?IsInputMode@CBooleans@@UAEHXZ 10009150 f i DeckWalk.obj
+ 0001:00008180       ?SetInputMode@CBooleans@@UAEXH@Z 10009180 f i DeckWalk.obj
+ 0001:000081b0       ?IsOutputMode@CBooleans@@UAEHXZ 100091b0 f i DeckWalk.obj
+ 0001:000081e0       ?SetOutputMode@CBooleans@@UAEXH@Z 100091e0 f i DeckWalk.obj
+ 0001:00008210       ??1CBooleans@@UAE@XZ       10009210 f i DeckWalk.obj
+ 0001:00008240       ??_GCBooleans@@UAEPAXI@Z   10009240 f i DeckWalk.obj
+ 0001:00008280       ??_ECBooleans@@UAEPAXI@Z   10009280 f i DeckWalk.obj
+ 0001:00008320       ?GetObjectType@CDataWindow@@UAEHXZ 10009320 f i DeckWalk.obj
+ 0001:00008350       ?SetObjectType@CDataWindow@@UAEXH@Z 10009350 f i DeckWalk.obj
+ 0001:00008380       ?GetElemType@CDataWindow@@UAEHXZ 10009380 f i DeckWalk.obj
+ 0001:000083b0       ?SetElemType@CDataWindow@@UAEXH@Z 100093b0 f i DeckWalk.obj
+ 0001:000083e0       ?GetObjectNo@CDataWindow@@UAEJXZ 100093e0 f i DeckWalk.obj
+ 0001:00008410       ?SetObjectNo@CDataWindow@@UAEXJ@Z 10009410 f i DeckWalk.obj
+ 0001:00008440       ?GetWinOrgWIC@CDataWindow@@UAE?AULPOINT3@@XZ 10009440 f i DeckWalk.obj
+ 0001:00008480       ?GetWinMinWIC@CDataWindow@@UAE?AULPOINT3@@XZ 10009480 f i DeckWalk.obj
+ 0001:000084c0       ?GetWinMaxWIC@CDataWindow@@UAE?AULPOINT3@@XZ 100094c0 f i DeckWalk.obj
+ 0001:00008500       ?GetWinExtWIC@CDataWindow@@UAE?AULPOINT3@@XZ 10009500 f i DeckWalk.obj
+ 0001:00008540       ??1CDataWindow@@UAE@XZ     10009540 f i DeckWalk.obj
+ 0001:00008570       ??_GCDataWindow@@UAEPAXI@Z 10009570 f i DeckWalk.obj
+ 0001:000085b0       ??_ECDataWindow@@UAEPAXI@Z 100095b0 f i DeckWalk.obj
+ 0001:00008650       ?GetObjectType@CDrFont@@UAEHXZ 10009650 f i DeckWalk.obj
+ 0001:00008680       ?SetObjectType@CDrFont@@UAEXH@Z 10009680 f i DeckWalk.obj
+ 0001:000086b0       ?GetElemType@CDrFont@@UAEHXZ 100096b0 f i DeckWalk.obj
+ 0001:000086e0       ?SetElemType@CDrFont@@UAEXH@Z 100096e0 f i DeckWalk.obj
+ 0001:00008710       ?GetObjectNo@CDrFont@@UAEJXZ 10009710 f i DeckWalk.obj
+ 0001:00008740       ?SetObjectNo@CDrFont@@UAEXJ@Z 10009740 f i DeckWalk.obj
+ 0001:00008770       ?IsFontSelected@CDrFont@@UAEHXZ 10009770 f i DeckWalk.obj
+ 0001:000087a0       ?GetTextColor@CDrFont@@UAEKXZ 100097a0 f i DeckWalk.obj
+ 0001:000087d0       ?SetTextColor@CDrFont@@UAEXK@Z 100097d0 f i DeckWalk.obj
+ 0001:00008800       ?GetCurrentLogFont@CDrFont@@UAE?AUtagLOGFONTA@@XZ 10009800 f i DeckWalk.obj
+ 0001:00008840       ?SetCurrentLogFont@CDrFont@@UAEXUtagLOGFONTA@@@Z 10009840 f i DeckWalk.obj
+ 0001:00008880       ??1CDrFont@@UAE@XZ         10009880 f i DeckWalk.obj
+ 0001:000088b0       ??_GCDrFont@@UAEPAXI@Z     100098b0 f i DeckWalk.obj
+ 0001:000088f0       ??_ECDrFont@@UAEPAXI@Z     100098f0 f i DeckWalk.obj
+ 0001:00008990       ?GetObjectType@CDrPen@@UAEHXZ 10009990 f i DeckWalk.obj
+ 0001:000089c0       ?SetObjectType@CDrPen@@UAEXH@Z 100099c0 f i DeckWalk.obj
+ 0001:000089f0       ?GetElemType@CDrPen@@UAEHXZ 100099f0 f i DeckWalk.obj
+ 0001:00008a20       ?SetElemType@CDrPen@@UAEXH@Z 10009a20 f i DeckWalk.obj
+ 0001:00008a50       ?GetObjectNo@CDrPen@@UAEJXZ 10009a50 f i DeckWalk.obj
+ 0001:00008a80       ?SetObjectNo@CDrPen@@UAEXJ@Z 10009a80 f i DeckWalk.obj
+ 0001:00008ab0       ?GetCurrentPen@CDrPen@@UAEPAVCPen@@XZ 10009ab0 f i DeckWalk.obj
+ 0001:00008ae0       ?GetStyle@CDrPen@@UAEHXZ   10009ae0 f i DeckWalk.obj
+ 0001:00008b10       ?SetStyle@CDrPen@@UAEXH@Z  10009b10 f i DeckWalk.obj
+ 0001:00008b40       ?GetStyleOld@CDrPen@@UAEHXZ 10009b40 f i DeckWalk.obj
+ 0001:00008b70       ?SetStyleOld@CDrPen@@UAEXH@Z 10009b70 f i DeckWalk.obj
+ 0001:00008ba0       ?GetStyleDefault@CDrPen@@UAEHXZ 10009ba0 f i DeckWalk.obj
+ 0001:00008bd0       ?SetStyleDefault@CDrPen@@UAEXH@Z 10009bd0 f i DeckWalk.obj
+ 0001:00008c00       ?GetWidth@CDrPen@@UAEHXZ   10009c00 f i DeckWalk.obj
+ 0001:00008c30       ?SetWidth@CDrPen@@UAEXH@Z  10009c30 f i DeckWalk.obj
+ 0001:00008c60       ?GetWidthOld@CDrPen@@UAEHXZ 10009c60 f i DeckWalk.obj
+ 0001:00008c90       ?SetWidthOld@CDrPen@@UAEXH@Z 10009c90 f i DeckWalk.obj
+ 0001:00008cc0       ?GetWidthDefault@CDrPen@@UAEHXZ 10009cc0 f i DeckWalk.obj
+ 0001:00008cf0       ?SetWidthDefault@CDrPen@@UAEXH@Z 10009cf0 f i DeckWalk.obj
+ 0001:00008d20       ?GetColor@CDrPen@@UAEKXZ   10009d20 f i DeckWalk.obj
+ 0001:00008d50       ?SetColor@CDrPen@@UAEXK@Z  10009d50 f i DeckWalk.obj
+ 0001:00008d80       ?GetColorOld@CDrPen@@UAEKXZ 10009d80 f i DeckWalk.obj
+ 0001:00008db0       ?SetColorOld@CDrPen@@UAEXK@Z 10009db0 f i DeckWalk.obj
+ 0001:00008de0       ?GetColorDefault@CDrPen@@UAEKXZ 10009de0 f i DeckWalk.obj
+ 0001:00008e10       ?SetColorDefault@CDrPen@@UAEXK@Z 10009e10 f i DeckWalk.obj
+ 0001:00008e40       ?GetIndex@CDrPen@@UAEIXZ   10009e40 f i DeckWalk.obj
+ 0001:00008e70       ?SetIndex@CDrPen@@UAEXI@Z  10009e70 f i DeckWalk.obj
+ 0001:00008ea0       ?GetIndexOld@CDrPen@@UAEIXZ 10009ea0 f i DeckWalk.obj
+ 0001:00008ed0       ?SetIndexOld@CDrPen@@UAEXI@Z 10009ed0 f i DeckWalk.obj
+ 0001:00008f00       ?GetIndexDefault@CDrPen@@UAEIXZ 10009f00 f i DeckWalk.obj
+ 0001:00008f30       ?SetIndexDefault@CDrPen@@UAEXI@Z 10009f30 f i DeckWalk.obj
+ 0001:00008f60       ?GetStyleNameCount@CDrPen@@UAEIXZ 10009f60 f i DeckWalk.obj
+ 0001:00008f90       ?SetStyleNameCount@CDrPen@@UAEXI@Z 10009f90 f i DeckWalk.obj
+ 0001:00008fc0       ?GetStyleName@CDrPen@@UAE?AVCString@@I@Z 10009fc0 f i DeckWalk.obj
+ 0001:00009010       ?GetStyleConstant@CDrPen@@UAEII@Z 1000a010 f i DeckWalk.obj
+ 0001:00009040       ??1CDrPen@@UAE@XZ          1000a040 f i DeckWalk.obj
+ 0001:000090e0       ??_GCDrPen@@UAEPAXI@Z      1000a0e0 f i DeckWalk.obj
+ 0001:00009120       ??_ECDrPen@@UAEPAXI@Z      1000a120 f i DeckWalk.obj
+ 0001:000091c0       ?GetObjectType@CHitNet@@UAEHXZ 1000a1c0 f i DeckWalk.obj
+ 0001:000091f0       ?SetObjectType@CHitNet@@UAEXH@Z 1000a1f0 f i DeckWalk.obj
+ 0001:00009220       ?GetElemType@CHitNet@@UAEHXZ 1000a220 f i DeckWalk.obj
+ 0001:00009250       ?SetElemType@CHitNet@@UAEXH@Z 1000a250 f i DeckWalk.obj
+ 0001:00009280       ?GetObjectNo@CHitNet@@UAEJXZ 1000a280 f i DeckWalk.obj
+ 0001:000092b0       ?SetObjectNo@CHitNet@@UAEXJ@Z 1000a2b0 f i DeckWalk.obj
+ 0001:000092e0       ?GetSearchNet@CHitNet@@QAEHXZ 1000a2e0 f i DeckWalk.obj
+ 0001:00009310       ?SetSearchNet@CHitNet@@QAEXH@Z 1000a310 f i DeckWalk.obj
+ 0001:00009340       ?GetSearchNetOld@CHitNet@@QAEHXZ 1000a340 f i DeckWalk.obj
+ 0001:00009370       ?SetSearchNetOld@CHitNet@@QAEXH@Z 1000a370 f i DeckWalk.obj
+ 0001:000093a0       ?GetSearchNetDefault@CHitNet@@QAEHXZ 1000a3a0 f i DeckWalk.obj
+ 0001:000093d0       ?SetSearchNetDefault@CHitNet@@QAEXH@Z 1000a3d0 f i DeckWalk.obj
+ 0001:00009400       ?GetSearchDet@CHitNet@@QAENXZ 1000a400 f i DeckWalk.obj
+ 0001:00009430       ?SetSearchDet@CHitNet@@QAEXN@Z 1000a430 f i DeckWalk.obj
+ 0001:00009470       ?GetSearchDetOld@CHitNet@@QAENXZ 1000a470 f i DeckWalk.obj
+ 0001:000094a0       ?SetSearchDetOld@CHitNet@@QAEXN@Z 1000a4a0 f i DeckWalk.obj
+ 0001:000094e0       ?GetSearchDetDefault@CHitNet@@QAENXZ 1000a4e0 f i DeckWalk.obj
+ 0001:00009510       ?SetSearchDetDefault@CHitNet@@QAEXN@Z 1000a510 f i DeckWalk.obj
+ 0001:00009550       ?GetDblRatio@CHitNet@@QAENXZ 1000a550 f i DeckWalk.obj
+ 0001:00009580       ?SetDblRatio@CHitNet@@QAEXN@Z 1000a580 f i DeckWalk.obj
+ 0001:000095c0       ?GetDblRatioOld@CHitNet@@QAENXZ 1000a5c0 f i DeckWalk.obj
+ 0001:000095f0       ?SetDblRatioOld@CHitNet@@QAEXN@Z 1000a5f0 f i DeckWalk.obj
+ 0001:00009630       ?GetDblRatioDefault@CHitNet@@QAENXZ 1000a630 f i DeckWalk.obj
+ 0001:00009660       ?SetDblRatioDefault@CHitNet@@QAEXN@Z 1000a660 f i DeckWalk.obj
+ 0001:000096a0       ?GetCoLinear@CHitNet@@QAENXZ 1000a6a0 f i DeckWalk.obj
+ 0001:000096d0       ?SetCoLinear@CHitNet@@QAEXN@Z 1000a6d0 f i DeckWalk.obj
+ 0001:00009710       ?GetCoLinearOld@CHitNet@@QAENXZ 1000a710 f i DeckWalk.obj
+ 0001:00009740       ?SetCoLinearOld@CHitNet@@QAEXN@Z 1000a740 f i DeckWalk.obj
+ 0001:00009780       ?GetCoLinearDefault@CHitNet@@QAENXZ 1000a780 f i DeckWalk.obj
+ 0001:000097b0       ?SetCoLinearDefault@CHitNet@@QAEXN@Z 1000a7b0 f i DeckWalk.obj
+ 0001:000097f0       ?GetCoPlanar@CHitNet@@QAENXZ 1000a7f0 f i DeckWalk.obj
+ 0001:00009820       ?SetCoPlanar@CHitNet@@QAEXN@Z 1000a820 f i DeckWalk.obj
+ 0001:00009860       ?GetCoPlanarOld@CHitNet@@QAENXZ 1000a860 f i DeckWalk.obj
+ 0001:00009890       ?SetCoPlanarOld@CHitNet@@QAEXN@Z 1000a890 f i DeckWalk.obj
+ 0001:000098d0       ?GetCoPlanarDefault@CHitNet@@QAENXZ 1000a8d0 f i DeckWalk.obj
+ 0001:00009900       ?SetCoPlanarDefault@CHitNet@@QAEXN@Z 1000a900 f i DeckWalk.obj
+ 0001:00009940       ?GetMergeNode_X@CHitNet@@QAENXZ 1000a940 f i DeckWalk.obj
+ 0001:00009970       ?SetMergeNode_X@CHitNet@@QAEXN@Z 1000a970 f i DeckWalk.obj
+ 0001:000099b0       ?GetMergeNode_XOld@CHitNet@@QAENXZ 1000a9b0 f i DeckWalk.obj
+ 0001:000099e0       ?SetMergeNode_XOld@CHitNet@@QAEXN@Z 1000a9e0 f i DeckWalk.obj
+ 0001:00009a20       ?GetMergeNode_XDefault@CHitNet@@QAENXZ 1000aa20 f i DeckWalk.obj
+ 0001:00009a50       ?SetMergeNode_XDefault@CHitNet@@QAEXN@Z 1000aa50 f i DeckWalk.obj
+ 0001:00009a90       ?GetMergeNode_Y@CHitNet@@QAENXZ 1000aa90 f i DeckWalk.obj
+ 0001:00009ac0       ?SetMergeNode_Y@CHitNet@@QAEXN@Z 1000aac0 f i DeckWalk.obj
+ 0001:00009b00       ?GetMergeNode_YOld@CHitNet@@QAENXZ 1000ab00 f i DeckWalk.obj
+ 0001:00009b30       ?SetMergeNode_YOld@CHitNet@@QAEXN@Z 1000ab30 f i DeckWalk.obj
+ 0001:00009b70       ?GetMergeNode_YDefault@CHitNet@@QAENXZ 1000ab70 f i DeckWalk.obj
+ 0001:00009ba0       ?SetMergeNode_YDefault@CHitNet@@QAEXN@Z 1000aba0 f i DeckWalk.obj
+ 0001:00009be0       ?GetMergeNode_Z@CHitNet@@QAENXZ 1000abe0 f i DeckWalk.obj
+ 0001:00009c10       ?SetMergeNode_Z@CHitNet@@QAEXN@Z 1000ac10 f i DeckWalk.obj
+ 0001:00009c50       ?GetMergeNode_ZOld@CHitNet@@QAENXZ 1000ac50 f i DeckWalk.obj
+ 0001:00009c80       ?SetMergeNode_ZOld@CHitNet@@QAEXN@Z 1000ac80 f i DeckWalk.obj
+ 0001:00009cc0       ?GetMergeNode_ZDefault@CHitNet@@QAENXZ 1000acc0 f i DeckWalk.obj
+ 0001:00009cf0       ?SetMergeNode_ZDefault@CHitNet@@QAEXN@Z 1000acf0 f i DeckWalk.obj
+ 0001:00009d30       ??1CHitNet@@UAE@XZ         1000ad30 f i DeckWalk.obj
+ 0001:00009d60       ??_GCHitNet@@UAEPAXI@Z     1000ad60 f i DeckWalk.obj
+ 0001:00009da0       ??_ECHitNet@@UAEPAXI@Z     1000ada0 f i DeckWalk.obj
+ 0001:00009e40       ?GetObjectType@CLayer@@UAEHXZ 1000ae40 f i DeckWalk.obj
+ 0001:00009e70       ?SetObjectType@CLayer@@UAEXH@Z 1000ae70 f i DeckWalk.obj
+ 0001:00009ea0       ?GetElemType@CLayer@@UAEHXZ 1000aea0 f i DeckWalk.obj
+ 0001:00009ed0       ?SetElemType@CLayer@@UAEXH@Z 1000aed0 f i DeckWalk.obj
+ 0001:00009f00       ?GetObjectNo@CLayer@@UAEJXZ 1000af00 f i DeckWalk.obj
+ 0001:00009f30       ?SetObjectNo@CLayer@@UAEXJ@Z 1000af30 f i DeckWalk.obj
+ 0001:00009f60       ?GetCurrentLayer@CLayer@@UAEIXZ 1000af60 f i DeckWalk.obj
+ 0001:00009f90       ?SetCurrentLayer@CLayer@@UAEXI@Z 1000af90 f i DeckWalk.obj
+ 0001:00009fc0       ?GetCurrentLayerOld@CLayer@@UAEIXZ 1000afc0 f i DeckWalk.obj
+ 0001:00009ff0       ?SetCurrentLayerOld@CLayer@@UAEXI@Z 1000aff0 f i DeckWalk.obj
+ 0001:0000a020       ?GetCurrentLayerDefault@CLayer@@UAEIXZ 1000b020 f i DeckWalk.obj
+ 0001:0000a050       ?SetCurrentLayerDefault@CLayer@@UAEXI@Z 1000b050 f i DeckWalk.obj
+ 0001:0000a080       ??1CLayer@@UAE@XZ          1000b080 f i DeckWalk.obj
+ 0001:0000a0b0       ??_GCLayer@@UAEPAXI@Z      1000b0b0 f i DeckWalk.obj
+ 0001:0000a0f0       ??_ECLayer@@UAEPAXI@Z      1000b0f0 f i DeckWalk.obj
+ 0001:0000a190       ?GetObjectType@CPatchMnu@@UAEHXZ 1000b190 f i DeckWalk.obj
+ 0001:0000a1c0       ?SetObjectType@CPatchMnu@@UAEXH@Z 1000b1c0 f i DeckWalk.obj
+ 0001:0000a1f0       ?GetElemType@CPatchMnu@@UAEHXZ 1000b1f0 f i DeckWalk.obj
+ 0001:0000a220       ?SetElemType@CPatchMnu@@UAEXH@Z 1000b220 f i DeckWalk.obj
+ 0001:0000a250       ?GetObjectNo@CPatchMnu@@UAEJXZ 1000b250 f i DeckWalk.obj
+ 0001:0000a280       ?SetObjectNo@CPatchMnu@@UAEXJ@Z 1000b280 f i DeckWalk.obj
+ 0001:0000a2b0       ?GetCurrentPatchMnu@CPatchMnu@@UAEIXZ 1000b2b0 f i DeckWalk.obj
+ 0001:0000a2e0       ?SetCurrentPatchMnu@CPatchMnu@@UAEXI@Z 1000b2e0 f i DeckWalk.obj
+ 0001:0000a310       ?GetCurrentPatchMnuOld@CPatchMnu@@UAEIXZ 1000b310 f i DeckWalk.obj
+ 0001:0000a340       ?SetCurrentPatchMnuOld@CPatchMnu@@UAEXI@Z 1000b340 f i DeckWalk.obj
+ 0001:0000a370       ?GetCurrentPatchMnuDefault@CPatchMnu@@UAEIXZ 1000b370 f i DeckWalk.obj
+ 0001:0000a3a0       ?SetCurrentPatchMnuDefault@CPatchMnu@@UAEXI@Z 1000b3a0 f i DeckWalk.obj
+ 0001:0000a3d0       ?GetPatchMnuID@CPatchMnu@@UAE?AVCString@@I@Z 1000b3d0 f i DeckWalk.obj
+ 0001:0000a420       ?SetPatchMnuID@CPatchMnu@@UAEXVCString@@I@Z 1000b420 f i DeckWalk.obj
+ 0001:0000a4a0       ?GetCurrentID@CPatchMnu@@UAE?AVCString@@XZ 1000b4a0 f i DeckWalk.obj
+ 0001:0000a4f0       ?SetCurrentID@CPatchMnu@@UAEXVCString@@@Z 1000b4f0 f i DeckWalk.obj
+ 0001:0000a570       ??1CPatchMnu@@UAE@XZ       1000b570 f i DeckWalk.obj
+ 0001:0000a630       ??_GCPatchMnu@@UAEPAXI@Z   1000b630 f i DeckWalk.obj
+ 0001:0000a670       ??_ECPatchMnu@@UAEPAXI@Z   1000b670 f i DeckWalk.obj
+ 0001:0000a710       ?GetObjectType@CObj3DMnu@@UAEHXZ 1000b710 f i DeckWalk.obj
+ 0001:0000a740       ?SetObjectType@CObj3DMnu@@UAEXH@Z 1000b740 f i DeckWalk.obj
+ 0001:0000a770       ?GetElemType@CObj3DMnu@@UAEHXZ 1000b770 f i DeckWalk.obj
+ 0001:0000a7a0       ?SetElemType@CObj3DMnu@@UAEXH@Z 1000b7a0 f i DeckWalk.obj
+ 0001:0000a7d0       ?GetObjectNo@CObj3DMnu@@UAEJXZ 1000b7d0 f i DeckWalk.obj
+ 0001:0000a800       ?SetObjectNo@CObj3DMnu@@UAEXJ@Z 1000b800 f i DeckWalk.obj
+ 0001:0000a830       ?GetCurrentObj3DMnu@CObj3DMnu@@UAEIXZ 1000b830 f i DeckWalk.obj
+ 0001:0000a860       ?SetCurrentObj3DMnu@CObj3DMnu@@UAEXI@Z 1000b860 f i DeckWalk.obj
+ 0001:0000a890       ?GetCurrentObj3DMnuOld@CObj3DMnu@@UAEIXZ 1000b890 f i DeckWalk.obj
+ 0001:0000a8c0       ?SetCurrentObj3DMnuOld@CObj3DMnu@@UAEXI@Z 1000b8c0 f i DeckWalk.obj
+ 0001:0000a8f0       ?GetCurrentObj3DMnuDefault@CObj3DMnu@@UAEIXZ 1000b8f0 f i DeckWalk.obj
+ 0001:0000a920       ?SetCurrentObj3DMnuDefault@CObj3DMnu@@UAEXI@Z 1000b920 f i DeckWalk.obj
+ 0001:0000a950       ?GetObj3DMnuID@CObj3DMnu@@UAE?AVCString@@I@Z 1000b950 f i DeckWalk.obj
+ 0001:0000a9a0       ?SetObj3DMnuID@CObj3DMnu@@UAEXVCString@@I@Z 1000b9a0 f i DeckWalk.obj
+ 0001:0000aa20       ?GetCurrentID@CObj3DMnu@@UAE?AVCString@@XZ 1000ba20 f i DeckWalk.obj
+ 0001:0000aa70       ?SetCurrentID@CObj3DMnu@@UAEXVCString@@@Z 1000ba70 f i DeckWalk.obj
+ 0001:0000aaf0       ??1CObj3DMnu@@UAE@XZ       1000baf0 f i DeckWalk.obj
+ 0001:0000abb0       ??_GCObj3DMnu@@UAEPAXI@Z   1000bbb0 f i DeckWalk.obj
+ 0001:0000abf0       ??_ECObj3DMnu@@UAEPAXI@Z   1000bbf0 f i DeckWalk.obj
+ 0001:0000ac90       ?GetObjectType@CMapFactor@@UAEHXZ 1000bc90 f i DeckWalk.obj
+ 0001:0000acc0       ?SetObjectType@CMapFactor@@UAEXH@Z 1000bcc0 f i DeckWalk.obj
+ 0001:0000acf0       ?GetElemType@CMapFactor@@UAEHXZ 1000bcf0 f i DeckWalk.obj
+ 0001:0000ad20       ?SetElemType@CMapFactor@@UAEXH@Z 1000bd20 f i DeckWalk.obj
+ 0001:0000ad50       ?GetObjectNo@CMapFactor@@UAEJXZ 1000bd50 f i DeckWalk.obj
+ 0001:0000ad80       ?SetObjectNo@CMapFactor@@UAEXJ@Z 1000bd80 f i DeckWalk.obj
+ 0001:0000adb0       ?GetMapFactor@CMapFactor@@UAENXZ 1000bdb0 f i DeckWalk.obj
+ 0001:0000ade0       ?SetMapFactor@CMapFactor@@UAEXN@Z 1000bde0 f i DeckWalk.obj
+ 0001:0000ae20       ?GetMapModeIndex@CMapFactor@@UAEHXZ 1000be20 f i DeckWalk.obj
+ 0001:0000ae50       ?SetMapModeIndex@CMapFactor@@UAEXH@Z 1000be50 f i DeckWalk.obj
+ 0001:0000ae80       ??1CMapFactor@@UAE@XZ      1000be80 f i DeckWalk.obj
+ 0001:0000aeb0       ??_GCMapFactor@@UAEPAXI@Z  1000beb0 f i DeckWalk.obj
+ 0001:0000aef0       ??_ECMapFactor@@UAEPAXI@Z  1000bef0 f i DeckWalk.obj
+ 0001:0000af90       ?GetObjectType@CPrecision@@UAEHXZ 1000bf90 f i DeckWalk.obj
+ 0001:0000afc0       ?SetObjectType@CPrecision@@UAEXH@Z 1000bfc0 f i DeckWalk.obj
+ 0001:0000aff0       ?GetElemType@CPrecision@@UAEHXZ 1000bff0 f i DeckWalk.obj
+ 0001:0000b020       ?SetElemType@CPrecision@@UAEXH@Z 1000c020 f i DeckWalk.obj
+ 0001:0000b050       ?GetObjectNo@CPrecision@@UAEJXZ 1000c050 f i DeckWalk.obj
+ 0001:0000b080       ?SetObjectNo@CPrecision@@UAEXJ@Z 1000c080 f i DeckWalk.obj
+ 0001:0000b0b0       ?GetPrecision@CPrecision@@UAEIXZ 1000c0b0 f i DeckWalk.obj
+ 0001:0000b0e0       ?SetPrecision@CPrecision@@UAEXI@Z 1000c0e0 f i DeckWalk.obj
+ 0001:0000b110       ?GetPrecisionOld@CPrecision@@UAEIXZ 1000c110 f i DeckWalk.obj
+ 0001:0000b140       ?SetPrecisionOld@CPrecision@@UAEXI@Z 1000c140 f i DeckWalk.obj
+ 0001:0000b170       ?GetPrecisionDefault@CPrecision@@UAEIXZ 1000c170 f i DeckWalk.obj
+ 0001:0000b1a0       ?SetPrecisionDefault@CPrecision@@UAEXI@Z 1000c1a0 f i DeckWalk.obj
+ 0001:0000b1d0       ?GetWorldBase@CPrecision@@UAEJXZ 1000c1d0 f i DeckWalk.obj
+ 0001:0000b200       ?SetWorldBase@CPrecision@@UAEXJ@Z 1000c200 f i DeckWalk.obj
+ 0001:0000b230       ?GetWorldBaseOld@CPrecision@@UAEJXZ 1000c230 f i DeckWalk.obj
+ 0001:0000b260       ?SetWorldBaseOld@CPrecision@@UAEXJ@Z 1000c260 f i DeckWalk.obj
+ 0001:0000b290       ?GetWorldBaseDefault@CPrecision@@UAEJXZ 1000c290 f i DeckWalk.obj
+ 0001:0000b2c0       ?SetWorldBaseDefault@CPrecision@@UAEXJ@Z 1000c2c0 f i DeckWalk.obj
+ 0001:0000b2f0       ??1CPrecision@@UAE@XZ      1000c2f0 f i DeckWalk.obj
+ 0001:0000b320       ??_GCPrecision@@UAEPAXI@Z  1000c320 f i DeckWalk.obj
+ 0001:0000b360       ??_ECPrecision@@UAEPAXI@Z  1000c360 f i DeckWalk.obj
+ 0001:0000b400       ?GetObjectType@CScaleFactor@@UAEHXZ 1000c400 f i DeckWalk.obj
+ 0001:0000b430       ?SetObjectType@CScaleFactor@@UAEXH@Z 1000c430 f i DeckWalk.obj
+ 0001:0000b460       ?GetElemType@CScaleFactor@@UAEHXZ 1000c460 f i DeckWalk.obj
+ 0001:0000b490       ?SetElemType@CScaleFactor@@UAEXH@Z 1000c490 f i DeckWalk.obj
+ 0001:0000b4c0       ?GetObjectNo@CScaleFactor@@UAEJXZ 1000c4c0 f i DeckWalk.obj
+ 0001:0000b4f0       ?SetObjectNo@CScaleFactor@@UAEXJ@Z 1000c4f0 f i DeckWalk.obj
+ 0001:0000b520       ?GetScaleFactor@CScaleFactor@@UAENXZ 1000c520 f i DeckWalk.obj
+ 0001:0000b550       ?SetScaleFactor@CScaleFactor@@UAEXN@Z 1000c550 f i DeckWalk.obj
+ 0001:0000b590       ?GetScaleFactorOld@CScaleFactor@@UAENXZ 1000c590 f i DeckWalk.obj
+ 0001:0000b5c0       ?SetScaleFactorOld@CScaleFactor@@UAEXN@Z 1000c5c0 f i DeckWalk.obj
+ 0001:0000b600       ?GetScaleFactorDefault@CScaleFactor@@UAENXZ 1000c600 f i DeckWalk.obj
+ 0001:0000b630       ?SetScaleFactorDefault@CScaleFactor@@UAEXN@Z 1000c630 f i DeckWalk.obj
+ 0001:0000b670       ??1CScaleFactor@@UAE@XZ    1000c670 f i DeckWalk.obj
+ 0001:0000b6a0       ??_GCScaleFactor@@UAEPAXI@Z 1000c6a0 f i DeckWalk.obj
+ 0001:0000b6e0       ??_ECScaleFactor@@UAEPAXI@Z 1000c6e0 f i DeckWalk.obj
+ 0001:0000b780       ?GetObjectType@CUnit@@UAEHXZ 1000c780 f i DeckWalk.obj
+ 0001:0000b7b0       ?SetObjectType@CUnit@@UAEXH@Z 1000c7b0 f i DeckWalk.obj
+ 0001:0000b7e0       ?GetElemType@CUnit@@UAEHXZ 1000c7e0 f i DeckWalk.obj
+ 0001:0000b810       ?SetElemType@CUnit@@UAEXH@Z 1000c810 f i DeckWalk.obj
+ 0001:0000b840       ?GetObjectNo@CUnit@@UAEJXZ 1000c840 f i DeckWalk.obj
+ 0001:0000b870       ?SetObjectNo@CUnit@@UAEXJ@Z 1000c870 f i DeckWalk.obj
+ 0001:0000b8a0       ?GetUnitName@CUnit@@UAE?AVCString@@I@Z 1000c8a0 f i DeckWalk.obj
+ 0001:0000b8f0       ?GetUnitIndex@CUnit@@UAEIXZ 1000c8f0 f i DeckWalk.obj
+ 0001:0000b920       ?SetUnitIndex@CUnit@@UAEXI@Z 1000c920 f i DeckWalk.obj
+ 0001:0000b950       ?GetUnitIndexOld@CUnit@@UAEIXZ 1000c950 f i DeckWalk.obj
+ 0001:0000b980       ?SetUnitIndexOld@CUnit@@UAEXI@Z 1000c980 f i DeckWalk.obj
+ 0001:0000b9b0       ?GetUnitIndexDefault@CUnit@@UAEIXZ 1000c9b0 f i DeckWalk.obj
+ 0001:0000b9e0       ?SetUnitIndexDefault@CUnit@@UAEXI@Z 1000c9e0 f i DeckWalk.obj
+ 0001:0000ba10       ?GetUnitNameCount@CUnit@@UAEIXZ 1000ca10 f i DeckWalk.obj
+ 0001:0000ba40       ?SetUnitNameCount@CUnit@@UAEXI@Z 1000ca40 f i DeckWalk.obj
+ 0001:0000ba70       ??1CUnit@@UAE@XZ           1000ca70 f i DeckWalk.obj
+ 0001:0000bb00       ??_GCUnit@@UAEPAXI@Z       1000cb00 f i DeckWalk.obj
+ 0001:0000bb40       ??_ECUnit@@UAEPAXI@Z       1000cb40 f i DeckWalk.obj
+ 0001:0000bbe0       ??1CDataRowHint@@UAE@XZ    1000cbe0 f i DeckWalk.obj
+ 0001:0000bc10       ?GetMapFactor@CObjectMgr@@UAEPAVCMapFactor@@XZ 1000cc10 f i DeckWalk.obj
+ 0001:0000bc40       ?GetPrecision@CObjectMgr@@UAEPAVCPrecision@@XZ 1000cc40 f i DeckWalk.obj
+ 0001:0000bc70       ?GetScaleFactor@CObjectMgr@@UAEPAVCScaleFactor@@XZ 1000cc70 f i DeckWalk.obj
+ 0001:0000bca0       ?GetUnit@CObjectMgr@@UAEPAVCUnit@@XZ 1000cca0 f i DeckWalk.obj
+ 0001:0000bcd0       ?GetObjectListFromIndex@CObjectMgr@@UAEPAVCDListMgr@@H@Z 1000ccd0 f i DeckWalk.obj
+ 0001:0000bd20       ?IsSceneChanged@CObjectMgr@@UAEHXZ 1000cd20 f i DeckWalk.obj
+ 0001:0000bd50       ?SetSceneChanged@CObjectMgr@@UAEXH@Z 1000cd50 f i DeckWalk.obj
+ 0001:0000bd80       ?IsViewChanged@CObjectMgr@@UAEHXZ 1000cd80 f i DeckWalk.obj
+ 0001:0000bdb0       ?SetViewChanged@CObjectMgr@@UAEXH@Z 1000cdb0 f i DeckWalk.obj
+ 0001:0000bde0       ?GetMasterLastObjectNo@CObjectMgr@@UAEIXZ 1000cde0 f i DeckWalk.obj
+ 0001:0000be10       ?SetMasterLastObjectNo@CObjectMgr@@UAEXI@Z 1000ce10 f i DeckWalk.obj
+ 0001:0000be40       ?GetActiveObjectNo@CObjectMgr@@UAEIXZ 1000ce40 f i DeckWalk.obj
+ 0001:0000be70       ?SetActiveObjectNo@CObjectMgr@@UAEXI@Z 1000ce70 f i DeckWalk.obj
+ 0001:0000bea0       ?GetActiveListIndex@CObjectMgr@@UAEHXZ 1000cea0 f i DeckWalk.obj
+ 0001:0000bed0       ?SetActiveListIndex@CObjectMgr@@UAEXH@Z 1000ced0 f i DeckWalk.obj
+ 0001:0000bf00       ?GetActiveObjectIndex@CObjectMgr@@UAEHXZ 1000cf00 f i DeckWalk.obj
+ 0001:0000bf30       ?SetActiveObjectIndex@CObjectMgr@@UAEXH@Z 1000cf30 f i DeckWalk.obj
+ 0001:0000bf60       ?GetActiveObjectType@CObjectMgr@@UAEHXZ 1000cf60 f i DeckWalk.obj
+ 0001:0000bf90       ?SetActiveObjectType@CObjectMgr@@UAEXH@Z 1000cf90 f i DeckWalk.obj
+ 0001:0000bfc0       ?GetRowList@CObjectMgr@@QAEPAV?$CList@JJ@@XZ 1000cfc0 f i DeckWalk.obj
+ 0001:0000bff0       ?GetRowCount@CObjectMgr@@QAEHXZ 1000cff0 f i DeckWalk.obj
+ 0001:0000c020       ?GetActiveRowIndex@CObjectMgr@@QAEHXZ 1000d020 f i DeckWalk.obj
+ 0001:0000c050       ?SetActiveRowIndex@CObjectMgr@@QAEXH@Z 1000d050 f i DeckWalk.obj
+ 0001:0000c080       ?GetFormat@CObjectMgr@@UAE?AVCString@@XZ 1000d080 f i DeckWalk.obj
+ 0001:0000c0d0       ?IsMeshGenOn@CObjectMgr@@UAEHXZ 1000d0d0 f i DeckWalk.obj
+ 0001:0000c100       ?SetMeshGenOn@CObjectMgr@@UAEXH@Z 1000d100 f i DeckWalk.obj
+ 0001:0000c130       ?GetMeshType@CObjectMgr@@UAEIXZ 1000d130 f i DeckWalk.obj
+ 0001:0000c160       ?SetMeshType@CObjectMgr@@UAEXI@Z 1000d160 f i DeckWalk.obj
+ 0001:0000c190       ?GetCurrentTopLevel@CObjectMgr@@UAEHXZ 1000d190 f i DeckWalk.obj
+ 0001:0000c1c0       ?SetCurrentTopLevel@CObjectMgr@@UAEXH@Z 1000d1c0 f i DeckWalk.obj
+ 0001:0000c1f0       ?GetObjectType@CElemInfo@@UAEHXZ 1000d1f0 f i DeckWalk.obj
+ 0001:0000c220       ?SetObjectType@CElemInfo@@UAEXH@Z 1000d220 f i DeckWalk.obj
+ 0001:0000c250       ?GetElemType@CElemInfo@@UAEHXZ 1000d250 f i DeckWalk.obj
+ 0001:0000c280       ?SetElemType@CElemInfo@@UAEXH@Z 1000d280 f i DeckWalk.obj
+ 0001:0000c2b0       ?GetObjectNo@CElemInfo@@UAEJXZ 1000d2b0 f i DeckWalk.obj
+ 0001:0000c2e0       ?SetObjectNo@CElemInfo@@UAEXJ@Z 1000d2e0 f i DeckWalk.obj
+ 0001:0000c310       ?GetInfoList@CElemInfo@@UAEPAVCDListMgr@@H@Z 1000d310 f i DeckWalk.obj
+ 0001:0000c340       ??1CElemInfo@@UAE@XZ       1000d340 f i DeckWalk.obj
+ 0001:0000c3d0       ??_GCElemInfo@@UAEPAXI@Z   1000d3d0 f i DeckWalk.obj
+ 0001:0000c410       ??_ECElemInfo@@UAEPAXI@Z   1000d410 f i DeckWalk.obj
+ 0001:0000c4b0       ??1CMeshRowHint@@UAE@XZ    1000d4b0 f i DeckWalk.obj
+ 0001:0000c4e0       ?GetRowList@CMsObjMgr@@QAEPAV?$CList@JJ@@XZ 1000d4e0 f i DeckWalk.obj
+ 0001:0000c510       ?GetRowCount@CMsObjMgr@@QAEHXZ 1000d510 f i DeckWalk.obj
+ 0001:0000c540       ?GetActiveRowIndex@CMsObjMgr@@QAEHXZ 1000d540 f i DeckWalk.obj
+ 0001:0000c570       ?SetActiveRowIndex@CMsObjMgr@@QAEXH@Z 1000d570 f i DeckWalk.obj
+ 0001:0000c5a0       ??1CBaseRowHint@@UAE@XZ    1000d5a0 f i DeckWalk.obj
+ 0001:0000c5d0       ?GetCurrentItem@CDbObjMgr@@QAEAAVCString@@XZ 1000d5d0 f i DeckWalk.obj
+ 0001:0000c5f0       ?SetCurrentItem@CDbObjMgr@@QAEXAAVCString@@@Z 1000d5f0 f i DeckWalk.obj
+ 0001:0000c620       ?GetCurrentParent@CDbObjMgr@@QAEAAVCString@@XZ 1000d620 f i DeckWalk.obj
+ 0001:0000c640       ?SetCurrentParent@CDbObjMgr@@QAEXAAVCString@@@Z 1000d640 f i DeckWalk.obj
+ 0001:0000c670       ??1CAxDataRowHint@@UAE@XZ  1000d670 f i DeckWalk.obj
+ 0001:0000c6a0       ?GetMapFactor@CAxObjMgr@@UAEPAVCMapFactor@@XZ 1000d6a0 f i DeckWalk.obj
+ 0001:0000c6d0       ?GetPrecision@CAxObjMgr@@UAEPAVCPrecision@@XZ 1000d6d0 f i DeckWalk.obj
+ 0001:0000c700       ?GetScaleFactor@CAxObjMgr@@UAEPAVCScaleFactor@@XZ 1000d700 f i DeckWalk.obj
+ 0001:0000c730       ?GetUnit@CAxObjMgr@@UAEPAVCUnit@@XZ 1000d730 f i DeckWalk.obj
+ 0001:0000c760       ?GetObjectListFromIndex@CAxObjMgr@@UAEPAVCDListMgr@@H@Z 1000d760 f i DeckWalk.obj
+ 0001:0000c7b0       ?IsSceneChanged@CAxObjMgr@@UAEHXZ 1000d7b0 f i DeckWalk.obj
+ 0001:0000c7e0       ?SetSceneChanged@CAxObjMgr@@UAEXH@Z 1000d7e0 f i DeckWalk.obj
+ 0001:0000c810       ?IsViewChanged@CAxObjMgr@@UAEHXZ 1000d810 f i DeckWalk.obj
+ 0001:0000c840       ?SetViewChanged@CAxObjMgr@@UAEXH@Z 1000d840 f i DeckWalk.obj
+ 0001:0000c870       ?GetMasterLastObjectNo@CAxObjMgr@@UAEIXZ 1000d870 f i DeckWalk.obj
+ 0001:0000c8a0       ?SetMasterLastObjectNo@CAxObjMgr@@UAEXI@Z 1000d8a0 f i DeckWalk.obj
+ 0001:0000c8d0       ?GetActiveObjectNo@CAxObjMgr@@UAEIXZ 1000d8d0 f i DeckWalk.obj
+ 0001:0000c900       ?SetActiveObjectNo@CAxObjMgr@@UAEXI@Z 1000d900 f i DeckWalk.obj
+ 0001:0000c930       ?GetActiveListIndex@CAxObjMgr@@UAEHXZ 1000d930 f i DeckWalk.obj
+ 0001:0000c960       ?SetActiveListIndex@CAxObjMgr@@UAEXH@Z 1000d960 f i DeckWalk.obj
+ 0001:0000c990       ?GetActiveObjectIndex@CAxObjMgr@@UAEHXZ 1000d990 f i DeckWalk.obj
+ 0001:0000c9c0       ?SetActiveObjectIndex@CAxObjMgr@@UAEXH@Z 1000d9c0 f i DeckWalk.obj
+ 0001:0000c9f0       ?GetActiveObjectType@CAxObjMgr@@UAEHXZ 1000d9f0 f i DeckWalk.obj
+ 0001:0000ca20       ?SetActiveObjectType@CAxObjMgr@@UAEXH@Z 1000da20 f i DeckWalk.obj
+ 0001:0000ca50       ?GetRowList@CAxObjMgr@@QAEPAV?$CList@JJ@@XZ 1000da50 f i DeckWalk.obj
+ 0001:0000ca80       ?GetRowCount@CAxObjMgr@@QAEHXZ 1000da80 f i DeckWalk.obj
+ 0001:0000cab0       ?GetActiveRowIndex@CAxObjMgr@@QAEHXZ 1000dab0 f i DeckWalk.obj
+ 0001:0000cae0       ?SetActiveRowIndex@CAxObjMgr@@QAEXH@Z 1000dae0 f i DeckWalk.obj
+ 0001:0000cb10       ?GetFormat@CAxObjMgr@@UAE?AVCString@@XZ 1000db10 f i DeckWalk.obj
+ 0001:0000cb60       ?IsMeshGenOn@CAxObjMgr@@UAEHXZ 1000db60 f i DeckWalk.obj
+ 0001:0000cb90       ?SetMeshGenOn@CAxObjMgr@@UAEXH@Z 1000db90 f i DeckWalk.obj
+ 0001:0000cbc0       ?GetMeshType@CAxObjMgr@@UAEIXZ 1000dbc0 f i DeckWalk.obj
+ 0001:0000cbf0       ?SetMeshType@CAxObjMgr@@UAEXI@Z 1000dbf0 f i DeckWalk.obj
+ 0001:0000cc20       ?GetCurrentTopLevel@CAxObjMgr@@UAEHXZ 1000dc20 f i DeckWalk.obj
+ 0001:0000cc50       ?SetCurrentTopLevel@CAxObjMgr@@UAEXH@Z 1000dc50 f i DeckWalk.obj
+ 0001:0000cc80       ?Parse_drPipe@CDrLinSup@@UAEPAUsupportcard@@PAVCString@@@Z 1000dc80 f i DeckWalk.obj
+ 0001:0000cca0       ?GetSuppCard@CDrLinSup@@UAEPAUsupportcard@@XZ 1000dca0 f i DeckWalk.obj
+ 0001:0000ccd0       ?GetCardNo@CDrLinSup@@UAEHXZ 1000dcd0 f i DeckWalk.obj
+ 0001:0000cd00       ?SetCardNo@CDrLinSup@@UAEXH@Z 1000dd00 f i DeckWalk.obj
+ 0001:0000cd30       ?GetLabelNo@CDrLinSup@@QAEJXZ 1000dd30 f i DeckWalk.obj
+ 0001:0000cd60       ?SetLabelNo@CDrLinSup@@QAEXJ@Z 1000dd60 f i DeckWalk.obj
+ 0001:0000cd90       ?GetnPts@CDrLinSup@@QAEHH@Z 1000dd90 f i DeckWalk.obj
+ 0001:0000cdc0       ?GetpLoc@CDrLinSup@@QAEPAUWORLD@@H@Z 1000ddc0 f i DeckWalk.obj
+ 0001:0000cdf0       ?IsSkewed@CDrLinSup@@UAEHXZ 1000ddf0 f i DeckWalk.obj
+ 0001:0000ce20       ?SetSkewed@CDrLinSup@@UAEXH@Z 1000de20 f i DeckWalk.obj
+ 0001:0000ce50       ?GetSkewMat@CDrLinSup@@QAEPAUMATRIX@@XZ 1000de50 f i DeckWalk.obj
+ 0001:0000ce80       ?SetSkewMat@CDrLinSup@@QAEXPAUMATRIX@@@Z 1000de80 f i DeckWalk.obj
+ 0001:0000cec0       ?GetCreateBase@CDrLinSup@@QAEIXZ 1000dec0 f i DeckWalk.obj
+ 0001:0000cef0       ?SetCreateBase@CDrLinSup@@QAEXI@Z 1000def0 f i DeckWalk.obj
+ 0001:0000cf20       ?IsTriangle@CDrLinSup@@QAEHXZ 1000df20 f i DeckWalk.obj
+ 0001:0000cf50       ?SetTriangle@CDrLinSup@@QAEXH@Z 1000df50 f i DeckWalk.obj
+ 0001:0000cf80       ?IsPentaHed@CDrLinSup@@QAEHXZ 1000df80 f i DeckWalk.obj
+ 0001:0000cfb0       ?SetPentaHed@CDrLinSup@@QAEXH@Z 1000dfb0 f i DeckWalk.obj
+ 0001:0000cfe0       ?GetCreate_i@CDrLinSup@@QAEHXZ 1000dfe0 f i DeckWalk.obj
+ 0001:0000d010       ?SetCreate_i@CDrLinSup@@QAEXH@Z 1000e010 f i DeckWalk.obj
+ 0001:0000d040       ?GetCreate_j@CDrLinSup@@QAEHXZ 1000e040 f i DeckWalk.obj
+ 0001:0000d070       ?SetCreate_j@CDrLinSup@@QAEXH@Z 1000e070 f i DeckWalk.obj
+ 0001:0000d0a0       ?GetCreate_k@CDrLinSup@@QAEHXZ 1000e0a0 f i DeckWalk.obj
+ 0001:0000d0d0       ?SetCreate_k@CDrLinSup@@QAEXH@Z 1000e0d0 f i DeckWalk.obj
+ 0001:0000d100       ?GetNodPos@CDrLinSup@@QAEPAUWORLD@@XZ 1000e100 f i DeckWalk.obj
+ 0001:0000d130       ?SetNodPos@CDrLinSup@@QAEXAAUWORLD@@@Z 1000e130 f i DeckWalk.obj
+ 0001:0000d170       ?IsSubDivided@CTriangle@@UAEHXZ 1000e170 f i DeckWalk.obj
+ 0001:0000d190       ?SetSubDivided@CTriangle@@UAEXH@Z 1000e190 f i DeckWalk.obj
+ 0001:0000d1c0       ?GetSubTriangleIndex@CTriangle@@UAEHH@Z 1000e1c0 f i DeckWalk.obj
+ 0001:0000d1f0       ?SetSubTriangleIndex@CTriangle@@UAEXHH@Z 1000e1f0 f i DeckWalk.obj
+ 0001:0000d220       ?GetType@CTriangle@@UAEHXZ 1000e220 f i DeckWalk.obj
+ 0001:0000d240       ?SetType@CTriangle@@UAEXH@Z 1000e240 f i DeckWalk.obj
+ 0001:0000d270       ?GetCNIndexList@CTriangle@@UAEPAV?$CList@HH@@XZ 1000e270 f i DeckWalk.obj
+ 0001:0000d290       ?GetPatIndex@CTriangle@@UAEHXZ 1000e290 f i DeckWalk.obj
+ 0001:0000d2b0       ?SetPatIndex@CTriangle@@UAEXH@Z 1000e2b0 f i DeckWalk.obj
+ 0001:0000d2e0       ?GetDegree@CTriangle@@UAEHXZ 1000e2e0 f i DeckWalk.obj
+ 0001:0000d300       ?SetDegree@CTriangle@@UAEXH@Z 1000e300 f i DeckWalk.obj
+ 0001:0000d330       ?GetVertexIndex@CTriangle@@UAEHH@Z 1000e330 f i DeckWalk.obj
+ 0001:0000d360       ?SetVertexIndex@CTriangle@@UAEXHH@Z 1000e360 f i DeckWalk.obj
+ 0001:0000d390       ?GetVertexIndex@CTriangle@@UAEPAHXZ 1000e390 f i DeckWalk.obj
+ 0001:0000d3b0       ?GetNebrVertexIndex@CTriangle@@UAEHH@Z 1000e3b0 f i DeckWalk.obj
+ 0001:0000d3e0       ?SetNebrVertexIndex@CTriangle@@UAEXHH@Z 1000e3e0 f i DeckWalk.obj
+ 0001:0000d410       ?GetNebrVertexIndex@CTriangle@@UAEPAHXZ 1000e410 f i DeckWalk.obj
+ 0001:0000d430       ?GetNebrTriangleIndex@CTriangle@@UAEHH@Z 1000e430 f i DeckWalk.obj
+ 0001:0000d460       ?SetNebrTriangleIndex@CTriangle@@UAEXHH@Z 1000e460 f i DeckWalk.obj
+ 0001:0000d490       ?GetNebrTriangleIndex@CTriangle@@UAEPAHXZ 1000e490 f i DeckWalk.obj
+ 0001:0000d4b0       ?GetOutSeg@CTriangle@@UAEHXZ 1000e4b0 f i DeckWalk.obj
+ 0001:0000d4d0       ?SetOutSeg@CTriangle@@UAEXH@Z 1000e4d0 f i DeckWalk.obj
+ 0001:0000d500       ?GetiOutGlo@CTriangle@@UAEHXZ 1000e500 f i DeckWalk.obj
+ 0001:0000d530       ?SetiOutGlo@CTriangle@@UAEXH@Z 1000e530 f i DeckWalk.obj
+ 0001:0000d560       ?GetjOutGlo@CTriangle@@UAEHXZ 1000e560 f i DeckWalk.obj
+ 0001:0000d590       ?SetjOutGlo@CTriangle@@UAEXH@Z 1000e590 f i DeckWalk.obj
+ 0001:0000d5c0       ??1CTriangle@@UAE@XZ       1000e5c0 f i DeckWalk.obj
+ 0001:0000d640       ??_GCTriangle@@UAEPAXI@Z   1000e640 f i DeckWalk.obj
+ 0001:0000d680       ??_ECTriangle@@UAEPAXI@Z   1000e680 f i DeckWalk.obj
+ 0001:0000d720       ?Parse_drPipe@CDrNode@@UAEPAUnodecard@@PAVCString@@@Z 1000e720 f i DeckWalk.obj
+ 0001:0000d740       ?GetNodeCard@CDrNode@@UAEPAUnodecard@@XZ 1000e740 f i DeckWalk.obj
+ 0001:0000d770       ?GetCardNo@CDrNode@@UAEHXZ 1000e770 f i DeckWalk.obj
+ 0001:0000d7a0       ?SetCardNo@CDrNode@@UAEXH@Z 1000e7a0 f i DeckWalk.obj
+ 0001:0000d7d0       ?DoFormattedCardView@CDrNode@@UAEXPAVCString@@AAV2@@Z 1000e7d0 f i DeckWalk.obj
+ 0001:0000d7f0       ?DoUnFormattedCardView@CDrNode@@UAEXPAVCString@@@Z 1000e7f0 f i DeckWalk.obj
+ 0001:0000d810       ?GetMaxCorners@CDrNode@@UAEHXZ 1000e810 f i DeckWalk.obj
+ 0001:0000d830       ?GetCategory@CDrNode@@UAE?AW4CATEGORY@@XZ 1000e830 f i DeckWalk.obj
+ 0001:0000d850       ?SetCategory@CDrNode@@UAEXW4CATEGORY@@@Z 1000e850 f i DeckWalk.obj
+ 0001:0000d880       ?GetPrecision@CDrNode@@UAEHXZ 1000e880 f i DeckWalk.obj
+ 0001:0000d8b0       ?SetPrecision@CDrNode@@UAEXH@Z 1000e8b0 f i DeckWalk.obj
+ 0001:0000d8e0       ?GetFormat@CDrNode@@QAE?AVCString@@XZ 1000e8e0 f i DeckWalk.obj
+ 0001:0000d930       ?SetFormat@CDrNode@@QAEXVCString@@@Z 1000e930 f i DeckWalk.obj
+ 0001:0000d9b0       ?GetMapFactor@CDrNode@@QAENXZ 1000e9b0 f i DeckWalk.obj
+ 0001:0000d9e0       ?SetMapFactor@CDrNode@@QAEXN@Z 1000e9e0 f i DeckWalk.obj
+ 0001:0000da20       ?GetScaleFactor@CDrNode@@QAENXZ 1000ea20 f i DeckWalk.obj
+ 0001:0000da50       ?SetScaleFactor@CDrNode@@QAEXN@Z 1000ea50 f i DeckWalk.obj
+ 0001:0000da90       ?GetMasterMultFac@CDrNode@@QAEJXZ 1000ea90 f i DeckWalk.obj
+ 0001:0000dac0       ?SetMasterMultFac@CDrNode@@QAEXJ@Z 1000eac0 f i DeckWalk.obj
+ 0001:0000daf0       ?GetLocalPos@CDrNode@@UAEPAUWORLD@@XZ 1000eaf0 f i DeckWalk.obj
+ 0001:0000db20       ?SetLocalPos@CDrNode@@UAEXUWORLD@@@Z 1000eb20 f i DeckWalk.obj
+ 0001:0000db60       ?GetWorldPos@CDrNode@@UAEPAUWORLD@@XZ 1000eb60 f i DeckWalk.obj
+ 0001:0000db90       ?SetWorldPos@CDrNode@@UAEXUWORLD@@@Z 1000eb90 f i DeckWalk.obj
+ 0001:0000dbd0       ?GetEyePos@CDrNode@@UAEPAUWORLD@@XZ 1000ebd0 f i DeckWalk.obj
+ 0001:0000dc00       ?SetEyePos@CDrNode@@UAEXUWORLD@@@Z 1000ec00 f i DeckWalk.obj
+ 0001:0000dc40       ?GetScreenPos3D@CDrNode@@UAEPAUWORLD@@XZ 1000ec40 f i DeckWalk.obj
+ 0001:0000dc70       ?SetScreenPos3D@CDrNode@@UAEXUWORLD@@@Z 1000ec70 f i DeckWalk.obj
+ 0001:0000dcb0       ?GetScreenPos2D@CDrNode@@UAEPAUtagPOINT@@XZ 1000ecb0 f i DeckWalk.obj
+ 0001:0000dce0       ?SetScreenPos2D@CDrNode@@UAEXUtagPOINT@@@Z 1000ece0 f i DeckWalk.obj
+ 0001:0000dd20       ?GetNormalWorld@CDrNode@@UAEPAUWORLD@@XZ 1000ed20 f i DeckWalk.obj
+ 0001:0000dd50       ?SetNormalWorld@CDrNode@@UAEXUWORLD@@@Z 1000ed50 f i DeckWalk.obj
+ 0001:0000dd90       ?GetNormalEye@CDrNode@@UAEPAUWORLD@@XZ 1000ed90 f i DeckWalk.obj
+ 0001:0000ddc0       ?SetNormalEye@CDrNode@@UAEXUWORLD@@@Z 1000edc0 f i DeckWalk.obj
+ 0001:0000de00       ?GetNormalScreen3D@CDrNode@@UAEPAUWORLD@@XZ 1000ee00 f i DeckWalk.obj
+ 0001:0000de30       ?SetNormalScreen3D@CDrNode@@UAEXUWORLD@@@Z 1000ee30 f i DeckWalk.obj
+ 0001:0000de70       ?GetNormalScreen2D@CDrNode@@UAEPAUtagPOINT@@XZ 1000ee70 f i DeckWalk.obj
+ 0001:0000dea0       ?SetNormalScreen2D@CDrNode@@UAEXUtagPOINT@@@Z 1000eea0 f i DeckWalk.obj
+ 0001:0000dee0       ?GetLabelNo@CDrNode@@QAEJXZ 1000eee0 f i DeckWalk.obj
+ 0001:0000df10       ?SetLabelNo@CDrNode@@QAEXJ@Z 1000ef10 f i DeckWalk.obj
+ 0001:0000df40       ?IsMeshNode@CDrNode@@QAEHXZ 1000ef40 f i DeckWalk.obj
+ 0001:0000df70       ?SetMeshNode@CDrNode@@QAEXH@Z 1000ef70 f i DeckWalk.obj
+ 0001:0000dfa0       ?IsGenerated@CDrNode@@QAEHXZ 1000efa0 f i DeckWalk.obj
+ 0001:0000dfd0       ?SetGenerated@CDrNode@@QAEXH@Z 1000efd0 f i DeckWalk.obj
+ 0001:0000e000       ?IsControlNode@CDrNode@@QAEHXZ 1000f000 f i DeckWalk.obj
+ 0001:0000e030       ?SetControlNode@CDrNode@@QAEXH@Z 1000f030 f i DeckWalk.obj
+ 0001:0000e070       ?GetInputMode@CDrNode@@QAEHXZ 1000f070 f i DeckWalk.obj
+ 0001:0000e0a0       ?SetInputMode@CDrNode@@QAEXH@Z 1000f0a0 f i DeckWalk.obj
+ 0001:0000e0d0       ?GetLength@CDrNode@@QAENXZ 1000f0d0 f i DeckWalk.obj
+ 0001:0000e100       ?SetLength@CDrNode@@QAEXN@Z 1000f100 f i DeckWalk.obj
+ 0001:0000e140       ?GetDelta@CDrNode@@QAEPAUWORLD@@XZ 1000f140 f i DeckWalk.obj
+ 0001:0000e170       ?SetDelta@CDrNode@@QAEXUWORLD@@@Z 1000f170 f i DeckWalk.obj
+ 0001:0000e1b0       ?GetFromID@CDrNode@@QAE?AVCString@@XZ 1000f1b0 f i DeckWalk.obj
+ 0001:0000e200       ?SetFromID@CDrNode@@QAEXVCString@@@Z 1000f200 f i DeckWalk.obj
+ 0001:0000e280       ?GetToID@CDrNode@@QAE?AVCString@@XZ 1000f280 f i DeckWalk.obj
+ 0001:0000e2d0       ?SetToID@CDrNode@@QAEXVCString@@@Z 1000f2d0 f i DeckWalk.obj
+ 0001:0000e350       ?IsRefCN@CDrNode@@QAEHXZ   1000f350 f i DeckWalk.obj
+ 0001:0000e380       ?SetRefCN@CDrNode@@QAEXH@Z 1000f380 f i DeckWalk.obj
+ 0001:0000e3b0       ?IsFromCN@CDrNode@@QAEHXZ  1000f3b0 f i DeckWalk.obj
+ 0001:0000e3e0       ?SetFromCN@CDrNode@@QAEXH@Z 1000f3e0 f i DeckWalk.obj
+ 0001:0000e410       ?IsToCN@CDrNode@@QAEHXZ    1000f410 f i DeckWalk.obj
+ 0001:0000e440       ?SetToCN@CDrNode@@QAEXH@Z  1000f440 f i DeckWalk.obj
+ 0001:0000e470       ?IsSkewed@CDrNode@@UAEHXZ  1000f470 f i DeckWalk.obj
+ 0001:0000e4a0       ?SetSkewed@CDrNode@@UAEXH@Z 1000f4a0 f i DeckWalk.obj
+ 0001:0000e4d0       ?IsLinSpr@CDrNode@@UAEHXZ  1000f4d0 f i DeckWalk.obj
+ 0001:0000e500       ?SetLinSpr@CDrNode@@UAEXH@Z 1000f500 f i DeckWalk.obj
+ 0001:0000e530       ?IsLinSnu@CDrNode@@UAEHXZ  1000f530 f i DeckWalk.obj
+ 0001:0000e560       ?SetLinSnu@CDrNode@@UAEXH@Z 1000f560 f i DeckWalk.obj
+ 0001:0000e590       ?GetSuppCardList@CDrNode@@QAEPAV?$CList@Usupportcard@@U1@@@XZ 1000f590 f i DeckWalk.obj
+ 0001:0000e5c0       ?GetStaLCardList@CDrNode@@QAEPAV?$CList@UstaLcard@@U1@@@XZ 1000f5c0 f i DeckWalk.obj
+ 0001:0000e5f0       ?IsDirty@CDrCurve@@UAEHXZ  1000f5f0 f i DeckWalk.obj
+ 0001:0000e620       ?SetDirty@CDrCurve@@UAEXH@Z 1000f620 f i DeckWalk.obj
+ 0001:0000e650       ?IsControlShapeNeeded@CDrCurve@@UAEHXZ 1000f650 f i DeckWalk.obj
+ 0001:0000e680       ?SetControlShapeNeed@CDrCurve@@UAEXH@Z 1000f680 f i DeckWalk.obj
+ 0001:0000e6b0       ?IsPosted@CDrCurve@@UAEHXZ 1000f6b0 f i DeckWalk.obj
+ 0001:0000e6e0       ?SetPosted@CDrCurve@@UAEXH@Z 1000f6e0 f i DeckWalk.obj
+ 0001:0000e710       ?GetCN_BSList@CDrCurve@@QAEPAVCDListMgr@@XZ 1000f710 f i DeckWalk.obj
+ 0001:0000e740       ?GetVNodeList@CDrCurve@@QAEPAVCDListMgr@@XZ 1000f740 f i DeckWalk.obj
+ 0001:0000e770       ?GetMeshElemDim@CDrCurve@@QAEHXZ 1000f770 f i DeckWalk.obj
+ 0001:0000e7a0       ?SetMeshElemDim@CDrCurve@@QAEXH@Z 1000f7a0 f i DeckWalk.obj
+ 0001:0000e7d0       ?IsIso@CDrCurve@@QAEHXZ    1000f7d0 f i DeckWalk.obj
+ 0001:0000e800       ?SetIso@CDrCurve@@QAEXH@Z  1000f800 f i DeckWalk.obj
+ 0001:0000e830       ?GetIsoToID@CDrCurve@@QAEAAVCString@@XZ 1000f830 f i DeckWalk.obj
+ 0001:0000e860       ?SetIsoToID@CDrCurve@@QAEXAAVCString@@@Z 1000f860 f i DeckWalk.obj
+ 0001:0000e890       ?GetCompoType@CDrCurve@@QAEHXZ 1000f890 f i DeckWalk.obj
+ 0001:0000e8c0       ?SetCompoType@CDrCurve@@QAEXH@Z 1000f8c0 f i DeckWalk.obj
+ 0001:0000e8f0       ?GetCompoID@CDrCurve@@QAEAAVCString@@XZ 1000f8f0 f i DeckWalk.obj
+ 0001:0000e920       ?SetCompoID@CDrCurve@@QAEXAAVCString@@@Z 1000f920 f i DeckWalk.obj
+ 0001:0000e950       ?GetClass_S@CDrCurve@@QAEHXZ 1000f950 f i DeckWalk.obj
+ 0001:0000e980       ?SetClass_S@CDrCurve@@QAEXH@Z 1000f980 f i DeckWalk.obj
+ 0001:0000e9b0       ?GetOutSegUnif_S@CDrCurve@@QAEHXZ 1000f9b0 f i DeckWalk.obj
+ 0001:0000e9e0       ?SetOutSegUnif_S@CDrCurve@@QAEXH@Z 1000f9e0 f i DeckWalk.obj
+ 0001:0000ea10       ?IsClosed_S@CDrCurve@@QAEHXZ 1000fa10 f i DeckWalk.obj
+ 0001:0000ea40       ?SetClosed_S@CDrCurve@@QAEXH@Z 1000fa40 f i DeckWalk.obj
+ 0001:0000ea70       ?GetCurveObjectType@CDrCurve@@QAEHXZ 1000fa70 f i DeckWalk.obj
+ 0001:0000eaa0       ?SetCurveObjectType@CDrCurve@@QAEXH@Z 1000faa0 f i DeckWalk.obj
+ 0001:0000ead0       ?GetMaxINodes_S@CDrCurve@@QAEHXZ 1000fad0 f i DeckWalk.obj
+ 0001:0000eb00       ?SetMaxINodes_S@CDrCurve@@QAEXH@Z 1000fb00 f i DeckWalk.obj
+ 0001:0000eb30       ?GetMaxCNodes_S@CDrCurve@@QAEHXZ 1000fb30 f i DeckWalk.obj
+ 0001:0000eb60       ?SetMaxCNodes_S@CDrCurve@@QAEXH@Z 1000fb60 f i DeckWalk.obj
+ 0001:0000eb90       ?GetMaxBezSegments_S@CDrCurve@@QAEHXZ 1000fb90 f i DeckWalk.obj
+ 0001:0000ebc0       ?SetMaxBezSegments_S@CDrCurve@@QAEXH@Z 1000fbc0 f i DeckWalk.obj
+ 0001:0000ebf0       ?GetMaxOutPts_S@CDrCurve@@QAEHXZ 1000fbf0 f i DeckWalk.obj
+ 0001:0000ec20       ?SetMaxOutPts_S@CDrCurve@@QAEXH@Z 1000fc20 f i DeckWalk.obj
+ 0001:0000ec50       ?GetLongOutPts@CDrCurve@@QAEJXZ 1000fc50 f i DeckWalk.obj
+ 0001:0000ec80       ?SetLongOutPts@CDrCurve@@QAEXJ@Z 1000fc80 f i DeckWalk.obj
+ 0001:0000ecb0       ?GetCurveType_S@CDrCurve@@QAE?AW4CURVEPROC@@XZ 1000fcb0 f i DeckWalk.obj
+ 0001:0000ece0       ?SetCurveType_S@CDrCurve@@QAEXW4CURVEPROC@@@Z 1000fce0 f i DeckWalk.obj
+ 0001:0000ed10       ?GetOutMethod@CDrCurve@@QAE?AW4CURVEOUTPUT@@XZ 1000fd10 f i DeckWalk.obj
+ 0001:0000ed40       ?GetAlfa@CDrCurve@@QAENXZ  1000fd40 f i DeckWalk.obj
+ 0001:0000ed70       ?GetBias@CDrCurve@@QAENXZ  1000fd70 f i DeckWalk.obj
+ 0001:0000eda0       ?GetTension@CDrCurve@@QAENXZ 1000fda0 f i DeckWalk.obj
+ 0001:0000edd0       ?IsUniform_S@CDrCurve@@QAEHXZ 1000fdd0 f i DeckWalk.obj
+ 0001:0000ee00       ?SetUniform_S@CDrCurve@@QAEXH@Z 1000fe00 f i DeckWalk.obj
+ 0001:0000ee30       ?SetOutMethod_S@CDrCurve@@QAEXW4CURVEOUTPUT@@@Z 1000fe30 f i DeckWalk.obj
+ 0001:0000ee60       ?GetMaxOutSeg_S@CDrCurve@@QAEHXZ 1000fe60 f i DeckWalk.obj
+ 0001:0000ee90       ?SetMaxOutSeg_S@CDrCurve@@QAEXH@Z 1000fe90 f i DeckWalk.obj
+ 0001:0000eec0       ?GetDis_AngPointer_S@CDrCurve@@QAEPANXZ 1000fec0 f i DeckWalk.obj
+ 0001:0000eef0       ?SetDis_AngPointer_S@CDrCurve@@QAEXPAN@Z 1000fef0 f i DeckWalk.obj
+ 0001:0000ef20       ?GetNum_tPointer_S@CDrCurve@@QAEPAHXZ 1000ff20 f i DeckWalk.obj
+ 0001:0000ef50       ?SetNum_tPointer_S@CDrCurve@@QAEXPAH@Z 1000ff50 f i DeckWalk.obj
+ 0001:0000ef80       ?GetDis_tPointer_S@CDrCurve@@QAEPANXZ 1000ff80 f i DeckWalk.obj
+ 0001:0000efb0       ?SetDis_tPointer_S@CDrCurve@@QAEXPAN@Z 1000ffb0 f i DeckWalk.obj
+ 0001:0000efe0       ?GetNum_tPointer_Ex_S@CDrCurve@@QAEPAHXZ 1000ffe0 f i DeckWalk.obj
+ 0001:0000f010       ?SetNum_tPointer_Ex_S@CDrCurve@@QAEXPAH@Z 10010010 f i DeckWalk.obj
+ 0001:0000f040       ?GetnBSeg_Ex_S@CDrCurve@@QAEHXZ 10010040 f i DeckWalk.obj
+ 0001:0000f070       ?SetnBSeg_Ex_S@CDrCurve@@QAEXH@Z 10010070 f i DeckWalk.obj
+ 0001:0000f0a0       ?GetBSegPointer_Ex_S@CDrCurve@@QAEPAHXZ 100100a0 f i DeckWalk.obj
+ 0001:0000f0d0       ?SetBSegPointer_Ex_S@CDrCurve@@QAEXPAH@Z 100100d0 f i DeckWalk.obj
+ 0001:0000f100       ?SetAlfa@CDrCurve@@QAEXN@Z 10010100 f i DeckWalk.obj
+ 0001:0000f140       ?SetBias@CDrCurve@@QAEXN@Z 10010140 f i DeckWalk.obj
+ 0001:0000f180       ?SetTension@CDrCurve@@QAEXN@Z 10010180 f i DeckWalk.obj
+ 0001:0000f1c0       ?GetMemIn@CDrCurve@@QAEPAUWORLD@@XZ 100101c0 f i DeckWalk.obj
+ 0001:0000f1f0       ?GetMemInWts@CDrCurve@@QAEPANXZ 100101f0 f i DeckWalk.obj
+ 0001:0000f220       ?GetMemInDP@CDrCurve@@QAEPAUtagPOINT@@XZ 10010220 f i DeckWalk.obj
+ 0001:0000f250       ?GetMemOut@CDrCurve@@QAEPAUWORLD@@XZ 10010250 f i DeckWalk.obj
+ 0001:0000f280       ?GetMemOutWts@CDrCurve@@QAEPANXZ 10010280 f i DeckWalk.obj
+ 0001:0000f2b0       ?GetMemOutDP@CDrCurve@@QAEPAUtagPOINT@@XZ 100102b0 f i DeckWalk.obj
+ 0001:0000f2e0       ?SetMemIn@CDrCurve@@QAEXPAUWORLD@@@Z 100102e0 f i DeckWalk.obj
+ 0001:0000f310       ?SetMemInWts@CDrCurve@@QAEXPAN@Z 10010310 f i DeckWalk.obj
+ 0001:0000f340       ?SetMemInDP@CDrCurve@@QAEXPAUtagPOINT@@@Z 10010340 f i DeckWalk.obj
+ 0001:0000f370       ?SetMemOut@CDrCurve@@QAEXPAUWORLD@@@Z 10010370 f i DeckWalk.obj
+ 0001:0000f3a0       ?SetMemOutWts@CDrCurve@@QAEXPAN@Z 100103a0 f i DeckWalk.obj
+ 0001:0000f3d0       ?SetMemOutDP@CDrCurve@@QAEXPAUtagPOINT@@@Z 100103d0 f i DeckWalk.obj
+ 0001:0000f400       ?FixMemD@CDrCurve@@QAEPANJ@Z 10010400 f i DeckWalk.obj
+ 0001:0000f450       ?FreeMemD@CDrCurve@@QAEXPAN@Z 10010450 f i DeckWalk.obj
+ 0001:0000f480       ?FixMem@CDrCurve@@QAEPAUWORLD@@J@Z 10010480 f i DeckWalk.obj
+ 0001:0000f4d0       ?FreeMem@CDrCurve@@QAEXPAUWORLD@@@Z 100104d0 f i DeckWalk.obj
+ 0001:0000f500       ?FixMemDP@CDrCurve@@QAEPAUtagPOINT@@J@Z 10010500 f i DeckWalk.obj
+ 0001:0000f550       ?FreeMemDP@CDrCurve@@QAEXPAUtagPOINT@@@Z 10010550 f i DeckWalk.obj
+ 0001:0000f580       ?GetData_S@CDrCurve@@QAEHXZ 10010580 f i DeckWalk.obj
+ 0001:0000f5b0       ?SetData_S@CDrCurve@@QAEXH@Z 100105b0 f i DeckWalk.obj
+ 0001:0000f5e0       ?GetOrder_S@CDrCurve@@QAEHXZ 100105e0 f i DeckWalk.obj
+ 0001:0000f610       ?SetOrder_S@CDrCurve@@QAEXH@Z 10010610 f i DeckWalk.obj
+ 0001:0000f640       ?GetKnotType_S@CDrCurve@@QAE?AW4KNOT@@XZ 10010640 f i DeckWalk.obj
+ 0001:0000f670       ?SetKnotType_S@CDrCurve@@QAEXW4KNOT@@@Z 10010670 f i DeckWalk.obj
+ 0001:0000f6a0       ?GetWtType_S@CDrCurve@@QAE?AW4WEIGHT@@XZ 100106a0 f i DeckWalk.obj
+ 0001:0000f6d0       ?SetWtType_S@CDrCurve@@QAEXW4WEIGHT@@@Z 100106d0 f i DeckWalk.obj
+ 0001:0000f700       ?GetBCL_S@CDrCurve@@QAE?AW4BOUNDARY@@XZ 10010700 f i DeckWalk.obj
+ 0001:0000f730       ?SetBCL_S@CDrCurve@@QAEXW4BOUNDARY@@@Z 10010730 f i DeckWalk.obj
+ 0001:0000f760       ?GetBCR_S@CDrCurve@@QAE?AW4BOUNDARY@@XZ 10010760 f i DeckWalk.obj
+ 0001:0000f790       ?SetBCR_S@CDrCurve@@QAEXW4BOUNDARY@@@Z 10010790 f i DeckWalk.obj
+ 0001:0000f7c0       ?GetTanL_S@CDrCurve@@QAE?AUVECTOR@@XZ 100107c0 f i DeckWalk.obj
+ 0001:0000f800       ?SetTanL_S@CDrCurve@@QAEXUVECTOR@@@Z 10010800 f i DeckWalk.obj
+ 0001:0000f840       ?GetTanR_S@CDrCurve@@QAE?AUVECTOR@@XZ 10010840 f i DeckWalk.obj
+ 0001:0000f880       ?SetTanR_S@CDrCurve@@QAEXUVECTOR@@@Z 10010880 f i DeckWalk.obj
+ 0001:0000f8c0       ?GetnCon_BS_S@CDrCurve@@QAEHXZ 100108c0 f i DeckWalk.obj
+ 0001:0000f8f0       ?SetnCon_BS_S@CDrCurve@@QAEXH@Z 100108f0 f i DeckWalk.obj
+ 0001:0000f920       ?GetnCon_BZ_S@CDrCurve@@QAEHXZ 10010920 f i DeckWalk.obj
+ 0001:0000f950       ?SetnCon_BZ_S@CDrCurve@@QAEXH@Z 10010950 f i DeckWalk.obj
+ 0001:0000f980       ?GetnMKnots_S@CDrCurve@@QAEHXZ 10010980 f i DeckWalk.obj
+ 0001:0000f9b0       ?SetnMKnots_S@CDrCurve@@QAEXH@Z 100109b0 f i DeckWalk.obj
+ 0001:0000f9e0       ?GetnKnots_S@CDrCurve@@QAEHXZ 100109e0 f i DeckWalk.obj
+ 0001:0000fa10       ?SetnKnots_S@CDrCurve@@QAEXH@Z 10010a10 f i DeckWalk.obj
+ 0001:0000fa40       ?GetnDim_S@CDrCurve@@QAEHXZ 10010a40 f i DeckWalk.obj
+ 0001:0000fa70       ?SetnDim_S@CDrCurve@@QAEXH@Z 10010a70 f i DeckWalk.obj
+ 0001:0000faa0       ?GetpMKnots_S@CDrCurve@@QAEPANXZ 10010aa0 f i DeckWalk.obj
+ 0001:0000fad0       ?SetpMKnots_S@CDrCurve@@QAEXPAN@Z 10010ad0 f i DeckWalk.obj
+ 0001:0000fb00       ?GetpWts_BS_S@CDrCurve@@QAEPANXZ 10010b00 f i DeckWalk.obj
+ 0001:0000fb30       ?SetpWts_BS_S@CDrCurve@@QAEXPAN@Z 10010b30 f i DeckWalk.obj
+ 0001:0000fb60       ?GetpKnots_S@CDrCurve@@QAEPANXZ 10010b60 f i DeckWalk.obj
+ 0001:0000fb90       ?SetpKnots_S@CDrCurve@@QAEXPAN@Z 10010b90 f i DeckWalk.obj
+ 0001:0000fbc0       ?GetpWts_DT_S@CDrCurve@@QAEPANXZ 10010bc0 f i DeckWalk.obj
+ 0001:0000fbf0       ?SetpWts_DT_S@CDrCurve@@QAEXPAN@Z 10010bf0 f i DeckWalk.obj
+ 0001:0000fc20       ?GetpWts_BZ_S@CDrCurve@@QAEPANXZ 10010c20 f i DeckWalk.obj
+ 0001:0000fc50       ?SetpWts_BZ_S@CDrCurve@@QAEXPAN@Z 10010c50 f i DeckWalk.obj
+ 0001:0000fc80       ?GetFromIDNode_S@CDrCurve@@QAEPAVCDrNode@@XZ 10010c80 f i DeckWalk.obj
+ 0001:0000fcb0       ?SetFromIDNode_S@CDrCurve@@QAEXPAVCDrNode@@@Z 10010cb0 f i DeckWalk.obj
+ 0001:0000fce0       ?GetToIDNode_S@CDrCurve@@QAEPAVCDrNode@@XZ 10010ce0 f i DeckWalk.obj
+ 0001:0000fd10       ?SetToIDNode_S@CDrCurve@@QAEXPAVCDrNode@@@Z 10010d10 f i DeckWalk.obj
+ 0001:0000fd40       ?GetData_Ex_S@CDrCurve@@QAEHXZ 10010d40 f i DeckWalk.obj
+ 0001:0000fd70       ?SetData_Ex_S@CDrCurve@@QAEXH@Z 10010d70 f i DeckWalk.obj
+ 0001:0000fda0       ?IsExpanded_S@CDrCurve@@QAEHXZ 10010da0 f i DeckWalk.obj
+ 0001:0000fdd0       ?SetExpanded_S@CDrCurve@@QAEXH@Z 10010dd0 f i DeckWalk.obj
+ 0001:0000fe00       ?GetMaxENodes_S@CDrCurve@@QAEHXZ 10010e00 f i DeckWalk.obj
+ 0001:0000fe30       ?SetMaxENodes_S@CDrCurve@@QAEXH@Z 10010e30 f i DeckWalk.obj
+ 0001:0000fe60       ?GetRadius_S@CDrCurve@@QAENXZ 10010e60 f i DeckWalk.obj
+ 0001:0000fe90       ?SetRadius_S@CDrCurve@@QAEXN@Z 10010e90 f i DeckWalk.obj
+ 0001:0000fed0       ?GetTheta_S@CDrCurve@@QAENXZ 10010ed0 f i DeckWalk.obj
+ 0001:0000ff00       ?SetTheta_S@CDrCurve@@QAEXN@Z 10010f00 f i DeckWalk.obj
+ 0001:0000ff40       ?GetCenter_S@CDrCurve@@QAE?AUWORLD@@XZ 10010f40 f i DeckWalk.obj
+ 0001:0000ff80       ?SetCenter_S@CDrCurve@@QAEXUWORLD@@@Z 10010f80 f i DeckWalk.obj
+ 0001:0000fff0       ?GetNormal_S@CDrCurve@@QAE?AUWORLD@@XZ 10010ff0 f i DeckWalk.obj
+ 0001:00010030       ?SetNormal_S@CDrCurve@@QAEXUWORLD@@@Z 10011030 f i DeckWalk.obj
+ 0001:000100a0       ?GetSegAngle_S@CDrCurve@@QAENXZ 100110a0 f i DeckWalk.obj
+ 0001:000100d0       ?SetSegAngle_S@CDrCurve@@QAEXN@Z 100110d0 f i DeckWalk.obj
+ 0001:00010110       ?GetCNode_CC@CDrCurve@@QAEPAVCDrNode@@XZ 10011110 f i DeckWalk.obj
+ 0001:00010140       ?SetCNode_CC@CDrCurve@@QAEXPAVCDrNode@@@Z 10011140 f i DeckWalk.obj
+ 0001:00010170       ?GetCNode_TI@CDrCurve@@QAEPAVCDrNode@@XZ 10011170 f i DeckWalk.obj
+ 0001:000101a0       ?SetCNode_TI@CDrCurve@@QAEXPAVCDrNode@@@Z 100111a0 f i DeckWalk.obj
+ 0001:000101d0       ?GetCNode_CA@CDrCurve@@QAEPAVCDrNode@@XZ 100111d0 f i DeckWalk.obj
+ 0001:00010200       ?SetCNode_CA@CDrCurve@@QAEXPAVCDrNode@@@Z 10011200 f i DeckWalk.obj
+ 0001:00010230       ?GetCNode_CB@CDrCurve@@QAEPAVCDrNode@@XZ 10011230 f i DeckWalk.obj
+ 0001:00010260       ?SetCNode_CB@CDrCurve@@QAEXPAVCDrNode@@@Z 10011260 f i DeckWalk.obj
+ 0001:00010290       ?IsHole_S@CDrCurve@@QAEHXZ 10011290 f i DeckWalk.obj
+ 0001:000102c0       ?SetHole_S@CDrCurve@@QAEXH@Z 100112c0 f i DeckWalk.obj
+ 0001:000102f0       ?GetpTangents_S@CDrCurve@@QAEPAUWORLD@@XZ 100112f0 f i DeckWalk.obj
+ 0001:00010320       ?SetpTangents_S@CDrCurve@@QAEXPAUWORLD@@@Z 10011320 f i DeckWalk.obj
+ 0001:00010350       ?GetpCurvatures_S@CDrCurve@@QAEPANXZ 10011350 f i DeckWalk.obj
+ 0001:00010380       ?SetpCurvatures_S@CDrCurve@@QAEXPAN@Z 10011380 f i DeckWalk.obj
+ 0001:000103b0       ?GetRatio_S@CDrCurve@@QAENXZ 100113b0 f i DeckWalk.obj
+ 0001:000103e0       ?SetRatio_S@CDrCurve@@QAEXN@Z 100113e0 f i DeckWalk.obj
+ 0001:00010420       ?IsAxisInput@CDrCurve@@QAEHXZ 10011420 f i DeckWalk.obj
+ 0001:00010450       ?SetAxisInput@CDrCurve@@QAEXH@Z 10011450 f i DeckWalk.obj
+ 0001:00010480       ?GetAxis@CDrCurve@@QAEHXZ  10011480 f i DeckWalk.obj
+ 0001:000104b0       ?SetAxis@CDrCurve@@QAEXH@Z 100114b0 f i DeckWalk.obj
+ 0001:000104e0       ?IsNegative@CDrCurve@@QAEHXZ 100114e0 f i DeckWalk.obj
+ 0001:00010510       ?SetNegative@CDrCurve@@QAEXH@Z 10011510 f i DeckWalk.obj
+ 0001:00010540       ?GetCircleType@CDrCurve@@QAE?AW4CIRCLETYPE@@XZ 10011540 f i DeckWalk.obj
+ 0001:00010570       ?SetCircleType@CDrCurve@@QAEXW4CIRCLETYPE@@@Z 10011570 f i DeckWalk.obj
+ 0001:000105a0       ?GetInputType@CDrCurve@@QAEHXZ 100115a0 f i DeckWalk.obj
+ 0001:000105d0       ?SetInputType@CDrCurve@@QAEXH@Z 100115d0 f i DeckWalk.obj
+ 0001:00010600       ?IsArcType@CDrCurve@@QAEHXZ 10011600 f i DeckWalk.obj
+ 0001:00010630       ?SetArcType@CDrCurve@@QAEXH@Z 10011630 f i DeckWalk.obj
+ 0001:00010660       ?GetElperSegList_S@CDrCurve@@QAEPAV?$CList@HH@@XZ 10011660 f i DeckWalk.obj
+ 0001:00010690       ?IsSkewed@CDrCurve@@UAEHXZ 10011690 f i DeckWalk.obj
+ 0001:000106c0       ?SetSkewed@CDrCurve@@UAEXH@Z 100116c0 f i DeckWalk.obj
+ 0001:000106f0       ?IsLinSpr@CDrCurve@@UAEHXZ 100116f0 f i DeckWalk.obj
+ 0001:00010720       ?SetLinSpr@CDrCurve@@UAEXH@Z 10011720 f i DeckWalk.obj
+ 0001:00010750       ?IsLinSnu@CDrCurve@@UAEHXZ 10011750 f i DeckWalk.obj
+ 0001:00010780       ?SetLinSnu@CDrCurve@@UAEXH@Z 10011780 f i DeckWalk.obj
+ 0001:000107b0       ?CullWorld@CDrCurve@@UAEHUWORLD@@@Z 100117b0 f i DeckWalk.obj
+ 0001:000107d0       ?CullScreen@CDrCurve@@UAEHPAUMATRIX@@@Z 100117d0 f i DeckWalk.obj
+ 0001:000107f0       ?Calc_CentroidWorld@CDrCurve@@UAEXXZ 100117f0 f i DeckWalk.obj
+ 0001:00010810       ?Calc_CentroidEye@CDrCurve@@UAEXXZ 10011810 f i DeckWalk.obj
+ 0001:00010830       ?Calc_CentroidScreen3D@CDrCurve@@UAEXNN@Z 10011830 f i DeckWalk.obj
+ 0001:00010850       ?Calc_NormalWorld@CDrCurve@@UAEXXZ 10011850 f i DeckWalk.obj
+ 0001:00010870       ?TransformNormalToEye@CDrCurve@@UAEXPAUMATRIX@@@Z 10011870 f i DeckWalk.obj
+ 0001:00010890       ?ProjectNormalToScreen3D@CDrCurve@@UAEXPAUMATRIX@@NN@Z 10011890 f i DeckWalk.obj
+ 0001:000108b0       ?GetNormalWorld@CDrCurve@@UAEPAUWORLD@@XZ 100118b0 f i DeckWalk.obj
+ 0001:000108d0       ?SetNormalWorld@CDrCurve@@UAEXUWORLD@@@Z 100118d0 f i DeckWalk.obj
+ 0001:000108f0       ?GetNormalEye@CDrCurve@@UAEPAUWORLD@@XZ 100118f0 f i DeckWalk.obj
+ 0001:00010910       ?SetNormalEye@CDrCurve@@UAEXUWORLD@@@Z 10011910 f i DeckWalk.obj
+ 0001:00010930       ?GetNormalScreen3D@CDrCurve@@UAEPAUWORLD@@XZ 10011930 f i DeckWalk.obj
+ 0001:00010950       ?SetNormalScreen3D@CDrCurve@@UAEXUWORLD@@@Z 10011950 f i DeckWalk.obj
+ 0001:00010970       ?GetNormalScreen2D@CDrCurve@@UAEPAUtagPOINT@@XZ 10011970 f i DeckWalk.obj
+ 0001:00010990       ?SetNormalScreen2D@CDrCurve@@UAEXUtagPOINT@@@Z 10011990 f i DeckWalk.obj
+ 0001:000109b0       ?GetNodTopoList@CDrCurve@@QAEPAVCDListMgr@@XZ 100119b0 f i DeckWalk.obj
+ 0001:000109e0       ?GetSuppCardList@CDrCurve@@QAEPAV?$CList@Usupportcard@@U1@@@XZ 100119e0 f i DeckWalk.obj
+ 0001:00010a10       ?GetStaLCardList@CDrCurve@@QAEPAV?$CList@UstaLcard@@U1@@@XZ 10011a10 f i DeckWalk.obj
+ 0001:00010a40       ?GetBndryPtList@CDrCurve@@QAEPAV?$CList@UWORLD@@U1@@@XZ 10011a40 f i DeckWalk.obj
+ 0001:00010a70       ?GetBezierType@CDrCurve@@QAE?AW4BEZIERTYPE@@XZ 10011a70 f i DeckWalk.obj
+ 0001:00010aa0       ?SetBezierType@CDrCurve@@QAEXW4BEZIERTYPE@@@Z 10011aa0 f i DeckWalk.obj
+ 0001:00010ad0       ?GetCategory@CDrPatch@@UAE?AW4CATEGORY@@XZ 10011ad0 f i DeckWalk.obj
+ 0001:00010af0       ?SetCategory@CDrPatch@@UAEXW4CATEGORY@@@Z 10011af0 f i DeckWalk.obj
+ 0001:00010b20       ?IsNormalNeeded@CDrPatch@@UAEHXZ 10011b20 f i DeckWalk.obj
+ 0001:00010b50       ?SetNormalNeed@CDrPatch@@UAEXH@Z 10011b50 f i DeckWalk.obj
+ 0001:00010b80       ?GetCurveType_T@CDrPatch@@QAE?AW4CURVEPROC@@XZ 10011b80 f i DeckWalk.obj
+ 0001:00010bb0       ?SetCurveType_T@CDrPatch@@QAEXW4CURVEPROC@@@Z 10011bb0 f i DeckWalk.obj
+ 0001:00010be0       ?GetOutSegUnif_T@CDrPatch@@QAEHXZ 10011be0 f i DeckWalk.obj
+ 0001:00010c10       ?SetOutSegUnif_T@CDrPatch@@QAEXH@Z 10011c10 f i DeckWalk.obj
+ 0001:00010c40       ?IsClosed_T@CDrPatch@@QAEHXZ 10011c40 f i DeckWalk.obj
+ 0001:00010c70       ?SetClosed_T@CDrPatch@@QAEXH@Z 10011c70 f i DeckWalk.obj
+ 0001:00010ca0       ?GetMaxBezSegments_T@CDrPatch@@QAEHXZ 10011ca0 f i DeckWalk.obj
+ 0001:00010cd0       ?SetMaxBezSegments_T@CDrPatch@@QAEXH@Z 10011cd0 f i DeckWalk.obj
+ 0001:00010d00       ?GetMaxCNodes_T@CDrPatch@@QAEHXZ 10011d00 f i DeckWalk.obj
+ 0001:00010d30       ?SetMaxCNodes_T@CDrPatch@@QAEXH@Z 10011d30 f i DeckWalk.obj
+ 0001:00010d60       ?GetMaxOutPts_T@CDrPatch@@QAEHXZ 10011d60 f i DeckWalk.obj
+ 0001:00010d90       ?SetMaxOutPts_T@CDrPatch@@QAEXH@Z 10011d90 f i DeckWalk.obj
+ 0001:00010dc0       ?GetNodes_S@CDrPatch@@QAEHXZ 10011dc0 f i DeckWalk.obj
+ 0001:00010df0       ?SetNodes_S@CDrPatch@@QAEXH@Z 10011df0 f i DeckWalk.obj
+ 0001:00010e20       ?GetNodes_T@CDrPatch@@QAEHXZ 10011e20 f i DeckWalk.obj
+ 0001:00010e50       ?SetNodes_T@CDrPatch@@QAEXH@Z 10011e50 f i DeckWalk.obj
+ 0001:00010e80       ?GetPrimaryDir@CDrPatch@@QAEHXZ 10011e80 f i DeckWalk.obj
+ 0001:00010eb0       ?SetPrimaryDir@CDrPatch@@QAEXH@Z 10011eb0 f i DeckWalk.obj
+ 0001:00010ee0       ?GetBlendCurve@CDrPatch@@QAEPAVCDrCurve@@XZ 10011ee0 f i DeckWalk.obj
+ 0001:00010f10       ?SetBlendCurve@CDrPatch@@QAEXPAVCDrCurve@@@Z 10011f10 f i DeckWalk.obj
+ 0001:00010f40       ?GetBlendCurve_U@CDrPatch@@QAEPAVCDrCurve@@XZ 10011f40 f i DeckWalk.obj
+ 0001:00010f70       ?SetBlendCurve_U@CDrPatch@@QAEXPAVCDrCurve@@@Z 10011f70 f i DeckWalk.obj
+ 0001:00010fa0       ?GetBlendCurve_V@CDrPatch@@QAEPAVCDrCurve@@XZ 10011fa0 f i DeckWalk.obj
+ 0001:00010fd0       ?SetBlendCurve_V@CDrPatch@@QAEXPAVCDrCurve@@@Z 10011fd0 f i DeckWalk.obj
+ 0001:00011000       ?GetBlendCurve_W@CDrPatch@@QAEPAVCDrCurve@@XZ 10012000 f i DeckWalk.obj
+ 0001:00011030       ?SetBlendCurve_W@CDrPatch@@QAEXPAVCDrCurve@@@Z 10012030 f i DeckWalk.obj
+ 0001:00011060       ?GetVCurveList@CDrPatch@@QAEPAVCDListMgr@@XZ 10012060 f i DeckWalk.obj
+ 0001:00011090       ?GetCurveList_U@CDrPatch@@QAEPAVCDListMgr@@XZ 10012090 f i DeckWalk.obj
+ 0001:000110c0       ?GetCurveList_V@CDrPatch@@QAEPAVCDListMgr@@XZ 100120c0 f i DeckWalk.obj
+ 0001:000110f0       ?GetCurveList_W@CDrPatch@@QAEPAVCDListMgr@@XZ 100120f0 f i DeckWalk.obj
+ 0001:00011120       ?GetCurveLatchList_U@CDrPatch@@QAEPAV?$CList@W4CURVELATCH@@W41@@@XZ 10012120 f i DeckWalk.obj
+ 0001:00011150       ?GetCurveLatchList_V@CDrPatch@@QAEPAV?$CList@W4CURVELATCH@@W41@@@XZ 10012150 f i DeckWalk.obj
+ 0001:00011180       ?GetCurveLatchList_W@CDrPatch@@QAEPAV?$CList@W4CURVELATCH@@W41@@@XZ 10012180 f i DeckWalk.obj
+ 0001:000111b0       ?IsAdvancedEnd_U@CDrPatch@@QAEHXZ 100121b0 f i DeckWalk.obj
+ 0001:000111e0       ?SetAdvancedEnd_U@CDrPatch@@QAEXH@Z 100121e0 f i DeckWalk.obj
+ 0001:00011210       ?GetCornerTwist_U@CDrPatch@@QAEPAY01UWORLD@@XZ 10012210 f i DeckWalk.obj
+ 0001:00011240       ?SetCornerTwist_U@CDrPatch@@QAEXPAY01UWORLD@@@Z 10012240 f i DeckWalk.obj
+ 0001:00011270       ?GetTwistMethod_U@CDrPatch@@QAE?AW4TWIST@@XZ 10012270 f i DeckWalk.obj
+ 0001:000112a0       ?SetTwistMethod_U@CDrPatch@@QAEXW4TWIST@@@Z 100122a0 f i DeckWalk.obj
+ 0001:000112d0       ?IsAdvancedEnd_V@CDrPatch@@QAEHXZ 100122d0 f i DeckWalk.obj
+ 0001:00011300       ?SetAdvancedEnd_V@CDrPatch@@QAEXH@Z 10012300 f i DeckWalk.obj
+ 0001:00011330       ?GetCornerTwist_V@CDrPatch@@QAEPAY01UWORLD@@XZ 10012330 f i DeckWalk.obj
+ 0001:00011360       ?SetCornerTwist_V@CDrPatch@@QAEXPAY01UWORLD@@@Z 10012360 f i DeckWalk.obj
+ 0001:00011390       ?GetTwistMethod_V@CDrPatch@@QAE?AW4TWIST@@XZ 10012390 f i DeckWalk.obj
+ 0001:000113c0       ?SetTwistMethod_V@CDrPatch@@QAEXW4TWIST@@@Z 100123c0 f i DeckWalk.obj
+ 0001:000113f0       ?GetEndList_U@CDrPatch@@QAEPAV?$CList@Ublendend@@U1@@@XZ 100123f0 f i DeckWalk.obj
+ 0001:00011420       ?GetEndList_V@CDrPatch@@QAEPAV?$CList@Ublendend@@U1@@@XZ 10012420 f i DeckWalk.obj
+ 0001:00011450       ?GetElperSegList_T@CDrPatch@@QAEPAV?$CList@HH@@XZ 10012450 f i DeckWalk.obj
+ 0001:00011480       ?GetCurveID@CDrPatch@@QAE?AVCString@@H@Z 10012480 f i DeckWalk.obj
+ 0001:000114d0       ?SetCurveID@CDrPatch@@QAEXVCString@@H@Z 100124d0 f i DeckWalk.obj
+ 0001:00011550       ?GetBndryCurve@CDrPatch@@QAEPAVCDrCurve@@H@Z 10012550 f i DeckWalk.obj
+ 0001:00011580       ?SetCurve@CDrPatch@@QAEXPAVCDrCurve@@H@Z 10012580 f i DeckWalk.obj
+ 0001:000115b0       ?GetCurveLatch@CDrPatch@@QAE?AW4CURVELATCH@@H@Z 100125b0 f i DeckWalk.obj
+ 0001:000115e0       ?SetCurveLatch@CDrPatch@@QAEXW4CURVELATCH@@H@Z 100125e0 f i DeckWalk.obj
+ 0001:00011610       ?GetFromIDNode_T@CDrPatch@@QAEPAVCDrNode@@XZ 10012610 f i DeckWalk.obj
+ 0001:00011640       ?SetFromIDNode_T@CDrPatch@@QAEXPAVCDrNode@@@Z 10012640 f i DeckWalk.obj
+ 0001:00011670       ?GetToIDNode_T@CDrPatch@@QAEPAVCDrNode@@XZ 10012670 f i DeckWalk.obj
+ 0001:000116a0       ?SetToIDNode_T@CDrPatch@@QAEXPAVCDrNode@@@Z 100126a0 f i DeckWalk.obj
+ 0001:000116d0       ?GetFromPtLocal_T@CDrPatch@@QAEPAUWORLD@@XZ 100126d0 f i DeckWalk.obj
+ 0001:00011700       ?SetFromPtLocal_T@CDrPatch@@QAEXUWORLD@@@Z 10012700 f i DeckWalk.obj
+ 0001:00011740       ?GetToPtLocal_T@CDrPatch@@QAEPAUWORLD@@XZ 10012740 f i DeckWalk.obj
+ 0001:00011770       ?SetToPtLocal_T@CDrPatch@@QAEXUWORLD@@@Z 10012770 f i DeckWalk.obj
+ 0001:000117b0       ?GetFromPtWorld_T@CDrPatch@@QAEPAUWORLD@@XZ 100127b0 f i DeckWalk.obj
+ 0001:000117e0       ?SetFromPtWorld_T@CDrPatch@@QAEXUWORLD@@@Z 100127e0 f i DeckWalk.obj
+ 0001:00011820       ?GetToPtWorld_T@CDrPatch@@QAEPAUWORLD@@XZ 10012820 f i DeckWalk.obj
+ 0001:00011850       ?SetToPtWorld_T@CDrPatch@@QAEXUWORLD@@@Z 10012850 f i DeckWalk.obj
+ 0001:00011890       ?GetFromPtEye_T@CDrPatch@@QAEPAUWORLD@@XZ 10012890 f i DeckWalk.obj
+ 0001:000118c0       ?SetFromPtEye_T@CDrPatch@@QAEXUWORLD@@@Z 100128c0 f i DeckWalk.obj
+ 0001:00011900       ?GetToPtEye_T@CDrPatch@@QAEPAUWORLD@@XZ 10012900 f i DeckWalk.obj
+ 0001:00011930       ?SetToPtEye_T@CDrPatch@@QAEXUWORLD@@@Z 10012930 f i DeckWalk.obj
+ 0001:00011970       ?GetAxis_T@CDrPatch@@QAEPAUWORLD@@XZ 10012970 f i DeckWalk.obj
+ 0001:000119a0       ?SetAxis_T@CDrPatch@@QAEXUWORLD@@@Z 100129a0 f i DeckWalk.obj
+ 0001:000119e0       ?GetExtruType_T@CDrPatch@@QAEHXZ 100129e0 f i DeckWalk.obj
+ 0001:00011a10       ?SetExtruType_T@CDrPatch@@QAEXH@Z 10012a10 f i DeckWalk.obj
+ 0001:00011a40       ?GetLength_T@CDrPatch@@QAENXZ 10012a40 f i DeckWalk.obj
+ 0001:00011a70       ?SetLength_T@CDrPatch@@QAEXN@Z 10012a70 f i DeckWalk.obj
+ 0001:00011ab0       ?GetWorldLength_T@CDrPatch@@QAE?AUWORLD@@XZ 10012ab0 f i DeckWalk.obj
+ 0001:00011af0       ?SetWorldLength_T@CDrPatch@@QAEXUWORLD@@@Z 10012af0 f i DeckWalk.obj
+ 0001:00011b30       ?GetSegs_T@CDrPatch@@QAEHXZ 10012b30 f i DeckWalk.obj
+ 0001:00011b60       ?SetSegs_T@CDrPatch@@QAEXH@Z 10012b60 f i DeckWalk.obj
+ 0001:00011b90       ?IsAxisInput_T@CDrPatch@@QAEHXZ 10012b90 f i DeckWalk.obj
+ 0001:00011bc0       ?SetAxisInput_T@CDrPatch@@QAEXH@Z 10012bc0 f i DeckWalk.obj
+ 0001:00011bf0       ?GetAxisType_T@CDrPatch@@QAEHXZ 10012bf0 f i DeckWalk.obj
+ 0001:00011c20       ?SetAxisType_T@CDrPatch@@QAEXH@Z 10012c20 f i DeckWalk.obj
+ 0001:00011c50       ?IsNegative_T@CDrPatch@@QAEHXZ 10012c50 f i DeckWalk.obj
+ 0001:00011c80       ?SetNegative_T@CDrPatch@@QAEXH@Z 10012c80 f i DeckWalk.obj
+ 0001:00011cb0       ?GetCircleType_T@CDrPatch@@QAE?AW4CIRCLETYPE@@XZ 10012cb0 f i DeckWalk.obj
+ 0001:00011ce0       ?SetCircleType_T@CDrPatch@@QAEXW4CIRCLETYPE@@@Z 10012ce0 f i DeckWalk.obj
+ 0001:00011d10       ?GetAng_1_T@CDrPatch@@QAENXZ 10012d10 f i DeckWalk.obj
+ 0001:00011d40       ?SetAng_1_T@CDrPatch@@QAEXN@Z 10012d40 f i DeckWalk.obj
+ 0001:00011d80       ?GetAng_2_T@CDrPatch@@QAENXZ 10012d80 f i DeckWalk.obj
+ 0001:00011db0       ?SetAng_2_T@CDrPatch@@QAEXN@Z 10012db0 f i DeckWalk.obj
+ 0001:00011df0       ?GetPatchProc@CDrPatch@@QAE?AW4PATCHPROC@@XZ 10012df0 f i DeckWalk.obj
+ 0001:00011e20       ?SetPatchProc@CDrPatch@@QAEXW4PATCHPROC@@@Z 10012e20 f i DeckWalk.obj
+ 0001:00011e50       ?GetPatchType@CDrPatch@@QAE?AW4PATCHTYPE@@XZ 10012e50 f i DeckWalk.obj
+ 0001:00011e80       ?SetPatchType@CDrPatch@@QAEXW4PATCHTYPE@@@Z 10012e80 f i DeckWalk.obj
+ 0001:00011eb0       ?GetPatSubType@CDrPatch@@QAE?AW4PATSUBTYPE@@XZ 10012eb0 f i DeckWalk.obj
+ 0001:00011ee0       ?SetPatSubType@CDrPatch@@QAEXW4PATSUBTYPE@@@Z 10012ee0 f i DeckWalk.obj
+ 0001:00011f10       ?GetOut_S@CDrPatch@@QAEHXZ 10012f10 f i DeckWalk.obj
+ 0001:00011f40       ?SetOut_S@CDrPatch@@QAEXH@Z 10012f40 f i DeckWalk.obj
+ 0001:00011f70       ?GetOut_T@CDrPatch@@QAEHXZ 10012f70 f i DeckWalk.obj
+ 0001:00011fa0       ?SetOut_T@CDrPatch@@QAEXH@Z 10012fa0 f i DeckWalk.obj
+ 0001:00011fd0       ?GetTotalElems@CDrPatch@@QAEJXZ 10012fd0 f i DeckWalk.obj
+ 0001:00012000       ?SetTotalElems@CDrPatch@@QAEXJ@Z 10013000 f i DeckWalk.obj
+ 0001:00012030       ?GetPtrTangents_S@CDrPatch@@QAEPAUWORLD@@XZ 10013030 f i DeckWalk.obj
+ 0001:00012060       ?GetPtrTangents_T@CDrPatch@@QAEPAUWORLD@@XZ 10013060 f i DeckWalk.obj
+ 0001:00012090       ?GetPtrNormals@CDrPatch@@QAEPAUWORLD@@XZ 10013090 f i DeckWalk.obj
+ 0001:000120c0       ?GetPtrTwists@CDrPatch@@QAEPAUWORLD@@XZ 100130c0 f i DeckWalk.obj
+ 0001:000120f0       ?GetMemIn@CDrPatch@@UAEPAUWORLD@@H@Z 100130f0 f i DeckWalk.obj
+ 0001:00012120       ?SetMemIn@CDrPatch@@UAEXPAUWORLD@@H@Z 10013120 f i DeckWalk.obj
+ 0001:00012150       ?SetMemIn@CDrPatch@@UAEXPAUWORLD@@@Z 10013150 f i DeckWalk.obj
+ 0001:00012180       ?SetMemInDP@CDrPatch@@UAEXPAUtagPOINT@@@Z 10013180 f i DeckWalk.obj
+ 0001:000121b0       ?SetMemOut@CDrPatch@@UAEXPAUWORLD@@@Z 100131b0 f i DeckWalk.obj
+ 0001:000121e0       ?SetMemOutDP@CDrPatch@@UAEXPAUtagPOINT@@@Z 100131e0 f i DeckWalk.obj
+ 0001:00012210       ?IsUniform_T@CDrPatch@@QAEHXZ 10013210 f i DeckWalk.obj
+ 0001:00012240       ?SetUniform_T@CDrPatch@@QAEXH@Z 10013240 f i DeckWalk.obj
+ 0001:00012270       ?GetClass_T@CDrPatch@@QAEHXZ 10013270 f i DeckWalk.obj
+ 0001:000122a0       ?SetClass_T@CDrPatch@@QAEXH@Z 100132a0 f i DeckWalk.obj
+ 0001:000122d0       ?GetOrder_T@CDrPatch@@QAEHXZ 100132d0 f i DeckWalk.obj
+ 0001:00012300       ?SetOrder_T@CDrPatch@@QAEXH@Z 10013300 f i DeckWalk.obj
+ 0001:00012330       ?GetnDim_T@CDrPatch@@QAEHXZ 10013330 f i DeckWalk.obj
+ 0001:00012360       ?SetnDim_T@CDrPatch@@QAEXH@Z 10013360 f i DeckWalk.obj
+ 0001:00012390       ?GetOutMethod_T@CDrPatch@@QAE?AW4PATCHOUTPUT@@XZ 10013390 f i DeckWalk.obj
+ 0001:000123c0       ?SetOutMethod_T@CDrPatch@@QAEXW4PATCHOUTPUT@@@Z 100133c0 f i DeckWalk.obj
+ 0001:000123f0       ?GetMaxOutSeg_T@CDrPatch@@QAEHXZ 100133f0 f i DeckWalk.obj
+ 0001:00012420       ?SetMaxOutSeg_T@CDrPatch@@QAEXH@Z 10013420 f i DeckWalk.obj
+ 0001:00012450       ?GetNum_tPointer_T@CDrPatch@@QAEPAHXZ 10013450 f i DeckWalk.obj
+ 0001:00012480       ?SetNum_tPointer_T@CDrPatch@@QAEXPAH@Z 10013480 f i DeckWalk.obj
+ 0001:000124b0       ?GetDis_tPointer_T@CDrPatch@@QAEPANXZ 100134b0 f i DeckWalk.obj
+ 0001:000124e0       ?SetDis_tPointer_T@CDrPatch@@QAEXPAN@Z 100134e0 f i DeckWalk.obj
+ 0001:00012510       ?GetNum_tPointer_Ex_T@CDrPatch@@QAEPAHXZ 10013510 f i DeckWalk.obj
+ 0001:00012540       ?SetNum_tPointer_Ex_T@CDrPatch@@QAEXPAH@Z 10013540 f i DeckWalk.obj
+ 0001:00012570       ?GetDis_AngPointer_T@CDrPatch@@QAEPANXZ 10013570 f i DeckWalk.obj
+ 0001:000125a0       ?SetDis_AngPointer_T@CDrPatch@@QAEXPAN@Z 100135a0 f i DeckWalk.obj
+ 0001:000125d0       ?GetData_Ex_T@CDrPatch@@QAEHXZ 100135d0 f i DeckWalk.obj
+ 0001:00012600       ?SetData_Ex_T@CDrPatch@@QAEXH@Z 10013600 f i DeckWalk.obj
+ 0001:00012630       ?IsExpanded_T@CDrPatch@@QAEHXZ 10013630 f i DeckWalk.obj
+ 0001:00012660       ?SetExpanded_T@CDrPatch@@QAEXH@Z 10013660 f i DeckWalk.obj
+ 0001:00012690       ?GetMaxENodes_T@CDrPatch@@QAEHXZ 10013690 f i DeckWalk.obj
+ 0001:000126c0       ?SetMaxENodes_T@CDrPatch@@QAEXH@Z 100136c0 f i DeckWalk.obj
+ 0001:000126f0       ?GetRadius_T@CDrPatch@@QAENXZ 100136f0 f i DeckWalk.obj
+ 0001:00012720       ?SetRadius_T@CDrPatch@@QAEXN@Z 10013720 f i DeckWalk.obj
+ 0001:00012760       ?GetTheta_T@CDrPatch@@QAENXZ 10013760 f i DeckWalk.obj
+ 0001:00012790       ?SetTheta_T@CDrPatch@@QAEXN@Z 10013790 f i DeckWalk.obj
+ 0001:000127d0       ?GetCenter_T@CDrPatch@@QAE?AUWORLD@@XZ 100137d0 f i DeckWalk.obj
+ 0001:00012810       ?SetCenter_T@CDrPatch@@QAEXUWORLD@@@Z 10013810 f i DeckWalk.obj
+ 0001:00012880       ?GetNormal_T@CDrPatch@@QAE?AUWORLD@@XZ 10013880 f i DeckWalk.obj
+ 0001:000128c0       ?SetNormal_T@CDrPatch@@QAEXUWORLD@@@Z 100138c0 f i DeckWalk.obj
+ 0001:00012930       ?GetSegAngle_T@CDrPatch@@QAENXZ 10013930 f i DeckWalk.obj
+ 0001:00012960       ?SetSegAngle_T@CDrPatch@@QAEXN@Z 10013960 f i DeckWalk.obj
+ 0001:000129a0       ?IsHole_T@CDrPatch@@QAEHXZ 100139a0 f i DeckWalk.obj
+ 0001:000129d0       ?SetHole_T@CDrPatch@@QAEXH@Z 100139d0 f i DeckWalk.obj
+ 0001:00012a00       ?GetpTangents_T@CDrPatch@@QAEPAUWORLD@@XZ 10013a00 f i DeckWalk.obj
+ 0001:00012a30       ?SetpTangents_T@CDrPatch@@QAEXPAUWORLD@@@Z 10013a30 f i DeckWalk.obj
+ 0001:00012a60       ?GetpCurvatures_T@CDrPatch@@QAEPANXZ 10013a60 f i DeckWalk.obj
+ 0001:00012a90       ?SetpCurvatures_T@CDrPatch@@QAEXPAN@Z 10013a90 f i DeckWalk.obj
+ 0001:00012ac0       ?GetRatio_T@CDrPatch@@QAENXZ 10013ac0 f i DeckWalk.obj
+ 0001:00012af0       ?SetRatio_T@CDrPatch@@QAEXN@Z 10013af0 f i DeckWalk.obj
+ 0001:00012b30       ?GetTwistType_T@CDrPatch@@QAEHXZ 10013b30 f i DeckWalk.obj
+ 0001:00012b60       ?SetTwistType_T@CDrPatch@@QAEXH@Z 10013b60 f i DeckWalk.obj
+ 0001:00012b90       ?GetTwistList_T@CDrPatch@@QAEPAV?$CList@NN@@XZ 10013b90 f i DeckWalk.obj
+ 0001:00012bc0       ?GetScaleType_T@CDrPatch@@QAEHXZ 10013bc0 f i DeckWalk.obj
+ 0001:00012bf0       ?SetScaleType_T@CDrPatch@@QAEXH@Z 10013bf0 f i DeckWalk.obj
+ 0001:00012c20       ?GetScaleList_T@CDrPatch@@QAEPAV?$CList@NN@@XZ 10013c20 f i DeckWalk.obj
+ 0001:00012c50       ?IsIncTwist_T@CDrPatch@@QAEHXZ 10013c50 f i DeckWalk.obj
+ 0001:00012c80       ?SetIncTwist_T@CDrPatch@@QAEXH@Z 10013c80 f i DeckWalk.obj
+ 0001:00012cb0       ?GetTwistMult_T@CDrPatch@@QAENXZ 10013cb0 f i DeckWalk.obj
+ 0001:00012ce0       ?SetTwistMult_T@CDrPatch@@QAEXN@Z 10013ce0 f i DeckWalk.obj
+ 0001:00012d20       ?GetTwistStart_T@CDrPatch@@QAENXZ 10013d20 f i DeckWalk.obj
+ 0001:00012d50       ?SetTwistStart_T@CDrPatch@@QAEXN@Z 10013d50 f i DeckWalk.obj
+ 0001:00012d90       ?IsIncScale_T@CDrPatch@@QAEHXZ 10013d90 f i DeckWalk.obj
+ 0001:00012dc0       ?SetIncScale_T@CDrPatch@@QAEXH@Z 10013dc0 f i DeckWalk.obj
+ 0001:00012df0       ?GetScaleMult_T@CDrPatch@@QAENXZ 10013df0 f i DeckWalk.obj
+ 0001:00012e20       ?SetScaleMult_T@CDrPatch@@QAEXN@Z 10013e20 f i DeckWalk.obj
+ 0001:00012e60       ?GetScaleStart_T@CDrPatch@@QAENXZ 10013e60 f i DeckWalk.obj
+ 0001:00012e90       ?SetScaleStart_T@CDrPatch@@QAEXN@Z 10013e90 f i DeckWalk.obj
+ 0001:00012ed0       ?GetWorldTwistMult_T@CDrPatch@@QAE?AUWORLD@@XZ 10013ed0 f i DeckWalk.obj
+ 0001:00012f10       ?SetWorldTwistMult_T@CDrPatch@@QAEXUWORLD@@@Z 10013f10 f i DeckWalk.obj
+ 0001:00012f50       ?GetWorldTwistStart_T@CDrPatch@@QAE?AUWORLD@@XZ 10013f50 f i DeckWalk.obj
+ 0001:00012f90       ?SetWorldTwistStart_T@CDrPatch@@QAEXUWORLD@@@Z 10013f90 f i DeckWalk.obj
+ 0001:00012fd0       ?GetWorldScaleMult_T@CDrPatch@@QAE?AUWORLD@@XZ 10013fd0 f i DeckWalk.obj
+ 0001:00013010       ?SetWorldScaleMult_T@CDrPatch@@QAEXUWORLD@@@Z 10014010 f i DeckWalk.obj
+ 0001:00013050       ?GetWorldScaleStart_T@CDrPatch@@QAE?AUWORLD@@XZ 10014050 f i DeckWalk.obj
+ 0001:00013090       ?SetWorldScaleStart_T@CDrPatch@@QAEXUWORLD@@@Z 10014090 f i DeckWalk.obj
+ 0001:000130d0       ?GetTriangleList@CDrPatch@@UAEPAVCDListMgr@@XZ 100140d0 f i DeckWalk.obj
+ 0001:00013100       ?GetnOutGlo_S@CDrPatch@@QAEHXZ 10014100 f i DeckWalk.obj
+ 0001:00013130       ?SetnOutGlo_S@CDrPatch@@QAEXH@Z 10014130 f i DeckWalk.obj
+ 0001:00013160       ?IsGenBCurve@CDrPatch@@QAEHXZ 10014160 f i DeckWalk.obj
+ 0001:00013190       ?SetGenBCurve@CDrPatch@@QAEXH@Z 10014190 f i DeckWalk.obj
+ 0001:000131c0       ?GetRefQuad@CDrMesh2D@@UAE?AW4REF_QUAD@@XZ 100141c0 f i DeckWalk.obj
+ 0001:000131f0       ?SetRefQuad@CDrMesh2D@@UAEXW4REF_QUAD@@@Z 100141f0 f i DeckWalk.obj
+ 0001:00013220       ?GetRefTri@CDrMesh2D@@UAE?AW4REF_TRI@@XZ 10014220 f i DeckWalk.obj
+ 0001:00013250       ?SetRefTri@CDrMesh2D@@UAEXW4REF_TRI@@@Z 10014250 f i DeckWalk.obj
+ 0001:00013280       ?GetOrient@CDrMesh2D@@UAE?AW4ORIENT@@XZ 10014280 f i DeckWalk.obj
+ 0001:000132b0       ?SetOrient@CDrMesh2D@@UAEXW4ORIENT@@@Z 100142b0 f i DeckWalk.obj
+ 0001:000132e0       ?GetGenObj@CDrMesh2D@@QAEPAVCDrPatch@@XZ 100142e0 f i DeckWalk.obj
+ 0001:00013310       ?SetGenObj@CDrMesh2D@@QAEXPAVCDrPatch@@@Z 10014310 f i DeckWalk.obj
+ 0001:00013340       ?IsReversed_ST@CDrMesh2D@@QAEHXZ 10014340 f i DeckWalk.obj
+ 0001:00013370       ?SetReversed_ST@CDrMesh2D@@QAEXH@Z 10014370 f i DeckWalk.obj
+ 0001:000133a0       ?GetEdgeList@CDrMesh2D@@QAEPAVCDListMgr@@XZ 100143a0 f i DeckWalk.obj
+ 0001:000133d0       ?GetElNumID@CDrFE0D@@QAEAAVCString@@XZ 100143d0 f i DeckWalk.obj
+ 0001:00013400       ?SetElNumID@CDrFE0D@@QAEXVCString@@@Z 10014400 f i DeckWalk.obj
+ 0001:00013480       ?GetElTypeID@CDrFE0D@@QAEAAVCString@@XZ 10014480 f i DeckWalk.obj
+ 0001:000134b0       ?SetElTypeID@CDrFE0D@@QAEXVCString@@@Z 100144b0 f i DeckWalk.obj
+ 0001:00013530       ?Getrid@CDrFE0D@@QAEAAVCString@@XZ 10014530 f i DeckWalk.obj
+ 0001:00013560       ?Setrid@CDrFE0D@@QAEXVCString@@@Z 10014560 f i DeckWalk.obj
+ 0001:000135e0       ?Getpid@CDrFE0D@@QAEAAVCString@@XZ 100145e0 f i DeckWalk.obj
+ 0001:00013610       ?Setpid@CDrFE0D@@QAEXVCString@@@Z 10014610 f i DeckWalk.obj
+ 0001:00013690       ?Getmid@CDrFE0D@@QAEAAVCString@@XZ 10014690 f i DeckWalk.obj
+ 0001:000136c0       ?Setmid@CDrFE0D@@QAEXVCString@@@Z 100146c0 f i DeckWalk.obj
+ 0001:00013740       ?GetElNum@CDrFE0D@@QAEIXZ  10014740 f i DeckWalk.obj
+ 0001:00013770       ?SetElNum@CDrFE0D@@QAEXI@Z 10014770 f i DeckWalk.obj
+ 0001:000137a0       ?GetElTypeNum@CDrFE0D@@QAEIXZ 100147a0 f i DeckWalk.obj
+ 0001:000137d0       ?SetElTypeNum@CDrFE0D@@QAEXI@Z 100147d0 f i DeckWalk.obj
+ 0001:00013800       ?Getrel@CDrFE0D@@QAEIXZ    10014800 f i DeckWalk.obj
+ 0001:00013830       ?Setrel@CDrFE0D@@QAEXI@Z   10014830 f i DeckWalk.obj
+ 0001:00013860       ?Getprop@CDrFE0D@@QAEIXZ   10014860 f i DeckWalk.obj
+ 0001:00013890       ?Setprop@CDrFE0D@@QAEXI@Z  10014890 f i DeckWalk.obj
+ 0001:000138c0       ?Getmat@CDrFE0D@@QAEIXZ    100148c0 f i DeckWalk.obj
+ 0001:000138f0       ?Setmat@CDrFE0D@@QAEXI@Z   100148f0 f i DeckWalk.obj
+ 0001:00013920       ?GetRefTemp@CDrFE0D@@QAENXZ 10014920 f i DeckWalk.obj
+ 0001:00013950       ?SetRefTemp@CDrFE0D@@QAEXN@Z 10014950 f i DeckWalk.obj
+ 0001:00013990       ?GetNormalWorld@CDrFE0D@@UAEPAUWORLD@@XZ 10014990 f i DeckWalk.obj
+ 0001:000139c0       ?SetNormalWorld@CDrFE0D@@UAEXUWORLD@@@Z 100149c0 f i DeckWalk.obj
+ 0001:00013a00       ?GetNormalEye@CDrFE0D@@UAEPAUWORLD@@XZ 10014a00 f i DeckWalk.obj
+ 0001:00013a30       ?SetNormalEye@CDrFE0D@@UAEXUWORLD@@@Z 10014a30 f i DeckWalk.obj
+ 0001:00013a70       ?GetNormalScreen3D@CDrFE0D@@UAEPAUWORLD@@XZ 10014a70 f i DeckWalk.obj
+ 0001:00013aa0       ?SetNormalScreen3D@CDrFE0D@@UAEXUWORLD@@@Z 10014aa0 f i DeckWalk.obj
+ 0001:00013ae0       ?GetNormalScreen2D@CDrFE0D@@UAEPAUtagPOINT@@XZ 10014ae0 f i DeckWalk.obj
+ 0001:00013b10       ?SetNormalScreen2D@CDrFE0D@@UAEXUtagPOINT@@@Z 10014b10 f i DeckWalk.obj
+ 0001:00013b50       ?IsMeshNode@CDrFE0D@@UAEHXZ 10014b50 f i DeckWalk.obj
+ 0001:00013b80       ?SetMeshNode@CDrFE0D@@UAEXH@Z 10014b80 f i DeckWalk.obj
+ 0001:00013bb0       ?GetHist_S@CDrFE0D@@QAEHXZ 10014bb0 f i DeckWalk.obj
+ 0001:00013be0       ?SetHist_S@CDrFE0D@@QAEXH@Z 10014be0 f i DeckWalk.obj
+ 0001:00013c10       ?GetHist_T@CDrFE0D@@QAEHXZ 10014c10 f i DeckWalk.obj
+ 0001:00013c40       ?SetHist_T@CDrFE0D@@QAEXH@Z 10014c40 f i DeckWalk.obj
+ 0001:00013c70       ?GetHist_R@CDrFE0D@@QAEHXZ 10014c70 f i DeckWalk.obj
+ 0001:00013ca0       ?SetHist_R@CDrFE0D@@QAEXH@Z 10014ca0 f i DeckWalk.obj
+ 0001:00013cd0       ?Parse_drPipe@CDrFE1D@@UAEXPAVCString@@@Z 10014cd0 f i DeckWalk.obj
+ 0001:00013cf0       ?DoFormattedCardView@CDrFE1D@@UAEXPAVCString@@AAV2@@Z 10014cf0 f i DeckWalk.obj
+ 0001:00013d10       ?DoUnFormattedCardView@CDrFE1D@@UAEXPAVCString@@@Z 10014d10 f i DeckWalk.obj
+ 0001:00013d30       ?GetMaxCorners@CDrFE1D@@UAEHXZ 10014d30 f i DeckWalk.obj
+ 0001:00013d50       ?GetMemIn@CDrFE1D@@UAEPAUWORLD@@XZ 10014d50 f i DeckWalk.obj
+ 0001:00013d80       ?GetMemInWts@CDrFE1D@@UAEPANXZ 10014d80 f i DeckWalk.obj
+ 0001:00013db0       ?GetMemInDP@CDrFE1D@@UAEPAUtagPOINT@@XZ 10014db0 f i DeckWalk.obj
+ 0001:00013de0       ?GetMemOut@CDrFE1D@@UAEPAUWORLD@@XZ 10014de0 f i DeckWalk.obj
+ 0001:00013e10       ?GetMemOutWts@CDrFE1D@@UAEPANXZ 10014e10 f i DeckWalk.obj
+ 0001:00013e40       ?GetMemOutDP@CDrFE1D@@UAEPAUtagPOINT@@XZ 10014e40 f i DeckWalk.obj
+ 0001:00013e70       ?SetMemIn@CDrFE1D@@UAEXPAUWORLD@@@Z 10014e70 f i DeckWalk.obj
+ 0001:00013ea0       ?SetMemInWts@CDrFE1D@@UAEXPAN@Z 10014ea0 f i DeckWalk.obj
+ 0001:00013ed0       ?SetMemInDP@CDrFE1D@@UAEXPAUtagPOINT@@@Z 10014ed0 f i DeckWalk.obj
+ 0001:00013f00       ?SetMemOut@CDrFE1D@@UAEXPAUWORLD@@@Z 10014f00 f i DeckWalk.obj
+ 0001:00013f30       ?SetMemOutWts@CDrFE1D@@UAEXPAN@Z 10014f30 f i DeckWalk.obj
+ 0001:00013f60       ?SetMemOutDP@CDrFE1D@@UAEXPAUtagPOINT@@@Z 10014f60 f i DeckWalk.obj
+ 0001:00013f90       ?FixMemD@CDrFE1D@@UAEPANJ@Z 10014f90 f i DeckWalk.obj
+ 0001:00013fe0       ?FreeMemD@CDrFE1D@@UAEXPAN@Z 10014fe0 f i DeckWalk.obj
+ 0001:00014010       ?FixMem@CDrFE1D@@UAEPAUWORLD@@J@Z 10015010 f i DeckWalk.obj
+ 0001:00014060       ?FreeMem@CDrFE1D@@UAEXPAUWORLD@@@Z 10015060 f i DeckWalk.obj
+ 0001:00014090       ?FixMemDP@CDrFE1D@@UAEPAUtagPOINT@@J@Z 10015090 f i DeckWalk.obj
+ 0001:000140e0       ?FreeMemDP@CDrFE1D@@UAEXPAUtagPOINT@@@Z 100150e0 f i DeckWalk.obj
+ 0001:00014110       ?GetnNodes@CDrFE1D@@QAEFXZ 10015110 f i DeckWalk.obj
+ 0001:00014140       ?SetnNodes@CDrFE1D@@QAEXF@Z 10015140 f i DeckWalk.obj
+ 0001:00014170       ?GetEdgeDegree@CDrFE1D@@QAEFXZ 10015170 f i DeckWalk.obj
+ 0001:000141a0       ?SetEdgeDegree@CDrFE1D@@QAEXF@Z 100151a0 f i DeckWalk.obj
+ 0001:000141d0       ?GetElNumID@CDrFE1D@@QAEAAVCString@@XZ 100151d0 f i DeckWalk.obj
+ 0001:00014200       ?SetElNumID@CDrFE1D@@QAEXVCString@@@Z 10015200 f i DeckWalk.obj
+ 0001:00014280       ?GetElTypeID@CDrFE1D@@QAEAAVCString@@XZ 10015280 f i DeckWalk.obj
+ 0001:000142b0       ?SetElTypeID@CDrFE1D@@QAEXVCString@@@Z 100152b0 f i DeckWalk.obj
+ 0001:00014330       ?Getline_id@CDrFE1D@@QAEAAVCString@@XZ 10015330 f i DeckWalk.obj
+ 0001:00014360       ?Setline_id@CDrFE1D@@QAEXVCString@@@Z 10015360 f i DeckWalk.obj
+ 0001:000143e0       ?Getrid@CDrFE1D@@UAEAAVCString@@H@Z 100153e0 f i DeckWalk.obj
+ 0001:00014410       ?Setrid@CDrFE1D@@UAEXVCString@@H@Z 10015410 f i DeckWalk.obj
+ 0001:00014490       ?Getpid@CDrFE1D@@QAEAAVCString@@XZ 10015490 f i DeckWalk.obj
+ 0001:000144c0       ?Setpid@CDrFE1D@@QAEXVCString@@@Z 100154c0 f i DeckWalk.obj
+ 0001:00014540       ?Getmid@CDrFE1D@@QAEAAVCString@@XZ 10015540 f i DeckWalk.obj
+ 0001:00014570       ?Setmid@CDrFE1D@@QAEXVCString@@@Z 10015570 f i DeckWalk.obj
+ 0001:000145f0       ?GetElNum@CDrFE1D@@QAEIXZ  100155f0 f i DeckWalk.obj
+ 0001:00014620       ?SetElNum@CDrFE1D@@QAEXI@Z 10015620 f i DeckWalk.obj
+ 0001:00014650       ?GetElTypeNum@CDrFE1D@@QAEIXZ 10015650 f i DeckWalk.obj
+ 0001:00014680       ?SetElTypeNum@CDrFE1D@@QAEXI@Z 10015680 f i DeckWalk.obj
+ 0001:000146b0       ?Getline_no@CDrFE1D@@QAEIXZ 100156b0 f i DeckWalk.obj
+ 0001:000146e0       ?Setline_no@CDrFE1D@@QAEXI@Z 100156e0 f i DeckWalk.obj
+ 0001:00014710       ?Getrel@CDrFE1D@@UAEIH@Z   10015710 f i DeckWalk.obj
+ 0001:00014740       ?Setrel@CDrFE1D@@UAEXIH@Z  10015740 f i DeckWalk.obj
+ 0001:00014770       ?Getprop@CDrFE1D@@QAEIXZ   10015770 f i DeckWalk.obj
+ 0001:000147a0       ?Setprop@CDrFE1D@@QAEXI@Z  100157a0 f i DeckWalk.obj
+ 0001:000147d0       ?Getmat@CDrFE1D@@QAEIXZ    100157d0 f i DeckWalk.obj
+ 0001:00014800       ?Setmat@CDrFE1D@@QAEXI@Z   10015800 f i DeckWalk.obj
+ 0001:00014830       ?Getnumseg@CDrFE1D@@QAEIXZ 10015830 f i DeckWalk.obj
+ 0001:00014860       ?Setnumseg@CDrFE1D@@QAEXI@Z 10015860 f i DeckWalk.obj
+ 0001:00014890       ?GetRefTemp@CDrFE1D@@QAENXZ 10015890 f i DeckWalk.obj
+ 0001:000148c0       ?SetRefTemp@CDrFE1D@@QAEXN@Z 100158c0 f i DeckWalk.obj
+ 0001:00014900       ?GetCardNo@CDrFE1D@@QAEIXZ 10015900 f i DeckWalk.obj
+ 0001:00014930       ?SetCardNo@CDrFE1D@@QAEXI@Z 10015930 f i DeckWalk.obj
+ 0001:00014960       ?GetCenter@CDrFE1D@@UAE?AUtagPOINT@@XZ 10015960 f i DeckWalk.obj
+ 0001:000149a0       ?SetCenter@CDrFE1D@@UAEXUtagPOINT@@@Z 100159a0 f i DeckWalk.obj
+ 0001:000149e0       ?Parse_drPipe@CDrFE2D@@UAEXPAVCString@@@Z 100159e0 f i DeckWalk.obj
+ 0001:00014a00       ?DoFormattedCardView@CDrFE2D@@UAEXPAVCString@@AAV2@@Z 10015a00 f i DeckWalk.obj
+ 0001:00014a20       ?DoUnFormattedCardView@CDrFE2D@@UAEXPAVCString@@@Z 10015a20 f i DeckWalk.obj
+ 0001:00014a40       ?GetMaxCorners@CDrFE2D@@UAEHXZ 10015a40 f i DeckWalk.obj
+ 0001:00014a70       ?GetCentroidScreen2D@CDrFE2D@@UAEPAUtagPOINT@@XZ 10015a70 f i DeckWalk.obj
+ 0001:00014aa0       ?SetCentroidScreen2D@CDrFE2D@@UAEXUtagPOINT@@@Z 10015aa0 f i DeckWalk.obj
+ 0001:00014ae0       ?GetCentroidScreen3D@CDrFE2D@@UAEPAUWORLD@@XZ 10015ae0 f i DeckWalk.obj
+ 0001:00014b10       ?SetCentroidScreen3D@CDrFE2D@@UAEXUWORLD@@@Z 10015b10 f i DeckWalk.obj
+ 0001:00014b50       ?GetCentroidEye@CDrFE2D@@UAEPAUWORLD@@XZ 10015b50 f i DeckWalk.obj
+ 0001:00014b80       ?SetCentroidEye@CDrFE2D@@UAEXUWORLD@@@Z 10015b80 f i DeckWalk.obj
+ 0001:00014bc0       ?GetCentroidWorld@CDrFE2D@@UAEPAUWORLD@@XZ 10015bc0 f i DeckWalk.obj
+ 0001:00014bf0       ?SetCentroidWorld@CDrFE2D@@UAEXUWORLD@@@Z 10015bf0 f i DeckWalk.obj
+ 0001:00014c30       ?GetCentroidZdepth@CDrFE2D@@UAENXZ 10015c30 f i DeckWalk.obj
+ 0001:00014c60       ?SetCentroidZdepth@CDrFE2D@@UAEXN@Z 10015c60 f i DeckWalk.obj
+ 0001:00014ca0       ?GetNormalWorld@CDrFE2D@@UAEPAUWORLD@@XZ 10015ca0 f i DeckWalk.obj
+ 0001:00014cd0       ?SetNormalWorld@CDrFE2D@@UAEXUWORLD@@@Z 10015cd0 f i DeckWalk.obj
+ 0001:00014d10       ?GetNormalEye@CDrFE2D@@UAEPAUWORLD@@XZ 10015d10 f i DeckWalk.obj
+ 0001:00014d40       ?SetNormalEye@CDrFE2D@@UAEXUWORLD@@@Z 10015d40 f i DeckWalk.obj
+ 0001:00014d80       ?GetNormalScreen3D@CDrFE2D@@UAEPAUWORLD@@XZ 10015d80 f i DeckWalk.obj
+ 0001:00014db0       ?SetNormalScreen3D@CDrFE2D@@UAEXUWORLD@@@Z 10015db0 f i DeckWalk.obj
+ 0001:00014df0       ?GetNormalScreen2D@CDrFE2D@@UAEPAUtagPOINT@@XZ 10015df0 f i DeckWalk.obj
+ 0001:00014e20       ?SetNormalScreen2D@CDrFE2D@@UAEXUtagPOINT@@@Z 10015e20 f i DeckWalk.obj
+ 0001:00014e60       ?IsCulled@CDrFE2D@@UAEHXZ  10015e60 f i DeckWalk.obj
+ 0001:00014e90       ?SetCulled@CDrFE2D@@UAEXH@Z 10015e90 f i DeckWalk.obj
+ 0001:00014ec0       ?GetnNodes@CDrFE2D@@QAEFXZ 10015ec0 f i DeckWalk.obj
+ 0001:00014ef0       ?SetnNodes@CDrFE2D@@QAEXF@Z 10015ef0 f i DeckWalk.obj
+ 0001:00014f20       ?GetnEdgeNodes@CDrFE2D@@QAEFXZ 10015f20 f i DeckWalk.obj
+ 0001:00014f50       ?SetnEdgeNodes@CDrFE2D@@QAEXF@Z 10015f50 f i DeckWalk.obj
+ 0001:00014f80       ?GetElNumID@CDrFE2D@@QAEAAVCString@@XZ 10015f80 f i DeckWalk.obj
+ 0001:00014fb0       ?SetElNumID@CDrFE2D@@QAEXVCString@@@Z 10015fb0 f i DeckWalk.obj
+ 0001:00015030       ?GetElTypeID@CDrFE2D@@QAEAAVCString@@XZ 10016030 f i DeckWalk.obj
+ 0001:00015060       ?SetElTypeID@CDrFE2D@@QAEXVCString@@@Z 10016060 f i DeckWalk.obj
+ 0001:000150e0       ?Getline_id@CDrFE2D@@QAEAAVCString@@XZ 100160e0 f i DeckWalk.obj
+ 0001:00015110       ?Setline_id@CDrFE2D@@QAEXVCString@@@Z 10016110 f i DeckWalk.obj
+ 0001:00015190       ?Getpid@CDrFE2D@@QAEAAVCString@@XZ 10016190 f i DeckWalk.obj
+ 0001:000151c0       ?Setpid@CDrFE2D@@QAEXVCString@@@Z 100161c0 f i DeckWalk.obj
+ 0001:00015240       ?Getmid@CDrFE2D@@QAEAAVCString@@XZ 10016240 f i DeckWalk.obj
+ 0001:00015270       ?Setmid@CDrFE2D@@QAEXVCString@@@Z 10016270 f i DeckWalk.obj
+ 0001:000152f0       ?GetElNum@CDrFE2D@@QAEIXZ  100162f0 f i DeckWalk.obj
+ 0001:00015320       ?SetElNum@CDrFE2D@@QAEXI@Z 10016320 f i DeckWalk.obj
+ 0001:00015350       ?GetElTypeNum@CDrFE2D@@QAEIXZ 10016350 f i DeckWalk.obj
+ 0001:00015380       ?SetElTypeNum@CDrFE2D@@QAEXI@Z 10016380 f i DeckWalk.obj
+ 0001:000153b0       ?Getline_no@CDrFE2D@@QAEIXZ 100163b0 f i DeckWalk.obj
+ 0001:000153e0       ?Setline_no@CDrFE2D@@QAEXI@Z 100163e0 f i DeckWalk.obj
+ 0001:00015410       ?Getprop@CDrFE2D@@QAEIXZ   10016410 f i DeckWalk.obj
+ 0001:00015440       ?Setprop@CDrFE2D@@QAEXI@Z  10016440 f i DeckWalk.obj
+ 0001:00015470       ?Getmat@CDrFE2D@@QAEIXZ    10016470 f i DeckWalk.obj
+ 0001:000154a0       ?Setmat@CDrFE2D@@QAEXI@Z   100164a0 f i DeckWalk.obj
+ 0001:000154d0       ?Getnumseg@CDrFE2D@@QAEIXZ 100164d0 f i DeckWalk.obj
+ 0001:00015500       ?Setnumseg@CDrFE2D@@QAEXI@Z 10016500 f i DeckWalk.obj
+ 0001:00015530       ?GetRefTemp@CDrFE2D@@QAENXZ 10016530 f i DeckWalk.obj
+ 0001:00015560       ?SetRefTemp@CDrFE2D@@QAEXN@Z 10016560 f i DeckWalk.obj
+ 0001:000155a0       ?GetCardNo@CDrFE2D@@QAEIXZ 100165a0 f i DeckWalk.obj
+ 0001:000155d0       ?SetCardNo@CDrFE2D@@QAEXI@Z 100165d0 f i DeckWalk.obj
+ 0001:00015600       ?GetCenter@CDrFE2D@@UAE?AUtagPOINT@@XZ 10016600 f i DeckWalk.obj
+ 0001:00015640       ?SetCenter@CDrFE2D@@UAEXUtagPOINT@@@Z 10016640 f i DeckWalk.obj
+ 0001:00015680       ?IsPosiEdge@CDrFE2D@@QAEHH@Z 10016680 f i DeckWalk.obj
+ 0001:000156b0       ?SetPosiEdge@CDrFE2D@@QAEXHH@Z 100166b0 f i DeckWalk.obj
+ 0001:000156e0       ?Getrid@CDrFE2D@@UAEAAVCString@@H@Z 100166e0 f i DeckWalk.obj
+ 0001:00015710       ?Setrid@CDrFE2D@@UAEXVCString@@H@Z 10016710 f i DeckWalk.obj
+ 0001:00015790       ?Getrel@CDrFE2D@@UAEIH@Z   10016790 f i DeckWalk.obj
+ 0001:000157c0       ?Setrel@CDrFE2D@@UAEXIH@Z  100167c0 f i DeckWalk.obj
+ 0001:000157f0       ?GetnCorners@CDrFE2D@@UAEFXZ 100167f0 f i DeckWalk.obj
+ 0001:00015820       ?SetnCorners@CDrFE2D@@UAEXF@Z 10016820 f i DeckWalk.obj
+ 0001:00015850       ?GetnEdges@CDrFE2D@@UAEFXZ 10016850 f i DeckWalk.obj
+ 0001:00015880       ?SetnEdges@CDrFE2D@@UAEXF@Z 10016880 f i DeckWalk.obj
+ 0001:000158b0       ?GetElDegree@CDrFE2D@@UAE?AW4ELEM_DEGREE@@XZ 100168b0 f i DeckWalk.obj
+ 0001:000158e0       ?SetElDegree@CDrFE2D@@UAEXW4ELEM_DEGREE@@@Z 100168e0 f i DeckWalk.obj
+ 0001:00015910       ?GetEdgeDegrees@CDrFE2D@@UAEFH@Z 10016910 f i DeckWalk.obj
+ 0001:00015940       ?SetEdgeDegrees@CDrFE2D@@UAEXFH@Z 10016940 f i DeckWalk.obj
+ 0001:00015970       ?GetThkness@CDrFE2D@@UAENXZ 10016970 f i DeckWalk.obj
+ 0001:000159a0       ?SetThkness@CDrFE2D@@UAEXN@Z 100169a0 f i DeckWalk.obj
+ 0001:000159e0       ?GetDrFace@CFaceInfo@@QAEPAVCObject@@XZ 100169e0 f i DeckWalk.obj
+ 0001:00015a00       ?SetDrFace@CFaceInfo@@QAEXPAVCObject@@@Z 10016a00 f i DeckWalk.obj
+ 0001:00015a30       ?GetFaceType@CFaceInfo@@QAEIXZ 10016a30 f i DeckWalk.obj
+ 0001:00015a50       ?SetFaceType@CFaceInfo@@QAEXI@Z 10016a50 f i DeckWalk.obj
+ 0001:00015a80       ?GetGenObj@CFaceInfo@@QAEPAVCObject@@XZ 10016a80 f i DeckWalk.obj
+ 0001:00015aa0       ?SetGenObj@CFaceInfo@@QAEXPAVCObject@@@Z 10016aa0 f i DeckWalk.obj
+ 0001:00015ad0       ?GetGenType@CFaceInfo@@QAEIXZ 10016ad0 f i DeckWalk.obj
+ 0001:00015af0       ?SetGenType@CFaceInfo@@QAEXI@Z 10016af0 f i DeckWalk.obj
+ 0001:00015b20       ?GetFaceDim@CFaceInfo@@QAEIXZ 10016b20 f i DeckWalk.obj
+ 0001:00015b40       ?SetFaceDim@CFaceInfo@@QAEXI@Z 10016b40 f i DeckWalk.obj
+ 0001:00015b70       ?GetObjectID@CDrEdge@@QAEAAVCString@@XZ 10016b70 f i DeckWalk.obj
+ 0001:00015b90       ?SetObjectID@CDrEdge@@QAEXAAVCString@@@Z 10016b90 f i DeckWalk.obj
+ 0001:00015bc0       ?GetVrtxIndex@CDrEdge@@QAEHH@Z 10016bc0 f i DeckWalk.obj
+ 0001:00015bf0       ?SetVrtxIndex@CDrEdge@@QAEXHH@Z 10016bf0 f i DeckWalk.obj
+ 0001:00015c20       ?GetFaceInfoList@CDrEdge@@QAEPAVCDListMgr@@XZ 10016c20 f i DeckWalk.obj
+ 0001:00015c40       ?GetHist_RCH@CDrEdge@@QAEHXZ 10016c40 f i DeckWalk.obj
+ 0001:00015c60       ?SetHist_RCH@CDrEdge@@QAEXH@Z 10016c60 f i DeckWalk.obj
+ 0001:00015c90       ?GetHistType@CDrEdge@@QAEHXZ 10016c90 f i DeckWalk.obj
+ 0001:00015cb0       ?SetHistType@CDrEdge@@QAEXH@Z 10016cb0 f i DeckWalk.obj
+ 0001:00015ce0       ?GetMesh@CDrEdge@@QAEPAVCDrObject@@XZ 10016ce0 f i DeckWalk.obj
+ 0001:00015d00       ?SetMesh@CDrEdge@@QAEXPAVCDrObject@@@Z 10016d00 f i DeckWalk.obj
+ 0001:00015d30       ?GetMeshType@CDrEdge@@QAEIXZ 10016d30 f i DeckWalk.obj
+ 0001:00015d50       ?SetMeshType@CDrEdge@@QAEXI@Z 10016d50 f i DeckWalk.obj
+ 0001:00015d80       ?IsOnBndry@CDrEdge@@QAEHXZ 10016d80 f i DeckWalk.obj
+ 0001:00015da0       ?SetOnBndry@CDrEdge@@QAEXH@Z 10016da0 f i DeckWalk.obj
+ 0001:00015dd0       ?_GetBaseClass@CDeckWalk@@KGPAUCRuntimeClass@@XZ 10016dd0 f   DeckWalk.obj
+ 0001:00015df0       ?GetRuntimeClass@CDeckWalk@@UBEPAUCRuntimeClass@@XZ 10016df0 f   DeckWalk.obj
+ 0001:00015e10       ??0CDeckWalk@@QAE@PAV?$CList@VCString@@V1@@@H@Z 10016e10 f   DeckWalk.obj
+ 0001:00015f30       ?Init@CDeckWalk@@UAEHQAH@Z 10016f30 f   DeckWalk.obj
+ 0001:00016060       ?DW_MESH@CDeckWalk@@UAEHXZ 10017060 f   DeckWalk.obj
+ 0001:00016230       ?GetDocument@CDrGrafApp@@QAEPAVCDrGrafDoc@@XZ 10017230 f i DeckWalk.obj
+ 0001:00016260       ?GetObjectMgr@CDrGrafDoc@@QAEPAVCObjectMgr@@XZ 10017260 f i DeckWalk.obj
+ 0001:00016290       ?DW_Mesh3D@CDeckWalk@@IAEHPAVCDrObject@@@Z 10017290 f   DeckWalk.obj
+ 0001:00016360       ?DW_Mesh3DObjects@CDeckWalk@@IAEHPAVCDListMgr@@PAVCDrObject@@@Z 10017360 f   DeckWalk.obj
+ 0001:000163a0       ?DW_Mesh2D@CDeckWalk@@IAEHPAVCDrObject@@@Z 100173a0 f   DeckWalk.obj
+ 0001:000166f0       ?DW_Mesh2DObjects@CDeckWalk@@IAEHPAVCDListMgr@@PAVCDrObject@@@Z 100176f0 f   DeckWalk.obj
+ 0001:00016870       ?DW_Mesh1D@CDeckWalk@@IAEHPAVCDrObject@@@Z 10017870 f   DeckWalk.obj
+ 0001:000168f0       ?DW_Mesh1DObjects@CDeckWalk@@IAEHPAVCDListMgr@@PAVCDrObject@@@Z 100178f0 f   DeckWalk.obj
+ 0001:000169b0       ?DW_Mesh0D@CDeckWalk@@IAEHPAVCDrObject@@@Z 100179b0 f   DeckWalk.obj
+ 0001:00016a00       ?DW_Mesh0DObjects@CDeckWalk@@IAEHPAVCDListMgr@@PAVCDrObject@@@Z 10017a00 f   DeckWalk.obj
+ 0001:00016a50       ?DW_ObjectType@CDeckWalk@@IAEHPAVCDListMgr@@II@Z 10017a50 f   DeckWalk.obj
+ 0001:00016d60       ?DW_MeshVrtxToVrtx@CDeckWalk@@IAEHPAVCDListMgr@@0@Z 10017d60 f   DeckWalk.obj
+ 0001:000171b0       ?DW_MeshNodeToElement@CDeckWalk@@IAEHPAVCDListMgr@@@Z 100181b0 f   DeckWalk.obj
+ 0001:00017550       ?DW_MeshNodeToElementID@CDeckWalk@@IAEHPAVCDListMgr@@0AAVCString@@H@Z 10018550 f   DeckWalk.obj
+ 0001:00017640       ?GetCount@?$CList@JJ@@QBEHXZ 10018640 f i DeckWalk.obj
+ 0001:00017660       ??1?$CList@HH@@UAE@XZ      10018660 f i DeckWalk.obj
+ 0001:00017700       ?Serialize@?$CList@HH@@UAEXAAVCArchive@@@Z 10018700 f i DeckWalk.obj
+ 0001:00017820       ?Dump@?$CList@HH@@UBEXAAVCDumpContext@@@Z 10018820 f i DeckWalk.obj
+ 0001:000178e0       ?AssertValid@?$CList@HH@@UBEXXZ 100188e0 f i DeckWalk.obj
+ 0001:000179e0       ??_G?$CList@HH@@UAEPAXI@Z  100189e0 f i DeckWalk.obj
+ 0001:000179e0       ??_E?$CList@HH@@UAEPAXI@Z  100189e0 f i DeckWalk.obj
+ 0001:00017a20       ?AddTail@?$CList@HH@@QAEPAU__POSITION@@H@Z 10018a20 f i DeckWalk.obj
+ 0001:00017ab0       ?RemoveAll@?$CList@HH@@QAEXXZ 10018ab0 f i DeckWalk.obj
+ 0001:00017b60       ?GetHeadPosition@?$CList@HH@@QBEPAU__POSITION@@XZ 10018b60 f i DeckWalk.obj
+ 0001:00017b80       ?GetNext@?$CList@HH@@QAEAAHAAPAU__POSITION@@@Z 10018b80 f i DeckWalk.obj
+ 0001:00017bf0       ?SerializeElements@@YGXAAVCArchive@@PAHH@Z 10018bf0 f i DeckWalk.obj
+ 0001:00017c90       ?DumpElements@@YGXAAVCDumpContext@@PBHH@Z 10018c90 f i DeckWalk.obj
+ 0001:00017cf0       ?NewNode@?$CList@HH@@IAEPAUCNode@1@PAU21@0@Z 10018cf0 f i DeckWalk.obj
+ 0001:00017e60       ?DestructElements@@YGXPAHH@Z 10018e60 f i DeckWalk.obj
+ 0001:00017ee0       ?ConstructElements@@YGXPAHH@Z 10018ee0 f i DeckWalk.obj
+ 0001:00017f90       ??2@YAPAXIPAX@Z            10018f90 f i DeckWalk.obj
+ 0001:00017fa8       ?GetRuntimeClass@CMatObj@@UBEPAUCRuntimeClass@@XZ 10018fa8 f   Spec_D32:Spec_D32.dll
+ 0001:00017fae       ?InitBooleans@CBooleans@@UAEXXZ 10018fae f   Spec_D32:Spec_D32.dll
+ 0001:00017fb4       ?ReadDefaultBooleans@CBooleans@@UAEXXZ 10018fb4 f   Spec_D32:Spec_D32.dll
+ 0001:00017fba       ?ToggleZoom@CBooleans@@UAEHHH@Z 10018fba f   Spec_D32:Spec_D32.dll
+ 0001:00017fc0       ?IsZoomOn@CBooleans@@UAEHHH@Z 10018fc0 f   Spec_D32:Spec_D32.dll
+ 0001:00017fc6       ?SetZoomEnabled@CBooleans@@UAEXHH@Z 10018fc6 f   Spec_D32:Spec_D32.dll
+ 0001:00017fcc       ?IsZoomEnabled@CBooleans@@UAEHH@Z 10018fcc f   Spec_D32:Spec_D32.dll
+ 0001:00017fd2       ?SetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z 10018fd2 f   Spec_D32:Spec_D32.dll
+ 0001:00017fd8       ?GetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z 10018fd8 f   Spec_D32:Spec_D32.dll
+ 0001:00017fde       ?Pack_drPipe@CBooleans@@UAEXPAVCString@@@Z 10018fde f   Spec_D32:Spec_D32.dll
+ 0001:00017fe4       ?SetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10018fe4 f   Spec_D32:Spec_D32.dll
+ 0001:00017fea       ?GetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10018fea f   Spec_D32:Spec_D32.dll
+ 0001:00017ff0       ?SetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10018ff0 f   Spec_D32:Spec_D32.dll
+ 0001:00017ff6       ?GetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10018ff6 f   Spec_D32:Spec_D32.dll
+ 0001:00017ffc       ?SetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10018ffc f   Spec_D32:Spec_D32.dll
+ 0001:00018002       ?GetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10019002 f   Spec_D32:Spec_D32.dll
+ 0001:00018008       ?SetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10019008 f   Spec_D32:Spec_D32.dll
+ 0001:0001800e       ?GetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 1001900e f   Spec_D32:Spec_D32.dll
+ 0001:00018014       ?DoDataView@CBooleans@@UAEXPAVCDC@@H@Z 10019014 f   Spec_D32:Spec_D32.dll
+ 0001:0001801a       ?Serialize@CBooleans@@UAEXAAVCArchive@@@Z 1001901a f   Spec_D32:Spec_D32.dll
+ 0001:00018020       ?GetRuntimeClass@CBooleans@@UBEPAUCRuntimeClass@@XZ 10019020 f   Spec_D32:Spec_D32.dll
+ 0001:00018026       ??1CDrObject@@UAE@XZ       10019026 f   Spec_D32:Spec_D32.dll
+ 0001:0001802c       ?InitDataWindow@CDataWindow@@UAEXXZ 1001902c f   Spec_D32:Spec_D32.dll
+ 0001:00018032       ?ReadDefaultDataWindow@CDataWindow@@UAEXXZ 10019032 f   Spec_D32:Spec_D32.dll
+ 0001:00018038       ?SetWinExtWIC@CDataWindow@@UAEXXZ 10019038 f   Spec_D32:Spec_D32.dll
+ 0001:0001803e       ?SetWinMinMaxWIC@CDataWindow@@UAEXULPOINT3@@@Z 1001903e f   Spec_D32:Spec_D32.dll
+ 0001:00018044       ?SetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z 10019044 f   Spec_D32:Spec_D32.dll
+ 0001:0001804a       ?GetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z 1001904a f   Spec_D32:Spec_D32.dll
+ 0001:00018050       ?Pack_drPipe@CDataWindow@@UAEXPAVCString@@@Z 10019050 f   Spec_D32:Spec_D32.dll
+ 0001:00018056       ?DoDataView@CDataWindow@@UAEXPAVCDC@@H@Z 10019056 f   Spec_D32:Spec_D32.dll
+ 0001:0001805c       ?Serialize@CDataWindow@@UAEXAAVCArchive@@@Z 1001905c f   Spec_D32:Spec_D32.dll
+ 0001:00018062       ?GetRuntimeClass@CDataWindow@@UBEPAUCRuntimeClass@@XZ 10019062 f   Spec_D32:Spec_D32.dll
+ 0001:00018068       ?InitDrFont@CDrFont@@UAEXXZ 10019068 f   Spec_D32:Spec_D32.dll
+ 0001:0001806e       ?ReadDefaultDrFont@CDrFont@@UAEXXZ 1001906e f   Spec_D32:Spec_D32.dll
+ 0001:00018074       ?DoTextFont@CDrFont@@UAEXXZ 10019074 f   Spec_D32:Spec_D32.dll
+ 0001:0001807a       ?SetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z 1001907a f   Spec_D32:Spec_D32.dll
+ 0001:00018080       ?GetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z 10019080 f   Spec_D32:Spec_D32.dll
+ 0001:00018086       ?Pack_drPipe@CDrFont@@UAEXPAVCString@@@Z 10019086 f   Spec_D32:Spec_D32.dll
+ 0001:0001808c       ?DoDataView@CDrFont@@UAEXPAVCDC@@H@Z 1001908c f   Spec_D32:Spec_D32.dll
+ 0001:00018092       ?Serialize@CDrFont@@UAEXAAVCArchive@@@Z 10019092 f   Spec_D32:Spec_D32.dll
+ 0001:00018098       ?GetRuntimeClass@CDrFont@@UBEPAUCRuntimeClass@@XZ 10019098 f   Spec_D32:Spec_D32.dll
+ 0001:0001809e       ?InitDrPen@CDrPen@@UAEXXZ  1001909e f   Spec_D32:Spec_D32.dll
+ 0001:000180a4       ?ReadDefaultDrPen@CDrPen@@UAEXXZ 100190a4 f   Spec_D32:Spec_D32.dll
+ 0001:000180aa       ?ReplacePen@CDrPen@@UAEXXZ 100190aa f   Spec_D32:Spec_D32.dll
+ 0001:000180b0       ?SetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z 100190b0 f   Spec_D32:Spec_D32.dll
+ 0001:000180b6       ?GetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z 100190b6 f   Spec_D32:Spec_D32.dll
+ 0001:000180bc       ?Pack_drPipe@CDrPen@@UAEXPAVCString@@@Z 100190bc f   Spec_D32:Spec_D32.dll
+ 0001:000180c2       ?DoDataView@CDrPen@@UAEXPAVCDC@@H@Z 100190c2 f   Spec_D32:Spec_D32.dll
+ 0001:000180c8       ?Serialize@CDrPen@@UAEXAAVCArchive@@@Z 100190c8 f   Spec_D32:Spec_D32.dll
+ 0001:000180ce       ?GetRuntimeClass@CDrPen@@UBEPAUCRuntimeClass@@XZ 100190ce f   Spec_D32:Spec_D32.dll
+ 0001:000180d4       ?SetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z 100190d4 f   Spec_D32:Spec_D32.dll
+ 0001:000180da       ?GetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z 100190da f   Spec_D32:Spec_D32.dll
+ 0001:000180e0       ?Pack_drPipe@CHitNet@@UAEXPAVCString@@@Z 100190e0 f   Spec_D32:Spec_D32.dll
+ 0001:000180e6       ?DoDataView@CHitNet@@UAEXPAVCDC@@H@Z 100190e6 f   Spec_D32:Spec_D32.dll
+ 0001:000180ec       ?Serialize@CHitNet@@UAEXAAVCArchive@@@Z 100190ec f   Spec_D32:Spec_D32.dll
+ 0001:000180f2       ?GetRuntimeClass@CHitNet@@UBEPAUCRuntimeClass@@XZ 100190f2 f   Spec_D32:Spec_D32.dll
+ 0001:000180f8       ?InitLayer@CLayer@@UAEXXZ  100190f8 f   Spec_D32:Spec_D32.dll
+ 0001:000180fe       ?ReadDefaultLayer@CLayer@@UAEXXZ 100190fe f   Spec_D32:Spec_D32.dll
+ 0001:00018104       ?SetLayerDefaultArray@CLayer@@UAEXQAY01I@Z 10019104 f   Spec_D32:Spec_D32.dll
+ 0001:0001810a       ?GetLayerDefaultArray@CLayer@@UAEXQAY01I@Z 1001910a f   Spec_D32:Spec_D32.dll
+ 0001:00018110       ?SetLayerOldArray@CLayer@@UAEXQAY01I@Z 10019110 f   Spec_D32:Spec_D32.dll
+ 0001:00018116       ?GetLayerOldArray@CLayer@@UAEXQAY01I@Z 10019116 f   Spec_D32:Spec_D32.dll
+ 0001:0001811c       ?SetLayerArray@CLayer@@UAEXQAY01I@Z 1001911c f   Spec_D32:Spec_D32.dll
+ 0001:00018122       ?GetLayerArray@CLayer@@UAEXQAY01I@Z 10019122 f   Spec_D32:Spec_D32.dll
+ 0001:00018128       ?SetLayerInfo@CLayer@@UAEXII@Z 10019128 f   Spec_D32:Spec_D32.dll
+ 0001:0001812e       ?GetLayerInfo@CLayer@@UAE?AVCString@@I@Z 1001912e f   Spec_D32:Spec_D32.dll
+ 0001:00018134       ?SetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z 10019134 f   Spec_D32:Spec_D32.dll
+ 0001:0001813a       ?GetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z 1001913a f   Spec_D32:Spec_D32.dll
+ 0001:00018140       ?Pack_drPipe@CLayer@@UAEXPAVCString@@@Z 10019140 f   Spec_D32:Spec_D32.dll
+ 0001:00018146       ?DoDataView@CLayer@@UAEXPAVCDC@@H@Z 10019146 f   Spec_D32:Spec_D32.dll
+ 0001:0001814c       ?Serialize@CLayer@@UAEXAAVCArchive@@@Z 1001914c f   Spec_D32:Spec_D32.dll
+ 0001:00018152       ?GetRuntimeClass@CLayer@@UBEPAUCRuntimeClass@@XZ 10019152 f   Spec_D32:Spec_D32.dll
+ 0001:00018158       ?InitPatchMnu@CPatchMnu@@UAEXXZ 10019158 f   Spec_D32:Spec_D32.dll
+ 0001:0001815e       ?ReadDefaultPatchMnu@CPatchMnu@@UAEXXZ 1001915e f   Spec_D32:Spec_D32.dll
+ 0001:00018164       ?SetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z 10019164 f   Spec_D32:Spec_D32.dll
+ 0001:0001816a       ?GetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z 1001916a f   Spec_D32:Spec_D32.dll
+ 0001:00018170       ?SetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z 10019170 f   Spec_D32:Spec_D32.dll
+ 0001:00018176       ?GetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z 10019176 f   Spec_D32:Spec_D32.dll
+ 0001:0001817c       ?SetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z 1001917c f   Spec_D32:Spec_D32.dll
+ 0001:00018182       ?GetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z 10019182 f   Spec_D32:Spec_D32.dll
+ 0001:00018188       ?SetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z 10019188 f   Spec_D32:Spec_D32.dll
+ 0001:0001818e       ?GetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z 1001918e f   Spec_D32:Spec_D32.dll
+ 0001:00018194       ?SetPatchMnuInfo@CPatchMnu@@UAEXII@Z 10019194 f   Spec_D32:Spec_D32.dll
+ 0001:0001819a       ?GetPatchMnuInfo@CPatchMnu@@UAE?AVCString@@I@Z 1001919a f   Spec_D32:Spec_D32.dll
+ 0001:000181a0       ?SetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z 100191a0 f   Spec_D32:Spec_D32.dll
+ 0001:000181a6       ?GetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z 100191a6 f   Spec_D32:Spec_D32.dll
+ 0001:000181ac       ?Pack_drPipe@CPatchMnu@@UAEXPAVCString@@@Z 100191ac f   Spec_D32:Spec_D32.dll
+ 0001:000181b2       ?DoDataView@CPatchMnu@@UAEXPAVCDC@@H@Z 100191b2 f   Spec_D32:Spec_D32.dll
+ 0001:000181b8       ?Serialize@CPatchMnu@@UAEXAAVCArchive@@@Z 100191b8 f   Spec_D32:Spec_D32.dll
+ 0001:000181be       ?GetRuntimeClass@CPatchMnu@@UBEPAUCRuntimeClass@@XZ 100191be f   Spec_D32:Spec_D32.dll
+ 0001:000181c4       ?InitObj3DMnu@CObj3DMnu@@UAEXXZ 100191c4 f   Spec_D32:Spec_D32.dll
+ 0001:000181ca       ?ReadDefaultObj3DMnu@CObj3DMnu@@UAEXXZ 100191ca f   Spec_D32:Spec_D32.dll
+ 0001:000181d0       ?SetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z 100191d0 f   Spec_D32:Spec_D32.dll
+ 0001:000181d6       ?GetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z 100191d6 f   Spec_D32:Spec_D32.dll
+ 0001:000181dc       ?SetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z 100191dc f   Spec_D32:Spec_D32.dll
+ 0001:000181e2       ?GetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z 100191e2 f   Spec_D32:Spec_D32.dll
+ 0001:000181e8       ?SetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z 100191e8 f   Spec_D32:Spec_D32.dll
+ 0001:000181ee       ?GetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z 100191ee f   Spec_D32:Spec_D32.dll
+ 0001:000181f4       ?SetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z 100191f4 f   Spec_D32:Spec_D32.dll
+ 0001:000181fa       ?GetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z 100191fa f   Spec_D32:Spec_D32.dll
+ 0001:00018200       ?SetObj3DMnuInfo@CObj3DMnu@@UAEXII@Z 10019200 f   Spec_D32:Spec_D32.dll
+ 0001:00018206       ?GetObj3DMnuInfo@CObj3DMnu@@UAE?AVCString@@I@Z 10019206 f   Spec_D32:Spec_D32.dll
+ 0001:0001820c       ?SetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z 1001920c f   Spec_D32:Spec_D32.dll
+ 0001:00018212       ?GetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z 10019212 f   Spec_D32:Spec_D32.dll
+ 0001:00018218       ?Pack_drPipe@CObj3DMnu@@UAEXPAVCString@@@Z 10019218 f   Spec_D32:Spec_D32.dll
+ 0001:0001821e       ?DoDataView@CObj3DMnu@@UAEXPAVCDC@@H@Z 1001921e f   Spec_D32:Spec_D32.dll
+ 0001:00018224       ?Serialize@CObj3DMnu@@UAEXAAVCArchive@@@Z 10019224 f   Spec_D32:Spec_D32.dll
+ 0001:0001822a       ?GetRuntimeClass@CObj3DMnu@@UBEPAUCRuntimeClass@@XZ 1001922a f   Spec_D32:Spec_D32.dll
+ 0001:00018230       ?InitMapFactor@CMapFactor@@UAEXXZ 10019230 f   Spec_D32:Spec_D32.dll
+ 0001:00018236       ?ReadDefaultMapFactor@CMapFactor@@UAEXXZ 10019236 f   Spec_D32:Spec_D32.dll
+ 0001:0001823c       ?SetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z 1001923c f   Spec_D32:Spec_D32.dll
+ 0001:00018242       ?GetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z 10019242 f   Spec_D32:Spec_D32.dll
+ 0001:00018248       ?Pack_drPipe@CMapFactor@@UAEXPAVCString@@@Z 10019248 f   Spec_D32:Spec_D32.dll
+ 0001:0001824e       ?DoDataView@CMapFactor@@UAEXPAVCDC@@H@Z 1001924e f   Spec_D32:Spec_D32.dll
+ 0001:00018254       ?Serialize@CMapFactor@@UAEXAAVCArchive@@@Z 10019254 f   Spec_D32:Spec_D32.dll
+ 0001:0001825a       ?GetRuntimeClass@CMapFactor@@UBEPAUCRuntimeClass@@XZ 1001925a f   Spec_D32:Spec_D32.dll
+ 0001:00018260       ?InitPrecision@CPrecision@@UAEXXZ 10019260 f   Spec_D32:Spec_D32.dll
+ 0001:00018266       ?ReadDefaultPrecision@CPrecision@@UAEXXZ 10019266 f   Spec_D32:Spec_D32.dll
+ 0001:0001826c       ?SetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z 1001926c f   Spec_D32:Spec_D32.dll
+ 0001:00018272       ?GetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z 10019272 f   Spec_D32:Spec_D32.dll
+ 0001:00018278       ?Pack_drPipe@CPrecision@@UAEXPAVCString@@@Z 10019278 f   Spec_D32:Spec_D32.dll
+ 0001:0001827e       ?DoDataView@CPrecision@@UAEXPAVCDC@@H@Z 1001927e f   Spec_D32:Spec_D32.dll
+ 0001:00018284       ?Serialize@CPrecision@@UAEXAAVCArchive@@@Z 10019284 f   Spec_D32:Spec_D32.dll
+ 0001:0001828a       ?GetRuntimeClass@CPrecision@@UBEPAUCRuntimeClass@@XZ 1001928a f   Spec_D32:Spec_D32.dll
+ 0001:00018290       ?InitScaleFactor@CScaleFactor@@UAEXXZ 10019290 f   Spec_D32:Spec_D32.dll
+ 0001:00018296       ?ReadDefaultScaleFactor@CScaleFactor@@UAEXXZ 10019296 f   Spec_D32:Spec_D32.dll
+ 0001:0001829c       ?SetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z 1001929c f   Spec_D32:Spec_D32.dll
+ 0001:000182a2       ?GetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z 100192a2 f   Spec_D32:Spec_D32.dll
+ 0001:000182a8       ?Pack_drPipe@CScaleFactor@@UAEXPAVCString@@@Z 100192a8 f   Spec_D32:Spec_D32.dll
+ 0001:000182ae       ?DoDataView@CScaleFactor@@UAEXPAVCDC@@H@Z 100192ae f   Spec_D32:Spec_D32.dll
+ 0001:000182b4       ?Serialize@CScaleFactor@@UAEXAAVCArchive@@@Z 100192b4 f   Spec_D32:Spec_D32.dll
+ 0001:000182ba       ?GetRuntimeClass@CScaleFactor@@UBEPAUCRuntimeClass@@XZ 100192ba f   Spec_D32:Spec_D32.dll
+ 0001:000182c0       ?InitUnit@CUnit@@UAEXXZ    100192c0 f   Spec_D32:Spec_D32.dll
+ 0001:000182c6       ?ReadDefaultUnit@CUnit@@UAEXXZ 100192c6 f   Spec_D32:Spec_D32.dll
+ 0001:000182cc       ?SetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z 100192cc f   Spec_D32:Spec_D32.dll
+ 0001:000182d2       ?GetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z 100192d2 f   Spec_D32:Spec_D32.dll
+ 0001:000182d8       ?Pack_drPipe@CUnit@@UAEXPAVCString@@@Z 100192d8 f   Spec_D32:Spec_D32.dll
+ 0001:000182de       ?DoDataView@CUnit@@UAEXPAVCDC@@H@Z 100192de f   Spec_D32:Spec_D32.dll
+ 0001:000182e4       ?Serialize@CUnit@@UAEXAAVCArchive@@@Z 100192e4 f   Spec_D32:Spec_D32.dll
+ 0001:000182ea       ?GetRuntimeClass@CUnit@@UBEPAUCRuntimeClass@@XZ 100192ea f   Spec_D32:Spec_D32.dll
+ 0001:000182f0       ??1CDListMgr@@UAE@XZ       100192f0 f   Spec_D32:Spec_D32.dll
+ 0001:000182f6       ?GetNextObject@CDListMgr@@QAEPAVCObject@@AAPAU__POSITION@@@Z 100192f6 f   Spec_D32:Spec_D32.dll
+ 0001:000182fc       ?GetFirstObjectPos@CDListMgr@@QAEPAU__POSITION@@XZ 100192fc f   Spec_D32:Spec_D32.dll
+ 0001:00018302       ?GetObjectA@CDListMgr@@QAEPAVCObject@@H@Z 10019302 f   Spec_D32:Spec_D32.dll
+ 0001:00018308       ?Init@CElemInfo@@UAEXXZ    10019308 f   Elem_D32:Elem_D32.dll
+ 0001:0001830e       ?ReadDefault@CElemInfo@@UAEXXZ 1001930e f   Elem_D32:Elem_D32.dll
+ 0001:00018314       ?SetObjectInfo@CElemInfo@@UAEXPAVCDrObject@@@Z 10019314 f   Elem_D32:Elem_D32.dll
+ 0001:0001831a       ?GetObjectInfo@CElemInfo@@UAEXPAVCDrObject@@@Z 1001931a f   Elem_D32:Elem_D32.dll
+ 0001:00018320       ?Pack_drPipe@CElemInfo@@UAEXPAVCString@@@Z 10019320 f   Elem_D32:Elem_D32.dll
+ 0001:00018326       ?DoDataView@CElemInfo@@UAEXPAVCDC@@H@Z 10019326 f   Elem_D32:Elem_D32.dll
+ 0001:0001832c       ?Serialize@CElemInfo@@UAEXAAVCArchive@@@Z 1001932c f   Elem_D32:Elem_D32.dll
+ 0001:00018332       ?GetRuntimeClass@CElemInfo@@UBEPAUCRuntimeClass@@XZ 10019332 f   Elem_D32:Elem_D32.dll
+ 0001:00018338       ?GetSpecObject@CObjectMgr@@QAEPAVCDrObject@@H@Z 10019338 f   OMgr_D32:OMgr_D32.dll
+ 0001:0001833e       ?GetRuntimeClass@CTriangle@@UBEPAUCRuntimeClass@@XZ 1001933e f   OGen_D32:OGEN_D32.dll
+ 0001:00018344       ?Serialize@C3DMath@@UAEXAAVCArchive@@@Z 10019344 f   Dr3D_D32:Dr3D_D32.dll
+ 0001:0001834a       ?GetRuntimeClass@C3DMath@@UBEPAUCRuntimeClass@@XZ 1001934a f   Dr3D_D32:Dr3D_D32.dll
+ 0001:00018350       ?BlockCopy@C3DMath@@QAEXPAD0K@Z 10019350 f   Dr3D_D32:Dr3D_D32.dll
+ 0001:00018356       ??0C3DMath@@QAE@XZ         10019356 f   Dr3D_D32:Dr3D_D32.dll
+ 0001:0001835c       ?AfxGetModuleState@@YGPAVAFX_MODULE_STATE@@XZ 1001935c f   mfc42d:MFC42D.DLL
+ 0001:00018362       ??0CDynLinkLibrary@@QAE@AAUAFX_EXTENSION_MODULE@@H@Z 10019362 f   mfc42d:MFC42D.DLL
+ 0001:00018368       ??2CObject@@SGPAXIPBDH@Z   10019368 f   mfc42d:MFC42D.DLL
+ 0001:0001836e       ?AfxInitExtensionModule@@YGHAAUAFX_EXTENSION_MODULE@@PAUHINSTANCE__@@@Z 1001936e f   mfc42d:MFC42D.DLL
+ 0001:00018374       ?AfxTrace@@YAXPBDZZ        10019374 f   mfc42d:MFC42D.DLL
+ 0001:0001837a       ?Dump@CObject@@UBEXAAVCDumpContext@@@Z 1001937a f   mfc42d:MFC42D.DLL
+ 0001:00018380       ?AssertValid@CObject@@UBEXXZ 10019380 f   mfc42d:MFC42D.DLL
+ 0001:00018386       ??1CObject@@UAE@XZ         10019386 f   mfc42d:MFC42D.DLL
+ 0001:0001838c       ??3CObject@@SGXPAX@Z       1001938c f   mfc42d:MFC42D.DLL
+ 0001:00018392       ??3@YAXPAX@Z               10019392 f   mfc42d:MFC42D.DLL
+ 0001:00018398       ??0CString@@QAE@ABV0@@Z    10019398 f   mfc42d:MFC42D.DLL
+ 0001:0001839e       ??1CString@@QAE@XZ         1001939e f   mfc42d:MFC42D.DLL
+ 0001:000183a4       ??4CString@@QAEABV0@ABV0@@Z 100193a4 f   mfc42d:MFC42D.DLL
+ 0001:000183aa       ?Serialize@CObject@@UAEXAAVCArchive@@@Z 100193aa f   mfc42d:MFC42D.DLL
+ 0001:000183b0       ??2CObject@@SGPAXI@Z       100193b0 f   mfc42d:MFC42D.DLL
+ 0001:000183b6       ?AfxClassInit@@YGXPAUCRuntimeClass@@@Z 100193b6 f   mfc42d:MFC42D.DLL
+ 0001:000183bc       ?ReadObject@CArchive@@QAEPAVCObject@@PBUCRuntimeClass@@@Z 100193bc f   mfc42d:MFC42D.DLL
+ 0001:000183c2       ??0CObject@@IAE@XZ         100193c2 f   mfc42d:MFC42D.DLL
+ 0001:000183c8       ?IsStoring@CArchive@@QBEHXZ 100193c8 f   mfc42d:MFC42D.DLL
+ 0001:000183ce       ?GetRuntimeClass@CObject@@UBEPAUCRuntimeClass@@XZ 100193ce f   mfc42d:MFC42D.DLL
+ 0001:000183d4       ?AfxAssertFailedLine@@YGHPBDH@Z 100193d4 f   mfc42d:MFC42D.DLL
+ 0001:000183da       ?AfxIsValidAddress@@YGHPBXIH@Z 100193da f   mfc42d:MFC42D.DLL
+ 0001:000183e0       ?AfxAssertValidObject@@YGXPBVCObject@@PBDH@Z 100193e0 f   mfc42d:MFC42D.DLL
+ 0001:000183e6       ??0CString@@QAE@XZ         100193e6 f   mfc42d:MFC42D.DLL
+ 0001:000183ec       ?ReadCount@CArchive@@QAEKXZ 100193ec f   mfc42d:MFC42D.DLL
+ 0001:000183f2       ?SerializeElements@@YGXAAVCArchive@@PAVCString@@H@Z 100193f2 f   mfc42d:MFC42D.DLL
+ 0001:000183f8       ?WriteCount@CArchive@@QAEXK@Z 100193f8 f   mfc42d:MFC42D.DLL
+ 0001:000183fe       ?GetDepth@CDumpContext@@QBEHXZ 100193fe f   mfc42d:MFC42D.DLL
+ 0001:00018404       ??6CDumpContext@@QAEAAV0@H@Z 10019404 f   mfc42d:MFC42D.DLL
+ 0001:0001840a       ??6CDumpContext@@QAEAAV0@PBD@Z 1001940a f   mfc42d:MFC42D.DLL
+ 0001:00018410       ?FreeDataChain@CPlex@@QAEXXZ 10019410 f   mfc42d:MFC42D.DLL
+ 0001:00018416       ?DestructElements@@YGXPAVCString@@H@Z 10019416 f   mfc42d:MFC42D.DLL
+ 0001:0001841c       ?ConstructElements@@YGXPAVCString@@H@Z 1001941c f   mfc42d:MFC42D.DLL
+ 0001:00018422       ?Create@CPlex@@SGPAU1@AAPAU1@II@Z 10019422 f   mfc42d:MFC42D.DLL
+ 0001:00018428       ??1CPen@@UAE@XZ            10019428 f   mfc42d:MFC42D.DLL
+ 0001:0001842e       ??2@YAPAXI@Z               1001942e f   mfc42d:MFC42D.DLL
+ 0001:00018434       ?GetCount@CObList@@QBEHXZ  10019434 f   mfc42d:MFC42D.DLL
+ 0001:0001843a       ?AfxGetApp@@YGPAVCWinApp@@XZ 1001943a f   mfc42d:MFC42D.DLL
+ 0001:00018440       ?IsEmpty@CObList@@QBEHXZ   10019440 f   mfc42d:MFC42D.DLL
+ 0001:00018446       ??4CString@@QAEABV0@PBD@Z  10019446 f   mfc42d:MFC42D.DLL
+ 0001:0001844c       ?GetLength@CString@@QBEHXZ 1001944c f   mfc42d:MFC42D.DLL
+ 0001:00018452       ?AfxMessageBox@@YGHPBDII@Z 10019452 f   mfc42d:MFC42D.DLL
+ 0001:00018458       ??BCString@@QBEPBDXZ       10019458 f   mfc42d:MFC42D.DLL
+ 0001:0001845e       ??YCString@@QAEABV0@PBD@Z  1001945e f   mfc42d:MFC42D.DLL
+ 0001:00018464       ??0CString@@QAE@PBD@Z      10019464 f   mfc42d:MFC42D.DLL
+ 0001:0001846a       ?LoadStringA@CString@@QAEHI@Z 1001946a f   mfc42d:MFC42D.DLL
+ 0001:00018470       ??YCString@@QAEABV0@ABV0@@Z 10019470 f   mfc42d:MFC42D.DLL
+ 0001:00018476       ??H@YG?AVCString@@ABV0@PBD@Z 10019476 f   mfc42d:MFC42D.DLL
+ 0001:0001847c       ?Read@CArchive@@QAEIPAXI@Z 1001947c f   mfc42d:MFC42D.DLL
+ 0001:00018482       ?Write@CArchive@@QAEXPBXI@Z 10019482 f   mfc42d:MFC42D.DLL
+ 0001:00018490       _sqrt                      10019490 f   msvcrtd:MSVCRTD.dll
+ 0001:000184a0       ??0type_info@@AAE@ABV0@@Z  100194a0 f   msvcrtd:ti_inst.obj
+ 0001:000184c0       ??_Gtype_info@@UAEPAXI@Z   100194c0 f i msvcrtd:ti_inst.obj
+ 0001:000184c0       ??_Etype_info@@UAEPAXI@Z   100194c0 f i msvcrtd:ti_inst.obj
+ 0001:000184f0       ??4type_info@@AAEAAV0@ABV0@@Z 100194f0 f   msvcrtd:ti_inst.obj
+ 0001:00018500       ??_M@YGXPAXIHP6EX0@Z@Z     10019500 f   msvcrtd:ehvecdtr.obj
+ 0001:000185b0       ?__ArrayUnwind@@YGXPAXIHP6EX0@Z@Z 100195b0 f   msvcrtd:ehvecdtr.obj
+ 0001:0001865c       ___CxxFrameHandler         1001965c f   msvcrtd:MSVCRTD.dll
+ 0001:00018662       _sprintf                   10019662 f   msvcrtd:MSVCRTD.dll
+ 0001:00018668       _memset                    10019668 f   msvcrtd:MSVCRTD.dll
+ 0001:00018670       __CRT_INIT@12              10019670 f   msvcrtd:crtdll.obj
+ 0001:00018780       __DllMainCRTStartup@12     10019780 f   msvcrtd:crtdll.obj
+ 0001:00018874       ??1type_info@@UAE@XZ       10019874 f   msvcrtd:MSVCRTD.dll
+ 0001:0001887a       __except_handler3          1001987a f   msvcrtd:MSVCRTD.dll
+ 0001:00018880       ?terminate@@YAXXZ          10019880 f   msvcrtd:MSVCRTD.dll
+ 0001:00018886       __free_dbg                 10019886 f   msvcrtd:MSVCRTD.dll
+ 0001:0001888c       __initterm                 1001988c f   msvcrtd:MSVCRTD.dll
+ 0001:000188a0       __onexit                   100198a0 f   msvcrtd:atonexit.obj
+ 0001:000188e0       _atexit                    100198e0 f   msvcrtd:atonexit.obj
+ 0001:000188f8       __malloc_dbg               100198f8 f   msvcrtd:MSVCRTD.dll
+ 0001:000188fe       ___dllonexit               100198fe f   msvcrtd:MSVCRTD.dll
+ 0001:000195b0       ?data@CPlex@@QAEPAXXZ      1001a5b0 f i DeckMgr.obj
+ 0001:0001be50       __enc$textbss$begin        1001ce50     <linker-defined>
+ 0001:0002be50       __enc$textbss$end          1002ce50     <linker-defined>
+ 0002:0000001c       ??_C@_0BH@DKDK@Deck?4DLL?5Terminating?$CB?6?$AA@ 1002d01c     DeckDll.obj
+ 0002:00000038       ??_C@_02DILL@?$CFs?$AA@    1002d038     DeckDll.obj
+ 0002:0000003c       ??_C@_0BI@CDKB@Deck?4DLL?5Initializing?$CB?6?$AA@ 1002d03c     DeckDll.obj
+ 0002:00000058       ??_C@_08JPHK@CDeckMgr?$AA@ 1002d058     DeckMgr.obj
+ 0002:00000068       ??_7C3DMath@@6B@           1002d068     DeckMgr.obj
+ 0002:00000084       ??_7CMatObj@@6B@           1002d084     DeckMgr.obj
+ 0002:00000190       ??_7CDeckWalk@@6B@         1002d190     DeckMgr.obj
+ 0002:000001b8       ??_7CDeckMgr@@6B@          1002d1b8     DeckMgr.obj
+ 0002:000001d0       ??_C@_0BD@HJMK@?5DeckMgr?7?3Loading?6?$AA@ 1002d1d0     DeckMgr.obj
+ 0002:000001e8       ??_C@_0BD@LOJM@?5DeckMgr?7?3Storing?6?$AA@ 1002d1e8     DeckMgr.obj
+ 0002:00000204       ??_7?$CList@VCString@@V1@@@6B@ 1002d204     DeckMgr.obj
+ 0002:0000021c       ??_C@_01BJG@?6?$AA@        1002d21c     DeckMgr.obj
+ 0002:00000220       ??_C@_05KIFI@with?5?$AA@   1002d220     DeckMgr.obj
+ 0002:00000228       ??_C@_09LOPF@?5elements?$AA@ 1002d228     DeckMgr.obj
+ 0002:00000238       ?classCDeckWalk@CDeckWalk@@2UCRuntimeClass@@B 1002d238     DeckWalk.obj
+ 0002:00000254       ??_C@_09DANO@CDeckWalk?$AA@ 1002d254     DeckWalk.obj
+ 0002:00000264       ??_7CBooleans@@6B@         1002d264     DeckWalk.obj
+ 0002:0000051c       ??_7CDataWindow@@6B@       1002d51c     DeckWalk.obj
+ 0002:000006dc       ??_7CDrFont@@6B@           1002d6dc     DeckWalk.obj
+ 0002:0000089c       ??_7CDrPen@@6B@            1002d89c     DeckWalk.obj
+ 0002:00000ad0       ??_7CHitNet@@6B@           1002dad0     DeckWalk.obj
+ 0002:00000c68       ??_7CLayer@@6B@            1002dc68     DeckWalk.obj
+ 0002:00000e4c       ??_7CPatchMnu@@6B@         1002de4c     DeckWalk.obj
+ 0002:00001050       ??_7CObj3DMnu@@6B@         1002e050     DeckWalk.obj
+ 0002:00001254       ??_7CMapFactor@@6B@        1002e254     DeckWalk.obj
+ 0002:00001408       ??_7CPrecision@@6B@        1002e408     DeckWalk.obj
+ 0002:000015e4       ??_7CScaleFactor@@6B@      1002e5e4     DeckWalk.obj
+ 0002:000017a4       ??_7CUnit@@6B@             1002e7a4     DeckWalk.obj
+ 0002:00001970       ??_7CElemInfo@@6B@         1002e970     DeckWalk.obj
+ 0002:00001b18       ??_7CTriangle@@6B@         1002eb18     DeckWalk.obj
+ 0002:00001bb0       ??_C@_0DC@IONL@C?0?0?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?5Element?5Definit@ 1002ebb0     DeckWalk.obj
+ 0002:00001bec       ??_C@_0DC@DCBO@C?0?0?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?5Node?5Definition@ 1002ebec     DeckWalk.obj
+ 0002:00001c28       ??_C@_00A@?$AA@            1002ec28     DeckWalk.obj
+ 0002:00001c2c       ??_C@_09NMKJ@?$CF?94?44d?5?$CFs?$AA@ 1002ec2c     DeckWalk.obj
+ 0002:00001c38       ??_C@_0DB@HHEJ@ERROR?3?6CDeckWalk?3?3DW_ObjectType?3@ 1002ec38     DeckWalk.obj
+ 0002:00001c74       ??_C@_0M@HNDB@?$CFd?5NOTFOUND?$AA@ 1002ec74     DeckWalk.obj
+ 0002:00001c84       ??_C@_0CN@NNCJ@Error?3?6CDeckWalk?3?3DW_Object?6Load@ 1002ec84     DeckWalk.obj
+ 0002:00001cbc       ??_C@_02IHLC@?5?5?$AA@     1002ecbc     DeckWalk.obj
+ 0002:00001cc0       ??_C@_05GLIP@?5?5?5?5?5?$AA@ 1002ecc0     DeckWalk.obj
+ 0002:00001cc8       ??_C@_0DC@LJKE@C?0?0?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?5Vertex?5To?5Verte@ 1002ecc8     DeckWalk.obj
+ 0002:00001d04       ??_C@_0DC@GECN@C?0?0?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?$CK?5Node?5To?5Element@ 1002ed04     DeckWalk.obj
+ 0002:00001d44       ??_7?$CList@HH@@6B@        1002ed44     DeckWalk.obj
+ 0002:00001d60       _IID_IDocHostUIHandlerDispatch 1002ed60     mfcs42d:stdafx.obj
+ 0002:00001d70       _IID_IInternalConnection   1002ed70     mfcs42d:stdafx.obj
+ 0002:00001d80       _IID_IAxWinAmbientDispatch 1002ed80     mfcs42d:stdafx.obj
+ 0002:00001d90       _IID_IAxWinHostWindow      1002ed90     mfcs42d:stdafx.obj
+ 0002:00001da0       _IID_IRegistrar            1002eda0     mfcs42d:stdafx.obj
+ 0002:00001db0       _CLSID_Registrar           1002edb0     mfcs42d:stdafx.obj
+ 0002:00001dc0       _LIBID_ATLLib              1002edc0     mfcs42d:stdafx.obj
+ 0002:00001dd4       ??_7type_info@@6B@         1002edd4     msvcrtd:ti_inst.obj
+ 0002:00001df4       ??_C@_08JKC@crtdll?4c?$AA@ 1002edf4     msvcrtd:crtdll.obj
+ 0002:00001f40       ??_R1A@?0A@A@CObject@@8    1002ef40     DeckMgr.obj
+ 0002:00001f60       ??_R1A@?0A@A@C3DMath@@8    1002ef60     DeckMgr.obj
+ 0002:00001f80       ??_R2C3DMath@@8            1002ef80     DeckMgr.obj
+ 0002:00001f90       ??_R3C3DMath@@8            1002ef90     DeckMgr.obj
+ 0002:00001fa8       ??_R4C3DMath@@6B@          1002efa8     DeckMgr.obj
+ 0002:00001fc0       ??_R1A@?0A@A@CMatObj@@8    1002efc0     DeckMgr.obj
+ 0002:00001fe0       ??_R2CMatObj@@8            1002efe0     DeckMgr.obj
+ 0002:00001ff0       ??_R3CMatObj@@8            1002eff0     DeckMgr.obj
+ 0002:00002008       ??_R4CMatObj@@6B@          1002f008     DeckMgr.obj
+ 0002:00002020       ??_R1A@?0A@A@CDeckWalk@@8  1002f020     DeckMgr.obj
+ 0002:00002040       ??_R2CDeckWalk@@8          1002f040     DeckMgr.obj
+ 0002:00002050       ??_R3CDeckWalk@@8          1002f050     DeckMgr.obj
+ 0002:00002068       ??_R4CDeckWalk@@6B@        1002f068     DeckMgr.obj
+ 0002:00002080       ??_R1A@?0A@A@CDeckMgr@@8   1002f080     DeckMgr.obj
+ 0002:000020a0       ??_R2CDeckMgr@@8           1002f0a0     DeckMgr.obj
+ 0002:000020b0       ??_R3CDeckMgr@@8           1002f0b0     DeckMgr.obj
+ 0002:000020c8       ??_R4CDeckMgr@@6B@         1002f0c8     DeckMgr.obj
+ 0002:000020e0       ??_R1A@?0A@A@?$CList@VCString@@V1@@@8 1002f0e0     DeckMgr.obj
+ 0002:00002100       ??_R2?$CList@VCString@@V1@@@8 1002f100     DeckMgr.obj
+ 0002:00002110       ??_R3?$CList@VCString@@V1@@@8 1002f110     DeckMgr.obj
+ 0002:00002128       ??_R4?$CList@VCString@@V1@@@6B@ 1002f128     DeckMgr.obj
+ 0002:00002140       ??_R1A@?0A@A@CDrObject@@8  1002f140     DeckWalk.obj
+ 0002:00002160       ??_R1A@?0A@A@CBooleans@@8  1002f160     DeckWalk.obj
+ 0002:00002180       ??_R2CBooleans@@8          1002f180     DeckWalk.obj
+ 0002:00002190       ??_R3CBooleans@@8          1002f190     DeckWalk.obj
+ 0002:000021a8       ??_R4CBooleans@@6B@        1002f1a8     DeckWalk.obj
+ 0002:000021c0       ??_R1A@?0A@A@CDataWindow@@8 1002f1c0     DeckWalk.obj
+ 0002:000021e0       ??_R2CDataWindow@@8        1002f1e0     DeckWalk.obj
+ 0002:000021f0       ??_R3CDataWindow@@8        1002f1f0     DeckWalk.obj
+ 0002:00002208       ??_R4CDataWindow@@6B@      1002f208     DeckWalk.obj
+ 0002:00002220       ??_R1A@?0A@A@CDrFont@@8    1002f220     DeckWalk.obj
+ 0002:00002240       ??_R2CDrFont@@8            1002f240     DeckWalk.obj
+ 0002:00002250       ??_R3CDrFont@@8            1002f250     DeckWalk.obj
+ 0002:00002268       ??_R4CDrFont@@6B@          1002f268     DeckWalk.obj
+ 0002:00002280       ??_R1A@?0A@A@CDrPen@@8     1002f280     DeckWalk.obj
+ 0002:000022a0       ??_R2CDrPen@@8             1002f2a0     DeckWalk.obj
+ 0002:000022b0       ??_R3CDrPen@@8             1002f2b0     DeckWalk.obj
+ 0002:000022c8       ??_R4CDrPen@@6B@           1002f2c8     DeckWalk.obj
+ 0002:000022e0       ??_R1A@?0A@A@CHitNet@@8    1002f2e0     DeckWalk.obj
+ 0002:00002300       ??_R2CHitNet@@8            1002f300     DeckWalk.obj
+ 0002:00002310       ??_R3CHitNet@@8            1002f310     DeckWalk.obj
+ 0002:00002328       ??_R4CHitNet@@6B@          1002f328     DeckWalk.obj
+ 0002:00002340       ??_R1A@?0A@A@CLayer@@8     1002f340     DeckWalk.obj
+ 0002:00002360       ??_R2CLayer@@8             1002f360     DeckWalk.obj
+ 0002:00002370       ??_R3CLayer@@8             1002f370     DeckWalk.obj
+ 0002:00002388       ??_R4CLayer@@6B@           1002f388     DeckWalk.obj
+ 0002:000023a0       ??_R1A@?0A@A@CPatchMnu@@8  1002f3a0     DeckWalk.obj
+ 0002:000023c0       ??_R2CPatchMnu@@8          1002f3c0     DeckWalk.obj
+ 0002:000023d0       ??_R3CPatchMnu@@8          1002f3d0     DeckWalk.obj
+ 0002:000023e8       ??_R4CPatchMnu@@6B@        1002f3e8     DeckWalk.obj
+ 0002:00002400       ??_R1A@?0A@A@CObj3DMnu@@8  1002f400     DeckWalk.obj
+ 0002:00002420       ??_R2CObj3DMnu@@8          1002f420     DeckWalk.obj
+ 0002:00002430       ??_R3CObj3DMnu@@8          1002f430     DeckWalk.obj
+ 0002:00002448       ??_R4CObj3DMnu@@6B@        1002f448     DeckWalk.obj
+ 0002:00002460       ??_R1A@?0A@A@CMapFactor@@8 1002f460     DeckWalk.obj
+ 0002:00002480       ??_R2CMapFactor@@8         1002f480     DeckWalk.obj
+ 0002:00002490       ??_R3CMapFactor@@8         1002f490     DeckWalk.obj
+ 0002:000024a8       ??_R4CMapFactor@@6B@       1002f4a8     DeckWalk.obj
+ 0002:000024c0       ??_R1A@?0A@A@CPrecision@@8 1002f4c0     DeckWalk.obj
+ 0002:000024e0       ??_R2CPrecision@@8         1002f4e0     DeckWalk.obj
+ 0002:000024f0       ??_R3CPrecision@@8         1002f4f0     DeckWalk.obj
+ 0002:00002508       ??_R4CPrecision@@6B@       1002f508     DeckWalk.obj
+ 0002:00002520       ??_R1A@?0A@A@CScaleFactor@@8 1002f520     DeckWalk.obj
+ 0002:00002540       ??_R2CScaleFactor@@8       1002f540     DeckWalk.obj
+ 0002:00002550       ??_R3CScaleFactor@@8       1002f550     DeckWalk.obj
+ 0002:00002568       ??_R4CScaleFactor@@6B@     1002f568     DeckWalk.obj
+ 0002:00002580       ??_R1A@?0A@A@CUnit@@8      1002f580     DeckWalk.obj
+ 0002:000025a0       ??_R2CUnit@@8              1002f5a0     DeckWalk.obj
+ 0002:000025b0       ??_R3CUnit@@8              1002f5b0     DeckWalk.obj
+ 0002:000025c8       ??_R4CUnit@@6B@            1002f5c8     DeckWalk.obj
+ 0002:000025e0       ??_R1A@?0A@A@CElemInfo@@8  1002f5e0     DeckWalk.obj
+ 0002:00002600       ??_R2CElemInfo@@8          1002f600     DeckWalk.obj
+ 0002:00002610       ??_R3CElemInfo@@8          1002f610     DeckWalk.obj
+ 0002:00002628       ??_R4CElemInfo@@6B@        1002f628     DeckWalk.obj
+ 0002:00002640       ??_R1A@?0A@A@CTriangle@@8  1002f640     DeckWalk.obj
+ 0002:00002660       ??_R2CTriangle@@8          1002f660     DeckWalk.obj
+ 0002:00002670       ??_R3CTriangle@@8          1002f670     DeckWalk.obj
+ 0002:00002688       ??_R4CTriangle@@6B@        1002f688     DeckWalk.obj
+ 0002:000026a0       ??_R1A@?0A@A@?$CList@HH@@8 1002f6a0     DeckWalk.obj
+ 0002:000026c0       ??_R2?$CList@HH@@8         1002f6c0     DeckWalk.obj
+ 0002:000026d0       ??_R3?$CList@HH@@8         1002f6d0     DeckWalk.obj
+ 0002:000026e8       ??_R4?$CList@HH@@6B@       1002f6e8     DeckWalk.obj
+ 0002:00002700       ??_R1A@?0A@A@type_info@@8  1002f700     msvcrtd:ti_inst.obj
+ 0002:00002718       ??_R2type_info@@8          1002f718     msvcrtd:ti_inst.obj
+ 0002:00002720       ??_R3type_info@@8          1002f720     msvcrtd:ti_inst.obj
+ 0002:00002730       ??_R4type_info@@6B@        1002f730     msvcrtd:ti_inst.obj
+ 0003:00000000       ___xc_a                    10043000     msvcrtd:cinitexe.obj
+ 0003:00000208       ___xc_z                    10043208     msvcrtd:cinitexe.obj
+ 0003:0000030c       ___xi_a                    1004330c     msvcrtd:cinitexe.obj
+ 0003:00000410       ___xi_z                    10043410     msvcrtd:cinitexe.obj
+ 0003:00000544       __pRawDllMain              10043544     DeckDll.obj
+ 0003:00000550       ?__LINE__Var@?1??InitDeckDLL@@9@0@4FA 10043550     DeckDll.obj
+ 0003:00000588       ?classCDeckMgr@CDeckMgr@@2UCRuntimeClass@@A 10043588     DeckMgr.obj
+ 0003:000005b0       ??_R0?AVCObject@@@8        100435b0     DeckMgr.obj
+ 0003:000005d0       ??_R0?AVC3DMath@@@8        100435d0     DeckMgr.obj
+ 0003:000005f0       ??_R0?AVCMatObj@@@8        100435f0     DeckMgr.obj
+ 0003:00000610       ??_R0?AVCDeckWalk@@@8      10043610     DeckMgr.obj
+ 0003:00000630       ??_R0?AVCDeckMgr@@@8       10043630     DeckMgr.obj
+ 0003:00000650       ??_R0?AV?$CList@VCString@@V1@@@@8 10043650     DeckMgr.obj
+ 0003:000006c0       ??_R0?AVCDrObject@@@8      100436c0     DeckWalk.obj
+ 0003:000006e0       ??_R0?AVCBooleans@@@8      100436e0     DeckWalk.obj
+ 0003:00000700       ??_R0?AVCDataWindow@@@8    10043700     DeckWalk.obj
+ 0003:00000720       ??_R0?AVCDrFont@@@8        10043720     DeckWalk.obj
+ 0003:00000740       ??_R0?AVCDrPen@@@8         10043740     DeckWalk.obj
+ 0003:00000760       ??_R0?AVCHitNet@@@8        10043760     DeckWalk.obj
+ 0003:00000780       ??_R0?AVCLayer@@@8         10043780     DeckWalk.obj
+ 0003:000007a0       ??_R0?AVCPatchMnu@@@8      100437a0     DeckWalk.obj
+ 0003:000007c0       ??_R0?AVCObj3DMnu@@@8      100437c0     DeckWalk.obj
+ 0003:000007e0       ??_R0?AVCMapFactor@@@8     100437e0     DeckWalk.obj
+ 0003:00000800       ??_R0?AVCPrecision@@@8     10043800     DeckWalk.obj
+ 0003:00000820       ??_R0?AVCScaleFactor@@@8   10043820     DeckWalk.obj
+ 0003:00000840       ??_R0?AVCUnit@@@8          10043840     DeckWalk.obj
+ 0003:00000858       ??_R0?AVCElemInfo@@@8      10043858     DeckWalk.obj
+ 0003:00000878       ??_R0?AVCTriangle@@@8      10043878     DeckWalk.obj
+ 0003:00000898       ??_R0?AV?$CList@HH@@@8     10043898     DeckWalk.obj
+ 0003:000008b8       ?GUID_ATLVer30@ATL@@3U_GUID@@A 100438b8     mfcs42d:stdafx.obj
+ 0003:000008d0       ??_R0?AVtype_info@@@8      100438d0     msvcrtd:ti_inst.obj
+ 0003:00000a10       __afxForceEXTDLL           10043a10     DeckDll.obj
+ 0003:00000a18       ?extensionDeck_DLL@@3UAFX_EXTENSION_MODULE@@A 10043a18     DeckDll.obj
+ 0003:00000a34       ?_init_CDeckMgr@@3UAFX_CLASSINIT@@A 10043a34     DeckMgr.obj
+ 0003:00000a38       __afxForceEXCLUDE          10043a38     mfcs42d:nolib.obj
+ 0003:00000a3c       ?ATL_CREATE_OBJECT@CComApartment@ATL@@2IA 10043a3c     mfcs42d:stdafx.obj
+ 0003:00000a40       ?m_libid@CComModule@ATL@@2U_GUID@@A 10043a40     mfcs42d:stdafx.obj
+ 0003:00000a50       ?_pModule@ATL@@3PAVCComModule@1@A 10043a50     mfcs42d:stdafx.obj
+ 0003:00000a54       __afxForceSTDAFX           10043a54     mfcs42d:stdafx.obj
+ 0003:00000a5c       __adjust_fdiv              10043a5c     <common>
+ 0003:00000a68       ___onexitend               10043a68     <common>
+ 0003:00000a78       ___onexitbegin             10043a78     <common>
+ 0004:00000000       __IMPORT_DESCRIPTOR_Spec_D32 10044000     Spec_D32:Spec_D32.dll
+ 0004:00000014       __IMPORT_DESCRIPTOR_Elem_D32 10044014     Elem_D32:Elem_D32.dll
+ 0004:00000028       __IMPORT_DESCRIPTOR_OMgr_D32 10044028     OMgr_D32:OMgr_D32.dll
+ 0004:0000003c       __IMPORT_DESCRIPTOR_OGEN_D32 1004403c     OGen_D32:OGEN_D32.dll
+ 0004:00000050       __IMPORT_DESCRIPTOR_Dr3D_D32 10044050     Dr3D_D32:Dr3D_D32.dll
+ 0004:00000064       __IMPORT_DESCRIPTOR_MFC42D 10044064     mfc42d:MFC42D.DLL
+ 0004:00000078       __IMPORT_DESCRIPTOR_MSVCRTD 10044078     msvcrtd:MSVCRTD.dll
+ 0004:0000008c       __NULL_IMPORT_DESCRIPTOR   1004408c     Spec_D32:Spec_D32.dll
+ 0004:000005f0       __imp_?BlockCopy@C3DMath@@QAEXPAD0K@Z 100445f0     Dr3D_D32:Dr3D_D32.dll
+ 0004:000005f4       __imp_?GetRuntimeClass@C3DMath@@UBEPAUCRuntimeClass@@XZ 100445f4     Dr3D_D32:Dr3D_D32.dll
+ 0004:000005f8       __imp_?Serialize@C3DMath@@UAEXAAVCArchive@@@Z 100445f8     Dr3D_D32:Dr3D_D32.dll
+ 0004:000005fc       __imp_??0C3DMath@@QAE@XZ   100445fc     Dr3D_D32:Dr3D_D32.dll
+ 0004:00000600       \177Dr3D_D32_NULL_THUNK_DATA 10044600     Dr3D_D32:Dr3D_D32.dll
+ 0004:0000062c       __imp_?Pack_drPipe@CElemInfo@@UAEXPAVCString@@@Z 1004462c     Elem_D32:Elem_D32.dll
+ 0004:00000630       __imp_?GetRuntimeClass@CElemInfo@@UBEPAUCRuntimeClass@@XZ 10044630     Elem_D32:Elem_D32.dll
+ 0004:00000634       __imp_?GetObjectInfo@CElemInfo@@UAEXPAVCDrObject@@@Z 10044634     Elem_D32:Elem_D32.dll
+ 0004:00000638       __imp_?SetObjectInfo@CElemInfo@@UAEXPAVCDrObject@@@Z 10044638     Elem_D32:Elem_D32.dll
+ 0004:0000063c       __imp_?ReadDefault@CElemInfo@@UAEXXZ 1004463c     Elem_D32:Elem_D32.dll
+ 0004:00000640       __imp_?Serialize@CElemInfo@@UAEXAAVCArchive@@@Z 10044640     Elem_D32:Elem_D32.dll
+ 0004:00000644       __imp_?DoDataView@CElemInfo@@UAEXPAVCDC@@H@Z 10044644     Elem_D32:Elem_D32.dll
+ 0004:00000648       __imp_?Init@CElemInfo@@UAEXXZ 10044648     Elem_D32:Elem_D32.dll
+ 0004:0000064c       \177Elem_D32_NULL_THUNK_DATA 1004464c     Elem_D32:Elem_D32.dll
+ 0004:0000067c       __imp_?Write@CArchive@@QAEXPBXI@Z 1004467c     mfc42d:MFC42D.DLL
+ 0004:00000680       __imp_?Read@CArchive@@QAEIPAXI@Z 10044680     mfc42d:MFC42D.DLL
+ 0004:00000684       __imp_??H@YG?AVCString@@ABV0@PBD@Z 10044684     mfc42d:MFC42D.DLL
+ 0004:00000688       __imp_??YCString@@QAEABV0@ABV0@@Z 10044688     mfc42d:MFC42D.DLL
+ 0004:0000068c       __imp_?LoadStringA@CString@@QAEHI@Z 1004468c     mfc42d:MFC42D.DLL
+ 0004:00000690       __imp_??0CString@@QAE@PBD@Z 10044690     mfc42d:MFC42D.DLL
+ 0004:00000694       __imp_??YCString@@QAEABV0@PBD@Z 10044694     mfc42d:MFC42D.DLL
+ 0004:00000698       __imp_??BCString@@QBEPBDXZ 10044698     mfc42d:MFC42D.DLL
+ 0004:0000069c       __imp_?AfxMessageBox@@YGHPBDII@Z 1004469c     mfc42d:MFC42D.DLL
+ 0004:000006a0       __imp_?GetLength@CString@@QBEHXZ 100446a0     mfc42d:MFC42D.DLL
+ 0004:000006a4       __imp_??4CString@@QAEABV0@PBD@Z 100446a4     mfc42d:MFC42D.DLL
+ 0004:000006a8       __imp_?IsEmpty@CObList@@QBEHXZ 100446a8     mfc42d:MFC42D.DLL
+ 0004:000006ac       __imp_?AfxGetApp@@YGPAVCWinApp@@XZ 100446ac     mfc42d:MFC42D.DLL
+ 0004:000006b0       __imp_?GetCount@CObList@@QBEHXZ 100446b0     mfc42d:MFC42D.DLL
+ 0004:000006b4       __imp_??2@YAPAXI@Z         100446b4     mfc42d:MFC42D.DLL
+ 0004:000006b8       __imp_??1CPen@@UAE@XZ      100446b8     mfc42d:MFC42D.DLL
+ 0004:000006bc       __imp_?Create@CPlex@@SGPAU1@AAPAU1@II@Z 100446bc     mfc42d:MFC42D.DLL
+ 0004:000006c0       __imp_?ConstructElements@@YGXPAVCString@@H@Z 100446c0     mfc42d:MFC42D.DLL
+ 0004:000006c4       __imp_?DestructElements@@YGXPAVCString@@H@Z 100446c4     mfc42d:MFC42D.DLL
+ 0004:000006c8       __imp_??6CDumpContext@@QAEAAV0@PBD@Z 100446c8     mfc42d:MFC42D.DLL
+ 0004:000006cc       __imp_??6CDumpContext@@QAEAAV0@H@Z 100446cc     mfc42d:MFC42D.DLL
+ 0004:000006d0       __imp_?GetDepth@CDumpContext@@QBEHXZ 100446d0     mfc42d:MFC42D.DLL
+ 0004:000006d4       __imp_?WriteCount@CArchive@@QAEXK@Z 100446d4     mfc42d:MFC42D.DLL
+ 0004:000006d8       __imp_?SerializeElements@@YGXAAVCArchive@@PAVCString@@H@Z 100446d8     mfc42d:MFC42D.DLL
+ 0004:000006dc       __imp_?ReadCount@CArchive@@QAEKXZ 100446dc     mfc42d:MFC42D.DLL
+ 0004:000006e0       __imp_??0CString@@QAE@XZ   100446e0     mfc42d:MFC42D.DLL
+ 0004:000006e4       __imp_?AfxAssertValidObject@@YGXPBVCObject@@PBDH@Z 100446e4     mfc42d:MFC42D.DLL
+ 0004:000006e8       __imp_?AfxIsValidAddress@@YGHPBXIH@Z 100446e8     mfc42d:MFC42D.DLL
+ 0004:000006ec       __imp_?AfxAssertFailedLine@@YGHPBDH@Z 100446ec     mfc42d:MFC42D.DLL
+ 0004:000006f0       __imp_?GetRuntimeClass@CObject@@UBEPAUCRuntimeClass@@XZ 100446f0     mfc42d:MFC42D.DLL
+ 0004:000006f4       __imp_?IsStoring@CArchive@@QBEHXZ 100446f4     mfc42d:MFC42D.DLL
+ 0004:000006f8       __imp_??0CObject@@IAE@XZ   100446f8     mfc42d:MFC42D.DLL
+ 0004:000006fc       __imp_?ReadObject@CArchive@@QAEPAVCObject@@PBUCRuntimeClass@@@Z 100446fc     mfc42d:MFC42D.DLL
+ 0004:00000700       __imp_?AfxClassInit@@YGXPAUCRuntimeClass@@@Z 10044700     mfc42d:MFC42D.DLL
+ 0004:00000704       __imp_?classCObject@CObject@@2UCRuntimeClass@@B 10044704     mfc42d:MFC42D.DLL
+ 0004:00000708       __imp_??2CObject@@SGPAXI@Z 10044708     mfc42d:MFC42D.DLL
+ 0004:0000070c       __imp_?Serialize@CObject@@UAEXAAVCArchive@@@Z 1004470c     mfc42d:MFC42D.DLL
+ 0004:00000710       __imp_??4CString@@QAEABV0@ABV0@@Z 10044710     mfc42d:MFC42D.DLL
+ 0004:00000714       __imp_??1CString@@QAE@XZ   10044714     mfc42d:MFC42D.DLL
+ 0004:00000718       __imp_??0CString@@QAE@ABV0@@Z 10044718     mfc42d:MFC42D.DLL
+ 0004:0000071c       __imp_??3@YAXPAX@Z         1004471c     mfc42d:MFC42D.DLL
+ 0004:00000720       __imp_??3CObject@@SGXPAX@Z 10044720     mfc42d:MFC42D.DLL
+ 0004:00000724       __imp_??1CObject@@UAE@XZ   10044724     mfc42d:MFC42D.DLL
+ 0004:00000728       __imp_?AssertValid@CObject@@UBEXXZ 10044728     mfc42d:MFC42D.DLL
+ 0004:0000072c       __imp_?Dump@CObject@@UBEXAAVCDumpContext@@@Z 1004472c     mfc42d:MFC42D.DLL
+ 0004:00000730       __imp_?AfxTrace@@YAXPBDZZ  10044730     mfc42d:MFC42D.DLL
+ 0004:00000734       __imp_?AfxInitExtensionModule@@YGHAAUAFX_EXTENSION_MODULE@@PAUHINSTANCE__@@@Z 10044734     mfc42d:MFC42D.DLL
+ 0004:00000738       __imp_??2CObject@@SGPAXIPBDH@Z 10044738     mfc42d:MFC42D.DLL
+ 0004:0000073c       __imp_??0CDynLinkLibrary@@QAE@AAUAFX_EXTENSION_MODULE@@H@Z 1004473c     mfc42d:MFC42D.DLL
+ 0004:00000740       __imp_?AfxGetModuleState@@YGPAVAFX_MODULE_STATE@@XZ 10044740     mfc42d:MFC42D.DLL
+ 0004:00000744       __imp_?FreeDataChain@CPlex@@QAEXXZ 10044744     mfc42d:MFC42D.DLL
+ 0004:00000748       \177MFC42D_NULL_THUNK_DATA 10044748     mfc42d:MFC42D.DLL
+ 0004:0000079c       __imp__sqrt                1004479c     msvcrtd:MSVCRTD.dll
+ 0004:000007a0       __imp____CxxFrameHandler   100447a0     msvcrtd:MSVCRTD.dll
+ 0004:000007a4       __imp__sprintf             100447a4     msvcrtd:MSVCRTD.dll
+ 0004:000007a8       __imp__memset              100447a8     msvcrtd:MSVCRTD.dll
+ 0004:000007ac       __imp_??1type_info@@UAE@XZ 100447ac     msvcrtd:MSVCRTD.dll
+ 0004:000007b0       __imp___except_handler3    100447b0     msvcrtd:MSVCRTD.dll
+ 0004:000007b4       __imp_?terminate@@YAXXZ    100447b4     msvcrtd:MSVCRTD.dll
+ 0004:000007b8       __imp___free_dbg           100447b8     msvcrtd:MSVCRTD.dll
+ 0004:000007bc       __imp___initterm           100447bc     msvcrtd:MSVCRTD.dll
+ 0004:000007c0       __imp___malloc_dbg         100447c0     msvcrtd:MSVCRTD.dll
+ 0004:000007c4       __imp___adjust_fdiv        100447c4     msvcrtd:MSVCRTD.dll
+ 0004:000007c8       __imp___onexit             100447c8     msvcrtd:MSVCRTD.dll
+ 0004:000007cc       __imp____dllonexit         100447cc     msvcrtd:MSVCRTD.dll
+ 0004:000007d0       \177MSVCRTD_NULL_THUNK_DATA 100447d0     msvcrtd:MSVCRTD.dll
+ 0004:00000804       __imp_?GetRuntimeClass@CTriangle@@UBEPAUCRuntimeClass@@XZ 10044804     OGen_D32:OGEN_D32.dll
+ 0004:00000808       \177OGEN_D32_NULL_THUNK_DATA 10044808     OGen_D32:OGEN_D32.dll
+ 0004:00000834       __imp_?GetSpecObject@CObjectMgr@@QAEPAVCDrObject@@H@Z 10044834     OMgr_D32:OMgr_D32.dll
+ 0004:00000838       \177OMgr_D32_NULL_THUNK_DATA 10044838     OMgr_D32:OMgr_D32.dll
+ 0004:00000864       __imp_?SetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z 10044864     Spec_D32:Spec_D32.dll
+ 0004:00000868       __imp_?GetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z 10044868     Spec_D32:Spec_D32.dll
+ 0004:0000086c       __imp_?Pack_drPipe@CPatchMnu@@UAEXPAVCString@@@Z 1004486c     Spec_D32:Spec_D32.dll
+ 0004:00000870       __imp_?DoDataView@CPatchMnu@@UAEXPAVCDC@@H@Z 10044870     Spec_D32:Spec_D32.dll
+ 0004:00000874       __imp_?Serialize@CPatchMnu@@UAEXAAVCArchive@@@Z 10044874     Spec_D32:Spec_D32.dll
+ 0004:00000878       __imp_?GetRuntimeClass@CPatchMnu@@UBEPAUCRuntimeClass@@XZ 10044878     Spec_D32:Spec_D32.dll
+ 0004:0000087c       __imp_?InitObj3DMnu@CObj3DMnu@@UAEXXZ 1004487c     Spec_D32:Spec_D32.dll
+ 0004:00000880       __imp_?ReadDefaultObj3DMnu@CObj3DMnu@@UAEXXZ 10044880     Spec_D32:Spec_D32.dll
+ 0004:00000884       __imp_?SetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z 10044884     Spec_D32:Spec_D32.dll
+ 0004:00000888       __imp_?GetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z 10044888     Spec_D32:Spec_D32.dll
+ 0004:0000088c       __imp_?SetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z 1004488c     Spec_D32:Spec_D32.dll
+ 0004:00000890       __imp_?GetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z 10044890     Spec_D32:Spec_D32.dll
+ 0004:00000894       __imp_?SetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z 10044894     Spec_D32:Spec_D32.dll
+ 0004:00000898       __imp_?GetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z 10044898     Spec_D32:Spec_D32.dll
+ 0004:0000089c       __imp_?SetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z 1004489c     Spec_D32:Spec_D32.dll
+ 0004:000008a0       __imp_?GetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z 100448a0     Spec_D32:Spec_D32.dll
+ 0004:000008a4       __imp_?SetObj3DMnuInfo@CObj3DMnu@@UAEXII@Z 100448a4     Spec_D32:Spec_D32.dll
+ 0004:000008a8       __imp_?GetObj3DMnuInfo@CObj3DMnu@@UAE?AVCString@@I@Z 100448a8     Spec_D32:Spec_D32.dll
+ 0004:000008ac       __imp_?SetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z 100448ac     Spec_D32:Spec_D32.dll
+ 0004:000008b0       __imp_?GetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z 100448b0     Spec_D32:Spec_D32.dll
+ 0004:000008b4       __imp_?Pack_drPipe@CObj3DMnu@@UAEXPAVCString@@@Z 100448b4     Spec_D32:Spec_D32.dll
+ 0004:000008b8       __imp_?DoDataView@CObj3DMnu@@UAEXPAVCDC@@H@Z 100448b8     Spec_D32:Spec_D32.dll
+ 0004:000008bc       __imp_?Serialize@CObj3DMnu@@UAEXAAVCArchive@@@Z 100448bc     Spec_D32:Spec_D32.dll
+ 0004:000008c0       __imp_?GetRuntimeClass@CObj3DMnu@@UBEPAUCRuntimeClass@@XZ 100448c0     Spec_D32:Spec_D32.dll
+ 0004:000008c4       __imp_?InitMapFactor@CMapFactor@@UAEXXZ 100448c4     Spec_D32:Spec_D32.dll
+ 0004:000008c8       __imp_?ReadDefaultMapFactor@CMapFactor@@UAEXXZ 100448c8     Spec_D32:Spec_D32.dll
+ 0004:000008cc       __imp_?SetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z 100448cc     Spec_D32:Spec_D32.dll
+ 0004:000008d0       __imp_?GetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z 100448d0     Spec_D32:Spec_D32.dll
+ 0004:000008d4       __imp_?Pack_drPipe@CMapFactor@@UAEXPAVCString@@@Z 100448d4     Spec_D32:Spec_D32.dll
+ 0004:000008d8       __imp_?DoDataView@CMapFactor@@UAEXPAVCDC@@H@Z 100448d8     Spec_D32:Spec_D32.dll
+ 0004:000008dc       __imp_?GetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z 100448dc     Spec_D32:Spec_D32.dll
+ 0004:000008e0       __imp_?GetRuntimeClass@CMapFactor@@UBEPAUCRuntimeClass@@XZ 100448e0     Spec_D32:Spec_D32.dll
+ 0004:000008e4       __imp_?InitPrecision@CPrecision@@UAEXXZ 100448e4     Spec_D32:Spec_D32.dll
+ 0004:000008e8       __imp_?ReadDefaultPrecision@CPrecision@@UAEXXZ 100448e8     Spec_D32:Spec_D32.dll
+ 0004:000008ec       __imp_?SetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z 100448ec     Spec_D32:Spec_D32.dll
+ 0004:000008f0       __imp_?GetPatchMnuInfo@CPatchMnu@@UAE?AVCString@@I@Z 100448f0     Spec_D32:Spec_D32.dll
+ 0004:000008f4       __imp_?Pack_drPipe@CPrecision@@UAEXPAVCString@@@Z 100448f4     Spec_D32:Spec_D32.dll
+ 0004:000008f8       __imp_?DoDataView@CPrecision@@UAEXPAVCDC@@H@Z 100448f8     Spec_D32:Spec_D32.dll
+ 0004:000008fc       __imp_?Serialize@CPrecision@@UAEXAAVCArchive@@@Z 100448fc     Spec_D32:Spec_D32.dll
+ 0004:00000900       __imp_?GetRuntimeClass@CPrecision@@UBEPAUCRuntimeClass@@XZ 10044900     Spec_D32:Spec_D32.dll
+ 0004:00000904       __imp_?InitScaleFactor@CScaleFactor@@UAEXXZ 10044904     Spec_D32:Spec_D32.dll
+ 0004:00000908       __imp_?ReadDefaultScaleFactor@CScaleFactor@@UAEXXZ 10044908     Spec_D32:Spec_D32.dll
+ 0004:0000090c       __imp_?SetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z 1004490c     Spec_D32:Spec_D32.dll
+ 0004:00000910       __imp_?GetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z 10044910     Spec_D32:Spec_D32.dll
+ 0004:00000914       __imp_?Pack_drPipe@CScaleFactor@@UAEXPAVCString@@@Z 10044914     Spec_D32:Spec_D32.dll
+ 0004:00000918       __imp_?DoDataView@CScaleFactor@@UAEXPAVCDC@@H@Z 10044918     Spec_D32:Spec_D32.dll
+ 0004:0000091c       __imp_?Serialize@CScaleFactor@@UAEXAAVCArchive@@@Z 1004491c     Spec_D32:Spec_D32.dll
+ 0004:00000920       __imp_?GetRuntimeClass@CScaleFactor@@UBEPAUCRuntimeClass@@XZ 10044920     Spec_D32:Spec_D32.dll
+ 0004:00000924       __imp_?InitUnit@CUnit@@UAEXXZ 10044924     Spec_D32:Spec_D32.dll
+ 0004:00000928       __imp_?ReadDefaultUnit@CUnit@@UAEXXZ 10044928     Spec_D32:Spec_D32.dll
+ 0004:0000092c       __imp_?SetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z 1004492c     Spec_D32:Spec_D32.dll
+ 0004:00000930       __imp_?GetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z 10044930     Spec_D32:Spec_D32.dll
+ 0004:00000934       __imp_?Pack_drPipe@CUnit@@UAEXPAVCString@@@Z 10044934     Spec_D32:Spec_D32.dll
+ 0004:00000938       __imp_?DoDataView@CUnit@@UAEXPAVCDC@@H@Z 10044938     Spec_D32:Spec_D32.dll
+ 0004:0000093c       __imp_?Serialize@CUnit@@UAEXAAVCArchive@@@Z 1004493c     Spec_D32:Spec_D32.dll
+ 0004:00000940       __imp_?GetRuntimeClass@CUnit@@UBEPAUCRuntimeClass@@XZ 10044940     Spec_D32:Spec_D32.dll
+ 0004:00000944       __imp_??1CDListMgr@@UAE@XZ 10044944     Spec_D32:Spec_D32.dll
+ 0004:00000948       __imp_?GetNextObject@CDListMgr@@QAEPAVCObject@@AAPAU__POSITION@@@Z 10044948     Spec_D32:Spec_D32.dll
+ 0004:0000094c       __imp_?GetFirstObjectPos@CDListMgr@@QAEPAU__POSITION@@XZ 1004494c     Spec_D32:Spec_D32.dll
+ 0004:00000950       __imp_?GetObjectA@CDListMgr@@QAEPAVCObject@@H@Z 10044950     Spec_D32:Spec_D32.dll
+ 0004:00000954       __imp_?SetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z 10044954     Spec_D32:Spec_D32.dll
+ 0004:00000958       __imp_?GetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z 10044958     Spec_D32:Spec_D32.dll
+ 0004:0000095c       __imp_?SetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z 1004495c     Spec_D32:Spec_D32.dll
+ 0004:00000960       __imp_?GetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z 10044960     Spec_D32:Spec_D32.dll
+ 0004:00000964       __imp_?SetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z 10044964     Spec_D32:Spec_D32.dll
+ 0004:00000968       __imp_?ReadDefaultPatchMnu@CPatchMnu@@UAEXXZ 10044968     Spec_D32:Spec_D32.dll
+ 0004:0000096c       __imp_?InitPatchMnu@CPatchMnu@@UAEXXZ 1004496c     Spec_D32:Spec_D32.dll
+ 0004:00000970       __imp_?GetRuntimeClass@CLayer@@UBEPAUCRuntimeClass@@XZ 10044970     Spec_D32:Spec_D32.dll
+ 0004:00000974       __imp_?Serialize@CLayer@@UAEXAAVCArchive@@@Z 10044974     Spec_D32:Spec_D32.dll
+ 0004:00000978       __imp_?SetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z 10044978     Spec_D32:Spec_D32.dll
+ 0004:0000097c       __imp_?SetPatchMnuInfo@CPatchMnu@@UAEXII@Z 1004497c     Spec_D32:Spec_D32.dll
+ 0004:00000980       __imp_?GetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z 10044980     Spec_D32:Spec_D32.dll
+ 0004:00000984       __imp_?GetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z 10044984     Spec_D32:Spec_D32.dll
+ 0004:00000988       __imp_?DoDataView@CLayer@@UAEXPAVCDC@@H@Z 10044988     Spec_D32:Spec_D32.dll
+ 0004:0000098c       __imp_?Pack_drPipe@CLayer@@UAEXPAVCString@@@Z 1004498c     Spec_D32:Spec_D32.dll
+ 0004:00000990       __imp_?GetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z 10044990     Spec_D32:Spec_D32.dll
+ 0004:00000994       __imp_?SetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z 10044994     Spec_D32:Spec_D32.dll
+ 0004:00000998       __imp_?GetLayerInfo@CLayer@@UAE?AVCString@@I@Z 10044998     Spec_D32:Spec_D32.dll
+ 0004:0000099c       __imp_?SetLayerInfo@CLayer@@UAEXII@Z 1004499c     Spec_D32:Spec_D32.dll
+ 0004:000009a0       __imp_?GetLayerArray@CLayer@@UAEXQAY01I@Z 100449a0     Spec_D32:Spec_D32.dll
+ 0004:000009a4       __imp_?SetLayerArray@CLayer@@UAEXQAY01I@Z 100449a4     Spec_D32:Spec_D32.dll
+ 0004:000009a8       __imp_?GetLayerOldArray@CLayer@@UAEXQAY01I@Z 100449a8     Spec_D32:Spec_D32.dll
+ 0004:000009ac       __imp_?SetLayerOldArray@CLayer@@UAEXQAY01I@Z 100449ac     Spec_D32:Spec_D32.dll
+ 0004:000009b0       __imp_?GetLayerDefaultArray@CLayer@@UAEXQAY01I@Z 100449b0     Spec_D32:Spec_D32.dll
+ 0004:000009b4       __imp_?SetLayerDefaultArray@CLayer@@UAEXQAY01I@Z 100449b4     Spec_D32:Spec_D32.dll
+ 0004:000009b8       __imp_?ReadDefaultLayer@CLayer@@UAEXXZ 100449b8     Spec_D32:Spec_D32.dll
+ 0004:000009bc       __imp_?InitLayer@CLayer@@UAEXXZ 100449bc     Spec_D32:Spec_D32.dll
+ 0004:000009c0       __imp_?GetRuntimeClass@CHitNet@@UBEPAUCRuntimeClass@@XZ 100449c0     Spec_D32:Spec_D32.dll
+ 0004:000009c4       __imp_?Serialize@CHitNet@@UAEXAAVCArchive@@@Z 100449c4     Spec_D32:Spec_D32.dll
+ 0004:000009c8       __imp_?DoDataView@CHitNet@@UAEXPAVCDC@@H@Z 100449c8     Spec_D32:Spec_D32.dll
+ 0004:000009cc       __imp_?Pack_drPipe@CHitNet@@UAEXPAVCString@@@Z 100449cc     Spec_D32:Spec_D32.dll
+ 0004:000009d0       __imp_?GetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z 100449d0     Spec_D32:Spec_D32.dll
+ 0004:000009d4       __imp_?SetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z 100449d4     Spec_D32:Spec_D32.dll
+ 0004:000009d8       __imp_?GetRuntimeClass@CDrPen@@UBEPAUCRuntimeClass@@XZ 100449d8     Spec_D32:Spec_D32.dll
+ 0004:000009dc       __imp_?Serialize@CDrPen@@UAEXAAVCArchive@@@Z 100449dc     Spec_D32:Spec_D32.dll
+ 0004:000009e0       __imp_?DoDataView@CDrPen@@UAEXPAVCDC@@H@Z 100449e0     Spec_D32:Spec_D32.dll
+ 0004:000009e4       __imp_?Pack_drPipe@CDrPen@@UAEXPAVCString@@@Z 100449e4     Spec_D32:Spec_D32.dll
+ 0004:000009e8       __imp_?GetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z 100449e8     Spec_D32:Spec_D32.dll
+ 0004:000009ec       __imp_?SetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z 100449ec     Spec_D32:Spec_D32.dll
+ 0004:000009f0       __imp_?ReplacePen@CDrPen@@UAEXXZ 100449f0     Spec_D32:Spec_D32.dll
+ 0004:000009f4       __imp_?ReadDefaultDrPen@CDrPen@@UAEXXZ 100449f4     Spec_D32:Spec_D32.dll
+ 0004:000009f8       __imp_?InitDrPen@CDrPen@@UAEXXZ 100449f8     Spec_D32:Spec_D32.dll
+ 0004:000009fc       __imp_?GetRuntimeClass@CDrFont@@UBEPAUCRuntimeClass@@XZ 100449fc     Spec_D32:Spec_D32.dll
+ 0004:00000a00       __imp_?Serialize@CDrFont@@UAEXAAVCArchive@@@Z 10044a00     Spec_D32:Spec_D32.dll
+ 0004:00000a04       __imp_?DoDataView@CDrFont@@UAEXPAVCDC@@H@Z 10044a04     Spec_D32:Spec_D32.dll
+ 0004:00000a08       __imp_?Pack_drPipe@CDrFont@@UAEXPAVCString@@@Z 10044a08     Spec_D32:Spec_D32.dll
+ 0004:00000a0c       __imp_?GetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z 10044a0c     Spec_D32:Spec_D32.dll
+ 0004:00000a10       __imp_?SetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z 10044a10     Spec_D32:Spec_D32.dll
+ 0004:00000a14       __imp_?DoTextFont@CDrFont@@UAEXXZ 10044a14     Spec_D32:Spec_D32.dll
+ 0004:00000a18       __imp_?ReadDefaultDrFont@CDrFont@@UAEXXZ 10044a18     Spec_D32:Spec_D32.dll
+ 0004:00000a1c       __imp_?InitDrFont@CDrFont@@UAEXXZ 10044a1c     Spec_D32:Spec_D32.dll
+ 0004:00000a20       __imp_?GetRuntimeClass@CDataWindow@@UBEPAUCRuntimeClass@@XZ 10044a20     Spec_D32:Spec_D32.dll
+ 0004:00000a24       __imp_?Serialize@CDataWindow@@UAEXAAVCArchive@@@Z 10044a24     Spec_D32:Spec_D32.dll
+ 0004:00000a28       __imp_?DoDataView@CDataWindow@@UAEXPAVCDC@@H@Z 10044a28     Spec_D32:Spec_D32.dll
+ 0004:00000a2c       __imp_?Pack_drPipe@CDataWindow@@UAEXPAVCString@@@Z 10044a2c     Spec_D32:Spec_D32.dll
+ 0004:00000a30       __imp_?GetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z 10044a30     Spec_D32:Spec_D32.dll
+ 0004:00000a34       __imp_?SetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z 10044a34     Spec_D32:Spec_D32.dll
+ 0004:00000a38       __imp_?SetWinMinMaxWIC@CDataWindow@@UAEXULPOINT3@@@Z 10044a38     Spec_D32:Spec_D32.dll
+ 0004:00000a3c       __imp_?SetWinExtWIC@CDataWindow@@UAEXXZ 10044a3c     Spec_D32:Spec_D32.dll
+ 0004:00000a40       __imp_?ReadDefaultDataWindow@CDataWindow@@UAEXXZ 10044a40     Spec_D32:Spec_D32.dll
+ 0004:00000a44       __imp_?InitDataWindow@CDataWindow@@UAEXXZ 10044a44     Spec_D32:Spec_D32.dll
+ 0004:00000a48       __imp_??1CDrObject@@UAE@XZ 10044a48     Spec_D32:Spec_D32.dll
+ 0004:00000a4c       __imp_?GetRuntimeClass@CBooleans@@UBEPAUCRuntimeClass@@XZ 10044a4c     Spec_D32:Spec_D32.dll
+ 0004:00000a50       __imp_?Serialize@CBooleans@@UAEXAAVCArchive@@@Z 10044a50     Spec_D32:Spec_D32.dll
+ 0004:00000a54       __imp_?DoDataView@CBooleans@@UAEXPAVCDC@@H@Z 10044a54     Spec_D32:Spec_D32.dll
+ 0004:00000a58       __imp_?GetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10044a58     Spec_D32:Spec_D32.dll
+ 0004:00000a5c       __imp_?SetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10044a5c     Spec_D32:Spec_D32.dll
+ 0004:00000a60       __imp_?GetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10044a60     Spec_D32:Spec_D32.dll
+ 0004:00000a64       __imp_?SetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10044a64     Spec_D32:Spec_D32.dll
+ 0004:00000a68       __imp_?GetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10044a68     Spec_D32:Spec_D32.dll
+ 0004:00000a6c       __imp_?SetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10044a6c     Spec_D32:Spec_D32.dll
+ 0004:00000a70       __imp_?GetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10044a70     Spec_D32:Spec_D32.dll
+ 0004:00000a74       __imp_?SetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10044a74     Spec_D32:Spec_D32.dll
+ 0004:00000a78       __imp_?Pack_drPipe@CBooleans@@UAEXPAVCString@@@Z 10044a78     Spec_D32:Spec_D32.dll
+ 0004:00000a7c       __imp_?GetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z 10044a7c     Spec_D32:Spec_D32.dll
+ 0004:00000a80       __imp_?SetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z 10044a80     Spec_D32:Spec_D32.dll
+ 0004:00000a84       __imp_?IsZoomEnabled@CBooleans@@UAEHH@Z 10044a84     Spec_D32:Spec_D32.dll
+ 0004:00000a88       __imp_?SetZoomEnabled@CBooleans@@UAEXHH@Z 10044a88     Spec_D32:Spec_D32.dll
+ 0004:00000a8c       __imp_?IsZoomOn@CBooleans@@UAEHHH@Z 10044a8c     Spec_D32:Spec_D32.dll
+ 0004:00000a90       __imp_?ToggleZoom@CBooleans@@UAEHHH@Z 10044a90     Spec_D32:Spec_D32.dll
+ 0004:00000a94       __imp_?ReadDefaultBooleans@CBooleans@@UAEXXZ 10044a94     Spec_D32:Spec_D32.dll
+ 0004:00000a98       __imp_?InitBooleans@CBooleans@@UAEXXZ 10044a98     Spec_D32:Spec_D32.dll
+ 0004:00000a9c       __imp_?Serialize@CMapFactor@@UAEXAAVCArchive@@@Z 10044a9c     Spec_D32:Spec_D32.dll
+ 0004:00000aa0       __imp_?GetRuntimeClass@CMatObj@@UBEPAUCRuntimeClass@@XZ 10044aa0     Spec_D32:Spec_D32.dll
+ 0004:00000aa4       \177Spec_D32_NULL_THUNK_DATA 10044aa4     Spec_D32:Spec_D32.dll
+
+ entry point at        0001:00018780
+

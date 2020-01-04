@@ -1,0 +1,34 @@
+; MMs2Mgr_D.def -- DEBUG version
+
+LIBRARY	MMs2_D32
+DESCRIPTION  'MMs2Mgr Debug DLL' 
+
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMMs2DLL											@2 NONAME
+
+
+
+
+??0CMI_2Prof@@QAE@XZ
+??1CMI_2Prof@@UAE@XZ
+
+?RBUp_2Profile@CMI_2Prof@@UAEHPAVCDrProf_2@@@Z
+
+
+
+; CMI_Gang2
+	; Constructor and Destructor
+
+
+??0CMI_Gang2@@QAE@XZ
+??1CMI_Gang2@@UAE@XZ
+
+?classCMI_Gang2@CMI_Gang2@@2UCRuntimeClass@@A
+
+

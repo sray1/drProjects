@@ -1,0 +1,11 @@
+	/////////////////////////////////////////////
+	int nActiveIndex;
+    CDr????* pAdd 	= (CDr????*)(pObjectMgr->AddToDataBase(nActiveIndex,????));
+    SetInfoForDataBase(pAdd);
+    //////////////////////////////////////////////////////////////////////////////// Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,????);
+
+	pObjectMgr->SetActiveObjectType(????);
+
+	//////////////////////////////////////////////////////////////// DELETE
+	pObjectMgr->DeleteFromDataBase(nIndex??, ????);

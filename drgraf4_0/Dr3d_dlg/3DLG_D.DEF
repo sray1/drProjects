@@ -1,0 +1,40 @@
+; 3Dlg_D.def -- for CDrawDlg stuff --  DEBUG version
+
+LIBRARY	3Dlg_D
+DESCRIPTION  '3DDlgs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	Init3DlgDLL												@2 NONAME
+
+
+; C3DlgMgr
+;	; Constructor and Destructor
+;	??0C3DlgMgr@@REC@XZ
+;	??1C3DlgMgr@@VEC@XZ
+ 	
+;	?DoModal_EyePosition@C3DlgMgr@@RECIXZ
+
+
+; CEyePositionDlg
+;	; Constructor and Destructor
+;	??0CEyePosition@@REC@PEVCWnd@@@Z
+;	??1CEyePosition@@VEC@XZ
+ 	
+	
+;	?classCDrNode@CNodeProp@@2UCRuntimeClass@@A
+;	?classCDrPipe@CPipeProp@@2UCRuntimeClass@@A
+
+
+  

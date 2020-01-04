@@ -1,0 +1,7 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by StaLMgr.rc
+//
+#define HIDCANCEL                       0x807d0002    // IDD_ISOPAR
+#define HIDC_UPDATE                     0x8087038a    // IDD_LUMPWT_IN
+#define HIDD_OK                         0x807d0001    // IDD_ISOPAR
+#define HIDOK                           0x80790001    // IDD_MANY_COMPO

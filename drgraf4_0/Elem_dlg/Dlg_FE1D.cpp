@@ -1,0 +1,701 @@
+// PipeProp.cpp : implementation file
+//
+#include "stdafx.h"
+
+#include "glb_Objs.h"
+//#include "glb_CuPS.h"
+/////////////////////
+#include "drgraf.h"
+#include "drgradoc.h" 
+/////////////////////
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// cards
+#include "crdefine.h"
+///////////////////// ElemObjs
+#include "eldefine.h"
+#include "elextern.h"
+#include "DrNode.h"
+#include "DrFE1D.h"
+///////////////////// SpecObjs
+#include "spdefine.h"
+#include "drpen.h"
+#include "Layer.h"
+////////////////////
+#include "Dlg_FE1D.h"
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+////////////////////////////////////////////////////////////////////////
+#define COMBO_NIDJ_LOC 	9     // Location of NidJ in element ComboBox
+////////////////////////////////////////////////////////////////////////
+// CDlg_FE1D dialog
+
+CDlg_FE1D::CDlg_FE1D(CWnd* pParent /*=NULL*/)
+	: CDialog(CDlg_FE1D::IDD, pParent)
+{
+	buttonOK.LoadBitmaps("Image1Up","Image1Down","Image1Focus");
+	buttonCancel.LoadBitmaps("Image2Up","Image2Down","Image2Focus");
+	//{{AFX_DATA_INIT(CDlg_FE1D)
+	m_nseg = 0;
+	m_bValve = FALSE;
+	m_LineID = "";
+	m_matID = "";
+	m_nid_I = "";
+	m_nid_J = "";
+	m_propID = "";
+	m_rid_I = "";
+	m_rid_J = "";
+	m_stressID_I = "";
+	m_stressID_J = "";
+	//}}AFX_DATA_INIT
+}
+
+void CDlg_FE1D::DoDataExchange(CDataExchange* pDX)
+{
+	CDialog::DoDataExchange(pDX);
+	//{{AFX_DATA_MAP(CDlg_FE1D)
+	DDX_Text(pDX, IDD_PIPE_NSEG, m_nseg);
+	DDV_MinMaxUInt(pDX, m_nseg, 0, 50);
+	DDX_Check(pDX, IDD_VALVE, m_bValve);
+	DDX_CBString(pDX, IDD_PIPE_LINE_ID, m_LineID);
+	DDV_MaxChars(pDX, m_LineID, 5);
+	DDX_CBString(pDX, IDD_PIPE_MID, m_matID);
+	DDV_MaxChars(pDX, m_matID, 5);
+	DDX_CBString(pDX, IDD_PIPE_NID_I, m_nid_I);
+	DDV_MaxChars(pDX, m_nid_I, 5);
+	DDX_CBString(pDX, IDD_PIPE_NID_J, m_nid_J);
+	DDV_MaxChars(pDX, m_nid_J, 5);
+	DDX_CBString(pDX, IDD_PIPE_PID, m_propID);
+	DDV_MaxChars(pDX, m_propID, 5);
+	DDX_CBString(pDX, IDD_PIPE_RID_I, m_rid_I);
+	DDV_MaxChars(pDX, m_rid_I, 5);
+	DDX_CBString(pDX, IDD_PIPE_RID_J, m_rid_J);
+	DDV_MaxChars(pDX, m_rid_J, 5);
+	DDX_CBString(pDX, IDD_PIPE_STRESS_ID_I, m_stressID_I);
+	DDV_MaxChars(pDX, m_stressID_I, 5);
+	DDX_CBString(pDX, IDD_PIPE_STRESS_ID_J, m_stressID_J);
+	DDV_MaxChars(pDX, m_stressID_J, 5);
+	//}}AFX_DATA_MAP
+}
+
+BEGIN_MESSAGE_MAP(CDlg_FE1D, CDialog)
+	//{{AFX_MSG_MAP(CDlg_FE1D)
+	ON_BN_CLICKED(IDD_ADD, OnClickedAdd)
+	ON_BN_CLICKED(IDD_DEL, OnClickedDel)
+	ON_BN_CLICKED(IDD_EDIT, OnClickedEdit)
+	ON_LBN_SELCHANGE(IDD_LIST, OnSelchangeList)
+	ON_BN_CLICKED(IDD_VALVE, OnClickedValve)
+	ON_CBN_KILLFOCUS(IDD_PIPE_LINE_ID, OnKillfocusPipeLineId)
+	ON_CBN_SELCHANGE(IDD_PIPE_LINE_ID, OnSelchangePipeLineId)
+	ON_BN_DOUBLECLICKED(IDD_ADD, OnClickedAdd)
+	ON_BN_DOUBLECLICKED(IDD_DEL, OnClickedDel)
+	ON_BN_DOUBLECLICKED(IDD_EDIT, OnClickedEdit)
+	ON_BN_DOUBLECLICKED(IDOK, OnOK)
+	ON_CBN_EDITUPDATE(IDD_PIPE_LINE_ID, OnEditupdatePipeLineId)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// CDlg_FE1D message handlers
+
+BOOL CDlg_FE1D::OnInitDialog()
+{
+	CDialog::OnInitDialog();
+	
+	// TODO: Add extra initialization here
+	buttonOK.SubclassDlgItem(IDOK,this); 
+	buttonCancel.SubclassDlgItem(IDCANCEL,this);
+	buttonOK.SizeToContent();
+	buttonCancel.SizeToContent();
+	///////////////////////////////////////////////////////////////////
+	//structural
+	///////////////////////////////////////////////////////////////////
+	CWnd* pWndCtrl;
+	pWndCtrl = GetDlgItem(IDD_PIPE_NSEG);
+	((CComboBox*)pWndCtrl)->LimitText(ID_LEN); 
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	/////////////////////////////////////////////
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	int nMaxNodes 	 = pDListMgr->GetSpecificObjectCount(NODE);//
+	if (nMaxNodes<=0)
+		return TRUE;
+	/////////////////////////////////////////////////////
+	FillListAllNodeIDs(1);  // nid_I
+	FillListAllNodeIDs(2);  // nid_J
+	////////////////////////////////
+	pDListMgr 	= pObjectMgr->GetObjectList(PIPE);
+	int nMaxPipes 	 = pDListMgr->GetSpecificObjectCount(PIPE);//
+	if(nMaxPipes>0)
+	{
+		///////////////////////////////////////////////	
+ 		FillListAllString();          // filling Pipe List
+ 		////////////////////
+		int nActiveObjIndex = pObjectMgr->GetActiveObjectIndex();//notactive = -1
+		CDrObject* pObject = (CDrObject*)(pDListMgr->GetObject(nActiveObjIndex));       // 
+		if (pObject->GetObjectType() == (int)PIPE) 
+			FillOthers(nActiveObjIndex);		// Active Pipe
+		else
+			FillOthers(-1);           			// First Pipe
+		///////////////////////////////
+		CString EndNids;  
+		int nIdLen,nRepeat;
+			
+		nIdLen  = m_nid_I.GetLength();
+		nRepeat = COMBO_NIDJ_LOC - (nIdLen + 1);   // no. of Blank Spaces 
+		CString blank(' ',nRepeat);
+		EndNids = m_nid_I + blank + m_nid_J;
+		////////
+		pWndCtrl = GetDlgItem(IDD_LIST);
+		int index = ((CListBox*)pWndCtrl)->FindStringExact(-1,EndNids);
+		((CListBox*)pWndCtrl)->SetCurSel(index);
+		//////////////////////////////////////// 
+		pWndCtrl = GetDlgItem(IDD_PIPE_NID_I);
+		index = ((CComboBox*)pWndCtrl)->FindStringExact(-1,m_nid_I);
+		((CComboBox*)pWndCtrl)->SetCurSel(index); 
+		((CComboBox*)pWndCtrl)->SetFocus; 
+	    ////////////////////////////////////////
+		pWndCtrl = GetDlgItem(IDD_PIPE_NID_J);
+		index = ((CComboBox*)pWndCtrl)->FindStringExact(-1,m_nid_J);
+		((CComboBox*)pWndCtrl)->SetCurSel(index);
+	}
+	//////////////////
+	UpdateData(FALSE);
+	//////////////////	
+	return FALSE;  // return TRUE  unless you set the focus to a control
+}
+
+void CDlg_FE1D::OnClickedAdd()
+{
+//       case IDD_ADD:
+    ////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+    ///////////////////	
+	if((!m_nid_I.GetLength())||(!m_nid_J.GetLength()) )   // blank nIDs
+	{
+		AfxMessageBox("No Node Exists!!\nUse Cancel Button\nCreate Nodes First");
+   		return;
+   	} 
+	////////////////////////////////	 
+	if(m_nid_I == m_nid_J)
+	{
+		AfxMessageBox("Node IDs for End: I & End: J must be different!!");
+   		return;
+   	} 
+   	//////////////////////////////////////////////////////
+	CWnd* pWndCtrl = GetDlgItem(IDD_LIST);
+	int i,index,nIdLen,nRepeat;
+	CString EndNids;  
+			
+	nIdLen  = m_nid_I.GetLength();
+	nRepeat = COMBO_NIDJ_LOC - (nIdLen + 1);   // no. of Blank Spaces 
+	CString blank(' ',nRepeat);
+	EndNids = m_nid_I + blank + m_nid_J; 
+	/////////////////////////////////////////// already exists
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+   	if(( i= pObjectMgr->GetObjectIndexfromKey(PIPE,EndNids,1)) >=0)
+   	{
+   		index = ((CListBox*)pWndCtrl)->GetCurSel();
+		AfxMessageBox("Pipe with these NodeIDs Already Exists !!\nUse Edit Button");
+   		return;
+	}
+    /////////////////////////////////////////////////////////////////////////////// Add 
+	int nActiveIndex;
+    CDrPipe* pAdd 	= (CDrPipe*)(pObjectMgr->AddToDataBase(nActiveIndex,PIPE));
+    SetInfoForDataBase(pAdd);
+    //////////////////////////////////////////////////////////////////////////////// Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,PIPE);
+	////////////////////////////////////////////////////////// 
+	index = ((CListBox*)pWndCtrl)->FindStringExact(-1,EndNids);
+	((CListBox*)(pWndCtrl))->AddString(EndNids);
+	((CListBox*)pWndCtrl)->SetCurSel(index); 
+	////////////////////
+	UpdateData(FALSE);			//TO Screen(FALSE)    
+	///////////////////
+	return;
+}
+
+void CDlg_FE1D::OnClickedDel()
+{
+//       case IDD_DEL:
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	//////////////////
+	UpdateData(TRUE);
+	//////////////////
+	int nIdLen,nRepeat;
+	CString EndNids;  
+			
+	nIdLen  = m_nid_I.GetLength();
+	nRepeat = COMBO_NIDJ_LOC - (nIdLen + 1);   // no. of Blank Spaces 
+	CString blank(' ',nRepeat);
+	EndNids = m_nid_I + blank + m_nid_J;
+	///////////////////////////////////// 
+	int nMaxPipes;
+	pDListMgr 	= pObjectMgr->GetObjectList(PIPE);
+	nMaxPipes = pDListMgr->GetSpecificObjectCount(PIPE);  
+	if(nMaxPipes <= 0 )   // no Pipe
+	{
+		AfxMessageBox("No Pipe to Delete!!");
+   		return;
+   	} 
+	//////////////////////////////////////////////////////	
+//   	CDrPipe Pipe;
+	int i;
+   	///////////////////////////
+   	i = pObjectMgr->GetObjectIndexfromKey(PIPE,EndNids,1);
+   	if(i<0)
+   	{
+   		AfxMessageBox("No Need to Delete !!\nPipe was Not saved");
+   		return;
+   	}		
+	/////////////////////////////////////////////////////////////
+	CString strDel = "Deleting Pipe with ends " + m_nid_I + " & " 
+												+ m_nid_J + 
+												"\nAre You Sure !!"; 
+		if(AfxMessageBox(strDel,MB_YESNO) == IDNO)
+		return;
+	/////////////////////////////////////////////////////////////// DELETE
+	CWnd* pWndCtrl = GetDlgItem(IDD_LIST);
+	int index;
+ 	index = ((CListBox*)pWndCtrl)->FindStringExact(-1,EndNids);
+	((CListBox*)(pWndCtrl))->DeleteString(index); 
+	///////////////////////////////////////////////
+	pObjectMgr->DeleteFromDataBase(i, PIPE);// delete from ObjectList
+	pDoc->UpdateAllViews(NULL);					// Tell all Views
+	/////////////////////////////
+	nMaxPipes = pDListMgr->GetSpecificObjectCount(PIPE);
+	if(nMaxPipes>0)
+	{
+    	((CListBox*)pWndCtrl)->SetCurSel(0);
+    	OnSelchangeList();
+    	((CListBox*)pWndCtrl)->GetText(0,EndNids); 
+    	//////////////////////////////////////////////// change ActiveObjIndex
+   		if((i = pObjectMgr->GetObjectIndexfromKey(PIPE,EndNids,1)) >=0)
+			pObjectMgr->SetActiveObjectIndex(i);
+   	    ////////////////////////////////////////////////
+    	
+    }
+    else
+    {
+		m_LineID = "";
+		m_matID = "";
+//		m_nid_I = "";
+//		m_nid_J = "";
+		m_nseg = 0;
+		m_propID = "";
+		m_rid_I = "";
+		m_rid_J = "";
+		m_stressID_I = "";
+		m_stressID_J = "";
+		m_bValve = FALSE;
+    	//////////////////////////////////////////////// change ActiveObjIndex
+ 		pObjectMgr->SetActiveObjectIndex(-1);
+   	    ////////////////////////////////////////////////
+	} 
+	////////////////////
+	UpdateData(FALSE);          //To Screen
+	//////////////////// 
+	return;
+}
+
+void CDlg_FE1D::OnClickedEdit()
+{
+//      case IDD_EDIT:   
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PIPE);
+	///////////////////////////////////////////// 
+	UpdateData(TRUE);
+	//////////////////
+	int i,nMaxPipes;                   
+	
+	nMaxPipes = pDListMgr->GetSpecificObjectCount(PIPE);  
+	if(nMaxPipes <= 0 )   // no Pipe
+	{
+		AfxMessageBox("No Pipe to Edit!!\nUse Add Button");
+   		return;
+   	}
+   	 
+	if((!m_nid_I.GetLength())||(!m_nid_J.GetLength()) )   // blank nIDs
+	{
+		AfxMessageBox("No Node Exists!!\nUse Cancel Button\nCreate Nodes First");
+   		return;
+   	} 
+	////////////////////////////////	 
+	if(m_nid_I == m_nid_J)
+	{
+		AfxMessageBox("Node IDs for End: I & End: J must be different!!");
+   		return;
+   	} 
+   	
+    //////////////////////////////////////////////////////
+	CString EndNids,NidI,NidJ;
+	int nIdLen,nRepeat;
+	//////////////////
+	nIdLen  = m_nid_I.GetLength();
+	nRepeat = COMBO_NIDJ_LOC - (nIdLen + 1);   // no. of Blank Spaces
+	CString blank(' ',nRepeat);
+	EndNids = m_nid_I + blank + m_nid_J; 
+	///////////////////////////////////////////////
+    if((i= pObjectMgr->GetObjectIndexfromKey(PIPE,EndNids,1)) <0)
+    {
+		AfxMessageBox("Pipe does not Exist!!\nUse Add Button");
+   		return;
+   	}
+	else
+	{	
+       ///////////////////////////////////////////////////// EDIT
+		CDrPipe* pPipe = (CDrPipe*)pDListMgr->GetObject(i);    
+    	SetInfoForDataBase(pPipe);
+   		pDListMgr->EditObject(i,pPipe);
+		////////////////////
+		UpdateData(FALSE);			//TO  Screen(FALSE)    
+   		///////////////////	
+	}		
+	////////    
+	return;
+}
+
+void CDlg_FE1D::OnOK()
+{ 
+
+	CDialog::OnOK();
+
+} 
+
+void CDlg_FE1D::OnSelchangeList()
+{
+//      case IDD_LIST:
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PIPE);
+	/////////////////////////////////////////////
+	CString EndNids,NidI,NidJ;  
+	////////////////////////////
+	int nMaxPipes = pDListMgr->GetSpecificObjectCount(PIPE);
+	if(nMaxPipes <= 0) return;
+	//////////////////////////
+   	////////////////////
+	UpdateData(TRUE);			//Get From Screen(TRUE)    
+   	///////////////////	
+
+	CWnd* pWndCtrl = GetDlgItem(IDD_LIST);
+   	int index = ((CListBox*)pWndCtrl)->GetCurSel();
+	    
+    ((CListBox*)pWndCtrl)->GetText(index,EndNids); 
+    
+	int i;
+	///////////////////////////////////////////////
+   	if((i= pObjectMgr->GetObjectIndexfromKey(PIPE,EndNids,1)) <0)
+   	{
+    	MessageBeep(0); 
+    	return;
+	}
+	else
+	{    	
+   		//////////////
+   		FillOthers(i);     
+   		//////////////
+	}    	    
+   	////////////////////
+	UpdateData(FALSE);			//TO Screen(FALSE)    
+   	///////////////////	
+	
+}
+
+void CDlg_FE1D::OnEditupdatePipeLineId()
+{ 
+/*
+	/////////////////////////////////////////////
+	CWnd* pWndCtrl = GetDlgItem(IDD_PIPE_LINE_ID);
+	
+	int index;
+   	CString EditString = 
+   	index = ((CComboBox*)pComCtrlI)->GetCurSel();
+   	
+    ((CComboBox*)pComCtrlI)->GetLBText(index,m_nid_I);
+   	index = ((CComboBox*)pComCtrlJ)->GetCurSel();
+    ((CComboBox*)pComCtrlI)->GetLBText(index,m_nid_J);
+	//////////////////
+	/////////////////////////////////////////////
+	m_LineID = (pPipe->GetPipeCard())->line_id;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_LineID);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+*/
+	// TODO: Add your control notification handler code here
+	
+}
+
+void CDlg_FE1D::OnSelchangePipeLineId()
+{
+	// TODO: Add your control notification handler code here
+	
+}
+
+void CDlg_FE1D::OnKillfocusPipeLineId()
+{
+    ////////////////////
+	UpdateData(TRUE);			//FROM Screen(TRUE)    
+    ///////////////////	
+	m_LineID.MakeUpper();
+    ////////////////////
+	UpdateData(FALSE);		    //TO Screen(FALSE)    
+    ///////////////////	
+	// TODO: Add your control notification handler code here
+		
+}
+
+void CDlg_FE1D::OnClickedValve()
+{
+//      case IDD_Pipe_Valve:
+    ////////////////////
+	UpdateData(TRUE);			//FROM Screen(TRUE)    
+    ///////////////////	
+	m_bValve = !m_bValve;
+    ////////////////////
+	UpdateData(FALSE);			//TO Screen(FALSE)    
+    ///////////////////	
+	// TODO: Add your control notification handler code here
+	
+}  
+ 
+////////////////////////////////////////////////////////////// HELPERS
+void CDlg_FE1D::FillOthers(int i)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PIPE);
+	/////////////////////////////////////////////
+	// if   i<0, get First Pipe
+	//		>=0  get according to index
+	///////////////////////////////////
+	int index;
+	if (i<0)
+	{
+		index = pDListMgr->GetObjectFirstIndex(PIPE);
+	}
+	else
+		index = i;	
+	CDrPipe* pPipe 	  = (CDrPipe*)(pDListMgr->GetObject(index));       // Pipe 
+	CWnd* pComCtrl;
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_NID_I);
+	m_nid_I  = (pPipe->GetPipeCard())->nid_i;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_nid_I);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_NID_J);
+	m_nid_J  = (pPipe->GetPipeCard())->nid_j;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_nid_J);
+   	if(index>= 0)
+	    ((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_LINE_ID);
+	m_LineID = (pPipe->GetPipeCard())->line_id;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_LineID);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_MID);
+	m_matID  = (pPipe->GetPipeCard())->mid;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_matID);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_PID);
+	m_propID = (pPipe->GetPipeCard())->pid;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_propID);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_RID_I);
+	m_rid_I  = (pPipe->GetPipeCard())->rid_i;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_rid_I);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_RID_J);
+	m_rid_J  = (pPipe->GetPipeCard())->rid_j;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_rid_J);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_STRESS_ID_I);
+	m_stressID_I = (pPipe->GetPipeCard())->sid_i;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_stressID_I);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	/////////////////////////////////////////////
+	pComCtrl = GetDlgItem(IDD_PIPE_STRESS_ID_J);
+	m_stressID_J = (pPipe->GetPipeCard())->sid_j;
+   	index    = ((CComboBox*)pComCtrl)->FindStringExact(-1,m_stressID_J);
+   	if(index>= 0)
+    	((CComboBox*)pComCtrl)->SetCurSel(index);
+	////////////////////////////////////////////// Thro' data exchange
+	m_nseg       = (pPipe->GetPipeCard())->numseg;
+	m_bValve     = (pPipe->GetPipeCard())->bValve;
+
+}
+
+void CDlg_FE1D::FillListAllString()
+{
+			 
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PIPE);
+	/////////////////////////////////////////////
+	CWnd* pWndCtrl = GetDlgItem(IDD_LIST);
+	CString EndNids,NidI,NidJ;
+	
+	int nMaxPipes = pDListMgr->GetSpecificObjectCount(PIPE);
+    if(nMaxPipes>0)
+    {
+		CDrObject* pObject;			       // Pipe
+	
+		POSITION pos = pDListMgr->GetFirstObjectPos();
+		for (;pos !=NULL;)
+		{
+			pObject = (CDrObject*)pDListMgr->GetNextObject( pos); 
+			if(pObject->GetObjectType() == PIPE)
+			{ 
+				CDrPipe* pPipe = (CDrPipe*)pObject;
+	   			NidI    = (pPipe->GetPipeCard())->nid_i;
+	   			NidJ    = (pPipe->GetPipeCard())->nid_j;
+	   		
+				int nIdLen  = NidI.GetLength();
+				int nRepeat = COMBO_NIDJ_LOC - (nIdLen + 1);   // no. of Blank Spaces
+				CString blank(' ',nRepeat);
+				EndNids = NidI + blank + NidJ; 
+			
+				((CListBox*)(pWndCtrl))->AddString(EndNids); 
+ 		   	}
+		} 		   	
+	} 
+    
+}    
+void CDlg_FE1D::EmptyListAllString()
+{
+			 
+	CWnd* pWndCtrl = GetDlgItem(IDD_LIST);
+    int i,nMaxListItems;  
+    
+    nMaxListItems = ((CListBox*)(pWndCtrl))->GetCount();
+	if( nMaxListItems ) 
+		for (i=0;i<nMaxListItems;i++)
+		((CListBox*)(pWndCtrl))->DeleteString(0); 
+    
+} 
+
+void CDlg_FE1D::SetInfoForDataBase(CDrPipe* pPipe)
+{
+
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+ 	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current Pipe
+	/////////////////////////////////////////////////
+	pPipe->SetObjectType((int)PIPE);
+	pPipe->SetElemType((int)ELEM_OBJECT);              // globals.h
+    pPipe->SetLevelType((int)LEVEL_GRAPA);          // globals
+	pPipe->SetObjectID(m_nid_I+m_nid_J);             
+	/////////////////////////////////////////////////
+	(pPipe->GetPipeCard())->line_id 	= m_LineID;
+	(pPipe->GetPipeCard())->mid			= m_matID;
+	(pPipe->GetPipeCard())->nid_i		= m_nid_I;
+	(pPipe->GetPipeCard())->nid_j		= m_nid_J;
+	(pPipe->GetPipeCard())->numseg		= m_nseg ;
+	(pPipe->GetPipeCard())->pid			= m_propID;
+	(pPipe->GetPipeCard())->rid_i		= m_rid_I;
+	(pPipe->GetPipeCard())->rid_j		= m_rid_J;
+	(pPipe->GetPipeCard())->sid_i		= m_stressID_I;
+	(pPipe->GetPipeCard())->sid_j		= m_stressID_J;
+	(pPipe->GetPipeCard())->bValve		= m_bValve; 
+	///////////////////////////////////////////////
+	pPipe->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pPipe->SetLayer(pLayer->GetCurrentLayer());
+	///////////////////////////////////////////////////////// store node pointers 
+	int index;
+	//////////////////////////////////////////////////////////////////////
+	CString nid[MAX_NODES_PIPE];
+	int nEnds = MAX_NODES_PIPE;
+	/////////////////
+	nid[0] = m_nid_I; 
+	nid[1] = m_nid_J; 
+	/////////////////////////////////////////////////////  
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+    for(int i=0;i<nEnds;i++)
+    {
+		if(( index = pObjectMgr->GetObjectIndexfromKey(NODE,nid[i],1))>=0)
+		{
+			CDrNode* pDrNode = (CDrNode*)pDListMgr->GetObject(index);
+  			pPipe->GetNodeList()->InsertObject(pDrNode);
+			//////////////////////////////// save Current Pipe Pointer in Nodes
+			pDrNode->GetElemList()->InsertObject(pPipe);
+		}			
+	
+  	}	
+	//////////////////////////
+	
+} 
+
+void CDlg_FE1D::FillListAllNodeIDs(int IorJ)
+{
+			 
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	///////////////////////////////////////////////
+	CWnd* pWndCtrl;
+	if(IorJ == 1)
+		pWndCtrl = GetDlgItem(IDD_PIPE_NID_I);
+	else if(IorJ == 2)
+		pWndCtrl = GetDlgItem(IDD_PIPE_NID_J); 
+	//////////////////////////
+	CString NidI,NidJ;
+	
+	int nMaxNodes 	 = pDListMgr->GetSpecificObjectCount(NODE);//
+	if (nMaxNodes<=0)
+		return;
+    if(nMaxNodes)
+    {
+		CDrObject* 	pObject;			        
+	
+		POSITION pos = pDListMgr->GetFirstObjectPos();
+		for (;pos !=NULL;)
+		{
+			pObject = (CDrObject*)pDListMgr->GetNextObject( pos);
+			if(pObject->GetObjectType() == NODE)
+			{ 
+				CDrNode* pNode = (CDrNode*)pObject;
+	   			CString Nid     = (pNode->GetNodeCard())->id;
+	   		    ((CComboBox*)(pWndCtrl))->AddString(Nid);
+			}	   		     
+    	}
+	} 
+    
+}    
+///////////////////////////////// End of Module ///////////////*

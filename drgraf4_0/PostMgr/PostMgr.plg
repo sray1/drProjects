@@ -1,0 +1,124 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: PostMgr - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/Pmgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\PostMgr\Pmgr.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP61.tmp" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/PostMgr.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\PostMgr\CurPost.cpp"
+"C:\drgraf4_0\PostMgr\NodPost.cpp"
+"C:\drgraf4_0\PostMgr\PatPost.cpp"
+"C:\drgraf4_0\PostMgr\PmgrDll.cpp"
+"C:\drgraf4_0\PostMgr\PostMgr.cpp"
+"C:\drgraf4_0\PostMgr\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP61.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP62.tmp" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib EDlg_D32.lib DDlg_D32.lib Dr3D_D32.lib MSup_D32.lib MStL_D32.lib MNod_D32.lib MCur_D32.lib MPat_D32.lib MSol_D32.lib MMgr_D32.lib MMs0_D32.lib MMs1_D32.lib MMs2_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/PMgr_D32.pdb" /map:".\Debug/PMgr_D32.map" /debug /machine:I386 /def:".\Pmgr_d.def" /out:"c:\drgraf4_0\applic\Debug/PMgr_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/PMgr_D32.lib" 
+.\Debug\CurPost.obj
+.\Debug\NodPost.obj
+.\Debug\PatPost.obj
+.\Debug\PmgrDll.obj
+.\Debug\PostMgr.obj
+.\Debug\StdAfx.obj
+.\Debug\Pmgr.res
+\drgraf4_0\applic\Debug\MMs2_D32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP62.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+CurPost.cpp
+c:\drgraf4_0\postmgr\curpost.cpp(82) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(124) : warning C4189: 'pBool' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(230) : warning C4390: ';' : empty controlled statement found; is this the intent?
+c:\drgraf4_0\postmgr\curpost.cpp(253) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(327) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(575) : warning C4189: 'pID' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(670) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(672) : warning C4189: 'IGenID' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(664) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(853) : warning C4390: ';' : empty controlled statement found; is this the intent?
+c:\drgraf4_0\postmgr\curpost.cpp(987) : warning C4189: 'pGang' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(1035) : warning C4189: 'pDoc' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(1111) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(1118) : warning C4189: 'pID' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(1114) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(1219) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(1225) : warning C4189: 'nAnswer' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(1223) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\postmgr\curpost.cpp(1567) : warning C4189: 'aObj' : local variable is initialized but not referenced
+NodPost.cpp
+c:\drgraf4_0\postmgr\curpost.cpp(950) : warning C4700: local variable 'nResult' used without having been initialized
+c:\drgraf4_0\postmgr\curpost.cpp(1198) : warning C4700: local variable 'nActiveIndex' used without having been initialized
+C:\drgraf4_0\PostMgr\NodPost.cpp(91) : warning C4189: 'cyMenuSize' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(90) : warning C4189: 'cxVScroll' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(93) : warning C4189: 'cyFrame' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(89) : warning C4189: 'cyBorder' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(157) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(200) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(244) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\PostMgr\NodPost.cpp(257) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(315) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(481) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(483) : warning C4189: 'IGenID' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(474) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(537) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\PostMgr\NodPost.cpp(550) : warning C4189: 'pDoc' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(626) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(632) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(686) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(692) : warning C4189: 'nAnswer' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(690) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\NodPost.cpp(806) : warning C4189: 'aObj' : local variable is initialized but not referenced
+PatPost.cpp
+C:\drgraf4_0\PostMgr\NodPost.cpp(401) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\PostMgr\PatPost.cpp(152) : warning C4189: 'pBool' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(259) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\PostMgr\PatPost.cpp(325) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(524) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(628) : warning C4189: 'bRightOn' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(630) : warning C4189: 'IGenID' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(622) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(887) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\PostMgr\PatPost.cpp(1129) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(1253) : warning C4189: 'pDoc' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(1341) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(1337) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(1556) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(1562) : warning C4189: 'nAnswer' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(1560) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(1753) : warning C4189: 'aObj' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PatPost.cpp(1754) : warning C4189: 'CntlID' : local variable is initialized but not referenced
+PmgrDll.cpp
+C:\drgraf4_0\PostMgr\PatPost.cpp(915) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\PostMgr\PatPost.cpp(975) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\PostMgr\PatPost.cpp(1023) : warning C4701: local variable 'nResult' may be used without having been initialized
+C:\drgraf4_0\PostMgr\PatPost.cpp(1063) : warning C4700: local variable 'nResult' used without having been initialized
+C:\drgraf4_0\PostMgr\PatPost.cpp(1451) : warning C4700: local variable 'nActiveIndex' used without having been initialized
+C:\drgraf4_0\PostMgr\PmgrDll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+PostMgr.cpp
+C:\drgraf4_0\PostMgr\PostMgr.cpp(83) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PostMgr.cpp(110) : warning C4189: 'cyMenuSize' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PostMgr.cpp(109) : warning C4189: 'cxVScroll' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PostMgr.cpp(112) : warning C4189: 'cyFrame' : local variable is initialized but not referenced
+C:\drgraf4_0\PostMgr\PostMgr.cpp(108) : warning C4189: 'cyBorder' : local variable is initialized but not referenced
+StdAfx.cpp
+Linking...
+.\Pmgr_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Pmgr_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug/PMgr_D32.lib and object c:\drgraf4_0\applic\Debug/PMgr_D32.exp
+
+
+
+<h3>Results</h3>
+PMgr_D32.dll - 0 error(s), 72 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,9 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by CMgr.rc
+//
+#define HIDCANCEL                       0x80ea0002    // IDD_LSYM_TYPE
+#define HIDC_TYPE_1_ROT                 0x80ac00a0    // IDD_ROT_TYPE
+#define HIDC_TYPE_1_SYM                 0x80ea00a2    // IDD_LSYM_TYPE
+#define HIDC_TYPE_2_ROT                 0x80ac00a1    // IDD_ROT_TYPE
+#define HIDC_TYPE_2_SYM                 0x80ea00a3    // IDD_LSYM_TYPE
+#define HIDOK                           0x80ea0001    // IDD_LSYM_TYPE

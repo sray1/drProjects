@@ -1,0 +1,162 @@
+ // ELMouse.h : header file
+//
+#ifndef _NODMOUSE_H 
+#define _NODMOUSE_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+#include <afxtempl.h>			// CList Template
+                    
+#include "mouse.h"
+///////////////////// Modeless
+#include "Dlg_NodI.h"
+/////////////////////
+#include "DrNode.h" 	
+#include "DrLabel.h" 	
+#include "DListMgr.h"
+#include "Def_CuPS.h"                    
+#include "Def_Type.h"                    
+#include "Def_Mous.h"                    
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class CNodMouse : public CMouse
+{
+public:
+
+	CNodMouse();
+//////////////////////////////////////
+	DECLARE_SERIAL(CNodMouse)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+
+	///////////////////////////////////////////////////////////////////////////
+	UINT				ReSetToolID_NOD(UINT CntlID,UINT IGenID, UINT OperID);
+	void				InitDlgIn_NOD();
+	void				ModeLessOff_NOD();
+	void				ModeLessOn_NOD();
+	////////////////////////////////////////////////////////
+	CDlg_NodI*			GetNodInDlg(){return m_pNodInDlg;};                                                                                
+	////////////////////////////////////////////////////////////////
+	long				CreateorActivateNodIn(UINT wParam, long lParam);
+	long				CancelNodIn(UINT wParam, long lParam);
+	long				GoodByeNodIn(UINT wParam, long lParam);
+	long				UpdateNodIn(UINT wParam, long lParam);
+	/////////////////////
+	void 				OnEBoxMouseMove_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 				OnEBoxLButtonDown_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 				OnEBoxRButtonDown_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 				OnEBoxLButtonUp_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 				OnEBoxRButtonUp_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	///////////////////////////////////////////////////// NODE
+	virtual	int 		ShowNode(CString* pID,BOOL bnid_c,int nHowMany);
+	virtual CString		GetCurrentNodeID(){return m_CurrentNodeID;};
+    virtual void		SetCurrentNodeID(CString NID)
+    					{
+    						m_CurrentNodeID = NID;
+    					}; 
+	virtual CString		GetAnchorNodeID(){return m_AnchorNodeID;};
+	virtual void		SetAnchorNodeID(CString NID)
+						{
+							m_AnchorNodeID = NID;
+						};
+	virtual CString		GetCurrentSupID(){return m_CurrentSupID;};
+    virtual void		SetCurrentSupID(CString SID)
+    					{
+    						m_CurrentSupID = SID;
+    					}; 
+	virtual CString		GetCurrentLoadID(){return m_CurrentLoadID;};
+    virtual void		SetCurrentLoadID(CString LID)
+    					{
+    						m_CurrentLoadID = LID;
+    					}; 
+
+	
+		
+protected:
+
+
+	void			SizeRectDlgIn(CRect& BoxRect);
+	//////////////////////////////////////////////
+	void			ElementLeftDown_NOD();				// described in derived also
+	void			ElementLeftUp_NOD(CPoint point);	// described in derived also
+	///////////////////////////////////////////////////////// Node
+	CDrObject*		GetObjectFromID(CString& ID, int nObjType);
+	void			SetMouseWICFromNode(CDrNode* pDrNode,LPOINT3* pMouseWIC);
+	void			UpdateNDlg_TRUE();
+	void			UpdateNDlg_FALSE();
+	int				LeftUp_NODE(CPoint point,BOOL bCNode);
+    ////////////////////////////////////////
+	void 			SerializeNode(CArchive& ar);
+	////////////////////////////////////
+	void 			PreLeftDown(CPoint point);
+	void 			PostLeft();
+	void 			PreLeftUp(CPoint point);
+
+
+protected:  
+// Attributes
+
+
+	CDlg_NodI*	m_pNodInDlg;                                                                                
+	BOOL		m_bDoModalDone;
+	///////////////////////////////////////////////////
+	GENERATE	m_Gener;		// forward/reverse/auto					
+	/////////////////////////////////////////// MouseInsert:Interpolate
+//	CMI_Sol_I	m_MI_Sol_I;
+	///////////////////////////////////////////
+	BOOL    	m_bElementMode;
+	int			m_nActiveObject;
+	int			m_nActiveTool;
+	/////////////////////////////////////////// Node 
+	CDrNode*	m_pCurrentNode;
+	CDrLabel*	m_pCurrentLabel;
+
+    int			m_LastNodeNum;		// internal
+	CString 	m_CurrentNodeID;
+	CString 	m_CurrentSupID;
+	CString 	m_CurrentLoadID;
+	CString 	m_CurrentNodeIDOld;
+	CString 	m_AnchorNodeID;
+	BOOL		m_bAnchorCNode;
+	int			m_nNodeDone;		// for dragging
+ 	/////////////////////////////////////////// CNode     
+	int		    m_nCNodeDone;		// for Curve & Patch
+	CString 	m_CurrentCNodeID;
+
+
+
+//Operations
+public:
+
+	~CNodMouse();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CNodMouse)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

@@ -1,0 +1,164 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: View_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/View.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\VIEW\View.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP59.tmp" with contents
+[
+/nologo /MDd /W4 /GR /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/View_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\VIEW\Ax_wire0.cpp"
+"C:\drgraf4_0\VIEW\Axisdraw.cpp"
+"C:\drgraf4_0\VIEW\Colorpal.cpp"
+"C:\drgraf4_0\VIEW\Draxis.cpp"
+"C:\drgraf4_0\VIEW\Light.cpp"
+"C:\drgraf4_0\VIEW\Render.cpp"
+"C:\drgraf4_0\VIEW\Rn_wire0.cpp"
+"C:\drgraf4_0\VIEW\Rn_wire1.cpp"
+"C:\drgraf4_0\VIEW\Rn_wire2.cpp"
+"C:\drgraf4_0\VIEW\Textures.cpp"
+"C:\drgraf4_0\VIEW\Viewdll.cpp"
+"C:\drgraf4_0\VIEW\Viewinfo.cpp"
+"C:\drgraf4_0\VIEW\Zbuffer.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP59.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP5A.tmp" with contents
+[
+Dr3D_D32.lib Spec_D32.lib Mesh_D32.lib Elem_D32.lib Draw_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib OMgr_d32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/View_d32.pdb" /map:".\Debug/View_d32.map" /debug /machine:IX86 /def:".\View_d.def" /out:"c:\drgraf4_0\applic\Debug\View_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\View_d32.lib" 
+.\Debug\Ax_wire0.obj
+.\Debug\Axisdraw.obj
+.\Debug\Colorpal.obj
+.\Debug\Draxis.obj
+.\Debug\Light.obj
+.\Debug\Render.obj
+.\Debug\Rn_wire0.obj
+.\Debug\Rn_wire1.obj
+.\Debug\Rn_wire2.obj
+.\Debug\Textures.obj
+.\Debug\Viewdll.obj
+.\Debug\Viewinfo.obj
+.\Debug\Zbuffer.obj
+.\Debug\View.res
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP5A.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Ax_wire0.cpp
+c:\drgraf4_0\view\ax_wire0.cpp(277) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\view\ax_wire0.cpp(475) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Axisdraw.cpp
+C:\drgraf4_0\VIEW\Axisdraw.cpp(80) : warning C4189: 'nPenWidth' : local variable is initialized but not referenced
+Colorpal.cpp
+Draxis.cpp
+C:\drgraf4_0\VIEW\Colorpal.cpp(119) : warning C4701: local variable 'h' may be used without having been initialized
+C:\drgraf4_0\VIEW\Colorpal.cpp(159) : warning C4701: local variable 'r' may be used without having been initialized
+C:\drgraf4_0\VIEW\Colorpal.cpp(160) : warning C4701: local variable 'g' may be used without having been initialized
+C:\drgraf4_0\VIEW\Colorpal.cpp(161) : warning C4701: local variable 'b' may be used without having been initialized
+C:\drgraf4_0\VIEW\Colorpal.cpp(369) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\VIEW\Colorpal.cpp(404) : warning C4706: assignment within conditional expression
+Light.cpp
+C:\drgraf4_0\VIEW\Draxis.cpp(82) : warning C4701: local variable 'Dest0' may be used without having been initialized
+C:\drgraf4_0\VIEW\Light.cpp(138) : warning C4101: 'transmission' : unreferenced local variable
+Render.cpp
+C:\drgraf4_0\VIEW\Render.cpp(110) : warning C4244: 'argument' : conversion from 'long' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(110) : warning C4244: 'argument' : conversion from 'long' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(110) : warning C4244: 'argument' : conversion from 'long' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(110) : warning C4244: 'argument' : conversion from 'long' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(128) : warning C4244: 'initializing' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(431) : warning C4552: '-' : operator has no effect; expected operator with side-effect
+C:\drgraf4_0\VIEW\Render.cpp(445) : warning C4244: 'argument' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(445) : warning C4244: 'argument' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(847) : warning C4244: '=' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(854) : warning C4244: '=' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(967) : warning C4244: '=' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(972) : warning C4244: '=' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(1107) : warning C4101: 'pPolyTemp' : unreferenced local variable
+C:\drgraf4_0\VIEW\Render.cpp(1237) : warning C4552: '-' : operator has no effect; expected operator with side-effect
+C:\drgraf4_0\VIEW\Render.cpp(1301) : warning C4244: 'argument' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(1301) : warning C4244: 'argument' : conversion from 'int' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(1340) : warning C4244: '=' : conversion from 'long' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(1341) : warning C4244: '=' : conversion from 'long' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(1345) : warning C4244: '=' : conversion from 'long' to 'short', possible loss of data
+C:\drgraf4_0\VIEW\Render.cpp(1346) : warning C4244: '=' : conversion from 'long' to 'short', possible loss of data
+Rn_wire0.cpp
+C:\drgraf4_0\VIEW\Render.cpp(130) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\VIEW\Render.cpp(355) : warning C4700: local variable 'bInterrupted' used without having been initialized
+C:\drgraf4_0\VIEW\Render.cpp(460) : warning C4701: local variable 'R' may be used without having been initialized
+C:\drgraf4_0\VIEW\Render.cpp(460) : warning C4701: local variable 'dR' may be used without having been initialized
+C:\drgraf4_0\VIEW\Render.cpp(453) : warning C4701: local variable 'pB' may be used without having been initialized
+C:\drgraf4_0\VIEW\Render.cpp(506) : warning C4700: local variable 'bInterrupted' used without having been initialized
+C:\drgraf4_0\VIEW\Render.cpp(737) : warning C4701: local variable 'pNodeB' may be used without having been initialized
+C:\drgraf4_0\VIEW\Render.cpp(867) : warning C4701: local variable 'R' may be used without having been initialized
+C:\drgraf4_0\VIEW\Render.cpp(867) : warning C4701: local variable 'dR' may be used without having been initialized
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(455) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(475) : warning C4189: 'nObjType' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(538) : warning C4189: 'nObjType' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(590) : warning C4189: 'nObjType' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(642) : warning C4189: 'nObjType' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(694) : warning C4189: 'nObjType' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(743) : warning C4189: 'nObjType' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(792) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(780) : warning C4189: 'nObjType' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(1040) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(1094) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(1252) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(1353) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(1373) : warning C4189: 'nObjType' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(1439) : warning C4189: 'pListN' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire0.cpp(1431) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Rn_wire1.cpp
+C:\drgraf4_0\VIEW\Rn_wire1.cpp(392) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire1.cpp(476) : warning C4189: 'pSolid' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire1.cpp(549) : warning C4189: 'pPatch' : local variable is initialized but not referenced
+C:\drgraf4_0\VIEW\Rn_wire1.cpp(1000) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Rn_wire2.cpp
+Textures.cpp
+C:\drgraf4_0\VIEW\Textures.cpp(72) : warning C4100: 'LI' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(144) : warning C4100: 'LI' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(158) : warning C4100: 'LI' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(199) : warning C4100: 'LI' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(751) : warning C4100: 'bounds' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(749) : warning C4100: 'PICTid' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(923) : warning C4100: 'lon' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(921) : warning C4100: 'lat' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(920) : warning C4100: 'repeat' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(919) : warning C4100: 'c' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(918) : warning C4100: 'w' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(917) : warning C4100: 'v' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(916) : warning C4100: 'u' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(1010) : warning C4100: 'lon' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(1008) : warning C4100: 'lat' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(1007) : warning C4100: 'scalar' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(1005) : warning C4100: 'w' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(1004) : warning C4100: 'v' : unreferenced formal parameter
+C:\drgraf4_0\VIEW\Textures.cpp(1003) : warning C4100: 'u' : unreferenced formal parameter
+Viewdll.cpp
+C:\drgraf4_0\VIEW\Textures.cpp(212) : warning C4700: local variable 'oC' used without having been initialized
+C:\drgraf4_0\VIEW\Textures.cpp(471) : warning C4700: local variable 'p3DMath' used without having been initialized
+C:\drgraf4_0\VIEW\Textures.cpp(496) : warning C4700: local variable 'p3DMath' used without having been initialized
+C:\drgraf4_0\VIEW\Textures.cpp(521) : warning C4700: local variable 'p3DMath' used without having been initialized
+C:\drgraf4_0\VIEW\Textures.cpp(546) : warning C4700: local variable 'p3DMath' used without having been initialized
+C:\drgraf4_0\VIEW\Textures.cpp(571) : warning C4700: local variable 'p3DMath' used without having been initialized
+C:\drgraf4_0\VIEW\Textures.cpp(596) : warning C4700: local variable 'p3DMath' used without having been initialized
+C:\drgraf4_0\VIEW\Textures.cpp(981) : warning C4700: local variable 'rgb' used without having been initialized
+C:\drgraf4_0\VIEW\Viewdll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Viewinfo.cpp
+Zbuffer.cpp
+C:\drgraf4_0\VIEW\Zbuffer.cpp(64) : warning C4706: assignment within conditional expression
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\View_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\View_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug\View_d32.lib and object c:\drgraf4_0\applic\Debug\View_d32.exp
+
+
+
+<h3>Results</h3>
+View_d32.dll - 0 error(s), 92 warning(s)
+</pre>
+</body>
+</html>

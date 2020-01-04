@@ -1,0 +1,138 @@
+; OMgr_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY			OMgr_D32
+DESCRIPTION		'ObjectMgr DLL' 
+EXETYPE			WINDOWS
+CODE			LOADONCALL MOVEABLE DISCARDABLE
+DATA			PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitOMgrDLL												@2 NONAME
+
+; CObjectMgr
+;	; Constructor and Destructor
+ 	??0CObjectMgr@@REC@XZ   									
+ 	??1CObjectMgr@@VEC@XZ
+ 	
+	?GetRuntimeClass@CObjectMgr@@VFCPEUCRuntimeClass@@XZ
+    ?classCObjectMgr@CObjectMgr@@2UCRuntimeClass@@A
+    ?Serialize@CObjectMgr@@VECXAEVCArchive@@@Z 
+ 
+;?GetXForm@CObjectMgr@@VECPEVCXForm@@XZ
+	?GetEBoxMgr@CObjectMgr@@VECPEVCEBoxMgr@@XZ
+	?GetDBoxMgr@CObjectMgr@@VECPEVCDBoxMgr@@XZ
+
+	?Init@CObjectMgr@@VECXXZ
+	
+	?IsViewChanged@CObjectMgr@@VECHXZ
+	?SetViewChanged@CObjectMgr@@VECXH@Z
+
+?GetLastObjectNo@CObjectMgr@@VECJXZ
+?BumpLastObjectNo@CObjectMgr@@VECXXZ 
+
+	?GetObjectList@CObjectMgr@@VECPEVCDListMgr@@XZ
+	?GetObjectCount@CObjectMgr@@VECHXZ
+	?GetActiveObjectIndex@CObjectMgr@@VECHXZ
+	?SetActiveObjectIndex@CObjectMgr@@VECXH@Z
+
+	?GetActiveObjectNo@CObjectMgr@@VECIXZ
+	?GetActiveObjectType@CObjectMgr@@VECHXZ
+	?SetActiveObjectNo@CObjectMgr@@VECXI@Z
+	?SetActiveObjectType@CObjectMgr@@VECXH@Z
+
+    ?GetDocSize@CObjectMgr@@REC?EVCSize@@XZ
+	?Do_Object_Dialog@CObjectMgr@@RECXXZ
+	?Do_Object_DataView@CObjectMgr@@RECXPEVCDC@@HH@Z
+	?Do_Object_DrawView@CObjectMgr@@RECXPEVCDC@@HHH@Z
+	?ChangeSelectionNextObjectIndex@CObjectMgr@@RECXH@Z
+	?ChangeSelectionToObjectIndex@CObjectMgr@@RECXI@Z
+	?UpdateAllViewsWithActiveIndex@CObjectMgr@@RECXPEVCView@@I@Z
+	?GetObjectIndexfromKey@CObjectMgr@@RECHHVCString@@I@Z
+	?IsObjectHit@CObjectMgr@@RECHHPEVCClientDC@@UtagPOINT@@PEUtagRECT@@H@Z
+	?GetSpecObject@CObjectMgr@@RECPEVCDrObject@@H@Z
+
+	?GetFormat@CObjectMgr@@VEC?EVCString@@XZ
+	?SetFormatParam@CObjectMgr@@RECXIJ@Z
+
+	?DStoSC@CObjectMgr@@VECXPEH@Z
+	?DStoSC@CObjectMgr@@VECXPEJ@Z
+	?DStoSC@CObjectMgr@@VECXPEN@Z
+	?DStoSC@CObjectMgr@@VECXPEULPOINT3@@@Z
+	?DStoSC@CObjectMgr@@VECXPEULPOINT@@@Z
+	?DStoSC@CObjectMgr@@VECXPEULRECT@@@Z
+	?DStoSC@CObjectMgr@@VECXPEUtagPOINT@@@Z
+	?DStoSC@CObjectMgr@@VECXPEUtagRECT@@@Z
+
+	?SCtoDS@CObjectMgr@@VECXPEH@Z
+	?SCtoDS@CObjectMgr@@VECXPEJ@Z
+	?SCtoDS@CObjectMgr@@VECXPEN@Z
+	?SCtoDS@CObjectMgr@@VECXPEULPOINT3@@@Z
+	?SCtoDS@CObjectMgr@@VECXPEULPOINT@@@Z
+	?SCtoDS@CObjectMgr@@VECXPEULRECT@@@Z
+	?SCtoDS@CObjectMgr@@VECXPEUtagPOINT@@@Z
+	?SCtoDS@CObjectMgr@@VECXPEUtagRECT@@@Z
+
+
+
+; CDataRowHint
+;	; Constructor and Destructor
+ 	??0CDataRowHint@@REC@XZ   									
+ 	??1CDataRowHint@@VEC@XZ
+ 	
+	
+;;	?GetRuntimeClass@CDataRowHint@@VFCPEUCRuntimeClass@@XZ
+    ?classCDataRowHint@CDataRowHint@@2UCRuntimeClass@@A
+	?GetRuntimeClass@CDataRowHint@@VFCPEUCRuntimeClass@@XZ
+
+
+
+; CEBoxMgr
+	; Constructor and Destructor
+ 	??0CEBoxMgr@@REC@XZ										
+ 	??1CEBoxMgr@@VEC@XZ                                                    
+	
+ 	?GetRuntimeClass@CEBoxMgr@@VFCPEUCRuntimeClass@@XZ                  
+ 	?classCEBoxMgr@CEBoxMgr@@2UCRuntimeClass@@A                          
+ 	?Serialize@CEBoxMgr@@VECXAEVCArchive@@@Z                                
+
+ 	?IsElemBoxActive@CEBoxMgr@@VECHXZ						             
+ 	?SetElemBoxStatus@CEBoxMgr@@VECXH@Z                                  
+ 	?GetActiveObjectType@CEBoxMgr@@VECHXZ                                 
+ 	?SetActiveObjectType@CEBoxMgr@@VECXH@Z                                
+ 	?GetActiveToolType@CEBoxMgr@@VECHXZ                                  
+ 	?SetActiveToolType@CEBoxMgr@@VECXH@Z                                    
+	
+
+
+; CDBoxMgr
+	; Constructor and Destructor
+ 	??0CDBoxMgr@@REC@XZ										               
+ 	??1CDBoxMgr@@VEC@XZ                                                  
+	
+ 	?GetRuntimeClass@CDBoxMgr@@VFCPEUCRuntimeClass@@XZ                    
+ 	?classCDBoxMgr@CDBoxMgr@@2UCRuntimeClass@@A                        
+ 	?Serialize@CDBoxMgr@@VECXAEVCArchive@@@Z                              
+
+ 	?IsDrawBoxActive@CDBoxMgr@@VECHXZ						               
+ 	?SetDrawBoxStatus@CDBoxMgr@@VECXH@Z                                
+ 	?GetActiveObjectType@CDBoxMgr@@VECHXZ                               
+ 	?SetActiveObjectType@CDBoxMgr@@VECXH@Z                               
+ 	?GetActiveToolType@CDBoxMgr@@VECHXZ                                     
+ 	?SetActiveToolType@CDBoxMgr@@VECXH@Z                                       
+
+
+
+; CNewObjs
+	; Constructor and Destructor
+ 	??0CNewObjs@@REC@XZ										               
+ 	??1CNewObjs@@VEC@XZ                                                  
+	
+	?GetRuntimeClass@CNewObjs@@VFCPEUCRuntimeClass@@XZ
+ 	?classCNewObjs@CNewObjs@@2UCRuntimeClass@@A
+
+	?NewObject@CNewObjs@@RECPEVCDrObject@@H@Z
+
+  

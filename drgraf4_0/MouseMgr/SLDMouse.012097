@@ -1,0 +1,2768 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+
+#include "drgraf.h"
+#include "drgrafrm.h"
+#include "UserMsg.h"
+#include "drawView.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_Objs.h"                    
+#include "Def_Mous.h"                    
+#include "Def_CuPS.h"                    
+///////////////////// dialogMgr
+//#include "MSLDMgr.h"  
+///////////////////// elements
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+#include "DrSolid.h"
+#include "DrObj3D.h"
+///////////////////// StaLObjs
+#include "Def_StaL.h"
+#include "DrF_M.h" 	
+#include "DrD_R.h" 	
+#include "DrPrs.h" 	
+#include "DrThr.h" 	
+#include "DrLWt.h" 	
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h" 	
+///////////////////// specials
+#include "Def_Spec.h"
+#include "Obj3DMnu.h"
+#include "PatchMnu.h"
+#include "DrPen.h"
+#include "Layer.h"
+#include "booleans.h"
+#include "precison.h"
+/////////////////////
+#include "mouse.h"
+#include "DListMgr.h"
+/////////////////////
+#include "MI_F_M.h" 
+#include "MI_D_R.h" 
+#include "MI_Prs.h" 
+#include "MI_Thr.h" 
+#include "MI_LWt.h" 
+////////////////////// 
+#include "Dlg_StLI.h"
+//////////////////////
+#include "SLDMouse.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////////////////////////////
+#define	new					DEBUG_NEW
+#define	BUFF_SIZE			1024
+////////////////////////////////////
+IMPLEMENT_SERIAL(CSLDMouse,CSupMouse,1)
+/////////////////////////////////////////////////////////////////////////////
+CSLDMouse::CSLDMouse()
+{
+
+	m_pStLInDlg	= NULL;                                                                                
+	/////////////////////////////////////////// Support
+	m_StaLProc		= STL_FORCE;
+	m_StaLProcOld	= m_StaLProc;
+	m_Tx			= 0.0;
+	m_Ty			= 0.0;
+	m_Tz			= 0.0;
+	m_Rx			= 0.0;
+	m_Ry			= 0.0;
+	m_Rz			= 0.0;
+	/////
+	m_CID			= "";
+	m_bIncrement	= FALSE;
+	m_Orient		= "";
+	m_dScale		= 0.0;
+	m_dStep			= 0.0;
+	m_dStart		= 0.0;
+	m_aNid			= "";
+	m_bTan			= FALSE;
+	////////////////////////////////
+    m_LastStLNum		= 0;		// internal
+	m_CurrentStLID		= "StL0";
+	m_CurrentStLIDOld	= "StL0";
+
+}
+
+CSLDMouse::~CSLDMouse()
+{
+	/////////////////////////////////// Modeless Dialogs
+	if(m_pStLInDlg->m_hWnd)
+		m_pStLInDlg->DestroyWindow();
+	///////////////////
+	delete m_pStLInDlg;                                                                                
+	///////////////////
+}
+
+void CSLDMouse::InitDlgIn_SLD()
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////////////// System Sizes
+	m_pStLInDlg			= new CDlg_StLI(pWnd);                                                                                
+}
+
+void CSLDMouse:: ElementLeftDown_SLD()
+{	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////////////////
+//	int nMeshType; 
+	/////////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		////////////////////////////////////////////////// Force	
+		case NSL_FORCE:
+		case NSL_FOR_NODE:
+		case NSL_FOR_CNODE:
+
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_FORCE;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= TRUE;
+				m_bTy			= TRUE;
+				m_bTz			= TRUE;
+				m_bRx			= TRUE;
+				m_bRy			= TRUE;
+				m_bRz			= TRUE;
+				/////
+				m_aNid			= "";
+				m_bTan			= FALSE;
+				m_bIso			= FALSE;
+				////////////////////////////////////////
+/*
+				GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+*/
+			}
+			///////
+			return;
+
+
+		case NSL_DISPLACE:
+		case NSL_DIS_NODE:
+		case NSL_DIS_CNODE:
+
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_DISPLACE;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= TRUE;
+				m_bTy			= TRUE;
+				m_bTz			= TRUE;
+				m_bRx			= TRUE;
+				m_bRy			= TRUE;
+				m_bRz			= TRUE;
+				////////////////////////////////////////
+/*
+				GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+*/
+			}
+			///////
+			return;
+
+
+
+		case NSL_PRESSURE:
+		case NSL_PRS_NODE:
+		case NSL_PRS_CNODE:
+
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_PRESSURE;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= TRUE;
+				////////////////////////////////////////
+/*
+				GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+*/
+			}
+			return;
+
+
+
+		case NSL_THERMAL:
+		case NSL_THR_NODE:
+		case NSL_THR_CNODE:
+
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_THERMAL;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= TRUE;
+				////////////////////////////////////////
+/*
+				GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+*/
+			}
+			return;
+
+
+
+		case NSL_LUMPWT:
+		case NSL_LWT_NODE:
+		case NSL_LWT_CNODE:
+
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_LUMPWT;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= TRUE;
+				m_bTy			= TRUE;
+				m_bTz			= TRUE;
+				m_bGravMul		= FALSE;
+				////////////////////////////////////////
+/*
+				GetStLInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+				GetStLInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+*/
+			}
+			///////
+			return;
+
+		///////////////////////////////////////////////////// LinSup: Curve Based										
+		case CSL_FORCE:
+		case CSL_FOR_CIRCLE:
+        case CSL_FOR_ELLIPSE:
+        case CSL_FOR_PARABOLA:
+        case CSL_FOR_LINEAR:
+        case CSL_FOR_QUADRATIC:
+        case CSL_FOR_CUBIC:
+        case CSL_FOR_HERMITE:
+        case CSL_FOR_BEZIER:
+        case CSL_FOR_BSPLINE:
+        case CSL_FOR_NURB:
+
+			m_StaLProcOld	= m_StaLProc;
+			m_StaLProc		= STL_FORCE;
+			////////////////////////
+			if(m_StaLProc != m_StaLProcOld)
+			{
+	
+				m_bTx			= TRUE;
+				m_bTy			= TRUE;
+				m_bTz			= TRUE;
+				m_bRx			= TRUE;
+				m_bRy			= TRUE;
+				m_bRz			= TRUE;
+				/////
+				m_aNid			= "";
+				m_bTan			= FALSE;
+				m_bIso			= FALSE;
+				////////////////////////////////////////
+			}
+			///////
+			return;
+		////////////////////////////////////////
+        case CSL_DISPLACE:
+        case CSL_DIS_CIRCLE:
+        case CSL_DIS_ELLIPSE:
+        case CSL_DIS_PARABOLA:
+        case CSL_DIS_LINEAR:
+        case CSL_DIS_QUADRATIC:
+        case CSL_DIS_CUBIC:
+        case CSL_DIS_HERMITE:
+        case CSL_DIS_BEZIER:
+        case CSL_DIS_BSPLINE:
+        case CSL_DIS_NURB:
+			///////
+			return;
+		////////////////////////////////////////
+        case CSL_PRESSURE:
+        case CSL_PRS_CIRCLE:
+        case CSL_PRS_ELLIPSE:
+        case CSL_PRS_PARABOLA:
+        case CSL_PRS_LINEAR:
+        case CSL_PRS_QUADRATIC:
+        case CSL_PRS_CUBIC:
+        case CSL_PRS_HERMITE:
+        case CSL_PRS_BEZIER:
+        case CSL_PRS_BSPLINE:
+        case CSL_PRS_NURB:
+			///////
+			return;
+		////////////////////////////////////////
+        case CSL_THERMAL:
+        case CSL_THR_CIRCLE:
+        case CSL_THR_ELLIPSE:
+        case CSL_THR_PARABOLA:
+        case CSL_THR_LINEAR:
+        case CSL_THR_QUADRATIC:
+        case CSL_THR_CUBIC:
+        case CSL_THR_HERMITE:
+        case CSL_THR_BEZIER:
+        case CSL_THR_BSPLINE:
+        case CSL_THR_NURB:
+			///////
+			return;
+		////////////////////////////////////////
+        case CSL_LUMPWT:
+        case CSL_LWT_CIRCLE:
+        case CSL_LWT_ELLIPSE:
+        case CSL_LWT_PARABOLA:
+        case CSL_LWT_LINEAR:
+        case CSL_LWT_QUADRATIC:
+        case CSL_LWT_CUBIC:
+        case CSL_LWT_HERMITE:
+        case CSL_LWT_BEZIER:
+        case CSL_LWT_BSPLINE:
+        case CSL_LWT_NURB:
+			///////
+			return;
+
+		//////////////////////////////////////////////////
+		default:
+			break;
+	}  
+
+}
+
+int CSLDMouse::ShowNodeForce(CString* pID,int nHowMany)
+{
+	///////////////////////////////////////////////////////////////////////
+//	 nHowmany			// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateNodeLinSup
+						// even if same coords node exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowNode to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(FORCE);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_F_M F_MI;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Force
+	m_StaLProc == STL_FORCE;
+	////////////////////////////
+	m_pCurrentF_M = F_MI.CreateNodeBased(*pID,m_pCurrentNode,
+						m_Tx,m_Ty,m_Tz,m_Rx,m_Ry,m_Rz,m_aNid,NODE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();  // Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(FORCE);					// set Active Type									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,FORCE);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowCurveForce(CString* pID,int nHowMany)
+{
+	///////////////////////////////////////////////////////////////////////
+//	 nHowmany			// Used as an afterthought for Updating Support anyway
+						// in CMI_LSupp.CreateCurveLinSup
+						// even if same coords Curve exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowCurve to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(FORCE);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_F_M F_MI;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Support
+	m_StaLProc == STL_FORCE;
+	////////////////////////////
+	m_pCurrentF_M = F_MI.CreateCurveBased(*pID,m_pCurrentCurve,
+						m_Tx,m_Ty,m_Tz,m_Rx,m_Ry,m_Rz,m_aNid,m_bTan,CURVE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();  // Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(FORCE);					// set Active Type									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,FORCE);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowNodeDisplace(CString* pID,int nHowMany)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(DISPLACE);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_D_R F_MI;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Force
+	m_StaLProc == STL_DISPLACE;
+	////////////////////////////
+	m_pCurrentD_R = F_MI.CreateNodeBased(*pID,m_pCurrentNode,
+						m_Tx,m_Ty,m_Tz,m_Rx,m_Ry,m_Rz,m_aNid,NODE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();		    // Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(DISPLACE);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,DISPLACE);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowCurveDisplace(CString* pID,int nHowMany)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(DISPLACE);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_D_R F_MI;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Support
+	m_StaLProc == STL_DISPLACE;
+	////////////////////////////
+	m_pCurrentD_R = F_MI.CreateCurveBased(*pID,m_pCurrentCurve,
+						m_Tx,m_Ty,m_Tz,m_Rx,m_Ry,m_Rz,m_aNid,CURVE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();		    // Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(DISPLACE);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,DISPLACE);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowCurvePressure(CString* pID,int nHowMany)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(PRESSURE);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_Prs F_MI;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Support
+	m_StaLProc == STL_PRESSURE;
+	////////////////////////////
+	m_pCurrentPrs = F_MI.CreateCurveBased(*pID,m_pCurrentCurve,
+						m_Tx,m_Ty,m_Tz,m_aNid,CURVE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();		    // Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(PRESSURE);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,PRESSURE);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowCurveThermal(CString* pID,int nHowMany)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(THERMAL);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_Thr F_MI;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Support
+	m_StaLProc == STL_THERMAL;
+	////////////////////////////
+	m_pCurrentThr = F_MI.CreateCurveBased(*pID,m_pCurrentCurve,
+						m_Tx,m_Ty,m_Tz,m_aNid,CURVE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();		    // Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(THERMAL);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,THERMAL);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowNodeLumpWt(CString* pID,int nHowMany)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(LUMPWT);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_LWt F_MI;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Force
+	m_StaLProc == STL_LUMPWT;
+	////////////////////////////
+	m_pCurrentLWt = F_MI.CreateNodeBased(*pID,m_pCurrentNode,
+						m_Tx,m_Ty,m_Tz,m_aNid,NODE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();		    // Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(LUMPWT);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,LUMPWT);
+	///////////////////////////////
+	return 0;
+}	 
+
+int CSLDMouse::ShowCurveLumpWt(CString* pID,int nHowMany)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////
+	pObjectMgr->SetActiveObjectType(LUMPWT);                   
+	/////////////////////////////////////////////////////////////// Using GangSup
+	CMI_LWt F_MI;
+	//////////////////////////////////////////////////// Recompute Suppproc,for Drawing Support
+	m_StaLProc == STL_LUMPWT;
+	////////////////////////////
+	m_pCurrentLWt = F_MI.CreateCurveBased(*pID,m_pCurrentCurve,
+						m_Tx,m_Ty,m_Tz,m_aNid,CURVE);
+	////////////////////////////////////////////////////////////////////// Show
+	int nActiveIndex = pObjectMgr->GetActiveObjectIndex();		    // Get Active Index									
+	pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+	pObjectMgr->SetActiveObjectType(LUMPWT);		    // set Active Index									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,LUMPWT);
+	///////////////////////////////
+	return 0;
+}	 
+
+void CSLDMouse::OnEBoxLButtonDown_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	CDListMgr* pDListMgr;
+	/////////////////////////////////// 
+   	m_bDragOn 		= pBool->IsDragOn();
+	m_bDialogOn		= pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	//////////////////////////////////////////////////////// LOG
+	m_pdc->DPtoLP(&point);
+	//////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////////////////////////////////// take care of Edit AllClear
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	if(!(pDListMgr->GetSpecificObjectCount(NODE)) ) m_nNodeDone = 0;
+	/////////////////////////////////////////////////////////////////
+    /////////////////////////////  ELement Dialog On/Off Check
+    if(m_Gener == FORWARD)
+		ElementLeftDown_SLD();
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftDown_I();
+	//////////////////////////////////
+}
+
+void CSLDMouse::UpdateForceDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pStLInDlg->UpdateData(TRUE); // from screen
+	////////////
+	m_bTx			= GetStLInDlg()->m_bTx;
+	m_bTy			= GetStLInDlg()->m_bTy;
+	m_bTz			= GetStLInDlg()->m_bTz;
+	m_bRx			= GetStLInDlg()->m_bRx;
+	m_bRy			= GetStLInDlg()->m_bRy;
+	m_bRz			= GetStLInDlg()->m_bRz;
+	/////
+	m_bIso			= GetStLInDlg()->m_bIso;
+	m_aNid			= GetStLInDlg()->m_NID;
+	m_bTan			= GetStLInDlg()->m_bTan;
+	m_CurrentStLID	= GetStLInDlg()->m_LoadID;
+	m_StaLProc		= GetStLInDlg()->m_StaLProc;
+	/////////////////////////////////////
+}
+			
+void CSLDMouse::UpdateForceDlg_FALSE()
+{
+	//////////////////////////////////
+	GetStLInDlg()->m_dMx	= m_Rx;
+	GetStLInDlg()->m_dMy	= m_Ry;
+	GetStLInDlg()->m_dMz	= m_Rz;
+	GetStLInDlg()->m_dFx	= m_Tx;
+	GetStLInDlg()->m_dFy	= m_Ty;
+	GetStLInDlg()->m_dFz	= m_Tz;
+	GetStLInDlg()->m_LoadID	= m_CurrentLoadID;
+	////////////
+	m_pStLInDlg->UpdateData(FALSE); // to screen
+	////////////////////////////
+}
+
+int CSLDMouse::LeftUp_NodeForce(CPoint point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString* pID;
+	CString ID;
+	CDrNode* pDrNode;
+	int nActiveIndex;
+	///////////////////////////////////////////// See if any Existing Node Hit
+	int index = IsObjectHit(NODE,point,0);
+	if(index>=0)
+	{
+		pDrNode				= (CDrNode*)pDListMgr->GetObject(index);
+		ID					= pDrNode->GetObjectID();
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(NODE);
+		nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				int j;
+				/////////////////////////////// Coords
+				WORLD wLoc = *(pDrNode->GetLocalPos());
+				WORtoWOP(&wLoc,&wLoc);	// to Physical
+				//////////////////////////////
+				j = sprintf(buf,
+					"Node %s with Coordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f ",
+					ID,wLoc.x,wLoc.y,wLoc.z);
+				j += sprintf(buf+j,
+					"\nCancel: Find Next Matching Node");
+				j += sprintf(buf+j,
+					"\nOK:     Accept This Node");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDOK)
+				{
+					delete str;
+					break;
+				}
+				else
+				{
+					//////////////////////////////////////////////////////// Retry
+					index = IsObjectHit(NODE,point,startIndex);
+					if(index>=0)
+					{
+						pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+						ID		= pDrNode->GetObjectID();
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(NODE);
+						nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+						////////////////////////////////////////
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return 0;
+					}
+					/////////
+				}
+			}
+		}
+		CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+		m_pCurrentNode			= (CDrNode*)pDListMgr->GetObject(index);
+		/////////////////////////////////////////////
+	}
+	else
+		return 0;
+	//////////////////////////////////////////////////// Show LinSup
+	pID = &m_CurrentLoadID;
+	//////////////////////////
+	if(ShowNodeForce(pID,1)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_NodeForce\nShowForce Problem");
+		return -1;
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::LeftUp_CurveForce(CPoint point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	//////////////////////////////////////////////////////////////////
+	CString* pID;
+	CString ID;
+	CDrCurve* pDrCurve;
+	int nActiveIndex;
+	CDListMgr* pList;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	int index = IsObjectHit(CURVE,point,0);
+	if(index>=0)
+	{
+		pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+		ID						= pDrCurve->GetObjectID();
+		///////////////////////////////////////// Check if This Curve is Already Supported
+		pList = pDrCurve->GetSuppList();
+		///////////////////////////////
+		if(pList)
+		{
+			AfxMessageBox("Curve Already Supported!");
+//			return -1;
+		}
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(CURVE);
+		nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				int j;
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j = sprintf(buf,
+					"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+						ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				/////////////////////////	
+				j += sprintf(buf+j,"\n\nCancel: Find Next Matching Curve\n");
+				j += sprintf(buf+j,    "OK:     Accept This Curve");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDOK)
+				{
+					delete str;
+					break;
+				}
+				else
+				{
+					////////////////////////////////
+					index = IsObjectHit(CURVE,point,startIndex);
+					if(index>=0)
+					{
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						///////////////////////////////////////// Check if This Curve is Already Supported
+						pList = pDrCurve->GetSuppList();
+						///////////////////////////////
+						if(pList)
+						{
+							AfxMessageBox("Curve Already Supported!");
+							return -1;
+						}
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(CURVE);
+						nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+						////////////////////////////////////////
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return 0;
+					}
+					/////////
+				}
+			}
+		}
+		//////////////////////////////////////////////////// Gotch'a Curve/ Show LinSup
+		CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+		m_pCurrentCurve			= (CDrCurve*)pDListMgr->GetObject(index);
+	}
+	else
+		return 0;
+	/////////////////////////////////////////////
+	pID = &m_CurrentLoadID;
+	//////////////////////////
+	if(ShowCurveForce(pID,1)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_CurveForce\nShowForce Problem");
+		return -1;
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+void CSLDMouse::UpdateDisplaceDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pStLInDlg->UpdateData(TRUE); // from screen
+	////////////
+	m_Rx			= GetStLInDlg()->m_dMx;
+	m_Ry			= GetStLInDlg()->m_dMy;
+	m_Rz			= GetStLInDlg()->m_dMz;
+	m_Tx			= GetStLInDlg()->m_dFx;
+	m_Ty			= GetStLInDlg()->m_dFy;
+	m_Tz			= GetStLInDlg()->m_dFz;
+	m_CurrentLoadID	= GetStLInDlg()->m_LoadID;
+	/////////////////////////////////////
+}
+			
+void CSLDMouse::UpdateDisplaceDlg_FALSE()
+{
+	//////////////////////////////////
+	GetStLInDlg()->m_dMx	= m_Rx;
+	GetStLInDlg()->m_dMy	= m_Ry;
+	GetStLInDlg()->m_dMz	= m_Rz;
+	GetStLInDlg()->m_dFx	= m_Tx;
+	GetStLInDlg()->m_dFy	= m_Ty;
+	GetStLInDlg()->m_dFz	= m_Tz;
+	GetStLInDlg()->m_LoadID	= m_CurrentLoadID;
+	////////////
+	m_pStLInDlg->UpdateData(FALSE); // to screen
+	////////////////////////////
+}
+
+int CSLDMouse::LeftUp_NodeDisplace(CPoint point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString* pID;
+	CString ID;
+	CDrNode* pDrNode;
+	int nActiveIndex;
+	///////////////////////////////////////////// See if any Existing Node Hit
+	int index = IsObjectHit(NODE,point,0);
+	if(index>=0)
+	{
+		pDrNode				= (CDrNode*)pDListMgr->GetObject(index);
+		ID					= pDrNode->GetObjectID();
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(NODE);
+		nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				int j;
+				/////////////////////////////// Coords
+				WORLD wLoc = *(pDrNode->GetLocalPos());
+				WORtoWOP(&wLoc,&wLoc);	// to Physical
+				//////////////////////////////
+				j = sprintf(buf,
+					"Node %s with Coordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f ",
+					ID,wLoc.x,wLoc.y,wLoc.z);
+				j += sprintf(buf+j,
+					"\nCancel: Find Next Matching Node");
+				j += sprintf(buf+j,
+					"\nOK:     Accept This Node");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDOK)
+				{
+					delete str;
+					break;
+				}
+				else
+				{
+					//////////////////////////////////////////////////////// Retry
+					index = IsObjectHit(NODE,point,startIndex);
+					if(index>=0)
+					{
+						pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+						ID		= pDrNode->GetObjectID();
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(NODE);
+						nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+						////////////////////////////////////////
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return 0;
+					}
+					/////////
+				}
+			}
+		}
+		CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+		m_pCurrentNode			= (CDrNode*)pDListMgr->GetObject(index);
+		/////////////////////////////////////////////
+	}
+	else
+		return 0;
+	//////////////////////////////////////////////////// Show LinSup
+	pID = &m_CurrentLoadID;
+	//////////////////////////
+	if(ShowNodeForce(pID,1)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_NodeForce\nShowForce Problem");
+		return -1;
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::LeftUp_CurveDisplace(CPoint point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	//////////////////////////////////////////////////////////////////
+	CString* pID;
+	CString ID;
+	CDrCurve* pDrCurve;
+	int nActiveIndex;
+	CDListMgr* pList;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	int index = IsObjectHit(CURVE,point,0);
+	if(index>=0)
+	{
+		pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+		ID						= pDrCurve->GetObjectID();
+		///////////////////////////////////////// Check if This Curve is Already Supported
+		pList = pDrCurve->GetSuppList();
+		///////////////////////////////
+		if(pList)
+		{
+			AfxMessageBox("Curve Already Supported!");
+//			return -1;
+		}
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(CURVE);
+		nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				int j;
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j = sprintf(buf,
+					"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+						ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				/////////////////////////	
+				j += sprintf(buf+j,"\n\nCancel: Find Next Matching Curve\n");
+				j += sprintf(buf+j,    "OK:     Accept This Curve");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDOK)
+				{
+					delete str;
+					break;
+				}
+				else
+				{
+					////////////////////////////////
+					index = IsObjectHit(CURVE,point,startIndex);
+					if(index>=0)
+					{
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						///////////////////////////////////////// Check if This Curve is Already Supported
+						pList = pDrCurve->GetSuppList();
+						///////////////////////////////
+						if(pList)
+						{
+							AfxMessageBox("Curve Already Supported!");
+							return -1;
+						}
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(CURVE);
+						nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+						////////////////////////////////////////
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return 0;
+					}
+					/////////
+				}
+			}
+		}
+		//////////////////////////////////////////////////// Gotch'a Curve/ Show LinSup
+		CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+		m_pCurrentCurve			= (CDrCurve*)pDListMgr->GetObject(index);
+	}
+	else
+		return 0;
+	/////////////////////////////////////////////
+	pID = &m_CurrentLoadID;
+	//////////////////////////
+	if(ShowCurveForce(pID,1)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_CurveForce\nShowForce Problem");
+		return -1;
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+void CSLDMouse::UpdatePressureDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pStLInDlg->UpdateData(TRUE); // from screen
+	////////////
+	m_Tx			= GetStLInDlg()->m_dFx;
+	m_CurrentLoadID	= GetStLInDlg()->m_LoadID;
+	/////////////////////////////////////
+}
+			
+void CSLDMouse::UpdatePressureDlg_FALSE()
+{
+	//////////////////////////////////
+	GetStLInDlg()->m_dFx	= m_Tx;
+	GetStLInDlg()->m_LoadID	= m_CurrentLoadID;
+	////////////
+	m_pStLInDlg->UpdateData(FALSE); // to screen
+	////////////////////////////
+}
+
+int CSLDMouse::LeftUp_CurvePressure(CPoint point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	//////////////////////////////////////////////////////////////////
+	CString* pID;
+	CString ID;
+	CDrCurve* pDrCurve;
+	int nActiveIndex;
+	CDListMgr* pList;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	int index = IsObjectHit(CURVE,point,0);
+	if(index>=0)
+	{
+		pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+		ID						= pDrCurve->GetObjectID();
+		///////////////////////////////////////// Check if This Curve is Already Supported
+		pList = pDrCurve->GetSuppList();
+		///////////////////////////////
+		if(pList)
+		{
+			AfxMessageBox("Curve Already Supported!");
+//			return -1;
+		}
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(CURVE);
+		nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				int j;
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j = sprintf(buf,
+					"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+						ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				/////////////////////////	
+				j += sprintf(buf+j,"\n\nCancel: Find Next Matching Curve\n");
+				j += sprintf(buf+j,    "OK:     Accept This Curve");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDOK)
+				{
+					delete str;
+					break;
+				}
+				else
+				{
+					////////////////////////////////
+					index = IsObjectHit(CURVE,point,startIndex);
+					if(index>=0)
+					{
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						///////////////////////////////////////// Check if This Curve is Already Supported
+						pList = pDrCurve->GetSuppList();
+						///////////////////////////////
+						if(pList)
+						{
+							AfxMessageBox("Curve Already Supported!");
+							return -1;
+						}
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(CURVE);
+						nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+						////////////////////////////////////////
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return 0;
+					}
+					/////////
+				}
+			}
+		}
+		//////////////////////////////////////////////////// Gotch'a Curve/ Show LinSup
+		CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+		m_pCurrentCurve			= (CDrCurve*)pDListMgr->GetObject(index);
+	}
+	else
+		return 0;
+	/////////////////////////////////////////////
+	pID = &m_CurrentLoadID;
+	//////////////////////////
+	if(ShowCurveForce(pID,1)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_CurveForce\nShowForce Problem");
+		return -1;
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+void CSLDMouse::UpdateThermalDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pStLInDlg->UpdateData(TRUE); // from screen
+	////////////
+	m_Tx			= GetStLInDlg()->m_dFx;
+	m_CurrentLoadID	= GetStLInDlg()->m_LoadID;
+	/////////////////////////////////////
+}
+			
+void CSLDMouse::UpdateThermalDlg_FALSE()
+{
+	//////////////////////////////////
+	GetStLInDlg()->m_dFx	= m_Tx;
+	GetStLInDlg()->m_LoadID	= m_CurrentLoadID;
+	////////////
+	m_pStLInDlg->UpdateData(FALSE); // to screen
+	////////////////////////////
+}
+
+int CSLDMouse::LeftUp_CurveThermal(CPoint point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	//////////////////////////////////////////////////////////////////
+	CString* pID;
+	CString ID;
+	CDrCurve* pDrCurve;
+	int nActiveIndex;
+	CDListMgr* pList;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	int index = IsObjectHit(CURVE,point,0);
+	if(index>=0)
+	{
+		pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+		ID						= pDrCurve->GetObjectID();
+		///////////////////////////////////////// Check if This Curve is Already Supported
+		pList = pDrCurve->GetSuppList();
+		///////////////////////////////
+		if(pList)
+		{
+			AfxMessageBox("Curve Already Supported!");
+//			return -1;
+		}
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(CURVE);
+		nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				int j;
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j = sprintf(buf,
+					"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+						ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				/////////////////////////	
+				j += sprintf(buf+j,"\n\nCancel: Find Next Matching Curve\n");
+				j += sprintf(buf+j,    "OK:     Accept This Curve");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDOK)
+				{
+					delete str;
+					break;
+				}
+				else
+				{
+					////////////////////////////////
+					index = IsObjectHit(CURVE,point,startIndex);
+					if(index>=0)
+					{
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						///////////////////////////////////////// Check if This Curve is Already Supported
+						pList = pDrCurve->GetSuppList();
+						///////////////////////////////
+						if(pList)
+						{
+							AfxMessageBox("Curve Already Supported!");
+							return -1;
+						}
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(CURVE);
+						nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+						////////////////////////////////////////
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return 0;
+					}
+					/////////
+				}
+			}
+		}
+		//////////////////////////////////////////////////// Gotch'a Curve/ Show LinSup
+		CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+		m_pCurrentCurve			= (CDrCurve*)pDListMgr->GetObject(index);
+	}
+	else
+		return 0;
+	/////////////////////////////////////////////
+	pID = &m_CurrentLoadID;
+	//////////////////////////
+	if(ShowCurveForce(pID,1)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_CurveForce\nShowForce Problem");
+		return -1;
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+void CSLDMouse::UpdateLumpWtDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pStLInDlg->UpdateData(TRUE); // from screen
+	////////////
+	m_Tx			= GetStLInDlg()->m_dFx;
+	m_Ty			= GetStLInDlg()->m_dFy;
+	m_Tz			= GetStLInDlg()->m_dFz;
+	m_CurrentLoadID	= GetStLInDlg()->m_LoadID;
+	/////////////////////////////////////
+}
+			
+void CSLDMouse::UpdateLumpWtDlg_FALSE()
+{
+	//////////////////////////////////
+	GetStLInDlg()->m_dFx	= m_Tx;
+	GetStLInDlg()->m_dFy	= m_Ty;
+	GetStLInDlg()->m_dFz	= m_Tz;
+	GetStLInDlg()->m_LoadID	= m_CurrentLoadID;
+	////////////
+	m_pStLInDlg->UpdateData(FALSE); // to screen
+	////////////////////////////
+}
+
+int CSLDMouse::LeftUp_NodeLumpWt(CPoint point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString* pID;
+	CString ID;
+	CDrNode* pDrNode;
+	int nActiveIndex;
+	///////////////////////////////////////////// See if any Existing Node Hit
+	int index = IsObjectHit(NODE,point,0);
+	if(index>=0)
+	{
+		pDrNode				= (CDrNode*)pDListMgr->GetObject(index);
+		ID					= pDrNode->GetObjectID();
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(NODE);
+		nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				int j;
+				/////////////////////////////// Coords
+				WORLD wLoc = *(pDrNode->GetLocalPos());
+				WORtoWOP(&wLoc,&wLoc);	// to Physical
+				//////////////////////////////
+				j = sprintf(buf,
+					"Node %s with Coordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f ",
+					ID,wLoc.x,wLoc.y,wLoc.z);
+				j += sprintf(buf+j,
+					"\nCancel: Find Next Matching Node");
+				j += sprintf(buf+j,
+					"\nOK:     Accept This Node");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDOK)
+				{
+					delete str;
+					break;
+				}
+				else
+				{
+					//////////////////////////////////////////////////////// Retry
+					index = IsObjectHit(NODE,point,startIndex);
+					if(index>=0)
+					{
+						pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+						ID		= pDrNode->GetObjectID();
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(NODE);
+						nActiveIndex = pList->GetObjectIndex(NODE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(NODE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+						////////////////////////////////////////
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return 0;
+					}
+					/////////
+				}
+			}
+		}
+		CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(NODE);
+		m_pCurrentNode			= (CDrNode*)pDListMgr->GetObject(index);
+		/////////////////////////////////////////////
+	}
+	else
+		return 0;
+	//////////////////////////////////////////////////// Show LinSup
+	pID = &m_CurrentLoadID;
+	//////////////////////////
+	if(ShowNodeForce(pID,1)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_NodeForce\nShowForce Problem");
+		return -1;
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+int CSLDMouse::LeftUp_CurveLumpWt(CPoint point)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	//////////////////////////////////////////////////////////////////
+	CString* pID;
+	CString ID;
+	CDrCurve* pDrCurve;
+	int nActiveIndex;
+	CDListMgr* pList;
+	///////////////////////////////////////////// See if any Existing Curve Hit
+	int index = IsObjectHit(CURVE,point,0);
+	if(index>=0)
+	{
+		pDrCurve				= (CDrCurve*)pDListMgr->GetObject(index);
+		ID						= pDrCurve->GetObjectID();
+		///////////////////////////////////////// Check if This Curve is Already Supported
+		pList = pDrCurve->GetSuppList();
+		///////////////////////////////
+		if(pList)
+		{
+			AfxMessageBox("Curve Already Supported!");
+//			return -1;
+		}
+		/////////////////////////////////////////
+		pList = pObjectMgr->GetObjectList(CURVE);
+		nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+		pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+		pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				int j;
+				/////////////////////////////// total elems
+				int nIn		= pDrCurve->GetMaxINodes_S();
+				int nElems	= pDrCurve->GetMaxOutPts_S();
+				pList		= pDrCurve->GetINodeList();
+				//////////////////////////////
+				j = sprintf(buf,
+					"Curve %s contains:\n\t%d Interpolation Nodes\n\t%d Elements",
+						ID,nIn,nElems);
+				j += sprintf(buf+j,"Nodes:\n");
+				//////////////////////////////
+				for (POSITION posI = pList->GetHeadPosition( );posI !=NULL;)
+				{
+					////
+					CDrNode* pNode = (CDrNode*)pList->GetNextObject(posI);
+					j += sprintf(buf+j,"%s, ",pNode->GetObjectID());
+				}
+				sprintf( buf + j-2, ";");
+				/////////////////////////	
+				j += sprintf(buf+j,"\n\nCancel: Find Next Matching Curve\n");
+				j += sprintf(buf+j,    "OK:     Accept This Curve");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_OKCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDOK)
+				{
+					delete str;
+					break;
+				}
+				else
+				{
+					////////////////////////////////
+					index = IsObjectHit(CURVE,point,startIndex);
+					if(index>=0)
+					{
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						///////////////////////////////////////// Check if This Curve is Already Supported
+						pList = pDrCurve->GetSuppList();
+						///////////////////////////////
+						if(pList)
+						{
+							AfxMessageBox("Curve Already Supported!");
+							return -1;
+						}
+						///////////////////////////////////////// 
+						pList = pObjectMgr->GetObjectList(CURVE);
+						nActiveIndex = pList->GetObjectIndex(CURVE, ID);;
+						pObjectMgr->SetActiveObjectIndex(nActiveIndex);		    // set Active Index									
+						pObjectMgr->SetActiveObjectType(CURVE);		    // set Active Index									
+						pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CURVE);
+						////////////////////////////////////////
+						pDrCurve	= (CDrCurve*)pDListMgr->GetObject(index);
+						ID			= pDrCurve->GetObjectID();
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+						delete str;
+						return 0;
+					}
+					/////////
+				}
+			}
+		}
+		//////////////////////////////////////////////////// Gotch'a Curve/ Show LinSup
+		CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(CURVE);
+		m_pCurrentCurve			= (CDrCurve*)pDListMgr->GetObject(index);
+	}
+	else
+		return 0;
+	/////////////////////////////////////////////
+	pID = &m_CurrentLoadID;
+	//////////////////////////
+	if(ShowCurveForce(pID,1)<0)		// 
+	{
+		AfxMessageBox("ERROR:\nCSLDMouse::LeftUp_CurveForce\nShowForce Problem");
+		return -1;
+	}
+	//////////////////////////////////////
+	return 0;
+}
+
+void CSLDMouse::ElementLeftUp_SLD(CPoint point)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	//////////////////////////////////////////////////////////////////
+//	CString*	pID;
+	/////////////
+//	char buf[20];
+	CString Nid;
+	///////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		///////////////////////////////////////////////////// LinSup: Node Based										
+	case NSL_FOR_NODE:
+
+			////////////////
+			UpdateForceDlg_TRUE();
+			////////////////////
+			LeftUp_NodeForce(point);	
+			////////////////////
+			UpdateForceDlg_FALSE();
+			//////////////////// 
+			break;
+
+		case NSL_DIS_NODE:
+		case NSL_PRS_NODE:
+		case NSL_THR_NODE:
+		case NSL_LWT_NODE:
+		///////////////////////////////////////////////////// LinSup: Curve Based										
+		case CSL_FORCE:
+		case CSL_FOR_CIRCLE:
+		case CSL_FOR_ELLIPSE:
+		case CSL_FOR_PARABOLA:
+		case CSL_FOR_LINEAR:
+		case CSL_FOR_QUADRATIC:
+		case CSL_FOR_CUBIC:
+		case CSL_FOR_HERMITE:
+		case CSL_FOR_BEZIER:
+		case CSL_FOR_BSPLINE:
+		case CSL_FOR_NURB:
+		case CSL_FOR_STITCH:
+		case CSL_FOR_SPAWN:
+
+			////////////////
+			UpdateForceDlg_TRUE();
+			////////////////////
+			LeftUp_CurveForce(point);	
+			////////////////////
+			UpdateForceDlg_FALSE();
+			//////////////////// 
+			break;
+
+		case CSL_DISPLACE:
+		case CSL_DIS_CIRCLE:
+		case CSL_DIS_ELLIPSE:
+		case CSL_DIS_PARABOLA:
+		case CSL_DIS_LINEAR:
+		case CSL_DIS_QUADRATIC:
+		case CSL_DIS_CUBIC:
+		case CSL_DIS_HERMITE:
+		case CSL_DIS_BEZIER:
+		case CSL_DIS_BSPLINE:
+		case CSL_DIS_NURB:
+		case CSL_DIS_STITCH:
+		case CSL_DIS_SPAWN:
+
+			////////////////
+			UpdateDisplaceDlg_TRUE();
+			////////////////////
+			LeftUp_CurveDisplace(point);	
+			////////////////////
+			UpdateDisplaceDlg_FALSE();
+			//////////////////// 
+			break;
+
+		case CSL_PRESSURE:
+		case CSL_PRS_CIRCLE:
+		case CSL_PRS_ELLIPSE:
+		case CSL_PRS_PARABOLA:
+		case CSL_PRS_LINEAR:
+		case CSL_PRS_QUADRATIC:
+		case CSL_PRS_CUBIC:
+		case CSL_PRS_HERMITE:
+		case CSL_PRS_BEZIER:
+		case CSL_PRS_BSPLINE:
+		case CSL_PRS_NURB:
+		case CSL_PRS_STITCH:
+		case CSL_PRS_SPAWN:
+
+			////////////////
+			UpdatePressureDlg_TRUE();
+			////////////////////
+			LeftUp_CurvePressure(point);	
+			////////////////////
+			UpdatePressureDlg_FALSE();
+			//////////////////// 
+			break;
+
+		case CSL_THERMAL:
+		case CSL_THR_CIRCLE:
+		case CSL_THR_ELLIPSE:
+		case CSL_THR_PARABOLA:
+		case CSL_THR_LINEAR:
+		case CSL_THR_QUADRATIC:
+		case CSL_THR_CUBIC:
+		case CSL_THR_HERMITE:
+		case CSL_THR_BEZIER:
+		case CSL_THR_BSPLINE:
+		case CSL_THR_NURB:
+		case CSL_THR_STITCH:
+		case CSL_THR_SPAWN:
+
+			////////////////
+			UpdateThermalDlg_TRUE();
+			////////////////////
+			LeftUp_CurveThermal(point);	
+			////////////////////
+			UpdateThermalDlg_FALSE();
+			//////////////////// 
+			break;
+
+		case CSL_LUMPWT:
+		case CSL_LWT_CIRCLE:
+		case CSL_LWT_ELLIPSE:
+		case CSL_LWT_PARABOLA:
+		case CSL_LWT_LINEAR:
+		case CSL_LWT_QUADRATIC:
+		case CSL_LWT_CUBIC:
+		case CSL_LWT_HERMITE:
+		case CSL_LWT_BEZIER:
+		case CSL_LWT_BSPLINE:
+		case CSL_LWT_NURB:
+		case CSL_LWT_STITCH:
+		case CSL_LWT_SPAWN:
+
+			////////////////
+			UpdateLumpWtDlg_TRUE();
+			////////////////////
+			LeftUp_CurveLumpWt(point);	
+			////////////////////
+			UpdateLumpWtDlg_FALSE();
+			//////////////////// 
+			break;
+
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	} 
+}	
+
+void CSLDMouse::OnEBoxMouseMove_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{  
+
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CMouseMgr* pMouseMgr	= pWnd->GetMouseMgr(); 
+	////////////////////////// LOG: Log/DEScaled
+   	m_pdc->DPtoLP(&point);     
+	LPOINT LpLOG;
+	LpLOG.x = (long)point.x;
+	LpLOG.y = (long)point.y;
+   	m_pdc->LPtoDP(&point);     
+    /////////////////////////////////////////////
+    if(!m_bDragging)  // not currently dragging 
+    { 
+    
+		//////////////////////////////////////
+		LPOINT3 MouseOldTempWIC = GetMouseOldWIC();
+	    LPOINT3 MouseTempWIC 	= GetMouseWIC();
+   		SetMouseOldWIC(MouseTempWIC);
+   		LPOINT3 MouseWIC;
+    	///////////////////////  LOG :DEScaled
+    	LOGtoWIC2(&MouseWIC,&LpLOG,&MouseTempWIC); //LOG/Scaled WIC
+    	////////////////////                 
+    	SetMouseWIC(MouseWIC);
+    	///////////////////////////
+//    	pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+		pMouseMgr->SetStatusMouseWIC(MouseWIC);
+		////////////////////////////
+		///////////////////// recover MouseWIC changed for statusbar update 
+	    SetMouseOldWIC(MouseOldTempWIC);
+	    SetMouseWIC(MouseTempWIC);
+
+		return;
+    }	
+   	//////////////////////////////      ***** START FROM HERE *****
+   	CPen    Pen;
+	CPen*   PtrOldPen;
+	//////////////////////////////
+	m_pdc->SetBkMode(TRANSPARENT);
+	//////////////////////////////	
+	// Create Black Pen 2 Pixel wide;
+	int two = 2;
+	COLORREF crColor = 0x000000;  
+	Pen.CreatePen ((int)PS_SOLID,two,crColor);
+	PtrOldPen = m_pdc->SelectObject(&Pen);
+	///////////////////////////
+	m_MouseLOG = point;              // Device
+	POINT MouseLOC;
+	/////////////////////////	
+	m_pdc->SetROP2 (R2_NOT); 
+	
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseOldLOG;        // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+	////////////////////////	  
+//	m_pdc->SetROP2 (R2_COPYPEN);
+
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseLOG;
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+
+	m_MouseOldLOG = m_MouseLOG;
+	///////////////////////////
+   	m_pdc->SelectObject(PtrOldPen);   
+	Pen.DeleteObject(); 
+	//////////////////////////////////////
+    LPOINT3 MouseWIC = GetMouseWIC();
+    SetMouseOldWIC(MouseWIC);
+   	///////////////////////
+   	LOGtoWIC(&MouseWIC,&LpLOG); //LOG/Scaled WIC
+   	////////////////////                 
+    SetMouseWIC(MouseWIC);
+    ///////////////////////////
+//  pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+	pMouseMgr->SetStatusMouseWIC(MouseWIC);
+	//////////////////////////////////////////////    
+}
+
+void CSLDMouse::OnEBoxLButtonUp_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+  	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+    if(m_bDragging)  // not currently dragging
+    {
+		m_bDragging = FALSE; 
+		::ReleaseCapture();
+		//	ClipCursor(NULL);				TOBEDONE 
+	}	
+	///////////////////////////////////////////////////////// 
+	PreLeftUp(point);
+    /////////////////////////////  ELement Dialog On/Off Check
+    POINT Logpoint;
+    m_pdc->DPtoLP(&point);
+    Logpoint.x = point.x;
+    Logpoint.y = point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftUp_SLD(Logpoint);
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftUp_I();
+	/////////////////
+	PostLeft();
+	/////////////////////////
+	
+}
+
+void CSLDMouse::OnEBoxRButtonDown_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+									UINT nFlags, CPoint point)
+{ 
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+    /////////////////////////////  ELement Dialog On/Off Check
+	m_bDialogOn     = pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	m_bSingleSegOn	= pBool->IsSingleSegOn();
+	m_bBLineOn		= pBool->IsBLineOn();
+	/////////////////////////////////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////
+//	CMSLDMgr* pMSLDMgr;
+	//////////////////////////////////////////
+	switch(m_nActiveTool) 
+	{
+		case FORCE:
+			break;
+		////////////////////////////////////////////////// Patch
+		default:
+			break;
+	}  
+}
+
+void CSLDMouse::OnEBoxRButtonUp_SLD(CClientDC* pdc,CView* pView,GENERATE gener,
+								UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	CString* pID = &ID;
+//	CMSLDMgr* pMSLDMgr;
+//	int nMeshType;
+	////////////////////
+	switch(m_nActiveTool) 
+	{
+
+		case FORCE:
+			break;
+		/////////////
+		default:  
+			break;
+	} 
+
+}
+/////////////////////////////////////////////////////////////////////////////////////// F_M
+UINT CSLDMouse::ReSetToolID_SLD(UINT CntlID,UINT IGenID, UINT OperID)
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString str;
+	UINT ID;
+	//////////////////////////////////////////// TaskID
+	switch(OperID)
+	{
+		//////////////////////////////////////////// Create
+		case CREATE:
+		{
+			pWnd->SetIGenBoxStatus(TRUE);
+			pWnd->SetCntlBoxStatus(FALSE);
+			pWnd->SetDrawBoxStatus(FALSE);
+			///////////////////////////// String
+			str = "CREATE";
+			pWnd->SetstrOperID(str);
+			/////////////////////////////
+			switch(CntlID)
+			{
+				//////////////////////////////////////// StaticLoad
+				case FORCE:
+
+//					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "FORCE";
+					pWnd->SetstrCntlID(str);
+					///////////////////////////////////// Force
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "Input@NODE";		ID = NSL_FOR_NODE;		break;
+						case CNODE:			str = "Control@CNODE";	ID = NSL_FOR_CNODE;		break;
+
+						case CURVE:			str = "CURVE";			ID = CSL_FORCE;			break;
+						case C_CIRCLE:		str = "CIRCULAR@CURVE";	ID = CSL_FOR_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPTIC@CURVE";	ID = CSL_FOR_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLIC@CURVE";ID = CSL_FOR_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR@CURVE";	ID = CSL_FOR_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC@CURVE";ID = CSL_FOR_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC@CURVE";	ID = CSL_FOR_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE@CURVE";	ID = CSL_FOR_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER@CURVE";	ID = CSL_FOR_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE@CURVE";	ID = CSL_FOR_BSPLINE;	break;
+						case C_NURB:		str = "NURB@CURVE";		ID = CSL_FOR_NURB;		break;
+						case C_STITCH:		str = "STITCH@CURVE";	ID = CSL_FOR_STITCH;	break;
+						case C_SPAWN:		str = "SPAWN@CURVE";	ID = CSL_FOR_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSL_FORCE; 		break;
+						case SOLID:			str = "SOLID";		ID = SSL_FORCE;			break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				//////////////////
+				case DISPLACE:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "DISPLACE";
+					pWnd->SetstrCntlID(str);
+					////////////////// Displacement
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSL_DIS_NODE;		break;
+						case CNODE:			str = "CNODE";		ID = NSL_DIS_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSL_DISPLACE;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSL_DIS_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSL_DIS_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSL_DIS_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSL_DIS_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSL_DIS_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSL_DIS_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSL_DIS_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSL_DIS_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSL_DIS_BSPLINE;	break;
+						case C_NURB:		str = "NURB";		ID = CSL_DIS_NURB;		break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSL_DIS_STITCH;	break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSL_DIS_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSL_DISPLACE; 		break;
+						case SOLID:			str = "SOLID";		ID = SSL_DISPLACE;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				//////////////////
+				case PRESSURE:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "PRESSURE";
+					pWnd->SetstrCntlID(str);
+					////////////////// Pressure
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSL_PRS_NODE;		break;
+						case CNODE:			str = "CNODE";		ID = NSL_PRS_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSL_PRESSURE;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSL_PRS_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSL_PRS_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSL_PRS_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSL_PRS_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSL_PRS_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSL_PRS_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSL_PRS_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSL_PRS_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSL_PRS_BSPLINE;	break;
+						case C_NURB:		str = "NURB";		ID = CSL_PRS_NURB;		break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSL_PRS_STITCH;	break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSL_PRS_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSL_PRESSURE; 		break;
+						case SOLID:			str = "SOLID";		ID = SSL_PRESSURE;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////// 
+				case THERMAL:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "THERMAL";
+					pWnd->SetstrCntlID(str);
+					////////////////// Thermal
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSL_THR_NODE;		break;
+						case CNODE:			str = "CNODE";		ID = NSL_THR_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSL_THERMAL;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSL_THR_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSL_THR_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSL_THR_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSL_THR_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSL_THR_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSL_THR_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSL_THR_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSL_THR_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSL_THR_BSPLINE;	break;
+						case C_NURB:		str = "NURB";		ID = CSL_THR_NURB;		break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSL_THR_STITCH;	break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSL_THR_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSL_THERMAL; 		break;
+						case SOLID:			str = "SOLID";		ID = SSL_THERMAL;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				////////////////// 
+				case LUMPWT:
+
+					pWnd->SetMouseBoxType(STATICLOADBOX);
+					str = "LUMPWT";
+					pWnd->SetstrCntlID(str);
+					////////////////// LumpWt
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID = NSL_LWT_NODE;		break;
+						case CNODE:			str = "CNODE";		ID = NSL_LWT_CNODE;		break;
+
+						case CURVE:			str = "CURVE";		ID = CSL_LUMPWT;		break;
+						case C_CIRCLE:		str = "CIRCLE";		ID = CSL_LWT_CIRCLE;	break;
+						case C_ELLIPSE:		str = "ELLIPSE";	ID = CSL_LWT_ELLIPSE;	break;
+						case C_PARABOLA:	str = "PARABOLA";	ID = CSL_LWT_PARABOLA;	break;
+						case C_LINEAR:		str = "LINEAR";		ID = CSL_LWT_LINEAR;	break;
+						case C_QUADRATIC:	str = "QUADRATIC";	ID = CSL_LWT_QUADRATIC;	break;
+						case C_CUBIC:		str = "CUBIC";		ID = CSL_LWT_CUBIC;		break;
+						case C_HERMITE:		str = "HERMITE";	ID = CSL_LWT_HERMITE;	break;
+						case C_BEZIER:		str = "BEZIER";		ID = CSL_LWT_BEZIER;	break;
+						case C_BSPLINE:		str = "BSPLINE";	ID = CSL_LWT_BSPLINE;	break;
+						case C_NURB:		str = "NURB";		ID = CSL_LWT_NURB;		break;
+						case C_STITCH:		str = "C_STITCH";	ID = CSL_LWT_STITCH;	break;
+						case C_SPAWN:		str = "C_SPAWN";	ID = CSL_LWT_SPAWN;		break;
+
+						case PATCH:			str = "PATCH";		ID = PSL_LUMPWT; 		break;
+						case SOLID:			str = "SOLID";		ID = SSL_LUMPWT;		break;
+						default:			str = "UNKNOWN";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					return ID;
+				/////////
+				default:					str = "UNKNOWN";	ID = UNONE;
+					pWnd->SetstrIGenID(str);
+					return ID;
+			}
+			pWnd->SetstrCntlID(str);
+			return ID;
+		////////
+		default:							str = "UNKNOWN";	ID = UNONE;
+		}
+		pWnd->SetstrOperID(str);
+		return ID;
+	}
+		/*		SAVE FOLLOWING :  TODO		
+		//////////////////////////////////////////// Edit
+		case EDIT:
+		{
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Mesh
+				case ELEMENT:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return N_EDIT;
+						case CURVE:				return C_EDIT;
+						case PATCH:				return P_EDIT;
+						case SOLID:				return S_EDIT;
+						default:				return NONE;
+					}
+				//////////////////////////////////////// StaticLoad
+				case FORCE:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_FOR;
+						case CURVE:				return CSL_EDIT_FOR;
+						case PATCH:				return PSL_EDIT_FOR;
+						case SOLID:				return SSL_EDIT_FOR;
+						default:				return NONE;
+					}
+				case DISPLACE:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_DIS;
+						case CURVE:				return CSL_EDIT_DIS;
+						case PATCH:				return PSL_EDIT_DIS;
+						case SOLID:				return SSL_EDIT_DIS;
+						default:				return NONE;
+					}
+				case PRESSURE:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_PRS;
+						case CURVE:				return CSL_EDIT_PRS;
+						case PATCH:				return PSL_EDIT_PRS;
+						case SOLID:				return SSL_EDIT_PRS;
+						default:				return NONE;
+					}
+				case THERMAL:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_THR;
+						case CURVE:				return CSL_EDIT_THR;
+						case PATCH:				return PSL_EDIT_THR;
+						case SOLID:				return SSL_EDIT_THR;
+						default:				return NONE;
+					}
+		case LUMPWT:
+				/////////////
+					switch(IGenID)
+					{
+						case NODE:				return NSL_EDIT_LWT;
+						case CURVE:				return CSL_EDIT_LWT;
+						case PATCH:				return PSL_EDIT_LWT;
+						case SOLID:				return SSL_EDIT_LWT;
+						default:				return NONE;
+					}
+
+		
+
+						case CURVE:				return C_MOVE;
+				case CURVE:				return C_POST;
+				case CURVE:				return C_UNPOST;
+				case CURVE:				return C_DELETE;
+				case PATCH:				return P_MOVE;
+				case PATCH:				return P_POST;
+				case PATCH:				return P_UNPOST;
+				case PATCH:				return P_DELETE;
+				case SOLID:				return S_MOVE;
+				case SOLID:				return S_POST;
+				case SOLID:				return S_UNPOST;
+				case SOLID:				return S_DELETE;
+//////////////////////////////
+				//////////////////////////////////////// StaticLoad
+				case FORCE:
+				case C_ROTATE:
+				case C_XLATE:
+				case C_SCALE:
+				case C_SHEAR:
+				case C_OPER:
+				case C_SUPP:
+				case C_STAL:
+				case C_DYNL:
+				case C_SPEL:
+				////////////////
+				case P_ROTATE_B:
+				case P_XLATE:
+				case P_SCALE:
+				case P_SHEAR:
+				case P_OPER:
+				case P_SUPP:
+				case P_STAL:
+				case P_DYNL:
+				case P_SPEL:
+				////////////////
+				case S_ROTATE_B:
+				case S_XLATE:
+				case S_SCALE:
+				case S_SHEAR:
+				case S_OPER:
+				case S_SUPP:
+				case S_STAL:
+				case S_DYNL:
+				case S_SPEL:
+
+		}
+
+*/
+}
+
+void CSLDMouse::ModeLessOff_SLD()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	if(GetStLInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_FANDMIN,IDOK);
+}
+
+void CSLDMouse::ModeLessOn_SLD()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	int aTool	= pWnd->GetActiveToolType();
+	int aObj	= pWnd->GetActiveObjectType();
+	/////////////////////////////////////////////////////////////////////////
+	if	(
+			aTool == NSL_FORCE		||	aTool == NSL_FOR_NODE		||
+			aTool == NSL_FOR_CNODE	|| 	
+			aTool == CSL_FORCE		||	aTool == CSL_FOR_CIRCLE		||
+			aTool == CSL_FOR_ELLIPSE||	aTool == CSL_FOR_PARABOLA	||
+			aTool == CSL_FOR_LINEAR	||	aTool == CSL_FOR_QUADRATIC	||
+			aTool == CSL_FOR_CUBIC	||	aTool == CSL_FOR_HERMITE	||
+			aTool == CSL_FOR_BEZIER	||	aTool == CSL_FOR_BSPLINE	||
+			aTool == CSL_FOR_NURB	||	aTool == CSL_FOR_STITCH		||
+			aTool == CSL_FOR_SPAWN 
+		)
+	{
+		if(!(GetStLInDlg()->m_hWnd))
+			pWnd->SendMessage(ID_ACTIVE_FANDMIN,IDOK);
+	}
+
+}
+
+long CSLDMouse::CreateorActivateF_MIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCurr;
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if F_MDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_FANDMIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	GetStLInDlg()->m_dMx		= GetMx();
+	GetStLInDlg()->m_dMy		= GetMy();
+	GetStLInDlg()->m_dMz		= GetMz();
+	GetStLInDlg()->m_dFx		= GetFx();
+	GetStLInDlg()->m_dFy		= GetFy();
+	GetStLInDlg()->m_dFz		= GetFz();
+	GetStLInDlg()->m_LoadID		= GetCurrentLoadID();
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	///////////////////////// CurrStat: Show
+	pWnd->GetCurrStat()->ShowWindow(TRUE);
+	strCurr = "Select@";
+	if(m_nActiveTool == NSL_FORCE)
+			strCurr += "A Node";
+	else
+	if(m_nActiveTool == CSL_FORCE)
+			strCurr += "A Curve";
+	//////
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelF_MIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByeF_MIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdateF_MIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	SetMx(GetStLInDlg()->m_dMx);
+	SetMy(GetStLInDlg()->m_dMy);
+	SetMz(GetStLInDlg()->m_dMz);
+	SetFx(GetStLInDlg()->m_dFx);
+	SetFy(GetStLInDlg()->m_dFy);
+	SetFz(GetStLInDlg()->m_dFz);
+	SetCurrentLoadID(GetStLInDlg()->m_LoadID);
+	//////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////// D_R
+long CSLDMouse::CreateorActivateD_RIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if D_RDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_DANDRIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	GetStLInDlg()->m_dMx		= GetMx();
+	GetStLInDlg()->m_dMy		= GetMy();
+	GetStLInDlg()->m_dMz		= GetMz();
+	GetStLInDlg()->m_dFx		= GetFx();
+	GetStLInDlg()->m_dFy		= GetFy();
+	GetStLInDlg()->m_dFz		= GetFz();
+	GetStLInDlg()->m_LoadID		= GetCurrentLoadID();
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelD_RIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByeD_RIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdateD_RIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	SetMx(GetStLInDlg()->m_dMx);
+	SetMy(GetStLInDlg()->m_dMy);
+	SetMz(GetStLInDlg()->m_dMz);
+	SetFx(GetStLInDlg()->m_dFx);
+	SetFy(GetStLInDlg()->m_dFy);
+	SetFz(GetStLInDlg()->m_dFz);
+	SetCurrentLoadID(GetStLInDlg()->m_LoadID);
+	//////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////// Prs
+long CSLDMouse::CreateorActivatePrsIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if PrsDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_PRESSIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	GetStLInDlg()->m_dFx		= GetFx();
+	GetStLInDlg()->m_LoadID		= GetCurrentLoadID();
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelPrsIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByePrsIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdatePrsIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	SetFx(GetStLInDlg()->m_dFx);
+	SetCurrentLoadID(GetStLInDlg()->m_LoadID);
+	//////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////// Thr
+long CSLDMouse::CreateorActivateThrIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if ThrDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_THERMIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	GetStLInDlg()->m_dFx		= GetFx();
+	GetStLInDlg()->m_LoadID		= GetCurrentLoadID();
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelThrIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByeThrIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdateThrIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	SetFx(GetStLInDlg()->m_dFx);
+	SetCurrentLoadID(GetStLInDlg()->m_LoadID);
+	//////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////// LWt
+long CSLDMouse::CreateorActivateLWtIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetStLInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetStLInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetStLInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetStLInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetStLInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if LWtDlg Open
+	if(GetStLInDlg()->m_hWnd)
+	{
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_LUMPWTIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	GetStLInDlg()->m_dFx		= GetFx();
+	GetStLInDlg()->m_dFy		= GetFy();
+	GetStLInDlg()->m_dFz		= GetFz();
+	GetStLInDlg()->m_bGravMul	= IsGravMulOn();
+	GetStLInDlg()->m_LoadID		= GetCurrentLoadID();
+	////////////////////////////////
+	GetStLInDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CSLDMouse::CancelLWtIn(UINT wParam, long lParam)
+{
+	
+	GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::GoodByeLWtIn(UINT wParam, long lParam)
+{
+	
+	if(GetStLInDlg()->m_hWnd)
+		GetStLInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CSLDMouse::UpdateLWtIn(UINT wParam, long lParam)
+{
+
+	GetStLInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	SetFx(GetStLInDlg()->m_dFx);
+	SetCurrentLoadID(GetStLInDlg()->m_LoadID);
+	//////////
+	return 0L;
+}
+	
+void CSLDMouse::Serialize(CArchive& ar)
+{
+
+	CSupMouse::Serialize( ar);              // must call base class Serializer
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" SLDMouse:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" SLDMouse:    Loading\n");	
+
+			/////////////////////////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////////// end of Module //////////////////////		
+
+

@@ -1,0 +1,80 @@
+ // mp_Rota3.h : header file
+//
+#ifndef _MS_ROTA3_H 
+#define _MS_ROTA3_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+                    
+#include "MI_GangS.h"
+#include "DrSolid.h"
+#include "Def_Type.h"                    
+/////////////////////////////////////////////////////////////////////////////
+class AFX_EXT_CLASS CMS_Rota3 : public CMI_GangS
+{
+public:
+
+	CMS_Rota3();
+//////////////////////////////////////
+	DECLARE_SERIAL(CMS_Rota3)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+
+	int			SetInfoBase							// dLen and FromID, ToID given;		(Type 1)default
+													// Axis Computed from FromID, ToID
+				(
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					CDListMgr*						pPatchList,
+					CList<PATCHLATCH,PATCHLATCH>*	pLatchList,
+					CDListMgr*						pNodeList,
+					CList<int,int>*					pElperSegList,
+					double							dLen,
+					double							Ratio,
+					CView*							pView
+				); 
+	CDrSolid*	GoDoIt(); 
+	int			GoDoIt(CDrSolid* pDrSolid);
+ 
+    				
+		
+protected:
+
+	////////////////////////////////////////////////////////////
+	int 		Rotate(); 
+	CDrSolid* 	GetInfo();
+	int			GetInfo(CDrSolid* pDrSolid);
+	int 		GenerateCNodes();
+	/////////////////////////
+		          
+
+protected:  
+// Attributes
+
+//Operations
+public:
+
+	~CMS_Rota3();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CMS_Rota3)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

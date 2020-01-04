@@ -1,0 +1,45 @@
+; MPatMgr_D.def -- DEBUG version
+
+LIBRARY	MPat_D32
+DESCRIPTION  'MPatMgr Debug DLL' 
+
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMPatDLL											@2 NONAME
+
+?classCMI_GangP@CMI_GangP@@2UCRuntimeClass@@A
+
+
+??0CDlg_Rend@@QAE@PAVCWnd@@@Z
+
+;?Duct@CPA_Duct@@QAEHUWORLD@@HPAU2@PANH1112@Z
+?GetRuntimeClass@CPA_Duct@@UBEPAUCRuntimeClass@@XZ
+
+;?LoftCurves_2@CPA_Loft2@@QAEHFNFPAUWORLD@@PAN0101@Z
+;?GetRuntimeClass@CPA_Loft2@@UBEPAUCRuntimeClass@@XZ
+
+;?RotateCurve@CPA_Rotat@@QAEHHHPANUWORLD@@1HHPAU2@020@Z
+;?GetRuntimeClass@CPA_Rotat@@UBEPAUCRuntimeClass@@XZ
+
+;?Sweep@CPA_Sweep@@QAEHUWORLD@@HPAU2@PANH11112@Z
+?GetRuntimeClass@CPA_Sweep@@UBEPAUCRuntimeClass@@XZ
+
+?ExtrudeCurve@CPA_Xtrud@@QAEHNUWORLD@@HNHPAU2@PAN12@Z
+?GetRuntimeClass@CPA_Xtrud@@UBEPAUCRuntimeClass@@XZ
+
+??0CSheet_PATI@@QAE@XZ
+??1CSheet_PATI@@UAE@XZ
+?GetRuntimeClass@CSheet_PATI@@UBEPAUCRuntimeClass@@XZ
+
+
+;CMI_PSPN
+
+;??0CMI_PSPN@@QAE@XZ
+;??1CMI_PSPN@@UAE@XZ
+
+;?classCMI_PSPN@CMI_PSPN@@2UCRuntimeClass@@A

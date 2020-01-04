@@ -1,0 +1,49 @@
+; EBox_R.def -- for CDrawBox stuff --  RELEASE version
+
+LIBRARY	EBox_R
+DESCRIPTION  'ElemBox DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitEBoxDLL												@3 NONAME
+
+; CElemBox
+	; Constructor and Destructor
+ 	??0CElemBox@@REC@XZ 									@201 NONAME
+ 	??1CElemBox@@VEC@XZ                                     @202 NONAME
+ 	?Create@CElemBox@@RECHPEVCMDIFrameWnd@@VCRect@@@Z       @203 NONAME
+ 	?GetHeight@CElemBox@@RECIXZ                             @206 NONAME
+ 	?GetWidth@CElemBox@@RECIXZ                              @207 NONAME
+ 	?GetActiveTool@CElemBox@@RECHXZ                         @208 NONAME
+ 	?GetActiveElemObject@CElemBox@@RECHXZ                   @209 NONAME  
+	?messageMap@CElemBox@@1UAFX_MSGMAP@@A					@222 NONAME
+;	?messageMap@CElemBar@@1UAFX_MSGMAP@@A					@223 NONAME
+
+ 	
+; CPaletteBar
+	
+	??0CPaletteBar@@REC@XZ 									@210 NONAME
+	??1CPaletteBar@@VEC@XZ                                  @211 NONAME
+	?Create@CPaletteBar@@VECHPEVCWnd@@HHII@Z                @212 NONAME
+	?DoPaint@CPaletteBar@@NECXPEVCDC@@@Z                    @213 NONAME
+	?GetItemRect@CPaletteBar@@NFCXHPEUtagRECT@@@Z           @214 NONAME
+	?HitTest@CPaletteBar@@NECHVCPoint@@@Z                   @215 NONAME
+	?messageMap@CPaletteBar@@1UAFX_MSGMAP@@A                @216 NONAME
+	?SetButtons@CPaletteBar@@VECHPFIHI@Z                    @217 NONAME
+	?SetSizes@CPaletteBar@@VECXUtagSIZE@@0H@Z               @218 NONAME
+	?OnLButtonDown@CPaletteBar@@JECXIVCPoint@@@Z            @219 NONAME
+	?OnLButtonUp@CPaletteBar@@JECXIVCPoint@@@Z              @220 NONAME
+	?RecalcLayout@CPaletteBar@@VECXI@Z                      @221 NONAME
+
+  

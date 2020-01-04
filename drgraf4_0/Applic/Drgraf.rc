@@ -1,0 +1,2102 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "resource.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""res\\drgraf.rc2""  // non-App Studio edited resources\r\n"
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON    DISCARDABLE     "RES\\DSICON.ICO"
+IDR_GRAFTYPE            ICON    DISCARDABLE     "RES\\DSICON2.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP  MOVEABLE PURE   "RES\\TOOLBAR.BMP"
+IDR_12TYPE              BITMAP  MOVEABLE PURE   "RES\\TOOLBAR.BMP"
+IMAGE1DOWN              BITMAP  DISCARDABLE     "RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "RES\\IMAGE1U.BMP"
+IDB_DRCAFE              BITMAP  DISCARDABLE     "RES\\DRCAFE.BMP"
+IDB_SEASHORE            BITMAP  DISCARDABLE     "RES\\SEASHORE.BMP"
+IDB_JASMIN              BITMAP  DISCARDABLE     "RES\\JASMIN.BMP"
+IDB_SPLASH              BITMAP  DISCARDABLE     "Splsh16.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_BUTTON              CURSOR  DISCARDABLE     "RES\\BUTTON.CUR"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New Model\tCtrl+N",          ID_FILE_NEW
+        MENUITEM "&Open Old Model...\tCtrl+O",  ID_FILE_OPEN
+        MENUITEM SEPARATOR
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "De&faults"
+    BEGIN
+        MENUITEM "&New Model",                  IDM_DEFAULT_NEW
+        MENUITEM "&Current Model",              IDM_DEFAULT_CURRENT
+    END
+    POPUP "&Mode"
+    BEGIN
+        MENUITEM "&Input/Edit",                 IDM_MODE_INPUT
+        MENUITEM "&Output",                     IDM_MODE_OUTPUT
+    END
+    POPUP "&Specs"
+    BEGIN
+        MENUITEM "&Paper...",                   IDM_SPEC_PAPER
+        MENUITEM "&Unit...",                    IDM_SPEC_UNITS
+        MENUITEM "&Scale Factor...",            IDM_SPEC_SCALEFACTOR
+        MENUITEM "Precisio&n...",               IDM_SPEC_PRECISION
+        MENUITEM SEPARATOR
+        MENUITEM "&Axis...",                    IDM_SPEC_AXIS
+        MENUITEM SEPARATOR
+    END
+    POPUP "Dec&k"
+    BEGIN
+        MENUITEM "dream&Pipe",                  IDM_DECK_DREAMPIPE
+        MENUITEM "&SAP",                        IDM_DECK_SAP
+        MENUITEM "&TAB",                        IDM_DECK_TAB
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Index",                      ID_HELP_INDEX
+        MENUITEM "&Using Help",                 ID_HELP_USING
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT
+    END
+END
+
+IDR_INPUTMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&Model"
+    BEGIN
+        MENUITEM "&Close",                      ID_FILE_CLOSE, HELP
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE, HELP
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT, HELP
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW, HELP
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP, HELP
+        MENUITEM SEPARATOR
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT, HELP
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT, HELP
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY, HELP
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE, HELP
+        MENUITEM "Paste &Link",                 ID_EDIT_PASTE_LINK, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "Insert &New Object...",       ID_OLE_INSERT_NEW, HELP
+        MENUITEM "Lin&ks...",                   ID_OLE_EDIT_LINKS, HELP
+        MENUITEM "<<OLE VERBS GO HERE>>",       ID_OLE_VERB_FIRST, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "Edit Clear &All",             IDM_EDIT_CLEAR_ALL, HELP
+    END
+    POPUP "&VuParam"
+    BEGIN
+        MENUITEM "&Eye Position ...",           IDM_3D_EYEPOSITION
+    END
+    POPUP "&Specs"
+    BEGIN
+        MENUITEM SEPARATOR
+        MENUITEM "Tolerances",                  IDM_SPECS_TOLERANCES
+        MENUITEM SEPARATOR
+        MENUITEM "&Layer...",                   IDM_SPEC_LAYER, HELP
+        MENUITEM SEPARATOR
+        POPUP "&Magnification", GRAYED
+        BEGIN
+            MENUITEM "&X Magnification",            IDM_SPEC_MAG_XMAG
+            , GRAYED
+            MENUITEM "&Y Magnification",            IDM_SPEC_MAG_YMAG
+            , GRAYED
+            MENUITEM "&Z Magnification",            IDM_SPEC_MAG_ZMAG
+            , GRAYED
+        END
+    END
+    POPUP "&NoShow"
+    BEGIN
+        POPUP "&Dirty", HELP
+        BEGIN
+            MENUITEM "&Objects",                    IDM_NOSHOW_D_OBJECT
+            , HELP
+            MENUITEM "S&olid Profile",              IDM_NOSHOW_D_PROFILE_S
+            , HELP
+            MENUITEM "&Solids",                     IDM_NOSHOW_D_SOLID, HELP
+            MENUITEM "P&atch Profile",              IDM_NOSHOW_D_PROFILE_P
+            , HELP
+            MENUITEM "&Patches",                    IDM_NOSHOW_D_PATCH, HELP
+            MENUITEM "C&urve Profile ",             IDM_NOSHOW_D_PROFILE_C
+            , HELP
+            MENUITEM "&Curves",                     IDM_NOSHOW_D_CURVE, HELP
+        END
+        POPUP "&Posted", HELP
+        BEGIN
+            MENUITEM "&SuperMesh",                  IDM_NOSHOW_P_OBJECT
+            , HELP
+            MENUITEM "Mesh&3D",                     IDM_NOSHOW_P_SOLID, HELP
+            MENUITEM "Mesh&2D",                     IDM_NOSHOW_P_PATCH, HELP
+            MENUITEM "Mesh&1D",                     IDM_NOSHOW_P_CURVE, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Nodes", HELP
+        BEGIN
+            MENUITEM "&Input",                      IDM_NOSHOW_NODES, HELP
+            MENUITEM "&Control",                    IDM_NOSHOW_CNODES, HELP
+            MENUITEM "&Mesh",                       IDM_NOSHOW_MNODES, HELP
+        END
+        MENUITEM "&Elements...",                IDM_NOSHOW_ELEMENTS, HELP
+        MENUITEM SEPARATOR
+        POPUP "&Linear Support", HELP
+        BEGIN
+            MENUITEM "&Rigid",                      IDM_NOSHOW_LINEARSUPPORT_RIGID
+            , HELP
+            MENUITEM "S&pring",                     IDM_NOSHOW_LINEARSUPPORT_SPRING
+            , HELP
+            MENUITEM "Sn&ubber",                    IDM_NOSHOW_LINEARSUPPORT_SNUBBER
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "Static Loads", HELP
+        BEGIN
+            MENUITEM "&Gravity",                    IDM_NOSHOW_STATIC_GRAVITY
+            , HELP
+            MENUITEM "&Force",                      IDM_NOSHOW_STATIC_FORCE
+            , HELP
+            MENUITEM "&Displacement",               IDM_NOSHOW_STATIC_DISPLACE
+            , HELP
+            MENUITEM "&Pressure",                   IDM_NOSHOW_STATIC_PRESSURE
+            , HELP
+            MENUITEM "&Thermal",                    IDM_NOSHOW_STATIC_THERMAL
+            , HELP
+            MENUITEM "&LumpWeight",                 IDM_NOSHOW_STATIC_LUMPWT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Control &Shapes",             IDM_NOSHOW_CONTROLSHAPE
+        , HELP
+        MENUITEM "N&ormals",                    IDM_NOSHOW_NORMALS, HELP
+        MENUITEM "C&entroids",                  IDM_NOSHOW_CENTROID, HELP
+        MENUITEM SEPARATOR
+    END
+    POPUP "&NoShowLabels"
+    BEGIN
+        POPUP "&Dirty", HELP
+        BEGIN
+            MENUITEM "&Objects",                    IDM_NOSHOWLABELS_D_OBJECT
+            , HELP
+            MENUITEM "S&olid Profile",              IDM_NOSHOWLABELS_D_PROFILE_S
+            , HELP
+            MENUITEM "&Solids",                     IDM_NOSHOWLABELS_D_SOLID
+            , HELP
+            MENUITEM "P&atch Profile",              IDM_NOSHOWLABELS_STATIC_DISPLACE
+            , HELP
+            MENUITEM "&Patches",                    IDM_NOSHOWLABELS_D_PATCH
+            , HELP
+            MENUITEM "C&urve Profile ",             IDM_NOSHOWLABELS_STATIC_FORCE
+            , HELP
+            MENUITEM "&Curves",                     IDM_NOSHOWLABELS_D_CURVE
+            , HELP
+        END
+        POPUP "&Posted", HELP
+        BEGIN
+            MENUITEM "&SuperMesh",                  IDM_NOSHOWLABELS_P_OBJECT
+            , HELP
+            MENUITEM "Mesh&3D",                     IDM_NOSHOWLABELS_P_SOLID
+            , HELP
+            MENUITEM "Mesh&2D",                     IDM_NOSHOWLABELS_P_PATCH
+            , HELP
+            MENUITEM "Mesh&1D",                     IDM_NOSHOWLABELS_P_CURVE
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "Nodes", HELP
+        BEGIN
+            MENUITEM "&Nodes",                      IDM_NOSHOW_NLABEL, HELP
+            MENUITEM "&Control Nodes",              IDM_NOSHOW_CNLABEL, HELP
+            MENUITEM "&Mesh Nodes",                 IDM_NOSHOW_MNLABEL, HELP
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "E&lements...",                IDM_NOSHOW_LABEL_ELEMENTS
+        MENUITEM SEPARATOR
+        POPUP "&Linear Support", HELP
+        BEGIN
+            MENUITEM "&Rigid",                      IDM_NOSHOWLABELS_LINEARSUPPORT_RIGID
+            , HELP
+            MENUITEM "S&pring",                     IDM_NOSHOWLABELS_LINEARSUPPORT_SPRING
+            , HELP
+            MENUITEM "Sn&ubber",                    IDM_NOSHOWLABELS_P_OBJECT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "Static Loads", HELP
+        BEGIN
+            MENUITEM "&Gravity",                    IDM_NOSHOWLABELS_STATIC_GRAVITY
+            , HELP
+            MENUITEM "&Force",                      IDM_NOSHOWLABELS_STATIC_FORCE
+            , HELP
+            MENUITEM "&Displacement",               IDM_NOSHOWLABELS_STATIC_DISPLACE
+            , HELP
+            MENUITEM "&Pressure",                   IDM_NOSHOWLABELS_D_PROFILE_S
+            , HELP
+            MENUITEM "&Thermal",                    IDM_NOSHOWLABELS_STATIC_THERMAL
+            , HELP
+            MENUITEM "&LumpWeight",                 IDM_NOSHOWLABELS_STATIC_LUMPWT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "2D Screen",                   IDM_NOSHOW_2DLABEL, HELP
+        MENUITEM "3&D ",                        IDM_NOSHOW_3DLABEL, HELP
+    END
+    POPUP "&Pick"
+    BEGIN
+        MENUITEM "&Object/SuperMesh",           ID_PICK_OBJECT, HELP
+        MENUITEM "&Solid/Mesh3D",               ID_PICK_SOLID, HELP
+        MENUITEM "&Patch/Mesh2D",               ID_PICK_PATCH, HELP
+        MENUITEM "&Curve/Mesh1D",               ID_PICK_CURVE, HELP
+        MENUITEM SEPARATOR
+        POPUP "&Node", HELP
+        BEGIN
+            MENUITEM "&Input",                      ID_PICK_NODE, HELP
+            MENUITEM "&Control",                    ID_PICK_NODE_CONTROL
+            , HELP
+            MENUITEM "&Mesh",                       ID_PICK_MESHNODE, HELP
+        END
+        MENUITEM "&Element...",                 ID_PICK_ELEMENTS, HELP
+        MENUITEM SEPARATOR
+        POPUP "&Linear Support", HELP
+        BEGIN
+            MENUITEM "&Rigid",                      ID_PICK_LINEARSUPPORT_RIGID
+            , HELP
+            MENUITEM "S&pring",                     ID_PICK_LINEARSUPPORT_SPRING
+            , HELP
+            MENUITEM "Sn&ubber",                    ID_PICK_LINEARSUPPORT_SNUBBER
+            , HELP
+        END
+        MENUITEM SEPARATOR
+    END
+    POPUP "S&ummary"
+    BEGIN
+        MENUITEM "&Object",                     ID_SUMMARY_OBJECT, HELP
+        POPUP "&Solid", HELP
+        BEGIN
+            MENUITEM "&Dirty",                      ID_SUMMARY_SOLID_DIRTY
+            , HELP
+            MENUITEM "&Posted",                     ID_SUMMARY_SOLID_POSTED
+            , HELP
+        END
+        POPUP "&Patch", HELP
+        BEGIN
+            MENUITEM "&Dirty",                      ID_SUMMARY_PATCH_DIRTY
+            , HELP
+            MENUITEM "&Posted",                     ID_SUMMARY_PATCH_POSTED
+            , HELP
+        END
+        POPUP "&Curve", HELP
+        BEGIN
+            MENUITEM "&Dirty",                      ID_SUMMARY_CURVE_DIRTY
+            , HELP
+            MENUITEM "&Posted",                     ID_SUMMARY_CURVE_POSTED
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Node", HELP
+        BEGIN
+            MENUITEM "&All types",                  ID_SUMMARY_NODE_ALLTYPES
+            , HELP
+            MENUITEM "&Control",                    ID_SUMMARY_NODE_CONTROL
+            , HELP
+            MENUITEM "&Mesh",                       ID_SUMMARY_NODE_MESH
+            , HELP
+        END
+        MENUITEM "&Elements...",                ID_SUMMARY_ELEMENTS
+        MENUITEM SEPARATOR
+        POPUP "&Linear Support", HELP
+        BEGIN
+            MENUITEM "&Rigid",                      ID_SUMMARY_LINEARSUPPORT_RIGID
+            , HELP
+            MENUITEM "S&pring",                     ID_SUMMARY_LINEARSUPPORT_SPRING
+            , HELP
+            MENUITEM "Sn&ubber",                    ID_SUMMARY_LINEARSUPPORT_SNUBBER
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "Static Loads", HELP
+        BEGIN
+            MENUITEM "&Gravity",                    ID_SUMMARY_STATIC_GRAVITY
+            , HELP
+            MENUITEM "&Force",                      ID_SUMMARY_STATIC_FORCE
+            , HELP
+            MENUITEM "&Displacement",               ID_SUMMARY_STATIC_DISPLACE
+            , HELP
+            MENUITEM "&Pressure",                   ID_SUMMARY_STATIC_PRESSURE
+            , HELP
+            MENUITEM "&Thermal",                    ID_SUMMARY_STATIC_THERMAL
+            , HELP
+            MENUITEM "&LumpWeightt",                ID_SUMMARY_STATIC_LUMPWT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Options"
+    BEGIN
+        MENUITEM "&Cursor Change",              IDM_OPTION_CURSOR, HELP
+        MENUITEM "&Pen Change ...",             IDM_OPTION_PENCHANGE, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&Dialog On",                  IDM_OPTION_DIALOGON, HELP
+        MENUITEM "&Axis On",                    IDM_OPTION_AXISON, HELP
+        MENUITEM "&RubberBandOn",               IDM_OPTION_RUBBERBAND, HELP
+        MENUITEM "&SoundOn",                    IDM_OPTION_SOUNDON, HELP
+        MENUITEM "A&utoAcceptOn",               IDM_OPTION_AUTOACCEPTON
+        , HELP
+        MENUITEM "&BLineOn",                    IDM_OPTION_BLINEON, HELP
+        MENUITEM "S&ingleSegmentOn",            IDM_OPTION_SINGLESEGON, HELP
+        MENUITEM "&CopyOn",                     IDM_OPTION_SPAWNON
+        MENUITEM "Ne&w NodeOn",                 IDM_OPTION_NEWNODEON
+        POPUP "Sna&pOn", HELP
+        BEGIN
+            MENUITEM "&Object Merge",               IDM_OPTION_SNAPON_OBJMERG
+            , HELP
+            MENUITEM SEPARATOR
+            MENUITEM "&Horizontal",                 ID_OPTIONS_SNAPON_HORIZONTAL
+            , HELP
+            MENUITEM "&Vertical",                   ID_OPTIONS_SNAPON_VERTICAL
+            , HELP
+        END
+    END
+    POPUP "&Deck"
+    BEGIN
+        POPUP "Format"
+        BEGIN
+            MENUITEM "&Free",                       IDM_DECK_FORMAT_FREE
+            MENUITEM "Fi&x",                        IDM_DECK_FORMAT_FIX
+        END
+        MENUITEM "&View",                       IDM_VIEW_DECKVIEW
+    END
+    POPUP "&Mode"
+    BEGIN
+        MENUITEM "&Generators",                 IDM_MODE_GENERATOR
+        MENUITEM "&Mesh",                       IDM_MODE_MESH
+        POPUP "&Auxilliary"
+        BEGIN
+            MENUITEM "Spatial",                     IDM_MODE_AUXILLIARY_SPATIAL
+
+            MENUITEM "Spectral",                    IDM_MODE_AUXILLIARY_SPECTRAL
+
+            MENUITEM "Temporal",                    IDM_MODE_AUXILLIARY_TEMPORAL
+
+        END
+    END
+    POPUP "Debug"
+    BEGIN
+        MENUITEM "&CalC Time",                  IDM_DEBUG_CALCTIME
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR, HELP
+        POPUP "&StatusBars", HELP
+        BEGIN
+            MENUITEM "&Bottom",                     IDM_VIEW_S_BAR_BOT, HELP
+            MENUITEM "&Top",                        IDM_VIEW_S_BAR_TOP, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Graphics", HELP
+        BEGIN
+            MENUITEM "&XY",                         IDM_VIEW_12VIEW, HELP
+            MENUITEM "&YZ",                         IDM_VIEW_23VIEW, HELP
+            MENUITEM "&ZX",                         IDM_VIEW_31VIEW, HELP
+            MENUITEM "3&D",                         IDM_VIEW_3DVIEW, HELP
+            MENUITEM "&All",                        IDM_VIEW_ALLVIEW, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "ToolBo&xes", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_CNTLBOX, HELP
+            MENUITEM "&Generators",                 IDM_VIEW_GENBOX, HELP
+            MENUITEM "&Operations",                 IDM_VIEW_OPERBOX, HELP
+            MENUITEM "Decorator",                   IDM_VIEW_DRAWBOX, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "T&oolStatus", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_INPUTSTATUS_CONTROLS
+            , HELP
+            MENUITEM "&Generators",                 IDM_VIEW_INPUTSTATUS_GENERATOR
+            , HELP
+            MENUITEM "&Operations",                 IDM_VIEW_INPUTSTATUS_OPERATIONS
+            , HELP
+            MENUITEM "Decorators",                  IDM_VIEW_INPUTSTATUS_DECORATORS
+            , HELP
+            MENUITEM "Current &Item",               IDM_VIEW_INPUTSTATUS_CURRENT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "D&ataBase", HELP
+        BEGIN
+            MENUITEM "&Generation",                 IDM_VIEW_DATAVIEW
+            MENUITEM "&Mesh",                       IDM_VIEW_MESHDATAVIEW
+            MENUITEM SEPARATOR
+            MENUITEM "&Form View",                  IDM_VIEW_DATABASE_FORMDATA
+
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "&Refresh",                    IDM_OPTION_REFRESH, HELP
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "New 3D View",                 IDM_WINDOW_NEW_3D_VIEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE, HELP
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ, HELP
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE, HELP
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Contents",                   ID_HELP_CONTENTS
+        MENUITEM "&Help Topics",                ID_HELP_FINDER, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&Index",                      ID_HELP_INDEX, HELP
+        MENUITEM "&Using Help",                 ID_HELP_USING, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT, HELP
+        MENUITEM SEPARATOR
+    END
+END
+
+IDR_DRGRAFTYPE_CNTR_IP MENU PRELOAD DISCARDABLE 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1, GRAYED
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    MENUITEM SEPARATOR
+    MENUITEM SEPARATOR
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&New Window",                 ID_WINDOW_NEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+END
+
+IDR_OUTPUTMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&Model"
+    BEGIN
+        MENUITEM "&Close",                      ID_FILE_CLOSE
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+        MENUITEM SEPARATOR
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+        MENUITEM "Paste &Link",                 ID_EDIT_PASTE_LINK
+        MENUITEM SEPARATOR
+        MENUITEM "Insert &New Object...",       ID_OLE_INSERT_NEW
+        MENUITEM "Lin&ks...",                   ID_OLE_EDIT_LINKS
+        MENUITEM "<<OLE VERBS GO HERE>>",       ID_OLE_VERB_FIRST
+        MENUITEM SEPARATOR
+        MENUITEM "Edit Clear &All",             IDM_EDIT_CLEAR_ALL
+    END
+    POPUP "&3D"
+    BEGIN
+        MENUITEM "&Eye Position ...",           IDM_3D_EYEPOSITION
+        POPUP "&Projection"
+        BEGIN
+            MENUITEM "P&arallel",                   IDM_3D_PROJECTION_PARALLEL
+
+            MENUITEM "P&erspective",                IDM_3D_PROJECTION_PERSPECTIVE
+
+        END
+        MENUITEM "&Rendering...",               IDM_3D_RENDERING
+        MENUITEM "&Light Source...",            IDM_3D_LIGHTSOURCE
+        MENUITEM SEPARATOR
+        POPUP "&WireFramed "
+        BEGIN
+            MENUITEM "&Pure",                       IDM_3D_WF_PURE
+            MENUITEM "&Hidden Surface",             IDM_3D_WF_HIDDEN
+        END
+        POPUP "&Flat Shading"
+        BEGIN
+            MENUITEM "&Painters",                   IDM_3D_FS_PAINTER
+            MENUITEM "&ZBuffered",                  IDM_3D_FS_ZBUFFER
+        END
+        POPUP "&ZBuffered"
+        BEGIN
+            MENUITEM "&Gouraud",                    IDM_3D_ZB_GOURAUD
+            MENUITEM "&Phong",                      IDM_3D_ZB_PHONG
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "&Shrink On...",               IDM_3D_SHRINKON
+        MENUITEM "&3DCullingOn",                IDM_3D_CULLING3D
+    END
+    POPUP "&NoShow"
+    BEGIN
+        POPUP "&Dirty", HELP
+        BEGIN
+            MENUITEM "&Objects",                    IDM_NOSHOWLABELS_D_OBJECT
+            , HELP
+            MENUITEM "S&olid Profile",              IDM_NOSHOW_D_PROFILE_S
+            , HELP
+            MENUITEM "&Solids",                     IDM_NOSHOW_D_SOLID, HELP
+            MENUITEM "P&atch Profile",              IDM_NOSHOW_D_PROFILE_P
+            , HELP
+            MENUITEM "&Patches",                    IDM_NOSHOW_D_PATCH, HELP
+            MENUITEM "C&urve Profile ",             IDM_NOSHOW_D_PROFILE_C
+            , HELP
+            MENUITEM "&Curves",                     IDM_NOSHOW_D_CURVE, HELP
+        END
+        POPUP "&Posted", HELP
+        BEGIN
+            MENUITEM "&SuperMesh",                  IDM_NOSHOW_P_OBJECT
+            , HELP
+            MENUITEM "Mesh&3D",                     IDM_NOSHOW_P_SOLID, HELP
+            MENUITEM "Mesh&2D",                     IDM_NOSHOW_P_PATCH, HELP
+            MENUITEM "Mesh&1D",                     IDM_NOSHOW_P_CURVE, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Nodes", HELP
+        BEGIN
+            MENUITEM "&Input",                      IDM_NOSHOW_NODES, HELP
+            MENUITEM "&Control",                    IDM_NOSHOW_CNODES, HELP
+            MENUITEM "&Mesh",                       IDM_NOSHOW_MNODES, HELP
+        END
+        MENUITEM "&Elements...",                IDM_NOSHOW_ELEMENTS, HELP
+        MENUITEM SEPARATOR
+        POPUP "&Linear Support", HELP
+        BEGIN
+            MENUITEM "&Rigid",                      IDM_NOSHOW_LINEARSUPPORT_RIGID
+            , HELP
+            MENUITEM "S&pring",                     IDM_NOSHOW_LINEARSUPPORT_SPRING
+            , HELP
+            MENUITEM "Sn&ubber",                    IDM_NOSHOW_LINEARSUPPORT_SNUBBER
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "Static Loads", HELP
+        BEGIN
+            MENUITEM "&Gravity",                    IDM_NOSHOW_STATIC_GRAVITY
+            , HELP
+            MENUITEM "&Force",                      IDM_NOSHOW_STATIC_FORCE
+            , HELP
+            MENUITEM "&Displacement",               IDM_NOSHOW_STATIC_DISPLACE
+            , HELP
+            MENUITEM "&Pressure",                   IDM_NOSHOW_STATIC_PRESSURE
+            , HELP
+            MENUITEM "&Thermal",                    IDM_NOSHOW_STATIC_THERMAL
+            , HELP
+            MENUITEM "&LumpWeight",                 IDM_NOSHOW_STATIC_LUMPWT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "Labels", HELP
+        BEGIN
+            MENUITEM "&Nodes",                      IDM_NOSHOW_NLABEL, HELP
+            MENUITEM "&Control Nodes",              IDM_NOSHOW_CNLABEL, HELP
+            MENUITEM "&Mesh Nodes",                 IDM_NOSHOW_MNLABEL, HELP
+            MENUITEM "2D Screen",                   IDM_NOSHOW_2DLABEL, HELP
+            MENUITEM "3&D ",                        IDM_NOSHOW_3DLABEL, HELP
+            MENUITEM "E&lements...",                IDM_NOSHOW_LABEL_ELEMENTS
+
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Control &Shapes",             IDM_NOSHOW_CONTROLSHAPE
+        , HELP
+        MENUITEM "N&ormals",                    IDM_NOSHOW_NORMALS, HELP
+        MENUITEM "C&entroids",                  IDM_NOSHOW_CENTROID, HELP
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Zoom"
+    BEGIN
+        MENUITEM "&In/Out",                     IDM_ZOOM, GRAYED
+        MENUITEM "To &Fit",                     IDM_ZOOM_FIT, GRAYED
+    END
+    POPUP "&Options"
+    BEGIN
+        MENUITEM "&Cursor Change",              IDM_OPTION_CURSOR
+        MENUITEM "&Pen Change",                 IDM_OPTION_PENCHANGE
+        MENUITEM "&Axis On",                    IDM_OPTION_AXISON
+        MENUITEM "&SoundOn",                    IDM_OPTION_SOUNDON
+        MENUITEM "A&utoAcceptOn",               IDM_OPTION_AUTOACCEPTON
+    END
+    POPUP "&Deck"
+    BEGIN
+        POPUP "Format"
+        BEGIN
+            MENUITEM "&Free",                       IDM_DECK_FORMAT_FREE
+            MENUITEM "Fi&x",                        IDM_DECK_FORMAT_FIX
+        END
+        MENUITEM "&View",                       IDM_VIEW_DECKVIEW
+    END
+    POPUP "&Mode"
+    BEGIN
+        MENUITEM "&Generators",                 IDM_MODE_GENERATOR
+        MENUITEM "&Mesh",                       IDM_MODE_MESH
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR, HELP
+        POPUP "&StatusBars", HELP
+        BEGIN
+            MENUITEM "&Bottom",                     IDM_VIEW_S_BAR_BOT, HELP
+            MENUITEM "&Top",                        IDM_VIEW_S_BAR_TOP, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Graphics", HELP
+        BEGIN
+            MENUITEM "&XY",                         IDM_VIEW_12VIEW, HELP
+            MENUITEM "&YZ",                         IDM_VIEW_23VIEW, HELP
+            MENUITEM "&ZX",                         IDM_VIEW_31VIEW, HELP
+            MENUITEM "3&D",                         IDM_VIEW_3DVIEW, HELP
+            MENUITEM "&All",                        IDM_VIEW_ALLVIEW, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "ToolBo&xes", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_CNTLBOX, HELP
+            MENUITEM "&Generators",                 IDM_VIEW_GENBOX, HELP
+            MENUITEM "&Operations",                 IDM_VIEW_OPERBOX, HELP
+            MENUITEM "Decorator",                   IDM_VIEW_DRAWBOX, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "T&oolStatus", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_INPUTSTATUS_CONTROLS
+            , HELP
+            MENUITEM "&Generators",                 IDM_VIEW_INPUTSTATUS_GENERATOR
+            , HELP
+            MENUITEM "&Operations",                 IDM_VIEW_INPUTSTATUS_OPERATIONS
+            , HELP
+            MENUITEM "Decorators",                  IDM_VIEW_INPUTSTATUS_DECORATORS
+            , HELP
+            MENUITEM "Current &Item",               IDM_VIEW_INPUTSTATUS_CURRENT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "D&ataBase", HELP
+        BEGIN
+            MENUITEM "&Generation",                 IDM_VIEW_DATAVIEW
+            MENUITEM "&Mesh",                       IDM_VIEW_MESHDATAVIEW
+        END
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "New 3D View",                 IDM_WINDOW_NEW_3D_VIEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Index",                      ID_HELP_INDEX
+        MENUITEM "&Using Help",                 ID_HELP_USING
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT
+    END
+END
+
+IDR_DATATYPE MENU DISCARDABLE 
+BEGIN
+    POPUP "&GenData"
+    BEGIN
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR, HELP
+        POPUP "&StatusBars", HELP
+        BEGIN
+            MENUITEM "&Bottom",                     IDM_VIEW_S_BAR_BOT, HELP
+            MENUITEM "&Top",                        IDM_VIEW_S_BAR_TOP, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Graphics", HELP
+        BEGIN
+            MENUITEM "&XY",                         IDM_VIEW_12VIEW, HELP
+            MENUITEM "&YZ",                         IDM_VIEW_23VIEW, HELP
+            MENUITEM "&ZX",                         IDM_VIEW_31VIEW, HELP
+            MENUITEM "3&D",                         IDM_VIEW_3DVIEW, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "ToolBo&xes", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_CNTLBOX, HELP
+            MENUITEM "&Generators",                 IDM_VIEW_GENBOX, HELP
+            MENUITEM "&Operations",                 IDM_VIEW_OPERBOX, HELP
+            MENUITEM "Decorator",                   IDM_VIEW_DRAWBOX, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "T&oolStatus", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_INPUTSTATUS_CONTROLS
+            , HELP
+            MENUITEM "&Generators",                 IDM_VIEW_INPUTSTATUS_GENERATOR
+            , HELP
+            MENUITEM "&Operations",                 IDM_VIEW_INPUTSTATUS_OPERATIONS
+            , HELP
+            MENUITEM "Decorators",                  IDM_VIEW_INPUTSTATUS_DECORATORS
+            , HELP
+            MENUITEM "Current &Item",               IDM_VIEW_INPUTSTATUS_CURRENT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "D&ataBase", HELP
+        BEGIN
+            MENUITEM "&Generation",                 IDM_VIEW_DATAVIEW
+            MENUITEM "&Mesh",                       IDM_VIEW_MESHDATAVIEW
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Dec&k",                       IDM_VIEW_DECKVIEW
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "New 3D View",                 IDM_WINDOW_NEW_3D_VIEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Index",                      ID_HELP_INDEX
+        MENUITEM "&Using Help",                 ID_HELP_USING
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT
+    END
+END
+
+IDR_MESHDATATYPE MENU DISCARDABLE 
+BEGIN
+    POPUP "&MeshData"
+    BEGIN
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR, HELP
+        POPUP "&StatusBars", HELP
+        BEGIN
+            MENUITEM "&Bottom",                     IDM_VIEW_S_BAR_BOT, HELP
+            MENUITEM "&Top",                        IDM_VIEW_S_BAR_TOP, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Graphics", HELP
+        BEGIN
+            MENUITEM "&XY",                         IDM_VIEW_12VIEW, HELP
+            MENUITEM "&YZ",                         IDM_VIEW_23VIEW, HELP
+            MENUITEM "&ZX",                         IDM_VIEW_31VIEW, HELP
+            MENUITEM "3&D",                         IDM_VIEW_3DVIEW, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "ToolBo&xes", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_CNTLBOX, HELP
+            MENUITEM "&Generators",                 IDM_VIEW_GENBOX, HELP
+            MENUITEM "&Operations",                 IDM_VIEW_OPERBOX, HELP
+            MENUITEM "Decorator",                   IDM_VIEW_DRAWBOX, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "T&oolStatus", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_INPUTSTATUS_CONTROLS
+            , HELP
+            MENUITEM "&Generators",                 IDM_VIEW_INPUTSTATUS_GENERATOR
+            , HELP
+            MENUITEM "&Operations",                 IDM_VIEW_INPUTSTATUS_OPERATIONS
+            , HELP
+            MENUITEM "Decorators",                  IDM_VIEW_INPUTSTATUS_DECORATORS
+            , HELP
+            MENUITEM "Current &Item",               IDM_VIEW_INPUTSTATUS_CURRENT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "D&ataBase", HELP
+        BEGIN
+            MENUITEM "&Generation",                 IDM_VIEW_DATAVIEW
+            MENUITEM "&Mesh",                       IDM_VIEW_MESHDATAVIEW
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Dec&k",                       IDM_VIEW_DECKVIEW
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "New 3D View",                 IDM_WINDOW_NEW_3D_VIEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Index",                      ID_HELP_INDEX
+        MENUITEM "&Using Help",                 ID_HELP_USING
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT
+    END
+END
+
+IDR_DECKTYPE MENU DISCARDABLE 
+BEGIN
+    POPUP "&Mesh Deck"
+    BEGIN
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+    END
+    POPUP "&Deck"
+    BEGIN
+        POPUP "Format"
+        BEGIN
+            MENUITEM "&Free",                       IDM_DECK_FORMAT_FREE
+            MENUITEM "Fi&x",                        IDM_DECK_FORMAT_FIX
+        END
+        MENUITEM "&View",                       IDM_VIEW_DECKVIEW
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR, HELP
+        POPUP "&StatusBars", HELP
+        BEGIN
+            MENUITEM "&Bottom",                     IDM_VIEW_S_BAR_BOT, HELP
+            MENUITEM "&Top",                        IDM_VIEW_S_BAR_TOP, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Graphics", HELP
+        BEGIN
+            MENUITEM "&XY",                         IDM_VIEW_12VIEW, HELP
+            MENUITEM "&YZ",                         IDM_VIEW_23VIEW, HELP
+            MENUITEM "&ZX",                         IDM_VIEW_31VIEW, HELP
+            MENUITEM "3&D",                         IDM_VIEW_3DVIEW, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "ToolBo&xes", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_CNTLBOX, HELP
+            MENUITEM "&Generators",                 IDM_VIEW_GENBOX, HELP
+            MENUITEM "&Operations",                 IDM_VIEW_OPERBOX, HELP
+            MENUITEM "Decorator",                   IDM_VIEW_DRAWBOX, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "T&oolStatus", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_INPUTSTATUS_CONTROLS
+            , HELP
+            MENUITEM "&Generators",                 IDM_VIEW_INPUTSTATUS_GENERATOR
+            , HELP
+            MENUITEM "&Operations",                 IDM_VIEW_INPUTSTATUS_OPERATIONS
+            , HELP
+            MENUITEM "Decorators",                  IDM_VIEW_INPUTSTATUS_DECORATORS
+            , HELP
+            MENUITEM "Current &Item",               IDM_VIEW_INPUTSTATUS_CURRENT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "D&ataBase", HELP
+        BEGIN
+            MENUITEM "&Generation",                 IDM_VIEW_DATAVIEW
+            MENUITEM "&Mesh",                       IDM_VIEW_MESHDATAVIEW
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Dec&k",                       IDM_VIEW_DECKVIEW
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "New 3D View",                 IDM_WINDOW_NEW_3D_VIEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Index",                      ID_HELP_INDEX
+        MENUITEM "&Using Help",                 ID_HELP_USING
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT
+    END
+END
+
+IDR_AUXINPUTMENU MENU DISCARDABLE 
+BEGIN
+    POPUP "&Auxilliary Input"
+    BEGIN
+        MENUITEM "&Close",                      ID_FILE_CLOSE, HELP
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE, HELP
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT, HELP
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW, HELP
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP, HELP
+        MENUITEM SEPARATOR
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT, HELP
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM "&Undo\tCtrl+Z",               ID_EDIT_UNDO, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT, HELP
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY, HELP
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE, HELP
+        MENUITEM "Paste &Link",                 ID_EDIT_PASTE_LINK, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "Insert &New Object...",       ID_OLE_INSERT_NEW, HELP
+        MENUITEM "Lin&ks...",                   ID_OLE_EDIT_LINKS, HELP
+        MENUITEM "<<OLE VERBS GO HERE>>",       ID_OLE_VERB_FIRST, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "Edit Clear &All",             IDM_EDIT_CLEAR_ALL, HELP
+    END
+    POPUP "&Specs"
+    BEGIN
+        MENUITEM SEPARATOR
+        MENUITEM "&HitNet...",                  IDM_SPEC_HITNET, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&Layer...",                   IDM_SPEC_LAYER, HELP
+        MENUITEM SEPARATOR
+    END
+    POPUP "&NoShow"
+    BEGIN
+        MENUITEM SEPARATOR
+        POPUP "&Points", HELP
+        BEGIN
+            MENUITEM "&Input",                      IDM_NOSHOW_NODES, HELP
+            MENUITEM "&Control",                    IDM_NOSHOW_CNODES, HELP
+            MENUITEM "&Final",                      IDM_NOSHOW_MNODES, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Kinematic Spectra/Histories", HELP
+        BEGIN
+            MENUITEM "Displacement   ",             IDM_NOSHOW_KINEMATICSPECTRAHISTORIES_DISPLACEMENT
+            , HELP
+            MENUITEM "&Velocity",                   IDM_NOSHOW_KINEMATICSPECTRAHISTORIES_VELOCITY
+            , HELP
+            MENUITEM "&Acceleration",               IDM_NOSHOW_KINEMATICSPECTRAHISTORIES_ACCELERATION
+
+        END
+        MENUITEM SEPARATOR
+        POPUP "Kinetic Spectra/Histories", HELP
+        BEGIN
+            MENUITEM "&Force",                      IDM_NOSHOW_KINETIC_FORCE
+            , HELP
+            MENUITEM "&Pressure",                   IDM_NOSHOW_KINETIC_PRESSURE
+            , HELP
+            MENUITEM "&Thermal",                    IDM_NOSHOW_KINETIC_THERMAL
+            , HELP
+            MENUITEM "&Mass",                       IDM_NOSHOW_KINETIC_MASS
+        END
+        MENUITEM SEPARATOR
+        POPUP "Labels", HELP
+        BEGIN
+            MENUITEM "&Points",                     IDM_NOSHOW_NLABEL, HELP
+            MENUITEM "&Control Points",             IDM_NOSHOW_CNLABEL, HELP
+            MENUITEM "&Final Points",               IDM_NOSHOW_MNLABEL, HELP
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Control &Shapes",             IDM_NOSHOW_CONTROLSHAPE
+        , HELP
+        MENUITEM "C&entroids",                  IDM_NOSHOW_CENTROID, HELP
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Pick"
+    BEGIN
+        MENUITEM SEPARATOR
+        POPUP "&Points", HELP
+        BEGIN
+            MENUITEM "&Input",                      ID_PICK_NODE, HELP
+            MENUITEM "&Control",                    ID_PICK_NODE_CONTROL
+            , HELP
+            MENUITEM "&Final",                      ID_PICK_MESHNODE, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Kinematic Spectra/Histories", HELP
+        BEGIN
+            MENUITEM "Displacement",                IDM_PICK_KINEMATICSPECTRAHISTORIES_DISPLACEMENT
+
+            MENUITEM "Velocity",                    IDM_PICK_KINEMATICSPECTRAHISTORIES_VELOCITY
+
+            MENUITEM "Acceleration",                IDM_PICK_KINEMATICSPECTRAHISTORIES_ACCELERATION
+
+        END
+        MENUITEM SEPARATOR
+        POPUP "Kinetic Spectra/Histories"
+        BEGIN
+            MENUITEM "Force",                       IDM_PICK_KINETICSPECTRAHISTORIES_FORCE
+
+            MENUITEM "Pressure",                    IDM_PICK_KINETICSPECTRAHISTORIES_PRESSURE
+
+            MENUITEM "Thermal",                     IDM_PICK_KINETICSPECTRAHISTORIES_THERMAL
+
+        END
+    END
+    POPUP "S&ummary"
+    BEGIN
+        POPUP "&Spectra", HELP
+        BEGIN
+            MENUITEM "&Dirty",                      ID_SUMMARY_CURVE_DIRTY
+            , HELP
+            MENUITEM "&Posted",                     ID_SUMMARY_CURVE_POSTED
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Points", HELP
+        BEGIN
+            MENUITEM "&All types",                  ID_SUMMARY_NODE_ALLTYPES
+            , HELP
+            MENUITEM "&Control",                    ID_SUMMARY_NODE_CONTROL
+            , HELP
+            MENUITEM "&Final",                      ID_SUMMARY_NODE_MESH
+            , HELP
+        END
+        MENUITEM "&Elements...",                ID_SUMMARY_ELEMENTS
+        MENUITEM SEPARATOR
+        MENUITEM SEPARATOR
+        POPUP "Static Loads", HELP
+        BEGIN
+            MENUITEM "&Force",                      ID_SUMMARY_STATIC_FORCE
+            , HELP
+            MENUITEM "&Displacement",               ID_SUMMARY_STATIC_DISPLACE
+            , HELP
+            MENUITEM "&Pressure",                   ID_SUMMARY_STATIC_PRESSURE
+            , HELP
+            MENUITEM "&Thermal",                    ID_SUMMARY_STATIC_THERMAL
+            , HELP
+            MENUITEM "&LumpWeightt",                ID_SUMMARY_STATIC_LUMPWT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+    END
+    POPUP "&Options"
+    BEGIN
+        MENUITEM "&Cursor Change",              IDM_OPTION_CURSOR, HELP
+        MENUITEM "&Pen Change ...",             IDM_OPTION_PENCHANGE, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&Dialog On",                  IDM_OPTION_DIALOGON, HELP
+        MENUITEM "&Axis On",                    IDM_OPTION_AXISON, HELP
+        MENUITEM "&RubberBandOn",               IDM_OPTION_RUBBERBAND, HELP
+        MENUITEM "&SoundOn",                    IDM_OPTION_SOUNDON, HELP
+        MENUITEM "A&utoAcceptOn",               IDM_OPTION_AUTOACCEPTON
+        , HELP
+        MENUITEM "&BLineOn",                    IDM_OPTION_BLINEON, HELP
+        MENUITEM "S&ingleSegmentOn",            IDM_OPTION_SINGLESEGON, HELP
+        MENUITEM "Spa&wnOn",                    IDM_OPTION_SPAWNON
+        MENUITEM "Ne&w PointOn",                IDM_OPTION_NEWNODEON
+    END
+    POPUP "&Deck"
+    BEGIN
+        POPUP "Format"
+        BEGIN
+            MENUITEM "&Free",                       IDM_DECK_FORMAT_FREE
+            MENUITEM "Fi&x",                        IDM_DECK_FORMAT_FIX
+        END
+        MENUITEM "&View",                       IDM_VIEW_DECKVIEW
+    END
+    POPUP "&Mode"
+    BEGIN
+        MENUITEM "&Generators",                 IDM_MODE_GENERATOR
+        MENUITEM "&Mesh",                       IDM_MODE_MESH
+        POPUP "&Auxilliary"
+        BEGIN
+            MENUITEM "Spatial",                     IDM_MODE_AUXILLIARY_SPATIAL
+
+            MENUITEM "Spectral",                    IDM_MODE_AUXILLIARY_SPECTRAL
+
+            MENUITEM "Temporal",                    IDM_MODE_AUXILLIARY_TEMPORAL
+
+        END
+    END
+    POPUP "Debug"
+    BEGIN
+        MENUITEM "&CalC Time",                  IDM_DEBUG_CALCTIME
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR, HELP
+        POPUP "&StatusBars", HELP
+        BEGIN
+            MENUITEM "&Bottom",                     IDM_VIEW_S_BAR_BOT, HELP
+            MENUITEM "&Top",                        IDM_VIEW_S_BAR_TOP, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Graphics", HELP
+        BEGIN
+            MENUITEM "&Spectra",                    IDM_VIEW_SPECTRA, HELP
+            MENUITEM "&History",                    IDM_VIEW_HISTORY, HELP
+            MENUITEM "&All",                        IDM_VIEW_ALLVIEW, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "ToolBo&xes", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_CNTLBOX, HELP
+            MENUITEM "&Generators",                 IDM_VIEW_GENBOX, HELP
+            MENUITEM "&Operations",                 IDM_VIEW_OPERBOX, HELP
+            MENUITEM "Decorator",                   IDM_VIEW_DRAWBOX, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "T&oolStatus", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_INPUTSTATUS_CONTROLS
+            , HELP
+            MENUITEM "&Generators",                 IDM_VIEW_INPUTSTATUS_GENERATOR
+            , HELP
+            MENUITEM "&Operations",                 IDM_VIEW_INPUTSTATUS_OPERATIONS
+            , HELP
+            MENUITEM "Decorators",                  IDM_VIEW_INPUTSTATUS_DECORATORS
+            , HELP
+            MENUITEM "Current &Item",               IDM_VIEW_INPUTSTATUS_CURRENT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "D&ataBase", HELP
+        BEGIN
+            MENUITEM "Spectral",                    IDM_VIEW_DATABASE_SPECTRAL
+
+            MENUITEM "History",                     IDM_VIEW_DATABASE_HISTORY
+
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "&Refresh",                    IDM_OPTION_REFRESH, HELP
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE, HELP
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ, HELP
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE, HELP
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Contents",                   ID_HELP_CONTENTS
+        MENUITEM "&Help Topics",                ID_HELP_FINDER, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&Index",                      ID_HELP_INDEX, HELP
+        MENUITEM "&Using Help",                 ID_HELP_USING, HELP
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT, HELP
+        MENUITEM SEPARATOR
+    END
+END
+
+IDR_FORMDATATYPE MENU DISCARDABLE 
+BEGIN
+    POPUP "&FormView"
+    BEGIN
+        MENUITEM "&Print...\tCtrl+P",           ID_FILE_PRINT
+        MENUITEM "Print Pre&view",              ID_FILE_PRINT_PREVIEW
+        MENUITEM "P&rint Setup...",             ID_FILE_PRINT_SETUP
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Toolbar",                    ID_VIEW_TOOLBAR, HELP
+        POPUP "&StatusBars", HELP
+        BEGIN
+            MENUITEM "&Bottom",                     IDM_VIEW_S_BAR_BOT, HELP
+            MENUITEM "&Top",                        IDM_VIEW_S_BAR_TOP, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "&Graphics", HELP
+        BEGIN
+            MENUITEM "&XY",                         IDM_VIEW_12VIEW, HELP
+            MENUITEM "&YZ",                         IDM_VIEW_23VIEW, HELP
+            MENUITEM "&ZX",                         IDM_VIEW_31VIEW, HELP
+            MENUITEM "3&D",                         IDM_VIEW_3DVIEW, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "ToolBo&xes", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_CNTLBOX, HELP
+            MENUITEM "&Generators",                 IDM_VIEW_GENBOX, HELP
+            MENUITEM "&Operations",                 IDM_VIEW_OPERBOX, HELP
+            MENUITEM "Decorator",                   IDM_VIEW_DRAWBOX, HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "T&oolStatus", HELP
+        BEGIN
+            MENUITEM "&Controls",                   IDM_VIEW_INPUTSTATUS_CONTROLS
+            , HELP
+            MENUITEM "&Generators",                 IDM_VIEW_INPUTSTATUS_GENERATOR
+            , HELP
+            MENUITEM "&Operations",                 IDM_VIEW_INPUTSTATUS_OPERATIONS
+            , HELP
+            MENUITEM "Decorators",                  IDM_VIEW_INPUTSTATUS_DECORATORS
+            , HELP
+            MENUITEM "Current &Item",               IDM_VIEW_INPUTSTATUS_CURRENT
+            , HELP
+        END
+        MENUITEM SEPARATOR
+        POPUP "D&ataBase", HELP
+        BEGIN
+            MENUITEM "&Generation",                 IDM_VIEW_DATAVIEW
+            MENUITEM "&Mesh",                       IDM_VIEW_MESHDATAVIEW
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Dec&k",                       IDM_VIEW_DECKVIEW
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "New 3D View",                 IDM_WINDOW_NEW_3D_VIEW
+        MENUITEM "&Cascade",                    ID_WINDOW_CASCADE
+        MENUITEM "&Tile",                       ID_WINDOW_TILE_HORZ
+        MENUITEM "&Arrange Icons",              ID_WINDOW_ARRANGE
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&Index",                      ID_HELP_INDEX
+        MENUITEM "&Using Help",                 ID_HELP_USING
+        MENUITEM SEPARATOR
+        MENUITEM "&About DRGRAF...",            ID_APP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+    VK_F1,          ID_CONTEXT_HELP,        VIRTKEY, SHIFT
+    VK_F1,          ID_HELP,                VIRTKEY 
+    VK_ESCAPE,      ID_CANCEL_EDIT,         VIRTKEY, NOINVERT
+END
+
+IDR_12TYPE ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+    VK_F1,          ID_CONTEXT_HELP,        VIRTKEY, SHIFT
+    VK_F1,          ID_HELP,                VIRTKEY 
+    VK_ESCAPE,      ID_CANCEL_EDIT,         VIRTKEY, NOINVERT
+END
+
+IDR_DRGRAFTYPE ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+    VK_F1,          ID_CONTEXT_HELP,        VIRTKEY, SHIFT
+    VK_F1,          ID_HELP,                VIRTKEY 
+    VK_ESCAPE,      ID_CANCEL_EDIT,         VIRTKEY, NOINVERT
+END
+
+IDR_DRGRAFTYPE_CNTR_IP ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "P",            ID_FILE_PRINT,          VIRTKEY, CONTROL
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+    VK_F1,          ID_CONTEXT_HELP,        VIRTKEY, SHIFT
+    VK_F1,          ID_HELP,                VIRTKEY 
+    VK_ESCAPE,      ID_CANCEL_EDIT,         VIRTKEY, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_TIMING_DLG DIALOG DISCARDABLE  0, 0, 309, 212
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,255,166,40,
+                    24
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,12,
+                    166,40,26
+    LISTBOX         IDC_LIST,16,10,275,142,NOT LBS_NOTIFY | 
+                    LBS_NOINTEGRALHEIGHT | LBS_NOSEL | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_ABOUTBOX DIALOG DISCARDABLE  80, 40, 261, 74
+STYLE WS_POPUP | WS_CAPTION
+CAPTION "About mm_GIG"
+FONT 12, "Architect"
+BEGIN
+    CONTROL         "",IDC_BIGICON,"Button",BS_OWNERDRAW | WS_DISABLED,6,6,
+                    38,40
+    LTEXT           "mm_GIG Version 1.0",IDC_STATIC,55,6,78,8,NOT WS_GROUP
+    LTEXT           "An IDRI Structural Graphical Input Generator",
+                    IDC_STATIC,55,15,142,8,NOT WS_GROUP
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKRECT,55,33,145,1
+    LTEXT           "Available Memory:",IDC_STATIC,55,43,63,8,NOT WS_GROUP
+    LTEXT           "(Avail mem)",IDC_AVAIL_MEM,127,43,129,8,NOT WS_GROUP
+    LTEXT           "Math Co-processor:",IDC_STATIC,55,51,64,8,NOT WS_GROUP
+    LTEXT           "(Math coprocessor)",IDC_MATH_COPR,127,51,129,8,NOT 
+                    WS_GROUP
+    LTEXT           "Disk Space:",IDC_STATIC,55,59,70,8,NOT WS_GROUP
+    LTEXT           "(Disk space)",IDC_DISK_SPACE,127,59,128,8,NOT WS_GROUP
+    CONTROL         "",IDOK,"Button",BS_OWNERDRAW,210,5,45,30
+END
+
+IDD_SPLASH DIALOG DISCARDABLE  80, 40, 237, 205
+STYLE DS_MODALFRAME | WS_POPUP
+FONT 8, "Helv"
+BEGIN
+    CONTROL         "",IDC_BIGICON,"Button",BS_OWNERDRAW | WS_DISABLED,6,6,
+                    38,40
+    LTEXT           "DrGrafix Version 1.0",IDC_STATIC,53,6,164,8,NOT 
+                    WS_GROUP
+    LTEXT           "An IDRI Structural Graphical Data Generator",IDC_STATIC,
+                    53,15,164,8,NOT WS_GROUP
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKRECT,53,30,184,1
+    LTEXT           "Warning: This computer program is protected by",
+                    IDC_STATIC,53,36,182,8
+    LTEXT           "copyright law and international treaties.  Unauthorized",
+                    IDC_STATIC,53,44,182,8
+    LTEXT           "reproduction or distribution of this program, or any",
+                    IDC_STATIC,53,52,182,8
+    LTEXT           "portion of it, may result in severe civil and criminal",
+                    IDC_STATIC,53,60,182,8
+    LTEXT           "penalties, and will be prosecuted to the maximum",
+                    IDC_STATIC,53,68,182,8
+    LTEXT           "extent possible under law.",IDC_STATIC,53,76,182,8
+    LTEXT           "The software is licensed to:",IDC_STATIC,55,90,180,10
+    LTEXT           "Debabrata Ray",IDC_STATIC,80,100,155,15
+END
+
+IDD_DEFAULTS DIALOG DISCARDABLE  45, 12, 106, 65
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Defaults"
+FONT 8, "System"
+BEGIN
+    LTEXT           "DEC PLACES",10,3,9,46,8
+    LTEXT           "MULT FACTOR",11,3,23,47,9
+    LTEXT           "UNITS",12,3,37,44,8
+    EDITTEXT        IDC_PARAMETERS_FIX,54,6,25,12
+    EDITTEXT        IDC_PARAMETERS_FACTOR,54,20,50,12
+    EDITTEXT        IDC_PARAMETERS_UNITS,54,34,25,12
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,9,49,24,14
+    CONTROL         "ESC",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,47,49,
+                    24,14
+END
+
+IDD_ELEMENTS DIALOG DISCARDABLE  60, 40, 60, 97
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION
+CAPTION "Show Element"
+FONT 8, "System"
+BEGIN
+    CHECKBOX        "NODE",IDM_ELEMENTS_NODE,3,2,28,12
+    CHECKBOX        "PIPE",IDM_ELEMENTS_PIPE,3,14,28,12
+    CHECKBOX        "ELBOW",IDM_ELEMENTS_ELBOW,3,25,33,12
+    CHECKBOX        "BEAM",IDM_ELEMENTS_BEAM,3,37,28,12
+    CHECKBOX        "SUPPORT",IDM_ELEMENTS_SUPPORT,3,49,39,12
+    CHECKBOX        "NONLIN SUPP",IDM_ELEMENTS_NL_SUPP,3,61,55,12
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,2,78,24,14
+    CONTROL         "ESC",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,33,78,
+                    24,14
+END
+
+IDD_SHRINKON DIALOG DISCARDABLE  0, 0, 197, 126
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Shrink Factor"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,135,80,40,
+                    24
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,15,
+                    80,40,26
+    RTEXT           "Shrink Factor: ",IDC_STATIC,45,40,49,9
+    EDITTEXT        IDC_SHRINK,97,40,40,12,ES_AUTOHSCROLL
+    ICON            "IDI_ICONPIPE",IDC_STATIC,15,10,21,20
+END
+
+IDD_NOSHOW_LABEL_ELEM DIALOGEX 0, 0, 241, 86
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "No Show Elements Label Option"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Beam",IDC_BEAM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,45,
+                    9,34,10,0,HIDC_BEAM
+    CONTROL         "Pipe",IDC_PIPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,45,
+                    18,30,10,0,HIDC_PIPE
+    CONTROL         "Elbow",IDC_ELBOW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    45,27,35,10,0,HIDC_ELBOW
+    CONTROL         "Truss",IDC_TRUSS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    45,36,33,10,0,HIDC_TRUSS
+    CONTROL         "Qu_4",IDC_QU_4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,
+                    9,33,10,0,HIDC_QU_4
+    CONTROL         "Qu_8",IDC_QU_8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,
+                    19,33,10,0,HIDC_QU_8
+    CONTROL         "Qu_9",IDC_QU_9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,
+                    29,33,10,0,HIDC_QU_9
+    CONTROL         "Qu_12",IDC_QU_12,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    91,39,37,10,0,HIDC_QU_12
+    CONTROL         "Qu_16",IDC_QU_16,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    91,49,37,10,0,HIDC_QU_16
+    CONTROL         "Tr_3",IDC_TR_3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    135,9,31,10,0,HIDC_TR_3
+    CONTROL         "Tr_6",IDC_TR_6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    135,17,31,10,0,HIDC_TR_6
+    CONTROL         "Tr_9",IDC_TR_9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    135,26,31,10,0,HIDC_TR_9
+    CONTROL         "Tr_10",IDC_TR_10,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    135,36,35,10,0,HIDC_TR_10
+    CONTROL         "Ball Joint",IDC_BALLJT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,1,9,44,10,0,HIDC_BALLJT
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,190,54,40,
+                    24,0,HIDOK
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,9,
+                    54,40,26,0,HIDCANCEL
+    CONTROL         "TetraHedron",IDC_TETRA,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,182,9,56,10,0,HIDC_TETRA
+    CONTROL         "PentaHedron",IDC_PENTA,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,182,17,58,10,0,HIDC_PENTA
+    CONTROL         "HexaHedron",IDC_HEXA,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,182,26,56,10,0,HIDC_HEXA
+    CONTROL         "ALL",IDC_NOSHOW_ALL,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,84,66,29,10
+    CONTROL         "None",IDC_NOSHOW_NONE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,132,66,33,10
+END
+
+IDD_NOSHOW_ELEM DIALOGEX 0, 0, 245, 86
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "No Show Elements Options"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Beam",IDC_BEAM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,45,
+                    9,34,10,0,HIDC_BEAM
+    CONTROL         "Pipe",IDC_PIPE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,45,
+                    18,30,10,0,HIDC_PIPE
+    CONTROL         "Elbow",IDC_ELBOW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    45,27,35,10,0,HIDC_ELBOW
+    CONTROL         "Truss",IDC_TRUSS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    45,36,33,10,0,HIDC_TRUSS
+    CONTROL         "Qu_4",IDC_QU_4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,
+                    9,33,10,0,HIDC_QU_4
+    CONTROL         "Qu_8",IDC_QU_8,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,
+                    19,33,10,0,HIDC_QU_8
+    CONTROL         "Qu_9",IDC_QU_9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,91,
+                    29,33,10,0,HIDC_QU_9
+    CONTROL         "Qu_12",IDC_QU_12,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    91,39,37,10,0,HIDC_QU_12
+    CONTROL         "Qu_16",IDC_QU_16,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    91,49,37,10,0,HIDC_QU_16
+    CONTROL         "Tr_3",IDC_TR_3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    135,9,31,10,0,HIDC_TR_3
+    CONTROL         "Tr_6",IDC_TR_6,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    135,17,31,10,0,HIDC_TR_6
+    CONTROL         "Tr_9",IDC_TR_9,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    135,26,31,10,0,HIDC_TR_9
+    CONTROL         "Tr_10",IDC_TR_10,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,
+                    135,36,35,10,0,HIDC_TR_10
+    CONTROL         "Ball Joint",IDC_BALLJT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,1,9,44,10,0,HIDC_BALLJT
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,190,54,40,
+                    24,0,HIDOK
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,9,
+                    54,40,26,0,HIDCANCEL
+    CONTROL         "TetraHedron",IDC_TETRA,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,182,9,56,10,0,HIDC_TETRA
+    CONTROL         "PentaHedron",IDC_PENTA,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,182,17,58,10,0,HIDC_PENTA
+    CONTROL         "HexaHedron",IDC_HEXA,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,182,26,56,10,0,HIDC_HEXA
+    CONTROL         "ALL",IDC_NOSHOW_ALL,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,75,68,29,10
+    CONTROL         "None",IDC_NOSHOW_NONE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,121,68,33,10
+END
+
+IDD_PROBELEMLIM DIALOGEX 0, 0, 196, 130
+STYLE DS_MODALFRAME | DS_3DLOOK | DS_CENTER | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Model/Element Max Dimension"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,23,
+                    90,40,26,0,HIDCANCEL
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,129,90,40,
+                    24,0,HIDOK
+    LTEXT           "Model Max Dimension",IDC_STATIC,35,38,75,8
+    LTEXT           "Element Max Dimension",IDC_STATIC,35,58,75,8
+    COMBOBOX        IDC_COMBOPROBDIM,118,36,39,63,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_COMBOELEMDIM,118,58,39,63,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_SHRINKON, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 190
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 119
+    END
+
+    IDD_NOSHOW_LABEL_ELEM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 234
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 79
+    END
+
+    IDD_NOSHOW_ELEM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 238
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 79
+    END
+
+    IDD_PROBELEMLIM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 189
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 123
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_PROBELEMLIM DLGINIT
+BEGIN
+    IDC_COMBOPROBDIM, 0x403, 3, 0
+0x4431, "\000" 
+    IDC_COMBOPROBDIM, 0x403, 3, 0
+0x4432, "\000" 
+    IDC_COMBOPROBDIM, 0x403, 3, 0
+0x4433, "\000" 
+    IDC_COMBOELEMDIM, 0x403, 3, 0
+0x4431, "\000" 
+    IDC_COMBOELEMDIM, 0x403, 3, 0
+0x4432, "\000" 
+    IDC_COMBOELEMDIM, 0x403, 3, 0
+0x4433, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "mmCAFE-GiG Resource String"
+    IDR_MAINFRAME           "mmCAFE-GiG Windows Application"
+    IDR_INPUTMENU           "\nmmCAFE_GiG\nGiG Model\\GiG Model (*.GiG)\n.GiG\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDR_12TYPE              "Y = Vertical Axis  X = Horizontal Axis\n12 View\nGiG Model\nmmCAFE-GiG File (*.GiG)\n.GiG\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDR_23TYPE              "Y = Vertical Axis  Z = Horizontal Axis\n23 View\n\n\n\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDR_31TYPE              "X = Vertical Axis  Z = Horizontal Axis\n31 View\n\n\n\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDR_3DTYPE              "3D View\n3D View\n\n\n\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDR_DATATYPE            "Generation DataBase View\nGeneration DataBase View\n\n\n\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDS_TOO_MANY_ROWS       "WARNING:  Limit exceeded.  Cannot display/print one or more checks."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDR_MESHDATATYPE        "Mesh DataBase View\nMesh DataBase View\n\n\n\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDR_DECKTYPE            "Mesh Deck View\nMesh Deck View\n\n\n\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDR_FORMDATATYPE        "DataBase Form View\nDataBase Form View\n\n\n\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDR_AUXINPUT            "Auxilliary Input View\nAuxilliary Input View\n\n\n\nmmCAFE-GiG_Model\nmmCAFE-GiG Model"
+    IDM_VIEW_STATUS_BAR_B   "Show or hide Bottom StatusBar"
+    IDM_VIEW_STATUS_BAR_T   "Show or Hide Top StatusBar"
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    65505                   "mmCAFE-GiG: An iDRi Computer-Aided Finite Element Program: Graphical Input Generator\001‡Ready\002‡Select an object on which to get Help\001"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_TEXT_X     " X: "
+    ID_INDICATOR_TEXT_Y     " Horz: "
+    ID_INDICATOR_TEXT_Z     " Vert: "
+    ID_INDICATOR_TEXT_LAYER "Layer :"
+    ID_INDICATOR_TEXT_UNIT  "Unit:"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDP_OLE_INIT_FAILED     "OLE 2.0 initialization failed.  Make sure that the OLE libraries are the correct version."
+    IDP_FAILED_TO_CREATE    "Failed to create object.  Make sure the object is entered in the system registry."
+END
+
+STRINGTABLE PRELOAD DISCARDABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "mmCAFE-GiG"
+    AFX_IDS_IDLEMESSAGE     "For Help, press F1"
+    AFX_IDS_HELPMODEMESSAGE "Select an object on which to get Help"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_NEW             "Create a new Model"
+    ID_FILE_OPEN            "Open an existing Model"
+    ID_FILE_CLOSE           "Close the active Model"
+    ID_FILE_SAVE            "Save the active Model"
+    ID_FILE_SAVE_AS         "Save the active Model with a new name"
+    ID_FILE_PAGE_SETUP      "Change the printing options"
+    ID_FILE_PRINT_SETUP     "Change the printer and printing options"
+    ID_FILE_PRINT           "Print the active Model"
+    ID_FILE_PRINT_PREVIEW   "Display Active Model in Full page View"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright"
+    ID_APP_EXIT             "Quit the application; prompts to save Model"
+    ID_HELP_INDEX           "List Help topics"
+    ID_HELP_FINDER          "List Help topics\nHelp Topics"
+    ID_HELP_USING           "Display instructions about how to use help"
+    ID_CONTEXT_HELP         "Display help for clicked on buttons, menus and windows"
+    ID_HELP                 "Display help for current task or command"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_FILE_MRU_FILE1       "Open this Model"
+    ID_FILE_MRU_FILE2       "Open this Model"
+    ID_FILE_MRU_FILE3       "Open this Model"
+    ID_FILE_MRU_FILE4       "Open this Model"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane"
+    ID_PREV_PANE            "Switch back to the previous window pane"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_WINDOW_NEW           "Open another 3D View for the Model"
+    ID_WINDOW_ARRANGE       "Arrange icons at the bottom of the window"
+    ID_WINDOW_CASCADE       "Arrange windows so they overlap"
+    ID_WINDOW_TILE_HORZ     "Arrange windows as non-overlapping tiles"
+    ID_WINDOW_TILE_VERT     "Arrange windows as non-overlapping tiles"
+    ID_WINDOW_SPLIT         "Split the active window into panes"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection"
+    ID_EDIT_CLEAR_ALL       "Delete All Objects Clean"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard"
+    ID_EDIT_FIND            "Find the specified text"
+    ID_EDIT_PASTE           "Insert Clipboard contents"
+    ID_EDIT_PASTE_LINK      "Insert Clipboard contents and a link to its source"
+    ID_EDIT_PASTE_SPECIAL   "Insert Clipboard contents with options"
+    ID_EDIT_REPEAT          "Repeat the last action"
+    ID_EDIT_REPLACE         "Replace specific text with different text"
+    ID_EDIT_SELECT_ALL      "Select the entire drawing"
+    ID_EDIT_UNDO            "Undo the last action"
+    ID_EDIT_REDO            "Redo the previously undone action"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_3D_FLATSHADING      "Selecting Simple Phong Model"
+    IDM_3D_ZBUFFERED        "Selecting Pixel Level Fancy Rendering"
+    IDM_ZOOM_FIT            "Scale Selected Objects to Fit Entire View Window"
+    IDM_EDIT_CLEAR_ALL      "Delete Everything Done So Far"
+    IDM_SPEC_OBJ3D          "Select Substructure for the Current Element"
+    IDM_SPEC_PATCH          "Select Component Structure for the Element"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_OPTION_CURSOR       "Select Cursor"
+    IDM_3D_PROJECTION_PARALLEL "Selecting Parallel Projection Type"
+    IDM_VIEW_DRAWBOX        "Show or Hide Draw Box"
+    IDM_VIEW_ELEMENTBOX     "Show or Hide Mesh Generation Box"
+    IDM_OPTION_DIALOG       "Selecting Perspective Projection Type"
+    IDM_OPTION_REFRESH      "Redraw the Entire View"
+    IDM_3D_WIREFRAMED       "Selecting WireFramed Drawing (No Rendering)"
+    IDM_3D_RENDERING        "Slecting Rendering Details"
+    IDM_3D_AMBIENTLIGHT     "Selecting Diffuse Light"
+    IDM_OPTION_RUBBERBAND   "Select for RubberBanding in Element drawing "
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_OLE_INSERT_NEW       "Insert new embedded object"
+    ID_OLE_EDIT_LINKS       "Edit linked objects"
+    ID_OLE_EDIT_CONVERT     "Convert object to different type"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_OLE_VERB_FIRST       "Activate embedded or linked object"
+    57873                   "Activate embedded or linked object"
+    57874                   "Activate embedded or linked object"
+    57875                   "Activate embedded or linked object"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_SPEC_EYELEVEL       "Set Rotation & Tilt to fix Eye Level for Isometric View"
+    IDM_SPEC_LAYER          "Select Layer for the Current object"
+    IDM_VIEW_12VIEW         "Show or Hide XY View"
+    IDM_VIEW_23VIEW         "Show or Hide YZ View"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_VIEW_31VIEW         "Show or Hide ZX View"
+    IDM_VIEW_3DVIEW         "Show or Hide 3D View"
+    IDM_3D_EYEPOSITION      "Selecting Viewer Details"
+    IDM_3D_LIGHTSOURCE      "Selecting Light Source Details"
+    IDM_SPEC_PAPER          "Select Paper Size"
+    IDM_SPEC_PRECISION      "Select Number of Decimal Places for display"
+    IDM_3D_PROJECTION       "Selecting 3D to 2D Projection Type"
+    IDM_SPEC_AXIS           "Select Vertical & Horizontal Axes"
+    IDM_SPEC_UNITS          "Select Drawing Unit (English,Metric etc.)"
+    IDM_SPEC_EYEPOSITION    "Select Eye Position with respect to Axes for Iso View"
+    IDM_SPEC_SCALEFACTOR    "Select As-drawn to Actual  Object Size ratio"
+    IDM_DEFAULT_NEW         "Set or View Default values for New Model"
+    IDM_DEFAULT_CURRENT     "Set or View Default values for Current Model"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_DECK_DREAMPIPE      "Output  dreamPipe Deck "
+    IDM_ZOOM                "Zoom In(Enlarge) or Out(Shrink) Selected View Objects"
+    IDM_OPTION_PENCHANGE    "Click to Change drawing Pen Style, Width & Color"
+    IDM_NOSHOW_NODES        "Show or Hide Nodes"
+    IDM_NOSHOW_CNODES       "Show or Hide Control Nodes"
+    IDM_NODELABEL           "Suppresses Drawing of Node Label"
+    IDM_NOSHOW_CNLABEL      "Show or Hide Control Node Labels"
+    IDM_NOSHOW_NLABEL       "Show or Hide Node Labels"
+    IDM_VIEW_CARDDECK       "Show or Hide Element Normals"
+    IDM_VIEW_DATAVIEW       "Show or Hide Generation Data View"
+    IDM_DECK_SAP            "Output SAP deck"
+    IDM_DECK_TAB            "Output TAB Deck"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_DISK_SPACE          "%lu KB Free"
+    IDS_MATH_COPR_NOTPRESENT "Not present"
+    IDS_MATH_COPR_PRESENT   "Present"
+    IDS_AVAIL_MEM           "%lu KB Free"
+    IDS_DISK_SPACE_UNAVAIL  "Unavailable"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_INDICATOR_TEXT_TIME  "Time:"
+    ID_INDICATOR_TEXT_DATE  "Date:  "
+    ID_INDICATOR_TEXT_DRAWING "Generating:"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+    AFX_IDS_MDICHILD        "Activate this window"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_NOSHOW_CONTROLSHAPE "Show or Hide Control Shapes"
+    IDM_INPUT               "Generate or Edit Model"
+    IDM_MODE_OUTPUT         "Render Existing or Created Model"
+    IDM_MODE_INPUT          "Input or Edit Model"
+    IDM_3D_WF_PURE          "WireFrame Drawing with No Rendition"
+    IDM_3D_WF_HIDDEN        "WireFrame Drawing with Hidden Surface Removal "
+    IDM_3D_FS_PAINTER       "Gouraud Rendition with DepthSort"
+    IDM_3D_FS_ZBUFFER       "Gouraud with ZBuffering"
+    IDM_3D_ZB_GOURAUD       "Image-Precision(Pixel Level) Gouraud Shading"
+    IDM_3D_ZB_PHONG         "Image-Precision(Pixel Level) Phong Shading"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NOSHOW_LABELS_2DSCREEN "Show or Hide 2D Screen Labels"
+    ID_NOSHOW_LABELS_3DPATCH "Show or Hide 3D Patch Labels"
+    IDM_NOSHOW_2DLABEL      "Show or Hide 2D Screen Labels"
+    IDM_NOSHOW_CENTROID     "Show or Hide Element Centroids"
+    IDM_NOSHOW_DIRTY        "Show or Hide Dirty (UnPosted) Items"
+    IDM_NOSHOW_POSTED       "Show or Hide Posted Items"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_NOSHOW_D_OBJECT     "Show or Hide Dirty Objects"
+    IDM_NOSHOW_D_SOLID      "Show or Hide Dirty Solid"
+    IDM_NOSHOW_D_PATCH      "Show or Hide Dirty Patch"
+    IDM_NOSHOW_D_CURVE      "Show or Hide Dirty Curves"
+    IDM_NOSHOW_P_OBJECT     "Show or Hide POSTED Objects"
+    IDM_NOSHOW_P_SOLID      "Show or Hide POSTED Solids"
+    IDM_NOSHOW_P_PATCH      "Show or Hide POSTED Patches"
+    IDM_NOSHOW_P_CURVE      "Show or Hide POSTED Curves"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_VIEW_MESHBOX        "Show or Hide Mesh Element Type Selection Box"
+    ID_SUMMARY_SOLID        "No. of Solids"
+    ID_SUMMARY_SOLID_DIRTY  "No. of Dirty Solids"
+    ID_SUMMARY_SOLID_POSTED "No. of Posted Solids"
+    ID_SUMMARY_PATCH_DIRTY  "No. of Dirty Patches"
+    ID_SUMMARY_PATCH_POSTED "No. of Posted Patches"
+    ID_SUMMARY_CURVE_DIRTY  "No. of Dirty Curves"
+    ID_SUMMARY_CURVE_POSTED "No. of Posted Curves"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_SUMMARY_NODE_ALLTYPES "Number of Total Nodes of All Types"
+    ID_SUMMARY_NODE_CONTROL "No. of Control Nodes"
+    ID_SUMMARY_NODE_MESH    "No. of Mesh Nodes"
+    IDM_3D_CULLINGON        "Turns BackFace Culling On or Off"
+    IDM_OPTION_SOUNDON      "Turns On or Off Sound"
+    IDM_OPTION_AUTOACCEPTON "If Selected, Acceptance Assumed Automatic"
+    IDM_OPTION_BLINEON      "Turns on Continuous Line On or Off"
+    IDM_OPTION_SINGLESEGON  "Turns Single Segment Line On or Off"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_VIEW_INPUTSTATUS_CURRENT 
+                            "Show or Hide Current Selection Item Status Window"
+    IDM_SPEC_HITNET         "Select to Specifiy Pixel Net & Physical Net for PickUps"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    ID_NEW_WINDOW_3D        "Display  Another 3D View"
+    IDM_OPTION_SPAWNON      "Turns ON or OFF for Object Copy in Affine Transformations"
+    IDM_VIEW_MESHDATAVIEW   "Show or Hide Mesh Data View"
+    IDM_DECK_FORMAT_FREE    "Output Deck in FreeFormat"
+    IDM_DECK_FORMAT_FIXED   "Output Deck in FixFormat"
+    IDM_VIEW_DECK           "Show or Hide Deck View"
+    IDM_VIEW_DECKVIEW       "Show or Hide Mesh Deck View"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_OPTION_NEWNODEON    "If On, Node created Anyway when needed"
+    IDM_NOSHOW_LABEL_ELEMENTS "Show or Hide Element Label"
+    IDM_DEBUG_CALCTIME      "Calculation Time Log"
+    ID_VIEW_REFRESH         "Redraw Entire View"
+    IDM_VIEW_ALLVIEW        "Show or Hide All 4 Views"
+    ID_VIEW_DATABASE_AUXILLIARY "Spectral or History Data Distribution"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_OPTION_SNAPON       "Merges with or Ignores 'nearby' like-kind existing Object"
+    IDM_OPTION_SNAPON_OBJMERG "Merges to or Ignores Existing like-kind Object"
+    ID_OPTIONS_SNAPON_HORIZONTAL "Snap On or Off Horizontally"
+    ID_OPTIONS_SNAPON_VERTICAL "Snap On or Off Vertically"
+    ID_VIEW_DATABASE_SHEETFORM "Show or Hide Entire Form Database"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDM_SPECS_TOLERANCES    "Adjust Various Tolerances"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#include "res\drgraf.rc2"  // non-App Studio edited resources
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

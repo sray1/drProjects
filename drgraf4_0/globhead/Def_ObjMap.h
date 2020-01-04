@@ -1,0 +1,8 @@
+#ifndef _DEF_OBJMAP_H
+#define _DEF_OBJMAP_H
+
+/////////////////////////////////////////////////////////
+#include <afxtempl.h>
+typedef CMap< CString,  LPCSTR, UINT, UINT > DrObjectMap;
+//////////////////////////////////////
+#endif

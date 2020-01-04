@@ -1,0 +1,193 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "IGenRsrc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "BoxBMPID.h"
+#include "CMgrRsrc.h"
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "IGenRsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""BoxBMPID.h""\r\n"
+    "#include ""CMgrRsrc.h""\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_BUTTON              CURSOR  DISCARDABLE     "RES\\BUTTON.CUR"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_CNTLBOX             BITMAP  DISCARDABLE     "RES\\CntlBox.bmp"
+IDB_CBOX                BITMAP  DISCARDABLE     "RES\\CurveBox.bmp"
+IDB_GOPBOX              BITMAP  DISCARDABLE     "res\\GOpbox.bmp"
+IDB_PBOX                BITMAP  DISCARDABLE     "res\\PatchBox.bmp"
+IDB_SBOX                BITMAP  DISCARDABLE     "res\\solidbox.bmp"
+IDB_NBOX                BITMAP  DISCARDABLE     "RES\\NodeBox.bmp"
+IDB_SPELBOX             BITMAP  DISCARDABLE     "Res\\SpelBox.bmp"
+IDB_DYNLBOX             BITMAP  DISCARDABLE     "Res\\DynLBar.bmp"
+IDB_STALBOX             BITMAP  DISCARDABLE     "Res\\StaLBox.bmp"
+IDB_SUPPBOX             BITMAP  DISCARDABLE     "Res\\Suppbox.bmp"
+IDB_EDIMBOX             BITMAP  DISCARDABLE     "Res\\EDimbox.bmp"
+IDB_IGENBOX             BITMAP  DISCARDABLE     "Res\\IGenBox.bmp"
+IDB_MAINBOX             BITMAP  DISCARDABLE     "Res\\MainBox.bmp"
+IDB_COPBOX              BITMAP  DISCARDABLE     "Res\\COpbox.bmp"
+IDB_MNODBOX             BITMAP  DISCARDABLE     "Res\\MNodBox.bmp"
+IDB_MGENBOX             BITMAP  DISCARDABLE     "Res\\MGenBox.bmp"
+IMAGE1DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1D.BMP"
+IMAGE1FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1F.BMP"
+IMAGE2DOWN              BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2D.BMP"
+IMAGE2FOCUS             BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2F.BMP"
+IMAGE2UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE2U.BMP"
+IMAGE1UP                BITMAP  DISCARDABLE     "c:\\DRGRAF4_0\\APPLIC\\RES\\IMAGE1U.BMP"
+IDB_MCNODBOX            BITMAP  DISCARDABLE     "Res\\MCNodBox.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_LSYM_TYPE DIALOGEX 0, 0, 190, 127
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Plane of Symmetry Options"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,137,95,43,
+                    25
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,8,
+                    95,43,25
+    CONTROL         "A Point on the Plane && the plane Normal",
+                    IDC_TYPE_1_SYM,"Button",BS_AUTORADIOBUTTON | 
+                    BS_MULTILINE,53,36,90,15
+    CONTROL         "3 Coplanar Points",IDC_TYPE_2_SYM,"Button",
+                    BS_AUTORADIOBUTTON | BS_MULTILINE,53,61,77,15
+    GROUPBOX        "Options",IDC_STATIC,37,14,111,69
+    ICON            110,IDC_STATIC,7,7,20,20
+END
+
+IDD_ROT_TYPE DIALOGEX 0, 0, 189, 127
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "Rotation Option"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,137,95,43,
+                    25
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,8,
+                    95,43,25
+    CONTROL         "Rotate about a Line or Axis by a given Angle",
+                    IDC_TYPE_1_ROT,"Button",BS_AUTORADIOBUTTON | 
+                    BS_MULTILINE,53,36,90,15
+    CONTROL         "From Reference Line to Target Line",IDC_TYPE_2_ROT,
+                    "Button",BS_AUTORADIOBUTTON | BS_MULTILINE,53,61,77,15
+    GROUPBOX        "Options",IDC_STATIC,37,14,111,69
+    ICON            110,IDC_STATIC,7,7,20,20
+END
+
+IDD_MOV_TYPE DIALOGEX 0, 0, 189, 127
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "MOVE Option"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,137,95,43,
+                    25
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,8,
+                    95,43,25
+    CONTROL         "Translational MOVE\nbla",IDC_TYPE_1_ROT,"Button",
+                    BS_AUTORADIOBUTTON | BS_MULTILINE,53,36,90,15
+    CONTROL         "Rotational MOVE\nbla",IDC_TYPE_2_ROT,"Button",
+                    BS_AUTORADIOBUTTON | BS_MULTILINE,53,61,77,15
+    GROUPBOX        "Options",IDC_STATIC,37,14,111,75
+    ICON            110,IDC_STATIC,7,7,20,20
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_ROT_TYPE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 182
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 120
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "IGen_Box Resource String"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

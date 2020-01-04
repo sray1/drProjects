@@ -1,0 +1,6 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by MO3DMgr.rc
+//
+#define HIDC_PID                        0x80e900b9    // IDD_O3D_IN
+#define HIDC_UPDATE                     0x80e9038a    // IDD_O3D_IN
+#define HIDD_CANCEL                     0x80e90002    // IDD_O3D_IN

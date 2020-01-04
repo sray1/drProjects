@@ -1,0 +1,695 @@
+// CSolidPen.cpp : implementation of the CSolidPen class
+//
+
+#include "stdafx.h"
+#include <math.h>
+#include <Float.h>		//DBL_MIN in sweep/duct
+#include <afxtempl.h>	// CList
+
+#include "3DMath.h"
+/////////////////////
+#include "Def_Type.h"
+#include "Def_Objs.h"
+#include "Def_CuPS.h"
+/////////////////////
+#include "Curve.h"
+#include "Surface4.h"
+#include "Triangle.h"
+#include "PentaHed.h"
+
+#include "SolidPen.h"
+////////////////////
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+/////////////////////////////////////////////////////////////////////////////
+// CSolidPen
+
+IMPLEMENT_DYNAMIC(CSolidPen,CObject)
+/*
+BEGIN_MESSAGE_MAP(CSolidPen,CObject)
+//BEGIN_MESSAGE_MAP
+	//{{AFX_MSG_MAP(CSolidPen)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/
+/////////////////////////////////////
+#define	new DEBUG_NEW
+#define	BUFF_SIZE	4096
+////////////////////////
+#define MAX_CON_TRIANGLE		10  // for Cubic
+#define MAX_CON_CURVE			4	// for Cubic
+/////////////////////////////////////////////////
+#define BARY2LIN_PT(i,j,nP)		(j)  + (i)*(nP)-(i)*((i)-1)/2
+#define BARY2LIN_TRI_1(i,j,nP)	(j)  + (i)*(2*(nP)-(i)-2)
+#define BARY2LIN_TRI_2(i,j,nP)	(j)  + (i)*(2*(nP)-(i)-2) - (nP) + (i)
+static DMA22
+	CoefLagLin		= {	{ -1,	 1 },
+						{  1,	 0 }	}
+,					
+	CoefBezierLin	= {	{ -1,	 1 },
+						{  1,	 0 }	};
+static DMA33
+	CoefLagQuad		= {	{  2,  -4,	 2 },
+						{ -3,	4,	-1 },
+						{  1,	0,	 0 } }
+,					
+	CoefBezierQuad	= {	{  1,  -2,	 1 },         
+						{ -2,	2,	 0 },
+						{  1,   0,	 0 } };
+static DMA44
+	CoefBezierCubic = {	{ -1,	 3,	-3,	1 },
+						{  3,	-6,	 3,	0 },
+						{ -3,	 3,	 0,	0 },
+						{  1,	 0,	 0,	0 }	};
+/*					
+,	CoefBSpline = {
+		{ -0.166666666F,  0.5F, 		 -0.5F,  		0.166666666F },
+		{  0.5F,			-1,  		  0.5F,  		0 			},
+		{ -0.5F,			 0,  		  0.5F,  		0 			},
+		{  0.166666666F,  0.66666666F,  0.166666666F,  0 			}	} 
+		
+,	CoefCatmullRom = {	{ -0.5F,	 1.5F,	-1.5F,	 0.5F },
+						{  1,	-2.5F,	 2.0F,	-0.5F },
+						{ -0.5F,	 0,	 0.5F,	 0 },
+						{  0,	 1,	 0,	 0 }	} 
+						
+,	CoefHermite = {	{  2, -2,  1,  1 },
+					{ -3,  3, -2, -1 },
+					{  0,  0,  1,  0 },
+					{  1,  0,  0,  0 }	} 
+					
+,	CoefBeta = {	{ -2,  2, -2,  2 },
+					{  6, -3,  3,  0 },
+					{ -6,  6,  6,  0 },
+					{  2,  1,  2,  0 }	} 
+,	CoefAlfa					
+; 
+*/
+static DMAT
+	CoefBezier		= {	{ -1,	 3,	-3,	1 },
+						{  3,	-6,	 3,	0 },
+						{ -3,	 3,	 0,	0 },
+						{  1,	 0,	 0,	0 }	}
+,	CoefBSpline		= { { -0.166666666F, 	0.5F, 			-0.5F,  		0.166666666F},
+						{  0.5F,			-1,  			0.5F,  			0 			},
+						{ -0.5F,			0,  			0.5F,  			0 			},
+						{  0.166666666F,	0.66666666F,	0.166666666F,	0 			}	}
+,	CoefCatmullRom	= {	{ -0.5F,	 1.5F,	-1.5F,	0.5F	},
+						{  1,		-2.5F,	 2,		-0.5F	},
+						{ -0.5F,	 0,	 	0.5F,	0		},
+						{  0,	 	1,	 	0,		0		}	}
+,	CoefHermite		= {	{  2, -2,  1,  1 },
+						{ -3,  3, -2, -1 },
+						{  0,  0,  1,  0 },
+						{  1,  0,  0,  0 }	}
+,	CoefBeta		= {	{ -2,  2, -2,  2 },
+						{  6, -3,  3,  0 },
+						{ -6,  6,  6,  0 },
+						{  2,  1,  2,  0 }	}
+;
+//////////////////////////////////////////////
+CSolidPen::CSolidPen()
+{ 
+
+} 
+////////////////////////////////////////////////////////////////////////////////////////////
+//	Definition:
+//					D = degree [ eg. 1 = Linear / 2 = Quadratic / 3 = Cubic ] 
+//					N = Order = degree + 1
+//					
+//					TN= Triangle Number = Number of Total Vertices
+//										= (D+1)*(D+2)/2 
+//										= (N)*(N+1)/2
+//						eg. for:
+//								(N=2)Linear		--->	TN = 3  
+//								(N=3)Quad		--->	TN = 6  
+//								(N=4)Cubic		--->	TN = 10, etc.
+//	NOTE:
+//					i + j + k = N
+//					so, Given i,j,N ---> k is fixed; so is the vertex
+///////////////////////////////////////////////////////////////////////  
+//	STORAGE MAP:
+//
+//					(LI)Linear Index of a Vertex at (i,j):
+//					
+//						LI = BARY2LIN_PT(i,j,N)
+//
+///////////////////////////////////////////////////////////////////////
+//		LINEAR:
+//
+//						   u=0
+//							|						  	
+//							|
+//				  (P2) Q010	o
+//							| \
+//							|   \ w=0		
+//							|     \
+//							|       \
+//				  (P3) Q001	o--------o Q100 -----  v=0 --		
+//									   (P1)
+//						  1	o
+//							| \
+//							|   \		
+//							|     \
+//							|       \
+//						  0	o--------o 2	
+//
+///////////////////////////////////////////////////////////////////////
+//		QUADRATIC:
+//
+//						   u=0
+//							|						  	
+//							|
+//				  (P2) Q020	o
+//							| \
+//							|   \ w=0		
+//							|     \
+//							|       \
+//					   Q010	o---------o Q110
+//							| \		  | \
+//							|   \     |	  \	w=0		
+//							|     \   |	    \
+//							|       \ |       \
+//				  (P3) Q002	o---------o--------o Q200 -----  v=0 --		
+//									Q101		 (P1)
+//						  2	o 
+//							| \
+//							|   \ w=0		
+//							|     \
+//							|       \
+//						  1	o---------o 4
+//							| \		  | \
+//							|   \     |	  \	w=0		
+//							|     \   |	    \
+//							|       \ |       \
+//							o---------o--------o  -----  v=0 --	
+//							0         3        5	
+//
+///////////////////////////////////////////////////////////////////////	
+//		CUBIC:
+//
+//						   u=0
+//							|						  	
+//							|
+//				  (P2) Q030	o
+//							| \
+//							|   \ w=0		
+//							|     \
+//							|       \
+//					   Q021	o---------o Q120
+//							| \		  | \
+//							|   \     |	  \	w=0		
+//							|     \   |	    \
+//							|       \ |Q111   \
+//					   Q012	o---------o---------o Q210
+//							| \		  | \       | \
+//							|   \     |	  \	    |   \ w=0		
+//							|     \   |	    \   |     \
+//							|       \ |       \ |       \
+//				  (P3) Q003	o---------o---------o-------- o Q300 -----  v=0 --		
+//									Q102	  Q201		    (P1)
+//						 3	o 
+//							| \
+//							|   \ w=0		
+//							|     \
+//							|       \
+//					      2	o---------o 6
+//							| \		  | \
+//							|   \     |	  \	w=0		
+//							|     \   |	    \
+//							|       \ |5      \
+//					      1	o---------o---------o 8
+//							| \		  | \       | \
+//							|   \     |	  \	    |   \ w=0		
+//							|     \   |	    \   |     \
+//							|       \ |       \ |       \
+//							o---------o---------o-------- o  -----  v=0 --		
+//							0		  4	        7		  9
+//
+///////////////////////////////////////////////////////////////////////	
+int CSolidPen::NumberOfBezierPenta
+			(
+				CURVEPROC kindST, int nCtlS, int nSegS, int nOrderST,
+				CURVEPROC kindR, int nCtlR, int nSegR, int nOrderR, BOOL bCloseR, 
+				int* pnTr_BZ_ST,int* pnPt_OutST,int* pnSegBZ_R,int* pnPt_OutR,
+				int* pnPenBZ
+			)
+{ 
+	////////////////////////////////////////////////////////////////////////
+	// 	Return: 	np 		= No. of Output Pts. to be generated                      
+	//	Parameter modified:
+	//				pnPST 	= No. of Triangles in ST-direction 
+	////////////////////////////////////////////////////////////////////////
+	CCurve Curve;
+	int ds,dr;
+	if( !(ds = Curve.CtlPtStep(kindST,nOrderST-1	)) )	// needed nDegree
+		return -1;
+	if( !(dr = Curve.CtlPtStep(kindR, nOrderR-1 )) )	// needed nDegree
+		return -1;
+	//////////////////////////////////////////
+	int nSegBZ_ST,nPt_BZ_ST,nBo_BZ_ST,nIn_BZ_ST; 
+	///////////////////////////////////////////////////////////// Base Bezier Triangles in ST Plane
+	nSegBZ_ST	= (nCtlS - nOrderST)/ds + 1;		// No. of Bezier Sides
+	nPt_BZ_ST	= (nSegBZ_ST+1)*(nSegBZ_ST+2)/2;	// No. of Bezier Vertices
+	nBo_BZ_ST	= 3*nSegBZ_ST;						// No. of Bezier Vertices on Boundary
+	nIn_BZ_ST	= nPt_BZ_ST-nBo_BZ_ST;				// No. of Bezier Vertices on inside
+	*pnTr_BZ_ST	= 2*nIn_BZ_ST+nBo_BZ_ST-2;			// No. of Bezier Triangles of Order nOrderST
+	////////////////////////////
+	*pnPt_OutST	= (nSegS+1)*(nSegS+2)/2;			// No. of Output for each Bezier Triangles
+	*pnPt_OutST	*= (*pnTr_BZ_ST);					// No. of Output for ALL Bezier Triangles
+	//////////////////////////////////// Height Segments
+	*pnSegBZ_R	= bCloseR ? nCtlR/dr : (nCtlR - nOrderR)/dr + 1;
+													// No. of Bezier Heights
+	*pnPt_OutR	= nSegR*(*pnSegBZ_R)+1;				// No. of Output over Entire Bezier Heights
+	////////////////////////////////////
+	*pnPenBZ	= (*pnTr_BZ_ST) * (*pnSegBZ_R);		// No. of Bezier Pentaheds  
+	int np		= (*pnPt_OutST) * (*pnPt_OutR);		// No. of Total Output
+	///////////////////////////////
+	return np;
+	////////
+} 
+
+int CSolidPen::EX_MakeSolides		// RATIONAL BEZIER Solides
+			(
+					BOOL		bClosed		//  Closed?
+				,	int			nCon		//  number of CONTROL points: ALWAYS BEZIER
+				,	int			nDim_ST		//  3= NonRational / 4 = Rational
+					//////////////////
+				,	int			nDim_R		//  3= NonRational / 4 = Rational
+				,	pDOUBLE		Dis_t_R		//  Output t distribution Pts. for Ratio Business
+				,	int			nSolides_R	//  Total Number of Patches in U-dir 
+					//////////////////////////  Globals:
+				,	int			nOutGlo_S	//  Total Output in each side of entire Base Patch 
+					//////////////////////////
+				,	CDListMgr*	pPenList	//	Pentahedral Solid List
+				,	pDOUBLE		pWts_UVW	//  Total Input Rational Bezier Weights Array		
+				,	pWORLD		pCon_UVW	//  Total Input CONTROL Points Array
+				,	pWORLD		pOut_UVW	//  Total Output Points Array
+				,	pDOUBLE		pOutWts_UVW	//  Total Output Wts Array (WE MAY NEED FOR RATIONAL SOLIDS)
+			)
+{
+	////////////////////////////////////////////////////// ControlSteps & Basis
+	PDMA22 pMCoef_1 = (PDMA22)CoefBezierLin;	// Linear
+	PDMA33 pMCoef_2 = (PDMA33)CoefBezierQuad;	// Quadratic
+	PDMA44 pMCoef_3 = (PDMA44)CoefBezierCubic;	// Cubic
+//////////////////////////////////////////////////// View Matrices
+#ifdef _DEBUG
+	///////////////////////////////////////////////
+	if(1 != 1 ) // 
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+ 	   ///////////////////////////////////////////
+		sprintf(buf,"Just in CSolidPen::MakeSolides");
+		AfxMessageBox(*str);
+		///////////////////
+		int j,m;
+	    ///////////////////
+		j = sprintf(buf,"pCon_UVW[%d] and pWts_UVW[%d]:\n",nCon,nCon);
+		for(m=0;m<nCon;m++)
+		{
+	   		j += sprintf( buf + j, "m=%2d  %7.2f %7.2f %7.2f    %7.2f \n", m, 
+					pCon_UVW[m].x, pCon_UVW[m].y, pCon_UVW[m].z, pWts_UVW[m] );
+	  		j += sprintf( buf + j, "\n");
+		}
+		AfxMessageBox(*str);
+		///////////////////
+		delete str;
+	}		
+#endif				
+//////////////////////////////////////////////////////////////////
+	if(pPenList->IsEmpty() )
+		return -1;
+	////////////////////////
+	int nPentaH	= pPenList->GetCount();
+	////////////////////////////////// Save PatchInfo
+	// Each Output Triangle should have all the Output Pts.
+	// this will require redundancy but simplify,So
+	////////////////////////
+	int nt_S,nt_R,nEmit_ST,nEmit_R,nEmit_STR,nOutP,nOut=0,nOutStartIndex;
+	int iOutGlo_ST,jOutGlo_ST;
+	/////////////////////////////////////////////////////////////////// LOOP: Triangle List
+	for (POSITION posT = pPenList->GetFirstObjectPos();posT !=NULL;)
+	{
+		CPentaHed* pPen = (CPentaHed*)pPenList->GetNextObject(posT);
+		/////////////////////////////////////////////// get info
+		int nType		= pPen->GetType();
+		int	nDegree_ST	= pPen->GetDegree_ST();			// Overall Degree of Triangle
+		int	nDegree_R	= pPen->GetDegree_R();			// Overall Degree of Triangle
+		int	TriNum_ST	= (nDegree_ST+1)*(nDegree_ST+2)/2;	//  Triangle Number 
+		int PenNum_STR  = TriNum_ST * (nDegree_R+1);
+		///////////////////////////////////////////////// OUTPUT
+		nOutStartIndex	= pPen->GetOutStartIndex();
+		iOutGlo_ST		= pPen->GetiOutGlo_ST();
+		jOutGlo_ST		= pPen->GetjOutGlo_ST();
+		nt_S			= pPen->GetOutSeg_S();			// Output on base Triangle side
+		nt_R			= pPen->GetOutSeg_R();			// Output on height side
+		nEmit_ST		= (nt_S+1)*(nt_S+2)/2;		// No. of Output for each Triangle	
+		nEmit_R			= nt_R+1;
+		/////////////
+		nEmit_STR		= nEmit_ST * nEmit_R;
+		////////////////////////////////////////////
+		CList<int,int>* pCNIndexList = pPen->GetCNIndexList();
+		int nCon		= pCNIndexList->GetCount();
+		if (nCon != PenNum_STR)
+		{
+			AfxMessageBox("ERROR:\nCSolidPen::MakeSolides\nnCon != PenNum_STR");
+			return -1;
+		}
+		///////////
+		pWORLD pCon		= new WORLD[nCon];
+		pDOUBLE pWts	= new double[nCon];
+		///////////////////////////////
+		int i = -1;
+		for (POSITION posI = pCNIndexList->GetHeadPosition( );posI !=NULL;)
+		{
+			int index = pCNIndexList->GetNext(posI); 
+    		///////////////////////////////
+			i++;
+			////
+			pCon[i].x	= pCon_UVW[index].x;	  
+			pCon[i].y	= pCon_UVW[index].y;  
+			pCon[i].z	= pCon_UVW[index].z;
+			pWts[i]		= pWts_UVW[index];
+		}
+		//////////////////////////////////// Go Make a PentaHedral Solid
+		nOutP = EX_Make_A_Solid(nDegree_ST,nDim_ST,nt_S,nEmit_ST,TriNum_ST,
+								nDegree_R,nDim_R,nt_R,Dis_t_R,nSolides_R,nEmit_R,
+								nType,nOutStartIndex,nOutGlo_S,iOutGlo_ST,jOutGlo_ST,
+								pCon,pWts,pOut_UVW,pOutWts_UVW);
+		if (nOutP <0)
+		{
+			AfxMessageBox("ERROR:\nCSolidPen::MakeSolides\nnOutP <0");
+			//////////////////
+			delete [] pCon;
+			delete [] pWts;
+			///////////////
+			return -1;
+		}
+		//////////////////
+		delete [] pCon;
+		delete [] pWts;
+	}										///////////////////////////// end LIST
+	//////////////////
+	return 0;
+	////////////
+}
+
+int CSolidPen::EX_Make_A_Solid
+			(
+					int			nDegree_ST		//  Degree in S-Dir
+				,	int			nDim_ST			//  3= NonRational / 4 = Rational
+				,	int			nt_S			// 	Output in S-dir
+				,	int			nMax_ST			// 	Max Output in ST-plane
+				,	int			TriNumCon_ST	//	# of Controls for a Triangle
+				/////////////////////////
+				,	int			nDegree_R		//  Degree in R-Dir
+				,	int			nDim_R			//  3= NonRational / 4 = Rational
+				,	int			nt_R			// 	# of subdivision to compute Surface Pts in R-dir
+				,	pDOUBLE		Dis_t_R			//  Output t distribution Pts. for Ratio Business
+				,	int			nSolides_R		//  Total Number of Patches for Ratio Business 
+				,	int			nMax_R			//	Max Output in R-dir
+				//////////////////////////////////  Globals for Output Storage:
+				,	int			nType			//	Base Triangle Type:1=left/2=right
+				,	int			nOutStartIndex	//	Global Output Index Start for the Bezier Penta 
+				,	int			nOutGloTot_S	//	Total Output in each side of entire Base Patch 
+				,	int			iOutGlo			//	Global i Bary Coords for Ist Output of the PentaHed 
+				,	int			jOutGlo			//	Global j Bary Coords for Ist Output of the PentaHed 
+				//////////////////////////////////
+				,	pWORLD		pCon_STR		//	pointer to pointer Control Pt. array for the solid
+				,	pDOUBLE		pWts_STR		//	pointer to pointer Wts. array for the solid	
+				,	pWORLD		pOut_G			// 	Total Global Output Points Array
+				,	pDOUBLE		pOutWT_G		// 	Total Global Output Wts Array
+			)
+{
+	CSurface4* pSurface4;
+	//////////////////////////////
+	int nOrder_ST = nDegree_ST + 1;
+	int nOrder_R  = nDegree_R + 1;
+	//////////////////////////////////////////////////// View Matrices
+	WORLD		C_R;
+//	pWORLD		p_R;
+	double 		W_R;
+//	pDOUBLE		pw_R;
+	int			i,j,k,m,ir,nOut = 0, nOut_ST,nOutGloTot_ST,nMax_STR;
+	//////////////////////////////
+	double 	delr	= 1.0/nt_R;
+	double	t		= -delr;
+//	nOutGloTot_ST	=	Total Output in entire Base Patch 
+	nOutGloTot_ST	= nOutGloTot_S*(nOutGloTot_S+1)/2;	
+	////////////////////////////////
+	nMax_STR		= nMax_ST * nMax_R;
+	//////////////
+	pWORLD pOut_L	= new WORLD[nMax_ST];			// local storage for the current triangle
+	pDOUBLE pwOut_L	= new double[nMax_ST];			// local storage for the current triangle
+	//////////////////////////////// memory
+	pWORLD pCon_ST	= new WORLD[MAX_CON_TRIANGLE];	//	Control Pt. array for the patch: RESERVED for Maximum Cubic
+	pDOUBLE pWts_ST	= new double[MAX_CON_TRIANGLE]; 
+	PW4 ppCon_R4	= new pWORLD[MAX_CON_CURVE];
+	PD4 ppWts_R4	= new pDOUBLE[MAX_CON_CURVE];
+	/////////////////////////////////////////////////////////////////// R Loop
+	for (ir=0;ir<nMax_R;ir++)
+	{
+		if(nSolides_R == 1 && nDegree_R == 1) // Ratio business/ Single & Linear
+			t = Dis_t_R[ir];
+		else
+			t += delr;
+		///////////////////////// Create Con_ST & Wts_ST for a specific R
+		for(i=0;i<nOrder_ST;i++)			
+		{
+			for(j=0;j<nOrder_ST-i;j++)
+			{
+				for(k=0;k<nOrder_R;k++)
+				{
+					//////////////////////////////////// Barycentric to Linear
+					m = BARY2LIN_PT(i,j,nOrder_ST) + k * TriNumCon_ST;
+					////////////////////////////		
+					ppCon_R4[k] = &(pCon_STR[m]);
+					ppWts_R4[k] = &(pWts_STR[m]);
+				}
+				//////////////////////////////////////////////////////////////////////////// Memory :Fix
+				PDMA24	pMG_1 = (PDMA24) new DMA24;	//  Basis*Geometry Matrix for Linear
+				PDMA34	pMG_2 = (PDMA34) new DMA34;	//  Basis*Geometry Matrix for Quadratic
+				PDMA44	pMG_3 = (PDMA44) new DMA44;	//  Basis*Geometry Matrix for Cubic
+				////////////////////////////////// Make Coef * Geometry Matrix for V-dir
+				pSurface4->HO_ComputeMG(ppCon_R4,ppWts_R4,
+										pMG_1,pMG_2,pMG_3,nDegree_R,nDim_R);
+				/////////////////////////////////////////////////////////////// Curve Pt. in W-dir
+				pSurface4->HO_Make_A_CurvePt_V(pMG_1,pMG_2,pMG_3,nDegree_R,nDim_R,t,&C_R,&W_R);
+				//////////////////////////////////// Barycentric to Linear
+				m = BARY2LIN_PT(i,j,nOrder_ST);
+				////////////////////////////		
+				pCon_ST[m].x 	= C_R.x;
+				pCon_ST[m].y 	= C_R.y;
+				pCon_ST[m].z 	= C_R.z;
+				pWts_ST[m]		= W_R;
+				//////////////////////////////////////////////////////////////////////////// Memory :Free
+
+				delete [] pMG_1;	//  Basis*Geometry Matrix for Linear
+				delete [] pMG_2;	//  Basis*Geometry Matrix for Quadratic
+				delete [] pMG_3;	//  Basis*Geometry Matrix for Cubic
+			}
+		}
+//////////////////////////////////////////////////// View Matrices
+#ifdef _DEBUG
+	///////////////////////////////////////////////
+	if(1 != 1 ) // 
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+ 	   ///////////////////////////////////////////
+		sprintf(buf,"CSolidPen::HO_Make_A_Solid-Just before Calling HO_Make_A_Solid\nir = %d",ir);
+		AfxMessageBox(*str);
+		///////////////////
+		int j,m;
+	    ///////////////////
+		j = sprintf(buf,"pCon_ST[%d] and pWts_ST[%d]:\n",TriNumCon_ST,TriNumCon_ST);
+		for(m=0;m<TriNumCon_ST;m++)
+		{
+	   		j += sprintf( buf + j, "m=%2d  %7.2f %7.2f %7.2f    %7.2f \n", m, 
+					pCon_ST[m].x, pCon_ST[m].y, pCon_ST[m].z, pWts_ST[m] );
+	  		j += sprintf( buf + j, "\n");
+		}
+		AfxMessageBox(*str);
+		///////////////////
+		delete str;
+	}		
+#endif				
+//////////////////////////////////////////////////////////////////
+		////////////////////////////////////////////////////////// Go make a Triangular patch in ST-dir
+		// To Get Local Output Storage for Single Triangle:
+		//			iOutGlo=jOutGlo=0;
+		//			nt_S+1 Output Pt. per Triangle 
+		//			Force Even Type 2 to Type 1
+		//////////////////////////////////////////////////////////
+		nOut_ST = EX_Make_A_Patch
+					(
+						nDegree_ST,nDim_ST,nt_S,TriNumCon_ST,
+						1,nt_S+1,0,0,		//make it Local Single Triangle
+											//by iOutGlo=jOutGlo=0;
+											//nt_S+1 Output Pt. per Triangle 
+						pWts_ST,pCon_ST,pOut_L,pwOut_L
+					);
+		///////////////////////////
+		if(nOut_ST != nMax_ST)
+		{
+			//////////////////
+			delete [] pOut_L;
+			delete [] pwOut_L;
+			delete [] pCon_ST;
+			delete [] pWts_ST;
+			delete [] ppCon_R4;
+			delete [] ppWts_R4;
+			//////////////////
+			AfxMessageBox("CSolidPen::HO_Make_A_Solid\nnOutST != nMaxST");
+			return -1;
+		}											
+		else
+		{
+			int iOut,jOut,mGlo,mLoc;
+			///////////////////////// Save Output in Right Place
+			for(i=0;i<=nt_S;i++)			
+			{
+				for(j=0;j<=(nt_S-i);j++)
+				{
+					if(nType == 1)
+					{
+						iOut	= iOutGlo + i;
+						jOut	= jOutGlo + j;
+					}
+					else
+					if(nType == 2)
+					{
+						iOut	= iOutGlo - i;
+						jOut	= jOutGlo - j;
+					}
+					else
+					{
+						//////////////////
+						AfxMessageBox("CSolidPen::HO_Make_A_Solid\nnType !==1 or 2");
+						return -1;
+					}
+					//////////////////////////////////// Barycentric to Linear: Global
+					mGlo = BARY2LIN_PT(iOut,jOut,nOutGloTot_S) + ir * nOutGloTot_ST + nOutStartIndex;
+					//////////////////////////////////// Barycentric to Linear: Local
+					mLoc = BARY2LIN_PT(i,j,nt_S+1);
+					////////////////////////////////// SAVE
+ 					pOut_G[mGlo].x	= pOut_L[mLoc].x;
+					pOut_G[mGlo].y	= pOut_L[mLoc].y;
+					pOut_G[mGlo].z	= pOut_L[mLoc].z;
+					pOutWT_G[mGlo]	= pwOut_L[mLoc];
+					////////////////////////////
+				}
+			}
+			/////////////////
+			nOut	+= nOut_ST;
+		}	
+	}
+	//////////////////
+	delete [] pOut_L;
+	delete [] pwOut_L;
+	delete [] pCon_ST;
+	delete [] pWts_ST;
+	delete [] ppCon_R4;
+	delete [] ppWts_R4;
+	//////////////////
+	if(nOut != nMax_STR)
+		return -1;
+	else	
+		return 0;
+	////////////////
+}
+//////////////////////////////////////////////////////////////////////
+int	CSolidPen::PentaHeds_3D
+				(
+					SOLIDOUTPUT		O_kind		//  Output Method
+				,	BOOL			bClosed		//  Closed?
+				,	int				nCon		//  number of CONTROL points: ALWAYS BEZIER
+				,	int				nDim_ST		//  3= NonRational / 4 = Rational
+				//////////////////
+				,	int				nDim_R		//  3= NonRational / 4 = Rational
+				,	pDOUBLE			Dis_t_R		//  Output t distribution Pts. for Ratio Business
+				,	int				nSolides_R	//  Total Number of Patches in U-dir 
+					//////////////////////////////  Globals:
+				,	int				nOutGlo_S		//  Total Output in each side of entire Base Patch
+					////////////////////
+				,	CDListMgr*		pPenList	//	Triangular Patch List
+				,	pWORLD			pCon_STR	//  Total Input CONTROL Points Array
+				,	pDOUBLE			pWts_STR	//  Total Input Rational Bezier Weights Array		
+				,	pWORLD			pOut_STR	//  Total Output Points Array
+				,	pDOUBLE			pOutWts_STR	//  Total Output Wts Array (WE MAY NEED FOR RATIONAL SOLIDS)
+				,	int				nOut		//	expected number of generated Patch vertices	
+				)
+{
+    ///////////////////////////////////
+	if	(
+			(!nCon)||(!pCon_STR)||(!pOut_STR)||(!pOutWts_STR)
+		)			   	
+		return ERROR_MISSING_ARGUMENTS;
+	////////////////////////////////////////////////////// CreatePatchPts
+	int nPtActual;
+	if (O_kind == PA_MODIFIED)
+	{
+		AfxMessageBox("ERROR\nCSolidPen::Triangles\nPA_MODIFIED Not Implemented Yet");
+		return -1;
+	}
+	///////////////////////
+	if (O_kind == PA_DECAS) 	// 
+	{
+		AfxMessageBox("ERROR\nCSolidPen::Triangles\nPA_DECAS Not Implemented Yet");
+		return -1;
+	}
+	/////////////////////////	O_kind == PA_EXPLICIT) 	// 
+	nPtActual = EX_MakeSolides
+				(
+					bClosed,nCon,nDim_ST,
+					nDim_R,Dis_t_R,nSolides_R,
+					nOutGlo_S,
+					pPenList,pWts_STR,pCon_STR,pOut_STR,pOutWts_STR
+				);
+	////////////////////
+	if(nPtActual<0)
+	{
+		//////////////////
+		AfxMessageBox("CSolidPen::Triangles_2D\nnPtActual<0");
+		return -1;
+	}		
+    else
+	{
+//////////////////////////////////////////////////// View Matrices
+#ifdef _DEBUG
+	///////////////////////////////////////////////
+	if(1 != 1 ) // 
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+ 	   ///////////////////////////////////////////
+		sprintf(buf,"CSolidPen::PentaHeds_3D-Just after Calling EX_MakeSolides");
+		AfxMessageBox(*str);
+		///////////////////
+		int j,m,nEmit;
+		nEmit = (nOutGlo_S+1)*(nOutGlo_S+2)/2;
+	    ///////////////////
+		j = sprintf(buf,"pOut_STR[%d] and pOutWts_STR[%d]:\n",nEmit,nEmit);
+		for(m=0;m<nEmit;m++)
+		{
+	   		j += sprintf( buf + j, "m=%2d  %7.2f %7.2f %7.2f    %7.2f \n", m, 
+					pOut_STR[m].x, pOut_STR[m].y, pOut_STR[m].z, pOutWts_STR[m] );
+	  		j += sprintf( buf + j, "\n");
+		}
+		AfxMessageBox(*str);
+		///////////////////
+		delete str;
+	}		
+#endif				
+//////////////////////////////////////////////////////////////////
+		return 0;
+	}
+}
+/////////////////////////////////// end of module /////////////////
+
+
+

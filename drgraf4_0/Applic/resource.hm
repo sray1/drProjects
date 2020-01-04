@@ -1,0 +1,22 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by Drgraf.rc
+//
+#define HIDCANCEL                       0x80700002    // IDD_NOSHOW_ELEM
+#define HIDC_BALLJT                     0x807003f6    // IDD_NOSHOW_ELEM
+#define HIDC_BEAM                       0x807003e9    // IDD_NOSHOW_ELEM
+#define HIDC_ELBOW                      0x807003eb    // IDD_NOSHOW_ELEM
+#define HIDC_HEXA                       0x807003fb    // IDD_NOSHOW_ELEM
+#define HIDC_PENTA                      0x807003fa    // IDD_NOSHOW_ELEM
+#define HIDC_PIPE                       0x807003ea    // IDD_NOSHOW_ELEM
+#define HIDC_QU_12                      0x807003f0    // IDD_NOSHOW_ELEM
+#define HIDC_QU_16                      0x807003f1    // IDD_NOSHOW_ELEM
+#define HIDC_QU_4                       0x807003ed    // IDD_NOSHOW_ELEM
+#define HIDC_QU_8                       0x807003ee    // IDD_NOSHOW_ELEM
+#define HIDC_QU_9                       0x807003ef    // IDD_NOSHOW_ELEM
+#define HIDC_TETRA                      0x807003f9    // IDD_NOSHOW_ELEM
+#define HIDC_TRUSS                      0x807003ec    // IDD_NOSHOW_ELEM
+#define HIDC_TR_10                      0x807003f5    // IDD_NOSHOW_ELEM
+#define HIDC_TR_3                       0x807003f2    // IDD_NOSHOW_ELEM
+#define HIDC_TR_6                       0x807003f3    // IDD_NOSHOW_ELEM
+#define HIDC_TR_9                       0x807003f4    // IDD_NOSHOW_ELEM
+#define HIDOK                           0x80700001    // IDD_NOSHOW_ELEM

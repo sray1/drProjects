@@ -1,0 +1,1211 @@
+// Loft2.cpp : implementation file
+//
+/*
+//////////////////////////////////////////////////// Move This One To CURVE Generation
+int CMP_LoftX::ReParametrizeBezWeightsToStdForm(pDOUBLE pWts,int nWts)
+{
+	////////////////////////////////////////////////// ReParametrize Bezier Wts
+													// so that w[0]=w[nCount]=1
+	pDOUBLE pWts	= pCurve->GetpWts_BZ_S(); 
+	double rw0		= 1.0/pWts[0];
+	/////////
+	double c		= pow(pWts[0]/pWts[nWts-1],(double)nWts);
+	/////////
+	for(i=0;i<nWts;i++)
+		pWts[i] = pow(c,(double(i))*(pWts[i]*rw0); 
+	///////////////////////////////
+	return 0;
+}
+*/
+///////////////////////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "math.h"
+
+#include "Def_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "DListMgr.h"
+#include "Def_MouseAct.h"
+#include "DegElevate.h"
+///////////////////// dialogMgr
+#include "MPatMgr.h"
+#include "dlg_LoftX.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+#include "Str_BlendEnd.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "MC_Circle.h"
+#include "MC_Parab.h"
+/////////////////////
+#include "Twist.h" 
+#include "MP_LoftX.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define BUFF_SIZE	1024
+/////////////////////////////////////
+#define wEQL(a,b)	((a).x ==(b).x) && ((a).y ==(b).y) \
+					&& ((a).z ==(b).z)  
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMP_LoftX,CMI_GangP,1)
+/////////////////////////////////////////////////////////////////////////////
+CMP_LoftX::CMP_LoftX()
+{
+}
+
+CMP_LoftX::~CMP_LoftX()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+// LoftX Patches Could be arising out of 2 situations:
+//		//////////////////////////																		
+//		1. As Part of Gordon Surfaces
+//			In this Case:
+//				bGordonPart		=	TRUE;
+//		//////////////////////////																		
+//		2. As StandAlone w/ Lattice Curves in U or V 
+//			In this Case:
+//				bGordonPart		=	FALSE;
+//////////////////////////////////////////////////////////////////////////////////////////////
+int CMP_LoftX::GoDoIt 
+				(
+					int								nCurDir,	// Curve Direction:1=U/2=V
+					BOOL							bAdvanced,	// tangents/twist BC
+					BOOL							bGordonPart,
+					//////////////////////////////////////////
+					CString&						PatchID,		
+					CDrPatch*						pDrPatch,
+					//////////////////////////////////////////
+					CDListMgr*						pCurveList,
+					CList<CURVELATCH,CURVELATCH>*	pLatchList,
+					CList<int,int>&					ElperSegList,
+					CDrCurve*						pBlendCurve,
+					double							Ratio,
+					//////////////////////////////////////////////
+					PWMAT2							pCornerTwist,// it is full,if TW_USER
+					TWIST							TwistMethod,
+					//////////////////////////////////////////////
+					CView*							pView
+				) 
+{
+	int nResult = MA_OK;
+	//////////////////////////////////////////////////////////
+	m_PatchID	= PatchID;
+	m_pDrPatch	= pDrPatch;
+	//////////////////////////////////	
+	int nDim_S,nTopDegree,nCon_BZ;
+	///////////////////////////////////////////////////////////////////////////////// S-direction
+	BOOL bClosed;
+	////////////////////////////////////////////////////////// Compatibility(Knots)
+	if(!AreCurvesCompatible(pCurveList,pLatchList,pBlendCurve,bClosed,nDim_S,nTopDegree,nCon_BZ) )
+		return MA_ERROR;
+	////////////////////////////////////////////////////////// Process  Data Curves( Elevate etc)
+	int nCurves		= pCurveList->GetCount(); 
+	int nCon_BZTot	= nCon_BZ * nCurves;  
+	pWORLD  pCon_BZ = new WORLD [nCon_BZTot]; 	
+	pDOUBLE pWts_BZ = new double[nCon_BZTot];
+	/////////////////////////////////////////
+	nResult = ProcessCurves(pCurveList,pLatchList,pCon_BZ,pWts_BZ,nCon_BZ,
+											nCon_BZTot,nTopDegree,nDim_S);
+	///////////////////////////////////////////////////////////////////////////////// T-direction
+	int nCon_BZ_T,nBezSeg_T;
+	////////////////////////////////////////////////////////// Interpolate 
+	PostPatBezInfoUsingBlendingInfo(pDrPatch,ElperSegList,pBlendCurve,Ratio,
+							pCon_BZ,pWts_BZ,nCon_BZ,nCurves,nCon_BZ_T,nBezSeg_T,nCurDir);
+	//////////////////////////////
+	m_nSegs_T			= nBezSeg_T;				
+	m_nMaxPatchCNodes_T	= nCon_BZ_T;
+	//////////////////
+	delete [] pCon_BZ;
+	delete [] pWts_BZ;
+	////////////////////////////////////////////////////////// Output Info_T
+	m_Ratio_T =	Ratio;
+	/////////
+	int		nOut,nMaxOSeg;
+	BOOL	bUnifOT;
+	//////////////////
+	int nDegree_T	= pBlendCurve->GetOrder_S() - 1;
+	Process_OutputInfo(&ElperSegList,nDegree_T,nBezSeg_T,m_Ratio_T,bUnifOT,nMaxOSeg,nOut);
+	///
+	m_nOrder_T		= nDegree_T + 1;
+	m_nOut_T		= nOut;
+	m_nMaxOSeg_T	= nMaxOSeg;
+	m_bUnifOT_T		= bUnifOT;
+	m_pNum_t_T		= m_pOSeg;
+	m_pDis_t_T		= m_pODis;
+	///////////////////////////////////////////////////////////////////////////////// Post OtherInfo
+	m_PatchType		= PA_TENSOR;
+	////////////////////////////
+	pBlendCurve->GetElperSegList()->RemoveAll();
+	pBlendCurve->GetElperSegList()->AddTail(&ElperSegList);
+	///////////////////////////////////////////////////////
+	m_bClosed_T		= pBlendCurve->IsClosed_S();
+	m_nDim_T		= pBlendCurve->GetnDim_S();
+	m_CurveType_T	= pBlendCurve->GetCurveType_S();
+	////////////////////////
+	nResult = SetInfoForDataBase(pDrPatch,pCurveList,pLatchList,pBlendCurve,nCurDir);
+	/////////////////////
+	return nResult;
+}
+
+//////////////////////////////////////////////////////////////////////////////////// PreProcess
+BOOL CMP_LoftX::AreCurvesCompatible(CDListMgr* pCurveList,CList<CURVELATCH,CURVELATCH>* pLatchList,
+					CDrCurve* pBlendCurve,BOOL bClosed,int& nDim_S,int& nTopDegree,int& nCon_BZ)
+{
+	//////////////////////////////////////////////////////////// ALL Closed or Open
+	if(!IsCompat_Closed(pCurveList,bClosed))
+		return FALSE;
+	else
+		m_bClosed_S = bClosed;
+	//////////////////////////////////////////////////////////// Segment Compatibility
+	PreProcessCurvesControlInfo(pCurveList,nDim_S,nTopDegree); // TopDegree? etc
+	///
+	if(pBlendCurve->GetnDim_S() == 4)	// override
+		nDim_S = 4;
+	/////////////////////////////
+	m_nDim_S	= nDim_S;
+	m_nOrder_S	= nTopDegree + 1;
+	/////////////////////////////
+	switch(m_nOrder_S)
+	{
+		case 2:
+			m_CurveType_S = CP_LINEAR;
+			break;
+		case 3:
+			m_CurveType_S = CP_QUADRATIC;
+//			if() // Circle
+//				m_CurveType_S = CP_CIRCLE;
+			break;
+		case 4:
+			m_CurveType_S = CP_BSPLINE;
+			if(m_nDim_S == 4)
+				m_CurveType_S = CP_NURB;
+			break;
+		default:
+			break;
+	}
+	//////////////////////////////////////////////////////////// Do it
+	int nBezSeg;
+	// Total Expected CNodes of EACH Curve
+	if(!IsCompat_NumberOfCNodes(pCurveList,nTopDegree,nBezSeg,nCon_BZ) )
+	{
+		AfxMessageBox(
+		"DATA ERROR\nCOMPATIBILITY Problem\nNumber of Bezier Segments MisMatch!!\nTask Cancelled");
+		return FALSE;
+	}
+	else
+	{
+		m_nSegs_S			= nBezSeg;				
+		m_nMaxPatchCNodes_S	= nCon_BZ;
+	}	
+	//////////////////////////////////////////////////////////// Output Compatibility
+	if(!IsCompat_OutputInfo(pCurveList) ) // ElPerSegList etc
+	{
+		AfxMessageBox(
+		"DATA ERROR\nCOMPATIBILITY Problem\nNumber of Elements MisMatch!!\nTask Cancelled");
+		return FALSE;
+	}
+	//////////////////////////////////////////////// Process Output_S
+	CList<int,int>*	pElperSegList = 
+		((CDrCurve*)pCurveList->GetHead())->GetElperSegList();
+	m_Ratio_S =	((CDrCurve*)pCurveList->GetHead())->GetRatio_S();
+	/////////
+	int		nOut,nMaxOSeg;
+	BOOL	bUnifOT;
+	///////////////
+	Process_OutputInfo(pElperSegList,nTopDegree,nBezSeg,m_Ratio_S,bUnifOT,nMaxOSeg,nOut);
+	///
+	m_nOut_S		= nOut;
+	m_nMaxOSeg_S	= nMaxOSeg;
+	m_bUnifOT_S		= bUnifOT;
+	m_pNum_t_S		= m_pOSeg;
+	m_pDis_t_S		= m_pODis;
+	//////////
+	return TRUE;
+}
+
+BOOL CMP_LoftX::IsCompat_Closed(CDListMgr* pCurveList,BOOL& bClosed)
+{
+	/////////////////////////////////////// Is ALL Closed or Open?
+	CDListMgr* pList	= pCurveList;
+	bClosed				= FALSE;
+	int i = -1;
+	//////////////////////////////////////////////////////////// Find Highest Degree
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve = (CDrCurve*)pList->GetNextObject(pos);
+		if(!pCurve)
+			return FALSE;
+   	 	///////////////////////////////////////////// IsClosed
+		i++;
+		if(i<=0) 
+			bClosed = pCurve->IsClosed_S();
+		else
+		if(bClosed != pCurve->IsClosed_S())
+			return FALSE;
+		/////	
+	}
+	////////////
+	return TRUE;
+}
+
+int CMP_LoftX::PreProcessCurvesControlInfo(CDListMgr* pCurveList,int& nDim_S,int& nTopDegree)
+{
+	/////////////////////////////////////// Rational?
+	nDim_S	= 3;
+	if(IsRational(pCurveList))
+		nDim_S	= 4;
+	/////////////////////////////////////// Find Highest Degree
+	nTopDegree	= GetTopDegree(pCurveList);
+	////////////
+	return MA_OK;
+}
+
+BOOL CMP_LoftX::IsRational(CDListMgr* pCurveList)
+{
+	CDListMgr* pList = pCurveList;
+	//////////////////////////////////////////////////////////// Find Highest Degree
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve = (CDrCurve*)pList->GetNextObject(pos);
+		if(!pCurve)
+			continue;
+   	 	///////////////////////////////////////////// Get Degree/Update
+		int nDim = pCurve->GetnDim_S();
+		if(4 == nDim)
+			return TRUE;
+		/////	
+	}
+	return FALSE;
+}
+
+int CMP_LoftX::GetTopDegree(CDListMgr* pCurveList)
+{
+	CDListMgr* pList = pCurveList;
+	//////////////////////////////
+	int nDegree=0,nDeg_C;
+	//////////////////////////////////////////////////////////// Find Highest Degree
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve = (CDrCurve*)pList->GetNextObject(pos);
+		if(!pCurve)
+			continue;
+   	 	///////////////////////////////////////////// Get Degree/Update
+		nDeg_C = (pCurve->GetOrder_S()) - 1;
+		if(nDeg_C>nDegree)
+			nDegree = nDeg_C;
+		/////	
+	}
+	return nDegree;
+}
+
+BOOL CMP_LoftX::IsCompat_NumberOfCNodes(CDListMgr* pCurveList,int nTopDegree,
+													int& nCurveSeg,int& nConBZ)
+{
+	// Check All Curves Have Same Number of CNodes after Elevation
+	////////////////////////////////////////////////////////////// 
+	CDListMgr*	pList = pCurveList;	// Curves making up Profile
+	int nDeg_C,nElev,nCon;
+	int nConBZOld;
+//	BOOL bClosed;
+	//////////////////////////////////////////////////////////// Total CNodes
+	int k = 0;
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve = (CDrCurve*)pList->GetNextObject(pos);
+		if(!pCurve)
+			return FALSE;	// error
+		////
+		k++;
+		nConBZ		= 0;
+   	 	///////////////////////////////////////////// Get Degree/Update
+		nDeg_C		= (pCurve->GetOrder_S()) - 1;
+		nElev		= nTopDegree - nDeg_C;	// How many Elevations	
+		nCon 		= pCurve->GetMaxCNodes_S();
+		nCurveSeg 	= pCurve->GetMaxCubicCurves(); // misleading name!
+//		bClosed		= pCurve->IsClosed_S();
+   		///////////////////////////////////////////// Update Total Control Nodes
+   		nConBZ		= nCon;	
+   		if(nElev>0)
+   			nConBZ	+= nElev * nCurveSeg;	// nElev Cnodes per Curve Segment
+		///////////////////////////////////////////// Check Compatibility
+		if(k<=1)
+			nConBZOld = nConBZ;	// first time
+		else
+		if(nConBZOld != nConBZ)	// InCompatible
+			return FALSE;
+	}
+	///////////////
+	return TRUE;
+
+}
+
+BOOL CMP_LoftX::IsCompat_OutputInfo(CDListMgr* pCurveList)
+{
+	/////////////////////////////////////// Is ALL Output Info same?
+	CDListMgr* pList	= pCurveList;
+	CList<int,int>*	pElperSegList;	 	
+	CList<int,int>*	pElperSegListOld;	 	
+	int i= -1,j;
+	//////////////////////////////////////////////////////////// Find Highest Degree
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve = (CDrCurve*)pList->GetNextObject(pos);
+		if(!pCurve)
+			return FALSE;
+   	 	///////////////////////////////////////////// ElperSegList
+		i++;
+		if(i<=0)
+		{
+			pElperSegList		= pCurve->GetElperSegList();
+			pElperSegListOld	= pElperSegList;
+			///
+			if(pElperSegList->IsEmpty())	// must have some Elems
+				return FALSE;
+			else
+				continue;
+		}
+		else
+		{
+			///////////////////////////////////////////// same count of indices?
+			if(pElperSegList->GetCount() != pElperSegListOld->GetCount())
+				return FALSE;
+			///////////////////////////////////////////// go over the list
+			j = -1;
+			for (POSITION posI = pElperSegList->GetHeadPosition( );posI !=NULL;)
+			{
+				j++;
+				////
+				int nElems = pElperSegList->GetNext(posI);
+				///////
+				POSITION posOld = pElperSegListOld->FindIndex(j);
+				int nElemsOld = pElperSegList->GetAt(posOld);
+				///////////////////////////////////////////////// same
+				if(nElemsOld != nElems)
+					return FALSE;
+			}
+		}
+	}
+	////////////
+	return TRUE;
+}
+
+int CMP_LoftX::Process_OutputInfo(CList<int,int>* pElperSegList,int nDegree,int nBezSeg,
+								  double Ratio,BOOL& bUnifOT,int& nMaxOSeg,int& nOut)
+{
+	////////////////////////////////////////////////////////////////////////// 
+	int i;
+	//////////////////////////////////////////////////////////////////////////
+	//	NOTE:
+	//
+	//		If single Segment & Linear:
+	//			Allow RATIO of First to Last, etc.
+	///////////////////////////////////////////////////////////// Linear/Single Segment
+	int nOrder = nDegree + 1; 
+	////////////////////
+	if (nOrder == 2 && nBezSeg == 1)
+	{
+		/////////////////////
+		if(Ratio == 1.0)		
+			bUnifOT = TRUE;
+		else			
+			bUnifOT = FALSE;
+		/////////////////////
+		nMaxOSeg 	= pElperSegList->GetHead();
+		///////////////////////////////////////// save
+		//			 	in Inter_C1: make One Segment of Control Nodes
+		//				with m_nMaxOSeg Output segment in it, i.e.,
+		//				1 Segment in S-direction
+		/////////////////////////////////////////////////////////////////////
+		int i;
+		//////
+		m_pOSeg = new int[1];
+		/////////////////////
+		m_pOSeg[0] = nMaxOSeg;
+		/////////////////////
+		if(bUnifOT)			// Uniform and OK
+		{
+			m_pODis = new double[nMaxOSeg+1];
+			///////////////////////////////
+			double delt;
+			delt	= 1.0/nMaxOSeg;
+			////////////////
+			m_pODis[0] = 0.;
+			////////////////
+			for (i=1;i<=nMaxOSeg;i++)
+			{
+				m_pODis[i] = m_pODis[i-1] + delt;
+			}
+			/////////////////////
+		}
+		else								// NonUniform
+		{
+			m_pODis = new double[nMaxOSeg+1];
+			/////////////////////////////////////////////////////////
+			// NOTE:	allows Unequal Generation
+			//		# of Segments = n + 1			= nSegs 
+			//		SPACEs between pts. are:
+			//			x, x+a, x+2a, x+3a, ..., x+na
+			//		with
+			//			x = 2/(segs*(ratio+1))
+			//			a = (x*(ratio-1))/(segs-1)
+			//
+			//////////////////////////////////////////////////////////
+			double x	= 2./(nMaxOSeg * (Ratio + 1));
+			double a	= (nMaxOSeg == 1)?0.:(x * (Ratio-1))/(nMaxOSeg-1);
+			//////////////////////////// save
+			int i;
+			//////
+			m_pODis[0] = 0.;
+			////////////////
+			for (i=0;i<nMaxOSeg;i++)
+			{
+				///////////////////
+				m_pODis[i+1] = m_pODis[i] + x + i * a;
+				///////////////////
+			}
+		}
+		////////////////////////////////////////////// Total Evaluation Pts
+		nOut = nMaxOSeg + 1;
+		///////////////////////
+	}	
+	///////////////////////////////////////////////////////////////// Other Cases
+	else															
+	{
+		///////////////////////////////////////////// Check if Uniform
+		bUnifOT = TRUE;
+		int nElems,nElemsPrev;
+		///////////////////////////// go over the list
+		i = -1;
+		for (POSITION posI = pElperSegList->GetHeadPosition( );posI !=NULL;)
+		{
+			i++;
+			////
+			nElems = pElperSegList->GetNext(posI); 
+			if(!i)
+				nElemsPrev = nElems;
+    		///////////////////////////////
+			if(nElemsPrev != nElems)
+			{
+				bUnifOT = FALSE;
+				break;
+			}
+		}
+		///////////////////////////////////////
+		m_pOSeg = new int[nBezSeg];
+		///////////////////////////////////////// save for Uniform
+		if(bUnifOT)
+		{
+			nMaxOSeg 	= pElperSegList->GetHead();
+			///////////////////////////////////////
+			for (i=0;i<nBezSeg;i++)
+			{
+				m_pOSeg[i] = nMaxOSeg;
+			}
+		}
+		///////////////////////////////////////// save for NonUniform
+		else
+		{
+			i = -1;
+			for (POSITION posI = pElperSegList->GetHeadPosition( );posI !=NULL;)
+			{
+				i++;
+				////
+				m_pOSeg[i] = pElperSegList->GetNext(posI);
+			}
+		}
+		////////////////////////////////////////////// Total Evaluation Pts
+		nOut = 0;	// formal parameter
+	
+		for (i=0;i<nBezSeg;i++)
+			nOut += *(m_pOSeg+i);
+		nOut++;
+	}
+	////////////////
+	return 0;
+}
+/////////////////////////////////////////////////////////////////////////////////////
+int CMP_LoftX::ProcessCurves(CDListMgr* pLoftCurveList,CList<CURVELATCH,CURVELATCH>* pLatchList,
+							 pWORLD pCon_BZ,pDOUBLE pWts_BZ,int nCon_BZ,
+							 int nCon_BZTot,int nDegree,int nDim)
+{
+	int nConActual = 0;
+	/////////////////////////////////////////////////////////////// Degree Elevate 
+	nConActual = Elevate_PatCurves(pLoftCurveList,pLatchList,
+								pCon_BZ, pWts_BZ, nDegree, nDim);
+	/////////////////////////
+	if(nConActual != nCon_BZTot)
+	{
+		AfxMessageBox("Internal Problem:\nCMP_LoftX::Elevate_Profile");
+		return -1;
+	}									
+	/////////
+	return 0;
+}
+
+int CMP_LoftX::Elevate_PatCurves(CDListMgr* pLoftCurveList,CList<CURVELATCH,CURVELATCH>* pLatchList,
+											pWORLD pCon_BZ, pDOUBLE pWts_BZ,int nDegree, int nDim)
+{
+
+	CDegElevate DegElevate;
+	///////////////////////
+	CDListMgr*	pCurveList = pLoftCurveList;	// Curves to Loft
+	/////////////////////////////////// 
+	int m,nDegOld,nElev,nSeg_BZ,nConOld,nConNew,nConTot=0,nBegNew=0;
+	/////////////////////////////////////// 	
+	int nCount=0; 
+  	////////////////////////////////////////// memory	
+	pWORLD		pConOld;
+	pDOUBLE		pWtsOld;
+	pWORLD		pConNew;
+	pDOUBLE		pWtsNew;
+	POSITION	posCurve;
+	POSITION	posLatch;	
+	//////////////////////////////////////////////////////////// Controls
+	for (	posCurve = pCurveList->GetFirstObjectPos(),
+			posLatch = pLatchList->GetHeadPosition();posCurve !=NULL;)
+	{
+		CDrCurve* pCurve	= (CDrCurve*)pCurveList->GetNext(posCurve);
+		CURVELATCH cLatch	= pLatchList->GetNext(posLatch); 
+		/////////
+		if(!pCurve)
+			continue;
+		/////////////////////////////////////// GetControl Nodes
+		nConOld 	= pCurve->GetMaxCNodes_S();
+		nDegOld		= (pCurve->GetOrder_S()) - 1;
+		nElev		= nDegree - nDegOld;	// How many Elevations	
+		nSeg_BZ 	= pCurve->GetMaxCubicCurves(); // misleading name!
+   		/////////////////////////////////////// 
+   		nConNew		= nConOld;	
+   		if(nElev>0)
+   			nConNew	+= nElev * nSeg_BZ;	// nElev Cnodes per Curve Segment 
+   		////////////////////////////////////////// memory	
+		pConOld 	= new WORLD [nConOld];
+		pWtsOld 	= new double[nConOld];
+		pConNew 	= new WORLD [nConNew];
+		pWtsNew 	= new double[nConNew];
+		////////////////////////////////////////// get Old 
+		GetCNodeCoords_N_Wts(pCurve, cLatch, pConOld, pWtsOld);
+   	 	///////////////////////////////// 
+		int nConActual = 
+				DegElevate.Elevate_Curve(pConOld, pWtsOld, nDegOld, nElev, pConNew, pWtsNew,
+								nSeg_BZ, nDim);
+   		////////////////////////////////////////// Free memory
+		delete [] pConOld;
+		delete [] pWtsOld;
+		//////////////////
+		if(nConActual != nConNew)
+		{
+			AfxMessageBox("Internal Problem:\nCMP_LoftX::Elevate_Profile");
+			return -1;
+		}									
+		/////////////////////////////////////// save
+		for(m=0;m<nConNew;m++)	
+		{
+			nConTot++;
+			///////////////
+			pCon_BZ[nBegNew+m].x = pConNew[m].x; 	
+			pCon_BZ[nBegNew+m].y = pConNew[m].y; 	
+			pCon_BZ[nBegNew+m].z = pConNew[m].z; 	
+			pWts_BZ[nBegNew+m]   = pWtsNew[m]; 	
+			///////////////////////////////////
+		}
+		nBegNew += nConNew;									
+   		////////////////////////////////////////// Free memory
+		delete [] pConNew;
+		delete [] pWtsNew;
+		////////////////////////////////////////// 
+	}
+	//////////////////
+	return nConTot;
+}
+
+int CMP_LoftX::GetCNodeCoords_N_Wts(CDrCurve* pCurve, CURVELATCH cLatch, 
+									pWORLD pConOld, pDOUBLE pWtsOld)
+{
+	CDListMgr* pList	= pCurve->GetCNodeList();
+	pDOUBLE pWts		= pCurve->GetpWts_BZ_S();
+	int nCon_BZ			= pCurve->GetMaxCNodes_S();
+	int nCon_IndexMax	= nCon_BZ -1;
+	/////////////////////////////////////////////////////////////// Coords 
+	int j=-1;
+	if(!pList->IsEmpty())
+	{
+		////////
+		for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+		{
+			CDrNode* pNode = (CDrNode*)pList->GetNextObject(pos);
+			///////////////////////////////////////
+			if(cLatch == CL_FORWARD)
+				pConOld[++j] = *(pNode->GetLocalPos());
+			else
+			if(cLatch == CL_BACKWARD)
+				pConOld[nCon_IndexMax - (++j) ] = *(pNode->GetLocalPos());
+			//////////////////////////////////
+		}
+	}
+	/////////////////////////////////////////////////////////////// Wts
+	for(j=0;j<nCon_BZ;j++)
+	{
+		if(cLatch == CL_FORWARD)
+			pWtsOld[j] = pWts[j];
+		else
+		if(cLatch == CL_BACKWARD)
+			pWtsOld[nCon_IndexMax - j] = pWts[j];
+	}
+	/////////
+	return 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////
+int CMP_LoftX::PostPatBezInfoUsingBlendingInfo(CDrPatch* pPatch,CList<int,int>& ElSegList,
+				CDrCurve* pBlendCurve,double Ratio,pWORLD pCon_BZ,pDOUBLE pWts_BZ,int nCon_BZ,
+									int nCurves,int& nCon_T,int& nBezSeg_T,int nDir)
+{
+	// First,	assume Curves in S-dir and Blend Curve in T-dir
+	// Then,	Based on nDir, Correctly Post Bezier Info	
+	///////////////////////////////////////////////////////////
+	// Blend Curve Contains T-directional Info:
+	//			CurveType
+	//			IsClosed
+	///////////////////////////////////////////////////////////
+	int i;
+	CDListMgr	INodeList;
+	CDListMgr	TemCNodeList;	// temporarily store Patch BezPts( may be undesirable
+								// Order, to be corrected at the end of this routine
+	//////////////////////////////////////////////////////// BlendInfo
+	BOOL bClosed_T = pBlendCurve->IsClosed_S();						 
+	BOOL nDegree_T = pBlendCurve->GetOrder_S() - 1;						 
+	//////////////////////////////////////////////////////// Wts
+	int nCon_S;
+	nCon_S					= nCon_BZ;
+	///
+	nBezSeg_T				= (bClosed_T)?nCurves:nCurves-1;
+	nCon_T					= (bClosed_T)?(nDegree_T*nBezSeg_T):(nDegree_T*nBezSeg_T+1);
+	pDOUBLE	pTemPatWts_BZ	= new double[nCon_S*nCon_T];
+	CString PatchID			= pPatch->GetObjectID();
+	//////////////////////////////////////////////////////// Loop Over Bez. Pts. on Curves
+	for(i=0;i<nCon_S;i++)
+	{
+		//////////////////////////////////////////////////// Input Nodes 
+		// Post temporarily Patch Bezier Junction CNodes as INodes
+		// these will be deleted when temporary Curve in
+		// GeneratePatchBezInfoFromBlendCurve SubRoutine is deleted
+		INodeList.RemoveAll();
+		TempPostPatBezJunctionPtsInINodeList(pCon_BZ,nCon_BZ,i,nCurves,&INodeList);
+		//////////////////////////////////////////////////// Input Weight
+		pDOUBLE	pTemWts_DT = new double[nCurves];		
+		PackPatBezJunctionWtsInDataWtsArray(pWts_BZ,nCon_BZ,i,nCurves,pTemWts_DT);
+		//////////////////////////////////////////////////// Now Generate
+		GeneratePatchBezInfoFromBlendCurve(pBlendCurve,&INodeList,
+				pTemWts_DT,ElSegList,&TemCNodeList,pTemPatWts_BZ,Ratio,PatchID,nCon_T,i);
+	}
+	////////////////////////////////////////////////////////////////////////// Post
+	if(nDir == 2) // Curve along T-direction
+	{
+		///////////////////////////////////////////////// Save Control Pts
+		(pPatch->GetCNodeList())->AddTail(&TemCNodeList);
+		TemCNodeList.RemoveAll();
+		///////////////////////////////////////////////// Save Wts
+		pPatch->SetMemInWts(pTemPatWts_BZ);
+		/////////////
+	}
+	else
+	if(nDir == 1) // Curve along S-direction, So Transpose
+	{
+		PostPatBezInfo(pPatch,TemCNodeList,pTemPatWts_BZ,nCon_S,nCon_T);
+		////////////////////////////// now remove from TemporaryList
+		TemCNodeList.RemoveAll();
+		////////////////////////////// delete
+		delete [] pTemPatWts_BZ;
+	}
+	//////////////
+	return MA_OK;
+}
+
+int CMP_LoftX::PostPatBezInfo(CDrPatch* pPatch,CDListMgr& TemCNodeList,pDOUBLE pTemPatWts_BZ,
+																		int nCon_S,int nCon_T)
+{
+	//////////////////////////////////////////////////////// Transpose BezPts & Wts to match UV dirs
+	// REMEMBER: C,C++ SAVES ROWWISE
+	////////////////////////////////
+	// would like to save:
+	//		v-dir(Col)
+	//		00000<-nCon_T of them (Based on # of Curves)
+	//  u-	11111 
+	//	d	22222 
+	//	i	33333 
+	//	r	44444 
+	//(row)	55555 
+	//		66666 
+	//		77777 
+	//			^
+	//			|
+	//		   nCon_S of them 
+	////////////////////////////////
+	// but currently saved as:
+	//		 v-dir(Col)
+	//		01234567<-nCon_S of them for each lofted curve
+	//  u-	01234567			|
+	//	d	01234567			| 
+	//	i	01234567			^ 
+	//	r	01234567		# of Curves 
+	//(row)		^
+	//			|
+	//		   nCon_T of them 
+	////////////////////////////////////////////////
+	int i,j,k=-1,index;
+	CDListMgr* pCNodeList	= pPatch->GetCNodeList();
+	pDOUBLE	pPatWts_BZ		= new double[nCon_S*nCon_T];
+	CDrNode* pNode;
+	double Wts;
+	POSITION pos;
+	/////////////////////
+	for(j=0;j<nCon_T;j++)
+	{
+		for(i=0;i<nCon_S;i++)
+		{
+			k++;
+			index	= i*nCon_T + j; 
+			pos		= TemCNodeList.FindIndex(index);
+			pNode	= (CDrNode*)TemCNodeList.GetAt(pos);
+			Wts		= pTemPatWts_BZ[index]; 
+			///////////////////////////////////////////////// Save BezPts
+			pCNodeList->InsertObject(pNode);
+			pPatWts_BZ[k] = Wts;
+			///////
+		}
+	}
+	///////////////////////////////////////////////////////// Save Wts
+	pPatch->SetMemInWts(pPatWts_BZ);
+	/////////////
+	return MA_OK;
+
+}
+	
+int CMP_LoftX::TempPostPatBezJunctionPtsInINodeList(pWORLD pCon_BZ,int nConBZ,int nCol,
+												int nCurves,CDListMgr* pINodeList)
+{
+    ///////////////////////////////////////////////////
+	WORLD		LocalPos;
+    CDrNode* 	pAddNode;
+	int			s,index;
+	///////////////////////////////////////
+	for (s = 0; s<nCurves; s++)
+	{
+		index = s*nConBZ + nCol;	// nCol Bez.Pt of sth Curve
+		//////////////////////////////////// Coords
+		LocalPos = pCon_BZ[index];
+	    //////////////////////////////////// Name
+		CString* pNid = new CString;
+		char* buf = pNid->GetBuffer(BUFF_SIZE);
+	    sprintf(buf,"%s_%d%d","Temp",s,nCol);
+		///////////////////////////////////// in THE List 
+		pAddNode = PostNode(*pNid,LEVEL_KIDDO,LocalPos,FALSE);	// Create DrNode
+		delete pNid;
+		/////////////
+		if(!pAddNode)	// Create DrCNode
+			return MA_ERROR;
+		///////////////////////////////////// in Curve 	
+		pINodeList->InsertObject(pAddNode); //CNodeList
+	}
+	/////////////////////////////////////////////////////////////////////	
+	return MA_OK;
+}
+	
+int CMP_LoftX::PackPatBezJunctionWtsInDataWtsArray(pDOUBLE pWts_BZ,int nConBZ,int nCol,
+												int nCurves,pDOUBLE pTemWts_BZ)
+{
+	int			s,index;
+	///////////////////////////////////////
+	for (s = 0; s<nCurves; s++)
+	{
+		index = s*nConBZ + nCol;	// nCol Bez.Pt of sth Curve
+		//////////////////////////////////// Wts
+		pTemWts_BZ[s] = pWts_BZ[index]; 
+	}
+#ifdef _DEBUG					
+	/////////////////////////////////////////// BEZIER Data Weights
+	for (s = 0; s<nCurves; s++)
+		double Wts = pTemWts_BZ[s];
+#endif	 
+	/////////////////////////////////////////////////////////////////////	
+	return 0;
+}
+
+int CMP_LoftX::GeneratePatchBezInfoFromBlendCurve(CDrCurve* pBlendCurve,CDListMgr* pINodeList,
+						pDOUBLE pWts_DT,CList<int,int>& ElSegList,CDListMgr* pPatCNodeList,
+						pDOUBLE pPatWts_BZ,double Ratio,CString& PatchID,int nCon_T,int nCol)
+{
+	// pINodeList contains already evaluated Bez Pts. of the data curves which
+	// will now serve as INPUT for Blending Curve Generation whose Bez. Pts.
+	// become Patch Bez Pts. for current column, nCol
+	///////////////////////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr*	pList;
+	int nActiveIndex;
+	CDrCurve* pCurve;
+	///////////////////
+	pObjectMgr->SetActiveObjectType(CURVE);
+	////////////////////////////////////////////////////// Tempo. Add to DataBase, if not Existing
+	CString		ID = "Blend";
+	///////////////////////////////////////// delete & Add
+	pList = pObjectMgr->GetObjectList(CURVE);
+	nActiveIndex = pList->GetObjectIndex(CURVE, ID);
+	if(nActiveIndex>=0)
+	{
+		pObjectMgr->DeleteFromDataBase(nActiveIndex, CURVE);
+		pCurve = (CDrCurve*)NULL;
+	}
+	pCurve	= (CDrCurve*)(pObjectMgr->AddToDataBase(ID,nActiveIndex,CURVE));
+	///////////////////////////////////////// Get rid of Old CNodes & INodes
+	if(!(pCurve->GetCNodeList()->IsEmpty())  )
+		pCurve->GetCNodeList()->RemoveAll();
+	if(!(pCurve->GetINodeList()->IsEmpty())  )
+		pCurve->GetINodeList()->RemoveAll();
+	/////////////////////////////////////////////////////////////// Clone Info
+	pCurve->SetObjectInfo(pBlendCurve);
+	pCurve->SetShow(FALSE);	// not quite ready
+	/////////////////////////////////////////////////////////////// Fill Input Nodes
+	pCurve->GetINodeList()->AddTail(pINodeList);	// copy
+	/////////////////////////////////////////////////////////////// Fill Input Wts
+	pCurve->SetWtType_S(WT_USER);	// UserType
+	pCurve->SetpWts_DT_S(pWts_DT);	// copy will be deleted when
+									// Curve is deleted
+	///////////////////////////////////////////////////////
+	pCurve->SetRatio_S(Ratio);
+	pCurve->SetClosed_S(pBlendCurve->IsClosed_S());
+	/////////////////////////////////////////////////////////////// Using GangC
+	CMI_GangC	GangC;
+	CMC_Circle	MC_Circle;
+	CMC_Parab	MC_Parabola;
+	CDrNode*	pFromNode = NULL;
+	CDrNode*	pToNode = NULL;
+	/////////////////////////////
+	CURVEPROC CurveType = pBlendCurve->GetCurveType_S(); 
+	/////////////////
+	switch(CurveType)
+	{
+		case CP_CIRCLE:	// Circle by NO3
+
+			////////////////////////////////////
+			pCurve = MC_Circle.CreateCircle(
+								ID,pCurve,pINodeList,CP_CIRCLE,
+								&ElSegList,CIRCLE_BY_NO3,0.0,120/*SegAngle*/,0.0,
+								TRUE/*bArc*/,pFromNode,pToNode,FALSE/*bFinal*/);
+			/////////////////
+			break;
+				
+		case CP_PARABOLA:
+
+			////////////////////////////////////
+			pCurve = MC_Parabola.CreateParabola(
+								ID,pCurve,pINodeList,CP_PARABOLA,
+								&ElSegList,/*m_bAdvanceOn*/FALSE,FALSE/*bFinal*/);
+			/////////////////
+			break;
+			
+		default:
+
+			pCurve = GangC.CreateCurve(
+								ID,pCurve,pINodeList,CurveType,
+								&ElSegList,FALSE/*m_bAdvanceOn*/,FALSE/*bFinal*/);
+			/////////////////
+			if(!pCurve)
+				return MA_ERROR;
+			//////
+			break;
+	}
+	////////////////////////////////////////////////// Copy & Transfer Bezier Pts
+	Copy_N_TransferBezControlInfo(pCurve,pPatCNodeList,PatchID,nCol);
+	////////////////////////////////////////////////// Copy & Transfer Bezier Pts
+	Copy_N_TransferBezWeightInfo(pCurve,pPatWts_BZ,nCon_T,nCol);
+	////////////////////////////////////////////////// Now get rid of it
+	pObjectMgr->DeleteFromDataBase(nActiveIndex, CURVE);
+	///////////////////////////////
+	return 0;
+}
+	 
+int CMP_LoftX::Copy_N_TransferBezControlInfo(CDrCurve* pCurve,CDListMgr* pPatCNodeList,
+														CString& PatchID,int nCol)
+{
+
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	CDListMgr*	pList;
+    ///////////////////////////////////////////////////
+	WORLD		LocalPos;
+    CDrNode* 	pAddNode;
+	int s;
+	POSITION	pos;
+	/////////////////////////////////////////////////////////// Data
+	int nMaxCurveCNodes_T		= pCurve->GetnCon_BZ_S();// should be equal to #Lofted Curves
+	CDListMgr* pCurCNodeList	= pCurve->GetCNodeList();
+	///////////////////////////////////////
+	for (s = 0; s<nMaxCurveCNodes_T; s++)
+	{
+		//////////////////////////////////// Coords
+		pos = pCurCNodeList->FindIndex(s);
+		LocalPos = *((CDrNode*)pCurCNodeList->GetAt(pos))->GetLocalPos();
+	    //////////////////////////////////// Name
+		CString* pNid = new CString;
+		char* buf = pNid->GetBuffer(BUFF_SIZE);
+	    sprintf(buf,"%s_%d%d",PatchID,s,nCol);
+		///////////////////////////////////// in THE List 
+		pAddNode = PostNode(*pNid,LEVEL_KIDDO,LocalPos,TRUE);	// Create DrCNode
+		delete pNid;
+		/////////////
+		if(!pAddNode)	// Create DrCNode
+			return -1;
+		///////////////////////////////////// in Curve 	
+		pPatCNodeList->InsertObject(pAddNode); //CNodeList
+	}
+#ifdef _DEBUG					
+	/////////////////////////////////////////// BEZIER Control Nodes
+	WORLD Local;
+	int ntemp = pPatCNodeList->GetCount();
+	pList = pPatCNodeList;
+	////////////////////////////////
+	for (pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrNode* pNode 	= (CDrNode*)pList->GetNextObject(pos);
+		/////////////////////////////////////////// ObjectInfo
+		Local = *(pNode->GetLocalPos());
+		//////////////////////////////////
+		LocalPos = Local;
+	}
+#endif	 
+	/////////////////////////////////////////////////////////////////////	
+	return 0;
+}
+
+int CMP_LoftX::Copy_N_TransferBezWeightInfo(CDrCurve* pCurve,pDOUBLE pPatWts_BZ,int nCon_T,int nCol)
+{
+	pDOUBLE pWts	= pCurve->GetpWts_BZ_S(); 
+	////////////////////////////////////////////////// Copy & Transfer Bezier Wts
+	int i,j;
+	for(i=0;i<nCon_T;i++)
+	{
+		j = nCol*nCon_T + i; 
+		pPatWts_BZ[j]	= pWts[i];
+	}
+	///////////////////////////////
+	return 0;
+}
+//////////////////////////////////////////////////////////////////////////////////////
+int CMP_LoftX::SetInfoForDataBase(CDrPatch* pDrObject,CDListMgr* pCurveList,
+			CList<CURVELATCH,CURVELATCH>* pCurveLatchList,CDrCurve* pBlendCurve,int nPrimeDir)
+{
+	pDrObject->SetDirty(TRUE);
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+    pDrObject->SetObjectType((int)PATCH);
+    pDrObject->SetElemType((int)GENR_OBJECT);          // globals
+    pDrObject->SetLevelType((int)LEVEL_GRAPA);          // globals
+	pDrObject->SetPatchProc(PP_LOFTX);
+	pDrObject->SetPatchType(PA_TENSOR);
+	pDrObject->SetPatSubType(PS_QUADRILAT);
+    //////////////////////////////
+	pDrObject->SetObjectID(m_PatchID);
+	///////////////////////////////////////////////////////////////////
+	if(nPrimeDir == 1)
+		SetInfoForDataBase_1(pDrObject,pCurveList,pCurveLatchList,pBlendCurve);
+	else
+	if(nPrimeDir == 2)
+		SetInfoForDataBase_2(pDrObject,pCurveList,pCurveLatchList,pBlendCurve);
+	/////////////////////////////////////////////////////////
+	m_nOut = (long)m_nOut_S * (long)m_nOut_T;
+	pDrObject->SetLongOutPts(m_nOut);			// m_nOut	
+	//////////////////////////////////////////////////
+	// call to NumberOfPatches() Overrides:	//
+	//		m_nOut_S,m_nOut_T,m_nOut				//
+	////////////////////////////////////////////////// 
+	int nOutTotal = pDrObject->NumberOfPatches();
+	if(nOutTotal != (int)m_nOut)
+	{
+		AfxMessageBox("Internal Problem:\nCMI_GangP::InsertMeshInfo\nm_nOut Mismatch!");
+		return MA_ERROR;
+	}
+	////////////////////////////////////////////////////////////////////////////////	
+	pDrObject->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pDrObject->SetLayer(pLayer->GetCurrentLayer());
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	pDrObject->Calc_3DBoundsLocal();
+	///////
+	return MA_OK;
+}
+
+void CMP_LoftX::SetInfoForDataBase_1(CDrPatch* pDrObject,CDListMgr* pCurveList,
+					CList<CURVELATCH,CURVELATCH>* pCurveLatchList,CDrCurve* pBlendCurve)
+{
+	pDrObject->SetPrimaryDir(1);
+	////////////////////////////////////////////////////////// CurveList
+	CDListMgr* pList = pDrObject->GetCurveList_U(); 
+	pList->RemoveAll();
+	pList->AddTail(pCurveList);
+	///////////////////////////////////////////////// Reciprocate
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve 	= (CDrCurve*)pList->GetNextObject(pos);
+		/////////////////////////////////////////// does exist already?
+		int index = pCurve->GetPatchList()->GetObjectIndex(pDrObject);
+		if(index<0)
+			pCurve->GetPatchList()->InsertObject(pDrObject);
+	}
+	/////////////////////////////////////////////////////////////////
+	pDrObject->GetCurveLatchList_U()->RemoveAll();
+	pDrObject->GetCurveLatchList_U()->AddTail(pCurveLatchList);
+	pDrObject->SetBlendCurve(pBlendCurve);
+	///////////////////////////////////////////////////////////////// All Other
+	pDrObject->SetRatio_S(m_Ratio_S);					
+	pDrObject->SetRatio_T(m_Ratio_T);					
+	pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+	pDrObject->SetUniform_T(m_bUnifOT_T);		// Output Distribution:
+	pDrObject->SetSegmentCount_S(m_nMaxOSeg_S); 	// for Old Compatibility
+	pDrObject->SetSegmentCount_T(m_nMaxOSeg_T); 	// for Old Compatibility
+	pDrObject->SetMaxOutSeg_S(m_nMaxOSeg_S);	// Number of Output Segments
+	pDrObject->SetMaxOutSeg_T(m_nMaxOSeg_T);	// Number of Output Segments
+//?
+	pDrObject->SetMaxOutPts_S(m_nOut_S);
+	pDrObject->SetMaxOutPts_T(m_nOut_T);
+	pDrObject->SetOut_S(m_nOut_S);
+	pDrObject->SetOut_T(m_nOut_T);
+	//////////////////////////////////////////
+	pDrObject->SetCurveType_S(m_CurveType_S);
+	pDrObject->SetCurveType_T(m_CurveType_T);
+	pDrObject->SetMaxCNodes_S(m_nMaxPatchCNodes_S);
+	pDrObject->SetMaxCNodes_T(m_nMaxPatchCNodes_T);
+	///////////////////////////////////////////////////
+	pDrObject->SetSegmentCount_S(m_nSegs_S);	
+	pDrObject->SetSegmentCount_T(m_nSegs_T); 
+	pDrObject->SetClosed_S(m_bClosed_S);
+	pDrObject->SetClosed_T(m_bClosed_T);
+	pDrObject->SetOut_S(m_nOut_S);	
+	pDrObject->SetOut_T(m_nOut_T);
+	pDrObject->SetOrder_S(m_nOrder_S);
+	pDrObject->SetOrder_T(m_nOrder_T);
+	pDrObject->SetnDim_S(m_nDim_S);
+	pDrObject->SetnDim_T(m_nDim_T);
+	///////////////////////////////////////////////////////// for now
+	pDrObject->SetNum_tPointer_S(m_pNum_t_S);			// Number of Outputs for each Output Segment
+	pDrObject->SetNum_tPointer_T(m_pNum_t_T);			// Number of Outputs for each Output Segment
+	//////////////////////////////////////////////////////////////////////
+	pDrObject->SetDis_tPointer_S(m_pDis_t_S);			// s-distribution
+	pDrObject->SetDis_tPointer_T(m_pDis_t_T);			// t-distribution
+	////////////////
+	return;
+}
+ 
+void CMP_LoftX::SetInfoForDataBase_2(CDrPatch* pDrObject,CDListMgr* pCurveList,
+					CList<CURVELATCH,CURVELATCH>* pCurveLatchList,CDrCurve* pBlendCurve)
+{
+	// Switched
+	pDrObject->SetPrimaryDir(2);
+	////////////////////////////////////////////////////////// CurveList
+	CDListMgr* pList = pDrObject->GetCurveList_V(); 
+	pList->RemoveAll();
+	pList->AddTail(pCurveList);
+	///////////////////////////////////////////////// Reciprocate
+	for (POSITION pos = pList->GetFirstObjectPos();pos !=NULL;)
+	{
+		CDrCurve* pCurve 	= (CDrCurve*)pList->GetNextObject(pos);
+		/////////////////////////////////////////// does exist already?
+		int index = pCurve->GetPatchList()->GetObjectIndex(pDrObject);
+		if(index<0)
+			pCurve->GetPatchList()->InsertObject(pDrObject);
+	}
+	/////////////////////////////////////////////////////////////////
+	pDrObject->GetCurveLatchList_V()->RemoveAll();
+	pDrObject->GetCurveLatchList_V()->AddTail(pCurveLatchList);
+	pDrObject->SetBlendCurve(pBlendCurve);
+	///////////////////////////////////////////////////////////////// All Other
+	pDrObject->SetRatio_S(m_Ratio_T);					
+	pDrObject->SetRatio_T(m_Ratio_S);					
+	pDrObject->SetUniform_S(m_bUnifOT_T);		// Output Distribution:
+	pDrObject->SetUniform_T(m_bUnifOT_S);		// Output Distribution:
+	pDrObject->SetSegmentCount_S(m_nMaxOSeg_T); 	// for Old Compatibility
+	pDrObject->SetSegmentCount_T(m_nMaxOSeg_S); 	// for Old Compatibility
+	pDrObject->SetMaxOutSeg_S(m_nMaxOSeg_T);	// Number of Output Segments
+	pDrObject->SetMaxOutSeg_T(m_nMaxOSeg_S);	// Number of Output Segments
+	pDrObject->SetMaxOutPts_S(m_nOut_T);
+	pDrObject->SetMaxOutPts_T(m_nOut_S);
+	pDrObject->SetOut_S(m_nOut_T);
+	pDrObject->SetOut_T(m_nOut_S);
+	//////////////////////////////////////////
+	pDrObject->SetCurveType_S(m_CurveType_T);
+	pDrObject->SetCurveType_T(m_CurveType_S);
+	pDrObject->SetMaxCNodes_S(m_nMaxPatchCNodes_T);
+	pDrObject->SetMaxCNodes_T(m_nMaxPatchCNodes_S);
+	///////////////////////////////////////////////////
+	pDrObject->SetSegmentCount_S(m_nSegs_T);	
+	pDrObject->SetSegmentCount_T(m_nSegs_S); 
+	pDrObject->SetClosed_S(m_bClosed_T);
+	pDrObject->SetClosed_T(m_bClosed_S);
+	pDrObject->SetOut_S(m_nOut_T);	
+	pDrObject->SetOut_T(m_nOut_S);
+	pDrObject->SetOrder_S(m_nOrder_T);
+	pDrObject->SetOrder_T(m_nOrder_S);
+	pDrObject->SetnDim_S(m_nDim_T);
+	pDrObject->SetnDim_T(m_nDim_S);
+	///////////////////////////////////////////////////////// for now
+	pDrObject->SetNum_tPointer_S(m_pOSeg_T);			// Number of Outputs for each Output Segment
+	pDrObject->SetNum_tPointer_T(m_pOSeg_S);			// Number of Outputs for each Output Segment
+	//////////////////////////////////////////////////////////////////////
+	pDrObject->SetDis_tPointer_S(m_pODis_T);			// s-distribution
+	pDrObject->SetDis_tPointer_T(m_pODis_S);			// t-distribution
+	////////////////
+	return;
+}
+
+void CMP_LoftX::Serialize(CArchive& ar)
+{
+
+	CMI_GangP::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMP_LoftX:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMP_LoftX:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////// end of module ///////////////////

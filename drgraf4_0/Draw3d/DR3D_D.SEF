@@ -1,0 +1,144 @@
+; Dr3D_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	Dr3D_D
+DESCRIPTION  'ElemDlgs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitDr3DDLL												@2 NONAME
+
+; CDr3DMgr
+;	; Constructor and Destructor
+	??0CDr3DMgr@@REC@XZ
+	??1CDr3DMgr@@VEC@XZ
+
+	?Serialize@CDr3DMgr@@VECXAEVCArchive@@@Z 
+	
+	?Init@CDr3DMgr@@RECXXZ
+
+
+; CXForm
+;	; Constructor and Destructor
+ 	??0CXForm@@REC@XZ   									
+ 	??1CXForm@@VEC@XZ
+
+	?Pack_drPipe@CXForm@@VECXPEVCString@@@Z
+    ?DoDataView@CXForm@@VECXPEVCDC@@H@Z
+	?GetObjectType@CXForm@@VECHXZ
+	?SetObjectType@CXForm@@VECXH@Z
+    ?GetElemType@CXForm@@VECHXZ
+	?SetElemType@CXForm@@VECXH@Z
+?GetObjectNo@CXForm@@VECJXZ
+?SetObjectNo@CXForm@@VECXJ@Z
+    ?GetObjectInfo@CXForm@@VECXPEVCDrObject@@@Z
+    ?SetObjectInfo@CXForm@@VECXPEVCDrObject@@@Z
+
+	?GetRuntimeClass@CXForm@@VFCPEUCRuntimeClass@@XZ
+    ?classCXForm@CXForm@@2UCRuntimeClass@@A
+    ?Serialize@CXForm@@VECXAEVCArchive@@@Z 
+    
+	?ReadDefaultXForm@CXForm@@VECXXZ
+	?InitXForm@CXForm@@VECXXZ
+ 	                                    
+	?DrScale@CXForm@@RECXPEUMatrix@@NNN@Z
+	?DrRotate@CXForm@@RECXPEUMatrix@@NNN@Z
+	?DrTranslate@CXForm@@RECXPEUMatrix@@NNN@Z
+	?DrSetInstanceReferenceFrame@CXForm@@RECXNNNNNNNNN@Z
+	?DrSetViewerReferenceFrame@CXForm@@RECXNNNNNNNNNN@Z
+	?DrCombineReferenceFrames@CXForm@@RECXXZ
+?DrRotateAboutLineMatrix@CXForm@@RECXPEUWORLD@@0NPEUMatrix@@@Z
+?DrRotateToLineMatrix@CXForm@@RECXPEUWORLD@@0PEUMatrix@@@Z
+?DrApplyTransform@CXForm@@RECXPEUWORLD@@0PEUMatrix@@@Z
+?DrApplyTransform@CXForm@@RECXPEJ0PEUMatrix@@H@Z
+;?DrApplyTransform@CXForm@@RECXPEJ0PEUMatrix@@@Z
+	?DrProject@CXForm@@RECXPEJPEUtagPOINT@@H@Z
+	?DrSetParallel@CXForm@@RECXH@Z
+	?DrGetParallel@CXForm@@RECHXZ
+	?DrSetCenter@CXForm@@RECXHH@Z
+	?DrGetCenterX@CXForm@@RECHXZ
+	?DrGetCenterY@CXForm@@RECHXZ
+	?DrGetMatrix@CXForm@@RECPEUMatrix@@W4matrices@@@Z
+	?DrSetMatrix@CXForm@@RECXW4matrices@@PEUMatrix@@@Z
+	?DrAimCamera@CXForm@@RECXULPOINT3@@0NNH@Z
+
+	?GetScale_X@CXForm@@VECNXZ
+	?SetScale_X@CXForm@@VECXN@Z
+	?GetScale_Y@CXForm@@VECNXZ
+	?SetScale_Y@CXForm@@VECXN@Z
+	?GetScale_Z@CXForm@@VECNXZ
+	?SetScale_Z@CXForm@@VECXN@Z
+	?GetTran_X@CXForm@@VECNXZ
+	?SetTran_X@CXForm@@VECXN@Z
+	?GetTran_Y@CXForm@@VECNXZ
+	?SetTran_Y@CXForm@@VECXN@Z
+	?GetTran_Z@CXForm@@VECNXZ
+	?SetTran_Z@CXForm@@VECXN@Z
+	?GetZoom@CXForm@@VECNXZ
+	?SetZoom@CXForm@@VECXN@Z
+	?GetPitch@CXForm@@VECHXZ
+	?SetPitch@CXForm@@VECXH@Z
+	?GetYaw@CXForm@@VECHXZ
+	?SetYaw@CXForm@@VECXH@Z
+	?GetRoll@CXForm@@VECHXZ
+	?SetRoll@CXForm@@VECXH@Z
+	?GetIncrement@CXForm@@VECIXZ
+	?SetIncrement@CXForm@@VECXI@Z 
+	
+	
+	
+; C3DMath
+;	; Constructor and Destructor
+ 	??0C3DMath@@REC@XZ   									
+ 	??1C3DMath@@VEC@XZ
+
+?GetRuntimeClass@C3DMath@@VFCPEUCRuntimeClass@@XZ
+	?classC3DMath@C3DMath@@2UCRuntimeClass@@A
+
+?Add3dPts@C3DMath@@RECXPEUWORLD@@00@Z
+?Sub3dPts@C3DMath@@RECXPEUWORLD@@00@Z
+	?Add3dPts@C3DMath@@RECXPEULPOINT3@@00@Z
+	?Sub3dPts@C3DMath@@RECXPEULPOINT3@@00@Z
+	?Avg3dPts@C3DMath@@RECXPEUWORLD@@00@Z
+	?ScaleVector@C3DMath@@RECXNPEUVector@@@Z
+	?VdotV@C3DMath@@RECNUVector@@0@Z
+	?VcrossV@C3DMath@@RECXPEUVector@@00@Z
+	?Normalize@C3DMath@@RECXPEULPOINT3@@PEUWORLD@@H@Z
+	?GenerateIdentityMatrix@C3DMath@@RECXPEUMatrix@@@Z
+	?ScaleMatrix@C3DMath@@RECXNPEUMatrix@@@Z
+	?TransposeMatrix@C3DMath@@RECXPEUMatrix@@@Z
+	?AddMatrix@C3DMath@@RECXPEUMatrix@@00@Z
+	?MultMatrix@C3DMath@@RECXPEUMatrix@@00@Z
+	?InvertMatrix@C3DMath@@RECXPEUMatrix@@0@Z
+	?GetDeterminant@C3DMath@@RECNPEUMatrix@@@Z
+
+
+
+; CClip
+;	; Constructor and Destructor
+ 	??0CClip@@REC@XZ   									
+ 	??1CClip@@VEC@XZ
+
+?GetRuntimeClass@CClip@@VFCPEUCRuntimeClass@@XZ
+	?classCClip@CClip@@2UCRuntimeClass@@A
+
+	?SetDrHither@CClip@@RECXN@Z
+	?GetDrHither@CClip@@RECNXZ
+	?SetDrYon@CClip@@RECXN@Z
+	?GetDrYon@CClip@@RECNXZ
+	?DrClipPt@CClip@@REC?EW4visibility@@PEULPOINT3@@H@Z
+	?DrClipLine@CClip@@REC?EW4visibility@@PEULPOINT3@@0H@Z
+	?DrSetCanonicalClipOn@CClip@@RECXH@Z
+
+
+  

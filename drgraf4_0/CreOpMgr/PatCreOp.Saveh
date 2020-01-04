@@ -1,0 +1,171 @@
+ // ELMouse.h : header file
+//
+#ifndef _PATMOUSE_H 
+#define _PATMOUSE_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+#include <afxtempl.h>			// CList Template
+                    
+#include "CurMouse.h"
+///////////////////// Modeless
+#include "Dlg_PatI.h"
+/////////////////////
+#include "DrNode.h" 	
+#include "DrLabel.h" 	
+#include "DrCurve.h" 	
+#include "MI_Pat_P.h"
+#include "MI_Pat_I.h"
+#include "DListMgr.h"
+#include "Def_CuPS.h"                    
+#include "Def_Type.h"                    
+#include "Def_Mous.h"                    
+/////////////////////////////////////////////////////////////////////////////
+// CMouse view
+//////////////////////////////////////////////////////
+class CPatMouse : public CCurMouse
+{
+public:
+
+	CPatMouse();
+//////////////////////////////////////
+	DECLARE_SERIAL(CPatMouse)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+ 
+
+	///////////////////////////////////////////////////////////////////////////
+	UINT			ReSetToolID_PAT(UINT CntlID,UINT IGenID, UINT OperID);
+	void			InitDlgIn_PAT();
+	void			ModeLessOff_PAT();
+	void			ModeLessOn_PAT();
+	////////////////////////////////////////////////////////
+	CDlg_PatI*		GetPatInDlg(){return m_pPatInDlg;};                                                                                
+	////////////////////////////////////////////////////////////////
+	long			CreateorActivatePatIn(UINT wParam, long lParam);
+	long			CancelPatIn(UINT wParam, long lParam);
+	long			GoodByePatIn(UINT wParam, long lParam);
+	long			UpdatePatIn(UINT wParam, long lParam);
+	/////////////////////
+	void 			OnEBoxMouseMove_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonDown_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonDown_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxLButtonUp_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+	void 			OnEBoxRButtonUp_PAT(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point);
+    ////////////////////////////////////////////////////////////////////// PATCH
+	virtual CString&	GetCurrentPatchID(){return m_CurrentPatchID;};
+	virtual void		SetCurrentPatchID(CString Pid){m_CurrentPatchID = Pid;};
+ 	virtual PATSUBTYPE	GetPatSubType(){return m_PatSubType;};
+	virtual void		SetPatSubType(PATSUBTYPE pst){m_PatSubType = pst;};
+/*
+ 	virtual CString&	GetPatCurveID(int i){return m_PatCurveID[i];};
+	virtual void		SetCurrentPatCurveID(CString Cid, int i){m_PatCurveID[i] = Cid;};
+	virtual CURVELATCH  GetPatCurveLat(int i){return m_PatCurveLatch[i];};
+	virtual void		SetPatCurveLat(CURVELATCH CLat, int i){m_PatCurveLatch[i] = CLat;};
+	virtual int			GetPatCurveElem(int i){return m_PatCurveElem[i];};
+	virtual void		SetPatCurveElem(int Elem, int i){m_PatCurveElem[i] = Elem;};
+*/ 				
+		
+protected:
+
+
+	int			RightUp_Premature();
+	int			RightUp_NotAutoAccept();
+	int			ShowPatch(CString* pID);
+	//////////////////////////////////////////////
+	void		ElementLeftDown_PAT();				// described in derived also
+	void		ElementLeftUp_PAT(CPoint point);	// described in derived also
+	//////////////////////////////////////////////////////// Patch
+	int			LeftUp_Pat_Curve(POINT point);
+	int			LeftUp_Pat_Node(POINT point, BOOL bCNode);
+	//////////////////
+	int			LeftDown_PATCH();
+	int			LeftUp_EXTRUDE(POINT point);
+	int			LeftUp_ROTATE(POINT point);
+	int			LeftUp_LOFT2(POINT point);
+	int			LeftUp_DUCT(POINT point);
+	int			LeftUp_SWEEP(POINT point);
+	int			LeftUp_COONS(POINT point);
+	void		UpdatePDlg_TRUE();
+	void		UpdatePDlg_FALSE();
+	/////////////////////////////////////////////////////////
+	int 		PutEndIdsInPlateList(CString nid[],int nEnds);
+	int 		PutObjectinPatch(CDrObject* pAddObject,CString nid[],int nEnds);
+	//////////////////////////////////////////////////////// Spawn
+	int				LeftUp_PSPAWN(CPoint point);
+	int				ShowPatchInfo(CDrPatch* pDrPatch);
+	int				ShowPatchToSpawn(CDrPatch* pDrPatch);
+
+
+protected:  
+// Attributes
+
+
+	CDlg_PatI*				m_pPatInDlg;                                                                                
+	/////////////////////////////////////////// MousePost:MeshGeneration
+	CMI_Pat_P				m_MI_Pat_P;
+	/////////////////////////////////////////// MouseInsert:Interpolate
+	CMI_Pat_I				m_MI_Pat_I;
+	/////////////////////////////////////////// Patch
+	CDrPatch*				m_pCurrentPatch;
+	CDrCurve*				m_pCurPatCurve;
+	CDrCurve*				m_pOldPatCurve;
+	//////////
+	CDListMgr				m_CurveList;		// 
+	CList<CURVELATCH,CURVELATCH>	m_LatchList;	
+//	CDListMgr				m_NodeList;			// already in CurMouse
+//	CList<int,int>			m_ElSegList			// already in CurMouse
+	//////////
+    int						m_LastPatchNum;		// internal
+	PATSUBTYPE				m_PatSubType;
+	CString					m_CurrentPatchID;
+	CString					m_CurrentPatchIDOld;
+	BOOL					m_bPatchDone;		// for dragging
+	int						m_nCurveDone;
+	int						m_nInfoDone;
+	//////////////////////////////// Dlg_PatI
+	PATCHPROC				m_PatProc;
+	CString					m_Orient;
+	double					m_dLen;				// also Angle for Rotation
+	BOOL					m_bTwist;
+	BOOL					m_bIncrement;
+	double					m_TwistStart;
+	double					m_TwistMult;
+	BOOL					m_bIncRad;
+	double					m_RadStart;
+	double					m_RadiusMult;
+
+
+//Operations
+public:
+
+	~CPatMouse();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CPatMouse)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

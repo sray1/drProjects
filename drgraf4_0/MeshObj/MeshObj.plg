@@ -1,0 +1,99 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: MeshObj - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MeshObj.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MeshObj\MeshObj.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP82E0.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/MeshObj.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MeshObj\DrEdge.cpp"
+"C:\drgraf4_0\MeshObj\DrFace.cpp"
+"C:\drgraf4_0\MeshObj\DrFE0D.cpp"
+"C:\drgraf4_0\MeshObj\DrFE1D.cpp"
+"C:\drgraf4_0\MeshObj\DrFE2D.cpp"
+"C:\drgraf4_0\MeshObj\DrFE3D.cpp"
+"C:\drgraf4_0\MeshObj\DrMesh1D.cpp"
+"C:\drgraf4_0\MeshObj\DrMesh2D.cpp"
+"C:\drgraf4_0\MeshObj\DrMesh3D.cpp"
+"C:\drgraf4_0\MeshObj\Drprof_1.cpp"
+"C:\drgraf4_0\MeshObj\Drprof_2.cpp"
+"C:\drgraf4_0\MeshObj\EdgeInfo.cpp"
+"C:\drgraf4_0\MeshObj\FaceInfo.cpp"
+"C:\drgraf4_0\MeshObj\Mesh_dll.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP82E0.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP82E1.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/MeshObj.pch" /Yc"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MeshObj\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP82E1.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP82E2.TMP" with contents
+[
+Dr3D_D32.lib Spec_D32.lib OGen_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/Mesh_D32.pdb" /map:".\Debug/Mesh_D32.map" /debug /machine:I386 /def:".\MeshObj.def" /out:"c:\drgraf4_0\applic\Debug/Mesh_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/Mesh_D32.lib" 
+.\Debug\DrEdge.obj
+.\Debug\DrFace.obj
+.\Debug\DrFE0D.obj
+.\Debug\DrFE1D.obj
+.\Debug\DrFE2D.obj
+.\Debug\DrFE3D.obj
+.\Debug\DrMesh1D.obj
+.\Debug\DrMesh2D.obj
+.\Debug\DrMesh3D.obj
+.\Debug\Drprof_1.obj
+.\Debug\Drprof_2.obj
+.\Debug\EdgeInfo.obj
+.\Debug\FaceInfo.obj
+.\Debug\Mesh_dll.obj
+.\Debug\StdAfx.obj
+.\Debug\MeshObj.res
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP82E2.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+StdAfx.cpp
+Compiling...
+DrEdge.cpp
+DrFace.cpp
+C:\drgraf4_0\MeshObj\DrFace.cpp(39) : warning C4100: 'ar' : unreferenced formal parameter
+DrFE0D.cpp
+DrFE1D.cpp
+DrFE2D.cpp
+C:\drgraf4_0\MeshObj\DrFE1D.cpp(316) : warning C4701: local variable 'pLMP' may be used without having been initialized
+DrFE3D.cpp
+C:\drgraf4_0\MeshObj\DrFE2D.cpp(620) : warning C4701: local variable 'pLMP' may be used without having been initialized
+DrMesh1D.cpp
+C:\drgraf4_0\MeshObj\DrFE3D.cpp(537) : warning C4701: local variable 'pLMP' may be used without having been initialized
+DrMesh2D.cpp
+DrMesh3D.cpp
+Drprof_1.cpp
+Drprof_2.cpp
+EdgeInfo.cpp
+FaceInfo.cpp
+Mesh_dll.cpp
+C:\drgraf4_0\MeshObj\Mesh_dll.cpp(38) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MeshObj.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MeshObj.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+DrFE0D.obj : warning LNK4197: export "?classCDrFE0D@CDrFE0D@@2UCRuntimeClass@@A" specified multiple times; using first specification
+DrFE1D.obj : warning LNK4197: export "?classCDrFE1D@CDrFE1D@@2UCRuntimeClass@@A" specified multiple times; using first specification
+DrFE2D.obj : warning LNK4197: export "?classCDrFE2D@CDrFE2D@@2UCRuntimeClass@@A" specified multiple times; using first specification
+DrFE3D.obj : warning LNK4197: export "?classCDrFE3D@CDrFE3D@@2UCRuntimeClass@@A" specified multiple times; using first specification
+DrMesh1D.obj : warning LNK4197: export "?classCDrMesh1D@CDrMesh1D@@2UCRuntimeClass@@A" specified multiple times; using first specification
+DrMesh2D.obj : warning LNK4197: export "?classCDrMesh2D@CDrMesh2D@@2UCRuntimeClass@@A" specified multiple times; using first specification
+DrMesh3D.obj : warning LNK4197: export "?classCDrMesh3D@CDrMesh3D@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/Mesh_D32.lib and object c:\drgraf4_0\applic\Debug/Mesh_D32.exp
+
+
+
+<h3>Results</h3>
+Mesh_D32.dll - 0 error(s), 15 warning(s)
+</pre>
+</body>
+</html>

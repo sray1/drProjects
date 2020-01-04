@@ -1,0 +1,84 @@
+ // mp_Loft2.h : header file
+//
+#ifndef _MP_COONP_H 
+#define _MP_COONP_H 
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+                    
+#include "MI_GangP.h"
+#include "DrPatch.h"
+#include "Def_Type.h"                    
+//////////////////////////////////////////////////////
+//class AFX_EXT_CLASS CMP_CoonP : public CMI_GangP
+class AFX_EXT_CLASS CMP_CoonP : public CMI_GangP
+{
+public:
+
+	CMP_CoonP();
+//////////////////////////////////////
+	DECLARE_SERIAL(CMP_CoonP)
+//////////////////////////////////////
+
+
+// Attributes 
+
+// Operations
+public:
+
+// Implementation
+public:
+
+	CDrPatch*	GoDoIt(); 
+	int			GoDoIt(
+						CString&	PatchID,		
+						CDrPatch*	pDrPatch,
+						CString		PatCurveID[],
+						CURVELATCH	PatCurveLatchID[]
+				     );
+	int 		Coon(); 
+
+    				
+		
+protected:
+
+	BOOL		CheckElemCompatibility(CString PatCurveID[]);
+	void		SetInfoForCoonBase(
+									CString&	PatchID,		
+									CDrPatch*	pDrObject,
+									CString		PatCurveID[],
+									CURVELATCH	PatCurveLatchID[]
+								  );
+	////////////////////////////////////////////////////////////
+	CDrPatch* 	GetInfo();
+	int 		GenerateCNodes();
+	/////////////////////////
+	int			Pre_Curve(CDrCurve* pDrCurve,int i, int nOut);
+	int			Curve_S_Process();
+	int			Curve_T_Process();
+	int			GetInfo_Curve_T(CDrCurve* pDrCurve);
+
+	
+
+protected:  
+// Attributes
+
+//Operations
+public:
+
+	~CMP_CoonP();
+	virtual void Serialize(CArchive& ar);
+/*
+	// Generated message map functions
+
+	//{{AFX_MSG(CMP_CoonP)
+	//}}AFX_MSG
+	DECLARE_MESSAGE_MAP()
+*/
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif

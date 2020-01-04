@@ -1,0 +1,2219 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+#include <math.h> 
+
+#include "3DMath.h"
+#include "XForm.h"
+
+#include "Def_Objs.h"
+#include "Def_View.h"
+#include "Def_Type.h"
+#include "Def_CuPS.h"
+/////////////////////
+#include "drgraf.h"
+#include "drgradoc.h"
+/////////////////////
+#include "ObjMgr.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "MCurMgr.h"  
+//#include "EDl2Mgr.h"  
+//#include "MDlgMgr.h"  
+///////////////////// cards
+#include "Def_Card.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h"
+///////////////////// specials
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+#include "precison.h"
+#include "mapfacto.h"
+#include "ScaleFac.h"
+#include "DrFont.h"
+#include "booleans.h"
+/////////////////////
+#include "MC_Parab.h" 
+#include "MC_Circl.h" 
+#include "MC_Lin.h"
+#include "MC_Quad.h"
+#include "MC_Cube.h"
+/////////////////////
+#include "Dlg_CClk.h"
+#include "MI_GangN.h" 
+#include "MI_GangC.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_GangC,CObject,1)
+/////////////////////////////////////
+#define MIN_INODES_CURVE	2
+#define new	DEBUG_NEW
+#define	BUFF_SIZE			1024
+//#define	NUM_LEN				12 
+#define	MAX_SEG_ANGLE		120
+/////////////////////////////////////////////////////////////////////////////
+CMI_GangC::CMI_GangC()
+{
+
+    /////////////////////////////////////////// Curve
+	m_bClosed_S			= FALSE;
+	/////////////////// Memory
+	m_MemErr	= 0;
+	m_pMKnot_S	= NULL;
+	m_pKnot_S	= NULL;
+	m_pWts_DT_S	= NULL;
+	m_pWts_BS_S	= NULL;
+	m_pWts_BZ_S	= NULL;
+	m_pData		= NULL;
+	m_pCon_BS_S	= NULL;
+	m_pCon_BZ_S	= NULL;
+	///////////////////
+    
+}
+
+CMI_GangC::~CMI_GangC()
+{
+ 
+	/////////////////// Error:MemoryRelease
+	if(m_MemErr<0)
+	{
+		if(m_pMKnot_S)
+		{
+			delete [] m_pMKnot_S;
+			m_pMKnot_S = NULL;
+		}	
+		if(m_pKnot_S)
+		{
+			delete [] m_pKnot_S;
+			m_pKnot_S = NULL;
+		}	
+		if(m_pWts_DT_S)
+		{
+			delete [] m_pWts_DT_S;
+			m_pWts_DT_S = NULL;
+		}	
+		if(m_pWts_BS_S)
+		{
+			delete [] m_pWts_BS_S;
+			m_pWts_BS_S = NULL;
+		}	
+		if(m_pWts_BZ_S)
+		{
+			delete [] m_pWts_BZ_S;
+			m_pWts_BZ_S = NULL;
+		}	
+		if(m_pData)
+		{
+			delete m_pData;
+			m_pData = NULL;
+		}	
+		if(m_pCon_BS_S)
+		{
+			delete [] m_pCon_BS_S;
+			m_pCon_BS_S = NULL;
+		}	
+		if(m_pCon_BZ_S)
+		{
+			delete [] m_pCon_BZ_S;
+			m_pCon_BZ_S = NULL;
+		}	
+	}	
+    //////////////////////////////// Memory release
+	if(m_pCon_BS_S)
+	{
+		delete [] m_pCon_BS_S;
+		m_pCon_BS_S = NULL;
+	}	
+	if(m_pCon_BZ_S)
+	{
+		delete [] m_pCon_BZ_S;
+		m_pCon_BZ_S = NULL;
+	}
+	//////////////////////////////	
+}	
+
+int CMI_GangC::InsertAllInfo_Curve(int nOrder)
+{ 
+
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	// 		ALWAYS	B E Z I E R	CurveType
+	///////////////////////////////////// Compute No. of Curves
+	int nCurves;
+	////////////////////////////////////////////////////////////
+	m_pDrCurve->NumberOfCurves(CP_BEZIER,m_nMaxCurveCNodes_S,&nCurves,m_bClosed_S,nOrder);
+	/////////////////////////////////////////////////////////// save in DrCurve
+	if((m_CurveType_S == CP_CIRCLE) && m_bFinal)
+	{
+		if(m_nType != CIRCLE_BY_2N_CC)
+		{
+			m_pDrCurve->SetCenter_S(m_Center_S);
+			m_pDrCurve->SetRadius_S(m_Radius_S);				
+			m_pDrCurve->SetNormal_S(m_vAxis_S);
+			//////////////////////////////////// also as node for future reference
+			pObjectMgr->BumpLastInputNo(CNODE);		// bump it
+			int nLastNum = pObjectMgr->GetLastInputNo(CNODE);		// internal
+			char buf[50];
+			sprintf(buf,"%d",nLastNum);
+			CString Nid;
+			Nid = "Ctr_";
+			Nid	+= buf;
+			/////////////
+			CDrLabel* pLabel;
+			int nNodeIndex,nLabelIndex;
+			/////////////////////////// Create Anyway
+			nNodeIndex = -12345;
+//092798			CDrNode* pAddNode = CreateNode(Nid,pLabel,m_Center_S,TRUE,TRUE,FALSE,
+//092798															nNodeIndex,nLabelIndex);
+			CDrNode* pAddNode = CreateNode(Nid,pLabel,m_Center_S,TRUE,TRUE,
+											nNodeIndex,nLabelIndex,LEVEL_GRAPA);
+			//////////////////////////////////
+			if(!pAddNode)	// Create DrCNode
+				return -1;
+			///////////////////////////////////////////////// Reciprocate
+			pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+			m_pDrCurve->GetElemList()->InsertObject(pAddNode); //Auxiliary CNode in ElemList
+			///////////////////////////////////////////////
+		}		
+	}
+	///////////////////////////////////////////
+	m_pDrCurve->SetCurveType_S(m_CurveType_S);
+	m_pDrCurve->SetMaxCubicCurves(nCurves);
+	m_pDrCurve->SetDirty(TRUE);
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrCurve->Calc_3DBoundsLocal();											
+	///////////////
+	return 0;
+	///////////////
+	
+}			 
+
+int CMI_GangC::SetUpINodes(CDListMgr* pList,pWORLD inData,int nData)
+{
+
+	int k;
+	///////////
+    if(nData<=0)
+    	return -1;
+    ///////////////////////
+    k = -1;
+    double x,y,z;
+    //////////////	
+	POSITION pos = pList->GetFirstObjectPos();
+	for (;pos !=NULL;)
+	{
+		CDrNode* pNode = (CDrNode*)pList->GetNextObject( pos);
+		k++;
+		x = (pNode->GetNodeCard())->x;
+		y = (pNode->GetNodeCard())->y;
+		z = (pNode->GetNodeCard())->z;
+		inData[k].x = x;
+		inData[k].y = y;
+		inData[k].z = z;
+	}
+	///////////
+	if(k != (nData-1))
+		return -1;
+	else
+		return 0;
+	/////////////		 
+}
+
+int CMI_GangC::FillMeshNodesCurve(CDrCurve* pDrCurve, pWORLD pOut, pDOUBLE pOutWts, int nOut)
+{
+    //////////////////////////////////////////////////////
+	pDrCurve->RefillCNLocalPosForPosting();	// filling m_pIn in DrCurve w/ LocalPos
+	pDrCurve->GenerateCurve(pOut, pOutWts);
+	//////////////////////////////////////////
+	if(!m_bBack)
+		return 0;
+	////////////////////////////////////////// BackWard
+	pWORLD pBk		= FixMem(nOut);
+	pDOUBLE pBkWts	= FixMemD(nOut);
+	///////////////
+	for(int i=0;i<nOut;i++)
+	{
+		pBk[i].x	= pOut[nOut-i-1].x;
+		pBk[i].y	= pOut[nOut-i-1].y;
+		pBk[i].z	= pOut[nOut-i-1].z;
+		pBkWts[i]	= pOutWts[nOut-i-1];
+	}
+	/////////////
+	for(i=0;i<nOut;i++)
+	{
+		pOut[i].x	= pBk[i].x;
+		pOut[i].y	= pBk[i].y;
+		pOut[i].z	= pBk[i].z;
+		pOutWts[i]	= pBkWts[i];
+	}
+	FreeMem(pBk);
+	FreeMemD(pBkWts);
+	/////////////////
+	return 0;
+
+}
+
+int CMI_GangC::FillMeshTangentsCurve(CDrCurve* pDrCurve, pWORLD pOut, int nOut)
+{
+    //////////////////////////////////////////////////////
+	pDrCurve->RefillCNLocalPosForPosting();	// filling m_pIn in DrCurve w/ LocalPos
+	pDrCurve->GenerateTangent(pOut);
+	//////////////////////////////////////////
+	if(!m_bBack)
+		return 0;
+	////////////////////////////////////////// BackWard
+	pWORLD pBk		= FixMem(nOut);
+	///////////////
+	for(int i=0;i<nOut;i++)
+	{
+		pBk[i].x	= pOut[nOut-i-1].x;
+		pBk[i].y	= pOut[nOut-i-1].y;
+		pBk[i].z	= pOut[nOut-i-1].z;
+	}
+	/////////////
+	for(i=0;i<nOut;i++)
+	{
+		pOut[i].x	= pBk[i].x;
+		pOut[i].y	= pBk[i].y;
+		pOut[i].z	= pBk[i].z;
+	}
+	FreeMem(pBk);
+	/////////////////
+	return 0;
+
+}
+/*
+//	Moved to CreOMgr Dll   01/14/98 
+
+CDrCurve* CMI_GangC::PostCurve(CString& Cid,CString& OldID,CURVEPROC CProc)
+{
+
+	CMCurMgr 	EDlgMgr;
+	CMCurMgr* 	pEDlgMgr = &EDlgMgr;
+	CDrCurve*	pCurve;
+	/////////////////////////////////////////////
+	pCurve = pEDlgMgr->SpawnCurve(Cid, OldID, CProc);
+	//////////////////////////////////////////////
+	return pCurve;
+}
+//	Moved to CreOMgr Dll   01/14/98 end 
+*/
+CDrCurve* CMI_GangC::CreateCurve(CString& Cid,CDrCurve* pCurve,CDListMgr* pNodeList,
+								 CURVEPROC kind,CList<int,int>* pElperSegList,
+								 BOOL bAdvanceOn,BOOL bFinal)
+{
+	///////////////////////////////////////////////
+	pCurve->GetElperSegList()->AddTail(pElperSegList);	// save for later editing etc
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMCurMgr	MDlgMgr;
+	CMCurMgr*	pMDlgMgr = &MDlgMgr;
+	////////////////////////////////////////////////////// Already in DataBase
+	m_pDrCurve 	= pCurve;
+	////////////////////////////////////////////// Fill Input Nodes (DONE IN SHOWCURVE)
+//	if(!(m_pDrCurve->GetINodeList()->IsEmpty())  )
+//		m_pDrCurve->GetINodeList()->RemoveHead();
+//	m_pDrCurve->GetINodeList()->AddTail(pNodeList);	// copy
+	/////////////////////////////////////////////// Fill EverythingElse
+	m_CurveID		= Cid;
+	m_CurveType_S	= kind;
+	m_bClosed_S		= m_pDrCurve->IsClosed_S();
+	m_Ratio_S		= m_pDrCurve->GetRatio_S();
+	/////////////////////////////////////////////// interpolate
+	if(m_CurveType_S == CP_LINEAR)
+	{
+		/////////
+		m_nOrder_S	= 2;
+		m_Ratio_S	= m_pDrCurve->GetRatio_S();
+		///////////////////////////////////////
+		SetInfoForCurveBase(m_pDrCurve,pElperSegList,bFinal);
+		/////////////////////////////// BC & Knot DataBases
+		if(bFinal && bAdvanceOn)
+			pMDlgMgr->DoModal_Cur_Advance_In(m_pDrCurve,m_nOrder_S);
+		else
+		if(m_pDrCurve->IsIso())
+			SetIsoInfoForCurveBase(m_pDrCurve);
+		else
+			SetDefaultInfoForCurveBase(m_pDrCurve);
+		/////////////
+		CMC_Lin McLin;
+		////////////////////////////////////////////////////////// Go Interpolate
+		McLin.GoDoIt(m_pDrCurve,bFinal);
+		///////////////////////
+	}
+	else
+	if(m_CurveType_S == CP_QUADRATIC)
+	{
+		/////////
+		m_nOrder_S = 3;
+		SetInfoForCurveBase(m_pDrCurve,pElperSegList,bFinal);
+		/////////////////////////////// BC & Knot DataBases
+		if(bFinal && bAdvanceOn)
+			pMDlgMgr->DoModal_Cur_Advance_In(m_pDrCurve,m_nOrder_S);
+		else
+		if(m_pDrCurve->IsIso())
+			SetIsoInfoForCurveBase(m_pDrCurve);
+		else
+			SetDefaultInfoForCurveBase(m_pDrCurve);
+		/////////////
+		CMC_Quad McQuad;
+		////////////////////////////////////////////////////////// Go Interpolate
+		McQuad.GoDoIt(m_pDrCurve,bFinal);
+		///////////////////////
+	}
+	else
+	if
+		(
+			m_CurveType_S == CP_BEZIER	||m_CurveType_S == CP_BSPLINE	||
+			m_CurveType_S == CP_NURB
+		)
+	{
+		/////////
+		m_nOrder_S = 4;
+		SetInfoForCurveBase(m_pDrCurve,pElperSegList,bFinal);
+		/////////////////////////////// BC & Knot DataBases
+		if(bFinal && bAdvanceOn)
+			pMDlgMgr->DoModal_Cur_Advance_In(m_pDrCurve,m_nOrder_S);
+		else
+		if(m_pDrCurve->IsIso())
+			SetIsoInfoForCurveBase(m_pDrCurve);
+		else
+			SetDefaultInfoForCurveBase(m_pDrCurve);
+		/////////////
+		CMC_Cube McCube;
+		////////////////////////////////////////////////////////// Go Interpolate
+		McCube.GoDoIt(m_pDrCurve,bFinal);
+		///////////////////////
+	}
+	////////////
+    return m_pDrCurve;
+}
+
+CDrCurve* CMI_GangC::CreateParabola(CString& Cid,CDrCurve* pCurve,CDListMgr* pNodeList,
+								 CURVEPROC kind,CList<int,int>* pElperSegList,
+								 BOOL bAdvanceOn,BOOL bFinal)
+{
+	///////////////////////////////////////////////
+	pCurve->GetElperSegList()->AddTail(pElperSegList);	// save for later editing etc
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMCurMgr	MDlgMgr;
+	CMCurMgr*	pMDlgMgr = &MDlgMgr;
+	////////////////////////////////////////////////////// Already in DataBase
+	m_pDrCurve 	= pCurve;
+	////////////////////////////////////////////// Fill Input Nodes (DONE IN SHOWCURVE)
+//	if(!(m_pDrCurve->GetINodeList()->IsEmpty())  )
+//		m_pDrCurve->GetINodeList()->RemoveHead();
+//	m_pDrCurve->GetINodeList()->AddTail(pNodeList);	// copy
+	/////////////////////////////////////////////// Fill EverythingElse
+	m_CurveID		= Cid;
+	m_CurveType_S	= kind;
+	m_bClosed_S		= m_pDrCurve->IsClosed_S();
+	m_Ratio_S		= m_pDrCurve->GetRatio_S();
+	m_nInputType	= m_pDrCurve->GetInputType();
+	/////////////////////////////////////////////// interpolate
+	m_nOrder_S = 3;
+	SetInfoForCurveBase(m_pDrCurve,pElperSegList,bFinal);
+	//////////////////////////////////////////////////// override
+	m_nDim_S = 4; // rational
+	m_pDrCurve->SetnDim_S(m_nDim_S); // rational
+	m_pDrCurve->SetCurveType_S(m_CurveType_S);
+	m_pDrCurve->SetInputType(m_nInputType);		// 1 = PARABOLA_BY_NO3
+	/////////////////////////////// BC & Knot DataBases
+/*
+	if(bFinal && bAdvanceOn)
+		pMDlgMgr->DoModal_Cur_Advance_In(m_pDrCurve,m_nOrder_S);
+	else
+	if(m_pDrCurve->IsIso())
+		SetIsoInfoForCurveBase(m_pDrCurve);
+	else
+		SetDefaultInfoForCurveBase(m_pDrCurve);
+*/
+	/////////////
+	CMC_Parab McConic;
+	////////////////////////////////////////////////////////// Go Interpolate
+	McConic.GoDoIt(m_pDrCurve,bFinal);
+	////////////
+    return m_pDrCurve;
+}
+ 
+void CMI_GangC::SetIsoInfoForCurveBase(CDrCurve* pDrObject)
+{
+	// BC_N_KNOTs_N DIMS
+    ////////////////////////////////////////////////// Knots
+	pDrObject->SetKnotType_S(KN_USER);
+	pDrObject->SetWtType_S(WT_USER);
+	////////////////////////////////////////////////////////////////////////
+/*		A L L R E A D Y  C O P I E D  F R O M  P A R E N T  I S O C U R V E	
+	////////////////////////////////////////////////// Boundary
+	m_BCL = BC_AUTO;
+	pDrObject->SetBCL_S(m_BCL);
+ 	m_BCR = BC_AUTO;
+	pDrObject->SetBCR_S(m_BCR);
+	/////////////////////////////////////////////////////// Quadratic
+	// Only One BC end is allowable:
+	//	 ifLeft	- set tan.v for right 	 -99999.	
+	//	 ifRight- set tan.v for left 	= -99999.
+	/////////////////////////////////////////////
+	VECTOR tan;
+	tan.v[0] = -99999.;	
+	////////
+	pDrObject->SetTanR_S(tan);
+//	pDrObject->SetTanL_S(tan);
+	///////////////////////////////////////////////////////////////////
+	pDrObject->SetpWts_DT_S((pDOUBLE)NULL);	// pointer
+	pDrObject->SetpKnots_S((pDOUBLE)NULL);	// pointer
+	/////////////////////////////////////////////////// Already In
+	int nDim 		= 3;			// NonRational
+	pDrObject->SetnDim_S(nDim);
+	///////////////////////////////////////////////////
+*/////////////////////////////////////////////////////////////////////////////
+	return;
+	
+} 
+ 
+void CMI_GangC::SetDefaultInfoForCurveBase(CDrCurve* pDrObject)
+{
+	// BC_N_KNOTs_N DIMS
+    ////////////////////////////////////////////////// Knots
+	pDrObject->SetKnotType_S(KN_AUTO);
+	pDrObject->SetWtType_S(WT_UNIFORM);
+	////////////////////////////////////////////////// Boundary
+	m_BCL = BC_AUTO;
+	pDrObject->SetBCL_S(m_BCL);
+ 	m_BCR = BC_AUTO;
+	pDrObject->SetBCR_S(m_BCR);
+	/////////////////////////////////////////////////////// Quadratic
+	// Only One BC end is allowable:
+	//	 ifLeft	- set tan.v for right 	 -99999.	
+	//	 ifRight- set tan.v for left 	= -99999.
+	/////////////////////////////////////////////
+	VECTOR tan;
+	tan.v[0] = -99999.;	
+	////////
+	pDrObject->SetTanR_S(tan);
+//	pDrObject->SetTanL_S(tan);
+	///////////////////////////////////////////////////////////////////
+	pDrObject->SetpWts_DT_S((pDOUBLE)NULL);	// pointer
+	pDrObject->SetpKnots_S((pDOUBLE)NULL);	// pointer
+	//////////////////////////////
+	int nDim 		= 3;			// NonRational
+	pDrObject->SetnDim_S(nDim);
+	///////////////////////////////////////////////////
+	return;
+	
+} 
+
+//void CDlg_CIRR::SetInfoForDataBase(CDrCurve* pDrObject)
+void CMI_GangC::SetInfoForCurveBase(CDrCurve* pDrObject,CList<int,int>* pElperSegList,
+									BOOL bFinal)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+	CDListMgr* pINodeList	= pDrObject->GetINodeList();
+    int i,nData;  
+	CString Nid;
+	CDrNode* pDrNode;
+	////////////////////////////////////
+    pDrObject->SetObjectType((int)CURVE);
+    pDrObject->SetElemType((int)GENR_OBJECT);          	// globals
+    pDrObject->SetLevelType((int)LEVEL_UNCLE);          // globals
+    //////////////////////////////
+	pDrObject->SetObjectID(m_CurveID);	
+	pDrObject->SetClosed_S(m_bClosed_S);
+    /////////////////////////////////////// Reciprocate if Final( Rt.MouseButt)	
+										 // makes it easy to del at intermediate
+    nData = pINodeList->GetCount();
+	if(bFinal)
+	{
+	   /////////////////
+		for (POSITION posI = pINodeList->GetHeadPosition( );posI !=NULL;)
+		{
+			////
+			pDrNode = (CDrNode*)pINodeList->GetNextObject(posI);
+			////////////////////////////////// save curve
+			int index = (pDrNode->GetCurveList())->GetObjectIndex(pDrObject); // exists already?
+			if(index>=0)
+				continue;
+			/////////////
+			pDrNode->GetCurveList()->InsertObject(pDrObject);
+		}
+		///////////////////
+	}
+	////////////////////////////////////////////////////////////// interpolation
+	pDrObject->SetData_S(nData);		// GIVEN: # of Data
+	pDrObject->SetMaxINodes_S(nData);
+	pDrObject->SetOrder_S(m_nOrder_S);				// k
+	//////////////////////////////////////////////// Update	 
+	m_nControls 	= nData + m_nOrder_S - 2;	        // L + k - 1 = nData + k - 2 = n + 1
+	m_nCurveSeg 	= nData - 1;
+	m_nMaxDistinct 	= nData;
+	m_nMaxTotal		= nData + (2 * m_nOrder_S - 2);	// n + k + 1 = nData + (2k - 2)
+	if(m_bClosed_S)
+	{
+		m_nCurveSeg++;
+		m_nMaxDistinct++;
+		m_nMaxTotal++;
+	}
+	////////////////////////////////////////////////////////
+	pDrObject->SetnCon_BS_S(m_nControls);	// L + k - 1
+											// = nData + k - 2
+											// = n + 1 (B-Spline));
+	pDrObject->SetnKnots_S(m_nMaxDistinct);
+	pDrObject->SetnMKnots_S(m_nMaxTotal);
+	////////////////////////////////////////
+	int nCon_BZ	= (m_nOrder_S - 1) * m_nCurveSeg + 1;	// (k-1) * L + 1 , Open
+	if(m_bClosed_S)
+		nCon_BZ--; 		
+	pDrObject->SetnCon_BZ_S(nCon_BZ); // = m_nMaxCurveCNodes(Eventually)
+	/////////////////////////////////////////////////////////////////////////////// Mesh(Output)
+	pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+	pDrObject->SetOutMethod_S(CO_HORNER);		// Output Method
+	////////////////////////////////////////////////////////////////////////// ReDistribute
+	//////////////////////////////////////////////////////////////////////////
+	//	NOTE:
+	//
+	//		If single Segment & Linear:
+	//			Allow RATIO of First to Last, etc.
+	///////////////////////////////////////////////////////////// Linear/Single Segment
+	BOOL bCancel = TRUE;
+	////////////////////
+	if (m_nOrder_S == 2 && m_nCurveSeg == 1)
+	{
+		/////////////////////
+		if(m_Ratio_S == 1.0)		
+			m_bUnifOT_S = TRUE;
+		else			
+			m_bUnifOT_S = FALSE;
+		/////////////////////
+		m_nMaxOSeg 	= pElperSegList->GetHead();
+		//////////////////////	
+		pDrObject->SetRatio_S(m_Ratio_S);					
+		pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+		///////////////////////////////////////// save
+		//			 	in Inter_C1: make One Segment of Control Nodes
+		//				with m_nMaxOSeg Output segment in it, i.e.,
+		//				1 Segment in S-direction
+		/////////////////////////////////////////////////////////////////////
+		int i;
+		//////
+		m_pOSeg = new int[1];
+		/////////////////////
+		m_pOSeg[0] = m_nMaxOSeg;
+		/////////////////////
+		if(m_bUnifOT_S)			// Uniform and OK
+		{
+			m_pODis = new double[m_nMaxOSeg+1];
+			///////////////////////////////
+			double delt;
+			delt	= 1.0/m_nMaxOSeg;
+			////////////////
+			m_pODis[0] = 0.;
+			////////////////
+			for (i=1;i<=m_nMaxOSeg;i++)
+			{
+				m_pODis[i] = m_pODis[i-1] + delt;
+			}
+			/////////////////////
+		}
+		else								// NonUniform
+		{
+			m_pODis = new double[m_nMaxOSeg+1];
+			/////////////////////////////////////////////////////////
+			// NOTE:	allows Unequal Generation
+			//		# of Segments = n + 1			= nSegs 
+			//		SPACEs between pts. are:
+			//			x, x+a, x+2a, x+3a, ..., x+na
+			//		with
+			//			x = 2/(segs*(ratio+1))
+			//			a = (x*(ratio-1))/(segs-1)
+			//
+			//////////////////////////////////////////////////////////
+			double x	= 2./(m_nMaxOSeg * (m_Ratio_S + 1));
+			double a	= (m_nMaxOSeg == 1)?0.:(x * (m_Ratio_S-1))/(m_nMaxOSeg-1);
+			//////////////////////////// save
+			int i;
+			//////
+			m_pODis[0] = 0.;
+			////////////////
+			for (i=0;i<m_nMaxOSeg;i++)
+			{
+				///////////////////
+				m_pODis[i+1] = m_pODis[i] + x + i * a;
+				///////////////////
+			}
+		}
+		//////////////////////////////////////////		 
+		pDrObject->SetMaxOutSeg_S(m_nMaxOSeg);	// Number of Output Segments
+		pDrObject->SetSegmentCount_S(1); 	// for Old Compatibility per patch
+		pDrObject->SetNum_tPointer_S(m_pOSeg);	// Number of Outputs for
+													// each Curve Segment
+		pDrObject->SetDis_tPointer_S(m_pODis);	// Number of Outputs for
+													// each Curve Segment
+		////////////////////////////////////////////// Total Evaluation Pts
+		int nOut = m_nMaxOSeg + 1;
+		///////////////////////
+		pDrObject->SetMaxOutPts_S(nOut);
+		pDrObject->SetLongOutPts((long)nOut);
+		////////////////////////////////////////////////
+	}	
+	///////////////////////////////////////////////////////////////// Other Cases
+	else															
+	{
+		///////////////////////////////////////////// Check if Uniform
+		m_bUnifOT_S = TRUE;
+		int nElems,nElemsPrev;
+		///////////////////////////// go over the list
+		i = -1;
+		for (POSITION posI = pElperSegList->GetHeadPosition( );posI !=NULL;)
+		{
+			i++;
+			////
+			nElems = pElperSegList->GetNext(posI); 
+			if(!i)
+				nElemsPrev = nElems;
+    		///////////////////////////////
+			if(nElemsPrev != nElems)
+			{
+				m_bUnifOT_S = FALSE;
+				break;
+			}
+		}
+		///////////////////////////////////////
+		m_pOSeg = new int[m_nCurveSeg];
+		///////////////////////////////////////// save for Uniform
+		if(m_bUnifOT_S)
+		{
+			m_nMaxOSeg 	= pElperSegList->GetHead();
+			///////////////////////////////////////
+			for (i=0;i<m_nCurveSeg;i++)
+			{
+				m_pOSeg[i] = m_nMaxOSeg;
+			}
+		}
+		///////////////////////////////////////// save for NonUniform
+		else
+		{
+			i = -1;
+			for (POSITION posI = pElperSegList->GetHeadPosition( );posI !=NULL;)
+			{
+				i++;
+				////
+				m_pOSeg[i] = pElperSegList->GetNext(posI);
+			}
+		}
+		//////////////////////////////////////////		 
+		pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+		pDrObject->SetMaxOutSeg_S(m_nCurveSeg);	// Number of Output Segments
+											// = nData - 1 = L = m_nCurveSeg
+		pDrObject->SetNum_tPointer_S(m_pOSeg);	// Number of Outputs for
+											// each Curve Segment
+		//////////////////////////////////////////
+		pDrObject->SetSegmentCount_S(m_nMaxOSeg); 	// for Old Compatibility
+		////////////////////////////////////////////// Total Evaluation Pts
+		int nOut = 0;
+	
+		for (i=0;i<m_nCurveSeg;i++)
+			nOut += *(m_pOSeg+i);
+		nOut++;
+		////////////////////////////////
+		pDrObject->SetMaxOutPts_S(nOut);
+		pDrObject->SetLongOutPts((long)nOut);
+	}
+	////////////////////////////////////////////////////////////////////////////////	
+	pDrObject->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pDrObject->SetLayer(pLayer->GetCurrentLayer());
+	//////////////////
+	return;
+	
+} 
+
+CDrCurve* CMI_GangC::CreateCircleByRot(CString& Cid,CDrCurve* pCurve,CDListMgr* pNodeList,
+					 CURVEPROC kind,CList<int,int>* pElperSegList,CIRCLETYPE nType,
+					 double dAng,CDrNode* pFromIDNode,CDrNode* pToIDNode,double SegAngle,BOOL bFinal)
+
+{
+	///////////////////////////////////////////////
+	pCurve->GetElperSegList()->AddTail(pElperSegList);	// save for later editing etc
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMCurMgr	MDlgMgr;
+	CMCurMgr*	pMDlgMgr = &MDlgMgr;
+	////////////////////////////////////////////////////// Already in DataBase
+	m_pDrCurve 	= pCurve;
+	////////////////////////////////////////////// Fill Input Nodes (DONE IN SHOWCURVE)
+//	if(!(m_pDrCurve->GetINodeList()->IsEmpty())  )
+//		m_pDrCurve->GetINodeList()->RemoveHead();
+//	m_pDrCurve->GetINodeList()->AddTail(pNodeList);	// copy
+	/////////////////////////////////////////////// Fill EverythingElse
+	m_CurveID		= Cid;
+	m_CurveType_S	= kind;
+	m_nType			= nType;
+	m_bClosed_S		= m_pDrCurve->IsClosed_S();
+	m_Ratio_S		= m_pDrCurve->GetRatio_S();
+	m_nMesh			= pElperSegList->GetHead();
+	m_dAng			= dAng;
+	m_pFromIDNode		= pFromIDNode;
+	m_pToIDNode		= pToIDNode;
+	m_SegAngle		= SegAngle;
+	/////////////////////////////////////////////// interpolate
+	if(m_CurveType_S == CP_CIRCLE)
+	{
+		/////////
+		m_nOrder_S = 3;
+		/////////////
+		if(SetInfoForCircleByRotBase(m_pDrCurve)<0)
+			return (CDrCurve*)NULL;
+		/////////////
+		CMC_Circl McCircle;
+		////////////////////////////////////////////////////////// Go Interpolate
+		McCircle.GoDoIt(m_pDrCurve,bFinal);	//TRUE=FINAL
+		///////////////////////
+	}
+	////////////
+    return m_pDrCurve;
+}
+
+//int CDlg_CIRC::SetInfoForDataBase(CDrCurve* pDrObject)
+int CMI_GangC::SetInfoForCircleByRotBase(CDrCurve* pDrObject)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr*	pINodeList	= pDrObject->GetINodeList();
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+    //////////////////
+//	int nData,index;  
+	int nData;  
+	CString Nid;
+	CDrNode* pDrNode;
+	//////////////////////////////////////////////////// Update Current DrObject
+    pDrObject->SetObjectType((int)CURVE);
+    pDrObject->SetElemType((int)GENR_OBJECT);          	// globals
+    pDrObject->SetLevelType((int)LEVEL_UNCLE);          // globals
+    //////////////////////////////
+	pDrObject->SetnDim_S(4); //Rational for use in circle and later in Solid 
+//	pDrObject->SetClosed_T(FALSE); // done later
+    //////////////////////////////
+	pDrObject->SetObjectID(m_CurveID);	
+    ////////////////////////////////////////////////////////////////////	
+    nData = pINodeList->GetCount();
+	if(nData != 1)
+	{
+		AfxMessageBox("Error:\nCMI_GangC::SetInfoForCircleByRotBase\nnData != 1");
+		return -1;
+	}
+	/////////////////
+	for (POSITION posI = pINodeList->GetHeadPosition( );posI !=NULL;)
+	{
+		////
+		pDrNode = (CDrNode*)pINodeList->GetNextObject(posI);
+		////////////////////////////////// save curve
+		int index = (pDrNode->GetCurveList())->GetObjectIndex(pDrObject); // exists already?
+		if(index>=0)
+			continue;
+		/////////////
+		pDrNode->GetCurveList()->InsertObject(pDrObject);
+	}
+	////////////////////////////////////////// Axis Input
+	pDrObject->SetAxisInput(m_bAxis);
+	pDrObject->SetAxis(m_nAxis);
+	pDrObject->SetNegative(m_bNegative);
+	/////////////////
+	pDrObject->SetInputType(m_nType);		// 1 = circleByRot
+	pDrObject->SetCircleType(m_nType);
+	//////////////////////////////////
+	pDrObject->SetMaxINodes_S(nData);	// 
+	////////////////////////////////////////// Reciprocate
+	CDListMgr*  pDListMgr	= pObjectMgr->GetObjectList(CNODE);
+	///
+	pDrObject->SetFromIDNode_S(m_pFromIDNode);
+	m_pFromIDNode->GetCurveList()->InsertObject(pDrObject);
+	///////////////////////////////
+/*
+	if(!m_bAxis)
+	{
+*/
+		pDrObject->SetToIDNode_S(m_pToIDNode);
+		m_pToIDNode->GetCurveList()->InsertObject(pDrObject);
+/*
+	}
+*/
+	////////////////////////////////////////////////////////////// interpolation
+//	int nOrder = 3;// k = 3 for Circle
+	pDrObject->SetOrder_S(m_nOrder_S);				
+	pDrObject->SetCurveType_S(CP_CIRCLE);
+	pDrObject->SetSegAngle_S(m_SegAngle);
+	///////////////////////////////////////////////////////////////////
+	int nDim	= 4;			// Homogeneous(Rational)
+	pDrObject->SetnDim_S(nDim);
+	///////////////////////////////////////////////////////////// ReDistribute 
+	pDrObject->SetOutMethod_S(CO_HORNER);		// Output Method
+	/////////////////////////////////////
+	if(m_Ratio_S == 1.0)		
+		m_bUnifOT_S = TRUE;
+	else			
+		m_bUnifOT_S = FALSE;
+	//////////////////////	
+	pDrObject->SetRatio_S(m_Ratio_S);					
+	pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+	if(m_bClosed_S)
+		m_dAng = 360.;
+	//////////////////
+	BOOL bClosed;
+	if(m_dAng<0.)
+		m_dAng = 0.;
+	if(m_dAng>360.)
+		m_dAng = 360.;
+	//////////////////////////////// Closed ?
+	if(m_dAng == 360)
+		bClosed = TRUE;
+	else
+		bClosed = FALSE;
+	//////////////////////
+	m_bClosed_S = bClosed;
+	//////////////////////
+	pDrObject->SetTheta_S(m_dAng);		
+	pDrObject->SetClosed_S(bClosed);
+	//////////////////////////////////////////////////// Finish it Up
+	if(SetAdditionalInfoForCircle(pDrObject)<0)
+		return -1;
+	//////////////////////////////////////
+	return 0;
+	
+} 
+
+CDrCurve* CMI_GangC::CreateCircleBy3Node(CString& Cid,CDrCurve* pCurve,CDListMgr* pNodeList,
+					 CURVEPROC kind,CList<int,int>* pElperSegList,CIRCLETYPE nType,
+					 double SegAngle,double dAngSpec,BOOL bArc,BOOL bFinal)
+{
+	///////////////////////////////////////////////
+	pCurve->GetElperSegList()->AddTail(pElperSegList);	// save for later editing etc
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMCurMgr	MDlgMgr;
+	CMCurMgr*	pMDlgMgr = &MDlgMgr;
+	////////////////////////////////////////////////////// Already in DataBase
+	m_pDrCurve 	= pCurve;
+	////////////////////////////////////////////// Fill Input Nodes (DONE IN SHOWCURVE)
+//	if(!(m_pDrCurve->GetINodeList()->IsEmpty())  )
+//		m_pDrCurve->GetINodeList()->RemoveHead();
+//	m_pDrCurve->GetINodeList()->AddTail(pNodeList);	// copy
+	/////////////////////////////////////////////// Fill EverythingElse
+	m_CurveID		= Cid;
+	m_CurveType_S	= kind;
+	m_nType			= nType;
+	m_bClosed_S		= m_pDrCurve->IsClosed_S();
+	m_Ratio_S		= m_pDrCurve->GetRatio_S();
+	m_nMesh			= pElperSegList->GetHead();
+	m_SegAngle		= SegAngle;
+	m_dAngSpec		= dAngSpec;
+	m_bArc			= bArc;
+	/////////////////////////////////////////////// interpolate
+	if(m_CurveType_S == CP_CIRCLE)
+	{
+		/////////
+		m_nOrder_S = 3;
+		/////////////
+		if(SetInfoForCircleBy3NodeBase(m_pDrCurve)<0)
+			return (CDrCurve*)NULL;
+		/////////////
+		CMC_Circl McCircle;
+		////////////////////////////////////////////////////////// Go Interpolate
+		McCircle.GoDoIt(m_pDrCurve,bFinal);	//TRUE=FINAL
+		///////////////////////
+	}
+	////////////
+    return m_pDrCurve;
+}
+
+//int CMI_GangC::SetInfoForDataBase(CDrCurve* pDrObject)
+int CMI_GangC::SetInfoForCircleBy3NodeBase(CDrCurve* pDrObject)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+	CDListMgr* pINodeList	= pDrObject->GetINodeList();
+    int nData;  
+	CString Nid;
+	CDrNode* pDrNode;
+	////////////////////////////////////
+    pDrObject->SetObjectType((int)CURVE);
+    pDrObject->SetElemType((int)GENR_OBJECT);          	// globals
+    pDrObject->SetLevelType((int)LEVEL_UNCLE);          // globals
+    //////////////////////////////
+	pDrObject->SetObjectID(m_CurveID);	
+	pDrObject->SetClosed_S(m_bClosed_S);
+    /////////////////////////////////////// Reciprocate if Final( ALWAYS)	
+										 // makes it easy to del at intermediate
+    nData = pINodeList->GetCount();
+   /////////////////
+	for (POSITION posI = pINodeList->GetHeadPosition( );posI !=NULL;)
+	{
+		////
+		pDrNode = (CDrNode*)pINodeList->GetNextObject(posI);
+		////////////////////////////////// save curve
+		int index = (pDrNode->GetCurveList())->GetObjectIndex(pDrObject); // exists already?
+		if(index>=0)
+			continue;
+		/////////////
+		pDrNode->GetCurveList()->InsertObject(pDrObject);
+	}
+	////////////////////////////////////////////////////////////// interpolation
+	pDrObject->SetInputType(m_nType);		// 1 = CircleBy3Nodes 
+	pDrObject->SetCircleType(m_nType);
+	//////////////////////////////////
+	pDrObject->SetData_S(nData);		// GIVEN: # of Data
+	pDrObject->SetMaxINodes_S(nData);
+	///////////////////////////////////
+//	int nOrder = 3;// k = 3 for Circle
+	pDrObject->SetOrder_S(m_nOrder_S);				// k = 3 for Circle
+	pDrObject->SetCurveType_S(CP_CIRCLE);
+	pDrObject->SetSegAngle_S(m_SegAngle);
+	///////////////////////////////////////////////////////////////////
+	int nDim	= 4;			// Homogeneous(Rational)
+	pDrObject->SetnDim_S(nDim);
+	///////////////////////////////////////////////////////////// ReDistribute 
+	pDrObject->SetOutMethod_S(CO_HORNER);		// Output Method
+	/////////////////////////////////////
+	if(m_Ratio_S == 1.0)		
+		m_bUnifOT_S = TRUE;
+	else			
+		m_bUnifOT_S = FALSE;
+	//////////////////////	
+	pDrObject->SetRatio_S(m_Ratio_S);					
+	pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+	/////////////////////////////////////////////////////////////
+	// find  and SetUp Angle, Radius & Normal
+	//////////////////////////////////////
+	CalcAdditionalInfoforCircle2(pDrObject, &m_dAng);
+	////////////////////////////////////// if Closed, set angle to 360
+	if(m_bClosed_S)
+		m_dAng = 360.;
+	else
+	{
+		////////////////////////////////// if Angle Specified, Override angle
+		if(!m_bArc)
+			m_dAng = m_dAngSpec;
+		///////////////////////// Check
+		if(m_dAng<0.)
+			m_dAng = 0.;
+		if(m_dAng>360.)
+			m_dAng = 360.;
+	}
+	BOOL bClosed;
+	//////////////////////////////// Closed ?
+	if(m_dAng == 360)
+		bClosed = TRUE;
+	else
+		bClosed = FALSE;
+	//////////////////////
+	m_bClosed_S = bClosed;
+	//////////////////////
+	pDrObject->SetArcType(m_bArc);	// for later editing		
+	pDrObject->SetTheta_S(m_dAng);		
+	pDrObject->SetClosed_S(bClosed);
+	//////////////////////////////////////////////////// Finish it Up
+	if(SetAdditionalInfoForCircle(pDrObject)<0)
+		return -1;
+	//////////////////////////////////////
+	return 0;
+}
+
+int CMI_GangC::SetAdditionalInfoForCircle(CDrCurve* pDrObject)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	///////////////////////////////////////// save
+	// if
+	//		 Uniform:
+	//			 	make As Many Segment of Control Nodes
+	//				as Close to SegAng(Default=120) with total of m_nMesh Output segment
+	//				in all of them i.e.,
+	//				nSegs = #of Bezier Quadratic CurveSegs in S-direction
+	//				saved as pDrObject->SetSegmentCount_S(nSegs)
+	//				variable Angles are stored in m_pODis;
+	//				m_pONum containing Number of Mesh for each CurveSeg
+	//		 NonUniform:
+	//			 	make m_nMesh Segments of Control Nodes
+	//				with 1 Output segment in each, i.e.,
+	//				m_nMesh many CurveSeg in S-direction
+	//				nSegs = m_nMesh = #of Bezier Quadratic CurveSegs in S-direction
+	//				saved as pDrObject->SetSegmentCount_S(nSegs)
+	//				Total Angle is stored in m_pODis[0];
+	//				m_pONum[0] containing Number of Mesh for the Patch
+	/////////////////////////////////////////////////////////////////////
+	int nSegs;
+	double dAng		= m_dAng;
+	BOOL bClosed	= m_bClosed_S;
+	//////////////////////////////////////////////////////// Uniform
+	if(m_bUnifOT_S)						// Uniform
+	{
+		// Max Angle for each Patch Segment = 120;
+		// for stability
+		////////////////////////////////////////// <=m_SegAngle:One Curve 
+		if(dAng<= m_SegAngle)
+		{
+			nSegs = 1;
+			//////////////////////////// Memory
+			m_pOSeg = new int[nSegs];
+			m_pODis = new double[nSegs];
+			//////////////////////////// save
+			m_pOSeg[0] = m_nMesh;
+			m_pODis[0] = dAng;
+			/////////////////////
+		}
+		////////////////////////////////////////// >m_SegAngle:Many Curves 
+		else
+		{
+			int		nTimes,nMesh,nRem,i;
+			double	dAngInc,dSegAng;
+			////////////////
+			dAngInc	= dAng/m_nMesh; // assume dAngInc ALWAYS <=120
+			if(dAngInc>120)
+			{
+				AfxMessageBox("Error:\nToo Few Number of Elements!");
+				/////////////////////
+				return -1;
+			}
+			nTimes	= (int)(m_SegAngle/dAngInc);
+			dSegAng	= nTimes * dAngInc;	// get biggest possible angle<=m_SegAngle
+			nSegs	= (int)(dAng/dSegAng);
+			nMesh	= nSegs*nTimes;
+			nRem	= m_nMesh%nMesh;
+			////
+			if(nRem)
+				nSegs++;
+			//////////////////////////// Memory
+			m_pOSeg = new int[nSegs];
+			m_pODis = new double[nSegs];
+			//////////////////////////// save
+			for(i=0;i<nSegs;i++)
+			{
+				///////////////
+				m_pOSeg[i] = nTimes;
+				m_pODis[i] = dSegAng;
+				/////////////////////
+			}
+			//////////////////////////// adjust  the Last one
+			if(nRem)
+			{
+				int nSeg1 = nSegs -1;
+				/////////////////////
+				m_pOSeg[nSeg1] = m_nMesh	- nTimes * nSeg1;
+				m_pODis[nSeg1] = dAng		- dSegAng* nSeg1;
+				/////////////////////
+			}
+		}
+	}
+	//////////////////////////////////////////////////////// NonUniform
+	else
+	{
+		nSegs = m_nMesh;
+		//////////////////////////// Memory
+		m_pOSeg = new int[nSegs];
+		m_pODis = new double[nSegs];
+		/////////////////////////////////////////////////////////
+		// NOTE:	allows Unequal Generation
+		//		# of Segments = n + 1			= nSegs 
+		//		SPACEs between pts. are:
+		//			x, x+a, x+2a, x+3a, ..., x+na
+		//		with
+		//			x = (2*theta)/(segs*(ratio+1))
+		//			a = (x*(ratio-1))/(segs-1)
+		//
+		//////////////////////////////////////////////////////////
+		double x	= (2 * dAng)/(nSegs * (m_Ratio_S + 1));
+		double a	= (nSegs == 1)?0.:(x * (m_Ratio_S-1))/(nSegs-1);
+		//////////////////////////// save
+		int i;
+		//////
+		for (i=0;i<nSegs;i++)
+		{
+			m_pOSeg[i] = 1;	// one Element in each
+			double angle = x + i * a;
+			/////////////////////////
+			if(angle>120)
+			{
+				AfxMessageBox("Error:\nToo Few Number of Elements!");
+				/////////////////////
+				return -1;
+			}
+			///////////////////
+			m_pODis[i] = angle;
+			///////////////////
+		}
+	}
+	/////////////////////
+	pDrObject->SetMaxOutSeg_S(m_nMesh);		// Total Number of Output Segments
+	pDrObject->SetSegmentCount_S(nSegs); 	// # of Curves ( B-Spline Segs)
+	//////////////////////////////////////////		 
+	pDrObject->SetNum_tPointer_S(m_pOSeg);	// Number of Outputs for
+											// each Curve Segment
+	pDrObject->SetNum_tPointer_Ex_S(m_pOSeg);	// Number of Outputs for
+												// each Curve Segment
+	pDrObject->SetDis_AngPointer_S(m_pODis);// Number of Angles for
+											// Bezier Control Pts. Generation
+    ////////////////////////////////////////////// Total Evaluation Pts
+	int nOut = m_nMesh + 1;
+	///////////////////////
+	pDrObject->SetMaxOutPts_S(nOut);
+	pDrObject->SetLongOutPts((long)nOut);
+	////////////////////////////////////////////////////////////////
+	int nCon_BZ	= (m_nOrder_S - 1) * nSegs + 1;	// (k-1) * L + 1 , Open
+	if(bClosed)
+		nCon_BZ--; 		
+	pDrObject->SetnCon_BZ_S(nCon_BZ); // = m_nMaxCurveCNodes(Eventually)
+	////////////////////////////////////////////////////////////////////// Mesh(Output)
+	int nData	= nSegs + 1;
+	//////////////////////////////////////////////// Update	 
+	pDrObject->SetData_S(nData);		// Generated: # of Data
+	pDrObject->SetData_Ex_S(nData);		// Adjusted# of Data for Conics(Circle) 
+	////////////////////////////
+	int		nControls,nCurveSeg,nMaxDistinct,nMaxTotal;
+	///////////////////////////////////////////////////
+	nControls 	= nData + m_nOrder_S - 2;	        // L + k - 1 = nData + k - 2 = n + 1
+	nCurveSeg 	= nData - 1;					// L
+	nMaxDistinct 	= nData;
+	nMaxTotal		= nData + (2 * m_nOrder_S - 2);	// n + k + 1 = nData + (2k - 2)
+	if(bClosed)
+	{
+		nCurveSeg++;
+		nMaxDistinct++;
+		nMaxTotal++;
+	}
+    ////////////////////
+	pDrObject->SetpWts_DT_S((pDOUBLE)NULL);	// pointer
+	/////////////	
+	pDrObject->SetpKnots_S((pDOUBLE)NULL);	// pointer
+	//////////////////////////////
+	pDrObject->SetnCon_BS_S(nControls);	// L + k - 1
+											// = nData + k - 2
+											// = n + 1 (B-Spline));
+	pDrObject->SetnKnots_S(nMaxDistinct);
+	pDrObject->SetnMKnots_S(nMaxTotal);
+	////////////////////////////////////////////////	
+	pDrObject->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pDrObject->SetLayer(pLayer->GetCurrentLayer());
+	//////////////////
+	return 0;
+	
+}
+ 
+CDrCurve* CMI_GangC::CreateCircleBy_2N_TI(CString& Cid,CDrCurve* pCurve,CDListMgr* pNodeList,
+					 CURVEPROC kind,CList<int,int>* pElperSegList,CIRCLETYPE nType,
+					 double SegAngle,BOOL bFinal)
+{
+	///////////////////////////////////////////////
+	pCurve->GetElperSegList()->AddTail(pElperSegList);	// save for later editing etc
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMCurMgr	MDlgMgr;
+	CMCurMgr*	pMDlgMgr = &MDlgMgr;
+	////////////////////////////////////////////////////// Already in DataBase
+	m_pDrCurve 	= pCurve;
+	////////////////////////////////////////////// Fill Input Nodes (DONE IN SHOWCURVE)
+//	if(!(m_pDrCurve->GetINodeList()->IsEmpty())  )
+//		m_pDrCurve->GetINodeList()->RemoveHead();
+//	m_pDrCurve->GetINodeList()->AddTail(pNodeList);	// copy
+	/////////////////////////////////////////////// Fill EverythingElse
+	m_CurveID		= Cid;
+	m_CurveType_S	= kind;
+	m_nType			= nType;
+//	m_bClosed_S		= m_pDrCurve->IsClosed_S();
+	m_Ratio_S		= m_pDrCurve->GetRatio_S();
+	m_nMesh			= pElperSegList->GetHead();
+//	m_Radius_S		= dRadius;
+//	m_pFromIDNode		= pFromIDNode;
+//	m_pToIDNode		= pToIDNode;
+	m_SegAngle		= SegAngle;
+	/////////////////////////////////////////////// interpolate
+	if(m_CurveType_S == CP_CIRCLE)
+	{
+		/////////
+		m_nOrder_S = 3;
+		/////////////
+		if(SetInfoForCircleBy_2N_TI(m_pDrCurve)<0)
+			return (CDrCurve*)NULL;
+		/////////////
+		CMC_Circl McCircle;
+		////////////////////////////////////////////////////////// Go Interpolate
+		McCircle.GoDoIt(m_pDrCurve,bFinal);	//TRUE=FINAL
+		///////////////////////
+	}
+	////////////
+    return m_pDrCurve;
+}
+
+int CMI_GangC::SetInfoForCircleBy_2N_TI(CDrCurve* pDrObject)
+{
+	//////////////////////////////
+	// Content of INodeList:	//
+	//		1. NID_I	NODE	//
+	//		2. NID_TI	CNODE	//
+	//		3. NID_J	NODE	//
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr*	pINodeList	= pDrObject->GetINodeList();	// Tangent Intersection CNode
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+    int nData;  
+	CString Nid;
+	CDrNode* pDrNode;
+	////////////////////////////////////
+    pDrObject->SetObjectType((int)CURVE);
+    pDrObject->SetElemType((int)GENR_OBJECT);          	// globals
+    pDrObject->SetLevelType((int)LEVEL_UNCLE);          // globals
+    //////////////////////////////
+	pDrObject->SetnDim_S(4); //Rational for use in circle and later in Solid 
+    //////////////////////////////
+	pDrObject->SetObjectID(m_CurveID);	
+    ////////////////////////////////////////////////////////////////////	
+    nData = pINodeList->GetCount();
+	if(nData != 3)
+	{
+		AfxMessageBox("Error:\nCMI_GangC::SetInfoForCircleBy_2N_TI\nnData != 3");
+		return -1;
+	}
+	/////////////////
+	for (POSITION posI = pINodeList->GetHeadPosition( );posI !=NULL;)
+	{
+		////
+		pDrNode = (CDrNode*)pINodeList->GetNextObject(posI);
+		////////////////////////////////// save curve
+		int index = (pDrNode->GetCurveList())->GetObjectIndex(pDrObject); // exists already?
+		if(index>=0)
+			continue;
+		/////////////
+		pDrNode->GetCurveList()->InsertObject(pDrObject);
+	}
+/*
+	////////////////////////////////////////// Reciprocate
+	pDrObject->SetpFromIDNode(m_pFromIDNode);	// NID_I
+	pDrObject->SetpToIDNode(m_pToIDNode);		// NID_J
+	/////////////////////////////
+	index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_pFromIDNode,1);
+	CDListMgr*  pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	pDrNode = (CDrNode*)(pDListMgr->GetObject(index));
+	pDrNode->GetCurveList()->InsertObject(pDrObject);
+	index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_pToIDNode,1);
+	pDrNode = (CDrNode*)(pDListMgr->GetObject(index));
+	pDrNode->GetCurveList()->InsertObject(pDrObject);
+*/
+	////////////////////////////////////////////////////////////// interpolation
+	pDrObject->SetInputType(m_nType);		// 3 = CircleBy2N_TI_RADIUS 
+	pDrObject->SetCircleType(m_nType);
+	//////////////////////////////////
+	pDrObject->SetData_S(nData-1);		// GIVEN: # of Data : Only 2 Nodes / Middle is CNode_TI
+	pDrObject->SetMaxINodes_S(nData);
+	///////////////////////////////////
+//	int nOrder = 3;// k = 3 for Circle
+	pDrObject->SetOrder_S(m_nOrder_S);				// k = 3 for Circle
+	pDrObject->SetCurveType_S(CP_CIRCLE);
+	pDrObject->SetSegAngle_S(m_SegAngle);
+	///////////////////////////////////////////////////////////////////
+	int nDim	= 4;			// Homogeneous(Rational)
+	pDrObject->SetnDim_S(nDim);
+	///////////////////////////////////////////////////////////// ReDistribute 
+	pDrObject->SetOutMethod_S(CO_HORNER);		// Output Method
+	/////////////////////////////////////
+	if(m_Ratio_S == 1.0)		
+		m_bUnifOT_S = TRUE;
+	else			
+		m_bUnifOT_S = FALSE;
+	//////////////////////	
+	pDrObject->SetRatio_S(m_Ratio_S);					
+	pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+	// find  and SetUp Angle, Radius & Normal
+	//////////////////////////////////////
+	CalcAdditionalInfoforCircle3(pDrObject, &m_dAng);
+	////////////////////////////////////// if Closed, set angle to 360
+	BOOL bClosed;
+	if(m_dAng<0.)
+		m_dAng = 0.;
+	if(m_dAng>360.)
+		m_dAng = 360.;
+	//////////////////////////////// Closed ?
+	if(m_dAng == 360)
+		bClosed = TRUE;
+	else
+		bClosed = FALSE;
+	//////////////////////
+	m_bClosed_S = bClosed;
+	//////////////////////
+	pDrObject->SetTheta_S(m_dAng);		
+	pDrObject->SetClosed_S(bClosed);
+	//////////////////////////////////////////////////// Finish it Up
+	if(SetAdditionalInfoForCircle(pDrObject)<0)
+		return -1;
+	//////////////////////////////////////
+	return 0;
+	
+}
+ 
+CDrCurve* CMI_GangC::CreateCircleBy_2N_CC(CString& Cid,CDrCurve* pCurve,CDListMgr* pNodeList,
+					 CURVEPROC kind,CList<int,int>* pElperSegList,CIRCLETYPE nType,
+					 double SegAngle,BOOL bFinal)
+{
+	///////////////////////////////////////////////
+	pCurve->GetElperSegList()->AddTail(pElperSegList);	// save for later editing etc
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMCurMgr	MDlgMgr;
+	CMCurMgr*	pMDlgMgr = &MDlgMgr;
+	////////////////////////////////////////////////////// Already in DataBase
+	m_pDrCurve 	= pCurve;
+	////////////////////////////////////////////// Fill Input Nodes (DONE IN SHOWCURVE)
+//	if(!(m_pDrCurve->GetINodeList()->IsEmpty())  )
+//		m_pDrCurve->GetINodeList()->RemoveHead();
+//	m_pDrCurve->GetINodeList()->AddTail(pNodeList);	// copy
+	/////////////////////////////////////////////// Fill EverythingElse
+	m_CurveID		= Cid;
+	m_CurveType_S	= kind;
+	m_nType			= nType;
+//	m_bClosed_S		= m_pDrCurve->IsClosed_S();
+	m_Ratio_S		= m_pDrCurve->GetRatio_S();
+	m_nMesh			= pElperSegList->GetHead();
+//	m_Radius_S		= dRadius;
+//	m_pFromIDNode		= pFromIDNode;
+//	m_pToIDNode		= pToIDNode;
+	m_SegAngle		= SegAngle;
+	/////////////////////////////////////////////// interpolate
+	if(m_CurveType_S == CP_CIRCLE)
+	{
+		/////////
+		m_nOrder_S = 3;
+		/////////////
+		if(SetInfoForCircleBy_2N_CC(m_pDrCurve)<0)
+			return (CDrCurve*)NULL;
+		/////////////
+		CMC_Circl McCircle;
+		////////////////////////////////////////////////////////// Go Interpolate
+		McCircle.GoDoIt(m_pDrCurve,bFinal);	//TRUE=FINAL
+		///////////////////////
+	}
+	////////////
+    return m_pDrCurve;
+}
+
+int CMI_GangC::SetInfoForCircleBy_2N_CC(CDrCurve* pDrObject)
+{
+	//////////////////////////////
+	// Content of INodeList:	//
+	//		1. NID_I	NODE	//
+	//		2. NID_CC	CNODE	//
+	//		3. NID_J	NODE	//
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr*	pINodeList	= pDrObject->GetINodeList();	// Tangent Intersection CNode
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+    int nData;  
+	CString Nid;
+	CDrNode* pDrNode;
+	////////////////////////////////////
+    pDrObject->SetObjectType((int)CURVE);
+    pDrObject->SetElemType((int)GENR_OBJECT);          	// globals
+    pDrObject->SetLevelType((int)LEVEL_UNCLE);          // globals
+    //////////////////////////////
+	pDrObject->SetnDim_S(4); //Rational for use in circle and later in Solid 
+    //////////////////////////////
+	pDrObject->SetObjectID(m_CurveID);	
+    ////////////////////////////////////////////////////////////////////	
+    nData = pINodeList->GetCount();
+	if(nData != 3)
+	{
+		AfxMessageBox("Error:\nCMI_GangC::SetInfoForCircleBy_2N_CC\nnData != 3");
+		return -1;
+	}
+	/////////////////
+	for (POSITION posI = pINodeList->GetHeadPosition( );posI !=NULL;)
+	{
+		////
+		pDrNode = (CDrNode*)pINodeList->GetNextObject(posI);
+		////////////////////////////////// save curve
+		int index = (pDrNode->GetCurveList())->GetObjectIndex(pDrObject); // exists already?
+		if(index>=0)
+			continue;
+		/////////////
+		pDrNode->GetCurveList()->InsertObject(pDrObject);
+	}
+	////////////////////////////////////////////////////////////// interpolation
+	pDrObject->SetInputType(m_nType);		// 4 = CircleBy2N_CC_RADIUS 
+	pDrObject->SetCircleType(m_nType);
+	//////////////////////////////////
+	pDrObject->SetData_S(nData-1);		// GIVEN: # of Data : Ist 2 only Nodes / Tail is CNode
+	pDrObject->SetMaxINodes_S(nData);
+	///////////////////////////////////
+//	int nOrder = 3;// k = 3 for Circle
+	pDrObject->SetOrder_S(m_nOrder_S);				// k = 3 for Circle
+	pDrObject->SetCurveType_S(CP_CIRCLE);
+	pDrObject->SetSegAngle_S(m_SegAngle);
+	///////////////////////////////////////////////////////////////////
+	int nDim	= 4;			// Homogeneous(Rational)
+	pDrObject->SetnDim_S(nDim);
+	///////////////////////////////////////////////////////////// ReDistribute 
+	pDrObject->SetOutMethod_S(CO_HORNER);		// Output Method
+	/////////////////////////////////////
+	if(m_Ratio_S == 1.0)		
+		m_bUnifOT_S = TRUE;
+	else			
+		m_bUnifOT_S = FALSE;
+	//////////////////////	
+	pDrObject->SetRatio_S(m_Ratio_S);					
+	pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+	// find  and SetUp Angle, Radius & Normal
+	//////////////////////////////////////
+	CalcAdditionalInfoforCircle4(pDrObject, &m_dAng);
+	////////////////////////////////////// if Closed, set angle to 360
+	BOOL bClosed;
+	if(m_dAng<0.)
+		m_dAng = 0.;
+	if(m_dAng>360.)
+		m_dAng = 360.;
+	//////////////////////////////// Closed ?
+	if(m_dAng == 360)
+		bClosed = TRUE;
+	else
+		bClosed = FALSE;
+	//////////////////////
+	m_bClosed_S = bClosed;
+	//////////////////////
+	pDrObject->SetTheta_S(m_dAng);		
+	pDrObject->SetClosed_S(bClosed);
+	//////////////////////////////////////////////////// Finish it Up
+	if(SetAdditionalInfoForCircle(pDrObject)<0)
+		return -1;
+	//////////////////////////////////////
+	return 0;
+	
+}
+ 
+CDrCurve* CMI_GangC::CreateCircleBy_2CN_TI_R(CString& Cid,CDrCurve* pCurve,CDListMgr* pNodeList,
+					 CURVEPROC kind,CList<int,int>* pElperSegList,CIRCLETYPE nType,
+					 double dRadius,double SegAngle,BOOL bFinal)
+{
+	///////////////////////////////////////////////
+	pCurve->GetElperSegList()->AddTail(pElperSegList);	// save for later editing etc
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMCurMgr	MDlgMgr;
+	CMCurMgr*	pMDlgMgr = &MDlgMgr;
+	////////////////////////////////////////////////////// Already in DataBase
+	m_pDrCurve 	= pCurve;
+	////////////////////////////////////////////// Fill Input Nodes (DONE IN SHOWCURVE)
+//	if(!(m_pDrCurve->GetINodeList()->IsEmpty())  )
+//		m_pDrCurve->GetINodeList()->RemoveHead();
+//	m_pDrCurve->GetINodeList()->AddTail(pNodeList);	// copy
+	/////////////////////////////////////////////// Fill EverythingElse
+	m_CurveID		= Cid;
+	m_CurveType_S	= kind;
+	m_nType			= nType;
+//	m_bClosed_S		= m_pDrCurve->IsClosed_S();
+	m_Ratio_S		= m_pDrCurve->GetRatio_S();
+	m_nMesh			= pElperSegList->GetHead();
+	m_Radius_S		= dRadius;
+//	m_pFromIDNode		= pFromIDNode;
+//	m_pToIDNode		= pToIDNode;
+	m_SegAngle		= SegAngle;
+	/////////////////////////////////////////////// interpolate
+	if(m_CurveType_S == CP_CIRCLE)
+	{
+		/////////
+		m_nOrder_S = 3;
+		/////////////
+		if(SetInfoForCircleBy_2CN_TI_R(m_pDrCurve)<0)
+			return (CDrCurve*)NULL;
+		/////////////
+		CMC_Circl McCircle;
+		////////////////////////////////////////////////////////// Go Interpolate
+		McCircle.GoDoIt(m_pDrCurve,bFinal);	//TRUE=FINAL
+		///////////////////////
+	}
+	////////////
+    return m_pDrCurve;
+}
+
+int CMI_GangC::SetInfoForCircleBy_2CN_TI_R(CDrCurve* pDrObject)
+{
+	//////////////////////////////
+	// Content of INodeList:	//
+	//		1. NID_I	NODE	//
+	//		2. NID_TI	CNODE	//
+	//		3. NID_J	NODE	//
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr*	pINodeList	= pDrObject->GetINodeList();	// Tangent Intersection CNode
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+    int nData;  
+	CString Nid;
+	CDrNode* pDrNode;
+	////////////////////////////////////
+    pDrObject->SetObjectType((int)CURVE);
+    pDrObject->SetElemType((int)GENR_OBJECT);          	// globals
+    pDrObject->SetLevelType((int)LEVEL_UNCLE);          // globals
+    //////////////////////////////
+	pDrObject->SetnDim_S(4); //Rational for use in circle and later in Solid 
+    //////////////////////////////
+	pDrObject->SetObjectID(m_CurveID);	
+    ////////////////////////////////////////////////////////////////////	
+    nData = pINodeList->GetCount();
+	if(nData != 3)
+	{
+		AfxMessageBox("Error:\nCMI_GangC::SetInfoForCircleBy_2N_TI\nnData != 3");
+		return -1;
+	}
+	/////////////////
+	for (POSITION posI = pINodeList->GetHeadPosition( );posI !=NULL;)
+	{
+		////
+		pDrNode = (CDrNode*)pINodeList->GetNextObject(posI);
+		////////////////////////////////// save curve
+		int index = (pDrNode->GetCurveList())->GetObjectIndex(pDrObject); // exists already?
+		if(index>=0)
+			continue;
+		/////////////
+		pDrNode->GetCurveList()->InsertObject(pDrObject);
+	}
+/*
+	////////////////////////////////////////// Reciprocate
+	pDrObject->SetpFromIDNode(m_pFromIDNode);	// NID_I
+	pDrObject->SetpToIDNode(m_pToIDNode);		// NID_J
+	/////////////////////////////
+	index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_pFromIDNode,1);
+	CDListMgr*  pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	pDrNode = (CDrNode*)(pDListMgr->GetObject(index));
+	pDrNode->GetCurveList()->InsertObject(pDrObject);
+	index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_pToIDNode,1);
+	pDrNode = (CDrNode*)(pDListMgr->GetObject(index));
+	pDrNode->GetCurveList()->InsertObject(pDrObject);
+*/
+	////////////////////////////////////////////////////////////// interpolation
+	pDrObject->SetInputType(m_nType);		// 3 = CircleBy2N_TI_RADIUS 
+	pDrObject->SetCircleType(m_nType);
+	//////////////////////////////////
+	pDrObject->SetData_S(nData);			// GIVEN: # of Data : // will be reset again later
+	pDrObject->SetMaxINodes_S(nData);
+	///////////////////////////////////
+//	int nOrder = 3;// k = 3 for Circle
+	pDrObject->SetOrder_S(m_nOrder_S);				// k = 3 for Circle
+	pDrObject->SetCurveType_S(CP_CIRCLE);
+	pDrObject->SetSegAngle_S(m_SegAngle);
+	///////////////////////////////////////////////////////////////////
+	int nDim	= 4;			// Homogeneous(Rational)
+	pDrObject->SetnDim_S(nDim);
+	///////////////////////////////////////////////////////////// ReDistribute 
+	pDrObject->SetOutMethod_S(CO_HORNER);		// Output Method
+	/////////////////////////////////////
+	if(m_Ratio_S == 1.0)		
+		m_bUnifOT_S = TRUE;
+	else			
+		m_bUnifOT_S = FALSE;
+	//////////////////////	
+	pDrObject->SetRatio_S(m_Ratio_S);					
+	pDrObject->SetUniform_S(m_bUnifOT_S);		// Output Distribution:
+	// find  and SetUp Angle, Radius & Normal
+	//////////////////////////////////////
+	CalcAdditionalInfoforCircle5(pDrObject, &m_dAng);
+	////////////////////////////////////// if Closed, set angle to 360
+	BOOL bClosed;
+	if(m_dAng<0.)
+		m_dAng = 0.;
+	if(m_dAng>360.)
+		m_dAng = 360.;
+	//////////////////////////////// Closed ?
+	if(m_dAng == 360)
+		bClosed = TRUE;
+	else
+		bClosed = FALSE;
+	//////////////////////
+	m_bClosed_S = bClosed;
+	//////////////////////
+	pDrObject->SetTheta_S(m_dAng);		
+	pDrObject->SetClosed_S(bClosed);
+	//////////////////////////////////////////////////// Finish it Up
+	if(SetAdditionalInfoForCircle(pDrObject)<0)
+		return -1;
+	//////////////////////////////////////
+	return 0;
+	
+}
+ 
+int CMI_GangC::CalcAdditionalInfoforCircle2(CDrCurve* pDrCurve, double* pTheta)
+{
+
+	CDListMgr* pINodeList	= pDrCurve->GetINodeList();
+	pWORLD pData	 		= NULL;
+	pWORLD pDat_Ex 			= NULL;
+    ///////////////////////////////////////////////////////// Memory
+	int nData = pDrCurve->GetMaxINodes_S(); 
+	pData 	= new WORLD[nData];
+	if(!pData)
+	{
+		AfxMessageBox("ERROR:Memory Failure!\nCMI_GangC::SetAdditionalInfo2");
+		return -1;
+	}
+	////////////////////////////////////////////// Set Data
+	if(SetUpINodes(pINodeList,pData,nData)<0)
+		return -1;
+	///////////////////////////////////////////////////////// Radius, Center and Normal
+	WORLD Center, Normal;
+	double Radius;
+	Calc_C_R_Normal(pData, &Center, &Radius, &Normal);
+	//////////////////////////////////////////// save
+	pDrCurve->SetCenter_S(Center);
+	pDrCurve->SetNormal_S(Normal);
+	pDrCurve->SetRadius_S(Radius);
+	////////////////////////////////////////////////////////// Central Angles
+	*pTheta = Calc_CentralAngles(pData,Center,Radius);
+	///////////////////////////////////////////////////////// # of Spline & Bezier Controls
+	return 0;
+}
+ 
+int CMI_GangC::CalcAdditionalInfoforCircle3(CDrCurve* pDrCurve, double* pTheta)
+{
+	//////////////////////////////
+	// Content of INodeList:	//
+	//		1. NID_I	NODE	//
+	//		2. NID_TI	CNODE	//
+	//		3. NID_J	NODE	//
+	///////////////////////////////////////
+	CDListMgr* pINodeList	= pDrCurve->GetINodeList();
+	pWORLD pData	 		= NULL;
+	pWORLD pDat_Ex 			= NULL;
+	CDrNode* pAddNode;
+	POSITION pos;
+    ///////////////////////////////////////////////////////// Memory
+	int nData = pDrCurve->GetMaxINodes_S(); 
+	pData 	= new WORLD[nData];
+	if(!pData)
+	{
+		AfxMessageBox("ERROR:Memory Failure!\nCMI_GangC::SetAdditionalInfo3");
+		return -1;
+	}
+	////////////////////////////////////////////// Set Data
+	if(SetUpINodes(pINodeList,pData,nData)<0)
+		return -1;
+	///////////////////////////////////////////////////////// Radius, Center and Normal
+	WORLD Center, Normal;
+	double Radius;
+	Calc_CRNPhifromTI(pData, &Center, &Radius, &Normal,pTheta);
+	//////////////////////////////////////////// save
+	pDrCurve->SetCenter_S(Center);
+	pDrCurve->SetNormal_S(Normal);
+	pDrCurve->SetRadius_S(Radius);
+	//////////////////////////////////////////// Save TI: Middle
+	pos			= pINodeList->FindIndex( 1 );
+	pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+	pDrCurve->SetCNode_TI(pAddNode);
+	pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+	//////////////////////////////////////////// Remove Middle: INodeList
+	pINodeList->RemoveAt(pos);
+	//////////////////////////////////////////// Set Data
+	pDrCurve->SetMaxINodes_S(pINodeList->GetCount()); 
+	pDrCurve->SetData_S(pINodeList->GetCount()); 
+	/////////
+	return 0;
+}
+ 
+int CMI_GangC::CalcAdditionalInfoforCircle4(CDrCurve* pDrCurve, double* pTheta)
+{
+	//////////////////////////////
+	// Content of INodeList:	//
+	//		1. NID_I	NODE	//
+	//		2. NID_CC	CNODE	//
+	//		3. NID_J	NODE	//
+	///////////////////////////////////////
+	CDListMgr* pINodeList	= pDrCurve->GetINodeList();
+	pWORLD pData	 		= NULL;
+	pWORLD pDat_Ex 			= NULL;
+	CDrNode* pAddNode;
+	POSITION pos;
+    ///////////////////////////////////////////////////////// Memory
+	int nData = pDrCurve->GetMaxINodes_S(); 
+	pData 	= new WORLD[nData];
+	if(!pData)
+	{
+		AfxMessageBox("ERROR:Memory Failure!\nCMI_GangC::SetAdditionalInfo4");
+		return -1;
+	}
+	////////////////////////////////////////////// Set Data
+	if(SetUpINodes(pINodeList,pData,nData)<0)
+		return -1;
+	///////////////////////////////////////////////////////// Radius, Center and Normal
+	WORLD Center, Normal;
+	double Radius;
+	Calc_CRNPhifromCC(pData, &Center, &Radius, &Normal,pTheta);
+	//////////////////////////////////////////// save
+	pDrCurve->SetCenter_S(Center);
+	pDrCurve->SetNormal_S(Normal);
+	pDrCurve->SetRadius_S(Radius);
+	//////////////////////////////////////////// Save CC: Middle
+	pos			= pINodeList->FindIndex( 1 );
+	pAddNode	= (CDrNode*)(pINodeList->GetAt(pos));
+	pDrCurve->SetCNode_CC(pAddNode);
+	pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+	//////////////////////////////////////////// Remove Middle: INodeList
+	pINodeList->RemoveAt(pos);
+	//////////////////////////////////////////// Set Data
+	pDrCurve->SetMaxINodes_S(pINodeList->GetCount()); 
+	pDrCurve->SetData_S(pINodeList->GetCount()); 
+	/////////
+	return 0;
+}
+ 
+int CMI_GangC::CalcAdditionalInfoforCircle5(CDrCurve* pDrCurve, double* pTheta)
+{
+	//////////////////////////////
+	// Content of INodeList:	//
+	//		1. CNID_A	CNODE	//
+	//		2. NID_TI	CNODE	//
+	//		3. CNID_B	CNODE	//
+	///////////////////////////////////////
+	CDListMgr* pINodeList	= pDrCurve->GetINodeList();
+	pWORLD pData	 		= NULL;
+	pWORLD pDat_Ex 			= NULL;
+	CDrNode* pAddNode;
+    ///////////////////////////////////////////////////////// Memory
+	int nData = pDrCurve->GetMaxINodes_S(); 
+	pData 	= new WORLD[nData];
+	if(!pData)
+	{
+		AfxMessageBox("ERROR:Memory Failure!\nCMI_GangC::SetAdditionalInfo3");
+		return -1;
+	}
+	////////////////////////////////////////////// Set Data
+	if(SetUpINodes(pINodeList,pData,nData)<0)
+		return -1;
+	///////////////////////////////////////////////////////// Radius, Center and Normal
+	WORLD Ni, Nj, Center, Normal;
+	Calc_NiNj_CRNPhi(pData, &Ni, &Nj, &Center, &Normal, pTheta);
+	//////////////////////////////////////////// save
+	pDrCurve->SetCenter_S(Center);
+	pDrCurve->SetNormal_S(Normal);
+	pDrCurve->SetRadius_S(m_Radius_S);
+	//////////////////////////////////////////// Save CN_A, TI & CN_B
+	pAddNode = (CDrNode*)(pINodeList->GetHead());
+	pDrCurve->SetCNode_CA(pAddNode);
+	pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+	//////////
+	POSITION pos = pINodeList->FindIndex( 1 );
+	pAddNode = (CDrNode*)(pINodeList->GetAt(pos));
+	pDrCurve->SetCNode_TI(pAddNode);
+	pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+	//////////
+	pAddNode = (CDrNode*)(pINodeList->GetTail());
+	pDrCurve->SetCNode_CB(pAddNode);
+	pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+	//////////////////////////////////////////// Empty INodeList
+	pINodeList->RemoveAll();
+	//////////////////////////////////////////// Create/Save Ni & Nj
+	// Create Nodes from Ni & Nj and store in:
+	//		INodeList of DrCurve
+    ////////////////////////////////////////////
+	CString		Nid,CurveID;
+	int			nChLen;
+	///////////////////////////////////////////// 
+	CurveID	= m_pDrCurve->GetObjectID();
+	///////////////////////////////////////////// Name
+	nChLen	= CurveID.GetLength();
+	if(nChLen>NUM_LEN-2)
+		nChLen = NUM_LEN-2;
+	/////////////////////////////////////////////////////////////// Ni	
+	Nid		= CurveID.Left(nChLen);
+	Nid		+= "_I"; 
+	///////////////////////////////////// in THE List 
+//092798	pAddNode = PostNode(Nid,Ni,FALSE,FALSE);	// Create DrNode
+	pAddNode = PostNode(Nid,LEVEL_GRAPA,Ni,FALSE);	// Create DrNode
+	if(!pAddNode)	// Create DrNode
+		return -1;
+	///////////////////////////////////// in Curve 	
+	pINodeList->InsertObject(pAddNode); //INodeList
+	//////////////////////////////////////// Reciprocate
+	pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+	/////////////////////////////////////////////////////////////// Nj	
+	Nid		= CurveID.Left(nChLen);
+	Nid		+= "_J"; 
+	///////////////////////////////////// in THE List 
+//092798	pAddNode = PostNode(Nid,Nj,FALSE,FALSE);	// Create DrNode
+	pAddNode = PostNode(Nid,LEVEL_GRAPA,Nj,FALSE);	// Create DrNode
+	if(!pAddNode)	// Create DrCNode
+		return -1;
+	///////////////////////////////////// in Curve 	
+	m_pDrCurve->GetINodeList()->InsertObject(pAddNode); //INodeList
+	//////////////////////////////////////// Reciprocate
+	pAddNode->GetCurveList()->InsertObject(m_pDrCurve);
+	////////////////////////////////////////////////////////////// Reset No. of Data
+	pDrCurve->SetMaxINodes_S(2); 
+	pDrCurve->SetData_S(2); 
+
+	return 0;
+}
+
+int CMI_GangC::Calc_C_R_Normal(pWORLD Data,pWORLD Center, pDOUBLE Radius, pWORLD Normal)
+{
+	// ALSO COMPUTES NORMAL to CIRCLE PLANE
+	///////////////
+	C3DMath	Math3D;
+	CXForm	XForm(TRUE);	// Parallel
+	///////////////////////////////////////
+	MATRIX Rot;
+	pMATRIX pRot = &Rot;  
+	Math3D.GetIdentityMATRIX(pRot);
+	//////////////////////////////////////// Translate Center & DOld to Origin
+	XForm.Translate(pRot, -Data[0].x, -Data[0].y, -Data[0].z, XF_REPLACE);	
+	////////////
+	WORLD a,b,c;
+	XForm.Transform(&Data[0], &a, pRot);
+	XForm.Transform(&Data[1], &b, pRot);
+	XForm.Transform(&Data[2], &c, pRot);
+	//////////////////////////////////////// midPts
+	WORLD mid1,mid2;
+	Math3D.Avg3DPts(&a, &b, &mid1);
+	Math3D.Avg3DPts(&b, &c, &mid2);
+	//////////////////////////////////////// Normal to plane of Circle
+	WORLD wN;
+	WORLD rab,rac;
+	Math3D.Sub3DPts(&b, &a, &rab);
+	Math3D.Sub3DPts(&c, &a, &rac);
+	Math3D.Cross3DPts(&rab,&rac,&wN);
+	///////////////////////////////// Save
+	Normal->x = wN.x;
+	Normal->y = wN.y;
+	Normal->z = wN.z;
+	//////////////////////// Normalize
+	Math3D.Normalize(Normal,Normal);
+	//////////////////////////////////////// Rotation Mat: wN->Z-axis/rab->Y-Axis
+	Math3D.GetIdentityMATRIX(pRot);
+	XForm.VRCtoWORLDRotationMATRIX(pRot,&wN,&rab);	
+	//////////////////////////////////////// Change Effectively to 2D
+	WORLD aBar,bBar,cBar,mid1Bar,mid2Bar;
+	XForm.Transform(&a, &aBar, pRot);
+	XForm.Transform(&b, &bBar, pRot);
+	XForm.Transform(&c, &cBar, pRot);
+	XForm.Transform(&mid1, &mid1Bar, pRot);
+	XForm.Transform(&mid2, &mid2Bar, pRot);
+	///////////////////////////////////////
+	WORLD Center2;
+	double m2Bar,b1Bar,b2Bar;
+//	m1Bar = 0;										// 2D slope of ab chord bisector 
+	if((cBar.y-bBar.y) == 0.)						// ab perpendicular to ac
+	{
+		Center2.x 	= mid2Bar.x;	 
+		Center2.y 	= mid1Bar.y;
+	}
+	else
+	{	 
+		b1Bar 		= mid1Bar.y;						// 2D intercept of ab chord bisector
+		m2Bar 		= (bBar.x-cBar.x)/(cBar.y-bBar.y);	// 2D Slope of bc chord bisector
+		b2Bar 		= mid2Bar.y - m2Bar*mid2Bar.x;		// 2D intercept of ab chord bisector
+		//////////////////////////////////////
+		Center2.y 	= b1Bar;
+		Center2.x 	= (Center2.y-b2Bar)/m2Bar;	 
+	}
+	/////////////////		 
+	Center2.z 	= 0.;
+	//////////////////////////////////////// Transform Center to 3D & Translate Back 
+	Math3D.TransposeMATRIX(pRot);
+	XForm.Transform(&Center2, Center, pRot);
+	///////////////////////////////
+	Math3D.GetIdentityMATRIX(pRot);
+	XForm.Translate(pRot, Data[0].x, Data[0].y, Data[0].z, XF_REPLACE);	
+	XForm.Transform(Center, &Center2, pRot);
+	Center->x = Center2.x;
+	Center->y = Center2.y;
+	Center->z = Center2.z;
+	//////////////////////////////////////// Radius
+	WORLD rVec;
+	Math3D.Sub3DPts(&Data[0], Center, &rVec);
+	*Radius = sqrt(rVec.x*rVec.x + rVec.y*rVec.y +rVec.z*rVec.z);
+	/////////
+	return 0;
+
+}
+
+int CMI_GangC::Calc_CRNPhifromTI(pWORLD Data,pWORLD Center, pDOUBLE Radius, pWORLD Normal,
+										pDOUBLE Phi)
+{
+	//////////////////////////////
+	// Content of Data:	//
+	//		1. NID_I	NODE	//
+	//		2. NID_TI	CNODE	//
+	//		3. NID_J	NODE	//
+	///////////////////////////////////////
+	// ALSO COMPUTES NORMAL to CIRCLE PLANE
+	///////////////
+	C3DMath	Math3D;
+	CXForm	XForm(TRUE);	// Parallel
+	////////////
+	WORLD a,b,c;
+	a = Data[0];	// NID_I
+	b = Data[1];	// NID_TI
+	c = Data[2];	// NID_J
+	//////////////////////////////////////// midPt. of NID_I & NID_J
+	WORLD mid;
+	Math3D.Avg3DPts(&a, &c, &mid);
+	//////////////////////////////////////// Normal to plane of Circle
+	WORLD wN;
+	WORLD rab,rac;
+	Math3D.Sub3DPts(&b, &a, &rab);
+	Math3D.Sub3DPts(&c, &a, &rac);
+	Math3D.Cross3DPts(&rab,&rac,&wN);
+	///////////////////////////////// Save
+	Normal->x = wN.x;
+	Normal->y = wN.y;
+	Normal->z = wN.z;
+	//////////////////////// Normalize
+	Math3D.Normalize(Normal,Normal);
+	/////////////////////////////////////// Radius & Central Angle 
+	WORLD raMid;
+	Math3D.Sub3DPts(&mid, &a, &raMid);
+	double dLenMid	= Math3D.Len3DPts(&raMid); 
+	double dLenA	= Math3D.Len3DPts(&rab); 
+	double phi = acos( dLenMid/dLenA ); 
+	/////////////////////////////// Radius
+	*Radius = dLenA/tan(phi);
+	/////////////////////////////// Central Angle 
+	double pi180 = 180./acos(-1.0);
+	*Phi = 2. * phi * pi180;
+	/////////////////////////////////////// Center
+	Math3D.Cross3DPts(&wN,&rab,Center);
+	Math3D.Normalize(Center,Center);
+	////////////////
+	Center->x = a.x + (*Radius) * Center->x;
+	Center->y = a.y + (*Radius) * Center->y;
+	Center->z = a.z + (*Radius) * Center->z;
+	/////////////////////////////////////// save
+	return 0;
+
+}
+
+int CMI_GangC::Calc_CRNPhifromCC(pWORLD Data,pWORLD Center, pDOUBLE Radius, pWORLD Normal,
+										pDOUBLE Phi)
+{
+	//////////////////////////////
+	// Content of Data:	//
+	//		1. NID_I	NODE	//
+	//		2. NID_CC	CNODE	//
+	//		3. NID_J	NODE	//
+	///////////////////////////////////////
+	// ALSO COMPUTES NORMAL to CIRCLE PLANE
+	///////////////
+	C3DMath	Math3D;
+	CXForm	XForm(TRUE);	// Parallel
+	////////////
+	WORLD a,b,c;
+	b = Data[0];	// NID_I
+	a = Data[1];	// NID_CC
+	c = Data[2];	// NID_J
+	//////////////////////////////////////// Normal to plane of Circle
+	WORLD wN;
+	WORLD rab,rac;
+	Math3D.Sub3DPts(&b, &a, &rab);
+	Math3D.Sub3DPts(&c, &a, &rac);
+	Math3D.Cross3DPts(&rab,&rac,&wN);
+	///////////////////////////////// Save
+	Normal->x = wN.x;
+	Normal->y = wN.y;
+	Normal->z = wN.z;
+	//////////////////////// Normalize
+	Math3D.Normalize(Normal,Normal);
+	/////////////////////////////////////// Radius & Central Angle 
+	/////////////////////////////// Radius
+	*Radius = Math3D.Len3DPts(&rab);
+	/////////////////////////////// Central Angle 
+	WORLD mid,ram;
+	Math3D.Avg3DPts(&b, &c, &mid);
+	Math3D.Sub3DPts(&mid, &a, &ram);
+	double ramLen	= Math3D.Len3DPts(&ram);
+	double phi		= acos(ramLen/(*Radius));
+	double pi180 = 180./acos(-1.0);
+	*Phi = 2. * phi * pi180;
+	/////////////////////////////////////// Center
+	*Center = a;
+	/////////////////////////////////////// save
+	return 0;
+
+}
+int CMI_GangC::Calc_NiNj_CRNPhi(pWORLD Data,pWORLD Ni, pWORLD Nj, pWORLD Center,
+										pWORLD Normal,	pDOUBLE Phi)
+{
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	CPrecision* pPrecision     	= (CPrecision*)pObjectMgr->GetSpecObject(PRECISION);
+	CMapFactor* pMapFactor     	= (CMapFactor*)pObjectMgr->GetSpecObject(MAPFACTOR); 
+	//////////////////////////////////////////////////// Update Current DrObject
+	long  lWorldBase  = pPrecision->GetWorldBase(); 
+    double dWorldBase = (double)lWorldBase;
+	double dMapFactor   = pMapFactor->GetMapFactor();
+	//////////////////////////////
+	// Content of Data:	//
+	//		1. CNID_A	CNODE	//
+	//		2. CNID_TI	CNODE	//
+	//		3. CNID_B	CNODE	//
+	///////////////////////////////////////
+	// ALSO COMPUTES NORMAL to CIRCLE PLANE
+	///////////////
+	C3DMath	Math3D;
+	CXForm	XForm(TRUE);	// Parallel
+	////////////
+	WORLD a,b,c;
+	a = Data[0];	// CNID_A
+	b = Data[1];	// CNID_TI
+	c = Data[2];	// CNID_B
+	//////////////////////////////////////// Change Radius from Physical->World
+	/////////////////////////////////////////// strip Scale Factor (World Coord)
+	pObjectMgr->SCtoDS(&m_Radius_S);
+    ////////////////////////////////
+	m_Radius_S *= (dWorldBase/dMapFactor);	
+	//////////////////////////////////////// midPt. of NID_I & NID_J
+	WORLD mid;
+	Math3D.Avg3DPts(&a, &c, &mid);
+	//////////////////////////////////////// Normal to plane of Circle
+	WORLD wN;
+	WORLD rba,rbc,biSector;
+	Math3D.Sub3DPts(&a, &b, &rba);
+	Math3D.Sub3DPts(&c, &b, &rbc);
+	Math3D.Cross3DPts(&rbc,&rba,&wN);
+	///////////////////////////////// Save
+	Normal->x = wN.x;
+	Normal->y = wN.y;
+	Normal->z = wN.z;
+	Math3D.Normalize(Normal,Normal);
+	/////////////////////////////////////// Central Angle 
+	Math3D.Sub3DPts(&rba, &rbc, &wN);
+	double LenA = Math3D.Len3DPts(&rba);
+	double LenB = Math3D.Len3DPts(&rbc);
+	double LenC = Math3D.Len3DPts(&wN);
+//	c^2 = a^2 + b^2 - 2 * a * b * cos(2*Si)
+	double Si = .5 * acos( (LenA*LenA+LenB*LenB-LenC*LenC)/(2*LenA*LenB) ); // Half Angle at TI(radian)	
+	/////////////////////////////// Central Angle 
+	double pi180 = 180./acos(-1.0);
+	double phi= 90. - Si * pi180;				// Degree
+	*Phi = 2. * phi;
+	/////////////////////////////////////// Center
+	Math3D.Normalize(&rba,&rba);
+	Math3D.Normalize(&rbc,&rbc);
+	Math3D.Avg3DPts(&rba, &rbc, &biSector);
+	Math3D.Normalize(&biSector,&biSector);
+	double dLenbCC	= m_Radius_S/sin( Si );
+	//////////////
+	Center->x = b.x + dLenbCC * biSector.x;
+	Center->y = b.y + dLenbCC * biSector.y;
+	Center->z = b.z + dLenbCC * biSector.z;
+	/////////////////////////////////////// Ni
+	double dLenab	= m_Radius_S/tan( Si );
+	/////////////
+	Ni->x = b.x + dLenab * rba.x;
+	Ni->y = b.y + dLenab * rba.y;
+	Ni->z = b.z + dLenab * rba.z;
+	/////////////////////////////////////// Nj
+	Nj->x = b.x + dLenab * rbc.x;
+	Nj->y = b.y + dLenab * rbc.y;
+	Nj->z = b.z + dLenab * rbc.z;
+	///////////
+	return 0;
+}
+
+double CMI_GangC::Calc_CentralAngles(pWORLD Data, WORLD Center, double Radius)
+{
+	// Compute Phi and Si in degrees: Should be called from Pre_Interpolate
+	///////////////
+	C3DMath	Math3D;
+	double pi180 = 180./acos(-1.0);
+	///////////////////////////////////////
+	WORLD rCenA,rCenB,rCenC;
+	Math3D.Sub3DPts(&Data[0], &Center, &rCenA);
+	Math3D.Sub3DPts(&Data[1], &Center, &rCenB);
+	Math3D.Sub3DPts(&Data[2], &Center, &rCenC);
+//	lCenC = Math3D.Len3DPts(&rCenC);
+	///////////////////////////////////////////
+	double Norm12	= Radius * Radius;
+	double cosPhi	= (Math3D.Dot3DPts(&rCenA,&rCenB))/Norm12;
+	double cosSi	= (Math3D.Dot3DPts(&rCenB,&rCenC))/Norm12;
+	////////////
+	cosPhi			= acos(cosPhi) * pi180;
+	cosSi			= acos(cosSi)  * pi180;
+	/////////////////
+	double theta 	= cosPhi + cosSi;
+	/////////
+	return theta;
+}
+//////////////////////////////////////////////////////////////////////////// Poting Helper
+void CMI_GangC::Serialize(CArchive& ar)
+{
+
+	CMI_GangN::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMI_GangC:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMI_GangC:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////////// end of Module //////////////////////		
+
+

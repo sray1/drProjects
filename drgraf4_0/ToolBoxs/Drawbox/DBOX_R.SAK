@@ -1,0 +1,147 @@
+# Microsoft Visual C++ generated build script - Do not modify
+
+PROJ = DBOX_R
+DEBUG = 0
+PROGTYPE = 1
+CALLER = 
+ARGS = 
+DLLS = 
+D_RCDEFINES = /d_DEBUG 
+R_RCDEFINES = /dNDEBUG 
+ORIGIN = MSVC
+ORIGIN_VER = 1.00
+PROJPATH = D:\DRGRAF\TOOLBOXS\DRAWBOX\
+USEMFC = 0
+CC = cl
+CPP = cl
+CXX = cl
+CCREATEPCHFLAG = 
+CPPCREATEPCHFLAG = /YcSTDAFX.H
+CUSEPCHFLAG = 
+CPPUSEPCHFLAG = /YuSTDAFX.H
+FIRSTC =             
+FIRSTCPP = COLORSQU.CPP
+RC = rc
+CFLAGS_D_WDLL = /nologo /G2 /W3 /Zi /ALw /Od /D "_DEBUG" /D "_AFXDLL" /GD /GEf /Fd"D_BOX.PDB" 
+CFLAGS_R_WDLL = /nologo /G2 /W4 /ALw /D "NDEBUG" /D "_AFXDLL" /GD /GEf 
+LFLAGS_D_WDLL = /NOLOGO /NOD /NOE /PACKC:61440 /ALIGN:16 /ONERROR:NOEXE /CO  
+LFLAGS_R_WDLL = /NOLOGO /NOD /NOE /PACKC:61440 /ALIGN:16 /ONERROR:NOEXE /MAP  
+LIBS_D_WDLL = MFC250D oldnames libw ldllcew commdlg.lib olecli.lib olesvr.lib shell.lib 
+LIBS_R_WDLL = MFC250 EBox_R oldnames libw ldllcew commdlg.lib olecli.lib olesvr.lib shell.lib 
+RCFLAGS = /nologo 
+RESFLAGS = /nologo 
+RUNFLAGS = 
+DEFFILE = DBOX_R.DEF
+OBJS_EXT = 
+LIBS_EXT = 
+!if "$(DEBUG)" == "1"
+CFLAGS = $(CFLAGS_D_WDLL)
+LFLAGS = $(LFLAGS_D_WDLL)
+LIBS = $(LIBS_D_WDLL)
+MAPFILE = nul
+RCDEFINES = $(D_RCDEFINES)
+!else
+CFLAGS = $(CFLAGS_R_WDLL)
+LFLAGS = $(LFLAGS_R_WDLL)
+LIBS = $(LIBS_R_WDLL)
+MAPFILE = nul
+RCDEFINES = $(R_RCDEFINES)
+!endif
+!if [if exist MSVC.BND del MSVC.BND]
+!endif
+SBRS = COLORSQU.SBR \
+		DBOXDLL.SBR \
+		DRAWBAR.SBR \
+		DRAWBOX.SBR
+
+
+COLORSQU_DEP = d:\drgraf\toolboxs\drawbox\inc\stdafx.h \
+	d:\drgraf\toolboxs\drawbox\inc\drawbox.h \
+	d:\drgraf\toolboxs\drawbox\inc\dboxbutt.h \
+	d:\drgraf\toolboxs\drawbox\inc\drawbar.h \
+	d:\drgraf\toolboxs\elembox\inc\palette.h \
+	d:\drgraf\toolboxs\drawbox\inc\colorsqu.h
+
+
+DBOXDLL_DEP = d:\drgraf\toolboxs\drawbox\inc\stdafx.h \
+	d:\drgraf\toolboxs\drawbox\inc\dbglobal.h \
+	d:\drgraf\toolboxs\drawbox\inc\dboxdll.h \
+	d:\drgraf\toolboxs\drawbox\inc\drawbox.h \
+	d:\drgraf\toolboxs\drawbox\inc\dboxbutt.h \
+	d:\drgraf\toolboxs\drawbox\inc\drawbar.h \
+	d:\drgraf\toolboxs\elembox\inc\palette.h \
+	d:\drgraf\toolboxs\drawbox\inc\colorsqu.h
+
+
+DRAWBAR_DEP = d:\drgraf\toolboxs\drawbox\inc\stdafx.h \
+	d:\drgraf\toolboxs\drawbox\inc\dboxbutt.h \
+	d:\drgraf\toolboxs\drawbox\inc\drawbox.h \
+	d:\drgraf\toolboxs\drawbox\inc\drawbar.h \
+	d:\drgraf\toolboxs\elembox\inc\palette.h \
+	d:\drgraf\toolboxs\drawbox\inc\colorsqu.h
+
+
+DRAWBOX_DEP = d:\drgraf\toolboxs\drawbox\inc\stdafx.h \
+	d:\drgraf\toolboxs\drawbox\inc\dboxbutt.h \
+	d:\drgraf\toolboxs\drawbox\inc\dbextern.h \
+	d:\drgraf\toolboxs\drawbox\inc\drawbox.h \
+	d:\drgraf\toolboxs\drawbox\inc\drawbar.h \
+	d:\drgraf\toolboxs\elembox\inc\palette.h \
+	d:\drgraf\toolboxs\drawbox\inc\colorsqu.h
+
+
+DBOX_RCDEP = d:\drgraf\toolboxs\drawbox\res\palette.bmp \
+	d:\drgraf\toolboxs\drawbox\res\button.cur
+
+
+all:	$(PROJ).DLL
+
+COLORSQU.OBJ:	COLORSQU.CPP $(COLORSQU_DEP)
+	$(CPP) $(CFLAGS) $(CPPCREATEPCHFLAG) /c COLORSQU.CPP
+
+DBOXDLL.OBJ:	DBOXDLL.CPP $(DBOXDLL_DEP)
+	$(CPP) $(CFLAGS) $(CPPUSEPCHFLAG) /c DBOXDLL.CPP
+
+DRAWBAR.OBJ:	DRAWBAR.CPP $(DRAWBAR_DEP)
+	$(CPP) $(CFLAGS) $(CPPUSEPCHFLAG) /c DRAWBAR.CPP
+
+DRAWBOX.OBJ:	DRAWBOX.CPP $(DRAWBOX_DEP)
+	$(CPP) $(CFLAGS) $(CPPUSEPCHFLAG) /c DRAWBOX.CPP
+
+DBOX.RES:	DBOX.RC $(DBOX_RCDEP)
+	$(RC) $(RCFLAGS) $(RCDEFINES) -r DBOX.RC
+
+
+$(PROJ).DLL::	DBOX.RES
+
+$(PROJ).DLL::	COLORSQU.OBJ DBOXDLL.OBJ DRAWBAR.OBJ DRAWBOX.OBJ $(OBJS_EXT) $(DEFFILE)
+	echo >NUL @<<$(PROJ).CRF
+COLORSQU.OBJ +
+DBOXDLL.OBJ +
+DRAWBAR.OBJ +
+DRAWBOX.OBJ +
+$(OBJS_EXT)
+$(PROJ).DLL
+$(MAPFILE)
+d:\msvc\lib\+
+d:\msvc\mfc\lib\+
+d:\c3d\+
+$(LIBS)
+$(DEFFILE);
+<<
+	link $(LFLAGS) @$(PROJ).CRF
+	$(RC) $(RESFLAGS) DBOX.RES $@
+	@copy $(PROJ).CRF MSVC.BND
+	implib /nowep $(PROJ).LIB $(PROJ).DLL
+
+$(PROJ).DLL::	DBOX.RES
+	if not exist MSVC.BND 	$(RC) $(RESFLAGS) DBOX.RES $@
+
+run: $(PROJ).DLL
+	$(PROJ) $(RUNFLAGS)
+
+
+$(PROJ).BSC: $(SBRS)
+	bscmake @<<
+/o$@ $(SBRS)
+<<

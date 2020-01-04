@@ -1,0 +1,38 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by MCurMgr.rc
+//
+#define HIDCANCEL                       0x81db0002
+#define HIDC_BEG                        0x81e501e8
+#define HIDC_CID                        0x80e401bc
+#define HIDC_CID_PROF                   0x806500ce
+#define HIDC_CNODE_FROM                 0x81db019d
+#define HIDC_CNODE_TO                   0x81db019e
+#define HIDC_COORD_INPUT                0x81db01df
+#define HIDC_DEFAULT_LMAT               0x80c700ef
+#define HIDC_ELEMS                      0x806803ec
+#define HIDC_ELOUT_UNIF                 0x81ea01eb
+#define HIDC_END                        0x81e501e6
+#define HIDC_NONU_OT                    0x81ea01ec
+#define HIDC_ORIENT                     0x80c700e9
+#define HIDC_RATIO                      0x806803ed
+#define HIDC_SEG_OT                     0x81e501e7
+#define HIDC_SPNID                      0x80e40169
+#define HIDC_STATIC                     0x81dbffff
+#define HIDC_STEP                       0x81d601d8
+#define HIDC_SYMM                       0x80e40168
+#define HIDC_TAN_X                      0x81db01dc
+#define HIDC_TAN_Y                      0x81db01dd
+#define HIDC_TAN_Z                      0x81db01de
+#define HIDC_UNIF_OT                    0x81ea01ed
+#define HIDC_UPDATE                     0x806803ee
+#define HIDC_VALUE                      0x81d601d9
+#define HIDC_XFORM                      0x80e40167
+#define HIDD_ADD                        0x81d6008d
+#define HIDD_CANCEL                     0x80680002
+#define HIDD_DEL                        0x81d6008e
+#define HIDD_EDIT                       0x81e50092
+#define HIDD_LATCHLIST                  0x80c700b8
+#define HIDD_LIST                       0x81d60090
+#define HIDD_POOLLIST                   0x80650091
+#define HIDD_SELECTLIST                 0x80c700b7
+#define HIDOK                           0x81db0001

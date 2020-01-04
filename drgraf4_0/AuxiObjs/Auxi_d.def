@@ -1,0 +1,32 @@
+; Auxi_D.def -- for CAuxiObj stuff --  DEBUG version
+
+LIBRARY	Auxi_D32
+DESCRIPTION  'AuxiObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitAuxiDLL												@2 NONAME
+	
+
+
+
+
+; CDrMat_0D
+	; Constructor and Destructor
+
+ 
+
+
+
+; CDrMat_1D
+	; Constructor and Destructor
+
+ 
+
+
+
+ 

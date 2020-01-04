@@ -1,0 +1,508 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Dr3d_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/Dr3d.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\DRAW3D\Dr3d.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP60E0.TMP" with contents
+[
+/nologo /MDd /W4 /GR /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Fp".\Debug/Dr3d_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\DRAW3D\3dmath.cpp"
+"C:\drgraf4_0\DRAW3D\Dr3ddll.cpp"
+"C:\drgraf4_0\DRAW3D\Dr3dmgr.cpp"
+"C:\drgraf4_0\DRAW3D\Drclip.cpp"
+"C:\drgraf4_0\DRAW3D\MsMath.cpp"
+"C:\drgraf4_0\DRAW3D\Xform.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP60E0.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP60E1.TMP" with contents
+[
+/nologo /version:32.1 /subsystem:windows /dll /incremental:no /pdb:".\Debug/Dr3d_d32.pdb" /map:".\Debug/Dr3d_d32.map" /debug /machine:IX86 /def:".\Dr3d_d.def" /out:"c:\drgraf4_0\applic\Debug\Dr3d_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Dr3d_d32.lib" 
+.\Debug\3dmath.obj
+.\Debug\Dr3ddll.obj
+.\Debug\Dr3dmgr.obj
+.\Debug\Drclip.obj
+.\Debug\MsMath.obj
+.\Debug\Xform.obj
+.\Debug\Dr3d.res
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP60E1.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+3dmath.cpp
+Dr3ddll.cpp
+c:\drgraf4_0\draw3d\3dmath.cpp(326) : warning C4701: local variable 'mt' may be used without having been initialized
+c:\drgraf4_0\draw3d\3dmath.cpp(340) : warning C4701: local variable 'mt' may be used without having been initialized
+c:\drgraf4_0\draw3d\3dmath.cpp(360) : warning C4701: local variable 'mt' may be used without having been initialized
+c:\drgraf4_0\draw3d\3dmath.cpp(528) : warning C4701: local variable 'imax' may be used without having been initialized
+c:\drgraf4_0\draw3d\3dmath.cpp(615) : warning C4706: assignment within conditional expression
+c:\drgraf4_0\draw3d\3dmath.cpp(620) : warning C4706: assignment within conditional expression
+c:\drgraf4_0\draw3d\3dmath.cpp(625) : warning C4706: assignment within conditional expression
+c:\drgraf4_0\draw3d\3dmath.cpp(700) : warning C4706: assignment within conditional expression
+c:\drgraf4_0\draw3d\3dmath.cpp(705) : warning C4706: assignment within conditional expression
+c:\drgraf4_0\draw3d\3dmath.cpp(710) : warning C4706: assignment within conditional expression
+c:\drgraf4_0\draw3d\3dmath.cpp(716) : warning C4706: assignment within conditional expression
+c:\drgraf4_0\draw3d\3dmath.cpp(721) : warning C4706: assignment within conditional expression
+c:\drgraf4_0\draw3d\3dmath.cpp(726) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\DRAW3D\Dr3ddll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Dr3dmgr.cpp
+Drclip.cpp
+MsMath.cpp
+C:\drgraf4_0\DRAW3D\MsMath.cpp(110) : warning C4552: '*' : operator has no effect; expected operator with side-effect
+C:\drgraf4_0\DRAW3D\MsMath.cpp(111) : warning C4552: '*' : operator has no effect; expected operator with side-effect
+C:\drgraf4_0\DRAW3D\MsMath.cpp(115) : warning C4552: '*' : operator has no effect; expected operator with side-effect
+C:\drgraf4_0\DRAW3D\MsMath.cpp(116) : warning C4552: '*' : operator has no effect; expected operator with side-effect
+Xform.cpp
+C:\drgraf4_0\DRAW3D\Xform.cpp(183) : warning C4100: 'mode' : unreferenced formal parameter
+C:\drgraf4_0\DRAW3D\Xform.cpp(183) : warning C4100: 'sz' : unreferenced formal parameter
+C:\drgraf4_0\DRAW3D\Xform.cpp(183) : warning C4100: 'sy' : unreferenced formal parameter
+C:\drgraf4_0\DRAW3D\Xform.cpp(183) : warning C4100: 'pM' : unreferenced formal parameter
+C:\drgraf4_0\DRAW3D\Xform.cpp(187) : warning C4100: 'mode' : unreferenced formal parameter
+C:\drgraf4_0\DRAW3D\Xform.cpp(187) : warning C4100: 'sz' : unreferenced formal parameter
+C:\drgraf4_0\DRAW3D\Xform.cpp(187) : warning C4100: 'sx' : unreferenced formal parameter
+C:\drgraf4_0\DRAW3D\Xform.cpp(187) : warning C4100: 'pM' : unreferenced formal parameter
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\Dr3d_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Dr3d_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Dr3dmgr.obj : warning LNK4197: export "?classCDr3DMgr@CDr3DMgr@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug\Dr3d_d32.lib and object c:\drgraf4_0\applic\Debug\Dr3d_d32.exp
+<h3>
+--------------------Configuration: Spec_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSP6133.TMP" with contents
+[
+/nologo /MDd /W4 /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/Spec_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\SPECIALS\Booleans.cpp"
+"C:\drgraf4_0\SPECIALS\Datawind.cpp"
+"C:\drgraf4_0\SPECIALS\Dlistmgr.cpp"
+"C:\drgraf4_0\SPECIALS\Drfont.cpp"
+"C:\drgraf4_0\SPECIALS\Drobject.cpp"
+"C:\drgraf4_0\SPECIALS\Drpen.cpp"
+"C:\drgraf4_0\SPECIALS\Hitnet.cpp"
+"C:\drgraf4_0\SPECIALS\Layer.cpp"
+"C:\drgraf4_0\SPECIALS\Mapfacto.cpp"
+"C:\drgraf4_0\SPECIALS\Matobj.cpp"
+"C:\drgraf4_0\SPECIALS\Obj3dmnu.cpp"
+"C:\drgraf4_0\SPECIALS\Patchmnu.cpp"
+"C:\drgraf4_0\SPECIALS\Precison.cpp"
+"C:\drgraf4_0\SPECIALS\Scalefac.cpp"
+"C:\drgraf4_0\SPECIALS\Specdll.cpp"
+"C:\drgraf4_0\SPECIALS\Unit.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP6133.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP6134.TMP" with contents
+[
+Dr3D_d32.lib /nologo /version:32.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/Spec_d32.pdb" /map:".\Debug/Spec_d32.map" /debug /machine:IX86 /def:".\Spec_d.def" /out:"c:\drgraf4_0\applic\Debug\Spec_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Spec_d32.lib" 
+.\Debug\Booleans.obj
+.\Debug\Datawind.obj
+.\Debug\Dlistmgr.obj
+.\Debug\Drfont.obj
+.\Debug\Drobject.obj
+.\Debug\Drpen.obj
+.\Debug\Hitnet.obj
+.\Debug\Layer.obj
+.\Debug\Mapfacto.obj
+.\Debug\Matobj.obj
+.\Debug\Obj3dmnu.obj
+.\Debug\Patchmnu.obj
+.\Debug\Precison.obj
+.\Debug\Scalefac.obj
+.\Debug\Specdll.obj
+.\Debug\Unit.obj
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP6134.TMP"
+<h3>Output Window</h3>
+Compiling...
+Booleans.cpp
+Datawind.cpp
+Dlistmgr.cpp
+C:\drgraf4_0\SPECIALS\Dlistmgr.cpp(71) : warning C4189: 'pObject' : local variable is initialized but not referenced
+Drfont.cpp
+C:\drgraf4_0\SPECIALS\Dlistmgr.cpp(91) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\SPECIALS\Dlistmgr.cpp(114) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\SPECIALS\Dlistmgr.cpp(136) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\SPECIALS\Dlistmgr.cpp(163) : warning C4701: local variable 'pObject' may be used without having been initialized
+Drobject.cpp
+Drpen.cpp
+Hitnet.cpp
+Layer.cpp
+Mapfacto.cpp
+Matobj.cpp
+Obj3dmnu.cpp
+Patchmnu.cpp
+Precison.cpp
+Scalefac.cpp
+Specdll.cpp
+C:\drgraf4_0\SPECIALS\Specdll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Unit.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\Spec_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Spec_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Drobject.obj : warning LNK4197: export "?classCDrObject@CDrObject@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug\Spec_d32.lib and object c:\drgraf4_0\applic\Debug\Spec_d32.exp
+<h3>
+--------------------Configuration: GenObjs - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSP61C2.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/GenObjs.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\GenObjs\Curve.cpp"
+"C:\drgraf4_0\GenObjs\Curve_1.cpp"
+"C:\drgraf4_0\GenObjs\Curve_2.cpp"
+"C:\drgraf4_0\GenObjs\Curve_3.cpp"
+"C:\drgraf4_0\GenObjs\Drcurve.cpp"
+"C:\drgraf4_0\GenObjs\Drnode.cpp"
+"C:\drgraf4_0\GenObjs\Drobj3d.cpp"
+"C:\drgraf4_0\GenObjs\Drpatch.cpp"
+"C:\drgraf4_0\GenObjs\Drprof_c.cpp"
+"C:\drgraf4_0\GenObjs\Drprof_P.cpp"
+"C:\drgraf4_0\GenObjs\Drsolid.cpp"
+"C:\drgraf4_0\GenObjs\OGen_dll.cpp"
+"C:\drgraf4_0\GenObjs\Pat_SubDiv4.cpp"
+"C:\drgraf4_0\GenObjs\Pat_Tan3.cpp"
+"C:\drgraf4_0\GenObjs\Pat_Tan4.cpp"
+"C:\drgraf4_0\GenObjs\Pat_Twist4.cpp"
+"C:\drgraf4_0\GenObjs\Pentahed.cpp"
+"C:\drgraf4_0\GenObjs\Rat_Twist4.cpp"
+"C:\drgraf4_0\GenObjs\Solid4.cpp"
+"C:\drgraf4_0\GenObjs\SolidHex.cpp"
+"C:\drgraf4_0\GenObjs\SolidPen.cpp"
+"C:\drgraf4_0\GenObjs\Surface3.cpp"
+"C:\drgraf4_0\GenObjs\Surface4.cpp"
+"C:\drgraf4_0\GenObjs\Triangle.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP61C2.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP61C3.TMP" with contents
+[
+Dr3D_D32.lib Spec_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/OGen_D32.pdb" /map:".\Debug/OGen_D32.map" /debug /machine:I386 /def:".\GenObj_d.def" /out:"c:\drgraf4_0\applic\Debug/OGen_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/OGen_D32.lib" 
+.\Debug\Curve.obj
+.\Debug\Curve_1.obj
+.\Debug\Curve_2.obj
+.\Debug\Curve_3.obj
+.\Debug\Drcurve.obj
+.\Debug\Drnode.obj
+.\Debug\Drobj3d.obj
+.\Debug\Drpatch.obj
+.\Debug\Drprof_c.obj
+.\Debug\Drprof_P.obj
+.\Debug\Drsolid.obj
+.\Debug\OGen_dll.obj
+.\Debug\Pat_SubDiv4.obj
+.\Debug\Pat_Tan3.obj
+.\Debug\Pat_Tan4.obj
+.\Debug\Pat_Twist4.obj
+.\Debug\Pentahed.obj
+.\Debug\Rat_Twist4.obj
+.\Debug\Solid4.obj
+.\Debug\SolidHex.obj
+.\Debug\SolidPen.obj
+.\Debug\Surface3.obj
+.\Debug\Surface4.obj
+.\Debug\Triangle.obj
+\drgraf4_0\applic\Debug\Dr3d_d32.lib
+\drgraf4_0\applic\Debug\Spec_d32.lib
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP61C3.TMP"
+<h3>Output Window</h3>
+Compiling...
+Curve.cpp
+c:\drgraf4_0\genobjs\curve.cpp(679) : warning C4100: 'pWts' : unreferenced formal parameter
+c:\drgraf4_0\genobjs\curve.cpp(679) : warning C4100: 'nC' : unreferenced formal parameter
+c:\drgraf4_0\genobjs\curve.cpp(683) : warning C4189: 'nOut' : local variable is initialized but not referenced
+Curve_1.cpp
+c:\drgraf4_0\genobjs\curve.cpp(71) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\Curve_1.cpp(73) : warning C4100: 'alfa' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(73) : warning C4100: 'tension' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(73) : warning C4100: 'bias' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(85) : warning C4100: 'blend' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(85) : warning C4100: 'knot' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(85) : warning C4100: 't' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(85) : warning C4100: 'i' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(494) : warning C4100: 'Num_t' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(664) : warning C4100: 'Dis_t' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(659) : warning C4100: 'nC' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(719) : warning C4100: 'Dis_t' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_1.cpp(714) : warning C4100: 'nC' : unreferenced formal parameter
+Curve_2.cpp
+C:\drgraf4_0\GenObjs\Curve_1.cpp(82) : warning C4700: local variable 'C' used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_1.cpp(648) : warning C4701: local variable 'nPtActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_1.cpp(698) : warning C4701: local variable 'tangent' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_2.cpp(69) : warning C4100: 'alfa' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(69) : warning C4100: 'tension' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(69) : warning C4100: 'bias' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(81) : warning C4100: 'blend' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(81) : warning C4100: 'knot' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(81) : warning C4100: 't' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(81) : warning C4100: 'i' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(492) : warning C4100: 'Num_t' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(663) : warning C4100: 'Dis_t' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_2.cpp(757) : warning C4100: 'Dis_t' : unreferenced formal parameter
+Curve_3.cpp
+C:\drgraf4_0\GenObjs\Curve_2.cpp(78) : warning C4700: local variable 'C' used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_2.cpp(647) : warning C4701: local variable 'nPtActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_2.cpp(740) : warning C4701: local variable 'pOCNs' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_2.cpp(741) : warning C4701: local variable 'pOWts' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_2.cpp(729) : warning C4701: local variable 'tangent' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_2.cpp(831) : warning C4701: local variable 'pOCNs' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_2.cpp(832) : warning C4701: local variable 'pOWts' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_3.cpp(621) : warning C4100: 'Num_t' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_3.cpp(792) : warning C4100: 'Dis_t' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_3.cpp(787) : warning C4100: 'nC' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_3.cpp(847) : warning C4100: 'Dis_t' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Curve_3.cpp(842) : warning C4100: 'nC' : unreferenced formal parameter
+Drcurve.cpp
+C:\drgraf4_0\GenObjs\Curve_3.cpp(144) : warning C4700: local variable 'C' used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_3.cpp(776) : warning C4701: local variable 'nPtActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Curve_3.cpp(826) : warning C4701: local variable 'tangent' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(833) : warning C4189: 'nResult' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Drcurve.cpp(853) : warning C4189: 'nResult' : local variable is initialized but not referenced
+Drnode.cpp
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1653) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1716) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1762) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1765) : warning C4701: local variable 'nOutActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1781) : warning C4700: local variable 'Curve' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1813) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1867) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1901) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(1910) : warning C4701: local variable 'nOutActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(2244) : warning C4700: local variable 'pCurve_1' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(2252) : warning C4700: local variable 'pCurve_2' used without having been initialized
+C:\drgraf4_0\GenObjs\Drcurve.cpp(2260) : warning C4700: local variable 'pCurve_3' used without having been initialized
+Drobj3d.cpp
+C:\drgraf4_0\GenObjs\Drnode.cpp(111) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drnode.cpp(132) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drnode.cpp(154) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drnode.cpp(188) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drnode.cpp(222) : warning C4701: local variable 'index' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drnode.cpp(552) : warning C4701: local variable 'pLMP' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drobj3d.cpp(267) : warning C4189: 'pPatch' : local variable is initialized but not referenced
+Drpatch.cpp
+C:\drgraf4_0\GenObjs\Drpatch.cpp(214) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\GenObjs\Drpatch.cpp(219) : warning C4390: ';' : empty controlled statement found; is this the intent?
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1089) : warning C4189: 'pNum_t_S' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Drpatch.cpp(2335) : warning C4189: 'nTriangle' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Drpatch.cpp(2675) : warning C4189: 'nPatTotal' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Drpatch.cpp(2673) : warning C4101: 'nOut_S' : unreferenced local variable
+C:\drgraf4_0\GenObjs\Drpatch.cpp(2673) : warning C4101: 'nOut_T' : unreferenced local variable
+C:\drgraf4_0\GenObjs\Drpatch.cpp(3226) : warning C4189: 'nOutRgn' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Drpatch.cpp(3541) : warning C4189: 'nTriangle' : local variable is initialized but not referenced
+Drprof_c.cpp
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1051) : warning C4700: local variable 'pSurface' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1115) : warning C4700: local variable 'pSurface' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1334) : warning C4700: local variable 'Pat_Tan3' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1357) : warning C4700: local variable 'Pat_Tan3' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1408) : warning C4700: local variable 'Pat_Tan4' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1451) : warning C4700: local variable 'Pat_Tan4' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1540) : warning C4700: local variable 'pSurface' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(1620) : warning C4701: local variable 'nOutActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(2678) : warning C4700: local variable 'pSurface' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(3235) : warning C4700: local variable 'i' used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(3372) : warning C4701: local variable 'nStart' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(3372) : warning C4701: local variable 'nStep' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(3460) : warning C4701: local variable 'nStart' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drpatch.cpp(3460) : warning C4701: local variable 'nStep' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Drprof_c.cpp(237) : warning C4189: 'pCurve' : local variable is initialized but not referenced
+Drprof_P.cpp
+C:\drgraf4_0\GenObjs\Drprof_P.cpp(233) : warning C4189: 'pPatch' : local variable is initialized but not referenced
+Drsolid.cpp
+C:\drgraf4_0\GenObjs\Drsolid.cpp(737) : warning C4189: 'nSolTotal' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Drsolid.cpp(1480) : warning C4189: 'nPenta' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Drsolid.cpp(1855) : warning C4189: 'nPenta' : local variable is initialized but not referenced
+OGen_dll.cpp
+C:\drgraf4_0\GenObjs\Drsolid.cpp(741) : warning C4700: local variable 'pSolid' used without having been initialized
+C:\drgraf4_0\GenObjs\Drsolid.cpp(766) : warning C4700: local variable 'pSolid' used without having been initialized
+C:\drgraf4_0\GenObjs\Drsolid.cpp(818) : warning C4700: local variable 'pSolid' used without having been initialized
+C:\drgraf4_0\GenObjs\Drsolid.cpp(928) : warning C4700: local variable 'pSolid' used without having been initialized
+C:\drgraf4_0\GenObjs\OGen_dll.cpp(37) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Pat_SubDiv4.cpp
+Pat_Tan3.cpp
+C:\drgraf4_0\GenObjs\Pat_SubDiv4.cpp(120) : warning C4701: local variable 'k' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_SubDiv4.cpp(229) : warning C4701: local variable 'k' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(172) : warning C4100: 'bClosed' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(369) : warning C4100: 'bClosed' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(535) : warning C4100: 'bClosed' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(581) : warning C4189: 'nOut' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(753) : warning C4100: 'bClosed' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(799) : warning C4189: 'nOut' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(1607) : warning C4100: 'nOut' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(1665) : warning C4100: 'nOut' : unreferenced formal parameter
+Pat_Tan4.cpp
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(738) : warning C4701: local variable 'OutTan' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(963) : warning C4701: local variable 'OutTanU' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(967) : warning C4701: local variable 'OutTanV' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(1357) : warning C4701: local variable 'k1' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(1639) : warning C4701: local variable 'nPtActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan3.cpp(1694) : warning C4701: local variable 'nPtActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan4.cpp(61) : warning C4100: 'bClosed_V' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Tan4.cpp(54) : warning C4100: 'bClosed_U' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Tan4.cpp(565) : warning C4100: 'pWts_UV' : unreferenced formal parameter
+Pat_Twist4.cpp
+C:\drgraf4_0\GenObjs\Pat_Tan4.cpp(666) : warning C4701: local variable 'k1' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan4.cpp(720) : warning C4701: local variable 'k1' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan4.cpp(774) : warning C4701: local variable 'k1' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Tan4.cpp(828) : warning C4701: local variable 'k1' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pat_Twist4.cpp(74) : warning C4100: 'bClosed_V' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Twist4.cpp(67) : warning C4100: 'bClosed_U' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pat_Twist4.cpp(281) : warning C4189: 'pTwist' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Pat_Twist4.cpp(283) : warning C4189: 'pNewW' : local variable is initialized but not referenced
+Pentahed.cpp
+C:\drgraf4_0\GenObjs\Pat_Twist4.cpp(669) : warning C4701: local variable 'k' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Pentahed.cpp(18) : warning C4100: 'nDeg' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pentahed.cpp(18) : warning C4100: 'k' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pentahed.cpp(18) : warning C4100: 'j' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pentahed.cpp(18) : warning C4100: 'i' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pentahed.cpp(25) : warning C4100: 'nDeg' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pentahed.cpp(25) : warning C4100: 'LIndex' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pentahed.cpp(25) : warning C4100: 'k' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pentahed.cpp(25) : warning C4100: 'j' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Pentahed.cpp(25) : warning C4100: 'i' : unreferenced formal parameter
+Rat_Twist4.cpp
+C:\drgraf4_0\GenObjs\Pentahed.cpp(22) : warning C4700: local variable 'Lindex' used without having been initialized
+C:\drgraf4_0\GenObjs\Rat_Twist4.cpp(59) : warning C4100: 'bClosed_V' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Rat_Twist4.cpp(52) : warning C4100: 'bClosed_U' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Rat_Twist4.cpp(194) : warning C4100: 'nDim_V' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Rat_Twist4.cpp(189) : warning C4100: 'nDim_U' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Rat_Twist4.cpp(215) : warning C4189: 'pTwist' : local variable is initialized but not referenced
+Solid4.cpp
+C:\drgraf4_0\GenObjs\Rat_Twist4.cpp(647) : warning C4701: local variable 'k' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Solid4.cpp(133) : warning C4100: 'pnOut_W' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Solid4.cpp(131) : warning C4100: 'nSegW' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Solid4.cpp(131) : warning C4100: 'kindW' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Solid4.cpp(184) : warning C4100: 'bClosed_W' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Solid4.cpp(175) : warning C4100: 'bClosed_V' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Solid4.cpp(166) : warning C4100: 'bClosed_U' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Solid4.cpp(242) : warning C4189: 'nEmitTot_UVW' : local variable is initialized but not referenced
+SolidHex.cpp
+C:\drgraf4_0\GenObjs\Solid4.cpp(143) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\Solid4.cpp(145) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\Solid4.cpp(147) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\Solid4.cpp(622) : warning C4701: local variable 'nPtActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\SolidHex.cpp(135) : warning C4100: 'pnOut_W' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\SolidHex.cpp(133) : warning C4100: 'nSegW' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\SolidHex.cpp(133) : warning C4100: 'kindW' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\SolidHex.cpp(186) : warning C4100: 'bClosed_W' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\SolidHex.cpp(177) : warning C4100: 'bClosed_V' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\SolidHex.cpp(168) : warning C4100: 'bClosed_U' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\SolidHex.cpp(246) : warning C4189: 'nEmitTot_UVW' : local variable is initialized but not referenced
+SolidPen.cpp
+C:\drgraf4_0\GenObjs\SolidHex.cpp(145) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\SolidHex.cpp(147) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\SolidHex.cpp(149) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\SolidHex.cpp(624) : warning C4701: local variable 'nPtActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\SolidPen.cpp(278) : warning C4100: 'bClosed' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\SolidPen.cpp(296) : warning C4189: 'pMCoef_2' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\SolidPen.cpp(297) : warning C4189: 'pMCoef_3' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\SolidPen.cpp(295) : warning C4189: 'pMCoef_1' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\SolidPen.cpp(332) : warning C4189: 'nOut' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\SolidPen.cpp(327) : warning C4189: 'nPentaH' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\SolidPen.cpp(625) : warning C4100: 'nOut' : unreferenced formal parameter
+Surface3.cpp
+C:\drgraf4_0\GenObjs\SolidPen.cpp(248) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\SolidPen.cpp(250) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\SolidPen.cpp(479) : warning C4700: local variable 'pSurface4' used without having been initialized
+C:\drgraf4_0\GenObjs\Surface3.cpp(167) : warning C4100: 'bClosed' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface3.cpp(209) : warning C4189: 'nTriangle' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Surface3.cpp(218) : warning C4189: 'nType' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Surface3.cpp(262) : warning C4100: 'nDim' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface3.cpp(314) : warning C4100: 'bClosed' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface3.cpp(364) : warning C4189: 'p' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Surface3.cpp(360) : warning C4189: 'nOut' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Surface3.cpp(365) : warning C4189: 'pW' : local variable is initialized but not referenced
+C:\drgraf4_0\GenObjs\Surface3.cpp(428) : warning C4100: 'nDim' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface3.cpp(638) : warning C4100: 'nOut' : unreferenced formal parameter
+Surface4.cpp
+C:\drgraf4_0\GenObjs\Surface3.cpp(520) : warning C4701: local variable 'WtOut' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Surface3.cpp(517) : warning C4701: local variable 'Out' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Surface4.cpp(399) : warning C4100: 'bias' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(496) : warning C4100: 'nDegree' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(496) : warning C4100: 'pMCoef_3' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(496) : warning C4100: 'pMCoef_2' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(496) : warning C4100: 'pMCoef_1' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(495) : warning C4100: 'kind' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(534) : warning C4100: 'bClosed_V' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(526) : warning C4100: 'bClosed_U' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(868) : warning C4101: 'k' : unreferenced local variable
+C:\drgraf4_0\GenObjs\Surface4.cpp(1229) : warning C4100: 'bClosed_V' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Surface4.cpp(1222) : warning C4100: 'bClosed_U' : unreferenced formal parameter
+Triangle.cpp
+C:\drgraf4_0\GenObjs\Surface4.cpp(141) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\Surface4.cpp(143) : warning C4706: assignment within conditional expression
+C:\drgraf4_0\GenObjs\Surface4.cpp(1062) : warning C4700: local variable 'pCurve_1' used without having been initialized
+C:\drgraf4_0\GenObjs\Surface4.cpp(1066) : warning C4700: local variable 'pCurve_2' used without having been initialized
+C:\drgraf4_0\GenObjs\Surface4.cpp(1070) : warning C4700: local variable 'pCurve_3' used without having been initialized
+C:\drgraf4_0\GenObjs\Surface4.cpp(1115) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Surface4.cpp(1125) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Surface4.cpp(1135) : warning C4700: local variable 'pCurve' used without having been initialized
+C:\drgraf4_0\GenObjs\Surface4.cpp(1209) : warning C4701: local variable 'nPtActual' may be used without having been initialized
+C:\drgraf4_0\GenObjs\Triangle.cpp(19) : warning C4100: 'nDeg' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Triangle.cpp(19) : warning C4100: 'k' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Triangle.cpp(19) : warning C4100: 'j' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Triangle.cpp(19) : warning C4100: 'i' : unreferenced formal parameter
+C:\drgraf4_0\GenObjs\Triangle.cpp(23) : warning C4700: local variable 'Lindex' used without having been initialized
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\GenObj_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\GenObj_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Drcurve.obj : warning LNK4197: export "?classCDrCurve@CDrCurve@@2UCRuntimeClass@@A" specified multiple times; using first specification
+Drnode.obj : warning LNK4197: export "?classCDrNode@CDrNode@@2UCRuntimeClass@@A" specified multiple times; using first specification
+Drobj3d.obj : warning LNK4197: export "?classCDrObj3D@CDrObj3D@@2UCRuntimeClass@@A" specified multiple times; using first specification
+Drpatch.obj : warning LNK4197: export "?classCDrPatch@CDrPatch@@2UCRuntimeClass@@A" specified multiple times; using first specification
+Drprof_c.obj : warning LNK4197: export "?classCDrProf_C@CDrProf_C@@2UCRuntimeClass@@A" specified multiple times; using first specification
+Drprof_P.obj : warning LNK4197: export "?classCDrProf_P@CDrProf_P@@2UCRuntimeClass@@A" specified multiple times; using first specification
+Drsolid.obj : warning LNK4197: export "?classCDrSolid@CDrSolid@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/OGen_D32.lib and object c:\drgraf4_0\applic\Debug/OGen_D32.exp
+<h3>
+--------------------Configuration: Draw_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSP62C3.TMP" with contents
+[
+/nologo /MDd /W4 /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/Draw_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\DRAWOBJS\Drawdll.cpp"
+"C:\drgraf4_0\DRAWOBJS\Drfrehnd.cpp"
+"C:\drgraf4_0\DRAWOBJS\Drgrid.cpp"
+"C:\drgraf4_0\DRAWOBJS\Drlabel.cpp"
+"C:\drgraf4_0\DRAWOBJS\Drprism.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP62C3.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP62C4.TMP" with contents
+[
+Dr3D_D32.lib Spec_D32.lib OGen_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/Draw_d32.pdb" /map:".\Debug/Draw_d32.map" /debug /machine:IX86 /def:".\Draw_d.def" /out:"c:\drgraf4_0\applic\Debug\Draw_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Draw_d32.lib" 
+.\Debug\Drawdll.obj
+.\Debug\Drfrehnd.obj
+.\Debug\Drgrid.obj
+.\Debug\Drlabel.obj
+.\Debug\Drprism.obj
+\drgraf4_0\applic\Debug\Dr3d_d32.lib
+\drgraf4_0\applic\Debug\OGen_D32.lib
+\drgraf4_0\applic\Debug\Spec_d32.lib
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP62C4.TMP"
+<h3>Output Window</h3>
+Compiling...
+Drawdll.cpp
+c:\drgraf4_0\drawobjs\drawdll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Drfrehnd.cpp
+Drgrid.cpp
+C:\drgraf4_0\DRAWOBJS\Drgrid.cpp(15) : fatal error C1083: Cannot open include file: 'drNode.h': No such file or directory
+Drlabel.cpp
+c:\drgraf4_0\drawobjs\drlabel.h(12) : fatal error C1083: Cannot open include file: 'DrNode.h': No such file or directory
+Drprism.cpp
+Error executing cl.exe.
+
+
+
+<h3>Results</h3>
+StaL_D32.dll - 2 error(s), 262 warning(s)
+</pre>
+</body>
+</html>

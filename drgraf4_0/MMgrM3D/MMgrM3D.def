@@ -1,0 +1,21 @@
+; MO3DMgr_D.def -- DEBUG version
+
+LIBRARY	MO3D_D32
+DESCRIPTION  'MO3DMgr Debug DLL' 
+
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMO3DDLL											@2 NONAME
+
+
+;CMI_OSPN
+
+??0CMI_OSPN@@QAE@XZ
+??1CMI_OSPN@@UAE@XZ
+
+?classCMI_OSPN@CMI_OSPN@@2UCRuntimeClass@@A

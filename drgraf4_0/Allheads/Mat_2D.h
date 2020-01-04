@@ -1,0 +1,47 @@
+#ifndef	_MAT_2D_H_
+#define	_MAT_2D_H_
+
+
+//#undef AFX_DATA
+//#define AFX_DATA AFX_EXT_DATA
+
+
+#include "Mat_1D.h"
+/////////////////////////////////////////////////////////////////////////////
+// CMat_2D		// Also Used For ELBOW
+/////////////////////////////////////////////////////////////////////////////
+class AFX_EXT_CLASS CMat_2D : public CMat_1D
+{
+// Construction
+public:  
+	CMat_2D();
+//////////////////////////////////////
+	DECLARE_DYNAMIC(CMat_2D)
+//////////////////////////////////////
+public:
+
+
+	////////////////////////////////////////////////
+//	double		GetE(){return m_E;};
+//	void 		SetE(double d){m_E = d;};
+	/////
+
+	
+protected:
+
+
+	//////////////////////
+//	double		m_E;			// Modulus of Elasticity
+	//////////////////////////////////////
+//	CString		m_ScheduleID;	// To get into Table below
+//	CList		m_Table;		// Data Table 		
+
+	
+public:
+	virtual ~CMat_2D(){};
+};
+
+//#undef AFX_DATA
+//#define AFX_DATA
+//////////////////////////////////////
+#endif	// _Pro_PIPE_H_

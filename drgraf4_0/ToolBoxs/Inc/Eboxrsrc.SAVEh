@@ -1,0 +1,140 @@
+//{{NO_DEPENDENCIES}}
+// App Studio generated include file.
+// Used by EBOX.RC
+//
+#define IDS_CHECK_RESOURCE              1
+#define IDB_PBOX                        110
+#define IDB_CBOX                        111
+#define IDB_SBOX                        113
+#define IDB_EL_SUPPORT                  205
+#define IDB_EBOX                        210
+#define IDC_BUTTON                      211
+#define IDW_ELEMBAR                     212
+#define IDW_ELEMBOX                     213
+#define IDW_SOLIDBAR                    214
+#define IDW_PATCHBAR                    215
+#define IDW_CURVEBAR                    216
+#define IDW_CNTLBAR                     217
+#define IDW_SUPPBAR	                    218
+#define IDW_NODEBAR	                    219
+#define IDB_SUP_ROT_SPRING              302
+#define IDB_SUP_FIXED_SUPPORT           303
+#define IDB_SUP_TRAN_SNUBBER            304
+#define IDB_SUP_ROT_SNUBBER             305
+#define IDB_SUP_ANCHOR                  306
+#define IDB_SUP_ROLLER                  307
+#define IDB_SUP_TRAN_SPRING             321
+#define IDS_NODE                        501
+#define IDS_PIPE                        502
+#define IDS_ELBOW                       503
+#define IDS_BEAM                        504
+#define IDS_SUPPORT                     505
+#define IDS_TRUSS                       506
+#define IDS_PLANE                       507
+#define IDS_PLATE                       508
+#define IDS_SHELL                       509
+////////////////////////////////////////////
+//  Matches w/ Elglobal.h defn.
+//  DONOT CHANGE SEPARATELY
+///////////////////////////////////////////
+#define IDB_NSUP_RIGID		            1126
+#define IDB_NSUP_LINSPRING              1127
+#define IDB_NSUP_LINSNUBBER             1128
+#define IDB_NSUP_NLSPRING	            1129
+#define IDB_NSUP_NLSNUBBER              1130
+///////////////////////////////////////////
+#define IDB_CSUP_RIGID		            1131
+#define IDB_CSUP_LINSPRING              1132
+#define IDB_CSUP_LINSNUBBER             1133
+#define IDB_CSUP_NLSPRING	            1134
+#define IDB_CSUP_NLSNUBBER              1135
+///////////////////////////////////////////
+#define IDB_PSUP_RIGID		            1136
+#define IDB_PSUP_LINSPRING              1137
+#define IDB_PSUP_LINSNUBBER             1138
+#define IDB_PSUP_NLSPRING	            1139
+#define IDB_PSUP_NLSNUBBER              1140
+///////////////////////////////////////////
+#define IDB_SSUP_RIGID		            1141
+#define IDB_SSUP_LINSPRING              1142
+#define IDB_SSUP_LINSNUBBER             1143
+#define IDB_SSUP_NLSPRING	            1144
+#define IDB_SSUP_NLSNUBBER              1145
+////////////////////////////////////////////
+#define IDB_NODE                        1001
+#define IDB_PIPE                        1002
+#define IDB_ELBOW                       1003
+#define IDB_BEAM                        1004
+////////////////////////////////////////////
+#define IDB_SUPPORT                     1005
+#define IDB_TRUSS                       1008
+#define IDB_PLANE                       1009
+#define IDB_PLATE                       1010
+#define IDB_SHELL                       1011
+#define IDB_BRICK                       1012
+////////////////////////////////////////////
+#define IDB_OBJ3D                       1052
+#define IDB_PATCH                       1012
+#define IDB_MESH                        1013
+#define IDB_ROTATE                      1014
+#define IDB_LOFT                        1015
+#define IDB_EXTRUDE                     1016
+#define IDB_DUCT                        1017
+#define IDB_SWEEP                       1018
+#define IDB_FLATPLATE                   1020
+#define IDB_P_EDIT						1021
+#define IDB_P_MOVE						1022
+#define IDB_SWEEP                       1018
+#define IDB_SOLID                       1040
+#define IDB_MESH_S                      1041
+#define IDB_ROTATE_S                    1042
+#define IDB_LOFT_S                      1043
+#define IDB_EXTRUDE_S                   1044
+#define IDB_DUCT_S                      1045
+#define IDB_SWEEP_S                     1046
+#define IDB_FLATPLATE                   1020
+#define IDB_S_EDIT                      1049
+#define IDB_S_MOVE                      1050
+#define IDB_P_EDIT                      1021
+#define IDB_P_MOVE                      1022
+////////////////////////////////////////// Element Tools:Edit & Move
+#define IDB_EDIT						1023
+#define IDB_MOVE						1024 
+////////////////////////////////////////////
+#define IDB_CURVE						1025	
+#define IDB_C_CIRCLE					1026
+#define IDB_C_ELLIPSE 					1027
+#define IDB_C_PARABOLA 					1028
+#define IDB_C_LINEAR 					1029
+#define IDB_C_QUADRATIC					1030
+#define IDB_C_HERMITE 					1031
+#define IDB_C_BEZIER 					1032
+#define IDB_C_BSPLINE 					1033
+#define IDB_C_EDIT  					1034
+#define IDB_C_MOVE 						1035
+#define IDB_CNODE                       1036
+#define IDB_P_POST                      1037
+#define IDB_C_POST                      1038
+#define IDB_POST                        1039
+#define IDB_S_POST                      1051
+#define IDB_P_UNPOST                    1053
+#define IDB_S_UNPOST                    1054
+#define IDB_UNPOST                      1055
+#define IDB_C_UNPOST                    1056
+#define IDB_C_NURB	 					1060
+#define IDB_C_DELETE					1061
+#define IDB_C_STITCH            		1077
+#define IDB_C_SPAWN            			1078
+
+
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+
+#define _APS_NEXT_RESOURCE_VALUE        111
+#define _APS_NEXT_COMMAND_VALUE         32771
+#define _APS_NEXT_CONTROL_VALUE         1000
+#define _APS_NEXT_SYMED_VALUE           133
+#endif
+#endif

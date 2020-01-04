@@ -1,0 +1,1481 @@
+ Sdlg_d32
+
+ Timestamp is 444d7d33 (Mon Apr 24 18:36:51 2006)
+
+ Preferred load address is 10000000
+
+ Start         Length     Name                   Class
+ 0001:00000000 00010b0aH .text                   CODE
+ 0001:00010b10 000019e7H .text$x                 CODE
+ 0001:000124f7 0001f909H .textbss                CODE
+ 0002:00000000 000028b0H .rdata                  DATA
+ 0002:000028b0 00000cf0H .xdata$x                DATA
+ 0002:000035a0 00009c8aH .edata                  DATA
+ 0003:00000000 00000104H .CRT$XCA                DATA
+ 0003:00000104 00000104H .CRT$XCU                DATA
+ 0003:00000208 00000104H .CRT$XCZ                DATA
+ 0003:0000030c 00000104H .CRT$XIA                DATA
+ 0003:00000410 00000104H .CRT$XIZ                DATA
+ 0003:00000520 0000036bH .data                   DATA
+ 0003:00000890 0000006cH .bss                    DATA
+ 0004:00000000 00000078H .idata$2                DATA
+ 0004:00000078 00000014H .idata$3                DATA
+ 0004:0000008c 00000698H .idata$4                DATA
+ 0004:00000724 00000698H .idata$5                DATA
+ 0004:00000dbc 00001f46H .idata$6                DATA
+ 0005:00000000 000005f3H .rsrc$01                DATA
+ 0005:00000600 0000476cH .rsrc$02                DATA
+
+  Address         Publics by Value              Rva+Base     Lib:Object
+
+ 0001:00001d30       ?Set3DPts@C3DMath@@QAEXPAULPOINT3@@JJJ@Z 10002d30 f i Dlg_HNet.obj
+ 0001:00001d70       ?Set3DPts@C3DMath@@QAEXPAUWORLD@@NNN@Z 10002d70 f i Dlg_HNet.obj
+ 0001:00001dd0       ?Len3DPts@C3DMath@@QAENPAUWORLD@@@Z 10002dd0 f i Dlg_HNet.obj
+ 0001:00001e30       ??1C3DMath@@UAE@XZ         10002e30 f i Dlg_HNet.obj
+ 0001:00001e60       ??_GC3DMath@@UAEPAXI@Z     10002e60 f i Dlg_HNet.obj
+ 0001:00001ea0       ??_EC3DMath@@UAEPAXI@Z     10002ea0 f i Dlg_HNet.obj
+ 0001:00001f40       ?GetMatrix@CMatObj@@UAEPAUMATRIX@@XZ 10002f40 f i Dlg_HNet.obj
+ 0001:00001f60       ?SetMatrix@CMatObj@@UAEXPAUMATRIX@@@Z 10002f60 f i Dlg_HNet.obj
+ 0001:00001ff0       ?GetCurveLatch@CMatObj@@UAE?AW4CURVELATCH@@XZ 10002ff0 f i Dlg_HNet.obj
+ 0001:00002010       ?SetCurveLatch@CMatObj@@UAEXW4CURVELATCH@@@Z 10003010 f i Dlg_HNet.obj
+ 0001:00002040       ?IsInstanced_Prof@CMatObj@@UAEHXZ 10003040 f i Dlg_HNet.obj
+ 0001:00002060       ?SetInstanced_Prof@CMatObj@@UAEXH@Z 10003060 f i Dlg_HNet.obj
+ 0001:00002090       ?GetFromID@CMatObj@@UAE?AVCString@@XZ 10003090 f i Dlg_HNet.obj
+ 0001:000020e0       ?SetFromID@CMatObj@@UAEXVCString@@@Z 100030e0 f i Dlg_HNet.obj
+ 0001:00002160       ?GetFromPt@CMatObj@@UAE?AUWORLD@@XZ 10003160 f i Dlg_HNet.obj
+ 0001:000021a0       ?SetFromPt@CMatObj@@UAEXUWORLD@@@Z 100031a0 f i Dlg_HNet.obj
+ 0001:000021e0       ?GetToID@CMatObj@@UAE?AVCString@@XZ 100031e0 f i Dlg_HNet.obj
+ 0001:00002230       ?SetToID@CMatObj@@UAEXVCString@@@Z 10003230 f i Dlg_HNet.obj
+ 0001:000022b0       ?GetToPt@CMatObj@@UAE?AUWORLD@@XZ 100032b0 f i Dlg_HNet.obj
+ 0001:000022f0       ?SetToPt@CMatObj@@UAEXUWORLD@@@Z 100032f0 f i Dlg_HNet.obj
+ 0001:00002330       ?GetRotPtID@CMatObj@@UAE?AVCString@@XZ 10003330 f i Dlg_HNet.obj
+ 0001:00002380       ?SetRotPtID@CMatObj@@UAEXVCString@@@Z 10003380 f i Dlg_HNet.obj
+ 0001:00002400       ?GetRotPt@CMatObj@@UAE?AUWORLD@@XZ 10003400 f i Dlg_HNet.obj
+ 0001:00002440       ?SetRotPt@CMatObj@@UAEXUWORLD@@@Z 10003440 f i Dlg_HNet.obj
+ 0001:00002480       ?IsCoordIn@CMatObj@@UAEHXZ 10003480 f i Dlg_HNet.obj
+ 0001:000024b0       ?SetCoordIn@CMatObj@@UAEXH@Z 100034b0 f i Dlg_HNet.obj
+ 0001:000024e0       ?GetTranPtID@CMatObj@@UAE?AVCString@@XZ 100034e0 f i Dlg_HNet.obj
+ 0001:00002530       ?SetTranPtID@CMatObj@@UAEXVCString@@@Z 10003530 f i Dlg_HNet.obj
+ 0001:000025b0       ?GetTranslation@CMatObj@@UAE?AUWORLD@@XZ 100035b0 f i Dlg_HNet.obj
+ 0001:000025f0       ?SetTranslation@CMatObj@@UAEXUWORLD@@@Z 100035f0 f i Dlg_HNet.obj
+ 0001:00002630       ?IsAngleIn@CMatObj@@UAEHXZ 10003630 f i Dlg_HNet.obj
+ 0001:00002660       ?SetAngleIn@CMatObj@@UAEXH@Z 10003660 f i Dlg_HNet.obj
+ 0001:00002690       ?IsDirCos@CMatObj@@UAEHXZ  10003690 f i Dlg_HNet.obj
+ 0001:000026c0       ?SetDirCos@CMatObj@@UAEXH@Z 100036c0 f i Dlg_HNet.obj
+ 0001:000026f0       ?GetDirCosDirect@CMatObj@@UAE?AUWORLD@@XZ 100036f0 f i Dlg_HNet.obj
+ 0001:00002730       ?SetDirCosDirect@CMatObj@@UAEXUWORLD@@@Z 10003730 f i Dlg_HNet.obj
+ 0001:00002770       ?GetRotation@CMatObj@@UAE?AUWORLD@@XZ 10003770 f i Dlg_HNet.obj
+ 0001:000027b0       ?SetRotation@CMatObj@@UAEXUWORLD@@@Z 100037b0 f i Dlg_HNet.obj
+ 0001:000027f0       ?GetScale@CMatObj@@UAE?AUWORLD@@XZ 100037f0 f i Dlg_HNet.obj
+ 0001:00002830       ?SetScale@CMatObj@@UAEXUWORLD@@@Z 10003830 f i Dlg_HNet.obj
+ 0001:00002870       ?GetShear@CMatObj@@UAE?AUWORLD@@XZ 10003870 f i Dlg_HNet.obj
+ 0001:000028b0       ?SetShear@CMatObj@@UAEXUWORLD@@@Z 100038b0 f i Dlg_HNet.obj
+ 0001:000028f0       ?IsNoRot@CMatObj@@UAEHXZ   100038f0 f i Dlg_HNet.obj
+ 0001:00002920       ?SetNoRot@CMatObj@@UAEXH@Z 10003920 f i Dlg_HNet.obj
+ 0001:00002950       ?IsNoTran@CMatObj@@UAEHXZ  10003950 f i Dlg_HNet.obj
+ 0001:00002980       ?SetNoTran@CMatObj@@UAEXH@Z 10003980 f i Dlg_HNet.obj
+ 0001:000029b0       ?IsNoScale@CMatObj@@UAEHXZ 100039b0 f i Dlg_HNet.obj
+ 0001:000029e0       ?SetNoScale@CMatObj@@UAEXH@Z 100039e0 f i Dlg_HNet.obj
+ 0001:00002a10       ?IsNoShear@CMatObj@@UAEHXZ 10003a10 f i Dlg_HNet.obj
+ 0001:00002a40       ?SetNoShear@CMatObj@@UAEXH@Z 10003a40 f i Dlg_HNet.obj
+ 0001:00002a70       ?GetXformType@CMatObj@@UAE?AW4XFORMTYPE@@XZ 10003a70 f i Dlg_HNet.obj
+ 0001:00002aa0       ?SetXformType@CMatObj@@UAEXW4XFORMTYPE@@@Z 10003aa0 f i Dlg_HNet.obj
+ 0001:00002ad0       ?GetSpawnType@CMatObj@@UAE?AW4SPAWNTYPE@@XZ 10003ad0 f i Dlg_HNet.obj
+ 0001:00002b00       ?SetSpawnType@CMatObj@@UAEXW4SPAWNTYPE@@@Z 10003b00 f i Dlg_HNet.obj
+ 0001:00002b30       ?GetCreOp@CMatObj@@UAEIXZ  10003b30 f i Dlg_HNet.obj
+ 0001:00002b60       ?SetCreOp@CMatObj@@UAEXI@Z 10003b60 f i Dlg_HNet.obj
+ 0001:00002b90       ??1CMatObj@@UAE@XZ         10003b90 f i Dlg_HNet.obj
+ 0001:00002c50       ??_GCMatObj@@UAEPAXI@Z     10003c50 f i Dlg_HNet.obj
+ 0001:00002c90       ??_ECMatObj@@UAEPAXI@Z     10003c90 f i Dlg_HNet.obj
+ 0001:00002d30       ?ReadyToDelete@CDrObject@@UAEXXZ 10003d30 f i Dlg_HNet.obj
+ 0001:00002d50       ?DoFormattedCardView@CDrObject@@UAEXPAVCString@@AAV2@@Z 10003d50 f i Dlg_HNet.obj
+ 0001:00002d70       ?DoUnFormattedCardView@CDrObject@@UAEXPAVCString@@@Z 10003d70 f i Dlg_HNet.obj
+ 0001:00002d90       ?DoDataView@CDrObject@@UAEXPAVCDC@@H@Z 10003d90 f i Dlg_HNet.obj
+ 0001:00002db0       ?InitDraw@CDrObject@@UAEXPAVCDC@@HHPAUMATRIX@@1NNN@Z 10003db0 f i Dlg_HNet.obj
+ 0001:00002dd0       ?InitDraw@CDrObject@@UAEXPAVCDC@@HHPAUMATRIX@@1NNNN@Z 10003dd0 f i Dlg_HNet.obj
+ 0001:00002df0       ?Corner_3Dto2D@CDrObject@@UAEXXZ 10003df0 f i Dlg_HNet.obj
+ 0001:00002e10       ?DoDrawView@CDrObject@@UAEXPAVCDC@@@Z 10003e10 f i Dlg_HNet.obj
+ 0001:00002e30       ?DoDrawView@CDrObject@@UAEXPAVCDC@@H@Z 10003e30 f i Dlg_HNet.obj
+ 0001:00002e50       ?DoDrawView@CDrObject@@UAEXPAVCDC@@HH@Z 10003e50 f i Dlg_HNet.obj
+ 0001:00002e70       ?DealObjectDialog@CDrObject@@UAEHXZ 10003e70 f i Dlg_HNet.obj
+ 0001:00002e90       ?TransformObjectToWorld@CDrObject@@UAEXPAUMATRIX@@H@Z 10003e90 f i Dlg_HNet.obj
+ 0001:00002eb0       ?TransformObjectToView@CDrObject@@UAEXPAUMATRIX@@@Z 10003eb0 f i Dlg_HNet.obj
+ 0001:00002ed0       ?TransformObjectToViewDirect@CDrObject@@UAEXPAUMATRIX@@00H@Z 10003ed0 f i Dlg_HNet.obj
+ 0001:00002ef0       ?RemoveHiddenObject@CDrObject@@UAEHPAUMATRIX@@UWORLD@@H@Z 10003ef0 f i Dlg_HNet.obj
+ 0001:00002f10       ?ProjectObject@CDrObject@@UAEXPAUMATRIX@@NN@Z 10003f10 f i Dlg_HNet.obj
+ 0001:00002f30       ?Calc_2DBoundsScreen@CDrObject@@UAEHXZ 10003f30 f i Dlg_HNet.obj
+ 0001:00002f50       ?Calc_3DBoundsLocal@CDrObject@@UAEHXZ 10003f50 f i Dlg_HNet.obj
+ 0001:00002f70       ?FinishObject@CDrObject@@UAEXPAVCClientDC@@H@Z 10003f70 f i Dlg_HNet.obj
+ 0001:00002f90       ?FinishObject@CDrObject@@UAEXH@Z 10003f90 f i Dlg_HNet.obj
+ 0001:00002fb0       ?FinishObject@CDrObject@@UAEXXZ 10003fb0 f i Dlg_HNet.obj
+ 0001:00002fd0       ?GetMaxCorners@CDrObject@@UAEHXZ 10003fd0 f i Dlg_HNet.obj
+ 0001:00002ff0       ?GetRawCoords@CDrObject@@UAEXPAJPAHH@Z 10003ff0 f i Dlg_HNet.obj
+ 0001:00003010       ?SetProjectedCoords@CDrObject@@UAEXUtagPOINT@@H@Z 10004010 f i Dlg_HNet.obj
+ 0001:00003030       ?RearrangeProjectedCoords@CDrObject@@UAEXXZ 10004030 f i Dlg_HNet.obj
+ 0001:00003050       ?IsObjectHit@CDrObject@@UAEHNUWORLD@@@Z 10004050 f i Dlg_HNet.obj
+ 0001:00003070       ?IsObjectHit@CDrObject@@UAEHHUtagPOINT@@H@Z 10004070 f i Dlg_HNet.obj
+ 0001:00003090       ?IsObjectHit@CDrObject@@UAEHHUtagPOINT@@@Z 10004090 f i Dlg_HNet.obj
+ 0001:000030b0       ?IsObjectHit@CDrObject@@UAEHPAVCClientDC@@HUtagPOINT@@PAVCRect@@H@Z 100040b0 f i Dlg_HNet.obj
+ 0001:000030d0       ?IsKeyMatch@CDrObject@@UAEHPAV1@VCString@@I@Z 100040d0 f i Dlg_HNet.obj
+ 0001:00003100       ?IsKeyMatch@CDrObject@@UAEHVCString@@I@Z 10004100 f i Dlg_HNet.obj
+ 0001:00003130       ?IsControlShapeNeeded@CDrObject@@UAEHXZ 10004130 f i Dlg_HNet.obj
+ 0001:00003150       ?SetControlShapeNeed@CDrObject@@UAEXH@Z 10004150 f i Dlg_HNet.obj
+ 0001:00003170       ?IsNormalNeeded@CDrObject@@UAEHXZ 10004170 f i Dlg_HNet.obj
+ 0001:00003190       ?SetNormalNeed@CDrObject@@UAEXH@Z 10004190 f i Dlg_HNet.obj
+ 0001:000031b0       ?IsCulled@CDrObject@@UAEHXZ 100041b0 f i Dlg_HNet.obj
+ 0001:000031d0       ?SetCulled@CDrObject@@UAEXH@Z 100041d0 f i Dlg_HNet.obj
+ 0001:000031f0       ?IsSkewed@CDrObject@@UAEHXZ 100041f0 f i Dlg_HNet.obj
+ 0001:00003210       ?SetSkewed@CDrObject@@UAEXH@Z 10004210 f i Dlg_HNet.obj
+ 0001:00003230       ?IsLinSpr@CDrObject@@UAEHXZ 10004230 f i Dlg_HNet.obj
+ 0001:00003250       ?SetLinSpr@CDrObject@@UAEXH@Z 10004250 f i Dlg_HNet.obj
+ 0001:00003270       ?IsLinSnu@CDrObject@@UAEHXZ 10004270 f i Dlg_HNet.obj
+ 0001:00003290       ?SetLinSnu@CDrObject@@UAEXH@Z 10004290 f i Dlg_HNet.obj
+ 0001:000032b0       ?CullWorld@CDrObject@@UAEHUWORLD@@@Z 100042b0 f i Dlg_HNet.obj
+ 0001:000032d0       ?CullScreen@CDrObject@@UAEHPAUMATRIX@@@Z 100042d0 f i Dlg_HNet.obj
+ 0001:000032f0       ?Calc_CentroidWorld@CDrObject@@UAEXXZ 100042f0 f i Dlg_HNet.obj
+ 0001:00003310       ?Calc_CentroidEye@CDrObject@@UAEXXZ 10004310 f i Dlg_HNet.obj
+ 0001:00003330       ?Calc_CentroidScreen3D@CDrObject@@UAEXNN@Z 10004330 f i Dlg_HNet.obj
+ 0001:00003350       ?Calc_NormalWorld@CDrObject@@UAEXXZ 10004350 f i Dlg_HNet.obj
+ 0001:00003370       ?TransformNormalToEye@CDrObject@@UAEXPAUMATRIX@@@Z 10004370 f i Dlg_HNet.obj
+ 0001:00003390       ?ProjectNormalToScreen3D@CDrObject@@UAEXPAUMATRIX@@NN@Z 10004390 f i Dlg_HNet.obj
+ 0001:000033b0       ?GetNormalWorld@CDrObject@@UAEPAUWORLD@@XZ 100043b0 f i Dlg_HNet.obj
+ 0001:000033d0       ?SetNormalWorld@CDrObject@@UAEXUWORLD@@@Z 100043d0 f i Dlg_HNet.obj
+ 0001:000033f0       ?GetNormalEye@CDrObject@@UAEPAUWORLD@@XZ 100043f0 f i Dlg_HNet.obj
+ 0001:00003410       ?SetNormalEye@CDrObject@@UAEXUWORLD@@@Z 10004410 f i Dlg_HNet.obj
+ 0001:00003430       ?GetNormalScreen3D@CDrObject@@UAEPAUWORLD@@XZ 10004430 f i Dlg_HNet.obj
+ 0001:00003450       ?SetNormalScreen3D@CDrObject@@UAEXUWORLD@@@Z 10004450 f i Dlg_HNet.obj
+ 0001:00003470       ?GetNormalScreen2D@CDrObject@@UAEPAUtagPOINT@@XZ 10004470 f i Dlg_HNet.obj
+ 0001:00003490       ?SetNormalScreen2D@CDrObject@@UAEXUtagPOINT@@@Z 10004490 f i Dlg_HNet.obj
+ 0001:000034b0       ?GetObjectList@CDrObject@@UAEPAVCDListMgr@@XZ 100044b0 f i Dlg_HNet.obj
+ 0001:000034d0       ?GetBoundingRect@CDrObject@@QAE?AVCRect@@XZ 100044d0 f i Dlg_HNet.obj
+ 0001:00003520       ?GetRInfo@CDrObject@@QAEPAURENDINFO@@XZ 10004520 f i Dlg_HNet.obj
+ 0001:00003540       ?IsParallel@CDrObject@@QAEHXZ 10004540 f i Dlg_HNet.obj
+ 0001:00003570       ?GetnView@CDrObject@@QAEHXZ 10004570 f i Dlg_HNet.obj
+ 0001:000035a0       ?GetdzMin@CDrObject@@QAENXZ 100045a0 f i Dlg_HNet.obj
+ 0001:000035d0       ?GetdScale_U@CDrObject@@QAENXZ 100045d0 f i Dlg_HNet.obj
+ 0001:00003600       ?GetdScale_V@CDrObject@@QAENXZ 10004600 f i Dlg_HNet.obj
+ 0001:00003630       ?GetpViewM@CDrObject@@QAEPAUMATRIX@@XZ 10004630 f i Dlg_HNet.obj
+ 0001:00003660       ?Getpvv3DM@CDrObject@@QAEPAUMATRIX@@XZ 10004660 f i Dlg_HNet.obj
+ 0001:00003690       ?GetpComposedM@CDrObject@@QAEPAUMATRIX@@XZ 10004690 f i Dlg_HNet.obj
+ 0001:000036c0       ?SetParallel@CDrObject@@QAEXH@Z 100046c0 f i Dlg_HNet.obj
+ 0001:000036f0       ?SetnView@CDrObject@@QAEXH@Z 100046f0 f i Dlg_HNet.obj
+ 0001:00003720       ?SetdzMin@CDrObject@@QAEXN@Z 10004720 f i Dlg_HNet.obj
+ 0001:00003760       ?SetdScale_U@CDrObject@@QAEXN@Z 10004760 f i Dlg_HNet.obj
+ 0001:000037a0       ?SetdScale_V@CDrObject@@QAEXN@Z 100047a0 f i Dlg_HNet.obj
+ 0001:000037e0       ?SetpViewM@CDrObject@@QAEXPAUMATRIX@@@Z 100047e0 f i Dlg_HNet.obj
+ 0001:00003820       ?Setpvv3DM@CDrObject@@QAEXPAUMATRIX@@@Z 10004820 f i Dlg_HNet.obj
+ 0001:00003860       ?SetpComposedM@CDrObject@@QAEXPAUMATRIX@@@Z 10004860 f i Dlg_HNet.obj
+ 0001:000038a0       ?GetLevelType@CDrObject@@QAEHXZ 100048a0 f i Dlg_HNet.obj
+ 0001:000038d0       ?SetLevelType@CDrObject@@QAEXH@Z 100048d0 f i Dlg_HNet.obj
+ 0001:00003900       ?GetObjectID@CDrObject@@QAE?AVCString@@XZ 10004900 f i Dlg_HNet.obj
+ 0001:00003950       ?SetObjectID@CDrObject@@QAEXVCString@@@Z 10004950 f i Dlg_HNet.obj
+ 0001:000039d0       ?GetObjectNo@CDrObject@@QAEJXZ 100049d0 f i Dlg_HNet.obj
+ 0001:00003a00       ?SetObjectNo@CDrObject@@QAEXJ@Z 10004a00 f i Dlg_HNet.obj
+ 0001:00003a30       ?GetObjectType@CDrObject@@QAEHXZ 10004a30 f i Dlg_HNet.obj
+ 0001:00003a60       ?SetObjectType@CDrObject@@QAEXH@Z 10004a60 f i Dlg_HNet.obj
+ 0001:00003a90       ?GetElemType@CDrObject@@QAEHXZ 10004a90 f i Dlg_HNet.obj
+ 0001:00003ac0       ?SetElemType@CDrObject@@QAEXH@Z 10004ac0 f i Dlg_HNet.obj
+ 0001:00003af0       ?GetPenInfo@CDrObject@@QAEXAAIAAK0@Z 10004af0 f i Dlg_HNet.obj
+ 0001:00003b40       ?SetPenInfo@CDrObject@@QAEXIKI@Z 10004b40 f i Dlg_HNet.obj
+ 0001:00003b90       ?GetPenInfoHi@CDrObject@@QAEXAAIAAK0@Z 10004b90 f i Dlg_HNet.obj
+ 0001:00003be0       ?SetPenInfoHi@CDrObject@@QAEXIKI@Z 10004be0 f i Dlg_HNet.obj
+ 0001:00003c30       ?GetLayer@CDrObject@@QAEIXZ 10004c30 f i Dlg_HNet.obj
+ 0001:00003c60       ?SetLayer@CDrObject@@QAEXI@Z 10004c60 f i Dlg_HNet.obj
+ 0001:00003c90       ?IsClipped@CDrObject@@QAEHXZ 10004c90 f i Dlg_HNet.obj
+ 0001:00003cc0       ?SetClipped@CDrObject@@QAEXH@Z 10004cc0 f i Dlg_HNet.obj
+ 0001:00003cf0       ?IsVirtual@CDrObject@@QAEHXZ 10004cf0 f i Dlg_HNet.obj
+ 0001:00003d10       ?SetVirtual@CDrObject@@QAEXH@Z 10004d10 f i Dlg_HNet.obj
+ 0001:00003d40       ?IsShow@CDrObject@@QAEHXZ  10004d40 f i Dlg_HNet.obj
+ 0001:00003d70       ?SetShow@CDrObject@@QAEXH@Z 10004d70 f i Dlg_HNet.obj
+ 0001:00003da0       ?GetParentID@CDrObject@@QAEAAVCString@@XZ 10004da0 f i Dlg_HNet.obj
+ 0001:00003dc0       ?SetParentID@CDrObject@@QAEXAAVCString@@@Z 10004dc0 f i Dlg_HNet.obj
+ 0001:00003df0       ?GetParentType@CDrObject@@QAEIXZ 10004df0 f i Dlg_HNet.obj
+ 0001:00003e10       ?SetParentType@CDrObject@@QAEXI@Z 10004e10 f i Dlg_HNet.obj
+ 0001:00003e40       ?IsInstanced@CDrObject@@QAEHXZ 10004e40 f i Dlg_HNet.obj
+ 0001:00003e60       ?SetInstanced@CDrObject@@QAEXH@Z 10004e60 f i Dlg_HNet.obj
+ 0001:00003e90       ?GetMatObj@CDrObject@@QAEPAVCMatObj@@XZ 10004e90 f i Dlg_HNet.obj
+ 0001:00003eb0       ?SetMatObj@CDrObject@@QAEXPAVCMatObj@@@Z 10004eb0 f i Dlg_HNet.obj
+ 0001:00003ee0       ?GetSpeLList@CDrObject@@QAEPAVCDListMgr@@XZ 10004ee0 f i Dlg_HNet.obj
+ 0001:00003f10       ?GetDynLList@CDrObject@@QAEPAVCDListMgr@@XZ 10004f10 f i Dlg_HNet.obj
+ 0001:00003f40       ?GetStaLList@CDrObject@@QAEPAVCDListMgr@@XZ 10004f40 f i Dlg_HNet.obj
+ 0001:00003f70       ?GetSuppList@CDrObject@@QAEPAVCDListMgr@@XZ 10004f70 f i Dlg_HNet.obj
+ 0001:00003fa0       ?GetElemList@CDrObject@@QAEPAVCDListMgr@@XZ 10004fa0 f i Dlg_HNet.obj
+ 0001:00003fd0       ?GetCurveList@CDrObject@@QAEPAVCDListMgr@@XZ 10004fd0 f i Dlg_HNet.obj
+ 0001:00004000       ?GetCProfList@CDrObject@@QAEPAVCDListMgr@@XZ 10005000 f i Dlg_HNet.obj
+ 0001:00004030       ?GetPatchList@CDrObject@@QAEPAVCDListMgr@@XZ 10005030 f i Dlg_HNet.obj
+ 0001:00004060       ?GetSolidList@CDrObject@@QAEPAVCDListMgr@@XZ 10005060 f i Dlg_HNet.obj
+ 0001:00004090       ?GetObj3DList@CDrObject@@QAEPAVCDListMgr@@XZ 10005090 f i Dlg_HNet.obj
+ 0001:000040c0       ?GetCNodeList@CDrObject@@QAEPAVCDListMgr@@XZ 100050c0 f i Dlg_HNet.obj
+ 0001:000040f0       ?GetINodeList@CDrObject@@QAEPAVCDListMgr@@XZ 100050f0 f i Dlg_HNet.obj
+ 0001:00004120       ?GetNodeList@CDrObject@@QAEPAVCDListMgr@@XZ 10005120 f i Dlg_HNet.obj
+ 0001:00004150       ?GetLabelList@CDrObject@@QAEPAVCDListMgr@@XZ 10005150 f i Dlg_HNet.obj
+ 0001:00004180       ?GetFE0DList@CDrObject@@QAEPAVCDListMgr@@XZ 10005180 f i Dlg_HNet.obj
+ 0001:000041b0       ?GetFE1DList@CDrObject@@QAEPAVCDListMgr@@XZ 100051b0 f i Dlg_HNet.obj
+ 0001:000041e0       ?GetFE2DList@CDrObject@@QAEPAVCDListMgr@@XZ 100051e0 f i Dlg_HNet.obj
+ 0001:00004210       ?GetFE3DList@CDrObject@@QAEPAVCDListMgr@@XZ 10005210 f i Dlg_HNet.obj
+ 0001:00004240       ?GetMs0List@CDrObject@@QAEPAVCDListMgr@@XZ 10005240 f i Dlg_HNet.obj
+ 0001:00004270       ?GetMs1List@CDrObject@@QAEPAVCDListMgr@@XZ 10005270 f i Dlg_HNet.obj
+ 0001:000042a0       ?GetMs2List@CDrObject@@QAEPAVCDListMgr@@XZ 100052a0 f i Dlg_HNet.obj
+ 0001:000042d0       ?GetMs3List@CDrObject@@QAEPAVCDListMgr@@XZ 100052d0 f i Dlg_HNet.obj
+ 0001:00004300       ?GetMbj3DList@CDrObject@@QAEPAVCDListMgr@@XZ 10005300 f i Dlg_HNet.obj
+ 0001:00004330       ?GetM2DProfList@CDrObject@@QAEPAVCDListMgr@@XZ 10005330 f i Dlg_HNet.obj
+ 0001:00004360       ?GetM3DProfList@CDrObject@@QAEPAVCDListMgr@@XZ 10005360 f i Dlg_HNet.obj
+ 0001:00004390       ?GetMbjProfList@CDrObject@@QAEPAVCDListMgr@@XZ 10005390 f i Dlg_HNet.obj
+ 0001:000043c0       ?GetScreen2DCorner@CDrObject@@UAE?AUtagPOINT@@H@Z 100053c0 f i Dlg_HNet.obj
+ 0001:00004410       ?SetScreen2DCorner@CDrObject@@UAEXUtagPOINT@@H@Z 10005410 f i Dlg_HNet.obj
+ 0001:00004450       ?GetSpawnType@CDrObject@@QAE?AW4SPAWNTYPE@@XZ 10005450 f i Dlg_HNet.obj
+ 0001:00004470       ?SetSpawnType@CDrObject@@QAEXW4SPAWNTYPE@@@Z 10005470 f i Dlg_HNet.obj
+ 0001:000044a0       ?GetCategory@CDrObject@@QAE?AW4CATEGORY@@XZ 100054a0 f i Dlg_HNet.obj
+ 0001:000044c0       ?SetCategory@CDrObject@@QAEXW4CATEGORY@@@Z 100054c0 f i Dlg_HNet.obj
+ 0001:000044f0       ?GetSubCat@CDrObject@@QAE?AW4SUBCAT@@XZ 100054f0 f i Dlg_HNet.obj
+ 0001:00004510       ?SetSubCat@CDrObject@@QAEXW4SUBCAT@@@Z 10005510 f i Dlg_HNet.obj
+ 0001:00004540       ?GetElemDimLim@CDrObject@@QAE?AW4ELEMDIMLIM@@XZ 10005540 f i Dlg_HNet.obj
+ 0001:00004560       ?SetElemDimLim@CDrObject@@QAEXW4ELEMDIMLIM@@@Z 10005560 f i Dlg_HNet.obj
+ 0001:00004590       ?IsDirty@CDrObject@@QAEHXZ 10005590 f i Dlg_HNet.obj
+ 0001:000045c0       ?SetDirty@CDrObject@@QAEXH@Z 100055c0 f i Dlg_HNet.obj
+ 0001:000045f0       ?IsMoved@CDrObject@@QAEHXZ 100055f0 f i Dlg_HNet.obj
+ 0001:00004620       ?SetMoved@CDrObject@@QAEXH@Z 10005620 f i Dlg_HNet.obj
+ 0001:00004650       ?IsEdited@CDrObject@@QAEHXZ 10005650 f i Dlg_HNet.obj
+ 0001:00004680       ?SetEdited@CDrObject@@QAEXH@Z 10005680 f i Dlg_HNet.obj
+ 0001:000046b0       ?IsPosted@CDrObject@@QAEHXZ 100056b0 f i Dlg_HNet.obj
+ 0001:000046e0       ?SetPosted@CDrObject@@QAEXH@Z 100056e0 f i Dlg_HNet.obj
+ 0001:00004710       ?IsDeleted@CDrObject@@QAEHXZ 10005710 f i Dlg_HNet.obj
+ 0001:00004740       ?SetDeleted@CDrObject@@QAEXH@Z 10005740 f i Dlg_HNet.obj
+ 0001:00004770       ?IsToBeMoved@CDrObject@@QAEHXZ 10005770 f i Dlg_HNet.obj
+ 0001:000047a0       ?SetToBeMoved@CDrObject@@QAEXH@Z 100057a0 f i Dlg_HNet.obj
+ 0001:000047c0       ?IsToBeEdited@CDrObject@@QAEHXZ 100057c0 f i Dlg_HNet.obj
+ 0001:000047f0       ?SetToBeEdited@CDrObject@@QAEXH@Z 100057f0 f i Dlg_HNet.obj
+ 0001:00004810       ?IsToBePosted@CDrObject@@QAEHXZ 10005810 f i Dlg_HNet.obj
+ 0001:00004840       ?SetToBePosted@CDrObject@@QAEXH@Z 10005840 f i Dlg_HNet.obj
+ 0001:00004860       ?IsToBeUnPosted@CDrObject@@QAEHXZ 10005860 f i Dlg_HNet.obj
+ 0001:00004890       ?SetToBeUnPosted@CDrObject@@QAEXH@Z 10005890 f i Dlg_HNet.obj
+ 0001:000048b0       ?IsToBeDeleted@CDrObject@@QAEHXZ 100058b0 f i Dlg_HNet.obj
+ 0001:000048e0       ?SetToBeDeleted@CDrObject@@QAEXH@Z 100058e0 f i Dlg_HNet.obj
+ 0001:00004900       ?IsFormatted@CDrObject@@QAEHXZ 10005900 f i Dlg_HNet.obj
+ 0001:00004920       ?SetFormatted@CDrObject@@QAEXH@Z 10005920 f i Dlg_HNet.obj
+ 0001:00004950       ?GetObjectType@CBooleans@@UAEHXZ 10005950 f i Dlg_HNet.obj
+ 0001:00004980       ?SetObjectType@CBooleans@@UAEXH@Z 10005980 f i Dlg_HNet.obj
+ 0001:000049b0       ?GetElemType@CBooleans@@UAEHXZ 100059b0 f i Dlg_HNet.obj
+ 0001:000049e0       ?SetElemType@CBooleans@@UAEXH@Z 100059e0 f i Dlg_HNet.obj
+ 0001:00004a10       ?GetObjectNo@CBooleans@@UAEJXZ 10005a10 f i Dlg_HNet.obj
+ 0001:00004a40       ?SetObjectNo@CBooleans@@UAEXJ@Z 10005a40 f i Dlg_HNet.obj
+ 0001:00004a70       ?IsSoundOn@CBooleans@@UAEHXZ 10005a70 f i Dlg_HNet.obj
+ 0001:00004aa0       ?ToggleSoundOn@CBooleans@@UAEXXZ 10005aa0 f i Dlg_HNet.obj
+ 0001:00004ae0       ?IsCoonSocksOff@CBooleans@@UAEHXZ 10005ae0 f i Dlg_HNet.obj
+ 0001:00004b10       ?ToggleCoonSocksOff@CBooleans@@UAEXXZ 10005b10 f i Dlg_HNet.obj
+ 0001:00004b50       ?IsSnapOn@CBooleans@@UAEHXZ 10005b50 f i Dlg_HNet.obj
+ 0001:00004b80       ?ToggleSnapOn@CBooleans@@UAEXXZ 10005b80 f i Dlg_HNet.obj
+ 0001:00004bc0       ?IsHorSnapOn@CBooleans@@UAEHXZ 10005bc0 f i Dlg_HNet.obj
+ 0001:00004bf0       ?ToggleHorSnapOn@CBooleans@@UAEXXZ 10005bf0 f i Dlg_HNet.obj
+ 0001:00004c30       ?IsVerSnapOn@CBooleans@@UAEHXZ 10005c30 f i Dlg_HNet.obj
+ 0001:00004c60       ?ToggleVerSnapOn@CBooleans@@UAEXXZ 10005c60 f i Dlg_HNet.obj
+ 0001:00004ca0       ?IsSpawnOn@CBooleans@@UAEHXZ 10005ca0 f i Dlg_HNet.obj
+ 0001:00004cd0       ?ToggleSpawnOn@CBooleans@@UAEXXZ 10005cd0 f i Dlg_HNet.obj
+ 0001:00004d10       ?IsBLineOn@CBooleans@@UAEHXZ 10005d10 f i Dlg_HNet.obj
+ 0001:00004d40       ?ToggleBLineOn@CBooleans@@UAEXXZ 10005d40 f i Dlg_HNet.obj
+ 0001:00004d80       ?IsSingleSegOn@CBooleans@@UAEHXZ 10005d80 f i Dlg_HNet.obj
+ 0001:00004db0       ?ToggleSingleSegOn@CBooleans@@UAEXXZ 10005db0 f i Dlg_HNet.obj
+ 0001:00004df0       ?IsAutoAcceptOn@CBooleans@@UAEHXZ 10005df0 f i Dlg_HNet.obj
+ 0001:00004e20       ?ToggleAutoAcceptOn@CBooleans@@UAEXXZ 10005e20 f i Dlg_HNet.obj
+ 0001:00004e60       ?IsDialogOn@CBooleans@@UAEHXZ 10005e60 f i Dlg_HNet.obj
+ 0001:00004e90       ?ToggleDialogOn@CBooleans@@UAEXXZ 10005e90 f i Dlg_HNet.obj
+ 0001:00004ed0       ?IsElementOn@CBooleans@@UAEHXZ 10005ed0 f i Dlg_HNet.obj
+ 0001:00004f00       ?ToggleElementOn@CBooleans@@UAEXXZ 10005f00 f i Dlg_HNet.obj
+ 0001:00004f40       ?IsDragOn@CBooleans@@UAEHXZ 10005f40 f i Dlg_HNet.obj
+ 0001:00004f70       ?ToggleDragOn@CBooleans@@UAEXXZ 10005f70 f i Dlg_HNet.obj
+ 0001:00004fb0       ?IsRefreshOn@CBooleans@@UAEHXZ 10005fb0 f i Dlg_HNet.obj
+ 0001:00004fe0       ?ToggleRefreshOn@CBooleans@@UAEXXZ 10005fe0 f i Dlg_HNet.obj
+ 0001:00005020       ?IsRubberBandOn@CBooleans@@UAEHXZ 10006020 f i Dlg_HNet.obj
+ 0001:00005050       ?ToggleRubberBandOn@CBooleans@@UAEXXZ 10006050 f i Dlg_HNet.obj
+ 0001:00005090       ?IsStViewActive@CBooleans@@UAEHXZ 10006090 f i Dlg_HNet.obj
+ 0001:000050c0       ?ToggleStViewActive@CBooleans@@UAEXXZ 100060c0 f i Dlg_HNet.obj
+ 0001:00005100       ?IsSpViewActive@CBooleans@@UAEHXZ 10006100 f i Dlg_HNet.obj
+ 0001:00005130       ?ToggleSpViewActive@CBooleans@@UAEXXZ 10006130 f i Dlg_HNet.obj
+ 0001:00005170       ?IsHsViewActive@CBooleans@@UAEHXZ 10006170 f i Dlg_HNet.obj
+ 0001:000051a0       ?ToggleHsViewActive@CBooleans@@UAEXXZ 100061a0 f i Dlg_HNet.obj
+ 0001:000051e0       ?Is12ViewActive@CBooleans@@UAEHXZ 100061e0 f i Dlg_HNet.obj
+ 0001:00005210       ?Toggle12ViewActive@CBooleans@@UAEXXZ 10006210 f i Dlg_HNet.obj
+ 0001:00005250       ?Is23ViewActive@CBooleans@@UAEHXZ 10006250 f i Dlg_HNet.obj
+ 0001:00005280       ?Toggle23ViewActive@CBooleans@@UAEXXZ 10006280 f i Dlg_HNet.obj
+ 0001:000052c0       ?Is31ViewActive@CBooleans@@UAEHXZ 100062c0 f i Dlg_HNet.obj
+ 0001:000052f0       ?Toggle31ViewActive@CBooleans@@UAEXXZ 100062f0 f i Dlg_HNet.obj
+ 0001:00005330       ?IsIsoViewActive@CBooleans@@UAEHXZ 10006330 f i Dlg_HNet.obj
+ 0001:00005360       ?ToggleIsoViewActive@CBooleans@@UAEXXZ 10006360 f i Dlg_HNet.obj
+ 0001:000053a0       ?IsDataViewActive@CBooleans@@UAEHXZ 100063a0 f i Dlg_HNet.obj
+ 0001:000053d0       ?ToggleDataViewActive@CBooleans@@UAEXXZ 100063d0 f i Dlg_HNet.obj
+ 0001:00005410       ?IsMeshDataViewActive@CBooleans@@UAEHXZ 10006410 f i Dlg_HNet.obj
+ 0001:00005440       ?ToggleMeshDataViewActive@CBooleans@@UAEXXZ 10006440 f i Dlg_HNet.obj
+ 0001:00005480       ?IsDeckViewActive@CBooleans@@UAEHXZ 10006480 f i Dlg_HNet.obj
+ 0001:000054b0       ?ToggleDeckViewActive@CBooleans@@UAEXXZ 100064b0 f i Dlg_HNet.obj
+ 0001:000054f0       ?IsFormDataViewActive@CBooleans@@UAEHXZ 100064f0 f i Dlg_HNet.obj
+ 0001:00005520       ?ToggleFormDataViewActive@CBooleans@@UAEXXZ 10006520 f i Dlg_HNet.obj
+ 0001:00005560       ?IsInputMode@CBooleans@@UAEHXZ 10006560 f i Dlg_HNet.obj
+ 0001:00005590       ?SetInputMode@CBooleans@@UAEXH@Z 10006590 f i Dlg_HNet.obj
+ 0001:000055c0       ?IsOutputMode@CBooleans@@UAEHXZ 100065c0 f i Dlg_HNet.obj
+ 0001:000055f0       ?SetOutputMode@CBooleans@@UAEXH@Z 100065f0 f i Dlg_HNet.obj
+ 0001:00005620       ??1CBooleans@@UAE@XZ       10006620 f i Dlg_HNet.obj
+ 0001:00005650       ??_GCBooleans@@UAEPAXI@Z   10006650 f i Dlg_HNet.obj
+ 0001:00005690       ??_ECBooleans@@UAEPAXI@Z   10006690 f i Dlg_HNet.obj
+ 0001:00005730       ?GetObjectType@CDataWindow@@UAEHXZ 10006730 f i Dlg_HNet.obj
+ 0001:00005760       ?SetObjectType@CDataWindow@@UAEXH@Z 10006760 f i Dlg_HNet.obj
+ 0001:00005790       ?GetElemType@CDataWindow@@UAEHXZ 10006790 f i Dlg_HNet.obj
+ 0001:000057c0       ?SetElemType@CDataWindow@@UAEXH@Z 100067c0 f i Dlg_HNet.obj
+ 0001:000057f0       ?GetObjectNo@CDataWindow@@UAEJXZ 100067f0 f i Dlg_HNet.obj
+ 0001:00005820       ?SetObjectNo@CDataWindow@@UAEXJ@Z 10006820 f i Dlg_HNet.obj
+ 0001:00005850       ?GetWinOrgWIC@CDataWindow@@UAE?AULPOINT3@@XZ 10006850 f i Dlg_HNet.obj
+ 0001:00005890       ?GetWinMinWIC@CDataWindow@@UAE?AULPOINT3@@XZ 10006890 f i Dlg_HNet.obj
+ 0001:000058d0       ?GetWinMaxWIC@CDataWindow@@UAE?AULPOINT3@@XZ 100068d0 f i Dlg_HNet.obj
+ 0001:00005910       ?GetWinExtWIC@CDataWindow@@UAE?AULPOINT3@@XZ 10006910 f i Dlg_HNet.obj
+ 0001:00005950       ??1CDataWindow@@UAE@XZ     10006950 f i Dlg_HNet.obj
+ 0001:00005980       ??_GCDataWindow@@UAEPAXI@Z 10006980 f i Dlg_HNet.obj
+ 0001:000059c0       ??_ECDataWindow@@UAEPAXI@Z 100069c0 f i Dlg_HNet.obj
+ 0001:00005a60       ?GetObjectType@CDrFont@@UAEHXZ 10006a60 f i Dlg_HNet.obj
+ 0001:00005a90       ?SetObjectType@CDrFont@@UAEXH@Z 10006a90 f i Dlg_HNet.obj
+ 0001:00005ac0       ?GetElemType@CDrFont@@UAEHXZ 10006ac0 f i Dlg_HNet.obj
+ 0001:00005af0       ?SetElemType@CDrFont@@UAEXH@Z 10006af0 f i Dlg_HNet.obj
+ 0001:00005b20       ?GetObjectNo@CDrFont@@UAEJXZ 10006b20 f i Dlg_HNet.obj
+ 0001:00005b50       ?SetObjectNo@CDrFont@@UAEXJ@Z 10006b50 f i Dlg_HNet.obj
+ 0001:00005b80       ?IsFontSelected@CDrFont@@UAEHXZ 10006b80 f i Dlg_HNet.obj
+ 0001:00005bb0       ?GetTextColor@CDrFont@@UAEKXZ 10006bb0 f i Dlg_HNet.obj
+ 0001:00005be0       ?SetTextColor@CDrFont@@UAEXK@Z 10006be0 f i Dlg_HNet.obj
+ 0001:00005c10       ?GetCurrentLogFont@CDrFont@@UAE?AUtagLOGFONTA@@XZ 10006c10 f i Dlg_HNet.obj
+ 0001:00005c50       ?SetCurrentLogFont@CDrFont@@UAEXUtagLOGFONTA@@@Z 10006c50 f i Dlg_HNet.obj
+ 0001:00005c90       ??1CDrFont@@UAE@XZ         10006c90 f i Dlg_HNet.obj
+ 0001:00005cc0       ??_GCDrFont@@UAEPAXI@Z     10006cc0 f i Dlg_HNet.obj
+ 0001:00005d00       ??_ECDrFont@@UAEPAXI@Z     10006d00 f i Dlg_HNet.obj
+ 0001:00005da0       ?GetObjectType@CDrPen@@UAEHXZ 10006da0 f i Dlg_HNet.obj
+ 0001:00005dd0       ?SetObjectType@CDrPen@@UAEXH@Z 10006dd0 f i Dlg_HNet.obj
+ 0001:00005e00       ?GetElemType@CDrPen@@UAEHXZ 10006e00 f i Dlg_HNet.obj
+ 0001:00005e30       ?SetElemType@CDrPen@@UAEXH@Z 10006e30 f i Dlg_HNet.obj
+ 0001:00005e60       ?GetObjectNo@CDrPen@@UAEJXZ 10006e60 f i Dlg_HNet.obj
+ 0001:00005e90       ?SetObjectNo@CDrPen@@UAEXJ@Z 10006e90 f i Dlg_HNet.obj
+ 0001:00005ec0       ?GetCurrentPen@CDrPen@@UAEPAVCPen@@XZ 10006ec0 f i Dlg_HNet.obj
+ 0001:00005ef0       ?GetStyle@CDrPen@@UAEHXZ   10006ef0 f i Dlg_HNet.obj
+ 0001:00005f20       ?SetStyle@CDrPen@@UAEXH@Z  10006f20 f i Dlg_HNet.obj
+ 0001:00005f50       ?GetStyleOld@CDrPen@@UAEHXZ 10006f50 f i Dlg_HNet.obj
+ 0001:00005f80       ?SetStyleOld@CDrPen@@UAEXH@Z 10006f80 f i Dlg_HNet.obj
+ 0001:00005fb0       ?GetStyleDefault@CDrPen@@UAEHXZ 10006fb0 f i Dlg_HNet.obj
+ 0001:00005fe0       ?SetStyleDefault@CDrPen@@UAEXH@Z 10006fe0 f i Dlg_HNet.obj
+ 0001:00006010       ?GetWidth@CDrPen@@UAEHXZ   10007010 f i Dlg_HNet.obj
+ 0001:00006040       ?SetWidth@CDrPen@@UAEXH@Z  10007040 f i Dlg_HNet.obj
+ 0001:00006070       ?GetWidthOld@CDrPen@@UAEHXZ 10007070 f i Dlg_HNet.obj
+ 0001:000060a0       ?SetWidthOld@CDrPen@@UAEXH@Z 100070a0 f i Dlg_HNet.obj
+ 0001:000060d0       ?GetWidthDefault@CDrPen@@UAEHXZ 100070d0 f i Dlg_HNet.obj
+ 0001:00006100       ?SetWidthDefault@CDrPen@@UAEXH@Z 10007100 f i Dlg_HNet.obj
+ 0001:00006130       ?GetColor@CDrPen@@UAEKXZ   10007130 f i Dlg_HNet.obj
+ 0001:00006160       ?SetColor@CDrPen@@UAEXK@Z  10007160 f i Dlg_HNet.obj
+ 0001:00006190       ?GetColorOld@CDrPen@@UAEKXZ 10007190 f i Dlg_HNet.obj
+ 0001:000061c0       ?SetColorOld@CDrPen@@UAEXK@Z 100071c0 f i Dlg_HNet.obj
+ 0001:000061f0       ?GetColorDefault@CDrPen@@UAEKXZ 100071f0 f i Dlg_HNet.obj
+ 0001:00006220       ?SetColorDefault@CDrPen@@UAEXK@Z 10007220 f i Dlg_HNet.obj
+ 0001:00006250       ?GetIndex@CDrPen@@UAEIXZ   10007250 f i Dlg_HNet.obj
+ 0001:00006280       ?SetIndex@CDrPen@@UAEXI@Z  10007280 f i Dlg_HNet.obj
+ 0001:000062b0       ?GetIndexOld@CDrPen@@UAEIXZ 100072b0 f i Dlg_HNet.obj
+ 0001:000062e0       ?SetIndexOld@CDrPen@@UAEXI@Z 100072e0 f i Dlg_HNet.obj
+ 0001:00006310       ?GetIndexDefault@CDrPen@@UAEIXZ 10007310 f i Dlg_HNet.obj
+ 0001:00006340       ?SetIndexDefault@CDrPen@@UAEXI@Z 10007340 f i Dlg_HNet.obj
+ 0001:00006370       ?GetStyleNameCount@CDrPen@@UAEIXZ 10007370 f i Dlg_HNet.obj
+ 0001:000063a0       ?SetStyleNameCount@CDrPen@@UAEXI@Z 100073a0 f i Dlg_HNet.obj
+ 0001:000063d0       ?GetStyleName@CDrPen@@UAE?AVCString@@I@Z 100073d0 f i Dlg_HNet.obj
+ 0001:00006420       ?GetStyleConstant@CDrPen@@UAEII@Z 10007420 f i Dlg_HNet.obj
+ 0001:00006450       ??1CDrPen@@UAE@XZ          10007450 f i Dlg_HNet.obj
+ 0001:000064f0       ??_GCDrPen@@UAEPAXI@Z      100074f0 f i Dlg_HNet.obj
+ 0001:00006530       ??_ECDrPen@@UAEPAXI@Z      10007530 f i Dlg_HNet.obj
+ 0001:000065d0       ?GetObjectType@CHitNet@@UAEHXZ 100075d0 f i Dlg_HNet.obj
+ 0001:00006600       ?SetObjectType@CHitNet@@UAEXH@Z 10007600 f i Dlg_HNet.obj
+ 0001:00006630       ?GetElemType@CHitNet@@UAEHXZ 10007630 f i Dlg_HNet.obj
+ 0001:00006660       ?SetElemType@CHitNet@@UAEXH@Z 10007660 f i Dlg_HNet.obj
+ 0001:00006690       ?GetObjectNo@CHitNet@@UAEJXZ 10007690 f i Dlg_HNet.obj
+ 0001:000066c0       ?SetObjectNo@CHitNet@@UAEXJ@Z 100076c0 f i Dlg_HNet.obj
+ 0001:000066f0       ?GetSearchNet@CHitNet@@QAEHXZ 100076f0 f i Dlg_HNet.obj
+ 0001:00006720       ?SetSearchNet@CHitNet@@QAEXH@Z 10007720 f i Dlg_HNet.obj
+ 0001:00006750       ?GetSearchNetOld@CHitNet@@QAEHXZ 10007750 f i Dlg_HNet.obj
+ 0001:00006780       ?SetSearchNetOld@CHitNet@@QAEXH@Z 10007780 f i Dlg_HNet.obj
+ 0001:000067b0       ?GetSearchNetDefault@CHitNet@@QAEHXZ 100077b0 f i Dlg_HNet.obj
+ 0001:000067e0       ?SetSearchNetDefault@CHitNet@@QAEXH@Z 100077e0 f i Dlg_HNet.obj
+ 0001:00006810       ?GetSearchDet@CHitNet@@QAENXZ 10007810 f i Dlg_HNet.obj
+ 0001:00006840       ?SetSearchDet@CHitNet@@QAEXN@Z 10007840 f i Dlg_HNet.obj
+ 0001:00006880       ?GetSearchDetOld@CHitNet@@QAENXZ 10007880 f i Dlg_HNet.obj
+ 0001:000068b0       ?SetSearchDetOld@CHitNet@@QAEXN@Z 100078b0 f i Dlg_HNet.obj
+ 0001:000068f0       ?GetSearchDetDefault@CHitNet@@QAENXZ 100078f0 f i Dlg_HNet.obj
+ 0001:00006920       ?SetSearchDetDefault@CHitNet@@QAEXN@Z 10007920 f i Dlg_HNet.obj
+ 0001:00006960       ?GetDblRatio@CHitNet@@QAENXZ 10007960 f i Dlg_HNet.obj
+ 0001:00006990       ?SetDblRatio@CHitNet@@QAEXN@Z 10007990 f i Dlg_HNet.obj
+ 0001:000069d0       ?GetDblRatioOld@CHitNet@@QAENXZ 100079d0 f i Dlg_HNet.obj
+ 0001:00006a00       ?SetDblRatioOld@CHitNet@@QAEXN@Z 10007a00 f i Dlg_HNet.obj
+ 0001:00006a40       ?GetDblRatioDefault@CHitNet@@QAENXZ 10007a40 f i Dlg_HNet.obj
+ 0001:00006a70       ?SetDblRatioDefault@CHitNet@@QAEXN@Z 10007a70 f i Dlg_HNet.obj
+ 0001:00006ab0       ?GetCoLinear@CHitNet@@QAENXZ 10007ab0 f i Dlg_HNet.obj
+ 0001:00006ae0       ?SetCoLinear@CHitNet@@QAEXN@Z 10007ae0 f i Dlg_HNet.obj
+ 0001:00006b20       ?GetCoLinearOld@CHitNet@@QAENXZ 10007b20 f i Dlg_HNet.obj
+ 0001:00006b50       ?SetCoLinearOld@CHitNet@@QAEXN@Z 10007b50 f i Dlg_HNet.obj
+ 0001:00006b90       ?GetCoLinearDefault@CHitNet@@QAENXZ 10007b90 f i Dlg_HNet.obj
+ 0001:00006bc0       ?SetCoLinearDefault@CHitNet@@QAEXN@Z 10007bc0 f i Dlg_HNet.obj
+ 0001:00006c00       ?GetCoPlanar@CHitNet@@QAENXZ 10007c00 f i Dlg_HNet.obj
+ 0001:00006c30       ?SetCoPlanar@CHitNet@@QAEXN@Z 10007c30 f i Dlg_HNet.obj
+ 0001:00006c70       ?GetCoPlanarOld@CHitNet@@QAENXZ 10007c70 f i Dlg_HNet.obj
+ 0001:00006ca0       ?SetCoPlanarOld@CHitNet@@QAEXN@Z 10007ca0 f i Dlg_HNet.obj
+ 0001:00006ce0       ?GetCoPlanarDefault@CHitNet@@QAENXZ 10007ce0 f i Dlg_HNet.obj
+ 0001:00006d10       ?SetCoPlanarDefault@CHitNet@@QAEXN@Z 10007d10 f i Dlg_HNet.obj
+ 0001:00006d50       ?GetMergeNode_X@CHitNet@@QAENXZ 10007d50 f i Dlg_HNet.obj
+ 0001:00006d80       ?SetMergeNode_X@CHitNet@@QAEXN@Z 10007d80 f i Dlg_HNet.obj
+ 0001:00006dc0       ?GetMergeNode_XOld@CHitNet@@QAENXZ 10007dc0 f i Dlg_HNet.obj
+ 0001:00006df0       ?SetMergeNode_XOld@CHitNet@@QAEXN@Z 10007df0 f i Dlg_HNet.obj
+ 0001:00006e30       ?GetMergeNode_XDefault@CHitNet@@QAENXZ 10007e30 f i Dlg_HNet.obj
+ 0001:00006e60       ?SetMergeNode_XDefault@CHitNet@@QAEXN@Z 10007e60 f i Dlg_HNet.obj
+ 0001:00006ea0       ?GetMergeNode_Y@CHitNet@@QAENXZ 10007ea0 f i Dlg_HNet.obj
+ 0001:00006ed0       ?SetMergeNode_Y@CHitNet@@QAEXN@Z 10007ed0 f i Dlg_HNet.obj
+ 0001:00006f10       ?GetMergeNode_YOld@CHitNet@@QAENXZ 10007f10 f i Dlg_HNet.obj
+ 0001:00006f40       ?SetMergeNode_YOld@CHitNet@@QAEXN@Z 10007f40 f i Dlg_HNet.obj
+ 0001:00006f80       ?GetMergeNode_YDefault@CHitNet@@QAENXZ 10007f80 f i Dlg_HNet.obj
+ 0001:00006fb0       ?SetMergeNode_YDefault@CHitNet@@QAEXN@Z 10007fb0 f i Dlg_HNet.obj
+ 0001:00006ff0       ?GetMergeNode_Z@CHitNet@@QAENXZ 10007ff0 f i Dlg_HNet.obj
+ 0001:00007020       ?SetMergeNode_Z@CHitNet@@QAEXN@Z 10008020 f i Dlg_HNet.obj
+ 0001:00007060       ?GetMergeNode_ZOld@CHitNet@@QAENXZ 10008060 f i Dlg_HNet.obj
+ 0001:00007090       ?SetMergeNode_ZOld@CHitNet@@QAEXN@Z 10008090 f i Dlg_HNet.obj
+ 0001:000070d0       ?GetMergeNode_ZDefault@CHitNet@@QAENXZ 100080d0 f i Dlg_HNet.obj
+ 0001:00007100       ?SetMergeNode_ZDefault@CHitNet@@QAEXN@Z 10008100 f i Dlg_HNet.obj
+ 0001:00007140       ??1CHitNet@@UAE@XZ         10008140 f i Dlg_HNet.obj
+ 0001:00007170       ??_GCHitNet@@UAEPAXI@Z     10008170 f i Dlg_HNet.obj
+ 0001:000071b0       ??_ECHitNet@@UAEPAXI@Z     100081b0 f i Dlg_HNet.obj
+ 0001:00007250       ?GetObjectType@CLayer@@UAEHXZ 10008250 f i Dlg_HNet.obj
+ 0001:00007280       ?SetObjectType@CLayer@@UAEXH@Z 10008280 f i Dlg_HNet.obj
+ 0001:000072b0       ?GetElemType@CLayer@@UAEHXZ 100082b0 f i Dlg_HNet.obj
+ 0001:000072e0       ?SetElemType@CLayer@@UAEXH@Z 100082e0 f i Dlg_HNet.obj
+ 0001:00007310       ?GetObjectNo@CLayer@@UAEJXZ 10008310 f i Dlg_HNet.obj
+ 0001:00007340       ?SetObjectNo@CLayer@@UAEXJ@Z 10008340 f i Dlg_HNet.obj
+ 0001:00007370       ?GetCurrentLayer@CLayer@@UAEIXZ 10008370 f i Dlg_HNet.obj
+ 0001:000073a0       ?SetCurrentLayer@CLayer@@UAEXI@Z 100083a0 f i Dlg_HNet.obj
+ 0001:000073d0       ?GetCurrentLayerOld@CLayer@@UAEIXZ 100083d0 f i Dlg_HNet.obj
+ 0001:00007400       ?SetCurrentLayerOld@CLayer@@UAEXI@Z 10008400 f i Dlg_HNet.obj
+ 0001:00007430       ?GetCurrentLayerDefault@CLayer@@UAEIXZ 10008430 f i Dlg_HNet.obj
+ 0001:00007460       ?SetCurrentLayerDefault@CLayer@@UAEXI@Z 10008460 f i Dlg_HNet.obj
+ 0001:00007490       ??1CLayer@@UAE@XZ          10008490 f i Dlg_HNet.obj
+ 0001:000074c0       ??_GCLayer@@UAEPAXI@Z      100084c0 f i Dlg_HNet.obj
+ 0001:00007500       ??_ECLayer@@UAEPAXI@Z      10008500 f i Dlg_HNet.obj
+ 0001:000075a0       ?GetObjectType@CPatchMnu@@UAEHXZ 100085a0 f i Dlg_HNet.obj
+ 0001:000075d0       ?SetObjectType@CPatchMnu@@UAEXH@Z 100085d0 f i Dlg_HNet.obj
+ 0001:00007600       ?GetElemType@CPatchMnu@@UAEHXZ 10008600 f i Dlg_HNet.obj
+ 0001:00007630       ?SetElemType@CPatchMnu@@UAEXH@Z 10008630 f i Dlg_HNet.obj
+ 0001:00007660       ?GetObjectNo@CPatchMnu@@UAEJXZ 10008660 f i Dlg_HNet.obj
+ 0001:00007690       ?SetObjectNo@CPatchMnu@@UAEXJ@Z 10008690 f i Dlg_HNet.obj
+ 0001:000076c0       ?GetCurrentPatchMnu@CPatchMnu@@UAEIXZ 100086c0 f i Dlg_HNet.obj
+ 0001:000076f0       ?SetCurrentPatchMnu@CPatchMnu@@UAEXI@Z 100086f0 f i Dlg_HNet.obj
+ 0001:00007720       ?GetCurrentPatchMnuOld@CPatchMnu@@UAEIXZ 10008720 f i Dlg_HNet.obj
+ 0001:00007750       ?SetCurrentPatchMnuOld@CPatchMnu@@UAEXI@Z 10008750 f i Dlg_HNet.obj
+ 0001:00007780       ?GetCurrentPatchMnuDefault@CPatchMnu@@UAEIXZ 10008780 f i Dlg_HNet.obj
+ 0001:000077b0       ?SetCurrentPatchMnuDefault@CPatchMnu@@UAEXI@Z 100087b0 f i Dlg_HNet.obj
+ 0001:000077e0       ?GetPatchMnuID@CPatchMnu@@UAE?AVCString@@I@Z 100087e0 f i Dlg_HNet.obj
+ 0001:00007830       ?SetPatchMnuID@CPatchMnu@@UAEXVCString@@I@Z 10008830 f i Dlg_HNet.obj
+ 0001:000078b0       ?GetCurrentID@CPatchMnu@@UAE?AVCString@@XZ 100088b0 f i Dlg_HNet.obj
+ 0001:00007900       ?SetCurrentID@CPatchMnu@@UAEXVCString@@@Z 10008900 f i Dlg_HNet.obj
+ 0001:00007980       ??1CPatchMnu@@UAE@XZ       10008980 f i Dlg_HNet.obj
+ 0001:00007a40       ??_GCPatchMnu@@UAEPAXI@Z   10008a40 f i Dlg_HNet.obj
+ 0001:00007a80       ??_ECPatchMnu@@UAEPAXI@Z   10008a80 f i Dlg_HNet.obj
+ 0001:00007b20       ?GetObjectType@CObj3DMnu@@UAEHXZ 10008b20 f i Dlg_HNet.obj
+ 0001:00007b50       ?SetObjectType@CObj3DMnu@@UAEXH@Z 10008b50 f i Dlg_HNet.obj
+ 0001:00007b80       ?GetElemType@CObj3DMnu@@UAEHXZ 10008b80 f i Dlg_HNet.obj
+ 0001:00007bb0       ?SetElemType@CObj3DMnu@@UAEXH@Z 10008bb0 f i Dlg_HNet.obj
+ 0001:00007be0       ?GetObjectNo@CObj3DMnu@@UAEJXZ 10008be0 f i Dlg_HNet.obj
+ 0001:00007c10       ?SetObjectNo@CObj3DMnu@@UAEXJ@Z 10008c10 f i Dlg_HNet.obj
+ 0001:00007c40       ?GetCurrentObj3DMnu@CObj3DMnu@@UAEIXZ 10008c40 f i Dlg_HNet.obj
+ 0001:00007c70       ?SetCurrentObj3DMnu@CObj3DMnu@@UAEXI@Z 10008c70 f i Dlg_HNet.obj
+ 0001:00007ca0       ?GetCurrentObj3DMnuOld@CObj3DMnu@@UAEIXZ 10008ca0 f i Dlg_HNet.obj
+ 0001:00007cd0       ?SetCurrentObj3DMnuOld@CObj3DMnu@@UAEXI@Z 10008cd0 f i Dlg_HNet.obj
+ 0001:00007d00       ?GetCurrentObj3DMnuDefault@CObj3DMnu@@UAEIXZ 10008d00 f i Dlg_HNet.obj
+ 0001:00007d30       ?SetCurrentObj3DMnuDefault@CObj3DMnu@@UAEXI@Z 10008d30 f i Dlg_HNet.obj
+ 0001:00007d60       ?GetObj3DMnuID@CObj3DMnu@@UAE?AVCString@@I@Z 10008d60 f i Dlg_HNet.obj
+ 0001:00007db0       ?SetObj3DMnuID@CObj3DMnu@@UAEXVCString@@I@Z 10008db0 f i Dlg_HNet.obj
+ 0001:00007e30       ?GetCurrentID@CObj3DMnu@@UAE?AVCString@@XZ 10008e30 f i Dlg_HNet.obj
+ 0001:00007e80       ?SetCurrentID@CObj3DMnu@@UAEXVCString@@@Z 10008e80 f i Dlg_HNet.obj
+ 0001:00007f00       ??1CObj3DMnu@@UAE@XZ       10008f00 f i Dlg_HNet.obj
+ 0001:00007fc0       ??_GCObj3DMnu@@UAEPAXI@Z   10008fc0 f i Dlg_HNet.obj
+ 0001:00008000       ??_ECObj3DMnu@@UAEPAXI@Z   10009000 f i Dlg_HNet.obj
+ 0001:000080a0       ?GetObjectType@CMapFactor@@UAEHXZ 100090a0 f i Dlg_HNet.obj
+ 0001:000080d0       ?SetObjectType@CMapFactor@@UAEXH@Z 100090d0 f i Dlg_HNet.obj
+ 0001:00008100       ?GetElemType@CMapFactor@@UAEHXZ 10009100 f i Dlg_HNet.obj
+ 0001:00008130       ?SetElemType@CMapFactor@@UAEXH@Z 10009130 f i Dlg_HNet.obj
+ 0001:00008160       ?GetObjectNo@CMapFactor@@UAEJXZ 10009160 f i Dlg_HNet.obj
+ 0001:00008190       ?SetObjectNo@CMapFactor@@UAEXJ@Z 10009190 f i Dlg_HNet.obj
+ 0001:000081c0       ?GetMapFactor@CMapFactor@@UAENXZ 100091c0 f i Dlg_HNet.obj
+ 0001:000081f0       ?SetMapFactor@CMapFactor@@UAEXN@Z 100091f0 f i Dlg_HNet.obj
+ 0001:00008230       ?GetMapModeIndex@CMapFactor@@UAEHXZ 10009230 f i Dlg_HNet.obj
+ 0001:00008260       ?SetMapModeIndex@CMapFactor@@UAEXH@Z 10009260 f i Dlg_HNet.obj
+ 0001:00008290       ??1CMapFactor@@UAE@XZ      10009290 f i Dlg_HNet.obj
+ 0001:000082c0       ??_GCMapFactor@@UAEPAXI@Z  100092c0 f i Dlg_HNet.obj
+ 0001:00008300       ??_ECMapFactor@@UAEPAXI@Z  10009300 f i Dlg_HNet.obj
+ 0001:000083a0       ?GetObjectType@CPrecision@@UAEHXZ 100093a0 f i Dlg_HNet.obj
+ 0001:000083d0       ?SetObjectType@CPrecision@@UAEXH@Z 100093d0 f i Dlg_HNet.obj
+ 0001:00008400       ?GetElemType@CPrecision@@UAEHXZ 10009400 f i Dlg_HNet.obj
+ 0001:00008430       ?SetElemType@CPrecision@@UAEXH@Z 10009430 f i Dlg_HNet.obj
+ 0001:00008460       ?GetObjectNo@CPrecision@@UAEJXZ 10009460 f i Dlg_HNet.obj
+ 0001:00008490       ?SetObjectNo@CPrecision@@UAEXJ@Z 10009490 f i Dlg_HNet.obj
+ 0001:000084c0       ?GetPrecision@CPrecision@@UAEIXZ 100094c0 f i Dlg_HNet.obj
+ 0001:000084f0       ?SetPrecision@CPrecision@@UAEXI@Z 100094f0 f i Dlg_HNet.obj
+ 0001:00008520       ?GetPrecisionOld@CPrecision@@UAEIXZ 10009520 f i Dlg_HNet.obj
+ 0001:00008550       ?SetPrecisionOld@CPrecision@@UAEXI@Z 10009550 f i Dlg_HNet.obj
+ 0001:00008580       ?GetPrecisionDefault@CPrecision@@UAEIXZ 10009580 f i Dlg_HNet.obj
+ 0001:000085b0       ?SetPrecisionDefault@CPrecision@@UAEXI@Z 100095b0 f i Dlg_HNet.obj
+ 0001:000085e0       ?GetWorldBase@CPrecision@@UAEJXZ 100095e0 f i Dlg_HNet.obj
+ 0001:00008610       ?SetWorldBase@CPrecision@@UAEXJ@Z 10009610 f i Dlg_HNet.obj
+ 0001:00008640       ?GetWorldBaseOld@CPrecision@@UAEJXZ 10009640 f i Dlg_HNet.obj
+ 0001:00008670       ?SetWorldBaseOld@CPrecision@@UAEXJ@Z 10009670 f i Dlg_HNet.obj
+ 0001:000086a0       ?GetWorldBaseDefault@CPrecision@@UAEJXZ 100096a0 f i Dlg_HNet.obj
+ 0001:000086d0       ?SetWorldBaseDefault@CPrecision@@UAEXJ@Z 100096d0 f i Dlg_HNet.obj
+ 0001:00008700       ??1CPrecision@@UAE@XZ      10009700 f i Dlg_HNet.obj
+ 0001:00008730       ??_GCPrecision@@UAEPAXI@Z  10009730 f i Dlg_HNet.obj
+ 0001:00008770       ??_ECPrecision@@UAEPAXI@Z  10009770 f i Dlg_HNet.obj
+ 0001:00008810       ?GetObjectType@CScaleFactor@@UAEHXZ 10009810 f i Dlg_HNet.obj
+ 0001:00008840       ?SetObjectType@CScaleFactor@@UAEXH@Z 10009840 f i Dlg_HNet.obj
+ 0001:00008870       ?GetElemType@CScaleFactor@@UAEHXZ 10009870 f i Dlg_HNet.obj
+ 0001:000088a0       ?SetElemType@CScaleFactor@@UAEXH@Z 100098a0 f i Dlg_HNet.obj
+ 0001:000088d0       ?GetObjectNo@CScaleFactor@@UAEJXZ 100098d0 f i Dlg_HNet.obj
+ 0001:00008900       ?SetObjectNo@CScaleFactor@@UAEXJ@Z 10009900 f i Dlg_HNet.obj
+ 0001:00008930       ?GetScaleFactor@CScaleFactor@@UAENXZ 10009930 f i Dlg_HNet.obj
+ 0001:00008960       ?SetScaleFactor@CScaleFactor@@UAEXN@Z 10009960 f i Dlg_HNet.obj
+ 0001:000089a0       ?GetScaleFactorOld@CScaleFactor@@UAENXZ 100099a0 f i Dlg_HNet.obj
+ 0001:000089d0       ?SetScaleFactorOld@CScaleFactor@@UAEXN@Z 100099d0 f i Dlg_HNet.obj
+ 0001:00008a10       ?GetScaleFactorDefault@CScaleFactor@@UAENXZ 10009a10 f i Dlg_HNet.obj
+ 0001:00008a40       ?SetScaleFactorDefault@CScaleFactor@@UAEXN@Z 10009a40 f i Dlg_HNet.obj
+ 0001:00008a80       ??1CScaleFactor@@UAE@XZ    10009a80 f i Dlg_HNet.obj
+ 0001:00008ab0       ??_GCScaleFactor@@UAEPAXI@Z 10009ab0 f i Dlg_HNet.obj
+ 0001:00008af0       ??_ECScaleFactor@@UAEPAXI@Z 10009af0 f i Dlg_HNet.obj
+ 0001:00008b90       ?GetObjectType@CUnit@@UAEHXZ 10009b90 f i Dlg_HNet.obj
+ 0001:00008bc0       ?SetObjectType@CUnit@@UAEXH@Z 10009bc0 f i Dlg_HNet.obj
+ 0001:00008bf0       ?GetElemType@CUnit@@UAEHXZ 10009bf0 f i Dlg_HNet.obj
+ 0001:00008c20       ?SetElemType@CUnit@@UAEXH@Z 10009c20 f i Dlg_HNet.obj
+ 0001:00008c50       ?GetObjectNo@CUnit@@UAEJXZ 10009c50 f i Dlg_HNet.obj
+ 0001:00008c80       ?SetObjectNo@CUnit@@UAEXJ@Z 10009c80 f i Dlg_HNet.obj
+ 0001:00008cb0       ?GetUnitName@CUnit@@UAE?AVCString@@I@Z 10009cb0 f i Dlg_HNet.obj
+ 0001:00008d00       ?GetUnitIndex@CUnit@@UAEIXZ 10009d00 f i Dlg_HNet.obj
+ 0001:00008d30       ?SetUnitIndex@CUnit@@UAEXI@Z 10009d30 f i Dlg_HNet.obj
+ 0001:00008d60       ?GetUnitIndexOld@CUnit@@UAEIXZ 10009d60 f i Dlg_HNet.obj
+ 0001:00008d90       ?SetUnitIndexOld@CUnit@@UAEXI@Z 10009d90 f i Dlg_HNet.obj
+ 0001:00008dc0       ?GetUnitIndexDefault@CUnit@@UAEIXZ 10009dc0 f i Dlg_HNet.obj
+ 0001:00008df0       ?SetUnitIndexDefault@CUnit@@UAEXI@Z 10009df0 f i Dlg_HNet.obj
+ 0001:00008e20       ?GetUnitNameCount@CUnit@@UAEIXZ 10009e20 f i Dlg_HNet.obj
+ 0001:00008e50       ?SetUnitNameCount@CUnit@@UAEXI@Z 10009e50 f i Dlg_HNet.obj
+ 0001:00008e80       ??1CUnit@@UAE@XZ           10009e80 f i Dlg_HNet.obj
+ 0001:00008f10       ??_GCUnit@@UAEPAXI@Z       10009f10 f i Dlg_HNet.obj
+ 0001:00008f50       ??_ECUnit@@UAEPAXI@Z       10009f50 f i Dlg_HNet.obj
+ 0001:00008ff0       ??1CDataRowHint@@UAE@XZ    10009ff0 f i Dlg_HNet.obj
+ 0001:00009020       ?GetMapFactor@CObjectMgr@@UAEPAVCMapFactor@@XZ 1000a020 f i Dlg_HNet.obj
+ 0001:00009050       ?GetPrecision@CObjectMgr@@UAEPAVCPrecision@@XZ 1000a050 f i Dlg_HNet.obj
+ 0001:00009080       ?GetScaleFactor@CObjectMgr@@UAEPAVCScaleFactor@@XZ 1000a080 f i Dlg_HNet.obj
+ 0001:000090b0       ?GetUnit@CObjectMgr@@UAEPAVCUnit@@XZ 1000a0b0 f i Dlg_HNet.obj
+ 0001:000090e0       ?GetObjectListFromIndex@CObjectMgr@@UAEPAVCDListMgr@@H@Z 1000a0e0 f i Dlg_HNet.obj
+ 0001:00009130       ?IsSceneChanged@CObjectMgr@@UAEHXZ 1000a130 f i Dlg_HNet.obj
+ 0001:00009160       ?SetSceneChanged@CObjectMgr@@UAEXH@Z 1000a160 f i Dlg_HNet.obj
+ 0001:00009190       ?IsViewChanged@CObjectMgr@@UAEHXZ 1000a190 f i Dlg_HNet.obj
+ 0001:000091c0       ?SetViewChanged@CObjectMgr@@UAEXH@Z 1000a1c0 f i Dlg_HNet.obj
+ 0001:000091f0       ?GetMasterLastObjectNo@CObjectMgr@@UAEIXZ 1000a1f0 f i Dlg_HNet.obj
+ 0001:00009220       ?SetMasterLastObjectNo@CObjectMgr@@UAEXI@Z 1000a220 f i Dlg_HNet.obj
+ 0001:00009250       ?GetActiveObjectNo@CObjectMgr@@UAEIXZ 1000a250 f i Dlg_HNet.obj
+ 0001:00009280       ?SetActiveObjectNo@CObjectMgr@@UAEXI@Z 1000a280 f i Dlg_HNet.obj
+ 0001:000092b0       ?GetActiveListIndex@CObjectMgr@@UAEHXZ 1000a2b0 f i Dlg_HNet.obj
+ 0001:000092e0       ?SetActiveListIndex@CObjectMgr@@UAEXH@Z 1000a2e0 f i Dlg_HNet.obj
+ 0001:00009310       ?GetActiveObjectIndex@CObjectMgr@@UAEHXZ 1000a310 f i Dlg_HNet.obj
+ 0001:00009340       ?SetActiveObjectIndex@CObjectMgr@@UAEXH@Z 1000a340 f i Dlg_HNet.obj
+ 0001:00009370       ?GetActiveObjectType@CObjectMgr@@UAEHXZ 1000a370 f i Dlg_HNet.obj
+ 0001:000093a0       ?SetActiveObjectType@CObjectMgr@@UAEXH@Z 1000a3a0 f i Dlg_HNet.obj
+ 0001:000093d0       ?GetRowList@CObjectMgr@@QAEPAV?$CList@JJ@@XZ 1000a3d0 f i Dlg_HNet.obj
+ 0001:00009400       ?GetRowCount@CObjectMgr@@QAEHXZ 1000a400 f i Dlg_HNet.obj
+ 0001:00009430       ?GetActiveRowIndex@CObjectMgr@@QAEHXZ 1000a430 f i Dlg_HNet.obj
+ 0001:00009460       ?SetActiveRowIndex@CObjectMgr@@QAEXH@Z 1000a460 f i Dlg_HNet.obj
+ 0001:00009490       ?GetFormat@CObjectMgr@@UAE?AVCString@@XZ 1000a490 f i Dlg_HNet.obj
+ 0001:000094e0       ?IsMeshGenOn@CObjectMgr@@UAEHXZ 1000a4e0 f i Dlg_HNet.obj
+ 0001:00009510       ?SetMeshGenOn@CObjectMgr@@UAEXH@Z 1000a510 f i Dlg_HNet.obj
+ 0001:00009540       ?GetMeshType@CObjectMgr@@UAEIXZ 1000a540 f i Dlg_HNet.obj
+ 0001:00009570       ?SetMeshType@CObjectMgr@@UAEXI@Z 1000a570 f i Dlg_HNet.obj
+ 0001:000095a0       ?GetCurrentTopLevel@CObjectMgr@@UAEHXZ 1000a5a0 f i Dlg_HNet.obj
+ 0001:000095d0       ?SetCurrentTopLevel@CObjectMgr@@UAEXH@Z 1000a5d0 f i Dlg_HNet.obj
+ 0001:00009600       ?GetObjectType@CElemInfo@@UAEHXZ 1000a600 f i Dlg_HNet.obj
+ 0001:00009630       ?SetObjectType@CElemInfo@@UAEXH@Z 1000a630 f i Dlg_HNet.obj
+ 0001:00009660       ?GetElemType@CElemInfo@@UAEHXZ 1000a660 f i Dlg_HNet.obj
+ 0001:00009690       ?SetElemType@CElemInfo@@UAEXH@Z 1000a690 f i Dlg_HNet.obj
+ 0001:000096c0       ?GetObjectNo@CElemInfo@@UAEJXZ 1000a6c0 f i Dlg_HNet.obj
+ 0001:000096f0       ?SetObjectNo@CElemInfo@@UAEXJ@Z 1000a6f0 f i Dlg_HNet.obj
+ 0001:00009720       ?GetInfoList@CElemInfo@@UAEPAVCDListMgr@@H@Z 1000a720 f i Dlg_HNet.obj
+ 0001:00009750       ??1CElemInfo@@UAE@XZ       1000a750 f i Dlg_HNet.obj
+ 0001:000097e0       ??_GCElemInfo@@UAEPAXI@Z   1000a7e0 f i Dlg_HNet.obj
+ 0001:00009820       ??_ECElemInfo@@UAEPAXI@Z   1000a820 f i Dlg_HNet.obj
+ 0001:000098c0       ??1CMeshRowHint@@UAE@XZ    1000a8c0 f i Dlg_HNet.obj
+ 0001:000098f0       ?GetRowList@CMsObjMgr@@QAEPAV?$CList@JJ@@XZ 1000a8f0 f i Dlg_HNet.obj
+ 0001:00009920       ?GetRowCount@CMsObjMgr@@QAEHXZ 1000a920 f i Dlg_HNet.obj
+ 0001:00009950       ?GetActiveRowIndex@CMsObjMgr@@QAEHXZ 1000a950 f i Dlg_HNet.obj
+ 0001:00009980       ?SetActiveRowIndex@CMsObjMgr@@QAEXH@Z 1000a980 f i Dlg_HNet.obj
+ 0001:000099b0       ??1CBaseRowHint@@UAE@XZ    1000a9b0 f i Dlg_HNet.obj
+ 0001:000099e0       ?GetCurrentItem@CDbObjMgr@@QAEAAVCString@@XZ 1000a9e0 f i Dlg_HNet.obj
+ 0001:00009a00       ?SetCurrentItem@CDbObjMgr@@QAEXAAVCString@@@Z 1000aa00 f i Dlg_HNet.obj
+ 0001:00009a30       ?GetCurrentParent@CDbObjMgr@@QAEAAVCString@@XZ 1000aa30 f i Dlg_HNet.obj
+ 0001:00009a50       ?SetCurrentParent@CDbObjMgr@@QAEXAAVCString@@@Z 1000aa50 f i Dlg_HNet.obj
+ 0001:00009a80       ??1CAxDataRowHint@@UAE@XZ  1000aa80 f i Dlg_HNet.obj
+ 0001:00009ab0       ?GetMapFactor@CAxObjMgr@@UAEPAVCMapFactor@@XZ 1000aab0 f i Dlg_HNet.obj
+ 0001:00009ae0       ?GetPrecision@CAxObjMgr@@UAEPAVCPrecision@@XZ 1000aae0 f i Dlg_HNet.obj
+ 0001:00009b10       ?GetScaleFactor@CAxObjMgr@@UAEPAVCScaleFactor@@XZ 1000ab10 f i Dlg_HNet.obj
+ 0001:00009b40       ?GetUnit@CAxObjMgr@@UAEPAVCUnit@@XZ 1000ab40 f i Dlg_HNet.obj
+ 0001:00009b70       ?GetObjectListFromIndex@CAxObjMgr@@UAEPAVCDListMgr@@H@Z 1000ab70 f i Dlg_HNet.obj
+ 0001:00009bc0       ?IsSceneChanged@CAxObjMgr@@UAEHXZ 1000abc0 f i Dlg_HNet.obj
+ 0001:00009bf0       ?SetSceneChanged@CAxObjMgr@@UAEXH@Z 1000abf0 f i Dlg_HNet.obj
+ 0001:00009c20       ?IsViewChanged@CAxObjMgr@@UAEHXZ 1000ac20 f i Dlg_HNet.obj
+ 0001:00009c50       ?SetViewChanged@CAxObjMgr@@UAEXH@Z 1000ac50 f i Dlg_HNet.obj
+ 0001:00009c80       ?GetMasterLastObjectNo@CAxObjMgr@@UAEIXZ 1000ac80 f i Dlg_HNet.obj
+ 0001:00009cb0       ?SetMasterLastObjectNo@CAxObjMgr@@UAEXI@Z 1000acb0 f i Dlg_HNet.obj
+ 0001:00009ce0       ?GetActiveObjectNo@CAxObjMgr@@UAEIXZ 1000ace0 f i Dlg_HNet.obj
+ 0001:00009d10       ?SetActiveObjectNo@CAxObjMgr@@UAEXI@Z 1000ad10 f i Dlg_HNet.obj
+ 0001:00009d40       ?GetActiveListIndex@CAxObjMgr@@UAEHXZ 1000ad40 f i Dlg_HNet.obj
+ 0001:00009d70       ?SetActiveListIndex@CAxObjMgr@@UAEXH@Z 1000ad70 f i Dlg_HNet.obj
+ 0001:00009da0       ?GetActiveObjectIndex@CAxObjMgr@@UAEHXZ 1000ada0 f i Dlg_HNet.obj
+ 0001:00009dd0       ?SetActiveObjectIndex@CAxObjMgr@@UAEXH@Z 1000add0 f i Dlg_HNet.obj
+ 0001:00009e00       ?GetActiveObjectType@CAxObjMgr@@UAEHXZ 1000ae00 f i Dlg_HNet.obj
+ 0001:00009e30       ?SetActiveObjectType@CAxObjMgr@@UAEXH@Z 1000ae30 f i Dlg_HNet.obj
+ 0001:00009e60       ?GetRowList@CAxObjMgr@@QAEPAV?$CList@JJ@@XZ 1000ae60 f i Dlg_HNet.obj
+ 0001:00009e90       ?GetRowCount@CAxObjMgr@@QAEHXZ 1000ae90 f i Dlg_HNet.obj
+ 0001:00009ec0       ?GetActiveRowIndex@CAxObjMgr@@QAEHXZ 1000aec0 f i Dlg_HNet.obj
+ 0001:00009ef0       ?SetActiveRowIndex@CAxObjMgr@@QAEXH@Z 1000aef0 f i Dlg_HNet.obj
+ 0001:00009f20       ?GetFormat@CAxObjMgr@@UAE?AVCString@@XZ 1000af20 f i Dlg_HNet.obj
+ 0001:00009f70       ?IsMeshGenOn@CAxObjMgr@@UAEHXZ 1000af70 f i Dlg_HNet.obj
+ 0001:00009fa0       ?SetMeshGenOn@CAxObjMgr@@UAEXH@Z 1000afa0 f i Dlg_HNet.obj
+ 0001:00009fd0       ?GetMeshType@CAxObjMgr@@UAEIXZ 1000afd0 f i Dlg_HNet.obj
+ 0001:0000a000       ?SetMeshType@CAxObjMgr@@UAEXI@Z 1000b000 f i Dlg_HNet.obj
+ 0001:0000a030       ?GetCurrentTopLevel@CAxObjMgr@@UAEHXZ 1000b030 f i Dlg_HNet.obj
+ 0001:0000a060       ?SetCurrentTopLevel@CAxObjMgr@@UAEXH@Z 1000b060 f i Dlg_HNet.obj
+ 0001:0000a090       ??1CDlg_HNet@@UAE@XZ       1000b090 f i Dlg_HNet.obj
+ 0001:0000a110       ??_FCDlg_HNet@@QAEXXZ      1000b110 f i Dlg_HNet.obj
+ 0001:0000a140       ??1CBitmapButton@@UAE@XZ   1000b140 f i Dlg_HNet.obj
+ 0001:0000a1e0       ??0CDlg_HNet@@QAE@PAVCWnd@@@Z 1000b1e0 f   Dlg_HNet.obj
+ 0001:0000a3b0       ??_GCDlg_HNet@@UAEPAXI@Z   1000b3b0 f i Dlg_HNet.obj
+ 0001:0000a3f0       ??_ECDlg_HNet@@UAEPAXI@Z   1000b3f0 f i Dlg_HNet.obj
+ 0001:0000a490       ?DoDataExchange@CDlg_HNet@@MAEXPAVCDataExchange@@@Z 1000b490 f   Dlg_HNet.obj
+ 0001:0000a5f0       ?_GetBaseMessageMap@CDlg_HNet@@KGPBUAFX_MSGMAP@@XZ 1000b5f0 f   Dlg_HNet.obj
+ 0001:0000a610       ?GetMessageMap@CDlg_HNet@@MBEPBUAFX_MSGMAP@@XZ 1000b610 f   Dlg_HNet.obj
+ 0001:0000a630       ?OnHitNet@CDlg_HNet@@QAEXXZ 1000b630 f   Dlg_HNet.obj
+ 0001:0000a8f0       ?GetDocument@CDrGrafApp@@QAEPAVCDrGrafDoc@@XZ 1000b8f0 f i Dlg_HNet.obj
+ 0001:0000a920       ?GetObjectMgr@CDrGrafDoc@@QAEPAVCObjectMgr@@XZ 1000b920 f i Dlg_HNet.obj
+ 0001:0000a950       ?OnInitDialog@CDlg_HNet@@MAEHXZ 1000b950 f   Dlg_HNet.obj
+ 0001:0000a9e0       ?GetCount@?$CList@JJ@@QBEHXZ 1000b9e0 f i Dlg_HNet.obj
+ 0001:0000aa00       ??1CDrawLayer@@UAE@XZ      1000ba00 f i Dlg_layr.obj
+ 0001:0000aaa0       ??_FCDrawLayer@@QAEXXZ     1000baa0 f i Dlg_layr.obj
+ 0001:0000aad0       ??0CDrawLayer@@QAE@PAVCWnd@@@Z 1000bad0 f   Dlg_layr.obj
+ 0001:0000abf0       ??_GCDrawLayer@@UAEPAXI@Z  1000bbf0 f i Dlg_layr.obj
+ 0001:0000ac30       ??_ECDrawLayer@@UAEPAXI@Z  1000bc30 f i Dlg_layr.obj
+ 0001:0000acd0       ?DoDataExchange@CDrawLayer@@MAEXPAVCDataExchange@@@Z 1000bcd0 f   Dlg_layr.obj
+ 0001:0000ad20       ?_GetBaseMessageMap@CDrawLayer@@KGPBUAFX_MSGMAP@@XZ 1000bd20 f   Dlg_layr.obj
+ 0001:0000ad40       ?GetMessageMap@CDrawLayer@@MBEPBUAFX_MSGMAP@@XZ 1000bd40 f   Dlg_layr.obj
+ 0001:0000ad60       ?OnLayer@CDrawLayer@@QAEXXZ 1000bd60 f   Dlg_layr.obj
+ 0001:0000aee0       ?OnInitDialog@CDrawLayer@@MAEHXZ 1000bee0 f   Dlg_layr.obj
+ 0001:0000af90       ?FillListAllString@CDrawLayer@@QAEXXZ 1000bf90 f   Dlg_layr.obj
+ 0001:0000b090       ?EmptyListAllString@CDrawLayer@@QAEXXZ 1000c090 f   Dlg_layr.obj
+ 0001:0000b0f0       ?ReFillListAllString@CDrawLayer@@QAEXI@Z 1000c0f0 f   Dlg_layr.obj
+ 0001:0000b1a0       ?ReFillListString@CDrawLayer@@QAEXII@Z 1000c1a0 f   Dlg_layr.obj
+ 0001:0000b220       ?OnClickedDrawAllactive@CDrawLayer@@IAEXXZ 1000c220 f   Dlg_layr.obj
+ 0001:0000b280       ?OnClickedToggleAll@CDrawLayer@@IAEXXZ 1000c280 f   Dlg_layr.obj
+ 0001:0000b2e0       ?OnClickedChange@CDrawLayer@@IAEXXZ 1000c2e0 f   Dlg_layr.obj
+ 0001:0000b350       ?OnClickedCurrent@CDrawLayer@@IAEXXZ 1000c350 f   Dlg_layr.obj
+ 0001:0000b3c0       ??0CColorListBox@@QAE@XZ   1000c3c0 f i Dlg_pen.obj
+ 0001:0000b3f0       ??1CColorListBox@@UAE@XZ   1000c3f0 f i Dlg_pen.obj
+ 0001:0000b420       ??_GCColorListBox@@UAEPAXI@Z 1000c420 f i Dlg_pen.obj
+ 0001:0000b460       ??_ECColorListBox@@UAEPAXI@Z 1000c460 f i Dlg_pen.obj
+ 0001:0000b500       ??1CPenDlg@@UAE@XZ         1000c500 f i Dlg_pen.obj
+ 0001:0000b5b0       ??_FCPenDlg@@QAEXXZ        1000c5b0 f i Dlg_pen.obj
+ 0001:0000b5e0       ??0CPenDlg@@QAE@PAVCWnd@@@Z 1000c5e0 f   Dlg_pen.obj
+ 0001:0000b720       ??_GCPenDlg@@UAEPAXI@Z     1000c720 f i Dlg_pen.obj
+ 0001:0000b760       ??_ECPenDlg@@UAEPAXI@Z     1000c760 f i Dlg_pen.obj
+ 0001:0000b800       ?DoDataExchange@CPenDlg@@MAEXPAVCDataExchange@@@Z 1000c800 f   Dlg_pen.obj
+ 0001:0000b880       ?_GetBaseMessageMap@CPenDlg@@KGPBUAFX_MSGMAP@@XZ 1000c880 f   Dlg_pen.obj
+ 0001:0000b8a0       ?GetMessageMap@CPenDlg@@MBEPBUAFX_MSGMAP@@XZ 1000c8a0 f   Dlg_pen.obj
+ 0001:0000b8c0       ?OnPen@CPenDlg@@QAEXXZ     1000c8c0 f   Dlg_pen.obj
+ 0001:0000bbd0       ?OnInitDialog@CPenDlg@@MAEHXZ 1000cbd0 f   Dlg_pen.obj
+ 0001:0000be50       ?OnOK@CPenDlg@@MAEXXZ      1000ce50 f   Dlg_pen.obj
+ 0001:0000bf50       ?AddColorItem@CColorListBox@@QAEXK@Z 1000cf50 f   Dlg_pen.obj
+ 0001:0000bf80       ?MeasureItem@CColorListBox@@UAEXPAUtagMEASUREITEMSTRUCT@@@Z 1000cf80 f   Dlg_pen.obj
+ 0001:0000bfb0       ?DrawItem@CColorListBox@@UAEXPAUtagDRAWITEMSTRUCT@@@Z 1000cfb0 f   Dlg_pen.obj
+ 0001:0000c1a0       ?CompareItem@CColorListBox@@UAEHPAUtagCOMPAREITEMSTRUCT@@@Z 1000d1a0 f   Dlg_pen.obj
+ 0001:0000c300       ??1CDrawPrecision@@UAE@XZ  1000d300 f i Dlg_prec.obj
+ 0001:0000c380       ??_FCDrawPrecision@@QAEXXZ 1000d380 f i Dlg_prec.obj
+ 0001:0000c3b0       ??0CDrawPrecision@@QAE@PAVCWnd@@@Z 1000d3b0 f   Dlg_prec.obj
+ 0001:0000c4b0       ??_GCDrawPrecision@@UAEPAXI@Z 1000d4b0 f i Dlg_prec.obj
+ 0001:0000c4f0       ??_ECDrawPrecision@@UAEPAXI@Z 1000d4f0 f i Dlg_prec.obj
+ 0001:0000c590       ?DoDataExchange@CDrawPrecision@@MAEXPAVCDataExchange@@@Z 1000d590 f   Dlg_prec.obj
+ 0001:0000c5f0       ?_GetBaseMessageMap@CDrawPrecision@@KGPBUAFX_MSGMAP@@XZ 1000d5f0 f   Dlg_prec.obj
+ 0001:0000c610       ?GetMessageMap@CDrawPrecision@@MBEPBUAFX_MSGMAP@@XZ 1000d610 f   Dlg_prec.obj
+ 0001:0000c630       ?OnPrecision@CDrawPrecision@@QAEXXZ 1000d630 f   Dlg_prec.obj
+ 0001:0000c7c0       ?OnInitDialog@CDrawPrecision@@MAEHXZ 1000d7c0 f   Dlg_prec.obj
+ 0001:0000c870       ??1CDrawScale@@UAE@XZ      1000d870 f i Dlg_sfac.obj
+ 0001:0000c8f0       ??_FCDrawScale@@QAEXXZ     1000d8f0 f i Dlg_sfac.obj
+ 0001:0000c920       ??0CDrawScale@@QAE@PAVCWnd@@@Z 1000d920 f   Dlg_sfac.obj
+ 0001:0000ca30       ??_GCDrawScale@@UAEPAXI@Z  1000da30 f i Dlg_sfac.obj
+ 0001:0000ca70       ??_ECDrawScale@@UAEPAXI@Z  1000da70 f i Dlg_sfac.obj
+ 0001:0000cb10       ?DoDataExchange@CDrawScale@@MAEXPAVCDataExchange@@@Z 1000db10 f   Dlg_sfac.obj
+ 0001:0000cb90       ?_GetBaseMessageMap@CDrawScale@@KGPBUAFX_MSGMAP@@XZ 1000db90 f   Dlg_sfac.obj
+ 0001:0000cbb0       ?GetMessageMap@CDrawScale@@MBEPBUAFX_MSGMAP@@XZ 1000dbb0 f   Dlg_sfac.obj
+ 0001:0000cbd0       ?OnScalefactor@CDrawScale@@QAEXXZ 1000dbd0 f   Dlg_sfac.obj
+ 0001:0000ccf0       ?OnInitDialog@CDrawScale@@MAEHXZ 1000dcf0 f   Dlg_sfac.obj
+ 0001:0000cdb0       ??1CDrawUnit@@UAE@XZ       1000ddb0 f i Dlg_unit.obj
+ 0001:0000ce50       ??_FCDrawUnit@@QAEXXZ      1000de50 f i Dlg_unit.obj
+ 0001:0000ce80       ??0CDrawUnit@@QAE@PAVCWnd@@@Z 1000de80 f   Dlg_unit.obj
+ 0001:0000cfa0       ??_GCDrawUnit@@UAEPAXI@Z   1000dfa0 f i Dlg_unit.obj
+ 0001:0000cfe0       ??_ECDrawUnit@@UAEPAXI@Z   1000dfe0 f i Dlg_unit.obj
+ 0001:0000d080       ?DoDataExchange@CDrawUnit@@MAEXPAVCDataExchange@@@Z 1000e080 f   Dlg_unit.obj
+ 0001:0000d0d0       ?_GetBaseMessageMap@CDrawUnit@@KGPBUAFX_MSGMAP@@XZ 1000e0d0 f   Dlg_unit.obj
+ 0001:0000d0f0       ?GetMessageMap@CDrawUnit@@MBEPBUAFX_MSGMAP@@XZ 1000e0f0 f   Dlg_unit.obj
+ 0001:0000d110       ?OnUnit@CDrawUnit@@QAEXXZ  1000e110 f   Dlg_unit.obj
+ 0001:0000d380       ?OnInitDialog@CDrawUnit@@UAEHXZ 1000e380 f   Dlg_unit.obj
+ 0001:0000d460       ??1CDlgObj3D@@UAE@XZ       1000e460 f i Dlgobj3d.obj
+ 0001:0000d500       ??_FCDlgObj3D@@QAEXXZ      1000e500 f i Dlgobj3d.obj
+ 0001:0000d530       ??0CDlgObj3D@@QAE@PAVCWnd@@@Z 1000e530 f   Dlgobj3d.obj
+ 0001:0000d650       ??_GCDlgObj3D@@UAEPAXI@Z   1000e650 f i Dlgobj3d.obj
+ 0001:0000d690       ??_ECDlgObj3D@@UAEPAXI@Z   1000e690 f i Dlgobj3d.obj
+ 0001:0000d730       ?DoDataExchange@CDlgObj3D@@MAEXPAVCDataExchange@@@Z 1000e730 f   Dlgobj3d.obj
+ 0001:0000d780       ?_GetBaseMessageMap@CDlgObj3D@@KGPBUAFX_MSGMAP@@XZ 1000e780 f   Dlgobj3d.obj
+ 0001:0000d7a0       ?GetMessageMap@CDlgObj3D@@MBEPBUAFX_MSGMAP@@XZ 1000e7a0 f   Dlgobj3d.obj
+ 0001:0000d7c0       ?OnObj3DMnu@CDlgObj3D@@QAEXXZ 1000e7c0 f   Dlgobj3d.obj
+ 0001:0000d940       ?OnInitDialog@CDlgObj3D@@MAEHXZ 1000e940 f   Dlgobj3d.obj
+ 0001:0000dab0       ?FillListAllString@CDlgObj3D@@QAEXXZ 1000eab0 f   Dlgobj3d.obj
+ 0001:0000dbb0       ?EmptyListAllString@CDlgObj3D@@QAEXXZ 1000ebb0 f   Dlgobj3d.obj
+ 0001:0000dc10       ?ReFillListAllString@CDlgObj3D@@QAEXI@Z 1000ec10 f   Dlgobj3d.obj
+ 0001:0000dcc0       ?ReFillListString@CDlgObj3D@@QAEXII@Z 1000ecc0 f   Dlgobj3d.obj
+ 0001:0000dd40       ?OnClickedDrawAllactive@CDlgObj3D@@IAEXXZ 1000ed40 f   Dlgobj3d.obj
+ 0001:0000dda0       ?OnClickedToggleAll@CDlgObj3D@@IAEXXZ 1000eda0 f   Dlgobj3d.obj
+ 0001:0000de00       ?OnClickedChange@CDlgObj3D@@IAEXXZ 1000ee00 f   Dlgobj3d.obj
+ 0001:0000de70       ?OnClickedCurrent@CDlgObj3D@@IAEXXZ 1000ee70 f   Dlgobj3d.obj
+ 0001:0000dee0       ??1CDlgPatch@@UAE@XZ       1000eee0 f i Dlgpatch.obj
+ 0001:0000df80       ??_FCDlgPatch@@QAEXXZ      1000ef80 f i Dlgpatch.obj
+ 0001:0000dfb0       ??0CDlgPatch@@QAE@PAVCWnd@@@Z 1000efb0 f   Dlgpatch.obj
+ 0001:0000e0d0       ??_GCDlgPatch@@UAEPAXI@Z   1000f0d0 f i Dlgpatch.obj
+ 0001:0000e110       ??_ECDlgPatch@@UAEPAXI@Z   1000f110 f i Dlgpatch.obj
+ 0001:0000e1b0       ?DoDataExchange@CDlgPatch@@MAEXPAVCDataExchange@@@Z 1000f1b0 f   Dlgpatch.obj
+ 0001:0000e200       ?_GetBaseMessageMap@CDlgPatch@@KGPBUAFX_MSGMAP@@XZ 1000f200 f   Dlgpatch.obj
+ 0001:0000e220       ?GetMessageMap@CDlgPatch@@MBEPBUAFX_MSGMAP@@XZ 1000f220 f   Dlgpatch.obj
+ 0001:0000e240       ?OnPatchMnu@CDlgPatch@@QAEXXZ 1000f240 f   Dlgpatch.obj
+ 0001:0000e3c0       ?OnInitDialog@CDlgPatch@@MAEHXZ 1000f3c0 f   Dlgpatch.obj
+ 0001:0000e530       ?FillListAllString@CDlgPatch@@QAEXXZ 1000f530 f   Dlgpatch.obj
+ 0001:0000e630       ?EmptyListAllString@CDlgPatch@@QAEXXZ 1000f630 f   Dlgpatch.obj
+ 0001:0000e690       ?ReFillListAllString@CDlgPatch@@QAEXI@Z 1000f690 f   Dlgpatch.obj
+ 0001:0000e740       ?ReFillListString@CDlgPatch@@QAEXII@Z 1000f740 f   Dlgpatch.obj
+ 0001:0000e7c0       ?OnClickedDrawAllactive@CDlgPatch@@IAEXXZ 1000f7c0 f   Dlgpatch.obj
+ 0001:0000e820       ?OnClickedToggleAll@CDlgPatch@@IAEXXZ 1000f820 f   Dlgpatch.obj
+ 0001:0000e880       ?OnClickedChange@CDlgPatch@@IAEXXZ 1000f880 f   Dlgpatch.obj
+ 0001:0000e8f0       ?OnClickedCurrent@CDlgPatch@@IAEXXZ 1000f8f0 f   Dlgpatch.obj
+ 0001:0000e960       _ExtRawDllMain@12          1000f960 f   Sdlgdll.obj
+ 0001:0000e9e0       _InitSDlgDLL@0             1000f9e0 f   Sdlgdll.obj
+ 0001:0000ea40       _DllMain@12                1000fa40 f   Sdlgdll.obj
+ 0001:0000eac0       ??B?$CTypedSimpleList@PAUCRuntimeClass@@@@QAEPAUCRuntimeClass@@XZ 1000fac0 f i Sdlgdll.obj
+ 0001:0000eaf0       ??B?$CTypedSimpleList@PAVCOleObjectFactory@@@@QAEPAVCOleObjectFactory@@XZ 1000faf0 f i Sdlgdll.obj
+ 0001:0000eb20       ?GetHead@CSimpleList@@QBEPAXXZ 1000fb20 f i Sdlgdll.obj
+ 0001:0000eb40       ?CreateObject@CSDlgMgr@@SGPAVCObject@@XZ 1000fb40 f   Sdlgmgr.obj
+ 0001:0000ebd0       ?_GetBaseClass@CSDlgMgr@@KGPAUCRuntimeClass@@XZ 1000fbd0 f   Sdlgmgr.obj
+ 0001:0000ebf0       ?GetRuntimeClass@CSDlgMgr@@UBEPAUCRuntimeClass@@XZ 1000fbf0 f   Sdlgmgr.obj
+ 0001:0000ec60       ??5@YGAAVCArchive@@AAV0@AAPAVCSDlgMgr@@@Z 1000fc60 f   Sdlgmgr.obj
+ 0001:0000ec90       ??0CSDlgMgr@@QAE@XZ        1000fc90 f   Sdlgmgr.obj
+ 0001:0000ecc0       ??_GCSDlgMgr@@UAEPAXI@Z    1000fcc0 f i Sdlgmgr.obj
+ 0001:0000ed00       ??_ECSDlgMgr@@UAEPAXI@Z    1000fd00 f i Sdlgmgr.obj
+ 0001:0000eda0       ??1CSDlgMgr@@UAE@XZ        1000fda0 f   Sdlgmgr.obj
+ 0001:0000edd0       ?DoModal_SpecObjs@CSDlgMgr@@QAEII@Z 1000fdd0 f   Sdlgmgr.obj
+ 0001:0000f020       ??0AFX_CLASSINIT@@QAE@PAUCRuntimeClass@@@Z 10010020 f i Sdlgmgr.obj
+ 0001:0000f050       ?Serialize@CSDlgMgr@@UAEXAAVCArchive@@@Z 10010050 f   Sdlgmgr.obj
+ 0001:0000f0ac       ?GetRuntimeClass@CMatObj@@UBEPAUCRuntimeClass@@XZ 100100ac f   Spec_D32:Spec_D32.dll
+ 0001:0000f0b2       ?InitBooleans@CBooleans@@UAEXXZ 100100b2 f   Spec_D32:Spec_D32.dll
+ 0001:0000f0b8       ?ReadDefaultBooleans@CBooleans@@UAEXXZ 100100b8 f   Spec_D32:Spec_D32.dll
+ 0001:0000f0be       ?ToggleZoom@CBooleans@@UAEHHH@Z 100100be f   Spec_D32:Spec_D32.dll
+ 0001:0000f0c4       ?IsZoomOn@CBooleans@@UAEHHH@Z 100100c4 f   Spec_D32:Spec_D32.dll
+ 0001:0000f0ca       ?SetZoomEnabled@CBooleans@@UAEXHH@Z 100100ca f   Spec_D32:Spec_D32.dll
+ 0001:0000f0d0       ?IsZoomEnabled@CBooleans@@UAEHH@Z 100100d0 f   Spec_D32:Spec_D32.dll
+ 0001:0000f0d6       ?SetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z 100100d6 f   Spec_D32:Spec_D32.dll
+ 0001:0000f0dc       ?GetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z 100100dc f   Spec_D32:Spec_D32.dll
+ 0001:0000f0e2       ?Pack_drPipe@CBooleans@@UAEXPAVCString@@@Z 100100e2 f   Spec_D32:Spec_D32.dll
+ 0001:0000f0e8       ?SetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 100100e8 f   Spec_D32:Spec_D32.dll
+ 0001:0000f0ee       ?GetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 100100ee f   Spec_D32:Spec_D32.dll
+ 0001:0000f0f4       ?SetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 100100f4 f   Spec_D32:Spec_D32.dll
+ 0001:0000f0fa       ?GetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 100100fa f   Spec_D32:Spec_D32.dll
+ 0001:0000f100       ?SetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10010100 f   Spec_D32:Spec_D32.dll
+ 0001:0000f106       ?GetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10010106 f   Spec_D32:Spec_D32.dll
+ 0001:0000f10c       ?SetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 1001010c f   Spec_D32:Spec_D32.dll
+ 0001:0000f112       ?GetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10010112 f   Spec_D32:Spec_D32.dll
+ 0001:0000f118       ?DoDataView@CBooleans@@UAEXPAVCDC@@H@Z 10010118 f   Spec_D32:Spec_D32.dll
+ 0001:0000f11e       ?Serialize@CBooleans@@UAEXAAVCArchive@@@Z 1001011e f   Spec_D32:Spec_D32.dll
+ 0001:0000f124       ?GetRuntimeClass@CBooleans@@UBEPAUCRuntimeClass@@XZ 10010124 f   Spec_D32:Spec_D32.dll
+ 0001:0000f12a       ??1CDrObject@@UAE@XZ       1001012a f   Spec_D32:Spec_D32.dll
+ 0001:0000f130       ?InitDataWindow@CDataWindow@@UAEXXZ 10010130 f   Spec_D32:Spec_D32.dll
+ 0001:0000f136       ?ReadDefaultDataWindow@CDataWindow@@UAEXXZ 10010136 f   Spec_D32:Spec_D32.dll
+ 0001:0000f13c       ?SetWinExtWIC@CDataWindow@@UAEXXZ 1001013c f   Spec_D32:Spec_D32.dll
+ 0001:0000f142       ?SetWinMinMaxWIC@CDataWindow@@UAEXULPOINT3@@@Z 10010142 f   Spec_D32:Spec_D32.dll
+ 0001:0000f148       ?SetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z 10010148 f   Spec_D32:Spec_D32.dll
+ 0001:0000f14e       ?GetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z 1001014e f   Spec_D32:Spec_D32.dll
+ 0001:0000f154       ?Pack_drPipe@CDataWindow@@UAEXPAVCString@@@Z 10010154 f   Spec_D32:Spec_D32.dll
+ 0001:0000f15a       ?DoDataView@CDataWindow@@UAEXPAVCDC@@H@Z 1001015a f   Spec_D32:Spec_D32.dll
+ 0001:0000f160       ?Serialize@CDataWindow@@UAEXAAVCArchive@@@Z 10010160 f   Spec_D32:Spec_D32.dll
+ 0001:0000f166       ?GetRuntimeClass@CDataWindow@@UBEPAUCRuntimeClass@@XZ 10010166 f   Spec_D32:Spec_D32.dll
+ 0001:0000f16c       ?InitDrFont@CDrFont@@UAEXXZ 1001016c f   Spec_D32:Spec_D32.dll
+ 0001:0000f172       ?ReadDefaultDrFont@CDrFont@@UAEXXZ 10010172 f   Spec_D32:Spec_D32.dll
+ 0001:0000f178       ?DoTextFont@CDrFont@@UAEXXZ 10010178 f   Spec_D32:Spec_D32.dll
+ 0001:0000f17e       ?SetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z 1001017e f   Spec_D32:Spec_D32.dll
+ 0001:0000f184       ?GetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z 10010184 f   Spec_D32:Spec_D32.dll
+ 0001:0000f18a       ?Pack_drPipe@CDrFont@@UAEXPAVCString@@@Z 1001018a f   Spec_D32:Spec_D32.dll
+ 0001:0000f190       ?DoDataView@CDrFont@@UAEXPAVCDC@@H@Z 10010190 f   Spec_D32:Spec_D32.dll
+ 0001:0000f196       ?Serialize@CDrFont@@UAEXAAVCArchive@@@Z 10010196 f   Spec_D32:Spec_D32.dll
+ 0001:0000f19c       ?GetRuntimeClass@CDrFont@@UBEPAUCRuntimeClass@@XZ 1001019c f   Spec_D32:Spec_D32.dll
+ 0001:0000f1a2       ?InitDrPen@CDrPen@@UAEXXZ  100101a2 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1a8       ?ReadDefaultDrPen@CDrPen@@UAEXXZ 100101a8 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1ae       ?ReplacePen@CDrPen@@UAEXXZ 100101ae f   Spec_D32:Spec_D32.dll
+ 0001:0000f1b4       ?SetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z 100101b4 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1ba       ?GetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z 100101ba f   Spec_D32:Spec_D32.dll
+ 0001:0000f1c0       ?Pack_drPipe@CDrPen@@UAEXPAVCString@@@Z 100101c0 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1c6       ?DoDataView@CDrPen@@UAEXPAVCDC@@H@Z 100101c6 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1cc       ?Serialize@CDrPen@@UAEXAAVCArchive@@@Z 100101cc f   Spec_D32:Spec_D32.dll
+ 0001:0000f1d2       ?GetRuntimeClass@CDrPen@@UBEPAUCRuntimeClass@@XZ 100101d2 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1d8       ?SetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z 100101d8 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1de       ?GetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z 100101de f   Spec_D32:Spec_D32.dll
+ 0001:0000f1e4       ?Pack_drPipe@CHitNet@@UAEXPAVCString@@@Z 100101e4 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1ea       ?DoDataView@CHitNet@@UAEXPAVCDC@@H@Z 100101ea f   Spec_D32:Spec_D32.dll
+ 0001:0000f1f0       ?Serialize@CHitNet@@UAEXAAVCArchive@@@Z 100101f0 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1f6       ?GetRuntimeClass@CHitNet@@UBEPAUCRuntimeClass@@XZ 100101f6 f   Spec_D32:Spec_D32.dll
+ 0001:0000f1fc       ?InitLayer@CLayer@@UAEXXZ  100101fc f   Spec_D32:Spec_D32.dll
+ 0001:0000f202       ?ReadDefaultLayer@CLayer@@UAEXXZ 10010202 f   Spec_D32:Spec_D32.dll
+ 0001:0000f208       ?SetLayerDefaultArray@CLayer@@UAEXQAY01I@Z 10010208 f   Spec_D32:Spec_D32.dll
+ 0001:0000f20e       ?GetLayerDefaultArray@CLayer@@UAEXQAY01I@Z 1001020e f   Spec_D32:Spec_D32.dll
+ 0001:0000f214       ?SetLayerOldArray@CLayer@@UAEXQAY01I@Z 10010214 f   Spec_D32:Spec_D32.dll
+ 0001:0000f21a       ?GetLayerOldArray@CLayer@@UAEXQAY01I@Z 1001021a f   Spec_D32:Spec_D32.dll
+ 0001:0000f220       ?SetLayerArray@CLayer@@UAEXQAY01I@Z 10010220 f   Spec_D32:Spec_D32.dll
+ 0001:0000f226       ?GetLayerArray@CLayer@@UAEXQAY01I@Z 10010226 f   Spec_D32:Spec_D32.dll
+ 0001:0000f22c       ?SetLayerInfo@CLayer@@UAEXII@Z 1001022c f   Spec_D32:Spec_D32.dll
+ 0001:0000f232       ?GetLayerInfo@CLayer@@UAE?AVCString@@I@Z 10010232 f   Spec_D32:Spec_D32.dll
+ 0001:0000f238       ?SetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z 10010238 f   Spec_D32:Spec_D32.dll
+ 0001:0000f23e       ?GetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z 1001023e f   Spec_D32:Spec_D32.dll
+ 0001:0000f244       ?Pack_drPipe@CLayer@@UAEXPAVCString@@@Z 10010244 f   Spec_D32:Spec_D32.dll
+ 0001:0000f24a       ?DoDataView@CLayer@@UAEXPAVCDC@@H@Z 1001024a f   Spec_D32:Spec_D32.dll
+ 0001:0000f250       ?Serialize@CLayer@@UAEXAAVCArchive@@@Z 10010250 f   Spec_D32:Spec_D32.dll
+ 0001:0000f256       ?GetRuntimeClass@CLayer@@UBEPAUCRuntimeClass@@XZ 10010256 f   Spec_D32:Spec_D32.dll
+ 0001:0000f25c       ?InitPatchMnu@CPatchMnu@@UAEXXZ 1001025c f   Spec_D32:Spec_D32.dll
+ 0001:0000f262       ?ReadDefaultPatchMnu@CPatchMnu@@UAEXXZ 10010262 f   Spec_D32:Spec_D32.dll
+ 0001:0000f268       ?SetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z 10010268 f   Spec_D32:Spec_D32.dll
+ 0001:0000f26e       ?GetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z 1001026e f   Spec_D32:Spec_D32.dll
+ 0001:0000f274       ?SetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z 10010274 f   Spec_D32:Spec_D32.dll
+ 0001:0000f27a       ?GetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z 1001027a f   Spec_D32:Spec_D32.dll
+ 0001:0000f280       ?SetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z 10010280 f   Spec_D32:Spec_D32.dll
+ 0001:0000f286       ?GetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z 10010286 f   Spec_D32:Spec_D32.dll
+ 0001:0000f28c       ?SetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z 1001028c f   Spec_D32:Spec_D32.dll
+ 0001:0000f292       ?GetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z 10010292 f   Spec_D32:Spec_D32.dll
+ 0001:0000f298       ?SetPatchMnuInfo@CPatchMnu@@UAEXII@Z 10010298 f   Spec_D32:Spec_D32.dll
+ 0001:0000f29e       ?GetPatchMnuInfo@CPatchMnu@@UAE?AVCString@@I@Z 1001029e f   Spec_D32:Spec_D32.dll
+ 0001:0000f2a4       ?SetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z 100102a4 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2aa       ?GetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z 100102aa f   Spec_D32:Spec_D32.dll
+ 0001:0000f2b0       ?Pack_drPipe@CPatchMnu@@UAEXPAVCString@@@Z 100102b0 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2b6       ?DoDataView@CPatchMnu@@UAEXPAVCDC@@H@Z 100102b6 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2bc       ?Serialize@CPatchMnu@@UAEXAAVCArchive@@@Z 100102bc f   Spec_D32:Spec_D32.dll
+ 0001:0000f2c2       ?GetRuntimeClass@CPatchMnu@@UBEPAUCRuntimeClass@@XZ 100102c2 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2c8       ?InitObj3DMnu@CObj3DMnu@@UAEXXZ 100102c8 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2ce       ?ReadDefaultObj3DMnu@CObj3DMnu@@UAEXXZ 100102ce f   Spec_D32:Spec_D32.dll
+ 0001:0000f2d4       ?SetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z 100102d4 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2da       ?GetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z 100102da f   Spec_D32:Spec_D32.dll
+ 0001:0000f2e0       ?SetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z 100102e0 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2e6       ?GetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z 100102e6 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2ec       ?SetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z 100102ec f   Spec_D32:Spec_D32.dll
+ 0001:0000f2f2       ?GetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z 100102f2 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2f8       ?SetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z 100102f8 f   Spec_D32:Spec_D32.dll
+ 0001:0000f2fe       ?GetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z 100102fe f   Spec_D32:Spec_D32.dll
+ 0001:0000f304       ?SetObj3DMnuInfo@CObj3DMnu@@UAEXII@Z 10010304 f   Spec_D32:Spec_D32.dll
+ 0001:0000f30a       ?GetObj3DMnuInfo@CObj3DMnu@@UAE?AVCString@@I@Z 1001030a f   Spec_D32:Spec_D32.dll
+ 0001:0000f310       ?SetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z 10010310 f   Spec_D32:Spec_D32.dll
+ 0001:0000f316       ?GetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z 10010316 f   Spec_D32:Spec_D32.dll
+ 0001:0000f31c       ?Pack_drPipe@CObj3DMnu@@UAEXPAVCString@@@Z 1001031c f   Spec_D32:Spec_D32.dll
+ 0001:0000f322       ?DoDataView@CObj3DMnu@@UAEXPAVCDC@@H@Z 10010322 f   Spec_D32:Spec_D32.dll
+ 0001:0000f328       ?Serialize@CObj3DMnu@@UAEXAAVCArchive@@@Z 10010328 f   Spec_D32:Spec_D32.dll
+ 0001:0000f32e       ?GetRuntimeClass@CObj3DMnu@@UBEPAUCRuntimeClass@@XZ 1001032e f   Spec_D32:Spec_D32.dll
+ 0001:0000f334       ?InitMapFactor@CMapFactor@@UAEXXZ 10010334 f   Spec_D32:Spec_D32.dll
+ 0001:0000f33a       ?ReadDefaultMapFactor@CMapFactor@@UAEXXZ 1001033a f   Spec_D32:Spec_D32.dll
+ 0001:0000f340       ?SetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z 10010340 f   Spec_D32:Spec_D32.dll
+ 0001:0000f346       ?GetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z 10010346 f   Spec_D32:Spec_D32.dll
+ 0001:0000f34c       ?Pack_drPipe@CMapFactor@@UAEXPAVCString@@@Z 1001034c f   Spec_D32:Spec_D32.dll
+ 0001:0000f352       ?DoDataView@CMapFactor@@UAEXPAVCDC@@H@Z 10010352 f   Spec_D32:Spec_D32.dll
+ 0001:0000f358       ?Serialize@CMapFactor@@UAEXAAVCArchive@@@Z 10010358 f   Spec_D32:Spec_D32.dll
+ 0001:0000f35e       ?GetRuntimeClass@CMapFactor@@UBEPAUCRuntimeClass@@XZ 1001035e f   Spec_D32:Spec_D32.dll
+ 0001:0000f364       ?InitPrecision@CPrecision@@UAEXXZ 10010364 f   Spec_D32:Spec_D32.dll
+ 0001:0000f36a       ?ReadDefaultPrecision@CPrecision@@UAEXXZ 1001036a f   Spec_D32:Spec_D32.dll
+ 0001:0000f370       ?SetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z 10010370 f   Spec_D32:Spec_D32.dll
+ 0001:0000f376       ?GetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z 10010376 f   Spec_D32:Spec_D32.dll
+ 0001:0000f37c       ?Pack_drPipe@CPrecision@@UAEXPAVCString@@@Z 1001037c f   Spec_D32:Spec_D32.dll
+ 0001:0000f382       ?DoDataView@CPrecision@@UAEXPAVCDC@@H@Z 10010382 f   Spec_D32:Spec_D32.dll
+ 0001:0000f388       ?Serialize@CPrecision@@UAEXAAVCArchive@@@Z 10010388 f   Spec_D32:Spec_D32.dll
+ 0001:0000f38e       ?GetRuntimeClass@CPrecision@@UBEPAUCRuntimeClass@@XZ 1001038e f   Spec_D32:Spec_D32.dll
+ 0001:0000f394       ?InitScaleFactor@CScaleFactor@@UAEXXZ 10010394 f   Spec_D32:Spec_D32.dll
+ 0001:0000f39a       ?ReadDefaultScaleFactor@CScaleFactor@@UAEXXZ 1001039a f   Spec_D32:Spec_D32.dll
+ 0001:0000f3a0       ?SetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z 100103a0 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3a6       ?GetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z 100103a6 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3ac       ?Pack_drPipe@CScaleFactor@@UAEXPAVCString@@@Z 100103ac f   Spec_D32:Spec_D32.dll
+ 0001:0000f3b2       ?DoDataView@CScaleFactor@@UAEXPAVCDC@@H@Z 100103b2 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3b8       ?Serialize@CScaleFactor@@UAEXAAVCArchive@@@Z 100103b8 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3be       ?GetRuntimeClass@CScaleFactor@@UBEPAUCRuntimeClass@@XZ 100103be f   Spec_D32:Spec_D32.dll
+ 0001:0000f3c4       ?InitUnit@CUnit@@UAEXXZ    100103c4 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3ca       ?ReadDefaultUnit@CUnit@@UAEXXZ 100103ca f   Spec_D32:Spec_D32.dll
+ 0001:0000f3d0       ?SetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z 100103d0 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3d6       ?GetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z 100103d6 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3dc       ?Pack_drPipe@CUnit@@UAEXPAVCString@@@Z 100103dc f   Spec_D32:Spec_D32.dll
+ 0001:0000f3e2       ?DoDataView@CUnit@@UAEXPAVCDC@@H@Z 100103e2 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3e8       ?Serialize@CUnit@@UAEXAAVCArchive@@@Z 100103e8 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3ee       ?GetRuntimeClass@CUnit@@UBEPAUCRuntimeClass@@XZ 100103ee f   Spec_D32:Spec_D32.dll
+ 0001:0000f3f4       ??1CDListMgr@@UAE@XZ       100103f4 f   Spec_D32:Spec_D32.dll
+ 0001:0000f3fa       ?GetSpecObject@CObjectMgr@@QAEPAVCDrObject@@H@Z 100103fa f   OMgr_D32:OMgr_D32.dll
+ 0001:0000f400       ?Serialize@C3DMath@@UAEXAAVCArchive@@@Z 10010400 f   Dr3D_D32:Dr3D_D32.dll
+ 0001:0000f406       ?GetRuntimeClass@C3DMath@@UBEPAUCRuntimeClass@@XZ 10010406 f   Dr3D_D32:Dr3D_D32.dll
+ 0001:0000f40c       ?BlockCopy@C3DMath@@QAEXPAD0K@Z 1001040c f   Dr3D_D32:Dr3D_D32.dll
+ 0001:0000f412       ??0C3DMath@@QAE@XZ         10010412 f   Dr3D_D32:Dr3D_D32.dll
+ 0001:0000f418       ?Init@CElemInfo@@UAEXXZ    10010418 f   Elem_D32:Elem_D32.dll
+ 0001:0000f41e       ?ReadDefault@CElemInfo@@UAEXXZ 1001041e f   Elem_D32:Elem_D32.dll
+ 0001:0000f424       ?SetObjectInfo@CElemInfo@@UAEXPAVCDrObject@@@Z 10010424 f   Elem_D32:Elem_D32.dll
+ 0001:0000f42a       ?GetObjectInfo@CElemInfo@@UAEXPAVCDrObject@@@Z 1001042a f   Elem_D32:Elem_D32.dll
+ 0001:0000f430       ?Pack_drPipe@CElemInfo@@UAEXPAVCString@@@Z 10010430 f   Elem_D32:Elem_D32.dll
+ 0001:0000f436       ?DoDataView@CElemInfo@@UAEXPAVCDC@@H@Z 10010436 f   Elem_D32:Elem_D32.dll
+ 0001:0000f43c       ?Serialize@CElemInfo@@UAEXAAVCArchive@@@Z 1001043c f   Elem_D32:Elem_D32.dll
+ 0001:0000f442       ?GetRuntimeClass@CElemInfo@@UBEPAUCRuntimeClass@@XZ 10010442 f   Elem_D32:Elem_D32.dll
+ 0001:0000f448       ?Dump@CObject@@UBEXAAVCDumpContext@@@Z 10010448 f   mfc42d:MFC42D.DLL
+ 0001:0000f44e       ?AssertValid@CObject@@UBEXXZ 1001044e f   mfc42d:MFC42D.DLL
+ 0001:0000f454       ??1CObject@@UAE@XZ         10010454 f   mfc42d:MFC42D.DLL
+ 0001:0000f45a       ??3CObject@@SGXPAX@Z       1001045a f   mfc42d:MFC42D.DLL
+ 0001:0000f460       ??3@YAXPAX@Z               10010460 f   mfc42d:MFC42D.DLL
+ 0001:0000f466       ??0CString@@QAE@ABV0@@Z    10010466 f   mfc42d:MFC42D.DLL
+ 0001:0000f46c       ??1CString@@QAE@XZ         1001046c f   mfc42d:MFC42D.DLL
+ 0001:0000f472       ??4CString@@QAEABV0@ABV0@@Z 10010472 f   mfc42d:MFC42D.DLL
+ 0001:0000f478       ?Serialize@CObject@@UAEXAAVCArchive@@@Z 10010478 f   mfc42d:MFC42D.DLL
+ 0001:0000f47e       ??1CPen@@UAE@XZ            1001047e f   mfc42d:MFC42D.DLL
+ 0001:0000f484       ??1CDialog@@UAE@XZ         10010484 f   mfc42d:MFC42D.DLL
+ 0001:0000f48a       ??1CButton@@UAE@XZ         1001048a f   mfc42d:MFC42D.DLL
+ 0001:0000f490       ??1CBitmap@@UAE@XZ         10010490 f   mfc42d:MFC42D.DLL
+ 0001:0000f496       ?PreInitDialog@CDialog@@MAEXXZ 10010496 f   mfc42d:MFC42D.DLL
+ 0001:0000f49c       ?OnCancel@CDialog@@MAEXXZ  1001049c f   mfc42d:MFC42D.DLL
+ 0001:0000f4a2       ?OnOK@CDialog@@MAEXXZ      100104a2 f   mfc42d:MFC42D.DLL
+ 0001:0000f4a8       ?OnSetFont@CDialog@@UAEXPAVCFont@@@Z 100104a8 f   mfc42d:MFC42D.DLL
+ 0001:0000f4ae       ?DoModal@CDialog@@UAEHXZ   100104ae f   mfc42d:MFC42D.DLL
+ 0001:0000f4b4       ?SetOccDialogInfo@CDialog@@MAEHPAU_AFX_OCC_DIALOG_INFO@@@Z 100104b4 f   mfc42d:MFC42D.DLL
+ 0001:0000f4ba       ?IsFrameWnd@CWnd@@UBEHXZ   100104ba f   mfc42d:MFC42D.DLL
+ 0001:0000f4c0       ?CheckAutoCenter@CDialog@@UAEHXZ 100104c0 f   mfc42d:MFC42D.DLL
+ 0001:0000f4c6       ?OnChildNotify@CWnd@@MAEHIIJPAJ@Z 100104c6 f   mfc42d:MFC42D.DLL
+ 0001:0000f4cc       ?PostNcDestroy@CWnd@@MAEXXZ 100104cc f   mfc42d:MFC42D.DLL
+ 0001:0000f4d2       ?DefWindowProcA@CWnd@@MAEJIIJ@Z 100104d2 f   mfc42d:MFC42D.DLL
+ 0001:0000f4d8       ?OnWndMsg@CWnd@@MAEHIIJPAJ@Z 100104d8 f   mfc42d:MFC42D.DLL
+ 0001:0000f4de       ?WindowProc@CWnd@@MAEJIIJ@Z 100104de f   mfc42d:MFC42D.DLL
+ 0001:0000f4e4       ?OnAmbientProperty@CWnd@@UAEHPAVCOleControlSite@@JPAUtagVARIANT@@@Z 100104e4 f   mfc42d:MFC42D.DLL
+ 0001:0000f4ea       ?PreTranslateMessage@CDialog@@UAEHPAUtagMSG@@@Z 100104ea f   mfc42d:MFC42D.DLL
+ 0001:0000f4f0       ?EndModalState@CWnd@@UAEXXZ 100104f0 f   mfc42d:MFC42D.DLL
+ 0001:0000f4f6       ?BeginModalState@CWnd@@UAEXXZ 100104f6 f   mfc42d:MFC42D.DLL
+ 0001:0000f4fc       ?GetSuperWndProcAddr@CWnd@@MAEPAP6GJPAUHWND__@@IIJ@ZXZ 100104fc f   mfc42d:MFC42D.DLL
+ 0001:0000f502       ?OnNotify@CWnd@@MAEHIJPAJ@Z 10010502 f   mfc42d:MFC42D.DLL
+ 0001:0000f508       ?OnCommand@CWnd@@MAEHIJ@Z  10010508 f   mfc42d:MFC42D.DLL
+ 0001:0000f50e       ?EndModalLoop@CWnd@@UAEXH@Z 1001050e f   mfc42d:MFC42D.DLL
+ 0001:0000f514       ?ContinueModal@CWnd@@UAEHXZ 10010514 f   mfc42d:MFC42D.DLL
+ 0001:0000f51a       ?WinHelpA@CWnd@@UAEXKI@Z   1001051a f   mfc42d:MFC42D.DLL
+ 0001:0000f520       ?GetScrollBarCtrl@CWnd@@UBEPAVCScrollBar@@H@Z 10010520 f   mfc42d:MFC42D.DLL
+ 0001:0000f526       ?OnToolHitTest@CWnd@@UBEHVCPoint@@PAUtagTOOLINFOA@@@Z 10010526 f   mfc42d:MFC42D.DLL
+ 0001:0000f52c       ?CalcWindowRect@CWnd@@UAEXPAUtagRECT@@I@Z 1001052c f   mfc42d:MFC42D.DLL
+ 0001:0000f532       ?PreCreateWindow@CWnd@@UAEHAAUtagCREATESTRUCTA@@@Z 10010532 f   mfc42d:MFC42D.DLL
+ 0001:0000f538       ?DestroyWindow@CWnd@@UAEHXZ 10010538 f   mfc42d:MFC42D.DLL
+ 0001:0000f53e       ?Create@CWnd@@UAEHPBD0KABUtagRECT@@PAV1@IPAUCCreateContext@@@Z 1001053e f   mfc42d:MFC42D.DLL
+ 0001:0000f544       ?PreSubclassWindow@CWnd@@UAEXXZ 10010544 f   mfc42d:MFC42D.DLL
+ 0001:0000f54a       ?GetConnectionHook@CCmdTarget@@MAEPAUIConnectionPoint@@ABU_GUID@@@Z 1001054a f   mfc42d:MFC42D.DLL
+ 0001:0000f550       ?GetExtraConnectionPoints@CCmdTarget@@MAEHPAVCPtrArray@@@Z 10010550 f   mfc42d:MFC42D.DLL
+ 0001:0000f556       ?GetInterfaceHook@CCmdTarget@@UAEPAUIUnknown@@PBX@Z 10010556 f   mfc42d:MFC42D.DLL
+ 0001:0000f55c       ?OnCreateAggregates@CCmdTarget@@UAEHXZ 1001055c f   mfc42d:MFC42D.DLL
+ 0001:0000f562       ?GetEventSinkMap@CCmdTarget@@MBEPBUAFX_EVENTSINKMAP@@XZ 10010562 f   mfc42d:MFC42D.DLL
+ 0001:0000f568       ?GetInterfaceMap@CCmdTarget@@MBEPBUAFX_INTERFACEMAP@@XZ 10010568 f   mfc42d:MFC42D.DLL
+ 0001:0000f56e       ?GetConnectionMap@CCmdTarget@@MBEPBUAFX_CONNECTIONMAP@@XZ 1001056e f   mfc42d:MFC42D.DLL
+ 0001:0000f574       ?GetDispatchMap@CCmdTarget@@MBEPBUAFX_DISPMAP@@XZ 10010574 f   mfc42d:MFC42D.DLL
+ 0001:0000f57a       ?GetCommandMap@CCmdTarget@@MBEPBUAFX_OLECMDMAP@@XZ 1001057a f   mfc42d:MFC42D.DLL
+ 0001:0000f580       ?GetTypeLib@CCmdTarget@@UAEJKPAPAUITypeLib@@@Z 10010580 f   mfc42d:MFC42D.DLL
+ 0001:0000f586       ?GetTypeLibCache@CCmdTarget@@UAEPAVCTypeLibCache@@XZ 10010586 f   mfc42d:MFC42D.DLL
+ 0001:0000f58c       ?GetTypeInfoCount@CCmdTarget@@UAEIXZ 1001058c f   mfc42d:MFC42D.DLL
+ 0001:0000f592       ?GetDispatchIID@CCmdTarget@@UAEHPAU_GUID@@@Z 10010592 f   mfc42d:MFC42D.DLL
+ 0001:0000f598       ?IsInvokeAllowed@CCmdTarget@@UAEHJ@Z 10010598 f   mfc42d:MFC42D.DLL
+ 0001:0000f59e       ?OnFinalRelease@CWnd@@UAEXXZ 1001059e f   mfc42d:MFC42D.DLL
+ 0001:0000f5a4       ?OnCmdMsg@CDialog@@UAEHIHPAXPAUAFX_CMDHANDLERINFO@@@Z 100105a4 f   mfc42d:MFC42D.DLL
+ 0001:0000f5aa       ?Dump@CDialog@@UBEXAAVCDumpContext@@@Z 100105aa f   mfc42d:MFC42D.DLL
+ 0001:0000f5b0       ?AssertValid@CDialog@@UBEXXZ 100105b0 f   mfc42d:MFC42D.DLL
+ 0001:0000f5b6       ?GetRuntimeClass@CDialog@@UBEPAUCRuntimeClass@@XZ 100105b6 f   mfc42d:MFC42D.DLL
+ 0001:0000f5bc       ?LoadBitmaps@CBitmapButton@@QAEHPBD000@Z 100105bc f   mfc42d:MFC42D.DLL
+ 0001:0000f5c2       ??0CBitmapButton@@QAE@XZ   100105c2 f   mfc42d:MFC42D.DLL
+ 0001:0000f5c8       ??0CDialog@@QAE@IPAVCWnd@@@Z 100105c8 f   mfc42d:MFC42D.DLL
+ 0001:0000f5ce       ?DDV_MinMaxDouble@@YGXPAVCDataExchange@@ABNNN@Z 100105ce f   mfc42d:MFC42D.DLL
+ 0001:0000f5d4       ?DDX_Text@@YGXPAVCDataExchange@@HAAN@Z 100105d4 f   mfc42d:MFC42D.DLL
+ 0001:0000f5da       ?DDV_MinMaxInt@@YGXPAVCDataExchange@@HHH@Z 100105da f   mfc42d:MFC42D.DLL
+ 0001:0000f5e0       ?DDX_Text@@YGXPAVCDataExchange@@HAAH@Z 100105e0 f   mfc42d:MFC42D.DLL
+ 0001:0000f5e6       ?DoDataExchange@CWnd@@MAEXPAVCDataExchange@@@Z 100105e6 f   mfc42d:MFC42D.DLL
+ 0001:0000f5ec       ?AfxGetApp@@YGPAVCWinApp@@XZ 100105ec f   mfc42d:MFC42D.DLL
+ 0001:0000f5f2       ?SetFocus@CWnd@@QAEPAV1@XZ 100105f2 f   mfc42d:MFC42D.DLL
+ 0001:0000f5f8       ?GetDlgItem@CWnd@@QBEPAV1@H@Z 100105f8 f   mfc42d:MFC42D.DLL
+ 0001:0000f5fe       ?SizeToContent@CBitmapButton@@QAEXXZ 100105fe f   mfc42d:MFC42D.DLL
+ 0001:0000f604       ?SubclassDlgItem@CWnd@@QAEHIPAV1@@Z 10010604 f   mfc42d:MFC42D.DLL
+ 0001:0000f60a       ?OnInitDialog@CDialog@@UAEHXZ 1001060a f   mfc42d:MFC42D.DLL
+ 0001:0000f610       ??4CString@@QAEABV0@PBD@Z  10010610 f   mfc42d:MFC42D.DLL
+ 0001:0000f616       ??0CString@@QAE@XZ         10010616 f   mfc42d:MFC42D.DLL
+ 0001:0000f61c       ?DDX_LBString@@YGXPAVCDataExchange@@HAAVCString@@@Z 1001061c f   mfc42d:MFC42D.DLL
+ 0001:0000f622       ?GotoDlgCtrl@CDialog@@QAEXPAVCWnd@@@Z 10010622 f   mfc42d:MFC42D.DLL
+ 0001:0000f628       ?SetCurSel@CListBox@@QAEHH@Z 10010628 f   mfc42d:MFC42D.DLL
+ 0001:0000f62e       ?AddString@CListBox@@QAEHPBD@Z 1001062e f   mfc42d:MFC42D.DLL
+ 0001:0000f634       ??BCString@@QBEPBDXZ       10010634 f   mfc42d:MFC42D.DLL
+ 0001:0000f63a       ?DeleteString@CListBox@@QAEHI@Z 1001063a f   mfc42d:MFC42D.DLL
+ 0001:0000f640       ?GetCurSel@CListBox@@QBEHXZ 10010640 f   mfc42d:MFC42D.DLL
+ 0001:0000f646       ?CharToItem@CListBox@@UAEHII@Z 10010646 f   mfc42d:MFC42D.DLL
+ 0001:0000f64c       ?VKeyToItem@CListBox@@UAEHII@Z 1001064c f   mfc42d:MFC42D.DLL
+ 0001:0000f652       ?DeleteItem@CListBox@@UAEXPAUtagDELETEITEMSTRUCT@@@Z 10010652 f   mfc42d:MFC42D.DLL
+ 0001:0000f658       ?SetOccDialogInfo@CWnd@@MAEHPAU_AFX_OCC_DIALOG_INFO@@@Z 10010658 f   mfc42d:MFC42D.DLL
+ 0001:0000f65e       ?CheckAutoCenter@CWnd@@UAEHXZ 1001065e f   mfc42d:MFC42D.DLL
+ 0001:0000f664       ?OnChildNotify@CListBox@@MAEHIIJPAJ@Z 10010664 f   mfc42d:MFC42D.DLL
+ 0001:0000f66a       ?PreTranslateMessage@CWnd@@UAEHPAUtagMSG@@@Z 1001066a f   mfc42d:MFC42D.DLL
+ 0001:0000f670       ?GetMessageMap@CWnd@@MBEPBUAFX_MSGMAP@@XZ 10010670 f   mfc42d:MFC42D.DLL
+ 0001:0000f676       ?OnCmdMsg@CCmdTarget@@UAEHIHPAXPAUAFX_CMDHANDLERINFO@@@Z 10010676 f   mfc42d:MFC42D.DLL
+ 0001:0000f67c       ?Dump@CWnd@@UBEXAAVCDumpContext@@@Z 1001067c f   mfc42d:MFC42D.DLL
+ 0001:0000f682       ?AssertValid@CWnd@@UBEXXZ  10010682 f   mfc42d:MFC42D.DLL
+ 0001:0000f688       ?GetRuntimeClass@CListBox@@UBEPAUCRuntimeClass@@XZ 10010688 f   mfc42d:MFC42D.DLL
+ 0001:0000f68e       ??0CListBox@@QAE@XZ        1001068e f   mfc42d:MFC42D.DLL
+ 0001:0000f694       ??1CListBox@@UAE@XZ        10010694 f   mfc42d:MFC42D.DLL
+ 0001:0000f69a       ?DDX_CBString@@YGXPAVCDataExchange@@HAAVCString@@@Z 1001069a f   mfc42d:MFC42D.DLL
+ 0001:0000f6a0       ?DDV_MinMaxUInt@@YGXPAVCDataExchange@@III@Z 100106a0 f   mfc42d:MFC42D.DLL
+ 0001:0000f6a6       ?DDX_Text@@YGXPAVCDataExchange@@HAAI@Z 100106a6 f   mfc42d:MFC42D.DLL
+ 0001:0000f6ac       ??8@YG_NABVCString@@0@Z    100106ac f   mfc42d:MFC42D.DLL
+ 0001:0000f6b2       ?SetCurSel@CComboBox@@QAEHH@Z 100106b2 f   mfc42d:MFC42D.DLL
+ 0001:0000f6b8       ?SetPos@CSpinButtonCtrl@@QAEHH@Z 100106b8 f   mfc42d:MFC42D.DLL
+ 0001:0000f6be       ?SetRange@CSpinButtonCtrl@@QAEXHH@Z 100106be f   mfc42d:MFC42D.DLL
+ 0001:0000f6c4       ?SetBase@CSpinButtonCtrl@@QAEHH@Z 100106c4 f   mfc42d:MFC42D.DLL
+ 0001:0000f6ca       ?SetBuddy@CSpinButtonCtrl@@QAEPAVCWnd@@PAV2@@Z 100106ca f   mfc42d:MFC42D.DLL
+ 0001:0000f6d0       ?AfxAssertFailedLine@@YGHPBDH@Z 100106d0 f   mfc42d:MFC42D.DLL
+ 0001:0000f6d6       ?LimitText@CEdit@@QAEXH@Z  100106d6 f   mfc42d:MFC42D.DLL
+ 0001:0000f6dc       ?AfxTrace@@YAXPBDZZ        100106dc f   mfc42d:MFC42D.DLL
+ 0001:0000f6e2       ?GetItemData@CListBox@@QBEKH@Z 100106e2 f   mfc42d:MFC42D.DLL
+ 0001:0000f6e8       ?MessageBoxA@CWnd@@QAEHPBD0I@Z 100106e8 f   mfc42d:MFC42D.DLL
+ 0001:0000f6ee       ?GetPos@CSpinButtonCtrl@@QBEHXZ 100106ee f   mfc42d:MFC42D.DLL
+ 0001:0000f6f4       ?FrameRect@CDC@@QAEXPBUtagRECT@@PAVCBrush@@@Z 100106f4 f   mfc42d:MFC42D.DLL
+ 0001:0000f6fa       ??1CBrush@@UAE@XZ          100106fa f   mfc42d:MFC42D.DLL
+ 0001:0000f700       ?FillRect@CDC@@QAEXPBUtagRECT@@PAVCBrush@@@Z 10010700 f   mfc42d:MFC42D.DLL
+ 0001:0000f706       ??0CBrush@@QAE@K@Z         10010706 f   mfc42d:MFC42D.DLL
+ 0001:0000f70c       ?FromHandle@CDC@@SGPAV1@PAUHDC__@@@Z 1001070c f   mfc42d:MFC42D.DLL
+ 0001:0000f712       ?SetWindowTextA@CWnd@@QAEXPBD@Z 10010712 f   mfc42d:MFC42D.DLL
+ 0001:0000f718       ?AfxGetModuleState@@YGPAVAFX_MODULE_STATE@@XZ 10010718 f   mfc42d:MFC42D.DLL
+ 0001:0000f71e       ??0CDynLinkLibrary@@QAE@AAUAFX_EXTENSION_MODULE@@H@Z 1001071e f   mfc42d:MFC42D.DLL
+ 0001:0000f724       ??2CObject@@SGPAXI@Z       10010724 f   mfc42d:MFC42D.DLL
+ 0001:0000f72a       ?AfxInitExtensionModule@@YGHAAUAFX_EXTENSION_MODULE@@PAUHINSTANCE__@@@Z 1001072a f   mfc42d:MFC42D.DLL
+ 0001:0000f730       ?ReadObject@CArchive@@QAEPAVCObject@@PBUCRuntimeClass@@@Z 10010730 f   mfc42d:MFC42D.DLL
+ 0001:0000f736       ??0CObject@@IAE@XZ         10010736 f   mfc42d:MFC42D.DLL
+ 0001:0000f73c       ?AfxSetResourceHandle@@YGXPAUHINSTANCE__@@@Z 1001073c f   mfc42d:MFC42D.DLL
+ 0001:0000f742       ?AfxGetResourceHandle@@YGPAUHINSTANCE__@@XZ 10010742 f   mfc42d:MFC42D.DLL
+ 0001:0000f748       ?LoadStringA@CString@@QAEHI@Z 10010748 f   mfc42d:MFC42D.DLL
+ 0001:0000f74e       ?AfxClassInit@@YGXPAUCRuntimeClass@@@Z 1001074e f   mfc42d:MFC42D.DLL
+ 0001:0000f754       ?IsStoring@CArchive@@QBEHXZ 10010754 f   mfc42d:MFC42D.DLL
+ 0001:0000f760       _sqrt                      10010760 f   msvcrtd:MSVCRTD.dll
+ 0001:0000f770       ??_M@YGXPAXIHP6EX0@Z@Z     10010770 f   msvcrtd:ehvecdtr.obj
+ 0001:0000f820       ?__ArrayUnwind@@YGXPAXIHP6EX0@Z@Z 10010820 f   msvcrtd:ehvecdtr.obj
+ 0001:0000f8cc       ___CxxFrameHandler         100108cc f   msvcrtd:MSVCRTD.dll
+ 0001:0000f8e0       __chkstk                   100108e0 f   msvcrtd:chkstk.obj
+ 0001:0000f8e0       __alloca_probe             100108e0 f   msvcrtd:chkstk.obj
+ 0001:0000f910       _pow                       10010910 f   msvcrtd:MSVCRTD.dll
+ 0001:0000f916       __ftol                     10010916 f   msvcrtd:MSVCRTD.dll
+ 0001:0000f920       __CRT_INIT@12              10010920 f   msvcrtd:crtdll.obj
+ 0001:0000fa30       __DllMainCRTStartup@12     10010a30 f   msvcrtd:crtdll.obj
+ 0001:0000fb24       __except_handler3          10010b24 f   msvcrtd:MSVCRTD.dll
+ 0001:0000fb2a       ?terminate@@YAXXZ          10010b2a f   msvcrtd:MSVCRTD.dll
+ 0001:0000fb30       __free_dbg                 10010b30 f   msvcrtd:MSVCRTD.dll
+ 0001:0000fb36       __initterm                 10010b36 f   msvcrtd:MSVCRTD.dll
+ 0001:0000fb40       __onexit                   10010b40 f   msvcrtd:atonexit.obj
+ 0001:0000fb80       _atexit                    10010b80 f   msvcrtd:atonexit.obj
+ 0001:0000fb98       __malloc_dbg               10010b98 f   msvcrtd:MSVCRTD.dll
+ 0001:0000fb9e       ___dllonexit               10010b9e f   msvcrtd:MSVCRTD.dll
+ 0001:00012500       __enc$textbss$begin        10013500     <linker-defined>
+ 0001:00031e00       __enc$textbss$end          10032e00     <linker-defined>
+ 0002:00000020       ?messageMap@CDlg_HNet@@1UAFX_MSGMAP@@B 10033020     Dlg_HNet.obj
+ 0002:00000028       ?_messageEntries@CDlg_HNet@@0QBUAFX_MSGMAP_ENTRY@@B 10033028     Dlg_HNet.obj
+ 0002:00000048       ??_7C3DMath@@6B@           10033048     Dlg_HNet.obj
+ 0002:00000060       ??_7CMatObj@@6B@           10033060     Dlg_HNet.obj
+ 0002:00000168       ??_7CBooleans@@6B@         10033168     Dlg_HNet.obj
+ 0002:0000041c       ??_7CDataWindow@@6B@       1003341c     Dlg_HNet.obj
+ 0002:000005d8       ??_7CDrFont@@6B@           100335d8     Dlg_HNet.obj
+ 0002:00000794       ??_7CDrPen@@6B@            10033794     Dlg_HNet.obj
+ 0002:000009c0       ??_7CHitNet@@6B@           100339c0     Dlg_HNet.obj
+ 0002:00000b54       ??_7CLayer@@6B@            10033b54     Dlg_HNet.obj
+ 0002:00000d34       ??_7CPatchMnu@@6B@         10033d34     Dlg_HNet.obj
+ 0002:00000f30       ??_7CObj3DMnu@@6B@         10033f30     Dlg_HNet.obj
+ 0002:0000112c       ??_7CMapFactor@@6B@        1003412c     Dlg_HNet.obj
+ 0002:000012dc       ??_7CPrecision@@6B@        100342dc     Dlg_HNet.obj
+ 0002:000014b4       ??_7CScaleFactor@@6B@      100344b4     Dlg_HNet.obj
+ 0002:00001670       ??_7CUnit@@6B@             10034670     Dlg_HNet.obj
+ 0002:00001838       ??_7CElemInfo@@6B@         10034838     Dlg_HNet.obj
+ 0002:000019dc       ??_C@_08OKPH@Image2Up?$AA@ 100349dc     Dlg_HNet.obj
+ 0002:000019e8       ??_C@_0L@KCBH@Image2Down?$AA@ 100349e8     Dlg_HNet.obj
+ 0002:000019f8       ??_C@_0M@DMDD@Image2Focus?$AA@ 100349f8     Dlg_HNet.obj
+ 0002:00001a08       ??_C@_08BMMM@Image1Up?$AA@ 10034a08     Dlg_HNet.obj
+ 0002:00001a14       ??_C@_0L@ECHI@Image1Down?$AA@ 10034a14     Dlg_HNet.obj
+ 0002:00001a24       ??_C@_0M@ICND@Image1Focus?$AA@ 10034a24     Dlg_HNet.obj
+ 0002:00001a34       ??_7CDlg_HNet@@6B@         10034a34     Dlg_HNet.obj
+ 0002:00001b38       ?messageMap@CDrawLayer@@1UAFX_MSGMAP@@B 10034b38     Dlg_layr.obj
+ 0002:00001b40       ?_messageEntries@CDrawLayer@@0QBUAFX_MSGMAP_ENTRY@@B 10034b40     Dlg_layr.obj
+ 0002:00001bd4       ??_C@_00A@?$AA@            10034bd4     Dlg_layr.obj
+ 0002:00001bd8       ??_7CDrawLayer@@6B@        10034bd8     Dlg_layr.obj
+ 0002:00001ce0       ?messageMap@CPenDlg@@1UAFX_MSGMAP@@B 10034ce0     Dlg_pen.obj
+ 0002:00001ce8       ?_messageEntries@CPenDlg@@0QBUAFX_MSGMAP_ENTRY@@B 10034ce8     Dlg_pen.obj
+ 0002:00001d08       ??_7CColorListBox@@6B@     10034d08     Dlg_pen.obj
+ 0002:00001e0c       ??_7CPenDlg@@6B@           10034e0c     Dlg_pen.obj
+ 0002:00001f10       ??_C@_0BL@JEPF@final?5color?5RGB?5?$DN?50x?$CF06lX?6?$AA@ 10034f10     Dlg_pen.obj
+ 0002:00001f30       ??_C@_0BG@LLAN@Please?5Select?5a?5Color?$AA@ 10034f30     Dlg_pen.obj
+ 0002:00001f50       ?messageMap@CDrawPrecision@@1UAFX_MSGMAP@@B 10034f50     Dlg_prec.obj
+ 0002:00001f58       ?_messageEntries@CDrawPrecision@@0QBUAFX_MSGMAP_ENTRY@@B 10034f58     Dlg_prec.obj
+ 0002:00001f78       ??_7CDrawPrecision@@6B@    10034f78     Dlg_prec.obj
+ 0002:00002080       ?messageMap@CDrawScale@@1UAFX_MSGMAP@@B 10035080     Dlg_sfac.obj
+ 0002:00002088       ?_messageEntries@CDrawScale@@0QBUAFX_MSGMAP_ENTRY@@B 10035088     Dlg_sfac.obj
+ 0002:000020a8       ??_7CDrawScale@@6B@        100350a8     Dlg_sfac.obj
+ 0002:000021b0       ?messageMap@CDrawUnit@@1UAFX_MSGMAP@@B 100351b0     Dlg_unit.obj
+ 0002:000021b8       ?_messageEntries@CDrawUnit@@0QBUAFX_MSGMAP_ENTRY@@B 100351b8     Dlg_unit.obj
+ 0002:000021d8       ??_7CDrawUnit@@6B@         100351d8     Dlg_unit.obj
+ 0002:000022e0       ?messageMap@CDlgObj3D@@1UAFX_MSGMAP@@B 100352e0     Dlgobj3d.obj
+ 0002:000022e8       ?_messageEntries@CDlgObj3D@@0QBUAFX_MSGMAP_ENTRY@@B 100352e8     Dlgobj3d.obj
+ 0002:0000237c       ??_7CDlgObj3D@@6B@         1003537c     Dlgobj3d.obj
+ 0002:00002480       ?messageMap@CDlgPatch@@1UAFX_MSGMAP@@B 10035480     Dlgpatch.obj
+ 0002:00002488       ?_messageEntries@CDlgPatch@@0QBUAFX_MSGMAP_ENTRY@@B 10035488     Dlgpatch.obj
+ 0002:0000251c       ??_7CDlgPatch@@6B@         1003551c     Dlgpatch.obj
+ 0002:00002620       ??_C@_0BH@NCAB@SDlg?4DLL?5Terminating?$CB?6?$AA@ 10035620     Sdlgdll.obj
+ 0002:0000263c       ??_C@_02DILL@?$CFs?$AA@    1003563c     Sdlgdll.obj
+ 0002:00002640       ??_C@_0BI@FOEJ@SDlg?4DLL?5Initializing?$CB?6?$AA@ 10035640     Sdlgdll.obj
+ 0002:0000265c       ??_C@_08EAGE@CSDlgMgr?$AA@ 1003565c     Sdlgmgr.obj
+ 0002:00002668       ??_7CSDlgMgr@@6B@          10035668     Sdlgmgr.obj
+ 0002:00002680       ??_C@_0BG@LFDF@resource?5string?5?$DN?5?$CFs?6?$AA@ 10035680     Sdlgmgr.obj
+ 0002:0000269c       ??_C@_0BD@DFAI@?5SDlgMgr?7?3Loading?6?$AA@ 1003569c     Sdlgmgr.obj
+ 0002:000026b4       ??_C@_0BD@PCFO@?5SDlgMgr?7?3Storing?6?$AA@ 100356b4     Sdlgmgr.obj
+ 0002:000026d0       _IID_IDocHostUIHandlerDispatch 100356d0     mfcs42d:stdafx.obj
+ 0002:000026e0       _IID_IInternalConnection   100356e0     mfcs42d:stdafx.obj
+ 0002:000026f0       _IID_IAxWinAmbientDispatch 100356f0     mfcs42d:stdafx.obj
+ 0002:00002700       _IID_IAxWinHostWindow      10035700     mfcs42d:stdafx.obj
+ 0002:00002710       _IID_IRegistrar            10035710     mfcs42d:stdafx.obj
+ 0002:00002720       _CLSID_Registrar           10035720     mfcs42d:stdafx.obj
+ 0002:00002730       _LIBID_ATLLib              10035730     mfcs42d:stdafx.obj
+ 0002:0000275c       ??_C@_08JKC@crtdll?4c?$AA@ 1003575c     msvcrtd:crtdll.obj
+ 0003:00000000       ___xc_a                    10041000     msvcrtd:cinitexe.obj
+ 0003:00000208       ___xc_z                    10041208     msvcrtd:cinitexe.obj
+ 0003:0000030c       ___xi_a                    1004130c     msvcrtd:cinitexe.obj
+ 0003:00000410       ___xi_z                    10041410     msvcrtd:cinitexe.obj
+ 0003:000005c8       ?__LINE__Var@?1??OnInitDialog@CPenDlg@@MAEHXZ@4FA 100415c8     Dlg_pen.obj
+ 0003:000005cc       ?__LINE__Var@?1??OnOK@CPenDlg@@MAEXXZ@4FA 100415cc     Dlg_pen.obj
+ 0003:0000070c       __pRawDllMain              1004170c     Sdlgdll.obj
+ 0003:00000740       ?classCSDlgMgr@CSDlgMgr@@2UCRuntimeClass@@A 10041740     Sdlgmgr.obj
+ 0003:00000768       ?GUID_ATLVer30@ATL@@3U_GUID@@A 10041768     mfcs42d:stdafx.obj
+ 0003:00000890       __afxForceEXTDLL           10041890     Sdlgdll.obj
+ 0003:00000898       ?extensionSDlg_DLL@@3UAFX_EXTENSION_MODULE@@A 10041898     Sdlgdll.obj
+ 0003:000008b4       ?_init_CSDlgMgr@@3UAFX_CLASSINIT@@A 100418b4     Sdlgmgr.obj
+ 0003:000008b8       __afxForceEXCLUDE          100418b8     mfcs42d:nolib.obj
+ 0003:000008bc       ?ATL_CREATE_OBJECT@CComApartment@ATL@@2IA 100418bc     mfcs42d:stdafx.obj
+ 0003:000008c0       ?m_libid@CComModule@ATL@@2U_GUID@@A 100418c0     mfcs42d:stdafx.obj
+ 0003:000008d0       ?_pModule@ATL@@3PAVCComModule@1@A 100418d0     mfcs42d:stdafx.obj
+ 0003:000008d4       __afxForceSTDAFX           100418d4     mfcs42d:stdafx.obj
+ 0003:000008dc       __adjust_fdiv              100418dc     <common>
+ 0003:000008e8       ___onexitend               100418e8     <common>
+ 0003:000008f8       ___onexitbegin             100418f8     <common>
+ 0004:00000000       __IMPORT_DESCRIPTOR_Spec_D32 10042000     Spec_D32:Spec_D32.dll
+ 0004:00000014       __IMPORT_DESCRIPTOR_OMgr_D32 10042014     OMgr_D32:OMgr_D32.dll
+ 0004:00000028       __IMPORT_DESCRIPTOR_Dr3D_D32 10042028     Dr3D_D32:Dr3D_D32.dll
+ 0004:0000003c       __IMPORT_DESCRIPTOR_Elem_D32 1004203c     Elem_D32:Elem_D32.dll
+ 0004:00000050       __IMPORT_DESCRIPTOR_MFC42D 10042050     mfc42d:MFC42D.DLL
+ 0004:00000064       __IMPORT_DESCRIPTOR_MSVCRTD 10042064     msvcrtd:MSVCRTD.dll
+ 0004:00000078       __NULL_IMPORT_DESCRIPTOR   10042078     Spec_D32:Spec_D32.dll
+ 0004:00000724       __imp_?BlockCopy@C3DMath@@QAEXPAD0K@Z 10042724     Dr3D_D32:Dr3D_D32.dll
+ 0004:00000728       __imp_?GetRuntimeClass@C3DMath@@UBEPAUCRuntimeClass@@XZ 10042728     Dr3D_D32:Dr3D_D32.dll
+ 0004:0000072c       __imp_?Serialize@C3DMath@@UAEXAAVCArchive@@@Z 1004272c     Dr3D_D32:Dr3D_D32.dll
+ 0004:00000730       __imp_??0C3DMath@@QAE@XZ   10042730     Dr3D_D32:Dr3D_D32.dll
+ 0004:00000734       \177Dr3D_D32_NULL_THUNK_DATA 10042734     Dr3D_D32:Dr3D_D32.dll
+ 0004:00000760       __imp_?GetRuntimeClass@CElemInfo@@UBEPAUCRuntimeClass@@XZ 10042760     Elem_D32:Elem_D32.dll
+ 0004:00000764       __imp_?Pack_drPipe@CElemInfo@@UAEXPAVCString@@@Z 10042764     Elem_D32:Elem_D32.dll
+ 0004:00000768       __imp_?SetObjectInfo@CElemInfo@@UAEXPAVCDrObject@@@Z 10042768     Elem_D32:Elem_D32.dll
+ 0004:0000076c       __imp_?ReadDefault@CElemInfo@@UAEXXZ 1004276c     Elem_D32:Elem_D32.dll
+ 0004:00000770       __imp_?Init@CElemInfo@@UAEXXZ 10042770     Elem_D32:Elem_D32.dll
+ 0004:00000774       __imp_?DoDataView@CElemInfo@@UAEXPAVCDC@@H@Z 10042774     Elem_D32:Elem_D32.dll
+ 0004:00000778       __imp_?Serialize@CElemInfo@@UAEXAAVCArchive@@@Z 10042778     Elem_D32:Elem_D32.dll
+ 0004:0000077c       __imp_?GetObjectInfo@CElemInfo@@UAEXPAVCDrObject@@@Z 1004277c     Elem_D32:Elem_D32.dll
+ 0004:00000780       \177Elem_D32_NULL_THUNK_DATA 10042780     Elem_D32:Elem_D32.dll
+ 0004:000007b0       __imp_?IsStoring@CArchive@@QBEHXZ 100427b0     mfc42d:MFC42D.DLL
+ 0004:000007b4       __imp_?AfxClassInit@@YGXPAUCRuntimeClass@@@Z 100427b4     mfc42d:MFC42D.DLL
+ 0004:000007b8       __imp_?LoadStringA@CString@@QAEHI@Z 100427b8     mfc42d:MFC42D.DLL
+ 0004:000007bc       __imp_?AfxGetResourceHandle@@YGPAUHINSTANCE__@@XZ 100427bc     mfc42d:MFC42D.DLL
+ 0004:000007c0       __imp_?AfxSetResourceHandle@@YGXPAUHINSTANCE__@@@Z 100427c0     mfc42d:MFC42D.DLL
+ 0004:000007c4       __imp_??0CObject@@IAE@XZ   100427c4     mfc42d:MFC42D.DLL
+ 0004:000007c8       __imp_?ReadObject@CArchive@@QAEPAVCObject@@PBUCRuntimeClass@@@Z 100427c8     mfc42d:MFC42D.DLL
+ 0004:000007cc       __imp_?classCObject@CObject@@2UCRuntimeClass@@B 100427cc     mfc42d:MFC42D.DLL
+ 0004:000007d0       __imp_?AfxInitExtensionModule@@YGHAAUAFX_EXTENSION_MODULE@@PAUHINSTANCE__@@@Z 100427d0     mfc42d:MFC42D.DLL
+ 0004:000007d4       __imp_??2CObject@@SGPAXI@Z 100427d4     mfc42d:MFC42D.DLL
+ 0004:000007d8       __imp_??0CDynLinkLibrary@@QAE@AAUAFX_EXTENSION_MODULE@@H@Z 100427d8     mfc42d:MFC42D.DLL
+ 0004:000007dc       __imp_?AfxGetModuleState@@YGPAVAFX_MODULE_STATE@@XZ 100427dc     mfc42d:MFC42D.DLL
+ 0004:000007e0       __imp_?SetWindowTextA@CWnd@@QAEXPBD@Z 100427e0     mfc42d:MFC42D.DLL
+ 0004:000007e4       __imp_?FromHandle@CDC@@SGPAV1@PAUHDC__@@@Z 100427e4     mfc42d:MFC42D.DLL
+ 0004:000007e8       __imp_??0CBrush@@QAE@K@Z   100427e8     mfc42d:MFC42D.DLL
+ 0004:000007ec       __imp_?FillRect@CDC@@QAEXPBUtagRECT@@PAVCBrush@@@Z 100427ec     mfc42d:MFC42D.DLL
+ 0004:000007f0       __imp_??1CBrush@@UAE@XZ    100427f0     mfc42d:MFC42D.DLL
+ 0004:000007f4       __imp_?FrameRect@CDC@@QAEXPBUtagRECT@@PAVCBrush@@@Z 100427f4     mfc42d:MFC42D.DLL
+ 0004:000007f8       __imp_?GetPos@CSpinButtonCtrl@@QBEHXZ 100427f8     mfc42d:MFC42D.DLL
+ 0004:000007fc       __imp_?MessageBoxA@CWnd@@QAEHPBD0I@Z 100427fc     mfc42d:MFC42D.DLL
+ 0004:00000800       __imp_?GetItemData@CListBox@@QBEKH@Z 10042800     mfc42d:MFC42D.DLL
+ 0004:00000804       __imp_?AfxTrace@@YAXPBDZZ  10042804     mfc42d:MFC42D.DLL
+ 0004:00000808       __imp_?LimitText@CEdit@@QAEXH@Z 10042808     mfc42d:MFC42D.DLL
+ 0004:0000080c       __imp_?AfxAssertFailedLine@@YGHPBDH@Z 1004280c     mfc42d:MFC42D.DLL
+ 0004:00000810       __imp_?SetBuddy@CSpinButtonCtrl@@QAEPAVCWnd@@PAV2@@Z 10042810     mfc42d:MFC42D.DLL
+ 0004:00000814       __imp_?SetBase@CSpinButtonCtrl@@QAEHH@Z 10042814     mfc42d:MFC42D.DLL
+ 0004:00000818       __imp_?SetRange@CSpinButtonCtrl@@QAEXHH@Z 10042818     mfc42d:MFC42D.DLL
+ 0004:0000081c       __imp_?SetPos@CSpinButtonCtrl@@QAEHH@Z 1004281c     mfc42d:MFC42D.DLL
+ 0004:00000820       __imp_?SetCurSel@CComboBox@@QAEHH@Z 10042820     mfc42d:MFC42D.DLL
+ 0004:00000824       __imp_??8@YG_NABVCString@@0@Z 10042824     mfc42d:MFC42D.DLL
+ 0004:00000828       __imp_?DDX_Text@@YGXPAVCDataExchange@@HAAI@Z 10042828     mfc42d:MFC42D.DLL
+ 0004:0000082c       __imp_?DDV_MinMaxUInt@@YGXPAVCDataExchange@@III@Z 1004282c     mfc42d:MFC42D.DLL
+ 0004:00000830       __imp_?DDX_CBString@@YGXPAVCDataExchange@@HAAVCString@@@Z 10042830     mfc42d:MFC42D.DLL
+ 0004:00000834       __imp_??1CListBox@@UAE@XZ  10042834     mfc42d:MFC42D.DLL
+ 0004:00000838       __imp_??0CListBox@@QAE@XZ  10042838     mfc42d:MFC42D.DLL
+ 0004:0000083c       __imp_?GetRuntimeClass@CListBox@@UBEPAUCRuntimeClass@@XZ 1004283c     mfc42d:MFC42D.DLL
+ 0004:00000840       __imp_?AssertValid@CWnd@@UBEXXZ 10042840     mfc42d:MFC42D.DLL
+ 0004:00000844       __imp_?Dump@CWnd@@UBEXAAVCDumpContext@@@Z 10042844     mfc42d:MFC42D.DLL
+ 0004:00000848       __imp_?OnCmdMsg@CCmdTarget@@UAEHIHPAXPAUAFX_CMDHANDLERINFO@@@Z 10042848     mfc42d:MFC42D.DLL
+ 0004:0000084c       __imp_?GetMessageMap@CWnd@@MBEPBUAFX_MSGMAP@@XZ 1004284c     mfc42d:MFC42D.DLL
+ 0004:00000850       __imp_?PreTranslateMessage@CWnd@@UAEHPAUtagMSG@@@Z 10042850     mfc42d:MFC42D.DLL
+ 0004:00000854       __imp_?OnChildNotify@CListBox@@MAEHIIJPAJ@Z 10042854     mfc42d:MFC42D.DLL
+ 0004:00000858       __imp_?CheckAutoCenter@CWnd@@UAEHXZ 10042858     mfc42d:MFC42D.DLL
+ 0004:0000085c       __imp_?SetOccDialogInfo@CWnd@@MAEHPAU_AFX_OCC_DIALOG_INFO@@@Z 1004285c     mfc42d:MFC42D.DLL
+ 0004:00000860       __imp_?DeleteItem@CListBox@@UAEXPAUtagDELETEITEMSTRUCT@@@Z 10042860     mfc42d:MFC42D.DLL
+ 0004:00000864       __imp_?VKeyToItem@CListBox@@UAEHII@Z 10042864     mfc42d:MFC42D.DLL
+ 0004:00000868       __imp_?CharToItem@CListBox@@UAEHII@Z 10042868     mfc42d:MFC42D.DLL
+ 0004:0000086c       __imp_?GetCurSel@CListBox@@QBEHXZ 1004286c     mfc42d:MFC42D.DLL
+ 0004:00000870       __imp_?DeleteString@CListBox@@QAEHI@Z 10042870     mfc42d:MFC42D.DLL
+ 0004:00000874       __imp_??BCString@@QBEPBDXZ 10042874     mfc42d:MFC42D.DLL
+ 0004:00000878       __imp_?AddString@CListBox@@QAEHPBD@Z 10042878     mfc42d:MFC42D.DLL
+ 0004:0000087c       __imp_?SetCurSel@CListBox@@QAEHH@Z 1004287c     mfc42d:MFC42D.DLL
+ 0004:00000880       __imp_?GotoDlgCtrl@CDialog@@QAEXPAVCWnd@@@Z 10042880     mfc42d:MFC42D.DLL
+ 0004:00000884       __imp_?DDX_LBString@@YGXPAVCDataExchange@@HAAVCString@@@Z 10042884     mfc42d:MFC42D.DLL
+ 0004:00000888       __imp_??0CString@@QAE@XZ   10042888     mfc42d:MFC42D.DLL
+ 0004:0000088c       __imp_??4CString@@QAEABV0@PBD@Z 1004288c     mfc42d:MFC42D.DLL
+ 0004:00000890       __imp_?OnInitDialog@CDialog@@UAEHXZ 10042890     mfc42d:MFC42D.DLL
+ 0004:00000894       __imp_?SubclassDlgItem@CWnd@@QAEHIPAV1@@Z 10042894     mfc42d:MFC42D.DLL
+ 0004:00000898       __imp_?SizeToContent@CBitmapButton@@QAEXXZ 10042898     mfc42d:MFC42D.DLL
+ 0004:0000089c       __imp_?SetFocus@CWnd@@QAEPAV1@XZ 1004289c     mfc42d:MFC42D.DLL
+ 0004:000008a0       __imp_?AfxGetApp@@YGPAVCWinApp@@XZ 100428a0     mfc42d:MFC42D.DLL
+ 0004:000008a4       __imp_?messageMap@CDialog@@1UAFX_MSGMAP@@B 100428a4     mfc42d:MFC42D.DLL
+ 0004:000008a8       __imp_?DoDataExchange@CWnd@@MAEXPAVCDataExchange@@@Z 100428a8     mfc42d:MFC42D.DLL
+ 0004:000008ac       __imp_?DDX_Text@@YGXPAVCDataExchange@@HAAH@Z 100428ac     mfc42d:MFC42D.DLL
+ 0004:000008b0       __imp_?DDV_MinMaxInt@@YGXPAVCDataExchange@@HHH@Z 100428b0     mfc42d:MFC42D.DLL
+ 0004:000008b4       __imp_?DDX_Text@@YGXPAVCDataExchange@@HAAN@Z 100428b4     mfc42d:MFC42D.DLL
+ 0004:000008b8       __imp_?DDV_MinMaxDouble@@YGXPAVCDataExchange@@ABNNN@Z 100428b8     mfc42d:MFC42D.DLL
+ 0004:000008bc       __imp_??0CDialog@@QAE@IPAVCWnd@@@Z 100428bc     mfc42d:MFC42D.DLL
+ 0004:000008c0       __imp_??0CBitmapButton@@QAE@XZ 100428c0     mfc42d:MFC42D.DLL
+ 0004:000008c4       __imp_?LoadBitmaps@CBitmapButton@@QAEHPBD000@Z 100428c4     mfc42d:MFC42D.DLL
+ 0004:000008c8       __imp_?GetRuntimeClass@CDialog@@UBEPAUCRuntimeClass@@XZ 100428c8     mfc42d:MFC42D.DLL
+ 0004:000008cc       __imp_?AssertValid@CDialog@@UBEXXZ 100428cc     mfc42d:MFC42D.DLL
+ 0004:000008d0       __imp_?Dump@CDialog@@UBEXAAVCDumpContext@@@Z 100428d0     mfc42d:MFC42D.DLL
+ 0004:000008d4       __imp_?OnCmdMsg@CDialog@@UAEHIHPAXPAUAFX_CMDHANDLERINFO@@@Z 100428d4     mfc42d:MFC42D.DLL
+ 0004:000008d8       __imp_?OnFinalRelease@CWnd@@UAEXXZ 100428d8     mfc42d:MFC42D.DLL
+ 0004:000008dc       __imp_?IsInvokeAllowed@CCmdTarget@@UAEHJ@Z 100428dc     mfc42d:MFC42D.DLL
+ 0004:000008e0       __imp_?GetDispatchIID@CCmdTarget@@UAEHPAU_GUID@@@Z 100428e0     mfc42d:MFC42D.DLL
+ 0004:000008e4       __imp_?GetTypeInfoCount@CCmdTarget@@UAEIXZ 100428e4     mfc42d:MFC42D.DLL
+ 0004:000008e8       __imp_?GetTypeLibCache@CCmdTarget@@UAEPAVCTypeLibCache@@XZ 100428e8     mfc42d:MFC42D.DLL
+ 0004:000008ec       __imp_?GetTypeLib@CCmdTarget@@UAEJKPAPAUITypeLib@@@Z 100428ec     mfc42d:MFC42D.DLL
+ 0004:000008f0       __imp_?GetCommandMap@CCmdTarget@@MBEPBUAFX_OLECMDMAP@@XZ 100428f0     mfc42d:MFC42D.DLL
+ 0004:000008f4       __imp_?GetDispatchMap@CCmdTarget@@MBEPBUAFX_DISPMAP@@XZ 100428f4     mfc42d:MFC42D.DLL
+ 0004:000008f8       __imp_?GetConnectionMap@CCmdTarget@@MBEPBUAFX_CONNECTIONMAP@@XZ 100428f8     mfc42d:MFC42D.DLL
+ 0004:000008fc       __imp_?GetInterfaceMap@CCmdTarget@@MBEPBUAFX_INTERFACEMAP@@XZ 100428fc     mfc42d:MFC42D.DLL
+ 0004:00000900       __imp_?GetEventSinkMap@CCmdTarget@@MBEPBUAFX_EVENTSINKMAP@@XZ 10042900     mfc42d:MFC42D.DLL
+ 0004:00000904       __imp_?OnCreateAggregates@CCmdTarget@@UAEHXZ 10042904     mfc42d:MFC42D.DLL
+ 0004:00000908       __imp_?GetInterfaceHook@CCmdTarget@@UAEPAUIUnknown@@PBX@Z 10042908     mfc42d:MFC42D.DLL
+ 0004:0000090c       __imp_?GetExtraConnectionPoints@CCmdTarget@@MAEHPAVCPtrArray@@@Z 1004290c     mfc42d:MFC42D.DLL
+ 0004:00000910       __imp_?GetConnectionHook@CCmdTarget@@MAEPAUIConnectionPoint@@ABU_GUID@@@Z 10042910     mfc42d:MFC42D.DLL
+ 0004:00000914       __imp_?PreSubclassWindow@CWnd@@UAEXXZ 10042914     mfc42d:MFC42D.DLL
+ 0004:00000918       __imp_?Create@CWnd@@UAEHPBD0KABUtagRECT@@PAV1@IPAUCCreateContext@@@Z 10042918     mfc42d:MFC42D.DLL
+ 0004:0000091c       __imp_?DestroyWindow@CWnd@@UAEHXZ 1004291c     mfc42d:MFC42D.DLL
+ 0004:00000920       __imp_?PreCreateWindow@CWnd@@UAEHAAUtagCREATESTRUCTA@@@Z 10042920     mfc42d:MFC42D.DLL
+ 0004:00000924       __imp_?CalcWindowRect@CWnd@@UAEXPAUtagRECT@@I@Z 10042924     mfc42d:MFC42D.DLL
+ 0004:00000928       __imp_?OnToolHitTest@CWnd@@UBEHVCPoint@@PAUtagTOOLINFOA@@@Z 10042928     mfc42d:MFC42D.DLL
+ 0004:0000092c       __imp_?GetScrollBarCtrl@CWnd@@UBEPAVCScrollBar@@H@Z 1004292c     mfc42d:MFC42D.DLL
+ 0004:00000930       __imp_?WinHelpA@CWnd@@UAEXKI@Z 10042930     mfc42d:MFC42D.DLL
+ 0004:00000934       __imp_?ContinueModal@CWnd@@UAEHXZ 10042934     mfc42d:MFC42D.DLL
+ 0004:00000938       __imp_?EndModalLoop@CWnd@@UAEXH@Z 10042938     mfc42d:MFC42D.DLL
+ 0004:0000093c       __imp_?OnCommand@CWnd@@MAEHIJ@Z 1004293c     mfc42d:MFC42D.DLL
+ 0004:00000940       __imp_?OnNotify@CWnd@@MAEHIJPAJ@Z 10042940     mfc42d:MFC42D.DLL
+ 0004:00000944       __imp_?GetSuperWndProcAddr@CWnd@@MAEPAP6GJPAUHWND__@@IIJ@ZXZ 10042944     mfc42d:MFC42D.DLL
+ 0004:00000948       __imp_?BeginModalState@CWnd@@UAEXXZ 10042948     mfc42d:MFC42D.DLL
+ 0004:0000094c       __imp_?EndModalState@CWnd@@UAEXXZ 1004294c     mfc42d:MFC42D.DLL
+ 0004:00000950       __imp_?PreTranslateMessage@CDialog@@UAEHPAUtagMSG@@@Z 10042950     mfc42d:MFC42D.DLL
+ 0004:00000954       __imp_?OnAmbientProperty@CWnd@@UAEHPAVCOleControlSite@@JPAUtagVARIANT@@@Z 10042954     mfc42d:MFC42D.DLL
+ 0004:00000958       __imp_?WindowProc@CWnd@@MAEJIIJ@Z 10042958     mfc42d:MFC42D.DLL
+ 0004:0000095c       __imp_?OnWndMsg@CWnd@@MAEHIIJPAJ@Z 1004295c     mfc42d:MFC42D.DLL
+ 0004:00000960       __imp_?DefWindowProcA@CWnd@@MAEJIIJ@Z 10042960     mfc42d:MFC42D.DLL
+ 0004:00000964       __imp_?PostNcDestroy@CWnd@@MAEXXZ 10042964     mfc42d:MFC42D.DLL
+ 0004:00000968       __imp_?OnChildNotify@CWnd@@MAEHIIJPAJ@Z 10042968     mfc42d:MFC42D.DLL
+ 0004:0000096c       __imp_?CheckAutoCenter@CDialog@@UAEHXZ 1004296c     mfc42d:MFC42D.DLL
+ 0004:00000970       __imp_?IsFrameWnd@CWnd@@UBEHXZ 10042970     mfc42d:MFC42D.DLL
+ 0004:00000974       __imp_?SetOccDialogInfo@CDialog@@MAEHPAU_AFX_OCC_DIALOG_INFO@@@Z 10042974     mfc42d:MFC42D.DLL
+ 0004:00000978       __imp_?DoModal@CDialog@@UAEHXZ 10042978     mfc42d:MFC42D.DLL
+ 0004:0000097c       __imp_?OnSetFont@CDialog@@UAEXPAVCFont@@@Z 1004297c     mfc42d:MFC42D.DLL
+ 0004:00000980       __imp_?OnOK@CDialog@@MAEXXZ 10042980     mfc42d:MFC42D.DLL
+ 0004:00000984       __imp_?OnCancel@CDialog@@MAEXXZ 10042984     mfc42d:MFC42D.DLL
+ 0004:00000988       __imp_?PreInitDialog@CDialog@@MAEXXZ 10042988     mfc42d:MFC42D.DLL
+ 0004:0000098c       __imp_??1CBitmap@@UAE@XZ   1004298c     mfc42d:MFC42D.DLL
+ 0004:00000990       __imp_??1CButton@@UAE@XZ   10042990     mfc42d:MFC42D.DLL
+ 0004:00000994       __imp_??1CDialog@@UAE@XZ   10042994     mfc42d:MFC42D.DLL
+ 0004:00000998       __imp_??1CPen@@UAE@XZ      10042998     mfc42d:MFC42D.DLL
+ 0004:0000099c       __imp_?Serialize@CObject@@UAEXAAVCArchive@@@Z 1004299c     mfc42d:MFC42D.DLL
+ 0004:000009a0       __imp_??4CString@@QAEABV0@ABV0@@Z 100429a0     mfc42d:MFC42D.DLL
+ 0004:000009a4       __imp_??1CString@@QAE@XZ   100429a4     mfc42d:MFC42D.DLL
+ 0004:000009a8       __imp_??0CString@@QAE@ABV0@@Z 100429a8     mfc42d:MFC42D.DLL
+ 0004:000009ac       __imp_??3@YAXPAX@Z         100429ac     mfc42d:MFC42D.DLL
+ 0004:000009b0       __imp_??3CObject@@SGXPAX@Z 100429b0     mfc42d:MFC42D.DLL
+ 0004:000009b4       __imp_?Dump@CObject@@UBEXAAVCDumpContext@@@Z 100429b4     mfc42d:MFC42D.DLL
+ 0004:000009b8       __imp_?AssertValid@CObject@@UBEXXZ 100429b8     mfc42d:MFC42D.DLL
+ 0004:000009bc       __imp_?GetDlgItem@CWnd@@QBEPAV1@H@Z 100429bc     mfc42d:MFC42D.DLL
+ 0004:000009c0       __imp_??1CObject@@UAE@XZ   100429c0     mfc42d:MFC42D.DLL
+ 0004:000009c4       \177MFC42D_NULL_THUNK_DATA 100429c4     mfc42d:MFC42D.DLL
+ 0004:00000a58       __imp____CxxFrameHandler   10042a58     msvcrtd:MSVCRTD.dll
+ 0004:00000a5c       __imp__pow                 10042a5c     msvcrtd:MSVCRTD.dll
+ 0004:00000a60       __imp___ftol               10042a60     msvcrtd:MSVCRTD.dll
+ 0004:00000a64       __imp___except_handler3    10042a64     msvcrtd:MSVCRTD.dll
+ 0004:00000a68       __imp___onexit             10042a68     msvcrtd:MSVCRTD.dll
+ 0004:00000a6c       __imp_?terminate@@YAXXZ    10042a6c     msvcrtd:MSVCRTD.dll
+ 0004:00000a70       __imp___free_dbg           10042a70     msvcrtd:MSVCRTD.dll
+ 0004:00000a74       __imp___initterm           10042a74     msvcrtd:MSVCRTD.dll
+ 0004:00000a78       __imp___malloc_dbg         10042a78     msvcrtd:MSVCRTD.dll
+ 0004:00000a7c       __imp___adjust_fdiv        10042a7c     msvcrtd:MSVCRTD.dll
+ 0004:00000a80       __imp____dllonexit         10042a80     msvcrtd:MSVCRTD.dll
+ 0004:00000a84       __imp__sqrt                10042a84     msvcrtd:MSVCRTD.dll
+ 0004:00000a88       \177MSVCRTD_NULL_THUNK_DATA 10042a88     msvcrtd:MSVCRTD.dll
+ 0004:00000abc       __imp_?GetSpecObject@CObjectMgr@@QAEPAVCDrObject@@H@Z 10042abc     OMgr_D32:OMgr_D32.dll
+ 0004:00000ac0       \177OMgr_D32_NULL_THUNK_DATA 10042ac0     OMgr_D32:OMgr_D32.dll
+ 0004:00000aec       __imp_??1CDListMgr@@UAE@XZ 10042aec     Spec_D32:Spec_D32.dll
+ 0004:00000af0       __imp_?GetRuntimeClass@CUnit@@UBEPAUCRuntimeClass@@XZ 10042af0     Spec_D32:Spec_D32.dll
+ 0004:00000af4       __imp_?Serialize@CUnit@@UAEXAAVCArchive@@@Z 10042af4     Spec_D32:Spec_D32.dll
+ 0004:00000af8       __imp_?DoDataView@CUnit@@UAEXPAVCDC@@H@Z 10042af8     Spec_D32:Spec_D32.dll
+ 0004:00000afc       __imp_?Pack_drPipe@CUnit@@UAEXPAVCString@@@Z 10042afc     Spec_D32:Spec_D32.dll
+ 0004:00000b00       __imp_?GetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z 10042b00     Spec_D32:Spec_D32.dll
+ 0004:00000b04       __imp_?SetObjectInfo@CUnit@@UAEXPAVCDrObject@@@Z 10042b04     Spec_D32:Spec_D32.dll
+ 0004:00000b08       __imp_?ReadDefaultUnit@CUnit@@UAEXXZ 10042b08     Spec_D32:Spec_D32.dll
+ 0004:00000b0c       __imp_?InitUnit@CUnit@@UAEXXZ 10042b0c     Spec_D32:Spec_D32.dll
+ 0004:00000b10       __imp_?GetRuntimeClass@CScaleFactor@@UBEPAUCRuntimeClass@@XZ 10042b10     Spec_D32:Spec_D32.dll
+ 0004:00000b14       __imp_?Serialize@CScaleFactor@@UAEXAAVCArchive@@@Z 10042b14     Spec_D32:Spec_D32.dll
+ 0004:00000b18       __imp_?DoDataView@CScaleFactor@@UAEXPAVCDC@@H@Z 10042b18     Spec_D32:Spec_D32.dll
+ 0004:00000b1c       __imp_?Pack_drPipe@CScaleFactor@@UAEXPAVCString@@@Z 10042b1c     Spec_D32:Spec_D32.dll
+ 0004:00000b20       __imp_?GetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z 10042b20     Spec_D32:Spec_D32.dll
+ 0004:00000b24       __imp_?SetObjectInfo@CScaleFactor@@UAEXPAVCDrObject@@@Z 10042b24     Spec_D32:Spec_D32.dll
+ 0004:00000b28       __imp_?ReadDefaultScaleFactor@CScaleFactor@@UAEXXZ 10042b28     Spec_D32:Spec_D32.dll
+ 0004:00000b2c       __imp_?InitScaleFactor@CScaleFactor@@UAEXXZ 10042b2c     Spec_D32:Spec_D32.dll
+ 0004:00000b30       __imp_?GetRuntimeClass@CPrecision@@UBEPAUCRuntimeClass@@XZ 10042b30     Spec_D32:Spec_D32.dll
+ 0004:00000b34       __imp_?Serialize@CPrecision@@UAEXAAVCArchive@@@Z 10042b34     Spec_D32:Spec_D32.dll
+ 0004:00000b38       __imp_?DoDataView@CPrecision@@UAEXPAVCDC@@H@Z 10042b38     Spec_D32:Spec_D32.dll
+ 0004:00000b3c       __imp_?Pack_drPipe@CPrecision@@UAEXPAVCString@@@Z 10042b3c     Spec_D32:Spec_D32.dll
+ 0004:00000b40       __imp_?GetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z 10042b40     Spec_D32:Spec_D32.dll
+ 0004:00000b44       __imp_?SetObjectInfo@CPrecision@@UAEXPAVCDrObject@@@Z 10042b44     Spec_D32:Spec_D32.dll
+ 0004:00000b48       __imp_?ReadDefaultPrecision@CPrecision@@UAEXXZ 10042b48     Spec_D32:Spec_D32.dll
+ 0004:00000b4c       __imp_?InitPrecision@CPrecision@@UAEXXZ 10042b4c     Spec_D32:Spec_D32.dll
+ 0004:00000b50       __imp_?GetRuntimeClass@CMapFactor@@UBEPAUCRuntimeClass@@XZ 10042b50     Spec_D32:Spec_D32.dll
+ 0004:00000b54       __imp_?Serialize@CMapFactor@@UAEXAAVCArchive@@@Z 10042b54     Spec_D32:Spec_D32.dll
+ 0004:00000b58       __imp_?DoDataView@CMapFactor@@UAEXPAVCDC@@H@Z 10042b58     Spec_D32:Spec_D32.dll
+ 0004:00000b5c       __imp_?Pack_drPipe@CMapFactor@@UAEXPAVCString@@@Z 10042b5c     Spec_D32:Spec_D32.dll
+ 0004:00000b60       __imp_?GetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z 10042b60     Spec_D32:Spec_D32.dll
+ 0004:00000b64       __imp_?SetObjectInfo@CMapFactor@@UAEXPAVCDrObject@@@Z 10042b64     Spec_D32:Spec_D32.dll
+ 0004:00000b68       __imp_?ReadDefaultMapFactor@CMapFactor@@UAEXXZ 10042b68     Spec_D32:Spec_D32.dll
+ 0004:00000b6c       __imp_?InitMapFactor@CMapFactor@@UAEXXZ 10042b6c     Spec_D32:Spec_D32.dll
+ 0004:00000b70       __imp_?GetRuntimeClass@CObj3DMnu@@UBEPAUCRuntimeClass@@XZ 10042b70     Spec_D32:Spec_D32.dll
+ 0004:00000b74       __imp_?Serialize@CObj3DMnu@@UAEXAAVCArchive@@@Z 10042b74     Spec_D32:Spec_D32.dll
+ 0004:00000b78       __imp_?DoDataView@CObj3DMnu@@UAEXPAVCDC@@H@Z 10042b78     Spec_D32:Spec_D32.dll
+ 0004:00000b7c       __imp_?Pack_drPipe@CObj3DMnu@@UAEXPAVCString@@@Z 10042b7c     Spec_D32:Spec_D32.dll
+ 0004:00000b80       __imp_?GetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z 10042b80     Spec_D32:Spec_D32.dll
+ 0004:00000b84       __imp_?SetObjectInfo@CObj3DMnu@@UAEXPAVCDrObject@@@Z 10042b84     Spec_D32:Spec_D32.dll
+ 0004:00000b88       __imp_?GetObj3DMnuInfo@CObj3DMnu@@UAE?AVCString@@I@Z 10042b88     Spec_D32:Spec_D32.dll
+ 0004:00000b8c       __imp_?SetObj3DMnuInfo@CObj3DMnu@@UAEXII@Z 10042b8c     Spec_D32:Spec_D32.dll
+ 0004:00000b90       __imp_?GetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z 10042b90     Spec_D32:Spec_D32.dll
+ 0004:00000b94       __imp_?SetObj3DMnuIDArray@CObj3DMnu@@UAEXQAVCString@@@Z 10042b94     Spec_D32:Spec_D32.dll
+ 0004:00000b98       __imp_?GetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z 10042b98     Spec_D32:Spec_D32.dll
+ 0004:00000b9c       __imp_?SetObj3DMnuArray@CObj3DMnu@@UAEXQAY01I@Z 10042b9c     Spec_D32:Spec_D32.dll
+ 0004:00000ba0       __imp_?GetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z 10042ba0     Spec_D32:Spec_D32.dll
+ 0004:00000ba4       __imp_?SetObj3DMnuOldArray@CObj3DMnu@@UAEXQAY01I@Z 10042ba4     Spec_D32:Spec_D32.dll
+ 0004:00000ba8       __imp_?GetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z 10042ba8     Spec_D32:Spec_D32.dll
+ 0004:00000bac       __imp_?SetObj3DMnuDefaultArray@CObj3DMnu@@UAEXQAY01I@Z 10042bac     Spec_D32:Spec_D32.dll
+ 0004:00000bb0       __imp_?ReadDefaultObj3DMnu@CObj3DMnu@@UAEXXZ 10042bb0     Spec_D32:Spec_D32.dll
+ 0004:00000bb4       __imp_?InitObj3DMnu@CObj3DMnu@@UAEXXZ 10042bb4     Spec_D32:Spec_D32.dll
+ 0004:00000bb8       __imp_?GetRuntimeClass@CPatchMnu@@UBEPAUCRuntimeClass@@XZ 10042bb8     Spec_D32:Spec_D32.dll
+ 0004:00000bbc       __imp_?Serialize@CPatchMnu@@UAEXAAVCArchive@@@Z 10042bbc     Spec_D32:Spec_D32.dll
+ 0004:00000bc0       __imp_?DoDataView@CPatchMnu@@UAEXPAVCDC@@H@Z 10042bc0     Spec_D32:Spec_D32.dll
+ 0004:00000bc4       __imp_?Pack_drPipe@CPatchMnu@@UAEXPAVCString@@@Z 10042bc4     Spec_D32:Spec_D32.dll
+ 0004:00000bc8       __imp_?GetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z 10042bc8     Spec_D32:Spec_D32.dll
+ 0004:00000bcc       __imp_?SetObjectInfo@CPatchMnu@@UAEXPAVCDrObject@@@Z 10042bcc     Spec_D32:Spec_D32.dll
+ 0004:00000bd0       __imp_?GetPatchMnuInfo@CPatchMnu@@UAE?AVCString@@I@Z 10042bd0     Spec_D32:Spec_D32.dll
+ 0004:00000bd4       __imp_?SetPatchMnuInfo@CPatchMnu@@UAEXII@Z 10042bd4     Spec_D32:Spec_D32.dll
+ 0004:00000bd8       __imp_?GetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z 10042bd8     Spec_D32:Spec_D32.dll
+ 0004:00000bdc       __imp_?SetPatchMnuIDArray@CPatchMnu@@UAEXQAVCString@@@Z 10042bdc     Spec_D32:Spec_D32.dll
+ 0004:00000be0       __imp_?GetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z 10042be0     Spec_D32:Spec_D32.dll
+ 0004:00000be4       __imp_?SetPatchMnuArray@CPatchMnu@@UAEXQAY01I@Z 10042be4     Spec_D32:Spec_D32.dll
+ 0004:00000be8       __imp_?GetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z 10042be8     Spec_D32:Spec_D32.dll
+ 0004:00000bec       __imp_?SetPatchMnuOldArray@CPatchMnu@@UAEXQAY01I@Z 10042bec     Spec_D32:Spec_D32.dll
+ 0004:00000bf0       __imp_?GetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z 10042bf0     Spec_D32:Spec_D32.dll
+ 0004:00000bf4       __imp_?SetPatchMnuDefaultArray@CPatchMnu@@UAEXQAY01I@Z 10042bf4     Spec_D32:Spec_D32.dll
+ 0004:00000bf8       __imp_?ReadDefaultPatchMnu@CPatchMnu@@UAEXXZ 10042bf8     Spec_D32:Spec_D32.dll
+ 0004:00000bfc       __imp_?InitPatchMnu@CPatchMnu@@UAEXXZ 10042bfc     Spec_D32:Spec_D32.dll
+ 0004:00000c00       __imp_?GetRuntimeClass@CLayer@@UBEPAUCRuntimeClass@@XZ 10042c00     Spec_D32:Spec_D32.dll
+ 0004:00000c04       __imp_?Serialize@CLayer@@UAEXAAVCArchive@@@Z 10042c04     Spec_D32:Spec_D32.dll
+ 0004:00000c08       __imp_?DoDataView@CLayer@@UAEXPAVCDC@@H@Z 10042c08     Spec_D32:Spec_D32.dll
+ 0004:00000c0c       __imp_?Pack_drPipe@CLayer@@UAEXPAVCString@@@Z 10042c0c     Spec_D32:Spec_D32.dll
+ 0004:00000c10       __imp_?GetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z 10042c10     Spec_D32:Spec_D32.dll
+ 0004:00000c14       __imp_?SetObjectInfo@CLayer@@UAEXPAVCDrObject@@@Z 10042c14     Spec_D32:Spec_D32.dll
+ 0004:00000c18       __imp_?GetLayerInfo@CLayer@@UAE?AVCString@@I@Z 10042c18     Spec_D32:Spec_D32.dll
+ 0004:00000c1c       __imp_?SetLayerInfo@CLayer@@UAEXII@Z 10042c1c     Spec_D32:Spec_D32.dll
+ 0004:00000c20       __imp_?GetLayerArray@CLayer@@UAEXQAY01I@Z 10042c20     Spec_D32:Spec_D32.dll
+ 0004:00000c24       __imp_?SetLayerArray@CLayer@@UAEXQAY01I@Z 10042c24     Spec_D32:Spec_D32.dll
+ 0004:00000c28       __imp_?GetLayerOldArray@CLayer@@UAEXQAY01I@Z 10042c28     Spec_D32:Spec_D32.dll
+ 0004:00000c2c       __imp_?SetLayerOldArray@CLayer@@UAEXQAY01I@Z 10042c2c     Spec_D32:Spec_D32.dll
+ 0004:00000c30       __imp_?GetLayerDefaultArray@CLayer@@UAEXQAY01I@Z 10042c30     Spec_D32:Spec_D32.dll
+ 0004:00000c34       __imp_?SetLayerDefaultArray@CLayer@@UAEXQAY01I@Z 10042c34     Spec_D32:Spec_D32.dll
+ 0004:00000c38       __imp_?ReadDefaultLayer@CLayer@@UAEXXZ 10042c38     Spec_D32:Spec_D32.dll
+ 0004:00000c3c       __imp_?InitLayer@CLayer@@UAEXXZ 10042c3c     Spec_D32:Spec_D32.dll
+ 0004:00000c40       __imp_?GetRuntimeClass@CHitNet@@UBEPAUCRuntimeClass@@XZ 10042c40     Spec_D32:Spec_D32.dll
+ 0004:00000c44       __imp_?Serialize@CHitNet@@UAEXAAVCArchive@@@Z 10042c44     Spec_D32:Spec_D32.dll
+ 0004:00000c48       __imp_?DoDataView@CHitNet@@UAEXPAVCDC@@H@Z 10042c48     Spec_D32:Spec_D32.dll
+ 0004:00000c4c       __imp_?Pack_drPipe@CHitNet@@UAEXPAVCString@@@Z 10042c4c     Spec_D32:Spec_D32.dll
+ 0004:00000c50       __imp_?GetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z 10042c50     Spec_D32:Spec_D32.dll
+ 0004:00000c54       __imp_?SetObjectInfo@CHitNet@@UAEXPAVCDrObject@@@Z 10042c54     Spec_D32:Spec_D32.dll
+ 0004:00000c58       __imp_?GetRuntimeClass@CDrPen@@UBEPAUCRuntimeClass@@XZ 10042c58     Spec_D32:Spec_D32.dll
+ 0004:00000c5c       __imp_?Serialize@CDrPen@@UAEXAAVCArchive@@@Z 10042c5c     Spec_D32:Spec_D32.dll
+ 0004:00000c60       __imp_?DoDataView@CDrPen@@UAEXPAVCDC@@H@Z 10042c60     Spec_D32:Spec_D32.dll
+ 0004:00000c64       __imp_?Pack_drPipe@CDrPen@@UAEXPAVCString@@@Z 10042c64     Spec_D32:Spec_D32.dll
+ 0004:00000c68       __imp_?GetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z 10042c68     Spec_D32:Spec_D32.dll
+ 0004:00000c6c       __imp_?SetObjectInfo@CDrPen@@UAEXPAVCDrObject@@@Z 10042c6c     Spec_D32:Spec_D32.dll
+ 0004:00000c70       __imp_?ReplacePen@CDrPen@@UAEXXZ 10042c70     Spec_D32:Spec_D32.dll
+ 0004:00000c74       __imp_?ReadDefaultDrPen@CDrPen@@UAEXXZ 10042c74     Spec_D32:Spec_D32.dll
+ 0004:00000c78       __imp_?InitDrPen@CDrPen@@UAEXXZ 10042c78     Spec_D32:Spec_D32.dll
+ 0004:00000c7c       __imp_?GetRuntimeClass@CDrFont@@UBEPAUCRuntimeClass@@XZ 10042c7c     Spec_D32:Spec_D32.dll
+ 0004:00000c80       __imp_?Serialize@CDrFont@@UAEXAAVCArchive@@@Z 10042c80     Spec_D32:Spec_D32.dll
+ 0004:00000c84       __imp_?DoDataView@CDrFont@@UAEXPAVCDC@@H@Z 10042c84     Spec_D32:Spec_D32.dll
+ 0004:00000c88       __imp_?Pack_drPipe@CDrFont@@UAEXPAVCString@@@Z 10042c88     Spec_D32:Spec_D32.dll
+ 0004:00000c8c       __imp_?GetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z 10042c8c     Spec_D32:Spec_D32.dll
+ 0004:00000c90       __imp_?SetObjectInfo@CDrFont@@UAEXPAVCDrObject@@@Z 10042c90     Spec_D32:Spec_D32.dll
+ 0004:00000c94       __imp_?DoTextFont@CDrFont@@UAEXXZ 10042c94     Spec_D32:Spec_D32.dll
+ 0004:00000c98       __imp_?ReadDefaultDrFont@CDrFont@@UAEXXZ 10042c98     Spec_D32:Spec_D32.dll
+ 0004:00000c9c       __imp_?InitDrFont@CDrFont@@UAEXXZ 10042c9c     Spec_D32:Spec_D32.dll
+ 0004:00000ca0       __imp_?GetRuntimeClass@CDataWindow@@UBEPAUCRuntimeClass@@XZ 10042ca0     Spec_D32:Spec_D32.dll
+ 0004:00000ca4       __imp_?Serialize@CDataWindow@@UAEXAAVCArchive@@@Z 10042ca4     Spec_D32:Spec_D32.dll
+ 0004:00000ca8       __imp_?DoDataView@CDataWindow@@UAEXPAVCDC@@H@Z 10042ca8     Spec_D32:Spec_D32.dll
+ 0004:00000cac       __imp_?Pack_drPipe@CDataWindow@@UAEXPAVCString@@@Z 10042cac     Spec_D32:Spec_D32.dll
+ 0004:00000cb0       __imp_?GetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z 10042cb0     Spec_D32:Spec_D32.dll
+ 0004:00000cb4       __imp_?SetObjectInfo@CDataWindow@@UAEXPAVCDrObject@@@Z 10042cb4     Spec_D32:Spec_D32.dll
+ 0004:00000cb8       __imp_?SetWinMinMaxWIC@CDataWindow@@UAEXULPOINT3@@@Z 10042cb8     Spec_D32:Spec_D32.dll
+ 0004:00000cbc       __imp_?SetWinExtWIC@CDataWindow@@UAEXXZ 10042cbc     Spec_D32:Spec_D32.dll
+ 0004:00000cc0       __imp_?ReadDefaultDataWindow@CDataWindow@@UAEXXZ 10042cc0     Spec_D32:Spec_D32.dll
+ 0004:00000cc4       __imp_?InitDataWindow@CDataWindow@@UAEXXZ 10042cc4     Spec_D32:Spec_D32.dll
+ 0004:00000cc8       __imp_??1CDrObject@@UAE@XZ 10042cc8     Spec_D32:Spec_D32.dll
+ 0004:00000ccc       __imp_?GetRuntimeClass@CBooleans@@UBEPAUCRuntimeClass@@XZ 10042ccc     Spec_D32:Spec_D32.dll
+ 0004:00000cd0       __imp_?Serialize@CBooleans@@UAEXAAVCArchive@@@Z 10042cd0     Spec_D32:Spec_D32.dll
+ 0004:00000cd4       __imp_?DoDataView@CBooleans@@UAEXPAVCDC@@H@Z 10042cd4     Spec_D32:Spec_D32.dll
+ 0004:00000cd8       __imp_?GetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10042cd8     Spec_D32:Spec_D32.dll
+ 0004:00000cdc       __imp_?SetLocalCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10042cdc     Spec_D32:Spec_D32.dll
+ 0004:00000ce0       __imp_?GetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10042ce0     Spec_D32:Spec_D32.dll
+ 0004:00000ce4       __imp_?SetWorldCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10042ce4     Spec_D32:Spec_D32.dll
+ 0004:00000ce8       __imp_?GetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10042ce8     Spec_D32:Spec_D32.dll
+ 0004:00000cec       __imp_?SetEyeCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10042cec     Spec_D32:Spec_D32.dll
+ 0004:00000cf0       __imp_?GetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10042cf0     Spec_D32:Spec_D32.dll
+ 0004:00000cf4       __imp_?SetScreen3DCorner@CDrObject@@UAEXPAUWORLD@@H@Z 10042cf4     Spec_D32:Spec_D32.dll
+ 0004:00000cf8       __imp_?Pack_drPipe@CBooleans@@UAEXPAVCString@@@Z 10042cf8     Spec_D32:Spec_D32.dll
+ 0004:00000cfc       __imp_?GetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z 10042cfc     Spec_D32:Spec_D32.dll
+ 0004:00000d00       __imp_?SetObjectInfo@CBooleans@@UAEXPAVCDrObject@@@Z 10042d00     Spec_D32:Spec_D32.dll
+ 0004:00000d04       __imp_?IsZoomEnabled@CBooleans@@UAEHH@Z 10042d04     Spec_D32:Spec_D32.dll
+ 0004:00000d08       __imp_?SetZoomEnabled@CBooleans@@UAEXHH@Z 10042d08     Spec_D32:Spec_D32.dll
+ 0004:00000d0c       __imp_?IsZoomOn@CBooleans@@UAEHHH@Z 10042d0c     Spec_D32:Spec_D32.dll
+ 0004:00000d10       __imp_?ToggleZoom@CBooleans@@UAEHHH@Z 10042d10     Spec_D32:Spec_D32.dll
+ 0004:00000d14       __imp_?ReadDefaultBooleans@CBooleans@@UAEXXZ 10042d14     Spec_D32:Spec_D32.dll
+ 0004:00000d18       __imp_?InitBooleans@CBooleans@@UAEXXZ 10042d18     Spec_D32:Spec_D32.dll
+ 0004:00000d1c       __imp_?GetRuntimeClass@CMatObj@@UBEPAUCRuntimeClass@@XZ 10042d1c     Spec_D32:Spec_D32.dll
+ 0004:00000d20       \177Spec_D32_NULL_THUNK_DATA 10042d20     Spec_D32:Spec_D32.dll
+
+ entry point at        0001:0000fa30
+

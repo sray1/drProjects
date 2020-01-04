@@ -1,0 +1,9 @@
+#ifndef _DREXTERN_H
+#define _DREXTERN_H 
+///////////////////
+#include "Str_Draw.h"
+//////////////////////////////////////////// Objects
+extern DRTYPES FAR DrTypes[];
+extern int nMax_DrawTypes;
+//////////////////////////////////////////
+#endif

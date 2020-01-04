@@ -1,0 +1,85 @@
+; SDlg_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	SDlg_D
+DESCRIPTION  'SpecialDlgs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitSDlgDLL												@2 NONAME
+
+
+; CSDlgMgr
+;	; Constructor and Destructor
+	??0CSDlgMgr@@REC@XZ
+	??1CSDlgMgr@@VEC@XZ
+
+	?DoModal_SpecObjs@CSDlgMgr@@RECII@Z
+	?Serialize@CSDlgMgr@@VECXAEVCArchive@@@Z
+
+
+; CDrawLayer
+;	; Constructor and Destructor
+	??0CDrawLayer@@REC@PEVCWnd@@@Z
+	??1CDrawLayer@@VEC@XZ
+ 	
+	
+;	?classCDrNode@CNodeProp@@2UCRuntimeClass@@A
+    
+
+
+; CPenDlg
+;	; Constructor and Destructor
+	??0CPenDlg@@REC@PEVCWnd@@@Z
+  	??1CPenDlg@@VEC@XZ
+ 	                                    
+
+;	?classCDrPipe@CPipeProp@@2UCRuntimeClass@@A
+
+
+;	CDrawPrecision
+;	; Constructor and Destructor
+	??0CDrawPrecision@@REC@PEVCWnd@@@Z
+  	??1CDrawPrecision@@VEC@XZ
+ 	                                    
+
+;	?classCDrPipe@CPipeProp@@2UCRuntimeClass@@A
+
+
+; CDrawScale
+;	; Constructor and Destructor
+	??0CDrawScale@@REC@PEVCWnd@@@Z
+  	??1CDrawScale@@VEC@XZ
+ 	                                    
+
+;	?classCDrPipe@CPipeProp@@2UCRuntimeClass@@A
+
+
+; CDrawUnit
+;	; Constructor and Destructor
+	??0CDrawUnit@@REC@PEVCWnd@@@Z
+  	??1CDrawUnit@@VEC@XZ
+ 	                                    
+
+;	?classCDrPipe@CPipeProp@@2UCRuntimeClass@@A
+
+
+; CDlgPatch
+;	; Constructor and Destructor
+	??0CDlgPatch@@REC@PEVCWnd@@@Z
+	??1CDlgPatch@@VEC@XZ
+
+
+; CDlgObj3D
+;	; Constructor and Destructor
+	??0CDlgObj3D@@REC@PEVCWnd@@@Z
+	??1CDlgObj3D@@VEC@XZ
+
+
+
+
+  

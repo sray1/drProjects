@@ -1,0 +1,22 @@
+; MSolMgr_D.def -- DEBUG version
+
+LIBRARY	MMs3_D32
+DESCRIPTION  'MMs3Mgr Debug DLL' 
+
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMMs3DLL											@2 NONAME
+
+
+
+;CMI_Gang3
+
+
+??0CMI_Gang3@@QAE@XZ
+??1CMI_Gang3@@UAE@XZ
+?Regen_MESH3D_Elements@CMI_Gang3@@QAEHPAVCDrObject@@0@Z

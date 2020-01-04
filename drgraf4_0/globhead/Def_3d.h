@@ -1,0 +1,12 @@
+#ifndef _DEF_3D_H
+#define _DEF_3D_H 
+
+//////////////////////////////////////////// Objects
+// Note: Must Match IDB_... in Button array
+////////////////////////////////////////////
+#define XFORM				2501          
+//#define BOOLEANS			4002
+//#define DRFONT   			2104 	// button
+//////////////////////////////////////////
+#endif
+

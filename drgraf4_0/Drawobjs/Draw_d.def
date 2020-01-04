@@ -1,0 +1,92 @@
+;  Draw_D.def -- for CDrawObj stuff --  DEBUG version
+
+LIBRARY	Draw_D32
+DESCRIPTION  'DrawObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitDrawDLL												@2 NONAME
+
+
+
+; CLabel
+	; Constructor and Destructor
+		??0CDrLabel@@QAE@XZ 
+		??1CDrLabel@@UAE@XZ 
+	
+		?DoDataView@CDrLabel@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CDrLabel@@UAEXPAVCString@@@Z 
+		?DoDrawView@CDrLabel@@UAEXPAVCDC@@HH@Z 
+	
+		?classCDrLabel@CDrLabel@@2UCRuntimeClass@@A
+		?GetRuntimeClass@CDrLabel@@UBEPAUCRuntimeClass@@XZ 
+		?Serialize@CDrLabel@@UAEXAAVCArchive@@@Z 
+
+		?GetRawCoords@CDrLabel@@UAEXPAJPAHH@Z 
+
+	
+		?FinishObject@CDrLabel@@UAEXPAVCClientDC@@H@Z 
+		?IsKeyMatch@CDrLabel@@UAEHPAVCDrObject@@VCString@@I@Z 
+;		?IsObjectHit@CDrLabel@@UAEHPAVCDrObject@@PAVCClientDC@@HUtagPOINT@@PAUtagRECT@@H@Z 
+	
+
+	
+
+; CFreeHand
+;	; Constructor and Destructor
+		??0CDrFreeHand@@QAE@XZ 
+		??1CDrFreeHand@@UAE@XZ 
+	
+ 	                                    
+		?DoDataView@CDrFreeHand@@UAEXPAVCDC@@H@Z 
+		?Pack_drPipe@CDrFreeHand@@UAEXPAVCString@@@Z 
+		?DoDrawView@CDrFreeHand@@UAEXPAVCDC@@HH@Z 
+
+		?classCDrFreeHand@CDrFreeHand@@2UCRuntimeClass@@A
+		?Serialize@CDrFreeHand@@UAEXAAVCArchive@@@Z 
+
+	
+
+		?FinishObject@CDrFreeHand@@UAEXH@Z 
+
+		?IsObjectHit@CDrFreeHand@@UAEHPAVCDrObject@@PAVCClientDC@@HUtagPOINT@@PAUtagRECT@@H@Z 
+		?IsKeyMatch@CDrFreeHand@@UAEHPAVCDrObject@@VCString@@I@Z 
+
+
+		?AddPoint@CDrFreeHand@@UAEXVCPoint@@@Z
+	
+	
+    
+
+; CDrGrid
+;	; Constructor and Destructor
+		??0CDrGrid@@QAE@XZ 
+		??1CDrGrid@@UAE@XZ
+
+		?classCDrGrid@CDrGrid@@2UCRuntimeClass@@A 
+		?Serialize@CDrGrid@@UAEXAAVCArchive@@@Z 
+
+
+
+; CPrism
+;	; Constructor and Destructor
+		??0CPrism@@QAE@III@Z      
+		??1CPrism@@UAE@XZ 
+	
+ 		;?classCPrism@CPrism@@2UCRuntimeClass@@A
+
+		?DrawPrism@CPrism@@UAEXPAVCDC@@UtagPOINT@@QAY02N@Z 
+ 
+
+
+; CAxis
+;	; Constructor and Destructor
+		;??0CAxis@@QAE@XZ 
+		;??1CAxis@@UAE@XZ 
+	
+
+  

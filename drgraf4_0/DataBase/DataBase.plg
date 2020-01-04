@@ -1,0 +1,371 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: DataBase - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/DataBase.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\DataBase\DataBase.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP3015.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Fp"Debug/DataBase.pch" /YX"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\drgraf4_0\DataBase\CNodeSheet.cpp"
+"C:\drgraf4_0\DataBase\Cur_PDebugPage.cpp"
+"C:\drgraf4_0\DataBase\Cur_PGeomPage.cpp"
+"C:\drgraf4_0\DataBase\Cur_PInputPage.cpp"
+"C:\drgraf4_0\DataBase\Cur_PLoadPage.cpp"
+"C:\drgraf4_0\DataBase\Cur_PRestPage.cpp"
+"C:\drgraf4_0\DataBase\Cur_PSheet.cpp"
+"C:\drgraf4_0\DataBase\Cur_PSuppPage.cpp"
+"C:\drgraf4_0\DataBase\Cur_PTopoPage.cpp"
+"C:\drgraf4_0\DataBase\CurveDebugPage.cpp"
+"C:\drgraf4_0\DataBase\CurveGeomPage.cpp"
+"C:\drgraf4_0\DataBase\CurveInputPage.cpp"
+"C:\drgraf4_0\DataBase\CurveLoadPage.cpp"
+"C:\drgraf4_0\DataBase\CurveRestPage.cpp"
+"C:\drgraf4_0\DataBase\CurveSheet.cpp"
+"C:\drgraf4_0\DataBase\CurveSuppPage.cpp"
+"C:\drgraf4_0\DataBase\CurveTopoPage.cpp"
+"C:\drgraf4_0\DataBase\DataVu.cpp"
+"C:\drgraf4_0\DataBase\DBaseDll.cpp"
+"C:\drgraf4_0\DataBase\DbObjMgr.cpp"
+"C:\drgraf4_0\DataBase\DrListVu.cpp"
+"C:\drgraf4_0\DataBase\DrPropSheet.cpp"
+"C:\drgraf4_0\DataBase\DrTreeVu.cpp"
+"C:\drgraf4_0\DataBase\Mbj3DDebugPage.cpp"
+"C:\drgraf4_0\DataBase\Mbj3DGeomPage.cpp"
+"C:\drgraf4_0\DataBase\Mbj3DInputPage.cpp"
+"C:\drgraf4_0\DataBase\Mbj3DSheet.cpp"
+"C:\drgraf4_0\DataBase\MCNodeSheet.cpp"
+"C:\drgraf4_0\DataBase\Mesh1DDebugPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh1DGeomPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh1DInputPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh1DLoadPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh1DRestPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh1DSheet.cpp"
+"C:\drgraf4_0\DataBase\Mesh1DSuppPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh1DTopoPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh2DDebugPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh2DGeomPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh2DInputPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh2DLoadPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh2DRestPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh2DSheet.cpp"
+"C:\drgraf4_0\DataBase\Mesh2DSuppPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh2DTopoPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh3DDebugPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh3DGeomPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh3DInputPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh3DLoadPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh3DRestPage.cpp"
+"C:\drgraf4_0\DataBase\Mesh3DSheet.cpp"
+"C:\drgraf4_0\DataBase\Mesh3DSuppPage.cpp"
+"C:\drgraf4_0\DataBase\MNodeSheet.cpp"
+"C:\drgraf4_0\DataBase\NodeDebugPage.cpp"
+"C:\drgraf4_0\DataBase\NodeGeomPage.cpp"
+"C:\drgraf4_0\DataBase\NodeInputPage.cpp"
+"C:\drgraf4_0\DataBase\NodeLoadPage.cpp"
+"C:\drgraf4_0\DataBase\NodeRestPage.cpp"
+"C:\drgraf4_0\DataBase\NodeSheet.cpp"
+"C:\drgraf4_0\DataBase\NodeSuppPage.cpp"
+"C:\drgraf4_0\DataBase\NodeTopoPage.cpp"
+"C:\drgraf4_0\DataBase\Obj3DDebugPage.cpp"
+"C:\drgraf4_0\DataBase\Obj3DGeomPage.cpp"
+"C:\drgraf4_0\DataBase\Obj3DInputPage.cpp"
+"C:\drgraf4_0\DataBase\Obj3DSheet.cpp"
+"C:\drgraf4_0\DataBase\PatchDebugPage.cpp"
+"C:\drgraf4_0\DataBase\PatchGeomPage.cpp"
+"C:\drgraf4_0\DataBase\PatchInputPage.cpp"
+"C:\drgraf4_0\DataBase\PatchLoadPage.cpp"
+"C:\drgraf4_0\DataBase\PatchRestPage.cpp"
+"C:\drgraf4_0\DataBase\PatchSheet.cpp"
+"C:\drgraf4_0\DataBase\PatchSuppPage.cpp"
+"C:\drgraf4_0\DataBase\PatchTopoPage.cpp"
+"C:\drgraf4_0\DataBase\SolidDebugPage.cpp"
+"C:\drgraf4_0\DataBase\SolidGeomPage.cpp"
+"C:\drgraf4_0\DataBase\SolidInputPage.cpp"
+"C:\drgraf4_0\DataBase\SolidLoadPage.cpp"
+"C:\drgraf4_0\DataBase\SolidRestPage.cpp"
+"C:\drgraf4_0\DataBase\SolidSheet.cpp"
+"C:\drgraf4_0\DataBase\SolidSuppPage.cpp"
+"C:\drgraf4_0\DataBase\SolidTopoPage.cpp"
+"C:\drgraf4_0\DataBase\Splitter.cpp"
+"C:\drgraf4_0\DataBase\StalDebugPage.cpp"
+"C:\drgraf4_0\DataBase\StalDefnPage.cpp"
+"C:\drgraf4_0\DataBase\StalInputPage.cpp"
+"C:\drgraf4_0\DataBase\StalSheet.cpp"
+"C:\drgraf4_0\DataBase\SuppDebugPage.cpp"
+"C:\drgraf4_0\DataBase\SuppDefnPage.cpp"
+"C:\drgraf4_0\DataBase\SuppInputPage.cpp"
+"C:\drgraf4_0\DataBase\SuppSheet.cpp"
+"C:\drgraf4_0\DataBase\TreeHandler.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP3015.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP3016.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /Fp"Debug/DataBase.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\drgraf4_0\DataBase\StdAfx.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP3016.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP3017.TMP" with contents
+[
+Dr3D_D32.lib Spec_D32.lib OGen_D32.lib Draw_D32.lib Elem_D32.lib OMgr_D32.lib MMgr_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/DBase_D32.pdb" /map:"Debug/DBase_D32.map" /debug /machine:I386 /def:".\DataBase.def" /out:"c:\drgraf4_0\applic\Debug/DBase_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/DBase_D32.lib" /pdbtype:sept 
+.\Debug\CNodeSheet.obj
+.\Debug\Cur_PDebugPage.obj
+.\Debug\Cur_PGeomPage.obj
+.\Debug\Cur_PInputPage.obj
+.\Debug\Cur_PLoadPage.obj
+.\Debug\Cur_PRestPage.obj
+.\Debug\Cur_PSheet.obj
+.\Debug\Cur_PSuppPage.obj
+.\Debug\Cur_PTopoPage.obj
+.\Debug\CurveDebugPage.obj
+.\Debug\CurveGeomPage.obj
+.\Debug\CurveInputPage.obj
+.\Debug\CurveLoadPage.obj
+.\Debug\CurveRestPage.obj
+.\Debug\CurveSheet.obj
+.\Debug\CurveSuppPage.obj
+.\Debug\CurveTopoPage.obj
+.\Debug\DataVu.obj
+.\Debug\DBaseDll.obj
+.\Debug\DbObjMgr.obj
+.\Debug\DrListVu.obj
+.\Debug\DrPropSheet.obj
+.\Debug\DrTreeVu.obj
+.\Debug\Mbj3DDebugPage.obj
+.\Debug\Mbj3DGeomPage.obj
+.\Debug\Mbj3DInputPage.obj
+.\Debug\Mbj3DSheet.obj
+.\Debug\MCNodeSheet.obj
+.\Debug\Mesh1DDebugPage.obj
+.\Debug\Mesh1DGeomPage.obj
+.\Debug\Mesh1DInputPage.obj
+.\Debug\Mesh1DLoadPage.obj
+.\Debug\Mesh1DRestPage.obj
+.\Debug\Mesh1DSheet.obj
+.\Debug\Mesh1DSuppPage.obj
+.\Debug\Mesh1DTopoPage.obj
+.\Debug\Mesh2DDebugPage.obj
+.\Debug\Mesh2DGeomPage.obj
+.\Debug\Mesh2DInputPage.obj
+.\Debug\Mesh2DLoadPage.obj
+.\Debug\Mesh2DRestPage.obj
+.\Debug\Mesh2DSheet.obj
+.\Debug\Mesh2DSuppPage.obj
+.\Debug\Mesh2DTopoPage.obj
+.\Debug\Mesh3DDebugPage.obj
+.\Debug\Mesh3DGeomPage.obj
+.\Debug\Mesh3DInputPage.obj
+.\Debug\Mesh3DLoadPage.obj
+.\Debug\Mesh3DRestPage.obj
+.\Debug\Mesh3DSheet.obj
+.\Debug\Mesh3DSuppPage.obj
+.\Debug\MNodeSheet.obj
+.\Debug\NodeDebugPage.obj
+.\Debug\NodeGeomPage.obj
+.\Debug\NodeInputPage.obj
+.\Debug\NodeLoadPage.obj
+.\Debug\NodeRestPage.obj
+.\Debug\NodeSheet.obj
+.\Debug\NodeSuppPage.obj
+.\Debug\NodeTopoPage.obj
+.\Debug\Obj3DDebugPage.obj
+.\Debug\Obj3DGeomPage.obj
+.\Debug\Obj3DInputPage.obj
+.\Debug\Obj3DSheet.obj
+.\Debug\PatchDebugPage.obj
+.\Debug\PatchGeomPage.obj
+.\Debug\PatchInputPage.obj
+.\Debug\PatchLoadPage.obj
+.\Debug\PatchRestPage.obj
+.\Debug\PatchSheet.obj
+.\Debug\PatchSuppPage.obj
+.\Debug\PatchTopoPage.obj
+.\Debug\SolidDebugPage.obj
+.\Debug\SolidGeomPage.obj
+.\Debug\SolidInputPage.obj
+.\Debug\SolidLoadPage.obj
+.\Debug\SolidRestPage.obj
+.\Debug\SolidSheet.obj
+.\Debug\SolidSuppPage.obj
+.\Debug\SolidTopoPage.obj
+.\Debug\Splitter.obj
+.\Debug\StalDebugPage.obj
+.\Debug\StalDefnPage.obj
+.\Debug\StalInputPage.obj
+.\Debug\StalSheet.obj
+.\Debug\StdAfx.obj
+.\Debug\SuppDebugPage.obj
+.\Debug\SuppDefnPage.obj
+.\Debug\SuppInputPage.obj
+.\Debug\SuppSheet.obj
+.\Debug\TreeHandler.obj
+.\Debug\DataBase.res
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP3017.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+StdAfx.cpp
+Compiling...
+CNodeSheet.cpp
+Cur_PDebugPage.cpp
+Cur_PGeomPage.cpp
+C:\drgraf4_0\DataBase\Cur_PGeomPage.cpp(94) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Cur_PInputPage.cpp
+Cur_PLoadPage.cpp
+C:\drgraf4_0\DataBase\Cur_PLoadPage.cpp(109) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\Cur_PLoadPage.cpp(132) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Cur_PRestPage.cpp
+Cur_PSheet.cpp
+Cur_PSuppPage.cpp
+C:\drgraf4_0\DataBase\Cur_PSuppPage.cpp(116) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\Cur_PSuppPage.cpp(139) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Cur_PTopoPage.cpp
+CurveDebugPage.cpp
+C:\drgraf4_0\DataBase\CurveDebugPage.cpp(131) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+CurveGeomPage.cpp
+C:\drgraf4_0\DataBase\CurveGeomPage.cpp(248) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+CurveInputPage.cpp
+CurveLoadPage.cpp
+C:\drgraf4_0\DataBase\CurveLoadPage.cpp(109) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\CurveLoadPage.cpp(132) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+CurveRestPage.cpp
+CurveSheet.cpp
+CurveSuppPage.cpp
+C:\drgraf4_0\DataBase\CurveSuppPage.cpp(116) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\CurveSuppPage.cpp(139) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+CurveTopoPage.cpp
+C:\drgraf4_0\DataBase\CurveTopoPage.cpp(103) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+DataVu.cpp
+C:\drgraf4_0\DataBase\DataVu.cpp(273) : warning C4189: 'nResult' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\DataVu.cpp(296) : warning C4189: 'nResult' : local variable is initialized but not referenced
+DBaseDll.cpp
+C:\drgraf4_0\DataBase\DBaseDll.cpp(32) : warning C4100: 'lpReserved' : unreferenced formal parameter
+DbObjMgr.cpp
+DrListVu.cpp
+DrPropSheet.cpp
+DrTreeVu.cpp
+Mbj3DDebugPage.cpp
+Mbj3DGeomPage.cpp
+Mbj3DInputPage.cpp
+Mbj3DSheet.cpp
+C:\drgraf4_0\DataBase\Mbj3DSheet.cpp(82) : warning C4189: 'pActivePage' : local variable is initialized but not referenced
+MCNodeSheet.cpp
+Mesh1DDebugPage.cpp
+Mesh1DGeomPage.cpp
+Mesh1DInputPage.cpp
+Mesh1DLoadPage.cpp
+C:\drgraf4_0\DataBase\Mesh1DLoadPage.cpp(106) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\Mesh1DLoadPage.cpp(129) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mesh1DRestPage.cpp
+Mesh1DSheet.cpp
+C:\drgraf4_0\DataBase\Mesh1DSheet.cpp(78) : warning C4189: 'pActivePage' : local variable is initialized but not referenced
+Mesh1DSuppPage.cpp
+C:\drgraf4_0\DataBase\Mesh1DSuppPage.cpp(112) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\Mesh1DSuppPage.cpp(135) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mesh1DTopoPage.cpp
+Mesh2DDebugPage.cpp
+Mesh2DGeomPage.cpp
+Mesh2DInputPage.cpp
+Mesh2DLoadPage.cpp
+C:\drgraf4_0\DataBase\Mesh2DLoadPage.cpp(105) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\Mesh2DLoadPage.cpp(128) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mesh2DRestPage.cpp
+Mesh2DSheet.cpp
+C:\drgraf4_0\DataBase\Mesh2DSheet.cpp(78) : warning C4189: 'pActivePage' : local variable is initialized but not referenced
+Mesh2DSuppPage.cpp
+C:\drgraf4_0\DataBase\Mesh2DSuppPage.cpp(113) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\Mesh2DSuppPage.cpp(136) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mesh2DTopoPage.cpp
+Mesh3DDebugPage.cpp
+Mesh3DGeomPage.cpp
+Mesh3DInputPage.cpp
+Mesh3DLoadPage.cpp
+C:\drgraf4_0\DataBase\Mesh3DLoadPage.cpp(106) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\Mesh3DLoadPage.cpp(129) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mesh3DRestPage.cpp
+Mesh3DSheet.cpp
+C:\drgraf4_0\DataBase\Mesh3DSheet.cpp(78) : warning C4189: 'pActivePage' : local variable is initialized but not referenced
+Mesh3DSuppPage.cpp
+C:\drgraf4_0\DataBase\Mesh3DSuppPage.cpp(113) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\Mesh3DSuppPage.cpp(136) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+MNodeSheet.cpp
+NodeDebugPage.cpp
+NodeGeomPage.cpp
+NodeInputPage.cpp
+C:\drgraf4_0\DataBase\NodeInputPage.cpp(172) : warning C4189: 'dWorldBase' : local variable is initialized but not referenced
+NodeLoadPage.cpp
+C:\drgraf4_0\DataBase\NodeLoadPage.cpp(146) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\NodeLoadPage.cpp(169) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+NodeRestPage.cpp
+C:\drgraf4_0\DataBase\NodeRestPage.cpp(152) : warning C4189: 'pPrecision' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\NodeRestPage.cpp(153) : warning C4189: 'pMapFactor' : local variable is initialized but not referenced
+NodeSheet.cpp
+NodeSuppPage.cpp
+C:\drgraf4_0\DataBase\NodeSuppPage.cpp(149) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\NodeSuppPage.cpp(172) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+NodeTopoPage.cpp
+C:\drgraf4_0\DataBase\NodeTopoPage.cpp(147) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Obj3DDebugPage.cpp
+Obj3DGeomPage.cpp
+Obj3DInputPage.cpp
+Obj3DSheet.cpp
+C:\drgraf4_0\DataBase\Obj3DSheet.cpp(82) : warning C4189: 'pActivePage' : local variable is initialized but not referenced
+PatchDebugPage.cpp
+PatchGeomPage.cpp
+C:\drgraf4_0\DataBase\PatchGeomPage.cpp(505) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+PatchInputPage.cpp
+PatchLoadPage.cpp
+C:\drgraf4_0\DataBase\PatchLoadPage.cpp(109) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\PatchLoadPage.cpp(132) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+PatchRestPage.cpp
+PatchSheet.cpp
+PatchSuppPage.cpp
+C:\drgraf4_0\DataBase\PatchSuppPage.cpp(116) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\PatchSuppPage.cpp(139) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+PatchTopoPage.cpp
+C:\drgraf4_0\DataBase\PatchTopoPage.cpp(103) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+SolidDebugPage.cpp
+SolidGeomPage.cpp
+SolidInputPage.cpp
+SolidLoadPage.cpp
+C:\drgraf4_0\DataBase\SolidLoadPage.cpp(109) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\SolidLoadPage.cpp(132) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+SolidRestPage.cpp
+SolidSheet.cpp
+C:\drgraf4_0\DataBase\SolidSheet.cpp(78) : warning C4189: 'pActivePage' : local variable is initialized but not referenced
+SolidSuppPage.cpp
+C:\drgraf4_0\DataBase\SolidSuppPage.cpp(116) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DataBase\SolidSuppPage.cpp(139) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+SolidTopoPage.cpp
+C:\drgraf4_0\DataBase\SolidTopoPage.cpp(102) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Splitter.cpp
+C:\drgraf4_0\DataBase\Splitter.cpp(65) : warning C4189: 'pView' : local variable is initialized but not referenced
+StalDebugPage.cpp
+StalDefnPage.cpp
+C:\drgraf4_0\DataBase\StalDefnPage.cpp(118) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+StalInputPage.cpp
+StalSheet.cpp
+SuppDebugPage.cpp
+SuppDefnPage.cpp
+C:\drgraf4_0\DataBase\SuppDefnPage.cpp(119) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+SuppInputPage.cpp
+SuppSheet.cpp
+TreeHandler.cpp
+C:\drgraf4_0\DataBase\TreeHandler.cpp(113) : warning C4700: local variable 'hItemParent' used without having been initialized
+Linking...
+.\DataBase.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\DataBase.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+DrTreeVu.obj : warning LNK4197: export "?classCDrTreeVu@CDrTreeVu@@2UCRuntimeClass@@B" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/DBase_D32.lib and object c:\drgraf4_0\applic\Debug/DBase_D32.exp
+
+
+
+<h3>Results</h3>
+DBase_D32.dll - 0 error(s), 59 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: DeckMgr - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/DeckMgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\DeckMgr\DeckMgr.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSPF175.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/DeckMgr.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\DeckMgr\DeckDll.cpp"
+"C:\drgraf4_0\DeckMgr\DeckMgr.cpp"
+"C:\drgraf4_0\DeckMgr\DeckWalk.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSPF175.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSPF176.TMP" with contents
+[
+Spec_D32.lib Mesh_d32.lib Elem_D32.lib OMgr_D32.lib Elem_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib Dr3D_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/Deck_D32.pdb" /map:".\Debug/Deck_D32.map" /debug /machine:I386 /def:".\DeckMgr.def" /out:"c:\drgraf4_0\applic\Debug/Deck_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/Deck_D32.lib" 
+.\Debug\DeckDll.obj
+.\Debug\DeckMgr.obj
+.\Debug\DeckWalk.obj
+.\Debug\DeckMgr.res
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSPF176.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+DeckDll.cpp
+c:\drgraf4_0\deckmgr\deckdll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+DeckMgr.cpp
+DeckWalk.cpp
+C:\drgraf4_0\DeckMgr\DeckWalk.cpp(111) : warning C4189: 'pLayer' : local variable is initialized but not referenced
+C:\drgraf4_0\DeckMgr\DeckWalk.cpp(380) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DeckMgr\DeckWalk.cpp(439) : warning C4189: 'nstrLen' : local variable is initialized but not referenced
+C:\drgraf4_0\DeckMgr\DeckWalk.cpp(454) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\DeckMgr\DeckWalk.cpp(511) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Linking...
+.\DeckMgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\DeckMgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug/Deck_D32.lib and object c:\drgraf4_0\applic\Debug/Deck_D32.exp
+
+
+
+<h3>Results</h3>
+Deck_D32.dll - 0 error(s), 8 warning(s)
+</pre>
+</body>
+</html>

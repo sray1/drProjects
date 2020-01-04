@@ -1,0 +1,111 @@
+// CPa_Duct.cpp : implementation of the CPA_Duct class
+//
+
+#include "stdafx.h"
+#include <math.h>
+#include <Float.h>		//DBL_MIN in sweep/duct
+
+#include "3DMath.h"
+#include "XForm.h"
+/////////////////////
+#include "glb_Type.h"
+#include "glb_Objs.h"
+#include "glb_CuPS.h"
+///////////////////
+#include "PA_Xtrud.h"
+#include "PA_Rotat.h"
+
+#include "PA_Duct.h"
+
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+/////////////////////////////////////////////////////////////////////////////
+// CPA_Duct
+
+IMPLEMENT_DYNAMIC(CPA_Duct,CObject)
+/*
+BEGIN_MESSAGE_MAP(CPA_Duct,CObject)
+//BEGIN_MESSAGE_MAP
+	//{{AFX_MSG_MAP(CPA_Duct)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/
+//////////////////////////////////////////////
+int CPA_Duct::Duct
+	(
+		WORLD	Anchor,		//	cross section Anchor point	
+		int		nXSec,		//	number of cross section points
+		pWORLD	pXSec,		//	cross section curve points
+		pDOUBLE	pXSecWt,	//	cross section curve points
+		int		nPath,		//	number of path points
+		pWORLD	pPath,		//	path curve points
+		pWORLD	pRotate,	//	path rotation factors: ONLY Y-COMPONENT is USEFUL
+		double	RotScale,	//	path rotation Scale
+		pWORLD	pOut,		//	Output Pts array
+		pDOUBLE	pOutWt		//	Output Wts array
+	)	  
+{
+	///////////////////////////////////////////////////// NOTE
+	//	for now, cross-section curve is assumed to be  //
+	//			Defined Always in XY plane             //
+	//  later: todo:                                   //
+	//		user defines in its local axis    		   //
+	//		we will preprocess as follows:             //
+	//			compute Normal to XSection,            //
+	//      	Rotate Normal to +Z-Axis               //
+	//		Then Continue doing rest of the process	   //
+	/////////////////////////////////////////////////////
+	pWORLD	pRow,p,pP;//,pS;
+	pDOUBLE pRowWt;
+	WORLD	td;
+	int		ii,jj;
+	long	sizeRow,sizeRowWt;
+	////////////////////////////////
+	if(pOut)
+	{
+		CPA_Xtrud 	Xtrud;
+		CPA_Rotat 	Rotate;
+		C3DMath		Math3D;
+		///////////////////////////////////////////////				
+		sizeRow		= nXSec*sizeof(WORLD);
+		sizeRowWt	= nXSec*sizeof(double);
+		////////////////////////////////////////
+		for( pRow=pOut,pRowWt=pOutWt,ii=0;ii<nPath;ii++,pRow+=nXSec,pRowWt+=nXSec ) 
+		{
+			Math3D.BlockCopy( (HUGEBLK)pXSec, (HUGEBLK)pRow, sizeRow );
+			Math3D.BlockCopy( (HUGEBLK)pXSecWt, (HUGEBLK)pRowWt, sizeRowWt );
+			/////////////////
+			pP = pPath + ii;
+			///////////////////////////////////////////////////// T-direction(tangent)
+			td.x = (pP + 1)->x - pP->x;
+			td.y = (pP + 1)->y - pP->y;
+			td.z = (pP + 1)->z - pP->z;
+			///////////////////////////
+			double depth = sqrt(td.x*td.x + td.y*td.y +td.z*td.z);
+			double theta = RotScale * (pRotate + ii)->y;
+			if(theta>360)
+				theta = 360;
+			//////////////////////////////////////////////////////
+			for( p=pRow,jj=0;jj<nXSec;jj++,p++ )
+			{
+				WORLD Old,New;
+				pWORLD pOld = &Old, pNew = &New;
+				////////////////////////////////
+				Old.x	= p->x;
+				Old.y	= p->y;
+				Old.z	= p->z;
+				///////////////////////////////////////////////// Extrude
+				Xtrud.GetAPtByExtrusion(pOld, td, depth);   
+				///////////////////////////////////////////////// Twist/Rotate   
+				Rotate.GetAPtByRotation(pOld,Anchor,td,theta,p);
+				/////////////////////////////////////////////////
+			}
+		}
+	}			
+	////////////////////////	
+	return	nXSec * nPath;
+}
+////////////////////////////// end of module /////////////////////// 

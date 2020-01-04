@@ -1,0 +1,300 @@
+// Rotate.cpp : implementation file
+//
+//	THIS ROUTINE IS SUPERSEDED BY THE ONE IN CREOM DLL
+//	THIS ONE WITH ITS HEADER NEEDS TO BE DESTROYED
+//						08/28/98
+/////////////////////////////////////////////////////////////// 
+
+#include "stdafx.h"
+
+#include "math.h"
+#include "XForm.h"
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "DListMgr.h"
+///////////////////// elements
+#include "Def_ELEM.h"
+///////////////////// Label
+#include "DrLabel.h"
+///////////////////// dialogMgr
+#include "MMs0Mgr.h"
+#include "Mi_Gang0.h"
+#include "Dlg_Spn0.h"
+////////////////////
+#include "MI_0SPN.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define new	DEBUG_NEW
+#define	BUFF_SIZE			1024
+#define MIN_CNODES_CURVE	4
+#define	NUM_LEN				12 
+#define	MAX_SEG_ANGLE		120
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_0SPN,CObject,1)
+/////////////////////////////////////////////////////////////////////////////
+CMI_0SPN::CMI_0SPN()
+{
+	m_bCopy		  = FALSE; // Normally, XForm
+	m_pContextNod = NULL;
+	m_pContextCur = NULL;
+	m_pContextPat = NULL;
+	m_pContextSol = NULL;
+}
+
+CMI_0SPN::~CMI_0SPN()
+{
+}
+
+
+int CMI_0SPN::SpawnNodeShowingDlg(CDrFE0D* pNewNode,CDrFE0D* pOldNode, 
+									CDrObject* pContextObj, UINT nContextType) 
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	////////////////////////////////////////////////////////////////
+	switch(nContextType)
+	{
+		case MESH0D:
+			m_pContextNod = (CDrFE0D*)pContextObj;
+			break;
+		case MESH1D:
+			m_pContextCur = (CDrMesh1D*)pContextObj;
+			break;
+		case MESH2D:
+			m_pContextPat = (CDrMesh2D*)pContextObj;
+			break;
+		case MESH3D:
+			m_pContextSol = (CDrMesh3D*)pContextObj;
+			break;
+		case MBJ3D:
+			m_pContextO3D = (CDrMbj3D*)pContextObj;
+			break;
+		default:
+			AfxMessageBox("ERROR:CMI_0SPN::CSpawn\nILLEGAL nContextType");
+			return -1;
+	}
+	/////////////////////
+	m_pDrNode = pNewNode;
+	////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	////////////////////////////////////////////////////////////////
+	int nResult = GetInfoFromDlg(m_pDrNode,pOldNode);
+	if(nResult<0)
+		return nResult;// error or cancel
+	///////////////////////////////////////////////////////////////////// Go Generate	
+	if(m_pDrNode)
+	{
+		; // do nothing
+/*
+		CString* str = new CString;
+		char* buf = str->GetBuffer(80);
+				
+		sprintf(buf,"Got All Node Spawning Info");
+		/////////////////////////	
+		AfxMessageBox(*str);
+		/////////////////////////
+		str->ReleaseBuffer();
+		delete str;
+*/
+	}	
+	else
+		return -1;	// error
+	///////////////////////////////// Spawn Node
+	if(!m_bCopy)
+	{
+		MATRIX Mat;
+		///////////
+		if(m_pDrNode->IsInstanced())
+		{
+			CMatObj* pMatObj	= m_pDrNode->GetMatObj();
+			Mat					= *(pMatObj->GetMatrix());
+			/////////////////////
+			if(SpawnNode(&Mat)<0)
+				return -1;
+			/////////////////////
+		}
+		else
+		{
+			MATRIX Mat;
+			C3DMath Math3D;
+			Math3D.GetIdentityMATRIX(&Mat);
+			/////////////////////
+			if(SpawnNode(&Mat)<0)
+				return -1;
+			/////////////////////
+		}
+	}
+	///////////////////////////// make it Unposted 
+//	m_pDrNode->SetPosted(FALSE);
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrNode->Calc_3DBoundsLocal();
+	/////////
+	return 0;
+}			
+	 
+int CMI_0SPN::GetInfoFromDlg(CDrFE0D* pNewNode, CDrFE0D* pOldNode)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CMMs0Mgr* 	pNodMgr;
+	CString		Cid = pNewNode->GetObjectID();
+	CString		ParentID = pOldNode->GetObjectID(); 
+	///////////////////////////////////////////////////
+	if (pNodMgr->DoModal_Spawn_N(pNewNode,pOldNode,&Cid,&ParentID) == IDCANCEL)
+		return -2; 
+	/////////
+	return 0;
+}
+	 
+int CMI_0SPN::SpawnNode(pMATRIX pXFMat)
+{
+	CXForm	XForm(TRUE);
+	////////////////////
+	WORLD	LocalPos;
+	///////////////////////////////////////// Get Coords		
+	LocalPos	= *(m_pDrNode->GetLocalPos());
+	///////////////////////////////////////// Transform
+	XForm.Transform(&LocalPos,&LocalPos,pXFMat);
+	///////////////////////////////////////// Set it
+	m_pDrNode->SetLocalPos(LocalPos);
+    /////////////////////////////
+	(m_pDrNode->GetNodeCard())->x = (long)LocalPos.x;	
+	(m_pDrNode->GetNodeCard())->y = (long)LocalPos.y;	
+	(m_pDrNode->GetNodeCard())->z = (long)LocalPos.z;
+	/////////////////////////////////////////////
+	return 0;
+}
+	 		
+int CMI_0SPN::SpawnNodeWithoutDlg(CDrFE0D* pNewNode,CDrFE0D* pOldNode,pMATRIX pXFMat,
+						CString* pNid,BOOL bCNode,CDrObject* pContextObj,UINT nContextType)
+{
+	BOOL bMNode = pOldNode->IsMeshNode();
+	///////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMsObjMgr* pMsObjMgr 	= pDoc->GetMsObjMgr();
+	///////////////
+	CString		NodeID = "",CurveID = "",PatchID="",SolidID="",Obj3DID="";
+	//////////////////////////////////////////////////////////////// Name
+	switch(nContextType)
+	{
+		case MESH0D:
+			m_pContextNod	= (CDrFE0D*)pContextObj;
+			NodeID			= m_pContextNod->GetObjectID();  	
+			break;
+		case MESH1D:
+			m_pContextCur	= (CDrMesh1D*)pContextObj;
+			CurveID			= m_pContextCur->GetObjectID();  	
+			NodeID			= pOldNode->GetObjectID();  	
+			break;
+		case MESH2D:
+			m_pContextPat	= (CDrMesh2D*)pContextObj;
+			PatchID			= m_pContextPat->GetObjectID();  	
+			NodeID			= pOldNode->GetObjectID();  	
+			break;
+		case MESH3D:
+			m_pContextSol	= (CDrMesh3D*)pContextObj;
+			SolidID			= m_pContextSol->GetObjectID();  	
+			NodeID			= pOldNode->GetObjectID();  	
+		case MBJ3D:
+			m_pContextO3D	= (CDrMbj3D*)pContextObj;
+			Obj3DID			= m_pContextO3D->GetObjectID();  	
+			NodeID			= pOldNode->GetObjectID();  	
+			break;
+		default:
+			AfxMessageBox("ERROR:CMI_0SPN::SpawnNodeWithoutDlg\nILLEGAL nContextType");
+			return -1;
+	}
+	/////////////////////////////
+	if(*pNid == "")
+	{
+		/////////////////////////////
+		CMI_Gang0 Gang0;
+		CString strID;
+		//////////////
+		if(bCNode)
+		{
+			Gang0.SetElemInfoID(strID,MCNODE);		
+			strID = "MC_" + strID;
+		}
+		else
+		if(bMNode)
+			Gang0.SetElemInfoID(strID,MNODE);		
+		else
+			Gang0.SetElemInfoID(strID,FE0D);		
+		///////////		
+		(*pNid)	+= strID;
+	}
+	////////////////////////////////////////////////////////////////// Fill it
+	m_pDrNode = pNewNode;
+	/////////////////////
+	(m_pDrNode->GetNodeCard())->bnid_c 	= bCNode;
+	m_pDrNode->SetMeshNode(bMNode);
+	int nResult = FillSpawnedNodeDlgDataBase(m_pDrNode,*pNid,pOldNode,NodeID);
+															// Fill DrCNode/Node
+	if(nResult<0)
+		return nResult;
+	///////////////////
+	if(!m_bCopy)
+		SpawnNode(pXFMat);
+	///////////////////
+	return 0;
+}
+
+int CMI_0SPN::FillSpawnedNodeDlgDataBase(CDrFE0D* pDrNode,CString& Cid,
+											CDrFE0D* pParentNode,CString& ParentCid)
+{
+	// Since Control Nodes are Privately Listed, we need to supply
+	// pOldNode to the Dlg Database	
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	////////////////////////////////////
+	CDlg_Spn0	Dlg_SpnN;		
+	/////////////////////////////////////////////////////////////////////////// Fill
+	Dlg_SpnN.m_SpawnID		= Cid;			// NewID
+	Dlg_SpnN.m_bInstanced 	= FALSE;
+	Dlg_SpnN.m_pParent	 	= pParentNode;	// OldID
+	Dlg_SpnN.m_CID		 	= ParentCid;	// OldID
+	Dlg_SpnN.m_pMatObj 		= NULL;
+	///////////////////////////////////////
+	Dlg_SpnN.SetInfoForDataBase(pDrNode);	// NewNode
+	///////////////
+    return 0;
+}
+
+void CMI_0SPN::Serialize(CArchive& ar)
+{
+
+	CObject::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMI_0SPN:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMI_0SPN:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////// end of module //////////////////

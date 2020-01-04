@@ -1,0 +1,53 @@
+; SDlg_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	SDlg_D32
+DESCRIPTION  'SpecialDlgs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitSDlgDLL												@2 NONAME
+
+
+; CSDlgMgr
+;	; Constructor and Destructor
+
+?DoModal_SpecObjs@CSDlgMgr@@QAEII@Z
+
+
+; CDrawLayer
+;	; Constructor and Destructor
+    
+
+
+; CPenDlg
+;	; Constructor and Destructor
+
+
+;	CDrawPrecision
+;	; Constructor and Destructor
+
+
+; CDrawScale
+;	; Constructor and Destructor
+
+
+; CDrawUnit
+;	; Constructor and Destructor
+
+
+; CDlgPatch
+;	; Constructor and Destructor
+
+
+; CDlgObj3D
+;	; Constructor and Destructor
+
+
+
+
+  

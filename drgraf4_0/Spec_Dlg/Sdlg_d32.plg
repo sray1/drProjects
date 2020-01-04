@@ -1,0 +1,124 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: Edlg_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/Elem_dlg.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\ELEM_DLG\Elem_dlg.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSPE.tmp" with contents
+[
+/nologo /MDd /W4 /GX /ZI /Od /D "_WINDLL" /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/Edlg_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\ELEM_DLG\dlg_fe0i.cpp"
+"C:\drgraf4_0\ELEM_DLG\dlg_FE1i.cpp"
+"C:\drgraf4_0\ELEM_DLG\dlg_fe2i.cpp"
+"C:\drgraf4_0\ELEM_DLG\Edlgdll.cpp"
+"C:\drgraf4_0\ELEM_DLG\Edlgmgr.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSPE.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSPF.tmp" with contents
+[
+Spec_D32.lib Elem_D32.lib OMgr_D32.lib Draw_D32.lib Dr3D_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/Edlg_d32.pdb" /map:".\Debug\Edlg_d32..map" /debug /machine:IX86 /def:".\Edlg_d.def" /out:"c:\drgraf4_0\applic\Debug\Edlg_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Edlg_d32.lib" 
+.\Debug\dlg_fe0i.obj
+.\Debug\dlg_FE1i.obj
+.\Debug\dlg_fe2i.obj
+.\Debug\Edlgdll.obj
+.\Debug\Edlgmgr.obj
+.\Debug\Elem_dlg.res
+\drgraf4_0\applic\Debug\Elem_d32.lib
+\drgraf4_0\applic\Debug\Ddlg_d32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSPF.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+dlg_fe0i.cpp
+dlg_FE1i.cpp
+dlg_fe2i.cpp
+C:\drgraf4_0\ELEM_DLG\dlg_FE1i.cpp(319) : warning C4701: local variable 'pWndCtrl' may be used without having been initialized
+C:\drgraf4_0\ELEM_DLG\dlg_FE1i.cpp(351) : warning C4701: local variable 'pWndCtrl' may be used without having been initialized
+Edlgdll.cpp
+C:\drgraf4_0\ELEM_DLG\dlg_fe2i.cpp(347) : warning C4701: local variable 'pWndCtrl' may be used without having been initialized
+C:\drgraf4_0\ELEM_DLG\Edlgdll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Edlgmgr.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\Edlg_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Edlg_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug\Edlg_d32.lib and object c:\drgraf4_0\applic\Debug\Edlg_d32.exp
+<h3>
+--------------------Configuration: Sdlg_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/Spec_dlg.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\SPEC_DLG\Spec_dlg.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP13.tmp" with contents
+[
+/nologo /MDd /W4 /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/Sdlg_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\SPEC_DLG\Dlg_HNet.cpp"
+"C:\drgraf4_0\SPEC_DLG\Dlg_layr.cpp"
+"C:\drgraf4_0\SPEC_DLG\Dlg_pen.cpp"
+"C:\drgraf4_0\SPEC_DLG\Dlg_prec.cpp"
+"C:\drgraf4_0\SPEC_DLG\Dlg_sfac.cpp"
+"C:\drgraf4_0\SPEC_DLG\Dlg_unit.cpp"
+"C:\drgraf4_0\SPEC_DLG\Dlgobj3d.cpp"
+"C:\drgraf4_0\SPEC_DLG\Dlgpatch.cpp"
+"C:\drgraf4_0\SPEC_DLG\Sdlgdll.cpp"
+"C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP13.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP14.tmp" with contents
+[
+Spec_D32.lib OMgr_D32.lib Dr3D_D32.lib Elem_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/Sdlg_d32.pdb" /map:".\Debug/Sdlg_d32.map" /debug /machine:IX86 /def:".\Sdlg_d.def" /out:"c:\drgraf4_0\applic\Debug\Sdlg_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Sdlg_d32.lib" 
+.\Debug\Dlg_HNet.obj
+.\Debug\Dlg_layr.obj
+.\Debug\Dlg_pen.obj
+.\Debug\Dlg_prec.obj
+.\Debug\Dlg_sfac.obj
+.\Debug\Dlg_unit.obj
+.\Debug\Dlgobj3d.obj
+.\Debug\Dlgpatch.obj
+.\Debug\Sdlgdll.obj
+.\Debug\Sdlgmgr.obj
+.\Debug\Spec_dlg.res
+\drgraf4_0\applic\Debug\Ddlg_d32.lib
+\drgraf4_0\applic\Debug\Edlg_d32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP14.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Dlg_HNet.cpp
+c:\drgraf4_0\spec_dlg\dlg_hnet.cpp(87) : warning C4189: 'dNet' : local variable is initialized but not referenced
+Dlg_layr.cpp
+Dlg_pen.cpp
+Dlg_prec.cpp
+Dlg_sfac.cpp
+Dlg_unit.cpp
+C:\drgraf4_0\SPEC_DLG\Dlg_unit.cpp(56) : warning C4189: 'pMapFactor' : local variable is initialized but not referenced
+Dlgobj3d.cpp
+Dlgpatch.cpp
+Sdlgdll.cpp
+C:\drgraf4_0\SPEC_DLG\Sdlgdll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+Sdlgmgr.cpp
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(77) : warning C4700: local variable 'pHitNet' used without having been initialized
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(81) : warning C4700: local variable 'pLayer' used without having been initialized
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(85) : warning C4700: local variable 'pPen' used without having been initialized
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(89) : warning C4700: local variable 'pScale' used without having been initialized
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(93) : warning C4700: local variable 'pUnit' used without having been initialized
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(97) : warning C4700: local variable 'pPrec' used without having been initialized
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(101) : warning C4700: local variable 'pDlgPatch' used without having been initialized
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(105) : warning C4700: local variable 'pDlgObj3D' used without having been initialized
+C:\drgraf4_0\SPEC_DLG\Sdlgmgr.cpp(118) : warning C4700: local variable 'nStatus' used without having been initialized
+Linking...
+.\Sdlg_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Sdlg_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug\Sdlg_d32.lib and object c:\drgraf4_0\applic\Debug\Sdlg_d32.exp
+
+
+
+<h3>Results</h3>
+Sdlg_d32.dll - 0 error(s), 21 warning(s)
+</pre>
+</body>
+</html>

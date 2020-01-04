@@ -1,0 +1,16 @@
+[MSVC Status File]
+Version=1.00
+ProjectType=10
+External=0
+BrkptCount=2
+BrkptType1=0
+BrkptActive1=0
+BrkptAmbig1=0
+BrkptIndex1=-1
+BrkptLoc1={,d:\drgraf\drstatus.cpp,} .152
+BrkptType2=0
+BrkptActive2=1
+BrkptAmbig2=0
+BrkptIndex2=-1
+BrkptLoc2={,d:\drgraf\drstatus.cpp,} .249
+WatchCount=0

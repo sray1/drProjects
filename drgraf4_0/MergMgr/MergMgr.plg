@@ -1,0 +1,87 @@
+--------------------Configuration: MergMgr - Win32 Debug--------------------
+Begining build with project "C:\drgraf4_0\MergMgr\MergMgr.dsp", at root.
+Active configuration is Win32 (x86) Dynamic-Link Library (based on Win32 (x86) Dynamic-Link Library)
+
+Project's tools are:
+			" (fl32.exe)" with flags ""
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /Fp"Debug/MergMgr.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /o NUL /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo"Debug/MergMgr.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o"Debug/MergMgr.bsc" "
+			"COFF Linker for 80x86" with flags "/nologo /subsystem:windows /dll /incremental:yes /pdb:"Debug/MergMgr.pdb" /debug /machine:I386 /def:".\MergMgr.def" /out:"Debug/MergMgr.dll" /implib:"Debug/MergMgr.lib" /pdbtype:sept "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "C:\WINDOWS\TEMP\RSP1270.TMP" with contents </nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /Fp"Debug/MergMgr.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\drgraf4_0\MergMgr\CurMerg.cpp"
+"C:\drgraf4_0\MergMgr\DbMerg.cpp"
+"C:\drgraf4_0\MergMgr\DLDMerg.cpp"
+"C:\drgraf4_0\MergMgr\dlg_enoA.cpp"
+"C:\drgraf4_0\MergMgr\dlg_ENod.cpp"
+"C:\drgraf4_0\MergMgr\ElMerg.cpp"
+"C:\drgraf4_0\MergMgr\MergDlgM.cpp"
+"C:\drgraf4_0\MergMgr\MergDll.cpp"
+"C:\drgraf4_0\MergMgr\MergMgr.cpp"
+"C:\drgraf4_0\MergMgr\MNodMerg.cpp"
+"C:\drgraf4_0\MergMgr\NodMerg.cpp"
+"C:\drgraf4_0\MergMgr\PatMerg.cpp"
+"C:\drgraf4_0\MergMgr\Regen1D.cpp"
+"C:\drgraf4_0\MergMgr\Regen2D.cpp"
+"C:\drgraf4_0\MergMgr\Regen3D.cpp"
+"C:\drgraf4_0\MergMgr\RegenCur.cpp"
+"C:\drgraf4_0\MergMgr\RegenPat.cpp"
+"C:\drgraf4_0\MergMgr\RegenSol.cpp"
+"C:\drgraf4_0\MergMgr\SLDMerg.cpp"
+"C:\drgraf4_0\MergMgr\SLMCur.cpp"
+"C:\drgraf4_0\MergMgr\SLMNod.cpp"
+"C:\drgraf4_0\MergMgr\SLMPat.cpp"
+"C:\drgraf4_0\MergMgr\SolMerg.cpp"
+"C:\drgraf4_0\MergMgr\SpLMerg.cpp"
+"C:\drgraf4_0\MergMgr\SupMerg.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP1270.TMP" 
+Creating temp file "C:\WINDOWS\TEMP\RSP1271.TMP" with contents </nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /Fp"Debug/MergMgr.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\drgraf4_0\MergMgr\StdAfx.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP1271.TMP" 
+Creating temp file "C:\WINDOWS\TEMP\RSP1272.TMP" with contents </nologo /subsystem:windows /dll /incremental:yes /pdb:"Debug/MergMgr.pdb" /debug /machine:I386 /def:".\MergMgr.def" /out:"Debug/MergMgr.dll" /implib:"Debug/MergMgr.lib" /pdbtype:sept 
+.\Debug\CurMerg.obj
+.\Debug\DbMerg.obj
+.\Debug\DLDMerg.obj
+.\Debug\dlg_enoA.obj
+.\Debug\dlg_ENod.obj
+.\Debug\ElMerg.obj
+.\Debug\MergDlgM.obj
+.\Debug\MergDll.obj
+.\Debug\MergMgr.obj
+.\Debug\MNodMerg.obj
+.\Debug\NodMerg.obj
+.\Debug\PatMerg.obj
+.\Debug\Regen1D.obj
+.\Debug\Regen2D.obj
+.\Debug\Regen3D.obj
+.\Debug\RegenCur.obj
+.\Debug\RegenPat.obj
+.\Debug\RegenSol.obj
+.\Debug\SLDMerg.obj
+.\Debug\SLMCur.obj
+.\Debug\SLMNod.obj
+.\Debug\SLMPat.obj
+.\Debug\SolMerg.obj
+.\Debug\SpLMerg.obj
+.\Debug\StdAfx.obj
+.\Debug\SupMerg.obj
+.\Debug\MergMgr.res>
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP1272.TMP" 
+Compiling...
+StdAfx.cpp
+Compiling...
+CurMerg.cpp
+C:\drgraf4_0\MergMgr\CurMerg.cpp(335) : error C2039: 'GetFromID_S' : is not a member of 'CDrCurve'
+C:\drgraf4_0\MergMgr\CurMerg.cpp(336) : error C2039: 'GetToID_S' : is not a member of 'CDrCurve'
+DbMerg.cpp
+DLDMerg.cpp
+dlg_enoA.cpp
+dlg_ENod.cpp
+ElMerg.cpp
+

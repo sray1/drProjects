@@ -1,0 +1,19 @@
+#ifndef _VUGLOBAL_H
+#define _VUGLOBAL_H
+///////////////////////////////////////////////////////////// GLOBALS
+enum VISIBILITY
+	{
+		NOT_VISIBLE,
+		YES_VISIBLE
+	};
+
+enum MATRICES
+	{ 
+		MT_IDENTITY,
+		MT_INSTANCE,
+		MT_VIEWER,
+		MT_COMBINED
+	};
+/////////////////////////////////////////////////////////////////////////////
+#endif 
+

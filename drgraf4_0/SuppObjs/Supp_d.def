@@ -1,0 +1,15 @@
+; Supp_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	Supp_D32
+DESCRIPTION  'SuppObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitSuppDLL												@2 NONAME
+
+
+

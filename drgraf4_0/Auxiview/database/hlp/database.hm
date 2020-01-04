@@ -1,0 +1,18 @@
+// MAKEHELP.BAT generated Help Map file.  Used by DATABASE.HPJ. 
+ 
+// Commands (ID_* and IDM_*) 
+ 
+// Prompts (IDP_*) 
+ 
+// Resources (IDR_*) 
+HIDR_MAINFRAME                          0x20080
+HIDR_DATABATYPE                         0x20081
+ 
+// Dialogs (IDD_*) 
+HIDD_ABOUTBOX                           0x20064
+HIDD_NODEGEOM                           0x20082
+HIDD_NODEINT                            0x20083
+HIDD_CURGEOM                            0x20085
+HIDD_CURINT                             0x20086
+ 
+// Frame Controls (IDW_*) 

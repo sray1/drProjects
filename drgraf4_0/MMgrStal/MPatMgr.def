@@ -1,0 +1,16 @@
+; MPatMgr_D.def -- DEBUG version
+
+LIBRARY	MPat_D32
+DESCRIPTION  'MPatMgr Debug DLL' 
+
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMPatDLL											@2 NONAME
+
+?classCMI_GangP@CMI_GangP@@2UCRuntimeClass@@A
+

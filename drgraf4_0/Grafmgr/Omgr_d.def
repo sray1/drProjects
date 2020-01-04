@@ -1,0 +1,78 @@
+; OMgr_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY			OMgr_D32
+DESCRIPTION		'ObjectMgr DLL' 
+CODE			LOADONCALL MOVEABLE DISCARDABLE
+DATA			PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitOMgrDLL												@2 NONAME
+
+; CObjectMgr
+;	; Constructor and Destructor
+
+
+
+;?GetSpecObject@CObjectMgr@@QAEPAVCDrObject@@H@Z
+;?GetObjectIndexfromKey@CObjectMgr@@QAEHHVCString@@I@Z
+;?UpdateAllViewsWithActiveIndex@CObjectMgr@@QAEXPAVCView@@I@Z
+;?GetDocSize@CObjectMgr@@QAE?AVCSize@@XZ
+
+; CDataRowHint
+;	; Constructor and Destructor
+
+
+
+; CEBoxMgr
+	; Constructor and Destructor
+	
+
+
+; CDBoxMgr
+	; Constructor and Destructor
+
+
+
+; CNewObjs
+	; Constructor and Destructor
+
+ ;??0CDBoxMgr@@QAE@XZ
+ ;?Serialize@CDBoxMgr@@UAEXAAVCArchive@@@Z 
+ ;??1CDBoxMgr@@UAE@XZ        
+ ;??0CEBoxMgr@@QAE@XZ        
+ ;?Serialize@CEBoxMgr@@UAEXAAVCArchive@@@Z 
+ ;??1CEBoxMgr@@UAE@XZ        
+ ;??0CDataRowHint@@QAE@XZ    
+ ;??0CObjectMgr@@QAE@XZ      
+ ;??1CObjectMgr@@UAE@XZ      
+ ;?DStoSC@CObjectMgr@@UAEXPAN@Z 
+ ;?SCtoDS@CObjectMgr@@UAEXPAN@Z 
+ ;?DStoSC@CObjectMgr@@UAEXPAH@Z 
+ ;?SCtoDS@CObjectMgr@@UAEXPAH@Z 
+ ;?DStoSC@CObjectMgr@@UAEXPAJ@Z 
+ ;?SCtoDS@CObjectMgr@@UAEXPAJ@Z 
+ ;?DStoSC@CObjectMgr@@UAEXPAUtagPOINT@@@Z 
+ ;?SCtoDS@CObjectMgr@@UAEXPAUtagPOINT@@@Z 
+ ;?DStoSC@CObjectMgr@@UAEXPAULPOINT3@@@Z 
+ ;?SCtoDS@CObjectMgr@@UAEXPAULPOINT3@@@Z 
+ ;?DStoSC@CObjectMgr@@UAEXPAULPOINT@@@Z 
+ ;?SCtoDS@CObjectMgr@@UAEXPAULPOINT@@@Z 
+ ;?DStoSC@CObjectMgr@@UAEXPAUtagRECT@@@Z 
+ ;?SCtoDS@CObjectMgr@@UAEXPAUtagRECT@@@Z 
+ ;?DStoSC@CObjectMgr@@UAEXPAULRECT@@@Z 
+ ;?SCtoDS@CObjectMgr@@UAEXPAULRECT@@@Z 
+ ;?Serialize@CObjectMgr@@UAEXAAVCArchive@@@Z 
+ ;??1CDataRowHint@@UAE@XZ    
+
+;?NewObject@CNewObjs@@QAEPAVCDrObject@@H@Z
+
+;?ChangeSelectionNextObjectIndex@CObjectMgr@@QAEXH@Z
+;?ChangeSelectionToObjectIndex@CObjectMgr@@QAEXI@Z
+;?Do_Object_DataView@CObjectMgr@@QAEXPAVCDC@@HH@Z
+;?Do_Object_Dialog@CObjectMgr@@QAEXXZ
+
+;?Do_Object_DrawView@CObjectMgr@@QAEXPAVCDC@@HHH@Z
+;?classCDataRowHint@CDataRowHint@@2UCRuntimeClass@@A

@@ -1,0 +1,44 @@
+// Pipe.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "limits.h"
+
+#include "3DMath.h"
+#include "XForm.h"
+////////////////////// elObjs
+#include "Ext_Elem.h"
+//////////////
+#include "DrFace.h"
+
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+/////////////////////////////////////////////////////////////////////////////
+// CDrFace
+IMPLEMENT_SERIAL(CDrFace, CObject,1)
+/*
+BEGIN_MESSAGE_MAP(CDrFace, CObject)
+	//{{AFX_MSG_MAP(CDrFace)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/  
+/////////////////////////////////////////////////////////////////////////////
+CDrFace::CDrFace()
+{  
+} 
+
+CDrFace::~CDrFace()
+{
+}	
+//////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////
+void CDrFace::Serialize(CArchive& ar)
+{
+}
+
+////////////////////// END OF MODULE ///////////////////////
+

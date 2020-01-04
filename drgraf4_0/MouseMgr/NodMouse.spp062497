@@ -1,0 +1,1400 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+
+#include "drgraf.h"
+#include "drgrafrm.h"
+#include "UserMsg.h"
+#include "drawView.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_Lims.h"                    
+#include "Def_Objs.h"                    
+#include "Def_Mous.h"                    
+#include "Def_CuPS.h"                    
+#include "Def_Ms.h" // Mesh Types for Patch
+///////////////////// dialogMgr
+#include "MNodMgr.h"  
+///////////////////// elements
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "Ext_Elem.h"
+#include "DrNode.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h" 	
+///////////////////// specials
+#include "Def_Spec.h"
+#include "Obj3DMnu.h"
+#include "PatchMnu.h"
+#include "DrPen.h"
+#include "Layer.h"
+#include "booleans.h"
+#include "precison.h"
+/////////////////////
+#include "mouse.h"
+#include "DListMgr.h"
+/////////////////////
+#include "MI_GangN.h" 
+////////////////////// 
+#include "Dlg_NodI.h"
+//////////////////////
+#include "NodMouse.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////////////////////////////
+#define MIN_NODES_CURVE		2        
+#define MIN_CURVES_PATCH	3        
+#define	new					DEBUG_NEW
+#define	BUFF_SIZE			1024
+#define MAX_NODES_FE1D		2
+#define MAX_NODES_FE2D		4
+////////////////////////////////////
+IMPLEMENT_SERIAL(CNodMouse,CMouse,1)
+/////////////////////////////////////////////////////////////////////////////
+CNodMouse::CNodMouse()
+{
+
+	////////////////////////////
+	m_pNodInDlg			= NULL;                                                                                
+	m_bDoModalDone		= FALSE;
+	////////////////////////////
+	m_bAutoAcceptOn		= FALSE;
+  	m_bDialogOn    		= FALSE;
+  	m_bElementMode 		= FALSE;
+	m_bDragOn      		= FALSE;
+	m_bDragging	   		= FALSE;
+	m_nNodeDone    		= 0;
+	m_nCNodeDone   		= 0;
+	//////////////////////// Set according to WIC: TOBEDONE
+	m_AnchorNodeLOG.x 	= 0;
+	m_AnchorNodeLOG.y 	= 0; 
+	//////////////////////////////////////
+	m_MouseLOG 			= m_AnchorNodeLOG;
+	m_MouseOldLOG 		= m_MouseLOG;
+	/////////////////////////////////////////// Node 
+    m_pCurrentNode		= NULL;
+	///////////////////////////////////////////
+	m_bRefreshOn		= FALSE;
+ 	/////////////////////////////////////////// Node 
+//    m_LastNodeNum		= 0;		// internal
+//	m_CurrentNodeID		= "0";
+	m_CurrentSupID		= "";
+	m_CurrentLoadID		= "";
+//	m_CurrentNodeIDOld	= "N0";
+//	m_CurrentNodeIDOld	= "";
+//	m_AnchorNodeID		= "0";
+	m_bAnchorCNode		= FALSE;
+	m_ThirdCoord		= 0.0;
+
+}
+
+CNodMouse::~CNodMouse()
+{
+	/////////////////////////////////// Modeless Dialogs
+	if(m_pNodInDlg->m_hWnd)
+		m_pNodInDlg->DestroyWindow();
+	///////////////////
+	delete m_pNodInDlg;                                                                                
+	///////////////////
+}
+
+void CNodMouse::InitDlgIn_NOD()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////////////////////////// System Sizes
+	m_pNodInDlg		= new CDlg_NodI(pWnd);
+	/////////////
+/*
+	char buf[50];
+	///////////////////
+	BOOL bCNode;
+	//////////////
+	bCNode = FALSE;
+	///
+	if(bCNode)
+	{
+		int nLastNum = pObjectMgr->GetLastInputNo(CNODE);		// internal
+		sprintf(buf,"%d",nLastNum);
+		m_CurrentNodeID = "CN_";
+		m_CurrentNodeID	+= buf;
+		pObjectMgr->BumpLastInputNo(CNODE);		// bump it
+	}
+	else
+	{
+		int nLastNum = pObjectMgr->GetLastInputNo(NODE);		// internal
+		sprintf(buf,"%d",nLastNum);
+		m_CurrentNodeID = "";
+		m_CurrentNodeID	+= buf;
+		pObjectMgr->BumpLastInputNo(NODE);		// bump it
+	}
+	////////////
+	m_CurrentNodeIDOld	= m_CurrentNodeID;
+	m_AnchorNodeID		= m_CurrentNodeIDOld;
+*/
+}
+	
+void CNodMouse::SizeRectDlgIn(CRect& BoxRect)
+{
+	
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////////////// System Sizes
+	int cxBorder	= ::GetSystemMetrics(SM_CXBORDER);
+	int cyBorder	= ::GetSystemMetrics(SM_CYBORDER);
+	int cxVScroll	= ::GetSystemMetrics(SM_CXVSCROLL);
+	int cyMenuSize	= ::GetSystemMetrics(SM_CYMENUSIZE);
+	int cyEdge		= ::GetSystemMetrics(SM_CYEDGE);
+	int cyFrame		= ::GetSystemMetrics(SM_CYSIZEFRAME);
+	int cyCapSize	= ::GetSystemMetrics(SM_CYSIZE);
+	///////////////////////////////
+	CRect FrameRect;
+	pWnd->GetWindowRect(&FrameRect);
+	/////////////////////////////////////////////////////////////// ...InBox 
+	int Boxwidth  		= BoxRect.Width();
+	int Boxheight 		= BoxRect.Height();
+	///////////////////////////////////////
+	BoxRect.top    = 1 + FrameRect.top + cyEdge + cyCapSize;   //		
+	BoxRect.bottom = BoxRect.top	+ Boxheight; //
+	BoxRect.right  = FrameRect.right - cxBorder;
+	BoxRect.left   = BoxRect.right	- Boxwidth;
+	////////////////////////////////
+	return;
+}
+
+void CNodMouse::PreLeftDown(CPoint point)
+{ 
+
+	LPOINT3 MouseWIC;
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////////////////END TEMPORARY
+	if(!m_nNodeDone || !m_bDragOn) 
+	{
+		///////////////////////////////////////
+	    MouseWIC = GetMouseWIC();
+	    SetMouseOldWIC(MouseWIC);
+	    /////////////////////////
+	    LPOINT Lpoint;
+	    Lpoint.x = (long)point.x;
+	    Lpoint.y = (long)point.y;
+	    ////////////////////
+	    LOGtoWIC(&MouseWIC,&Lpoint);                 
+	    SetMouseWIC(MouseWIC);
+	 }
+   
+}
+
+CDrObject* CNodMouse::GetObjectFromID(CString& ID, int nObjType)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////////////////
+	int index = pObjectMgr->GetObjectIndexfromKey(nObjType,ID,1);
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(nObjType);
+	return (CDrObject*)(pDListMgr->GetObject(index));
+}
+
+void CNodMouse::SetMouseWICFromNode(CDrNode* pDrNode,LPOINT3* pMouseWIC)
+//void CNodMouse::SetMouseWICFromNode(CString& NID,LPOINT3* pMouseWIC)
+{
+//	CDrNode* pDrNode = (CDrNode*)GetObjectFromID(NID, NODE);
+	pMouseWIC->x = pDrNode->GetNodeCard()->x;								  	
+	pMouseWIC->y = pDrNode->GetNodeCard()->y;								  	
+	pMouseWIC->z = pDrNode->GetNodeCard()->z;								  	
+}
+	
+void CNodMouse:: ElementLeftDown_NOD()
+{	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	/////////////////////////////////////////////////////////
+//	int nMeshType; 
+	/////////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		case INODE:
+		case CNODE:
+		//////////////////////////////////////////////////
+		default:
+			break;
+	}  
+
+}
+	
+void CNodMouse::PreLeftUp(CPoint point)
+{
+	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	///////////////////////////////////////
+    LPOINT3 MouseWIC = GetMouseWIC();
+    SetMouseOldWIC(MouseWIC);
+	//////////////
+    LPOINT Lpoint;
+    m_pdc->DPtoLP(&point);
+    Lpoint.x = (long)point.x;
+    Lpoint.y = (long)point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    LOGtoWIC(&MouseWIC,&Lpoint);    // Log/Scaled             
+    SetMouseWIC(MouseWIC);
+}
+
+int CNodMouse::ShowNode(CString* pID,BOOL bnid_c,int nHowMany)
+{
+	///////////////////////////////////////////////////////////////////////
+//	 nHowmany			// Used as an afterthought for creating Node anyway
+						// in GangN.CreateNode
+						// even if same coords node exists already !!!
+						// when nHowmany == -12345
+						// Use nNodeIndex of CreateNode to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr(); 
+	////////////////////////////////////////////////////////////////// Save ObjectType/Index
+//	UINT nTypeOld			= pObjectMgr->GetActiveObjectType();
+//	int nActiveIndexOld		= pObjectMgr->GetActiveObjectIndex();    // for Calling Object
+	///////////////////
+	pObjectMgr->SetActiveObjectType(NODE);                   
+	////////////////////
+/*
+	if(m_bDialogOn)
+	{
+		CMNodMgr* pMNodMgr;
+		int i;
+		/////////////////////////////////////////////////////////////// Using MNodMgr 
+		LPOINT3 MouseWIC = GetMouseWIC();
+		pID = &m_CurrentNodeID;
+		if (pMNodMgr->DoModal_Node(bnid_c,m_nView,&MouseWIC,pID,nHowMany) == IDCANCEL)
+			return -1;
+		////////////////////////////////////////////////////////// pNode
+	   	if(( i= pObjectMgr->GetObjectIndexfromKey(NODE,*pID,1)) <0)
+   		{
+			AfxMessageBox("ERROR:\nCNodMouse::ShowNode\nNo Node Index\nInternal Problem");
+   			return -1;
+   		}	
+ 		CDListMgr* pDListMgr = pObjectMgr->GetObjectList(NODE);
+		m_pCurrentNode = (CDrNode*)pDListMgr->GetObject(i);
+	}
+	else
+	{
+*/
+	/////////////////////////////////////////////////////////////// Using GangN
+	WORLD wPt;
+	LPOINT3 MouseWIC = GetMouseWIC();
+	///////////////////////////
+	WICtoWOR(&MouseWIC,&wPt);	// actually physical (ie bGen = FALSE in CreateNode below)
+	///////////////////////////
+	int nNodeIndex = nHowMany;
+	int nLabelIndex= 0;
+	CMI_GangN GangN;
+	////////////////////////////////
+	m_pCurrentNode = GangN.CreateNode(*pID,m_pCurrentLabel, wPt, bnid_c,FALSE,FALSE,
+										nNodeIndex,nLabelIndex);// FALSE=Input/TRUE=InternallyGen
+	m_pCurrentNode->SetCategory(CA_ELEMENT);
+	////////////////////////////////////////////////////////////////////// Show
+	pObjectMgr->SetActiveObjectIndex(nLabelIndex);		    // set Active Index for Label									
+	pObjectMgr->SetActiveObjectType(LABEL);					// set Active ObjectType									
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nLabelIndex,LABEL);
+	//////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectIndex(nNodeIndex);	// set Active Index
+	///
+	if(bnid_c)
+	{
+		pObjectMgr->SetActiveObjectType(CNODE);		    // set Active Type
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nNodeIndex,CNODE);
+	}
+	else
+	{
+		pObjectMgr->SetActiveObjectType(NODE);		    // set Active Type
+		pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nNodeIndex,NODE);
+	}
+	///////////////////////////////
+	return 0;
+}	 
+
+void CNodMouse::PostLeft()
+{	
+	/////////////////////////////// get New MouseWIndowCoord.
+	LPOINT3 MouseWIC = GetMouseWIC();
+	/////////////////////////////// Set MouseLOGoords.
+	LPOINT L_AnchorNodeLOG;
+	WICtoLOG(&MouseWIC,&L_AnchorNodeLOG);  // LOG/DEScaled LOG
+	m_AnchorNodeLOG.x = (int) L_AnchorNodeLOG.x;
+	m_AnchorNodeLOG.y = (int) L_AnchorNodeLOG.y;
+	m_pdc->LPtoDP(&m_AnchorNodeLOG);
+	//////////////////////////////
+	m_MouseLOG    = m_AnchorNodeLOG;
+	m_MouseOldLOG = m_MouseLOG;
+	///////////////////////////// Set Cursor Position 
+	POINT CurLoc = m_MouseLOG;
+//	pWnd->ClientToScreen(&CurLoc);
+	m_pView->ClientToScreen(&CurLoc);
+	::SetCursorPos(CurLoc.x,CurLoc.y); 
+	//////////////////////////////////
+}
+
+void CNodMouse::OnEBoxLButtonDown_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	CDListMgr* pDListMgr;
+	/////////////////////////////////// 
+   	m_bDragOn 		= pBool->IsDragOn();
+	m_bDialogOn		= pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	//////////////////////////////////////////////////////// LOG
+	m_pdc->DPtoLP(&point);
+	//////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////////////////////////////////// No Node
+	if(pWnd->GetCurrentIGenID() == NODE ||pWnd->GetCurrentIGenID() == INODE )
+		pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	else
+	if(pWnd->GetCurrentIGenID() == CNODE)
+		pDListMgr 	= pObjectMgr->GetObjectList(CNODE);
+	///
+	if(pDListMgr->GetCount()<=0)
+		return;
+	/////////////////////////////////////////////////////////////////
+	if(!(pDListMgr->GetSpecificObjectCount(NODE)) ) m_nNodeDone = 0;
+	/////////////////////////////////////////////////////////////////
+    /////////////////////////////  ELement Dialog On/Off Check
+    if(m_Gener == FORWARD)
+		ElementLeftDown_NOD();
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftDown_I();
+	//////////////////////////////////
+}
+
+void CNodMouse::UpdateNDlg_TRUE()
+{
+	//////////////////////////////////
+	m_pNodInDlg->UpdateData(TRUE); // from screen
+	////////////
+	m_CurrentNodeID = m_pNodInDlg->m_NID;
+//	m_CurrentSupID	= m_pNodInDlg->m_SID;
+	m_ThirdCoord	= m_pNodInDlg->m_dCoord;
+	/////////////////////////////////////
+}
+			
+void CNodMouse::UpdateNDlg_FALSE()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	CString str; 
+	/////////////////////////////////////////////////////////
+	m_pNodInDlg->m_NID		= m_CurrentNodeID;
+//	m_pNodInDlg->m_SID		= m_CurrentSupID;
+	m_pNodInDlg->m_dCoord	= m_ThirdCoord;
+	////////////////////////////// CurrStat
+	str = "Ready for Selection@";
+	if(m_nActiveTool == INODE)
+	{
+		str += "An Input Node";
+		m_pNodInDlg->SetWindowText("INPUT Node");
+	}
+	else
+	if(m_nActiveTool == CNODE)
+	{
+		str += "A Control Node";
+		m_pNodInDlg->SetWindowText("CONTROL Node");
+	}
+	///
+	pWnd->GetCurrStat()->SetText(str);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+	////////////
+	m_pNodInDlg->UpdateData(FALSE); // to screen
+	////////////////////////////
+}
+			
+int CNodMouse::LeftUp_NODE(CPoint point,BOOL bCNode)
+{
+	///////////////////////////////////////////////////////////////////////
+	int nAnyway	= 0;	// Used as an afterthought for creating Node anyway
+						// in GangN.CreateNode
+						// even if same coords node exists already !!!
+						// when nAnyway == -12345
+						// Use nHowmany of ShowNode to pass the variable
+	///////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+	///
+	CDListMgr* pDListMgr;
+	if(bCNode)
+		pDListMgr	= pObjectMgr->GetObjectList(CNODE);
+	else
+		pDListMgr	= pObjectMgr->GetObjectList(NODE);
+	///
+	CDListMgr* pList;
+	//////////////////////////////////////////////////////////////////
+	CString*	pID;
+	CString		ID;
+	CDrNode*	pDrNode;
+	int			nActiveIndex,index;
+	////////////////////////////////////
+	CHitNet*	pHitNet		= (CHitNet*)pObjectMgr->GetSpecObject(HITNET);
+	double		dTol		= pHitNet->GetSearchDet(); 
+	WORtoWOP(&dTol,&dTol);	// physical
+	//////////////////////////////////////////////////////////////////
+	pID = &m_CurrentNodeID;
+	///////////////////////
+	int			j;
+	WORLD		wLoc;
+	BOOL		bNew	= TRUE;
+	////////////////////////////////////////////////////////////////// ERROR:User Selected Same ID
+	if(m_nActiveTool == INODE || m_nActiveTool == NODE || m_nActiveTool == CNODE)
+	{
+		if(m_nActiveTool == INODE || m_nActiveTool == NODE)
+			pList	= pObjectMgr->GetObjectList(NODE);
+		else
+		if(m_nActiveTool == CNODE)
+			pList	= pObjectMgr->GetObjectList(CNODE);
+		///
+		index	= pList->GetObjectIndex(NODE, *pID); 
+		///
+		if(index>=0)						// User selected pID
+		{
+			pDrNode	= (CDrNode*)pList->GetObject(index);
+			wLoc	= *(pDrNode->GetLocalPos());
+			/////////////////////
+			WORtoWOP(&wLoc,&wLoc);			// to Physical
+			//////////////////////////////
+			CString*	str		= new CString;
+			char*		buf		= str->GetBuffer(BUFF_SIZE);
+			///////////////
+			j = sprintf(buf,"***** Error: A Node with Same ID Exists: *****");
+			j += sprintf(buf+j,"\nNodeID = %s\nCoordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f ",
+				*pID,wLoc.x,wLoc.y,wLoc.z);
+			////////////////////////////
+			AfxMessageBox(*str,MB_OK|MB_ICONEXCLAMATION);
+			/////////////
+			delete str;
+			/////////
+			return -1;
+		}
+	}
+	////////////////////////////////////////////////////////////// PreExisting Coords?
+	///////////////////////////////////////////// See if any Existing Node Hit
+	if(m_ProbLim == PDL_TWO)
+	{		
+		if(bCNode)
+			index = IsObjectHit(CNODE,point,0);
+		else
+			index = IsObjectHit(NODE,point,0);
+	}
+	else
+	if(m_ProbLim == PDL_THREE)
+	{
+		LPOINT3 MouseWIC;
+		//////////
+	    LPOINT Lpoint;
+	    Lpoint.x = (long)point.x;
+	    Lpoint.y = (long)point.y;
+	    ////////////////////
+	    LOGtoWIC(&MouseWIC,&Lpoint);
+		////////
+   		wLoc.x 	= (double)(MouseWIC.x);
+   		wLoc.y 	= (double)(MouseWIC.y);
+   		wLoc.z 	= (double)(MouseWIC.z);
+		////////////////
+/*
+		if(bCNode)
+			index = IsObjectHit(CNODE,&wLoc,0);
+		else
+			index = IsObjectHit(NODE,&wLoc,0);
+		///
+*/
+		if(bCNode)
+			index = IsObjectHit(CNODE,point,0);
+		else
+			index = IsObjectHit(NODE,point,0);
+	}
+	/////////////////////////////////////////////////////////////// Right Type
+	if(index>=0)						
+	{
+		bNew = FALSE;
+		/////////////
+		CDrNode* pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+		ID					= pDrNode->GetObjectID();
+		/////////////////////////////////////////////
+		if(bCNode)
+		{
+			pList = pObjectMgr->GetObjectList(CNODE);
+			nActiveIndex = pList->GetObjectIndex(CNODE, ID);
+			pObjectMgr->SetActiveObjectIndex(nActiveIndex);	// set Active Index									
+			pObjectMgr->SetActiveObjectType(CNODE);		    // set Active Type									
+			pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CNODE);
+		}
+		else
+		{
+			pList = pObjectMgr->GetObjectList(NODE);
+			nActiveIndex = pList->GetObjectIndex(NODE, ID);
+			pObjectMgr->SetActiveObjectIndex(nActiveIndex);	// set Active Index									
+			pObjectMgr->SetActiveObjectType(NODE);		    // set Active Type									
+			pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+		}
+		//////////////////////////////////////////////////////////////// MultipleSearch
+		int startIndex = index+1;
+		/////////////////////////
+		if(!m_bAutoAcceptOn)
+		{
+			/////////////
+			for(;;)
+			{
+				CString* str = new CString;
+				char* buf = str->GetBuffer(BUFF_SIZE);
+				/////////////
+				int j;
+				/////////////////////////////// Coords
+				WORLD Loc = *(pDrNode->GetLocalPos());
+				WORtoWOP(&Loc,&Loc);	// to Physical
+				//////////////////////////////
+				j = sprintf(buf,"***** A Node Already Exists ****\n");
+				j += sprintf(buf+j,"with Similar Coordinates (with %f Tolerance):",dTol);
+				j += sprintf(buf+j,"\nExisting NodeID = %s\nCoordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f\n",
+					ID,Loc.x,Loc.y,Loc.z);
+				//////////////////////////
+				WORLD wPt;
+				WORtoWOP(&wLoc,&wPt);	// to Physical
+				//////////////////////////////
+				j += sprintf(buf+j,"\nCurrent NodeID = %s\nCoordinates:\n\t X = %f\n\t Y = %f\n\t Z = %f ",
+					*pID,wPt.x,wPt.y,wPt.z);
+				////////////////////////////
+				j += sprintf(buf+j,
+					"\n\nYES:\t\tAccept This Existing (C)Node");
+				j += sprintf(buf+j,
+					"\nNO:\t\tFind Next Matching (C)Node");
+				j += sprintf(buf+j,
+					"\nCANCEL:\t\tCreate A New (C)Node Anyway");
+				////////////////////////////
+				int nResult = AfxMessageBox(*str,MB_YESNOCANCEL|MB_ICONQUESTION);
+				/////////////
+				if(nResult == IDYES)
+				{
+					//////////////////////////////////////////////////////// Accept Old
+					bNew = FALSE;
+					/////////////
+					delete str;
+					break;
+				}
+				else
+				if(nResult == IDNO)
+				{
+					//////////////////////////////////////////////////////// Retry
+					if(m_ProbLim == PDL_TWO)
+					{		
+						if(bCNode)
+							index = IsObjectHit(CNODE,point,startIndex);
+						else
+							index = IsObjectHit(NODE,point,startIndex);
+					}
+					else
+					if(m_ProbLim == PDL_THREE)
+					{
+/*
+						////////////////
+						if(bCNode)
+							index = IsObjectHit(CNODE,&wLoc,0);
+						else
+							index = IsObjectHit(NODE,&wLoc,0);
+						///
+*/
+						if(bCNode)
+							index = IsObjectHit(CNODE,point,startIndex);
+						else
+							index = IsObjectHit(NODE,point,startIndex);
+					}
+					/////////////////////////////////////////////////////////////// Right Type
+					if(index>=0)
+					{
+						pDrNode	= (CDrNode*)pDListMgr->GetObject(index);
+						ID		= pDrNode->GetObjectID();
+						/////////////////////////////////////////////
+						if(bCNode)
+						{
+							pList = pObjectMgr->GetObjectList(CNODE);
+							nActiveIndex = pList->GetObjectIndex(CNODE, ID);
+							pObjectMgr->SetActiveObjectIndex(nActiveIndex);	// set Active Index									
+							pObjectMgr->SetActiveObjectType(CNODE);		    // set Active Type									
+							pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,CNODE);
+						}
+						else
+						{
+							pList = pObjectMgr->GetObjectList(NODE);
+							nActiveIndex = pList->GetObjectIndex(NODE, ID);
+							pObjectMgr->SetActiveObjectIndex(nActiveIndex);	// set Active Index									
+							pObjectMgr->SetActiveObjectType(NODE);		    // set Active Type									
+							pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nActiveIndex,NODE);
+						}
+						////////////////////////////////////////
+						startIndex  = index+1;
+						/////////////////////
+					}
+					else
+					{
+						////////////////
+//						m_nNodeDone--;
+						delete str;
+						return -2;
+					}
+					/////////
+				}
+				else				// Cancel
+				{
+					//////////////////////////////////////////////////////// Create New
+					bNew	= TRUE;
+					nAnyway	= -12345;	// Create Anyway
+					/////////////
+					delete str;
+					break;
+				}
+			}						// end for loop
+			///////////////////////////////////////
+		}				// end !AutoAccept loop
+		//////////////////////////////////
+		if(!bNew)
+		{
+			////////////////////
+			if(bCNode)
+				pDListMgr = pObjectMgr->GetObjectList(CNODE);
+			else
+				pDListMgr = pObjectMgr->GetObjectList(NODE);
+			///
+			m_pCurrentNode			= (CDrNode*)pDListMgr->GetObject(index);
+			m_CurrentNodeID			= m_pCurrentNode->GetObjectID();
+			m_CurrentNodeIDOld		= m_pCurrentNode->GetObjectID();
+			m_AnchorNodeID			= m_CurrentNodeIDOld;
+			m_bAnchorCNode			= bCNode;
+			/////////////////////////////////////////////
+			return 0;
+		}
+	}			// end Index loop
+	else		// NewNode	of Curve, Patch or Solid etc
+	{
+		if((m_nActiveTool != INODE) && (m_nActiveTool != CNODE))
+		{
+			/// Bump ID if Not User or Blank
+			/////////////////////////////////////////////////////////////////
+			if(*pID == "" || (*pID == m_CurrentNodeIDOld) )
+			{
+				char buf[50];
+				/////////////
+				if(bCNode)
+				{
+					pObjectMgr->BumpLastInputNo(CNODE);		// bump it
+					int nLastNum = pObjectMgr->GetLastInputNo(CNODE);		// internal
+					sprintf(buf,"%d",nLastNum);
+					m_CurrentNodeID = "CN_";
+					m_CurrentNodeID	+= buf;
+//					pObjectMgr->BumpLastInputNo(CNODE);		// bump it
+				}
+				else
+				{
+					pObjectMgr->BumpLastInputNo(NODE);		// bump it
+					int nLastNum = pObjectMgr->GetLastInputNo(NODE);		// internal
+					sprintf(buf,"%d",nLastNum);
+					m_CurrentNodeID = "";
+					m_CurrentNodeID	+= buf;
+//					pObjectMgr->BumpLastInputNo(NODE);		// bump it
+				}
+				////////////
+				m_CurrentNodeIDOld	= m_CurrentNodeID;
+				m_AnchorNodeID		= m_CurrentNodeIDOld;
+				m_bAnchorCNode		= bCNode;
+				///////////////////////////////////////////////////////////////// 
+				pID = &m_CurrentNodeID;
+				///////////////////////
+			}
+		}
+	}
+	////////////////////////////////////////////////////////////////////////////// New Node
+	if(!m_bAutoAcceptOn)
+	{
+		CString*	str		= new CString;
+		char*		buf		= str->GetBuffer(BUFF_SIZE);
+		//////////////////////////
+		WORLD wPt;
+		WORtoWOP(&wLoc,&wPt);	// to Physical
+		//////////////////////////////
+		j = sprintf(buf,
+			"***** New Node Selection: *****\nNodeID = %s\nCoordinates:\n\tX = %f\n\tY = %f\n\tZ = %f ",
+			*pID,wPt.x,wPt.y,wPt.z);
+		j += sprintf(buf+j,"\n\nAccept This New Node?");
+		////////////////////////////
+		int nResult = AfxMessageBox(*str,MB_YESNO|MB_ICONQUESTION);
+		/////////////
+		if(nResult == IDYES)
+			///////////
+			delete str;
+		else
+		{
+			////////////////
+			delete str;
+			return -2;
+		}
+	}
+	//////////////////////////////////
+	if(ShowNode(pID,bCNode,nAnyway)<0)
+	{
+		AfxMessageBox("ERROR:\nCNodMouse::LeftUp_Node\nShowNode Problem");
+		return -1;
+	}
+	////////////////////////// Set NodeID
+	m_CurrentNodeIDOld	= *pID;
+	m_AnchorNodeID		= m_CurrentNodeIDOld;
+	m_bAnchorCNode		= bCNode;
+	///
+	if((m_nActiveTool == INODE) || (m_nActiveTool == CNODE))
+	{
+		/////////////
+		char buf[50];
+		/////////////
+		if(bCNode)
+		{
+			pObjectMgr->BumpLastInputNo(CNODE);		// bump it
+			int nLastNum = pObjectMgr->GetLastInputNo(CNODE);		// internal
+			sprintf(buf,"%d",nLastNum);
+			m_CurrentNodeID = "CN_";
+			m_CurrentNodeID	+= buf;
+//			pObjectMgr->BumpLastInputNo(CNODE);		// bump it
+		}
+		else
+		{
+			pObjectMgr->BumpLastInputNo(NODE);		// bump it
+			int nLastNum = pObjectMgr->GetLastInputNo(NODE);		// internal
+//			if(nLastNum == 0)
+//				pObjectMgr->BumpLastInputNo(NODE);		// bump it (fudge)!
+//			nLastNum = pObjectMgr->GetLastInputNo(NODE);		
+//			////
+			sprintf(buf,"%d",nLastNum);
+			m_CurrentNodeID = "";
+			m_CurrentNodeID	+= buf;
+//			pObjectMgr->BumpLastInputNo(NODE);		// bump it
+		}
+		////////////
+	}
+	////////////////////////////
+	return 0;
+}
+
+void CNodMouse::ElementLeftUp_NOD(CPoint point)
+{                          
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd);
+	//////////////////////////////////////////////////////////////////
+//	CString*	pID;
+	/////////////
+//	char buf[20];
+	CString Nid;
+	BOOL bRightOn = FALSE;
+	///////////////////
+	switch(m_nActiveTool) 
+	{
+		
+		case INODE:
+				
+			m_nNodeDone = 0;
+			////////////////
+			UpdateNDlg_TRUE();
+			LeftUp_NODE(point,FALSE);		// FALSE = Not CNODE
+			UpdateNDlg_FALSE();
+			///////
+			return;
+
+				
+		case CNODE:				
+
+			m_nCNodeDone = 0;
+			////////////////
+			UpdateNDlg_TRUE();
+			LeftUp_NODE(point,TRUE);		// TRUE = CNODE;
+			UpdateNDlg_FALSE();
+			///////
+			return;
+		//////////////////////////////////////////////////
+		default:  
+			break;
+	} 
+}	
+
+void CNodMouse::OnEBoxMouseMove_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{  
+
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CMouseMgr* pMouseMgr	= pWnd->GetMouseMgr(); 
+	////////////////////////// LOG: Log/DEScaled
+   	m_pdc->DPtoLP(&point);     
+	LPOINT LpLOG;
+	LpLOG.x = (long)point.x;
+	LpLOG.y = (long)point.y;
+   	m_pdc->LPtoDP(&point);     
+    /////////////////////////////////////////////
+    if(!m_bDragging)  // not currently dragging 
+    { 
+    
+		//////////////////////////////////////
+		LPOINT3 MouseOldTempWIC = GetMouseOldWIC();
+	    LPOINT3 MouseTempWIC 	= GetMouseWIC();
+   		SetMouseOldWIC(MouseTempWIC);
+   		LPOINT3 MouseWIC;
+    	///////////////////////  LOG :DEScaled
+    	LOGtoWIC2(&MouseWIC,&LpLOG,&MouseTempWIC); //LOG/Scaled WIC
+    	////////////////////                 
+    	SetMouseWIC(MouseWIC);
+    	///////////////////////////
+//    	pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+		pMouseMgr->SetStatusMouseWIC(MouseWIC);
+		////////////////////////////
+		///////////////////// recover MouseWIC changed for statusbar update 
+	    SetMouseOldWIC(MouseOldTempWIC);
+	    SetMouseWIC(MouseTempWIC);
+
+		return;
+    }	
+   	//////////////////////////////      ***** START FROM HERE *****
+   	CPen    Pen;
+	CPen*   PtrOldPen;
+	//////////////////////////////
+	m_pdc->SetBkMode(TRANSPARENT);
+	//////////////////////////////	
+	// Create Black Pen 2 Pixel wide;
+	int two = 2;
+	COLORREF crColor = 0x000000;  
+	Pen.CreatePen ((int)PS_SOLID,two,crColor);
+	PtrOldPen = m_pdc->SelectObject(&Pen);
+	///////////////////////////
+	m_MouseLOG = point;              // Device
+	POINT MouseLOC;
+	/////////////////////////	
+	m_pdc->SetROP2 (R2_NOT); 
+	
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseOldLOG;        // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+	////////////////////////	  
+//	m_pdc->SetROP2 (R2_COPYPEN);
+
+	MouseLOC = m_AnchorNodeLOG;      // Device
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->MoveTo (MouseLOC);
+
+	MouseLOC = m_MouseLOG;
+	m_pdc->DPtoLP(&MouseLOC);
+	m_pdc->LineTo (MouseLOC);
+
+	m_MouseOldLOG = m_MouseLOG;
+	///////////////////////////
+   	m_pdc->SelectObject(PtrOldPen);   
+	Pen.DeleteObject(); 
+	//////////////////////////////////////
+    LPOINT3 MouseWIC = GetMouseWIC();
+    SetMouseOldWIC(MouseWIC);
+   	///////////////////////
+   	LOGtoWIC(&MouseWIC,&LpLOG); //LOG/Scaled WIC
+   	////////////////////                 
+    SetMouseWIC(MouseWIC);
+    ///////////////////////////
+//  pDoc->UpdateStatusBar(&dc);  WILL BE CALLED FROM VIEW, JUST SET HERE
+	pMouseMgr->SetStatusMouseWIC(MouseWIC);
+	//////////////////////////////////////////////    
+}
+
+void CNodMouse::OnEBoxLButtonUp_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+											UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+  	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+    if(m_bDragging)  // not currently dragging
+    {
+		m_bDragging = FALSE; 
+		::ReleaseCapture();
+		//	ClipCursor(NULL);				TOBEDONE 
+	}	
+	///////////////////////////////////////////////////////// 
+	PreLeftUp(point);
+    /////////////////////////////  ELement Dialog On/Off Check
+    POINT Logpoint;
+    m_pdc->DPtoLP(&point);
+    Logpoint.x = point.x;
+    Logpoint.y = point.y;
+    m_pdc->LPtoDP(&point);							
+    ////////////////////
+    if(m_Gener == FORWARD)
+		ElementLeftUp_NOD(Logpoint);
+	else	
+    if(m_Gener == REVERSE)
+		;
+//		ElementLeftUp_I();
+	/////////////////
+	PostLeft();
+	/////////////////////////
+	
+}
+
+void CNodMouse::OnEBoxRButtonDown_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+									UINT nFlags, CPoint point)
+{ 
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr  = pDoc->GetObjectMgr();
+
+	CBooleans* pBool		= (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+    /////////////////////////////  ELement Dialog On/Off Check
+	m_bDialogOn     = pBool->IsDialogOn();
+	m_bAutoAcceptOn	= pBool->IsAutoAcceptOn();
+	/////////////////////////////////////////////////////////////////////////////
+	m_nActiveObject = pWnd->GetActiveObjectType(); 
+	m_nActiveTool	= pWnd->GetActiveToolType();    // -1= INSERT
+	/////////////////////////////////////////////////////////////////////////
+	pObjectMgr->SetActiveObjectType(m_nActiveObject);       // Set ObjectType 
+	////////////////////
+//	CMNodMgr* pMNodMgr;
+	//////////////////////////////////////////
+	switch(m_nActiveTool) 
+	{
+		case INODE:
+			break;
+		case CNODE:
+			break;
+		////////////////////////////////////////////////// 
+		default:
+			break;
+	}  
+}
+
+void CNodMouse::OnEBoxRButtonUp_NOD(CClientDC* pdc,CView* pView,GENERATE gener,
+								UINT nFlags, CPoint point)
+{
+	m_nFlags				= nFlags;
+	m_pView					= pView;
+	m_pdc					= pdc;
+	////////////////////////////////
+	m_Gener					= gener;
+	/////////////////////////////////////////////////////////
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CString ID;
+	CString* pID = &ID;
+//	CMNodMgr* pMNodMgr;
+//	int nMeshType;
+	////////////////////
+	switch(m_nActiveTool) 
+	{
+
+		case INODE:
+				
+        	m_nNodeDone = 0;
+			ShowNode(pID,FALSE,0);
+			return;
+
+				
+		case CNODE:				
+
+			m_nCNodeDone = 0;
+			ShowNode(pID,TRUE,0);
+			return;
+
+
+		
+		default:  
+			break;
+	} 
+
+}
+/////////////////////////////////////////////////////////////////////////////////////// F_M
+UINT CNodMouse::ReSetToolID_NOD(UINT CntlID,UINT IGenID, UINT OperID)
+{
+	CDrGrafFrame* pWnd	= (CDrGrafFrame*)AfxGetMainWnd();
+	CString strCur;
+	////////////////
+	CString str;
+	UINT ID;
+	//////////////////////////////////////////// TaskID
+	strCur = "Ready for Node Creation@";
+	/////////////////////////////
+	switch(OperID)
+	{
+		//////////////////////////////////////////// Create
+		case COP_CREATE:
+		{
+			pWnd->SetIGenBoxStatus(TRUE);
+			pWnd->SetCntlBoxStatus(FALSE);
+			pWnd->SetDrawBoxStatus(FALSE);
+			///////////////////////////// String
+			str = "CREATE";
+			pWnd->SetstrOperID(str);
+			/////////////////////////////
+			switch(CntlID)
+			{
+				//////////////////////////////////////// Elements
+				case ELEMENT:
+				case EDIM_0:
+				case EDIM_1:
+				case EDIM_2:
+				case EDIM_3:
+
+//					pWnd->SetMouseBoxType(ELEMDIMBOX);
+					str = "ELEMENT";
+					pWnd->SetstrCntlID(str);
+					///////////////////////////////////// EDim0/EDim1...
+					switch(IGenID)
+					{
+						/////////
+						case NODE:			str = "NODE";		ID	= NODE;
+								strCur += "Select Node Type";	break;
+						case INODE:			str = "Input@NODE";		ID	= INODE;
+								strCur += "Click in an Input Node";	break;
+						case CNODE:			str = "Control@NODE";	ID = CNODE;
+								strCur += "Click in a Control Node";	break;
+						default:			str = "UNKNOWN@NODE";	ID = UNONE;
+					}
+					pWnd->SetstrIGenID(str);
+					////////////////////////
+					pWnd->SetstrCurrID(strCur);
+					//////////
+					return ID;
+				//////////////////
+				/////////
+				default:					str = "UNKNOWN";	ID = UNONE;
+					pWnd->SetstrIGenID(str);
+					return ID;
+			}
+			pWnd->SetstrCntlID(str);
+			return ID;
+		////////
+		default:							str = "UNKNOWN";	ID = UNONE;
+		}
+		pWnd->SetstrOperID(str);
+		return ID;
+	}
+}
+	
+void CNodMouse::ModeLessOff_NOD()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	if(GetNodInDlg()->m_hWnd)
+		pWnd->SendMessage(ID_GOODBYE_NODIN,IDOK);
+}
+
+void CNodMouse::ModeLessOn_NOD()
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+	/////////////////////////////////////////////////////////
+	int aTool	= pWnd->GetActiveToolType();
+	int aObj	= pWnd->GetActiveObjectType();
+	/////////////////////////////////////////////////////////////////////////
+	if
+	(	
+		(aTool == INODE) ||(aTool == CNODE)
+	)
+	{
+		if(!(GetNodInDlg()->m_hWnd))
+			pWnd->SendMessage(ID_ACTIVE_NODIN,IDOK);
+/*
+		/////////////////////////////////////// Other Coords
+		if(GetNodInDlg()->m_hWnd)
+		{
+			CStatic* pCtl;
+			pCtl = (CStatic*)GetNodInDlg()->GetDlgItem(IDC_OTHER);
+			if(pWnd->GetActiveViewNumber() == VIEW12)
+				pCtl->SetWindowText("Z");
+			else
+			if(pWnd->GetActiveViewNumber() == VIEW23)
+				pCtl->SetWindowText("X");
+			else
+			if(pWnd->GetActiveViewNumber() == VIEW31)
+				pCtl->SetWindowText("Y");
+		}
+*/
+	}
+}
+
+long CNodMouse::CreateorActivateNodIn(UINT wParam, long lParam)
+{
+	CDrGrafFrame* pWnd		= (CDrGrafFrame*)AfxGetMainWnd();
+//	CString strCurr;
+	/////////////////////////////////////////////////////////
+	if(	(pWnd->GetCurrentIGenID() != INODE) && (pWnd->GetCurrentIGenID() != CNODE) )
+		return 0L;
+	////////////////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetNodInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetNodInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetNodInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetNodInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetNodInDlg()->SetActiveWindow();
+	/////////////////////////////////////////////////////////////////
+	CDListMgr* pDListMgr;
+	///
+	char buf[50];
+	/////////////
+	if(pWnd->GetCurrentIGenID() == CNODE)
+	{
+		pDListMgr = pObjectMgr->GetObjectList(CNODE);
+		m_pNodInDlg->SetWindowText("CONTROL Node");
+		int nLastNum = pObjectMgr->GetLastInputNo(CNODE);		// internal
+		sprintf(buf,"%d",nLastNum);
+		m_CurrentNodeID = "CN_";
+		m_CurrentNodeID	+= buf;
+		m_bAnchorCNode	= TRUE;
+		////////////////////////////////////////////////// Not Ist Time
+//		if( !pDListMgr->IsEmpty() )
+//			pObjectMgr->BumpLastInputNo(CNODE);		// bump it
+	}
+	else
+	if(pWnd->GetCurrentIGenID() == INODE)
+	{
+		pDListMgr = pObjectMgr->GetObjectList(NODE);
+		m_pNodInDlg->SetWindowText("INPUT Node");
+		int nLastNum = pObjectMgr->GetLastInputNo(NODE);		// internal
+		sprintf(buf,"%d",nLastNum);
+		m_CurrentNodeID = "";
+		m_CurrentNodeID	+= buf;
+		m_bAnchorCNode	= FALSE;
+		////////////////////////////////////////////////// Not Ist Time
+//		if( !pDListMgr->IsEmpty() )
+//			pObjectMgr->BumpLastInputNo(NODE);		// bump it
+	}
+	////////////
+	m_CurrentNodeIDOld	= m_CurrentNodeID;
+	m_AnchorNodeID		= m_CurrentNodeIDOld;
+	///////////////////////////////////////////////////////////////// if NodeDlg Open
+	if(GetNodInDlg()->m_hWnd)
+	{
+		CStatic* pCtl;
+		pCtl = (CStatic*)(GetNodInDlg()->GetDlgItem(IDC_OTHER));
+		////////////////////////////////////////////////////////
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEW12)
+			pCtl->SetWindowText("Z");
+		else
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEW23)
+			pCtl->SetWindowText("X");
+		else
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEW31)
+			pCtl->SetWindowText("Y");
+		else
+		if((UINT)(pWnd->GetActiveViewNumber()) == VIEWISO)
+		{
+			pWnd->SendMessage(ID_GOODBYE_NODIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	GetNodInDlg()->m_NID		= GetCurrentNodeID();
+//	GetNodInDlg()->m_SID		= GetCurrentSupID();
+	GetNodInDlg()->m_nViewNum	= pWnd->GetActiveViewNumber();
+	GetNodInDlg()->m_bnid_C		= FALSE;
+	GetNodInDlg()->m_dCoord		= GetCurrentThirdCoord();
+	////////////////////////////////
+	GetNodInDlg()->UpdateData(FALSE);
+	///////////////////////// CurrStat: Show
+/*
+	strCurr = "Ready for Selection@";
+	if(m_nActiveTool == NODE)							????? m_nActiveTool not known yet ????????
+		strCurr += "An Input Node";
+	else
+	if(m_nActiveTool == CNODE)
+		strCurr += "A Control Node";
+	pWnd->GetCurrStat()->SetText(strCurr);
+	pWnd->GetCurrStat()->Invalidate();
+	pWnd->GetCurrStat()->UpdateWindow();
+*/
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CNodMouse::CancelNodIn(UINT wParam, long lParam)
+{
+	
+	GetNodInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CNodMouse::GoodByeNodIn(UINT wParam, long lParam)
+{
+	
+	if(GetNodInDlg()->m_hWnd)
+		GetNodInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CNodMouse::UpdateNodIn(UINT wParam, long lParam)
+{
+
+	GetNodInDlg()->UpdateData(TRUE);
+	///////////////////////////////// Reset data in ElMouse
+	SetCurrentNodeID(GetNodInDlg()->m_NID);
+//	SetCurrentSupID(GetNodInDlg()->m_SID);
+//	SetCurrentLoadID(Lid);
+	SetMouseWIC(GetNodInDlg()->m_MouseWIC);
+	SetCurrentThirdCoord(GetNodInDlg()->m_dCoord);
+	//////////
+	return 0L;
+}
+	
+void CNodMouse::Serialize(CArchive& ar)
+{
+
+	CMouse::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	BYTE bDialogOn,bElementMode,bDragOn,bDragging,bRefreshOn; 
+	WORD nActiveObject,nActiveTool,nNodeDone;
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" NodMouse:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+		ar	<</*BOOL*/	(BYTE)m_bDialogOn 
+			<</*BOOL*/	(BYTE)m_bElementMode 
+			<</*int*/	(WORD)m_nActiveObject 
+			<</*int*/	(WORD)m_nActiveTool 
+			<</*BOOL*/	(BYTE)m_bDragOn 
+			<</*BOOL*/	(BYTE)m_bDragging 
+			<</*BOOL*/	(BYTE)m_bRefreshOn 
+			<</*int*/	(WORD)m_nNodeDone;
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" NodMouse:    Loading\n");	
+
+			/////////////////////////////////////////////////
+		ar	>>/*BOOL*/	bDialogOn 
+			>>/*BOOL*/	bElementMode 
+			>>/*int*/	nActiveObject 
+			>>/*int*/	nActiveTool 
+			>>/*BOOL*/	bDragOn 
+			>>/*BOOL*/	bDragging 
+			>>/*BOOL*/	bRefreshOn 
+			>>/*int*/	nNodeDone;
+ 		//////////////////////////////
+		m_bDialogOn		= (BOOL)bDialogOn;
+		m_bElementMode	= (BOOL)bElementMode;
+		m_nActiveObject	= (int)nActiveObject;
+		m_nActiveTool	= (int)nActiveTool;
+		m_bDragOn		= (BOOL)bDragOn;
+		m_bDragging		= (BOOL)bDragging;
+		m_bRefreshOn	= (BOOL)bRefreshOn;
+		m_nNodeDone		= (int)nNodeDone;
+	
+	}        
+	///////////////////////////////////// 
+	SerializeNode(ar);      
+	//////////////////
+}
+
+///////////////////////////////////////////////////////// element serializer
+void CNodMouse::SerializeNode(CArchive& ar)
+{ 
+	///////////////////////////////////////////////////// STORING				
+	if (ar.IsStoring())
+	{
+		ar	<<	m_CurrentNodeID
+			<<	m_AnchorNodeID;
+	}
+	///////////////////////////////////////////////////// LOADING				
+	else
+	{
+		ar	>>	m_CurrentNodeID
+			>>	m_AnchorNodeID;
+	}
+				    				
+}
+///////////////////////////////////// end of Module //////////////////////		
+/*	
+	///////////////////////////////////////////////////////////TEMPORARY
+	CString strRes;
+	strRes.LoadString(IDS_CHECK_RESOURCE);
+	TRACE("resource string = %s\n", (const char*) strRes); 
+    /////////////////////////////////////////////////////////////////////
+	CMNodMgr* pMNodMgr;
+	CString nID;
+	pMNodMgr->DoModal_Node(m_nView,&MouseWIC,&nID);
+	pMNodMgr->DoModal_Pipe();
+	/////////////////////////
+	CDDlgMgr* pDDlgMgr;
+	pDDlgMgr->DoModal_Label_Insert();
+	pDDlgMgr->DoModal_Label_Edit();
+	/////////////////////////////////////////////////////////////////////
+*/
+
+

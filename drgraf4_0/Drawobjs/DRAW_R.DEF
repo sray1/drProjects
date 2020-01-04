@@ -1,0 +1,181 @@
+; Draw_D.def -- for CDrawObj stuff --  DEBUG version
+
+LIBRARY	Draw_D
+DESCRIPTION  'DrawObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitDrawDLL												@2 NONAME
+
+; CLabel
+;	; Constructor and Destructor
+ 	??0CDrLabel@@REC@XZ   									
+ 	??1CDrLabel@@VEC@XZ
+ 	
+	?Pack_drPipe@CDrLabel@@VECXPEVCString@@@Z
+	?DoDataView@CDrLabel@@VECXPEVCDC@@H@Z
+	?DoDrawView@CDrLabel@@VECXPEVCDC@@HH@Z
+	?GetObjectType@CDrLabel@@VECHXZ
+    ?GetElemType@CDrLabel@@VECHXZ
+?GetObjectNo@CDrLabel@@VECJXZ
+?SetObjectNo@CDrLabel@@VECXJ@Z
+ 	?SetObjectType@CDrLabel@@VECXH@Z
+ 	?SetElemType@CDrLabel@@VECXH@Z
+ 	?SetObjectInfo@CDrLabel@@VECXPEVCDrObject@@@Z
+ 	?GetObjectInfo@CDrLabel@@VECXPEVCDrObject@@@Z 
+ 	?DealObjectDialog@CDrLabel@@VECHXZ
+	
+	?GetRuntimeClass@CDrLabel@@VFCPEUCRuntimeClass@@XZ
+    ?classCDrLabel@CDrLabel@@2UCRuntimeClass@@A
+    ?Serialize@CDrLabel@@VECXAEVCArchive@@@Z 
+    
+	?GetRawCoords@CDrLabel@@VECXPEJPEHH@Z
+	?GetMaxCorners@CDrLabel@@VECHXZ
+	?SetProjectedCoords@CDrLabel@@VECXUtagPOINT@@H@Z
+
+	
+	?IsMoved@CDrLabel@@VECHXZ
+	?SetMoved@CDrLabel@@VECXH@Z
+
+	?FinishObject@CDrLabel@@VECXPEVCClientDC@@H@Z
+ 	?GetBoundingRect@CDrLabel@@VEC?EVCRect@@XZ 
+	
+	?IsObjectHit@CDrLabel@@VECHPEVCDrObject@@PEVCClientDC@@HUtagPOINT@@PEUtagRECT@@H@Z
+ 	?IsKeyMatch@CDrLabel@@VECHPEVCDrObject@@VCString@@I@Z
+	
+ 	?GetLayer@CDrLabel@@VECIXZ
+ 	?SetLayer@CDrLabel@@VECXI@Z
+ 	?GetColor@CDrLabel@@VECKXZ
+ 	?SetColor@CDrLabel@@VECXK@Z
+ 	?GetViewNum@CDrLabel@@VECHXZ
+ 	?SetViewNum@CDrLabel@@VECXH@Z
+ 	?GetType@CDrLabel@@VECHXZ
+ 	?SetType@CDrLabel@@VECXH@Z
+ 	?GetText@CDrLabel@@VEC?EVCString@@XZ
+ 	?SetText@CDrLabel@@VECXVCString@@@Z
+ 	?SetLogFont@CDrLabel@@VECXUtagLOGFONT@@@Z
+ 	?GetLogFont@CDrLabel@@VEC?EUtagLOGFONT@@XZ
+	?GetCorner@CDrLabel@@VEC?EUtagPOINT@@H@Z
+	?SetCorner@CDrLabel@@VECXUtagPOINT@@H@Z
+ 	?GetOtherCorner@CDrLabel@@VEC?EUtagPOINT@@XZ
+ 	?SetOtherCorner@CDrLabel@@VECXUtagPOINT@@@Z
+
+	?IsGenerated@CDrLabel@@VECHXZ
+	?SetGenerated@CDrLabel@@VECXH@Z
+
+	?GetLevelType@CDrLabel@@VECHXZ
+	?SetLevelType@CDrLabel@@VECXH@Z
+	
+
+; CFreeHand
+;	; Constructor and Destructor
+  	??0CDrFreeHand@@REC@XZ   									
+  	??1CDrFreeHand@@VEC@XZ
+ 	                                    
+ 	?Pack_drPipe@CDrFreeHand@@VECXPEVCString@@@Z
+ 	?DoDataView@CDrFreeHand@@VECXPEVCDC@@H@Z
+	?DoDrawView@CDrFreeHand@@VECXPEVCDC@@HH@Z
+ 	?GetObjectType@CDrFreeHand@@VECHXZ
+ 	?GetElemType@CDrFreeHand@@VECHXZ
+?GetObjectNo@CDrFreeHand@@VECJXZ
+?SetObjectNo@CDrFreeHand@@VECXJ@Z
+ 	?SetObjectType@CDrFreeHand@@VECXH@Z
+ 	?SetElemType@CDrFreeHand@@VECXH@Z
+ 	?SetObjectInfo@CDrFreeHand@@VECXPEVCDrObject@@@Z
+ 	?GetObjectInfo@CDrFreeHand@@VECXPEVCDrObject@@@Z
+ 	?DealObjectDialog@CDrFreeHand@@VECHXZ
+
+	?GetRuntimeClass@CDrFreeHand@@VFCPEUCRuntimeClass@@XZ
+ 	?classCDrFreeHand@CDrFreeHand@@2UCRuntimeClass@@A
+ 	?Serialize@CDrFreeHand@@VECXAEVCArchive@@@Z
+
+;?GetRawCoords@CDrFreeHand@@VECXPEJPEHH@Z
+;?GetMaxCorners@CDrFreeHand@@VECHXZ
+	?SetProjectedCoords@CDrFreeHand@@VECXUtagPOINT@@H@Z
+	
+	?IsMoved@CDrFreeHand@@VECHXZ
+	?SetMoved@CDrFreeHand@@VECXH@Z
+
+	?FinishObject@CDrFreeHand@@VECXH@Z
+ 	?GetBoundingRect@CDrFreeHand@@VEC?EVCRect@@XZ
+
+	?IsObjectHit@CDrFreeHand@@VECHPEVCDrObject@@PEVCClientDC@@HUtagPOINT@@PEUtagRECT@@H@Z
+ 	?IsKeyMatch@CDrFreeHand@@VECHPEVCDrObject@@VCString@@I@Z
+
+ 	?GetPenInfo@CDrFreeHand@@VECXIKI@Z
+ 	?SetPenInfo@CDrFreeHand@@VECXIKI@Z
+ 	?GetLayer@CDrFreeHand@@VECIXZ
+ 	?SetLayer@CDrFreeHand@@VECXI@Z
+ 	?GetFreeHandNum@CDrFreeHand@@VECHXZ
+ 	?SetFreeHandNum@CDrFreeHand@@VECXH@Z
+ 	?GetViewNum@CDrFreeHand@@VECHXZ
+ 	?SetViewNum@CDrFreeHand@@VECXH@Z
+
+ 	?AddPoint@CDrFreeHand@@VECXVCPoint@@@Z
+
+	?IsGenerated@CDrFreeHand@@VECHXZ
+	?SetGenerated@CDrFreeHand@@VECXH@Z
+
+	?GetLevelType@CDrFreeHand@@VECHXZ
+	?SetLevelType@CDrFreeHand@@VECXH@Z
+	
+    
+; CPrism
+;	; Constructor and Destructor
+ 	??0CPrism@@REC@III@Z
+ 	??1CPrism@@VEC@XZ
+		
+ 	?DrawPrism@CPrism@@VECXPEVCDC@@UtagPOINT@@QEY02N@Z
+
+
+; CAxis
+;	; Constructor and Destructor
+; 	??0CAxis@@REC@XZ
+; 	??1CAxis@@VEC@XZ 
+
+;	?GetRuntimeClass@CAxis@@VFCPEUCRuntimeClass@@XZ
+; 	?classCAxis@CAxis@@2UCRuntimeClass@@A 
+; 	?Serialize@CAxis@@VECXAEVCArchive@@@Z
+
+; 	?DoAxes@CAxis@@VECXPEVCDC@@HHUtagPOINT@@I@Z
+; 	?DrawAxes@CAxis@@VECXPEVCDC@@UtagPOINT@@QEY02NPEII@Z
+
+; 	?GetVertical@CAxis@@VECIXZ
+; 	?SetVertical@CAxis@@VECXI@Z
+; 	?GetVerticalOld@CAxis@@VECIXZ
+; 	?SetVerticalOld@CAxis@@VECXI@Z
+; 	?GetVerticalDefault@CAxis@@VECIXZ
+; 	?SetVerticalDefault@CAxis@@VECXI@Z
+; 	?GetPositive@CAxis@@VECIXZ
+; 	?SetPositive@CAxis@@VECXI@Z
+; 	?GetPositiveOld@CAxis@@VECIXZ
+; 	?SetPositiveOld@CAxis@@VECXI@Z
+; 	?GetPositiveDefault@CAxis@@VECIXZ
+; 	?SetPositiveDefault@CAxis@@VECXI@Z
+; 	?GetAxes@CAxis@@VECXPEI@Z
+; 	?SetAxes@CAxis@@VECXPEI@Z
+; 	?GetAxesOld@CAxis@@VECXPEI@Z
+; 	?SetAxesOld@CAxis@@VECXPEI@Z
+; 	?GetAxesDefault@CAxis@@VECXPEI@Z
+; 	?SetAxesDefault@CAxis@@VECXPEI@Z
+; 	?GetLength@CAxis@@VECIXZ
+; 	?SetLength@CAxis@@VECXI@Z
+	
+; 	?TransformPoint3to2@CAxis@@VECXPENQEY02N0@Z
+; 	?GetTranArray@CAxis@@VECXQEY02N@Z
+; 	?SetTranArray@CAxis@@VECXHH@Z
+
+
+
+  

@@ -1,0 +1,130 @@
+; Mouse_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	MMgr_D
+DESCRIPTION  'Mouse Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+SEGMENTS
+	_TEXT   PRELOAD MOVEABLE DISCARDABLE
+	WEP_TEXT PRELOAD MOVEABLE DISCARDABLE
+
+HEAPSIZE  1024
+
+EXPORTS
+	WEP @1 RESIDENTNAME PRIVATE ;; required WEP entry point (uses library WEP)
+
+	; Explicitly exported initialization routine
+	InitMMgrDLL											@2 NONAME
+
+; CElMouse
+	; Constructor and Destructor
+	??0CELMouse@@REC@XZ
+	??1CELMouse@@VEC@XZ
+
+	?OnEBoxLButtonDown@CELMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+	?OnEBoxLButtonUp@CELMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+	?OnEBoxMouseMove@CELMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+	?OnEBoxRButtonDown@CELMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+	?OnEBoxRButtonUp@CELMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+
+	?SetCurrentNodeID@CELMouse@@VECXVCString@@@Z
+	?SetCurrentPipeID@CELMouse@@VECXVCString@@@Z
+	?SetAnchorNodeID@CELMouse@@VECXVCString@@@Z
+	
+?PutEndIdsInPipeList@CELMouse@@JECHQEVCString@@H@Z
+?PutEndIdsInPlateList@CELMouse@@JECHQEVCString@@H@Z
+?PutObjectinPatch@CELMouse@@JECHPEVCDrObject@@QEVCString@@H@Z
+	
+
+;?DrawDirtyCurve@CELMouse@@RECXPEVCDC@@@Z
+;?DrawDirtyPatch@CELMouse@@RECXPEVCDC@@@Z
+
+	?GetRuntimeClass@CELMouse@@VFCPEUCRuntimeClass@@XZ
+	?classCELMouse@CELMouse@@2UCRuntimeClass@@A
+	?Serialize@CELMouse@@VECXAEVCArchive@@@Z
+
+
+; CDbMouse
+	; Constructor and Destructor
+	??0CDBMouse@@REC@XZ
+	??1CDBMouse@@VEC@XZ
+
+	?GetFHIndexCurrent@CDBMouse@@VECHXZ
+	?SetFHIndexCurrent@CDBMouse@@VECXH@Z
+	?GetFHNumberCurrent@CDBMouse@@VECHXZ
+	?SetFHNumberCurrent@CDBMouse@@VECXH@Z
+	?GetCurrentLabelID@CDBMouse@@VEC?EVCString@@XZ
+	?SetCurrentLabelID@CDBMouse@@VECXVCString@@@Z
+
+	?OnDBoxLButtonDown@CDBMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+	?OnDBoxLButtonUp@CDBMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+	?OnDBoxMouseMove@CDBMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+	?OnDBoxRButtonDown@CDBMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+	?OnDBoxRButtonUp@CDBMouse@@RECXPEVCClientDC@@PEVCView@@IVCPoint@@@Z
+
+	?GetRuntimeClass@CDBMouse@@VFCPEUCRuntimeClass@@XZ
+	?classCDBMouse@CDBMouse@@2UCRuntimeClass@@A
+	?Serialize@CDBMouse@@VECXAEVCArchive@@@Z
+
+
+; CMouse
+	; Constructor and Destructor
+	??0CMouse@@REC@XZ
+	??1CMouse@@VEC@XZ
+
+	?SetViewNumber@CMouse@@RECXI@Z
+	?SetMouseOldWIC@CMouse@@RECXULPOINT3@@@Z
+	?SetMouseWIC@CMouse@@RECXULPOINT3@@@Z
+	?GetMouseWIC@CMouse@@REC?EULPOINT3@@XZ
+	?GetMouseOldWIC@CMouse@@REC?EULPOINT3@@XZ
+
+	?GetRuntimeClass@CMouse@@VFCPEUCRuntimeClass@@XZ
+	?classCMouse@CMouse@@2UCRuntimeClass@@A
+	?Serialize@CMouse@@VECXAEVCArchive@@@Z
+
+
+
+; CMouseMgr
+	; Constructor and Destructor
+	??0CMouseMgr@@REC@XZ
+	??1CMouseMgr@@VEC@XZ
+
+	?GetStatusMouseWIC@CMouseMgr@@REC?EULPOINT3@@XZ
+	?SetStatusMouseWIC@CMouseMgr@@RECXULPOINT3@@@Z
+	?SetViewCursor@CMouseMgr@@RECXH@Z
+	?GetELMouse@CMouseMgr@@RECPEVCELMouse@@H@Z
+	?GetDBMouse@CMouseMgr@@RECPEVCDBMouse@@H@Z
+
+	?GetRuntimeClass@CMouseMgr@@VFCPEUCRuntimeClass@@XZ
+	?classCMouseMgr@CMouseMgr@@2UCRuntimeClass@@A
+	?Serialize@CMouseMgr@@VECXAEVCArchive@@@Z
+
+
+; CGN_Curve
+	; Constructor and Destructor
+;	??0CGN_Curve@@REC@XZ
+;	??1CGN_Curve@@VEC@XZ
+
+;?GenCurveForPosting@CGN_Curve@@VECHPEVCDrObject@@PEUWORLD@@@Z
+;?GenCurveForDirtyDraw@CGN_Curve@@VECHPEVCView@@PEVCDrObject@@@Z
+
+;	?Serialize@CGN_Curve@@VECXAEVCArchive@@@Z
+;	?GetRuntimeClass@CGN_Curve@@VFCPEUCRuntimeClass@@XZ
+
+
+
+; CGN_Patch
+	; Constructor and Destructor
+;	??0CGN_Patch@@REC@XZ
+;	??1CGN_Patch@@VEC@XZ
+
+;?GenPatchForPosting@CGN_Patch@@VECHPEVCDrObject@@PEUWORLD@@@Z
+;?GenPatchForDirtyDraw@CGN_Patch@@VECHPEVCView@@PEVCDrObject@@@Z
+	
+;	?Serialize@CGN_Patch@@VECXAEVCArchive@@@Z
+;	?GetRuntimeClass@CGN_Patch@@VFCPEUCRuntimeClass@@XZ
+	
+ 
+  

@@ -1,0 +1,214 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "EMgrRsrc.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+#include "CommRsrc.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_NODE_EDIT_ADV DIALOGEX 0, 0, 380, 162
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "NODE Edit Advanced"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    EDITTEXT        IDD_NODE_ID,55,16,63,15
+    RTEXT           "DX:",IDC_STATIC,173,98,19,10
+    EDITTEXT        IDD_NODE_DX,195,95,63,15
+    RTEXT           "DY:",IDC_STATIC,173,112,19,10
+    EDITTEXT        IDD_NODE_DY,195,110,63,15
+    RTEXT           "DZ:",IDC_STATIC,173,126,19,10
+    EDITTEXT        IDD_NODE_DZ,195,124,63,15
+    RTEXT           "Ref. NodeIc:",IDC_STATIC,65,63,59,10
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,296,132,60,
+                    25
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,297,
+                    9,60,25
+    LISTBOX         IDD_LIST,295,51,77,82,LBS_SORT | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "NodeIc:",IDC_STATIC,55,5,35,10
+    ICON            110,IDC_STATIC,19,10,18,20
+    LTEXT           "Node Pool",IDC_STATIC,297,42,47,10
+    CONTROL         "Coordinates",IDC_COORD,"Button",BS_AUTORADIOBUTTON,216,
+                    31,67,12
+    CONTROL         "Direction",IDC_DIRECTION,"Button",BS_AUTORADIOBUTTON,
+                    216,17,60,12
+    GROUPBOX        "Input Mode",IDC_STATIC,203,4,85,43
+    GROUPBOX        "Node Info",IDC_STATIC,11,49,276,108
+    COMBOBOX        IDC_CNODE_FROM,67,95,65,63,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "From : ",IDC_STATIC,32,97,31,9
+    COMBOBOX        IDC_CNODE_TO,67,111,65,67,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    RTEXT           "To : ",IDC_STATIC,32,113,31,9
+    GROUPBOX        "Direction Nodes",IDC_STATIC,19,80,127,68
+    RTEXT           "Length: ",IDC_STATIC,37,134,27,10
+    EDITTEXT        IDD_LENGTH,67,130,63,15
+    COMBOBOX        IDD_NODE_NID_R,132,63,65,63,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Coordinates",IDC_STATIC,159,81,120,68
+    RTEXT           "X:",IDC_STATIC,124,6,11,10
+    EDITTEXT        IDD_NODE_X2,136,4,63,15,ES_READONLY
+    RTEXT           "Y:",IDC_STATIC,124,20,11,10
+    EDITTEXT        IDD_NODE_Y2,136,18,63,15,ES_READONLY
+    RTEXT           "Z:",IDC_STATIC,124,33,11,10
+    EDITTEXT        IDD_NODE_Z2,136,33,63,15,ES_READONLY
+    PUSHBUTTON      "&Start Over",IDC_STARTOVER,61,34,50,14
+END
+
+IDD_NODE_EDIT_SIMPLE DIALOGEX 0, 0, 147, 85
+STYLE DS_MODALFRAME | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+CAPTION "NODE Edit"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    RTEXT           "NID ",IDC_STATIC,0,6,17,8
+    EDITTEXT        IDC_COORD_X,17,16,50,12,ES_AUTOHSCROLL,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "Advanced",IDC_ADVANCED,21,56,40,13,0,WS_EX_CLIENTEDGE
+    EDITTEXT        IDC_COORD_Y,17,28,50,12,ES_AUTOHSCROLL,WS_EX_CLIENTEDGE
+    EDITTEXT        IDC_COORD_Z,17,40,50,12,ES_AUTOHSCROLL,WS_EX_CLIENTEDGE
+    LTEXT           "X",IDC_STATIC,5,18,8,8,0,WS_EX_RIGHT
+    LTEXT           "Y",IDC_STATIC,5,30,8,8,0,WS_EX_RIGHT
+    LTEXT           "Z",IDC_STATIC,5,42,8,8,0,WS_EX_RIGHT
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,79,
+                    8,60,25
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,79,53,60,25
+    EDITTEXT        IDC_NID,18,2,49,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "StartOver",IDC_STARTOVER2,15,71,50,11
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "EMgrRsrc.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "#include ""CommRsrc.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CURISO              CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\CUR_ISO.CUR"
+IDC_CUR12               CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\CURH_12.CUR"
+IDC_CUR23               CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\CURH_23.CUR"
+IDC_CUR31               CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\CURH_31.CUR"
+IDC_CURTEXT             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\CURTEXT.CUR"
+IDC_WAIT000             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\000%.CUR"
+IDC_WAIT012             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\012%.CUR"
+IDC_WAIT025             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\025%.CUR"
+IDC_WAIT037             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\037%.CUR"
+IDC_WAIT050             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\050%.CUR"
+IDC_WAIT062             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\062%.CUR"
+IDC_WAIT075             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\075%.CUR"
+IDC_WAIT087             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\087%.CUR"
+IDC_WAIT100             CURSOR  DISCARDABLE     "c:\\drgraf4_0\\applic\\RES\\100%.CUR"
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "CompanyName", "Institute for Dynamic Respons\0"
+            VALUE "FileDescription", "EMgr_d32\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "EMgr_d32\0"
+            VALUE "LegalCopyright", "Copyright © 1997\0"
+            VALUE "OriginalFilename", "EMgr_d32.dll\0"
+            VALUE "ProductName", "Institute for Dynamic Respons EMgr_d32\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CHECK_RESOURCE      "EditMgr Resource String"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

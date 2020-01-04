@@ -1,0 +1,595 @@
+// Rotate.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+
+#include "Def_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+#include "XForm.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "MSolMgr.h"
+///////////////////// elements
+#include "Def_Elem.h"
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "MI_SSPN.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define new	DEBUG_NEW
+#define	BUFF_SIZE			1024
+#define MIN_CNODES_CURVE	4
+#define	NUM_LEN				12 
+#define	MAX_SEG_ANGLE		120
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_SSPN,CMI_PSPN,1)
+/////////////////////////////////////////////////////////////////////////////
+CMI_SSPN::CMI_SSPN()
+{
+	m_pDrCurve = NULL;
+	m_pDrPatch = NULL;
+	m_pDrSolid = NULL;
+}
+
+CMI_SSPN::~CMI_SSPN()
+{
+}
+
+int CMI_SSPN::RBUp_SSpawn(CView* pView,UINT nView) 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(SOLID);
+	//////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	////////////////////////////////////////////////////////////////
+	m_pDrSolid	= GetInfo();                  	// 
+	///////////////////////////////////////////////////////////////////// Go Generate	
+	if(m_pDrSolid)
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(80);
+				
+		sprintf(buf,"Got All Solid Spawning Info");
+		/////////////////////////	
+		AfxMessageBox(*str);
+		/////////////////////////
+		str->ReleaseBuffer();
+		delete str;
+	}	
+	else
+		return -1;	// Cancel
+	///////////////////////////////// Spawn Nodes
+	MATRIX Mat;
+	///////////
+	if(m_pDrSolid->IsInstanced())
+	{
+		CMatObj* pMatObj	= m_pDrSolid->GetMatObj();
+		Mat					= *(pMatObj->GetMatrix());
+		/////////////////////
+		if(SpawnSolid(&Mat)<0)
+			return -1;
+		/////////////////////
+	}
+	else
+	{
+		MATRIX Mat;
+		C3DMath Math3D;
+		Math3D.GetIdentityMATRIX(&Mat);
+		/////////////////////
+		if(SpawnSolid(&Mat)<0)
+			return -1;
+		/////////////////////
+	}
+	///////////////////////////// make it Unposted 
+	m_pDrSolid->SetPosted(FALSE);
+	/////////////////////////////////////////////////////////// Control RectBound
+	m_pDrSolid->SetDirty(TRUE);
+	m_pDrSolid->SetShow(TRUE);
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrSolid->Calc_3DBoundsLocal();											
+	////////////////////////////////////////////////////////// Save
+	CString SolidID	= m_pDrSolid->GetObjectID();
+	int nSolidIndex = pDListMgr->GetObjectIndex(SOLID,SolidID); 
+	int nOldIndex 	= pObjectMgr->GetActiveObjectIndex();
+	pObjectMgr->SetActiveObjectIndex(nSolidIndex); 
+ 	pObjectMgr->SetActiveObjectType(SOLID);
+   ////////////////////////////////////////////////////////// done/Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nSolidIndex,SOLID);
+	/////////
+	return 0;		 
+}			
+	 
+CDrSolid* CMI_SSPN::GetInfo()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(SOLID);
+	//////////////////////////////////////////////////////////////////
+	CMSolMgr* 	pMSolMgr;
+	CString		Cid;
+	int 		index;
+	///////////////////////////////////////////////////
+	if (pMSolMgr->DoModal_Spawn_S(&Cid,1) == IDCANCEL)
+		return (CDrSolid*)NULL; 
+    /////////////////////////////////////////////////////// update
+	index 					= pObjectMgr->
+								GetObjectIndexfromKey(SOLID,Cid,1);
+	if(index>=0)
+	{						
+		CDrSolid* pDrSolid	= (CDrSolid*)(pDListMgr->GetObject(index));
+		////////////////
+		return pDrSolid;
+	}
+	else 
+		return (CDrSolid*)NULL;
+}
+	 
+int CMI_SSPN::SpawnSolid(pMATRIX pXFMat)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	//////////////////////////////////////////////////////////////////
+	CString		Cid;
+	////////////////////////////////////////////////////////////////// Lists
+	SpawnListsInSolid(pXFMat);
+	////////////////////////////////////////////////////////////////// CurvIDs
+	int index;
+	//////////
+	for(int i=0;i<2;i++)
+	{
+		Cid = m_pDrSolid->GetPatchID(i);
+		if(Cid != "")
+		{
+			CString NewCid;
+			///////////////////////////////// 
+			index = pObjectMgr->
+					GetObjectIndexfromKey(PATCH,Cid,1);
+			pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+			if(index>=0)
+				m_pDrPatch = (CDrPatch*)(pDListMgr->GetObject(index));
+			else
+				m_pDrPatch = NULL;
+			////////////////
+			if(m_pDrPatch)
+				SpawnPatch(m_pDrPatch,pXFMat,&NewCid);// changes
+													  // m_pDrCurve
+													  // to New DrCurve
+			/////////////////////// Reciprocate
+			m_pDrPatch->GetSolidList()->InsertObject(m_pDrSolid);
+			/////////////////////// Put it in Solid
+			m_pDrSolid->SetPatchID(NewCid,i);
+		}
+	}
+	////////////////////////////////////////////////////////////////// Node Spawn : FromID_R
+	CDrNode* pOldNode;
+	CDrNode* pNewNode;
+	CString	 NewNID;
+	CString	FromID_R;		// also used:AnchorID for Sweep/Duct
+	Cid = m_pDrSolid->GetFromID_R();
+	if(Cid != "")
+	{
+		///////////////////////////////// 
+		index = pObjectMgr->
+				GetObjectIndexfromKey(NODE,Cid,1);
+			pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+		if(index>=0)
+			pOldNode = (CDrNode*)(pDListMgr->GetObject(index));
+		else
+			pOldNode = NULL;
+		////////////////
+		if(pOldNode)
+		{
+			//////////
+			int nResult = SpawnNode(pOldNode,pXFMat,&NewNID,TRUE);
+			///////////////////////
+			if(nResult<0)
+				return -1;
+			//////////////
+			index = pObjectMgr->GetObjectIndexfromKey(NODE,NewNID,1);
+			pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+			if(index>=0)
+			{						
+				pNewNode	= (CDrNode*)(pDListMgr->GetObject(index));
+				//////////////////////////////////////// Reciprocate
+				pNewNode->GetSolidList()->InsertObject(m_pDrSolid);
+				//////////////
+				m_pDrSolid->SetFromID_R(NewNID); //FromID_T 
+				////////
+			}
+			else
+				return -1;
+			///////////
+		}
+	}
+	////////////////////////////////////////////////////////////////// Node Spawn : ToID_R
+	CString	ToID_R;		// also used:AnchorID for Sweep/Duct
+	Cid = m_pDrSolid->GetToID_R();
+	if(Cid != "")
+	{
+		///////////////////////////////// 
+		index = pObjectMgr->
+				GetObjectIndexfromKey(NODE,Cid,1);
+		pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+		if(index>=0)
+			pOldNode = (CDrNode*)(pDListMgr->GetObject(index));
+		else
+			pOldNode = NULL;
+		////////////////
+		if(pOldNode)
+		{
+			//////////
+			int nResult = SpawnNode(pOldNode,pXFMat,&NewNID,TRUE);
+			///////////////////////
+			if(nResult<0)
+				return -1;
+			//////////////
+			index = pObjectMgr->GetObjectIndexfromKey(NODE,NewNID,1);
+			pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+			if(index>=0)
+			{						
+				pNewNode	= (CDrNode*)(pDListMgr->GetObject(index));
+				//////////////////////////////////////// Reciprocate
+				pNewNode->GetSolidList()->InsertObject(m_pDrSolid);
+				//////////////
+				m_pDrSolid->SetToID_R(NewNID); //FromID_T 
+				////////
+			}
+			else
+				return -1;
+			///////////
+		}
+	}
+	/////////////////////////////////
+	// todo: after changing to String in DrSolid.h
+//	WORLD		m_Center_R;	// Circle
+	///////
+	return 0;
+}
+
+int CMI_SSPN::SpawnListsInSolid(pMATRIX pXFMat)
+{
+	CDListMgr*	pList;
+	int			nResult;
+	///////////////////////////////////////////////////////////////// CurveList
+    pList = m_pDrSolid->GetCurveList();
+	if(pList)
+	{
+		nResult = SpawnCurveListInSolid(pList,pXFMat);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocateSolidCurves(pList);
+	}
+	///////////////////////////////////////////////////////////////// NodeLists
+	/////////////////////////////////////////////////////////// CNode
+    pList = m_pDrSolid->GetCNodeList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, TRUE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocateSolidNodes(pList);
+	}
+	/////////////////////////////////////////////////////////// CN_BS
+    pList = m_pDrSolid->GetCN_BSList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, TRUE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocateSolidNodes(pList);
+	}
+	/////////////////////////////////////////////////////////// INode
+    pList = m_pDrSolid->GetINodeList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, FALSE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocateSolidNodes(pList);
+	}
+	/////////////////////////////////////////////////////////// ENode
+    pList = m_pDrSolid->GetENodeList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, FALSE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocateSolidNodes(pList);
+	}
+	/////////////////////////////////////////////////////////// Node
+    pList = m_pDrSolid->GetINodeList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, FALSE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocateSolidNodes(pList);
+	}
+	/////////////////////////////
+	return 0;
+	//////////////////////////////////////////////////////////////// Triangle List
+	CString Cid = m_pDrPatch->GetParentID();
+	////
+//	SpawnTriangleList(Cid, pXFMat);
+	/////////////////
+	return 0;
+}
+
+int CMI_SSPN::SpawnPentaList(CString Cid, pMATRIX pXFMat)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(SOLID);
+	//////////////////////////////////////////////////////////////////
+	int index;
+	CDrSolid* pOldSolid;
+	/////////
+	index = pObjectMgr->GetObjectIndexfromKey(SOLID,Cid,1);
+	if(index>=0)
+		pOldSolid = (CDrSolid*)(pDListMgr->GetObject(index));
+	else
+		pOldSolid = NULL;
+		////////////////
+	if(pOldSolid)
+	{
+		CDListMgr* pOldList = pOldSolid->GetPentaList();
+		if(pOldList->IsEmpty() )
+		return 0;
+		////////////////////////
+		CDListMgr* pNewList = m_pDrSolid->GetPentaList();
+		////////////////////////////////////////////////// copy
+		POSITION pos = pOldList->GetFirstObjectPos();
+		for (;pos !=NULL;)
+		pNewList->AddTail(pOldList->GetNextObject( pos));
+		///////
+	}
+	/////////
+	return 0;
+}
+	 		
+int CMI_SSPN::SpawnCurveListInSolid(CDListMgr* pFillList, pMATRIX pXFMat)
+{
+	if(pFillList->IsEmpty())
+		return 0;
+	////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	//////////////////////////////////////////////////////////////////
+	CDListMgr TempList;
+	////////////////////////////////////////////////// copy
+	POSITION pos = pFillList->GetFirstObjectPos();
+	for (;pos !=NULL;)
+		TempList.AddTail(pFillList->GetNextObject( pos));
+	////////////////////////////////////////////////// Empty it
+	pFillList->RemoveAll();
+	/////////////////////////////////////////////////////////////////// XForm 
+	int			nMaxNodes,index;
+	CDrCurve*	pNewCurve;
+	CString		NewCID;
+	int s;
+	/////////////////////////////////////////////////////////////////// XForm 
+	nMaxNodes		 	= TempList.GetCount();
+	////////////////////////////////////////// 	
+	for ( s = 0; s<nMaxNodes; s++)
+	{
+		CDrCurve* pOldCurve = (CDrCurve*)TempList.GetObject( s);
+		///////////////////////////////////////// Get ID
+		int nResult = SpawnCurve(pOldCurve,pXFMat,&NewCID);
+		///////////////////////////////////// in Curve 
+		if(nResult<0)
+			return -1;
+		//////////////
+		index = pObjectMgr->GetObjectIndexfromKey(CURVE,NewCID,1);
+		pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+		if(index>=0)
+		{						
+			pNewCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+			////////////////
+			pFillList->InsertObject(pNewCurve); //CNodeList 
+			//////////////////////////////////////// Reciprocate
+			pNewCurve->GetSolidList()->InsertObject(m_pDrSolid);
+			////////
+		}	
+		else
+			return -1;
+	}				
+	///////////////////////////////////////////////////////// Empty it
+	TempList.RemoveAll();
+	////////////
+	return 0;
+}
+	 		
+int CMI_SSPN::SpawnPatch(CDrPatch* pOldPatch,pMATRIX pXFMat,CString* pCid)
+{
+	/////////////////////////////////////////////////////////////////// XForm 
+	CString		OldID,SolidID="";
+	PATCHPROC	PProc;
+	int			nChLen;
+	////////////////////
+	CXForm	XForm(TRUE);	// Parallel
+	/////////////////////////////////////////////////////////// Data
+	if(m_pDrSolid)
+		SolidID				= m_pDrSolid->GetObjectID();		 // Spawned Solid
+	///////////////////////////////////////////// Name
+	nChLen	= SolidID.GetLength();
+	if(nChLen>NUM_LEN-2)
+		nChLen = NUM_LEN-2;
+	///////////////////////////////////////// Get ID
+	OldID		= pOldPatch->GetObjectID();
+	PProc		= pOldPatch->GetPatchProc();
+	////////////////////////////////////////////////////////////////// Name
+	*pCid	=	SolidID.Left(nChLen)+
+				OldID;
+	////////////////////////////////////////////////////////////////// CREATE	
+	CDrPatch* pNewPatch = PostPatch(*pCid, OldID, PProc);
+;	// Create DrPatch
+	if(!pNewPatch)	// Create DrPatch
+		return -1;
+	////////////////////////////////////////////////////////////////// XForm
+	m_pDrPatch = pNewPatch;
+	SpawnListsInPatch(pXFMat);
+	////////////////////////
+	return 0;
+}
+	 		
+int CMI_SSPN::SpawnPatchListInSolid(CDListMgr* pFillList, pMATRIX pXFMat)
+{
+	if(pFillList->IsEmpty())
+		return 0;
+	////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	//////////////////////////////////////////////////////////////////
+	CDListMgr TempList;
+	////////////////////////////////////////////////// copy
+	POSITION pos = pFillList->GetFirstObjectPos();
+	for (;pos !=NULL;)
+		TempList.AddTail(pFillList->GetNextObject( pos));
+	////////////////////////////////////////////////// Empty it
+	pFillList->RemoveAll();
+	/////////////////////////////////////////////////////////////////// XForm 
+	int			nMaxNodes,index;
+	CDrPatch*	pNewPatch;
+	CString		NewCID;
+	int s;
+	/////////////////////////////////////////////////////////////////// XForm 
+	nMaxNodes		 	= TempList.GetCount();
+	////////////////////////////////////////// 	
+	for ( s = 0; s<nMaxNodes; s++)
+	{
+		CDrPatch* pOldPatch = (CDrPatch*)TempList.GetObject( s);
+		///////////////////////////////////////// Get ID
+		int nResult = SpawnPatch(pOldPatch,pXFMat,&NewCID);
+		///////////////////////////////////// in Curve 
+		if(nResult<0)
+			return -1;
+		//////////////
+		index = pObjectMgr->GetObjectIndexfromKey(PATCH,NewCID,1);
+		pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+		if(index>=0)
+		{						
+			pNewPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+			////////////////
+			pFillList->InsertObject(pNewPatch); //CNodeList 
+			//////////////////////////////////////// Reciprocate
+			pNewPatch->GetSolidList()->InsertObject(m_pDrSolid);
+			////////
+		}	
+		else
+			return -1;
+	}				
+	///////////////////////////////////////////////////////// Empty it
+	TempList.RemoveAll();
+	////////////
+	return 0;
+}
+	 		
+void CMI_SSPN::ReciprocateSolidNodes(CDListMgr* pList)
+{
+	if(!pList || pList->IsEmpty())
+		return;
+	///////////////////////////////////
+	int s,nMaxNodes;
+	nMaxNodes = pList->GetCount();
+	/////////////////////////////
+	for (s = 0; s<nMaxNodes; s++)
+	{
+		CDrNode* pNewNode	= (CDrNode*)(pList->GetObject(s));
+		//////////////////////////////////////// Reciprocate
+		pNewNode->GetSolidList()->InsertObject(m_pDrSolid);
+		////////
+	}
+}
+
+void CMI_SSPN::ReciprocateSolidPatches(CDListMgr* pList)
+{
+	if(!pList || pList->IsEmpty())
+		return;
+	///////////////////////////////////
+	int s,nMaxPatches;
+	nMaxPatches = pList->GetCount();
+	/////////////////////////////
+	for (s = 0; s<nMaxPatches; s++)
+	{
+		CDrPatch* pNewPatch	= (CDrPatch*)(pList->GetObject(s));
+		//////////////////////////////////////// Reciprocate
+		pNewPatch->GetSolidList()->InsertObject(m_pDrSolid);
+		////////
+	}
+}
+
+void CMI_SSPN::ReciprocateSolidCurves(CDListMgr* pList)
+{
+	if(!pList || pList->IsEmpty())
+		return;
+	///////////////////////////////////
+	int s,nMaxCurves;
+	nMaxCurves = pList->GetCount();
+	/////////////////////////////
+	for (s = 0; s<nMaxCurves; s++)
+	{
+		CDrCurve* pNewCurve	= (CDrCurve*)(pList->GetObject(s));
+		//////////////////////////////////////// Reciprocate
+		pNewCurve->GetSolidList()->InsertObject(m_pDrSolid);
+		////////
+	}
+}
+
+void CMI_SSPN::Serialize(CArchive& ar)
+{
+
+	CMI_PSPN::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMI_SSPN:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMI_SSPN:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////// end of module //////////////////

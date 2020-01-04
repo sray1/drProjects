@@ -1,0 +1,49 @@
+; DBox_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	DBox_D32
+DESCRIPTION  'DrawBox DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitDBoxDLL												
+
+
+
+; CDBoxMgr
+	; Constructor and Destructor
+;	??0CDBoxMgr@@REC@XZ										
+;	??1CDBoxMgr@@VEC@XZ                                     
+	
+;	?classCDBoxMgr@CDBoxMgr@@2UCRuntimeClass@@A             
+;	?Serialize@CDBoxMgr@@VECXAEVCArchive@@@Z                
+
+;	?IsDrawBoxActive@CDBoxMgr@@VECHXZ						
+;	?SetDrawBoxStatus@CDBoxMgr@@VECXH@Z                     
+;	?GetActiveObjectType@CDBoxMgr@@VECHXZ                   
+;	?SetActiveObjectType@CDBoxMgr@@VECXH@Z                  
+;	?GetActiveToolType@CDBoxMgr@@VECHXZ                     
+;	?SetActiveToolType@CDBoxMgr@@VECXH@Z                    
+	
+
+; CDrawBox
+	; Constructor and Destructor
+ 	??0CDrawBox@@REC@XZ 									
+ 	??1CDrawBox@@VEC@XZ                                     
+
+;	?Create@CDrawBox@@RECHPEVCMDIFrameWnd@@VCRect@@@Z
+	?Create@CDrawBox@@RECHPEVCWnd@@VCRect@@@Z       
+
+ 	?GetBackColor@CDrawBox@@RECKXZ                          
+ 	?GetForeColor@CDrawBox@@RECKXZ                          
+ 	?GetHeight@CDrawBox@@RECIXZ                             
+ 	?GetWidth@CDrawBox@@RECIXZ                              
+ 	?GetActiveTool@CDrawBox@@RECHXZ                         
+ 	?GetActiveDrawObject@CDrawBox@@RECHXZ                   
+	?messageMap@CDrawBox@@1UAFX_MSGMAP@@A					
+
+  

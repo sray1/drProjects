@@ -1,0 +1,17 @@
+// Microsoft Developer Studio generated Help ID include file.
+// Used by MSolMgr.rc
+//
+#define HIDC_AXIS                       0x806c0402    // IDD_SOL_IN_REVOLV
+#define HIDC_AXIS_X                     0x806c03fc    // IDD_SOL_IN_REVOLV
+#define HIDC_AXIS_Y                     0x806c03fd    // IDD_SOL_IN_REVOLV
+#define HIDC_AXIS_Z                     0x806c03fe    // IDD_SOL_IN_REVOLV
+#define HIDC_ELEMS                      0x807d03ec    // IDD_LOFTX_SOLID
+#define HIDC_ELEMSV                     0x807103ee    // IDD_SOL_IN_TENSOR
+#define HIDC_ELEMSW                     0x807103f0    // IDD_SOL_IN_TENSOR
+#define HIDC_NEGATIVE                   0x806c0400    // IDD_SOL_IN_REVOLV
+#define HIDC_RATIO                      0x807d03ed    // IDD_SOLID_IN
+#define HIDC_RATIOV                     0x807103ef    // IDD_SOL_IN_TENSOR
+#define HIDC_RATIOW                     0x807103f1    // IDD_SOL_IN_TENSOR
+#define HIDC_STATIC                     0x807dffff    // IDD_LOFTX_SOLID
+#define HIDC_UPDATE                     0x807d038a    // IDD_SOLID_IN
+#define HIDD_CANCEL                     0x807d0002    // IDD_SOLID_IN

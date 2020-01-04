@@ -1,0 +1,1318 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+#include <afxtempl.h>	// CList
+
+#include "Def_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+///////////////////// 
+//#include "drawview.h" //for curve/patch 
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_Ms.h" // Mesh Types for Patch
+///////////////////// dialogMgr
+#include "MPatMgr.h"
+//#include "Dlg_Node.h"  
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "MI_GangP.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define MIN_CNODES_CURVE	4
+#define MIN_CNODES_PATCH	16
+/////////////////////////////////////
+#define wEQL(a,b)	((a).x ==(b).x) && ((a).y ==(b).y) \
+					&& ((a).z ==(b).z)  
+
+#define BARY2LIN_PT(i,j,nP)				(j)  + (i)*(nP)-(i)*((i)-1)/2
+#define BARY2LIN_TRI_1(i,j,nP)			(j)  + (i)*(2*(nP)-(i)-2)
+#define BARY2LIN_TRI_2(i,j,nP)			(j)  + (i)*(2*(nP)-(i)-2) - (nP) + (i)
+
+#define BARY2LIN_TRI_1_NEW(i,j,nP,nDeg)	( (j)  + ((i)*(2*(nP)-(i)-2))/(nDeg) )/(nDeg)
+#define BARY2LIN_TRI_2_NEW(i,j,nP,nDeg)	( (j - nDeg)  + ((i)*(2*(nP)-(i)-2))/(nDeg) - ((nP) - 1) + (i) )/(nDeg)
+//////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_GangP,CMI_GangC,1)
+/////////////////////////////////////////////////////////////////////////////
+CMI_GangP::CMI_GangP()
+{
+	m_pOut		= NULL;
+	m_pOutWts	= NULL;		// will be deleted in DrCurve.h
+	for (int i=0;i<4;i++)
+	{
+		m_pIn_S[i]		= NULL;
+		m_pInWts_S[i]	= NULL;
+	}
+    /////////////////////////////////////////// Mesh/Patch
+	m_CurrentPatchID	= "BLANK";
+	m_nMaxPatchCNodes_S	= MIN_CNODES_CURVE;
+	m_nMaxPatchCNodes_T	= MIN_CNODES_CURVE;
+	m_nMaxPatchCNodes	= m_nMaxPatchCNodes_S * m_nMaxPatchCNodes_T;
+}
+
+CMI_GangP::~CMI_GangP()
+{
+	if(m_pOut != NULL)
+	{
+		FreeMem(m_pOut);
+		m_pOut = NULL;
+	}	   
+}
+
+void CMI_GangP::GetInfo_Curve(CDrCurve* pDrCurve)
+{
+	/////////////////	
+	m_pWts_BZ_S			= pDrCurve->GetpWts_BZ_S();		
+	m_nMaxCurveCNodes_S = pDrCurve->GetMaxCNodes_S();
+	////////////////////////////////////////////////// FILL INFO
+	m_nDim_S			= pDrCurve->GetnDim_S();
+	m_pNum_t_S			= pDrCurve->GetNum_tPointer_S();
+	m_pDis_t_S			= pDrCurve->GetDis_tPointer_S();
+	m_pNum_t_Ex_S		= pDrCurve->GetNum_tPointer_Ex_S();
+	m_CurveType_S		= pDrCurve->GetCurveType_S();
+	m_nOrder_S			= pDrCurve->GetOrder_S();
+	///////////////////////////////////////////	
+	m_bClosed_S			= pDrCurve->IsClosed_S();		// X-Section
+	m_nOut_SCon			= (int)m_nMaxCurveCNodes_S;
+    ///////////////////////////////////
+	m_nOut_S			= (int)pDrCurve->GetLongOutPts();
+	m_nSegs_S			= pDrCurve->GetSegmentCount_S();	// for Uniform Output
+	//////// 
+	m_nSegs_SCon		= m_nOut_SCon - 1;
+	m_nMaxPatchCNodes_S = m_nOut_SCon;
+	///////////////////////////////
+}
+
+void CMI_GangP::FillCNodesLOCAL(CDListMgr* pCurveCNodeList,pDOUBLE pWts_S,
+							pWORLD pIn,pDOUBLE pInWts,int nMaxCNodes,
+							BOOL bSave)
+{
+	/////////////////////////////////////////
+	int i,j;
+	CDrNode* pDrNode;
+    /////////////////
+	WORLD 	LocalPos;
+	//////////////////////////////////////////// Get point 
+    for(i = 0; i<nMaxCNodes; i++)              
+    {
+		j = i;
+ 		if(m_bBack)	// Backward
+			j = nMaxCNodes-i-1;
+		pDrNode = (CDrNode*)(pCurveCNodeList->GetObject(j));
+    	//////////////////////////////////////// Save in Patch
+    										  // CNodeList
+		if(bSave)
+		{
+				m_pCNodeList->AddTail(pDrNode);
+				/////////////////////////////// Reciprocate 
+				pDrNode->GetPatchList()->InsertObject(m_pDrPatch);
+		}		
+    	//////////////////////////////////////// NPC Pt.
+    	LocalPos = *(pDrNode->GetLocalPos());
+    	/////////////////////////////////
+		pIn[i].x = LocalPos.x;	  
+		pIn[i].y = LocalPos.y;  
+		pIn[i].z = LocalPos.z;
+		//////////////////////////////////////// Wts
+		pInWts[i] = pWts_S[j];
+	}	
+}
+
+int CMI_GangP::InsertMeshInfo(BOOL bLoft)
+{
+	//////////////////////////////////////////////////////
+	// For ALL cases other than Mesh, All ControlNodes	//
+	// Must be Put in CNodeList of the Patch. However,	//
+	//	1.	some of them already created by generating	//
+	//		curve such as								//
+	//			DUCT & SWEEP: X-Section Curve CNodes	//
+	//			EXTRUDE/ROT.: Generating Curve CNodes	// I G N O R E
+	//			LOFT        : Start & End Curves'		// E V E R Y T H I N G 
+	//							CNodes					// H E R E
+	//	2.	Rest or In-Betweens have to generate		// 
+	//					DrNodes							//
+	//	3.	Inherent in Loft creation, Start/End Curves	//
+	//		Already created CNodes get interweaved		//
+	//		Need to sort out because we dont want to	//
+	//		create what are already posted				//
+	//////////////////////////////////////////////////////
+	WORLD		LocalPos;
+	CString		Nid,PatchID;
+	int			nChLen;
+	char		buf[10];
+    CDrNode* 	pAddNode;
+	int s,t,j;
+	///////////////////////////////////////////// Name
+	PatchID	= m_pDrPatch->GetObjectID();
+	nChLen	= PatchID.GetLength();
+	if(nChLen>4)
+		nChLen = 4;
+	////////////////////////////////////
+	for (t = 0; t<m_nMaxPatchCNodes_T; t++)
+	{
+		for (s = 0; s<m_nMaxPatchCNodes_S; s++)
+		{
+			if	(	(t == 0) &&
+				(	(m_PatchProc == PP_EXTRUDE) ||(m_PatchProc == PP_ROTATE) )		// first s of them already in List
+							// for Extrude & Rotate only
+				)	
+				continue;   // do nothing
+			///////////////////////
+			if( bLoft && (t == m_nMaxPatchCNodes_T-1) )
+			{
+				// get Already created saved in TemporaryList
+				pAddNode = (CDrNode*)m_CNListLoft.GetObject(s);
+				///////////////////////////////////// in PATCH 	
+   				m_pCNodeList->InsertObject(pAddNode); //CNodeList
+   				//////////////
+   				continue;
+   			}
+   			///////////////////////////////////////// CREATE	
+			Nid		= PatchID.Left(nChLen);
+		    //////////////////////////////////// Name
+		    sprintf(buf,"%d_%d",s,t);
+		    Nid += buf; 
+			////////////////////////////////////
+			j = t*m_nMaxPatchCNodes_S + s;
+			////////////////////////////		
+			LocalPos.x	= (m_pOut+j)->x;
+			LocalPos.y	= (m_pOut+j)->y;
+			LocalPos.z	= (m_pOut+j)->z;
+			///////////////////////////////////// in THE List 
+			pAddNode = PostNode(Nid,LocalPos,TRUE,FALSE);	// Create DrCNode
+			if(!pAddNode)	
+				return -1;
+			///////////////////////////////////// in PATCH 	
+   			m_pCNodeList->InsertObject(pAddNode); //CNodeList 
+			///////////////////////////////////// Reciprocate 
+			pAddNode->GetPatchList()->InsertObject(m_pDrPatch);
+		}				
+	}
+	////////////////////////////////////////// Save Info inPatch
+	m_pDrPatch->SetFromPtLocal_T(m_FromPt);
+	m_pDrPatch->SetToPtLocal_T(m_ToPt);
+	m_pDrPatch->SetAxis_T(m_vAxis);
+	////////////////////////////////////////////////////// All Other
+	m_pDrPatch->SetPatchType(m_PatchType);
+	m_pDrPatch->SetPatSubType(PS_QUADRILAT);
+	m_pDrPatch->SetCurveType_S(m_CurveType_S);
+	m_pDrPatch->SetCurveType_T(m_CurveType_T);
+	m_pDrPatch->SetMaxCNodes_S(m_nMaxPatchCNodes_S);
+	m_pDrPatch->SetMaxCNodes_T(m_nMaxPatchCNodes_T);
+	///////////////////////////////////////////////////
+	m_pDrPatch->SetSegmentCount_S(m_nSegs_S);	
+	m_pDrPatch->SetSegmentCount_T(m_nSegs_T); 
+	m_pDrPatch->SetClosed_S(m_bClosed_S);
+	m_pDrPatch->SetClosed_T(m_bClosed_T);
+	m_pDrPatch->SetDirty(TRUE);
+	//////////////////////////////////////////////////
+	// call to NumberOfPatches() Overrides:	//
+	//		m_nOut_S,m_nOut_T,m_nOut				//
+	////////////////////////////////////////////////// 
+	m_pDrPatch->SetLongOutPts(m_nOut);			// m_nOut	
+	m_pDrPatch->SetOut_S(m_nOut_S);	
+	m_pDrPatch->SetOut_T(m_nOut_T);
+	m_pDrPatch->SetOrder_S(m_nOrder_S);
+	m_pDrPatch->SetOrder_T(m_nOrder_T);
+	m_pDrPatch->SetnDim_S(m_nDim_S);
+	m_pDrPatch->SetnDim_T(m_nDim_T);
+	/////////////////////////////////////////////////////////
+	m_pDrPatch->SetMemInWts(m_pOutWts);		// wiil be deleted in CDrCurve.h
+	m_pDrPatch->SetNum_tPointer_S(m_pNum_t_S);			// Number of Outputs for each Output Segment
+	m_pDrPatch->SetDis_tPointer_S(m_pDis_t_S);			// t-distribution
+	m_pDrPatch->SetNum_tPointer_T(m_pNum_t_T);			// Number of Outputs for each Output Segment
+	m_pDrPatch->SetDis_tPointer_T(m_pDis_t_T);			// t-distribution
+	m_pDrPatch->SetNum_tPointer_Ex_S(m_pNum_t_Ex_S);// Circle Special
+					// Number of Outputs for each Output Segment
+	m_pDrPatch->SetNum_tPointer_Ex_T(m_pNum_t_Ex_T);// Circle Special
+					// Number of Outputs for each Output Segment
+	///////////////////////////////////
+	int nOutTotal = m_pDrPatch->NumberOfPatches();
+	if(nOutTotal != (int)m_nOut)
+	{
+		AfxMessageBox("Internal Problem:\nCMI_GangP::InsertMeshInfo\nm_nOut Mismatch!");
+		return - 1;
+	}
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrPatch->Calc_3DBoundsLocal();											
+	////////////////
+	return 0;
+}			
+
+int CMI_GangP::InsertMeshInfo_3()
+{
+	///////////////////////////////////////////////////////////////////////////////////
+	//	ALL Triangular Info SAVED in S-dir variables in Mi_GangP::InsertMeshInfo_3
+	//	EXCEPT: 
+	//	m_pDrPatch->SetMaxCNodes_T(m_nMaxPatchCNodes);		// Save Total Control Nodes
+	///////////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////////////////////////////
+	WORLD		LocalPos;
+	CString		Nid,PatchID;
+	int			nChLen;
+	char		buf[10];
+    CDrNode* 	pAddNode;
+	int i,j,k,m;
+	///////////////////////////////////////////// Name
+	PatchID	= m_pDrPatch->GetObjectID();
+	nChLen	= PatchID.GetLength();
+	if(nChLen>4)
+		nChLen = 4;
+	////////////////////////////////////
+	for (i = 0; i<m_nOut_SCon; i++)
+	{
+		for (j = 0; j<m_nOut_SCon -i; j++)
+		{
+   			///////////////////////////////////////// CREATE	
+			Nid		= PatchID.Left(nChLen);
+		    //////////////////////////////////// Name
+			k = m_nOut_SCon - i - j - 1; 
+		    sprintf(buf,"%d_%d_%d",i,j,k);
+		    Nid += buf; 
+			//////////////////////////////////// Barycentric to Linear
+			m = BARY2LIN_PT(i,j,m_nOut_SCon);
+			////////////////////////////		
+			LocalPos.x	= (m_pOut+m)->x;
+			LocalPos.y	= (m_pOut+m)->y;
+			LocalPos.z	= (m_pOut+m)->z;
+			///////////////////////////////////// in THE List 
+			pAddNode = PostNode(Nid,LocalPos,TRUE,FALSE);	// Create DrCNode
+			if(!pAddNode)	
+				return -1;
+			///////////////////////////////////// in PATCH 	
+   			m_pCNodeList->InsertObject(pAddNode); //CNodeList 
+			///////////////////////////////////// Reciprocate 
+			pAddNode->GetPatchList()->InsertObject(m_pDrPatch);
+		}				
+	}
+	////////////////////////////////////////// Save Info inPatch
+	m_pDrPatch->SetPatchType(m_PatchType);
+	m_pDrPatch->SetPatSubType(PS_TRIANGLE);
+	m_pDrPatch->SetCurveType_S(m_CurveType_S);
+	//////////////////////////////////////////////////////////////////////////
+	int nOutPerSeg	= m_pNum_t_S[0];
+	m_pDrPatch->SetSegmentCount_S(nOutPerSeg);			// Output Uniform for Triangular Patch
+	//////////////////////////////////////////////////////////////////////////
+	m_pDrPatch->SetClosed_S(m_bClosed_S);
+	m_pDrPatch->SetDirty(TRUE);
+	//////////////////////////////////////////////////
+	// call to NumberOfPatches() Overrides:	//
+	//		m_nOut_S,m_nOut_T,m_nOut				//
+	////////////////////////////////////////////////// 
+	m_pDrPatch->SetMaxCNodes_S(m_nMaxPatchCNodes_S);	// Save Control Nodes in Each side of Triangle
+	m_pDrPatch->SetMaxCNodes_T(m_nMaxPatchCNodes);		// Save Total Control Nodes
+	m_pDrPatch->SetLongOutPts(m_nOut);			 	
+	m_pDrPatch->SetOut_S(m_nOut_S);				// IN EACH DIRECTION	
+	m_pDrPatch->SetOrder_S(m_nOrder_S);
+	m_pDrPatch->SetnDim_S(m_nDim_S);
+	/////////////////////////////////////////////////////////
+	m_pDrPatch->SetMemInWts(m_pOutWts);		// wiil be deleted in CDrCurve.h
+	////////////////////////////////////// Now Store Triangle Database
+	if(m_nOrder_S == 2)
+		InsertTriangle_Linear();
+	if(m_nOrder_S == 3)
+		InsertTriangle_Quad();
+	if(m_nOrder_S == 4)
+		InsertTriangle_Cubic();
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrPatch->Calc_3DBoundsLocal();											
+	////////////////
+	return 0;
+}			
+
+int CMI_GangP::InsertTriangle_Linear()
+{
+	CDListMgr* 	pTriList = m_pDrPatch->GetTriangleList();											
+	/////////////////////////////////////////////////////
+	int i,j,nP,nB1,nB2,nTri,nTr1,nTr2,nOutPerSeg,nDeg,nCount=0;
+	///////////////////////
+	nP	= m_nOut_SCon;		// No. of Controls on each side	
+	////////////////////////////////////////
+	nOutPerSeg	= m_pNum_t_S[0];
+	nDeg		= m_nOrder_S - 1;
+	///////////////////////////
+	nB1		= (nP - 1)/nDeg;			// No. of Type1 Triangle Side Controls	
+	nB2		= (nP - 1 - nDeg)/nDeg;		// No. of Type2 Triangle Side Controls	
+	nTr1	= (nB1+1)*nB1/2;			// No. of Type1 Triangles	
+	nTr2	= (nB2+1)*nB2/2;			// No. of Type2 Triangles	
+	nTri	= nTr1 + nTr2;				// No. of Triangles	
+	///////////////////////////////////////////// Barycentric Coords
+	//
+	//
+	//			v,j
+	//			
+	//			|
+	//			|
+	//			o
+	//			| \
+	//		u=0 |   \ w=0
+	//			|     \
+	//			|-------o ----  u,i
+	//				v=0
+	///////////////////////////////////////////// Type 2 Triangles
+	//
+	//		Triangle K:
+	//
+	//				   i
+	//
+	//				   |
+	//				   |
+	//			N1     P2		
+	//			o------o------o N3
+	//			 \	K1 |\ K3  |
+	//			   \P1 o--oP4 o
+	//				 \ |-K--\ |
+	//				P0 o---o--o P5 ----- j
+	//					\ P3  |
+	//					  \K2 |
+	//						\ |
+	//						  o N2
+	///////////////////////////////////////////// Type 1 Triangles
+	//
+	//		Triangle K:
+	//						  i
+	//				   N2     
+	//				   o      |
+	//				   | \    |
+	//				   |K2 \  |
+	//			       | P3  \
+	//			    P5 o--o---o P0 ----- j
+	//			       |\--K--| \
+	//			       |P4o---oP1 \
+	//				   | K3 \-| K1  \
+	//				N3 o------o ----- o N1
+	//				          P2
+	//				        
+	//
+	/////////////////////////////////////////////////////////// LOOP
+	int nC,nCount1=0,nCount2=0,nPm1 = nP-nDeg-1;
+	///////////////////
+	for(i=0;i<=nPm1;i += nDeg)
+	{
+		////////////////////////////////
+		for(j=0;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Store:Type 1
+			nC = StoreType_1_Linear(i, j, nP, pTriList);
+			////////
+			if(nC<0)
+				return -1;
+			else
+				nCount1++;
+		}
+		///////////////////////////////////////////// Is Type2?
+		if(i==nPm1)
+			continue;
+		/////////////////////
+		for(j=nDeg;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Store:Type 2
+			nC = StoreType_2_Linear(i+nDeg, j, nP, pTriList);
+			////////
+			if(nC<0)
+				return -1;
+			else
+				nCount2++;
+			/////////////////
+		}
+	}
+	//////////////////
+	if(nCount1 != nTr1)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Linear\nnCount1 != nTr1!");
+		return - 1;
+	}
+	if(nCount2 != nTr2)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Linear\nnCount2 != nTr2!");
+		return - 1;
+	}
+	///////////////////////////
+	nCount = nCount1 + nCount2;
+	if(nCount != nTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Linear\nnCount != nTri!");
+		return - 1;
+	}
+	return 0;
+	
+}
+	
+int CMI_GangP::StoreType_1_Lin(int i, int j, int nP, CDListMgr* pTriList)
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	///////////////////////
+	int iMax,jMax,nPm1 = nP-1,nPm2 = nP-2;
+	int P[3],N1,N2,N3,K1,K2,K3,K;
+	int m,iB,jB;
+	//////////////////////////////// Number of Vertices
+	// ALWAYS 3 for LINEAR
+	//////////////////////////////////////////////// Current Triangle & Vertices
+	iMax	= nP - j - 1;
+	jMax	= nP - i - 1;
+	////////////////////////////////
+	K		= BARY2LIN_TRI_1(i,j,nP);
+	P[2]	= j + (i+1)*(2*nP-i)/2 - (nP-i);
+	P[0]	= P[2] + (nP-i);
+	P[1]	= P[2] + 1;
+	//////////////////////////////////////////////// Neighboring Triangle Linear Index
+	////////////////////////////////////// K1
+	iB		= i;
+	jB		= j+1;
+	/////////
+	K1		= (iB<0||iB>=iMax||jB<0||jB>=jMax)?-1:
+				BARY2LIN_TRI_2(iB,jB,nP);
+	////////////////////////////////////// K2
+	iB		= i+1;
+	jB		= j;
+	/////////
+	K2		= (iB<0||iB>=iMax||jB<0||jB>=jMax)?-1:
+				BARY2LIN_TRI_2(iB,jB,nP);
+	////////////////////////////////////// K3
+	iB		= i+1;
+	jB		= j+1;
+	/////////
+	K3		= (iB<0||iB>=iMax||jB<0||jB>=jMax)?-1:
+				BARY2LIN_TRI_2(iB,jB,nP);
+	//////////////////////////////////////////////// Neighboring Node Linear Index
+	////////////////////////////////////// N1
+	iB		= i-1;
+	/////////
+	N1		= (iB<0)?-1:P[1] - (nP-i+1);
+	////////////////////////////////////// N2
+	jB		= j-1;
+	/////////
+	N2		= (jB<0)?-1:P[0] - 1;
+	////////////////////////////////////// N3
+	iB		= i+1;
+	iMax	= nP - (j+1) - 1;
+	/////////
+	N3		= (iB>iMax)?-1:P[0] + 1;
+	////////////////////////////////////// SAVE
+	CTriangle* pTri = new CTriangle;
+	if(!pTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Linear\nMemory Problem!");
+		return - 1;
+	}
+	////////////////////////////////
+	pTri->SetType(1);
+	pTri->SetPatIndex(K);
+	pTri->SetDegree(m_nOrder_S-1);
+	for (m = 0;m<3;m++)
+		pTri->SetVertexIndex(P[m],m);
+	////////////////////////////////
+	pTri->SetNebrVertexIndex(N1,0);
+	pTri->SetNebrVertexIndex(N2,1);
+	pTri->SetNebrVertexIndex(N3,2);
+	pTri->SetNebrTriangleIndex(K1,0);
+	pTri->SetNebrTriangleIndex(K2,1);
+	pTri->SetNebrTriangleIndex(K3,2);
+/*
+	////////////////////////////////////////
+	CDListMgr* pNodeList = pTri->GetNodeList();
+	////////////////////
+	for (m = 0;m<3;m++)
+	{
+		CDrNode* pNode = (CDrNode*)m_pCNodeList->GetObject(P[m]);
+		/////// save
+		pNodeList->InsertObject(pNode);
+	}
+*/
+	////////////////////////////////////////////////////////// Output Segment
+	pTri->SetOutSeg(nOutPerSeg);
+//	pTri->SetOutSeg(m_nSegs_S);
+	///////////////////////////
+	pTri->SetiOutGlo(i);
+	pTri->SetjOutGlo(j);
+	////////////////////////////////////////
+	CList<int,int>* pCNIndexList = pTri->GetCNIndexList();
+	////////////////////
+	for (m = 0;m<3;m++)
+	{
+		/////// save suitable for display later in DrSolid
+		pCNIndexList->AddTail(P[2-m]);	// P3(i=0,j=0)
+										// P2(i=0,j=1)and then 
+										// P1(i=1,j=0)
+	}
+	///////////////////////////////////////// Save Triangle
+	pTriList->InsertObject(pTri);
+	/////////////////////////////
+	return 0;
+
+}
+	
+int CMI_GangP::StoreType_2_Lin(int i, int j, int nP, CDListMgr* pTriList)
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	///////////////////////
+	int iMax,jMax,nPm1 = nP-1,nPm2 = nP-2;
+	int P[3],N1,N2,N3,K1,K2,K3,K;
+	int m,iB,jB;
+	//////////////////////////////// Number of Vertices
+	// ALWAYS 3 for LINEAR
+	//////////////////////////////////////////////// Current Triangle & Vertices
+	iMax	= nP - j - 1;
+	jMax	= nP - i - 1;
+	////////////////////////////////
+	K		= BARY2LIN_TRI_2(i,j,nP);
+	P[2]	= j  + (i+1)*(2*nP-i)/2 - (nP-i);
+	P[0]	= P[2] - (nP-i+1);
+	P[1]	= P[2] - 1;
+	//////////////////////////////////////////////// Neighboring Triangle Linear Index
+	// Type 2 ALWAYS has neighboring Triangles
+	////////////////////////////////////// K1
+	iB		= i;
+	jB		= j-1;
+	/////////
+	K1		= BARY2LIN_TRI_1(iB,jB,nP);
+	////////////////////////////////////// K2
+	iB		= i-1;
+	jB		= j;
+	/////////
+	K2		= BARY2LIN_TRI_1(iB,jB,nP);
+	////////////////////////////////////// K3
+	iB	= i-1;
+	jB	= j-1;
+	/////////
+	K3		= BARY2LIN_TRI_1(iB,jB,nP);
+	//////////////////////////////////////////////// Neighboring Node Linear Index
+	// Type 2 ALWAYS has neighboring Vertices
+	////////////////////////////////////// N1
+	N1		= P[1] + (nP-i);
+	////////////////////////////////////// N2
+	N2		= P[0] + 1;
+	////////////////////////////////////// N3
+	N3		= P[0] - 1;
+	////////////////////////////////////// SAVE
+	CTriangle* pTri = new CTriangle;
+	if(!pTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Linear\nMemory Problem!");
+		return - 1;
+	}
+	////////////////////////////////
+	pTri->SetType(2);
+	pTri->SetPatIndex(K);
+	pTri->SetDegree(m_nOrder_S-1);
+	for (m = 0;m<3;m++)
+		pTri->SetVertexIndex(P[m],m);
+	/////////////////////////////////
+	pTri->SetNebrVertexIndex(N1,0);
+	pTri->SetNebrVertexIndex(N2,1);
+	pTri->SetNebrVertexIndex(N3,2);
+	pTri->SetNebrTriangleIndex(K1,0);
+	pTri->SetNebrTriangleIndex(K2,1);
+	pTri->SetNebrTriangleIndex(K3,2);
+/*
+	////////////////////////////////////////
+	CDListMgr* pNodeList = pTri->GetNodeList();
+	////////////////////
+	for (m = 0;m<3;m++)
+	{
+		CDrNode* pNode = (CDrNode*)m_pCNodeList->GetObject(P[m]);
+		/////// save
+		pNodeList->InsertObject(pNode);
+	}
+*/
+	////////////////////////////////////////////////////////// Output Segment
+	pTri->SetOutSeg(nOutPerSeg);
+//	pTri->SetOutSeg(m_nSegs_S);
+	///////////////////////////
+	pTri->SetiOutGlo(i);
+	pTri->SetjOutGlo(j);
+	////////////////////////////////////////
+	CList<int,int>* pCNIndexList = pTri->GetCNIndexList();
+	////////////////////
+	for (m = 0;m<3;m++)
+	{
+		/////// save suitable for display later in DrSolid
+		pCNIndexList->AddTail(P[2-m]);	// P3(i=0,j=0)
+										// P2(i=0,j=1)and then 
+										// P1(i=1,j=0)
+	}
+	///////////////////////////////////////// Save Triangle
+	pTriList->InsertObject(pTri);
+	/////////////////////////////
+	return 0;
+
+}
+
+int CMI_GangP::InsertTriangle_Quad()
+{
+	CDListMgr* 	pTriList = m_pDrPatch->GetTriangleList();											
+	/////////////////////////////////////////////////////
+	int i,j,nP,nB1,nB2,nTri,nTr1,nTr2,nOutPerSeg,nDeg,nCount=0;
+	///////////////////////
+	nP	= m_nOut_SCon;		// No. of Controls on each side	
+	////////////////////////////////////////
+	nOutPerSeg	= m_pNum_t_S[0];
+	nDeg		= m_nOrder_S - 1;
+	///////////////////////////
+	nB1		= (nP - 1)/nDeg;			// No. of Type1 Triangle Side Controls	
+	nB2		= (nP - 1 - nDeg)/nDeg;		// No. of Type2 Triangle Side Controls	
+	nTr1	= (nB1+1)*nB1/2;			// No. of Type1 Triangles	
+	nTr2	= (nB2+1)*nB2/2;			// No. of Type2 Triangles	
+	nTri	= nTr1 + nTr2;				// No. of Triangles	
+	///////////////////////////////////////////// Barycentric Coords
+	//
+	//
+	//			v,j
+	//			
+	//			|
+	//			|
+	//			o
+	//			| \
+	//		u=0 |   \ w=0
+	//			|     \
+	//			|-------o ----  u,i
+	//				v=0
+	///////////////////////////////////////////// Type 2 Triangles
+	//
+	//		Triangle K:
+	//
+	//				   i
+	//
+	//				   |
+	//				   |
+	//			N1     P2		
+	//			o------o------o N3
+	//			 \	K1 |\ K3  |
+	//			   \P1 o--oP4 o
+	//				 \ |-K--\ |
+	//				P0 o---o--o P5 ----- j
+	//					\ P3  |
+	//					  \K2 |
+	//						\ |
+	//						  o N2
+	///////////////////////////////////////////// Type 1 Triangles
+	//
+	//		Triangle K:
+	//						  i
+	//				   N2     
+	//				   o      |
+	//				   | \    |
+	//				   |K2 \  |
+	//			       | P3  \
+	//			    P5 o--o---o P0 ----- j
+	//			       |\--K--| \
+	//			       |P4o---oP1 \
+	//				   | K3 \-| K1  \
+	//				N3 o------o ----- o N1
+	//				          P2
+	//				        
+	//
+	/////////////////////////////////////////////////////////// LOOP
+	int nC,nCount1=0,nCount2=0,nPm1 = nP-nDeg-1;
+	///////////////////
+	for(i=0;i<=nPm1;i += nDeg)
+	{
+		////////////////////////////////
+		for(j=0;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Store:Type 1
+			nC = StoreType_1_Quad(i, j, nP, pTriList);
+			////////
+			if(nC<0)
+				return -1;
+			else
+				nCount1++;
+		}
+		///////////////////////////////////////////// Is Type2?
+		if(i==nPm1)
+			continue;
+		/////////////////////
+		for(j=nDeg;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Store:Type 2
+			nC = StoreType_2_Quad(i+nDeg, j, nP, pTriList);
+			////////
+			if(nC<0)
+				return -1;
+			else
+				nCount2++;
+			/////////////////
+		}
+	}
+	//////////////////
+	if(nCount1 != nTr1)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Quad\nnCount1 != nTr1!");
+		return - 1;
+	}
+	if(nCount2 != nTr2)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Quad\nnCount2 != nTr2!");
+		return - 1;
+	}
+	///////////////////////////
+	nCount = nCount1 + nCount2;
+	if(nCount != nTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Quad\nnCount != nTri!");
+		return - 1;
+	}
+	return 0;
+	
+}
+
+int CMI_GangP::StoreType_1_Quad(int i, int j, int nP, CDListMgr* pTriList)
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	////////////////////////////////
+	int P[6],K,m;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  6 for Quad
+	//////////////////////////////////////////////// Current Triangle & Vertices
+	K		= BARY2LIN_TRI_1_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j+1,nP);
+	P[2]	= BARY2LIN_PT(i		,j+2,nP);
+	P[3]	= BARY2LIN_PT(i+1	,j	,nP);
+	P[4]	= BARY2LIN_PT(i+1	,j+1,nP);
+	P[5]	= BARY2LIN_PT(i+2	,j	,nP);
+	//////////////////////////////////////////////// Neighboring Triangle Linear Index todo:LATER
+	////////////////////////////////////// SAVE
+	CTriangle* pTri = new CTriangle;
+	if(!pTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::StoreType_1_Quad\n!pTri:Memory Problem!");
+		return - 1;
+	}
+	////////////////////////////////
+	pTri->SetType(1);
+	pTri->SetPatIndex(K);
+	pTri->SetDegree(nDeg);
+	for (m = 0;m<6;m++)
+		pTri->SetVertexIndex(P[m],m);
+	////////////////////////////////////////////////////////// Output Segment
+	pTri->SetOutSeg(nOutPerSeg);
+	///////////////////////////
+	pTri->SetiOutGlo(i/nDeg*nOutPerSeg);
+	pTri->SetjOutGlo(j/nDeg*nOutPerSeg);
+	////////////////////////////////////////
+	CList<int,int>* pCNIndexList = pTri->GetCNIndexList();
+	////////////////////
+	for (m = 0;m<6;m++)
+	{
+		/////// save suitable for display later in DrSolid
+		pCNIndexList->AddTail(P[m]);	
+	}
+	///////////////////////////////////////// Save Triangle
+	pTriList->InsertObject(pTri);
+	/////////////////////////////
+	return 0;
+
+}
+
+int CMI_GangP::StoreType_2_Quad(int i, int j, int nP, CDListMgr* pTriList)
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	////////////////////////////////
+	int P[6],K,m;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  6 for Quad
+	//////////////////////////////////////////////// Current Triangle & Vertices
+	K		= BARY2LIN_TRI_2_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j-1,nP);
+	P[2]	= BARY2LIN_PT(i		,j-2,nP);
+	P[3]	= BARY2LIN_PT(i-1	,j	,nP);
+	P[4]	= BARY2LIN_PT(i-1	,j-1,nP);
+	P[5]	= BARY2LIN_PT(i-2	,j	,nP);
+	//////////////////////////////////////////////// Neighboring Triangle Linear Index todo:LATER
+	// Type 2 ALWAYS has neighboring Triangles
+	////////////////////////////////////// K1
+	////////////////////////////////////// K2
+	////////////////////////////////////// K3
+	//////////////////////////////////////////////// Neighboring Node Linear Index
+	// Type 2 ALWAYS has neighboring Vertices
+	////////////////////////////////////// SAVE
+	CTriangle* pTri = new CTriangle;
+	if(!pTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::StoreType_2_Quad\n!pTri:Memory Problem!");
+		return - 1;
+	}
+	////////////////////////////////
+	pTri->SetType(2);
+	pTri->SetPatIndex(K);
+	pTri->SetDegree(nDeg);
+	for (m = 0;m<6;m++)
+		pTri->SetVertexIndex(P[m],m);
+	////////////////////////////////////////////////////////// Output Segment
+	pTri->SetOutSeg(nOutPerSeg);
+	///////////////////////////
+	pTri->SetiOutGlo(i/nDeg*nOutPerSeg);
+	pTri->SetjOutGlo(j/nDeg*nOutPerSeg);
+	////////////////////////////////////////
+	CList<int,int>* pCNIndexList = pTri->GetCNIndexList();
+	////////////////////
+	for (m = 0;m<6;m++)
+	{
+		/////// save suitable for display later in DrSolid
+		pCNIndexList->AddTail(P[m]);
+	}
+	///////////////////////////////////////// Save Triangle
+	pTriList->InsertObject(pTri);
+	/////////////////////////////
+	return 0;
+
+}
+
+int CMI_GangP::InsertTriangle_Cubic()
+{
+	CDListMgr* 	pTriList = m_pDrPatch->GetTriangleList();											
+	/////////////////////////////////////////////////////
+	int i,j,nP,nB1,nB2,nTri,nTr1,nTr2,nOutPerSeg,nDeg,nCount=0;
+	///////////////////////
+	nP	= m_nOut_SCon;		// No. of Controls on each side	
+	////////////////////////////////////////
+	nOutPerSeg	= m_pNum_t_S[0];
+	nDeg		= m_nOrder_S - 1;
+	///////////////////////////
+	nB1		= (nP - 1)/nDeg;			// No. of Type1 Triangle Side Controls	
+	nB2		= (nP - 1 - nDeg)/nDeg;		// No. of Type2 Triangle Side Controls	
+	nTr1	= (nB1+1)*nB1/2;			// No. of Type1 Triangles	
+	nTr2	= (nB2+1)*nB2/2;			// No. of Type2 Triangles	
+	nTri	= nTr1 + nTr2;				// No. of Triangles	
+	///////////////////////////////////////////// Barycentric Coords
+	//
+	//
+	//			v,j
+	//			
+	//			|
+	//			|
+	//			o
+	//			| \
+	//		u=0 |   \ w=0
+	//			|     \
+	//			|-------o ----  u,i
+	//				v=0
+	///////////////////////////////////////////// Type 2 Triangles
+	//
+	//		Triangle K:
+	//
+	//				   i
+	//
+	//				   |
+	//				   |
+	//			N1     P2		
+	//			o------o------o N3
+	//			 \	K1 |\ K3  |
+	//			   \P1 o--oP4 o
+	//				 \ |-K--\ |
+	//				P0 o---o--o P5 ----- j
+	//					\ P3  |
+	//					  \K2 |
+	//						\ |
+	//						  o N2
+	///////////////////////////////////////////// Type 1 Triangles
+	//
+	//		Triangle K:
+	//						  i
+	//				   N2     
+	//				   o      |
+	//				   | \    |
+	//				   |K2 \  |
+	//			       | P3  \
+	//			    P5 o--o---o P0 ----- j
+	//			       |\--K--| \
+	//			       |P4o---oP1 \
+	//				   | K3 \-| K1  \
+	//				N3 o------o ----- o N1
+	//				          P2
+	//				        
+	//
+	/////////////////////////////////////////////////////////// LOOP
+	int nC,nCount1=0,nCount2=0,nPm1 = nP-nDeg-1;
+	///////////////////
+	for(i=0;i<=nPm1;i += nDeg)
+	{
+		////////////////////////////////
+		for(j=0;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Store:Type 1
+			nC = StoreType_1_Cubic(i, j, nP, pTriList);
+			////////
+			if(nC<0)
+				return -1;
+			else
+				nCount1++;
+		}
+		///////////////////////////////////////////// Is Type2?
+		if(i==nPm1)
+			continue;
+		/////////////////////
+		for(j=nDeg;j<=nPm1-i;j += nDeg)
+		{
+			////////////////////////////////////////////// Store:Type 2
+			nC = StoreType_2_Cubic(i+nDeg, j, nP, pTriList);
+			////////
+			if(nC<0)
+				return -1;
+			else
+				nCount2++;
+			/////////////////
+		}
+	}
+	//////////////////
+	if(nCount1 != nTr1)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Cubic\nnCount1 != nTr1!");
+		return - 1;
+	}
+	if(nCount2 != nTr2)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Cubic\nnCount2 != nTr2!");
+		return - 1;
+	}
+	///////////////////////////
+	nCount = nCount1 + nCount2;
+	if(nCount != nTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::InsertTriangle_Cubic\nnCount != nTri!");
+		return - 1;
+	}
+	return 0;
+	
+}
+
+int CMI_GangP::StoreType_1_Cubic(int i, int j, int nP, CDListMgr* pTriList)
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	////////////////////////////////
+	int P[10],K,m;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  10 for Cubic
+	//////////////////////////////////////////////// Current Triangle & Vertices
+	K		= BARY2LIN_TRI_1_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j+1,nP);
+	P[2]	= BARY2LIN_PT(i		,j+2,nP);
+	P[3]	= BARY2LIN_PT(i		,j+3,nP);
+	P[4]	= BARY2LIN_PT(i+1	,j	,nP);
+	P[5]	= BARY2LIN_PT(i+1	,j+1,nP);
+	P[6]	= BARY2LIN_PT(i+1	,j+2,nP);
+	P[7]	= BARY2LIN_PT(i+2	,j	,nP);
+	P[8]	= BARY2LIN_PT(i+2	,j+1,nP);
+	P[9]	= BARY2LIN_PT(i+3	,j	,nP);
+	//////////////////////////////////////////////// Neighboring Triangle Linear Index todo:LATER
+	////////////////////////////////////// SAVE
+	CTriangle* pTri = new CTriangle;
+	if(!pTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::StoreType_1_Cubic\n!pTri:Memory Problem!");
+		return - 1;
+	}
+	////////////////////////////////
+	pTri->SetType(1);
+	pTri->SetPatIndex(K);
+	pTri->SetDegree(nDeg);
+	for (m = 0;m<10;m++)
+		pTri->SetVertexIndex(P[m],m);
+	////////////////////////////////
+	////////////////////////////////////////////////////////// Output Segment
+	pTri->SetOutSeg(nOutPerSeg);
+	///////////////////////////
+	pTri->SetiOutGlo(i/nDeg*nOutPerSeg);
+	pTri->SetjOutGlo(j/nDeg*nOutPerSeg);
+	////////////////////////////////////////
+	CList<int,int>* pCNIndexList = pTri->GetCNIndexList();
+	////////////////////
+	for (m = 0;m<10;m++)
+	{
+		/////// save suitable for display later in DrSolid
+		pCNIndexList->AddTail(P[m]);	
+	}
+	///////////////////////////////////////// Save Triangle
+	pTriList->InsertObject(pTri);
+	/////////////////////////////
+	return 0;
+
+}
+
+int CMI_GangP::StoreType_2_Cubic(int i, int j, int nP, CDListMgr* pTriList)
+{
+	int nOutPerSeg	= m_pNum_t_S[0];
+	int nDeg		= m_nOrder_S - 1;
+	////////////////////////////////
+	int P[10],K,m;
+	//////////////////////////////// Number of Vertices
+	// Triangle # =  10 for Cubic
+	//////////////////////////////////////////////// Current Triangle & Vertices
+	K		= BARY2LIN_TRI_2_NEW(i,j,nP,nDeg);
+	P[0]	= BARY2LIN_PT(i		,j	,nP);
+	P[1]	= BARY2LIN_PT(i		,j-1,nP);
+	P[2]	= BARY2LIN_PT(i		,j-2,nP);
+	P[3]	= BARY2LIN_PT(i		,j-3,nP);
+	P[4]	= BARY2LIN_PT(i-1	,j	,nP);
+	P[5]	= BARY2LIN_PT(i-1	,j-1,nP);
+	P[6]	= BARY2LIN_PT(i-1	,j-2,nP);
+	P[7]	= BARY2LIN_PT(i-2	,j	,nP);
+	P[8]	= BARY2LIN_PT(i-2	,j-1,nP);
+	P[9]	= BARY2LIN_PT(i-3	,j	,nP);
+	//////////////////////////////////////////////// Neighboring Triangle Linear Index todo:LATER
+	////////////////////////////////
+	// Type 2 ALWAYS has neighboring Triangles
+	////////////////////////////////////// K1
+	////////////////////////////////////// K2
+	////////////////////////////////////// K3
+	//////////////////////////////////////////////// Neighboring Node Linear Index
+	// Type 2 ALWAYS has neighboring Vertices
+	////////////////////////////////////// SAVE
+	CTriangle* pTri = new CTriangle;
+	if(!pTri)
+	{
+		AfxMessageBox("Error:\nCMI_GangP::StoreType_2_Cubic\n!pTri:Memory Problem!");
+		return - 1;
+	}
+	////////////////////////////////
+	pTri->SetType(2);
+	pTri->SetPatIndex(K);
+	pTri->SetDegree(nDeg);
+	for (m = 0;m<10;m++)
+		pTri->SetVertexIndex(P[m],m);
+	////////////////////////////////////////////////////////// Output Segment
+	pTri->SetOutSeg(nOutPerSeg);
+	///////////////////////////
+	pTri->SetiOutGlo(i/nDeg*nOutPerSeg);
+	pTri->SetjOutGlo(j/nDeg*nOutPerSeg);
+	////////////////////////////////////////
+	CList<int,int>* pCNIndexList = pTri->GetCNIndexList();
+	////////////////////
+	for (m = 0;m<10;m++)
+	{
+		/////// save suitable for display later in DrSolid
+		pCNIndexList->AddTail(P[m]);
+	}
+	///////////////////////////////////////// Save Triangle
+	pTriList->InsertObject(pTri);
+	/////////////////////////////
+	return 0;
+
+}
+////////////////// Control Node Generation /////////////////
+int CMI_GangP::CurveNodesSaveAsCNodes(CDListMgr* pListTemp,int tIndex)
+{
+	//////////////////////////////////////////////////////
+	WORLD		LocalPos;
+	CString		Nid,PatchID;
+	int			nChLen;
+	char		buf[10];
+    CDrNode* 	pAddNode;
+	int s,t,index;
+	//////////////////////////////////// Name
+	PatchID	= m_pDrPatch->GetObjectID();
+	nChLen	= PatchID.GetLength();
+	if(nChLen>4)
+		nChLen = 4;
+	//////////////////////////////
+	t = tIndex;
+	///////////	
+	for (s = 0; s<m_nOut_S; s++)
+	{
+		///////////////////////////////////////// CREATE	
+		Nid	= PatchID.Left(nChLen);
+	    //////////////////////////////////// Name
+	    sprintf(buf,"%d%d",s,t);
+	    Nid += buf; 
+		//////////////////////////////////// Node Index in m_pOut
+		index = s;
+		LocalPos = *(m_pOut+index);
+		////////
+		pAddNode = PostNode(Nid,LocalPos,TRUE,FALSE); 	//CNodes = TRUE
+		pListTemp->InsertObject(pAddNode);
+	}
+	return 0;		
+}
+
+void CMI_GangP::UnitAxisFromEndNodes(int nType)
+{
+	//////////////////////////////////////////////////////////////
+	// nType = 0, do it all the way(Axis):Rotate/Extrude
+	//       = 1, just compute LocalPos of m_FromID
+	//			  (For Sweep/Duct Anchor Node)
+	//////////////////////////////////////////////////////////////
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+    /////////////////
+	int 		index;
+	CDrNode* 	pDrNode;
+//    int			nPrecision;
+//	long 		lCoord_1[3],lCoord_2[3];
+//	WORLD		ptDest_1,ptDest_2;
+	////////////////////////////////////////////////////// FromNode
+	index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_FromID,1);
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	if(index>=0)
+		pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+	else
+		AfxMessageBox("CMI_GangP::UnitAxisFromEndNodes");	
+   	///////////////////////////////////////////// get Raw Pt.
+   	m_FromPt = *(pDrNode->GetLocalPos());
+	//////////////////////////////// For Sweep/duct
+	if(nType == 1)
+		return; 
+	////////////////////////////////////////////////////// ToNode
+	index	= pObjectMgr->GetObjectIndexfromKey(NODE,m_ToID,1);
+	pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+	pDrNode	= (CDrNode*)(pDListMgr->GetObject(index));
+   	///////////////////////////////////////////// get Raw Pt.
+  	m_ToPt = *(pDrNode->GetLocalPos());
+	///////////////////////////////////////////// Vector
+	m_vAxis.x = m_ToPt.x - m_FromPt.x;  
+	m_vAxis.y = m_ToPt.y - m_FromPt.y;  
+	m_vAxis.z = m_ToPt.z - m_FromPt.z;  
+	///////////////////////// Unit
+	double NewD =	m_vAxis.x*m_vAxis.x +  
+    				m_vAxis.y*m_vAxis.y +
+    				m_vAxis.z*m_vAxis.z;
+	double r = 1.0/sqrt(NewD);
+	///////////////////////////// Unit vector
+	m_vAxis.x *= r;  
+	m_vAxis.y *= r;  
+	m_vAxis.z *= r;
+	///////////////
+}
+
+int CMI_GangP::FillMeshNodesPatch(CDrPatch* pDrPatch, pWORLD pOut, pDOUBLE pOutWts )
+{
+    //////////////////////////////////////////////////////
+	pDrPatch->RefillCNLocalPosForPosting();	// filling m_pIn in DrCurve w/ LocalPos
+	///////////////////////////////////////
+	if(	m_PatSubType == PS_TRIANGLE)
+		pDrPatch->Generate_Patch3(pOut, pOutWts);
+	else
+		pDrPatch->Generate_Patch4(pOut, pOutWts);
+	//////////////////////////////////////////		
+	if(!m_bBack)
+		return 0;
+/*
+	////////////////////////////////////////// BackWard
+	pWORLD pBk		= FixMem(nOut);
+	///////////////
+	for(int i=0;i<nOut;i++)
+	{
+		pBk[i].x	= pOut[nOut-i-1].x;
+		pBk[i].y	= pOut[nOut-i-1].y;
+		pBk[i].z	= pOut[nOut-i-1].z;
+	}
+	/////////////
+	for(i=0;i<nOut;i++)
+	{
+		pOut[i].x	= pBk[i].x;
+		pOut[i].y	= pBk[i].y;
+		pOut[i].z	= pBk[i].z;
+	}
+	FreeMem(pBk);
+*/
+	/////////////////
+	return 0;
+}
+
+int CMI_GangP::FillMeshNormalsPatch(CDrPatch* pDrPatch, pWORLD pOut )
+{
+//	pDrPatch->RefillCNLocalPosForPosting();	// filling m_pIn in DrCurve w/ LocalPos
+	///////////////////////////////////////
+	if(	m_PatSubType == PS_TRIANGLE)
+		pDrPatch->Generate_Tangents_N_Normal3(pOut);
+	else
+		pDrPatch->Generate_Tangents_N_Normal4(pOut);
+	//////////////////////////////////////////		
+	if(!m_bBack)
+		return 0;
+/*
+	////////////////////////////////////////// BackWard
+	pWORLD pBk		= FixMem(nOut);
+	///////////////
+	for(int i=0;i<nOut;i++)
+	{
+		pBk[i].x	= pOut[nOut-i-1].x;
+		pBk[i].y	= pOut[nOut-i-1].y;
+		pBk[i].z	= pOut[nOut-i-1].z;
+	}
+	/////////////
+	for(i=0;i<nOut;i++)
+	{
+		pOut[i].x	= pBk[i].x;
+		pOut[i].y	= pBk[i].y;
+		pOut[i].z	= pBk[i].z;
+	}
+	FreeMem(pBk);
+*/
+	/////////////////
+	return 0;
+}
+
+CDrPatch* CMI_GangP::PostPatch(CString& Cid,CString& OldID,PATCHPROC PProc)
+{
+
+	CMPatMgr 	MPatMgr;
+	CMPatMgr* 	pMPatMgr = &MPatMgr;
+	CDrPatch*	pPatch;
+	/////////////////////////////////////////////
+	pPatch = pMPatMgr->SpawnPatch(Cid, OldID, PProc);
+	//////////////////////////////////////////////
+	return pPatch;
+}
+////////////////////////////////////////////////////////////
+void CMI_GangP::Serialize(CArchive& ar)
+{
+
+	CMI_GangC::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMI_GangP:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMI_GangP:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+}
+///////////////////////////////////// end of Module //////////////////////		
+
+

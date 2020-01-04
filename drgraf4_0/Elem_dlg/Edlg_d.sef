@@ -1,0 +1,56 @@
+; EDlg_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	EDlg_D
+DESCRIPTION  'ElemDlgs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitEDlgDLL												@2 NONAME
+
+; CEDlgMgr
+;	; Constructor and Destructor
+	??0CEDlgMgr@@REC@XZ
+	??1CEDlgMgr@@VEC@XZ
+
+	?CreateNode@CEDlgMgr@@RECPEVCDrNode@@AEVCString@@UWORLD@@H@Z
+	?DoModal_Node@CEDlgMgr@@RECIHH@Z
+	?DoModal_Node@CEDlgMgr@@RECIHHPEULPOINT3@@PEVCString@@H@Z
+	?DoModal_Pipe@CEDlgMgr@@RECIH@Z
+	?DoModal_Plat@CEDlgMgr@@RECIHH@Z 
+	
+?DoModal_Curve_LB@CEDlgMgr@@RECIPEVCString@@W4CURVETYPE@@H@Z
+?DoModal_Curve_RB@CEDlgMgr@@RECIPEVCString@@W4CURVETYPE@@H@Z
+?DoModal_Cur_I_LB@CEDlgMgr@@RECIPEVCString@@H@Z
+?DoModal_Cur_I_RB@CEDlgMgr@@RECIPEVCString@@H@Z
+?DoModal_Cur_I_CIRCLE@CEDlgMgr@@RECIPEVCString@@H@Z
+?DoModal_Profile_C@CEDlgMgr@@RECIPEVCString@@H@Z
+	
+	?DoModal_Patch_Post@CEDlgMgr@@RECIPEVCString@@@Z
+	?DoModal_PatchCon@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Patch_Extrude@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Patch_Loft@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Patch_Rotate@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Patch_Duct@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Patch_Swip@CEDlgMgr@@RECIPEVCString@@H@Z
+
+	?DoModal_SolidCon@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Solid_Post@CEDlgMgr@@RECIPEVCString@@@Z
+	?DoModal_Solid_Extrude@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Solid_Loft@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Solid_Rotate@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Solid_Duct@CEDlgMgr@@RECIPEVCString@@H@Z
+	?DoModal_Solid_Swip@CEDlgMgr@@RECIPEVCString@@H@Z
+
+	?DoModal_Obj3D@CEDlgMgr@@RECIPEVCString@@@Z
+
+	?Serialize@CEDlgMgr@@VECXAEVCArchive@@@Z
+
+
+
+
+  

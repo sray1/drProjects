@@ -1,0 +1,30 @@
+!MS$FREEFORM
+! Microsoft Developer Studio generated include file.
+! Used by Elem_dlg.rc
+!
+      integer, parameter :: IDD_VALVE                       = 131
+      integer, parameter :: IDD_LID                         = 164
+      integer, parameter :: IDD_PID                         = 165
+      integer, parameter :: IDD_MID                         = 166
+      integer, parameter :: IDC_THKNESS                     = 169
+      integer, parameter :: IDC_REFTEMP                     = 170
+      integer, parameter :: IDD_ELP_SOLID                   = 184
+      integer, parameter :: IDD_FE1_IN                      = 236
+      integer, parameter :: IDD_FE2_IN                      = 237
+      integer, parameter :: IDD_FE0_IN                      = 238
+      integer, parameter :: IDD_PIPE_STRESS_ID_I            = 326
+      integer, parameter :: IDD_PIPE_STRESS_ID_J            = 327
+      integer, parameter :: IDD_RID_I                       = 328
+      integer, parameter :: IDD_RID_J                       = 329
+      integer, parameter :: IDD_RID_K                       = 330
+      integer, parameter :: IDD_RID_L                       = 331
+      integer, parameter :: IDD_BEAM_NID_K                  = 333
+      integer, parameter :: IDC_INCOMPAT                    = 334
+      integer, parameter :: IDC_RELHEAD2                    = 335
+      integer, parameter :: IDC_LINEHEAD                    = 374
+      integer, parameter :: IDC_RELHEAD                     = 375
+      integer, parameter :: IDC_GRPHEAD_L                   = 376
+      integer, parameter :: IDC_RELEASEHEAD                 = 377
+      integer, parameter :: IDC_SIHEAD                      = 378
+      integer, parameter :: IDC_KNODEHEAD                   = 379
+      integer, parameter :: IDC_REFRULE                     = 380

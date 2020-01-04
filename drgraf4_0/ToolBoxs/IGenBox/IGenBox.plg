@@ -1,0 +1,593 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: MMgrMs0 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Build : warning : failed to (or don't know how to) build 'c:\drgraf4_0\allheads\usermsg.h'
+
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP24.tmp" with contents
+[
+/nologo /MDd /W4 /Gm /GR /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs0.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs0\Po_FE0D.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP24.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP25.tmp" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs0_d32.pdb" /map:".\Debug/MMs0_d32.map" /debug /machine:I386 /def:".\MMs0Mgr.def" /out:"c:\drgraf4_0\applic\Debug\MMs0_d32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs0_d32.lib" 
+.\Debug\dlg_enoA.obj
+.\Debug\dlg_ENod.obj
+.\Debug\Mi_Gang0.obj
+.\Debug\MMs0dll.obj
+.\Debug\MMs0Mgr.obj
+.\Debug\Po_FE0D.obj
+.\Debug\MMs0Mgr.res
+\drgraf4_0\applic\Debug\Omgr_d32.lib
+\drgraf4_0\applic\Debug\Mmgr_d32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP25.tmp"
+<h3>Output Window</h3>
+Compiling...
+Po_FE0D.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MMs0Mgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MMs0Mgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Mi_Gang0.obj : warning LNK4197: export "?classCMI_Gang0@CMI_Gang0@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/MMs0_d32.lib and object c:\drgraf4_0\applic\Debug/MMs0_d32.exp
+<h3>
+--------------------Configuration: MMgrMs1 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MMs1Mgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MMgrMs1\MMs1Mgr.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP29.tmp" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs1.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs1\Dlg_1Mrg.cpp"
+"C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp"
+"C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp"
+"C:\drgraf4_0\MMgrMs1\MMs1dll.cpp"
+"C:\drgraf4_0\MMgrMs1\MMs1Mgr.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_Beam.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_Elbow.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_Pipe.cpp"
+"C:\drgraf4_0\MMgrMs1\Po_Truss.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP29.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP2A.tmp" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib Mesh_D32.lib MMgr_D32.lib MMs0_D32.lib MNod_D32.lib MCur_D32.lib /nologo /version:1.0 /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs1_D32.pdb" /map:".\Debug/MMs1_D32.map" /debug /machine:I386 /def:".\MMs1Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs1_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs1_D32.lib" 
+.\Debug\Dlg_1Mrg.obj
+.\Debug\Mi_1Prof.obj
+.\Debug\Mi_Gang1.obj
+.\Debug\MMs1dll.obj
+.\Debug\MMs1Mgr.obj
+.\Debug\Po_Beam.obj
+.\Debug\Po_Elbow.obj
+.\Debug\Po_FE1D.obj
+.\Debug\Po_Pipe.obj
+.\Debug\Po_Truss.obj
+.\Debug\MMs1Mgr.res
+\drgraf4_0\applic\Debug\MMs0_d32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP2A.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Dlg_1Mrg.cpp
+c:\drgraf4_0\mmgrms1\dlg_1mrg.cpp(144) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms1\dlg_1mrg.cpp(169) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_1Prof.cpp
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(66) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(63) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(133) : warning C4189: 'pFE0DListNew' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(139) : warning C4189: 'indexMesh1D' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_1Prof.cpp(130) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_Gang1.cpp
+C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp(227) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp(359) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+MMs1dll.cpp
+C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp(268) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs1\Mi_Gang1.cpp(336) : warning C4700: local variable 'pAddLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs1\MMs1dll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MMs1Mgr.cpp
+Po_Beam.cpp
+Po_Elbow.cpp
+Po_FE1D.cpp
+C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp(54) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp(119) : warning C4189: 'pListV' : local variable is initialized but not referenced
+Po_Pipe.cpp
+C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp(99) : warning C4700: local variable 'pMI_Gang0' used without having been initialized
+C:\drgraf4_0\MMgrMs1\Po_FE1D.cpp(183) : warning C4700: local variable 'pLabel' used without having been initialized
+Po_Truss.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MMs1Mgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MMs1Mgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Mi_Gang1.obj : warning LNK4197: export "?classCMI_Gang1@CMI_Gang1@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/MMs1_D32.lib and object c:\drgraf4_0\applic\Debug/MMs1_D32.exp
+<h3>
+--------------------Configuration: MMgrMs2 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MMs2Mgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MMgrMs2\MMs2Mgr.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP2E.tmp" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs2.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs2\Dlg_2Mrg.cpp"
+"C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp"
+"C:\drgraf4_0\MMgrMs2\Mi_Gang2.cpp"
+"C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp"
+"C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp"
+"C:\drgraf4_0\MMgrMs2\MMs2dll.cpp"
+"C:\drgraf4_0\MMgrMs2\MMs2Mgr.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_12.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_16.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_4.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_8.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Qu_9.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Tr_10.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Tr_3.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Tr_6.cpp"
+"C:\drgraf4_0\MMgrMs2\Po_Tr_9.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP2E.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP2F.tmp" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Mesh_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MMgr_D32.lib MNod_D32.lib MMs0_D32.lib MMs1_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs2_D32.pdb" /map:".\Debug/MMs2_D32.map" /debug /machine:I386 /def:".\MMs2Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs2_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs2_D32.lib" 
+.\Debug\Dlg_2Mrg.obj
+.\Debug\Mi_2Prof.obj
+.\Debug\Mi_Gang2.obj
+.\Debug\Mi_Qang2.obj
+.\Debug\Mi_Tang2.obj
+.\Debug\MMs2dll.obj
+.\Debug\MMs2Mgr.obj
+.\Debug\Po_FE2D.obj
+.\Debug\Po_Qu_12.obj
+.\Debug\Po_Qu_16.obj
+.\Debug\Po_Qu_4.obj
+.\Debug\Po_Qu_8.obj
+.\Debug\Po_Qu_9.obj
+.\Debug\Po_Tr_10.obj
+.\Debug\Po_Tr_3.obj
+.\Debug\Po_Tr_6.obj
+.\Debug\Po_Tr_9.obj
+.\Debug\MMs2Mgr.res
+\drgraf4_0\applic\Debug\MMs1_D32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP2F.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Dlg_2Mrg.cpp
+c:\drgraf4_0\mmgrms2\dlg_2mrg.cpp(146) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+c:\drgraf4_0\mmgrms2\dlg_2mrg.cpp(171) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_2Prof.cpp
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(65) : warning C4189: 'pID' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(62) : warning C4189: 'pDListMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(138) : warning C4189: 'indexMesh2D' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(132) : warning C4189: 'pFE0DListNew' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_2Prof.cpp(129) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_Gang2.cpp
+Mi_Qang2.cpp
+C:\drgraf4_0\MMgrMs2\Mi_Gang2.cpp(330) : warning C4701: local variable 'pList' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Gang2.cpp(381) : warning C4700: local variable 'pAddLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Gang2.cpp(476) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp(79) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp(247) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+Mi_Tang2.cpp
+C:\drgraf4_0\MMgrMs2\Mi_Qang2.cpp(124) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(266) : warning C4189: 'nTriangle' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(489) : warning C4189: 'nTriangle' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(482) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(675) : warning C4189: 'nDeg' : local variable is initialized but not referenced
+MMs2dll.cpp
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(230) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(236) : warning C4701: local variable 'pAddNode' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(635) : warning C4701: local variable 'nC' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(825) : warning C4701: local variable 'nC' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Mi_Tang2.cpp(1017) : warning C4701: local variable 'nC' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\MMs2dll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MMs2Mgr.cpp
+Po_FE2D.cpp
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(48) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(61) : warning C4189: 'pObjectMgr' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(226) : warning C4189: 'pDrPen' : local variable is initialized but not referenced
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(227) : warning C4189: 'pLayer' : local variable is initialized but not referenced
+Po_Qu_12.cpp
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(100) : warning C4700: local variable 'pMI_Gang0' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(150) : warning C4700: local variable 'pMI_Gang0' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(182) : warning C4700: local variable 'pMI_Gang0' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(447) : warning C4700: local variable 'pLabel' used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_FE2D.cpp(470) : warning C4701: local variable 'pAddNode' may be used without having been initialized
+C:\drgraf4_0\MMgrMs2\Po_Qu_12.cpp(90) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Qu_16.cpp
+C:\drgraf4_0\MMgrMs2\Po_Qu_16.cpp(90) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Qu_4.cpp
+Po_Qu_8.cpp
+C:\drgraf4_0\MMgrMs2\Po_Qu_8.cpp(90) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Qu_9.cpp
+C:\drgraf4_0\MMgrMs2\Po_Qu_9.cpp(89) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Tr_10.cpp
+C:\drgraf4_0\MMgrMs2\Po_Tr_10.cpp(89) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Tr_3.cpp
+Po_Tr_6.cpp
+C:\drgraf4_0\MMgrMs2\Po_Tr_6.cpp(90) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Po_Tr_9.cpp
+C:\drgraf4_0\MMgrMs2\Po_Tr_9.cpp(89) : warning C4189: 'pNewObj' : local variable is initialized but not referenced
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MMs2Mgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MMs2Mgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+Mi_Gang2.obj : warning LNK4197: export "?classCMI_Gang2@CMI_Gang2@@2UCRuntimeClass@@A" specified multiple times; using first specification
+   Creating library c:\drgraf4_0\applic\Debug/MMs2_D32.lib and object c:\drgraf4_0\applic\Debug/MMs2_D32.exp
+<h3>
+--------------------Configuration: MMgrMs3 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MMs3Mgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MMgrMs3\MMs3Mgr.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP33.tmp" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs3.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs3\Mi_Gang3.cpp"
+"C:\drgraf4_0\MMgrMs3\MMs3dll.cpp"
+"C:\drgraf4_0\MMgrMs3\MMs3Mgr.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP33.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP34.tmp" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MNod_D32.lib MCur_D32.lib MPat_D32.lib MMs0_d32.lib MMs1_d32.lib MMs2_d32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs3_D32.pdb" /map:".\Debug/MMs3_D32.map" /debug /machine:I386 /def:".\MMs3Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs3_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs3_D32.lib" 
+.\Debug\Mi_Gang3.obj
+.\Debug\MMs3dll.obj
+.\Debug\MMs3Mgr.obj
+.\Debug\MMs3Mgr.res
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP34.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Mi_Gang3.cpp
+c:\drgraf4_0\mmgrms3\mi_gang3.cpp(49) : warning C4101: 'nResult' : unreferenced local variable
+MMs3dll.cpp
+C:\drgraf4_0\MMgrMs3\MMs3dll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MMs3Mgr.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MMs3Mgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MMs3Mgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug/MMs3_D32.lib and object c:\drgraf4_0\applic\Debug/MMs3_D32.exp
+<h3>
+--------------------Configuration: Dbox_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP38.tmp" with contents
+[
+/nologo /MDd /W4 /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/Dbox_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\D_BOX.PDB" /FD /c 
+"C:\drgraf4_0\TOOLBOXS\DRAWBOX\BoxWnd.cpp"
+"C:\drgraf4_0\TOOLBOXS\DRAWBOX\Drawbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\DRAWBOX\VOprbox.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP38.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP39.tmp" with contents
+[
+Spec_D32.lib Mesh_D32.lib Elem_D32.lib Draw_D32.lib Supp_D32.lib StaL_D32.lib OMgr_D32.lib Dr3D_D32.lib OGen_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/Dbox_d32.pdb" /map:".\Debug/Dbox_d32.map" /debug /machine:IX86 /def:".\Dbox_d.def" /out:"c:\drgraf4_0\applic\Debug\Dbox_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Dbox_d32.lib" 
+.\Debug\BoxWnd.obj
+.\Debug\Colorsqu.obj
+.\Debug\Dboxdll.obj
+.\Debug\Drawbar.obj
+.\Debug\Drawbox.obj
+.\Debug\OldGlob.obj
+.\Debug\Oldtool.obj
+.\Debug\Palette.obj
+.\Debug\Stdafx.obj
+.\Debug\VOprBar.obj
+.\Debug\VOprbox.obj
+.\Debug\Dbox.res
+\drgraf4_0\applic\Debug\MMs0_d32.lib
+\drgraf4_0\applic\Debug\MMs1_D32.lib
+\drgraf4_0\applic\Debug\MMs2_D32.lib
+\drgraf4_0\applic\Debug\MMs3_D32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP39.tmp"
+<h3>Output Window</h3>
+Compiling...
+BoxWnd.cpp
+c:\drgraf4_0\toolboxs\drawbox\boxwnd.cpp(174) : warning C4101: 'PtrOldBrush' : unreferenced local variable
+Drawbox.cpp
+VOprbox.cpp
+C:\drgraf4_0\TOOLBOXS\DRAWBOX\VOprbox.cpp(278) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+C:\drgraf4_0\TOOLBOXS\DRAWBOX\VOprbox.cpp(277) : warning C4189: 'ScreenWidth' : local variable is initialized but not referenced
+C:\drgraf4_0\TOOLBOXS\DRAWBOX\VOprbox.cpp(280) : warning C4101: 'BoxHeight' : unreferenced local variable
+C:\drgraf4_0\TOOLBOXS\DRAWBOX\VOprbox.cpp(280) : warning C4101: 'BoxWidth' : unreferenced local variable
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\Dbox_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Dbox_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug\Dbox_d32.lib and object c:\drgraf4_0\applic\Debug\Dbox_d32.exp
+<h3>
+--------------------Configuration: Ebox_d - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/Ebox.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\TOOLBOXS\ELEMBOX\Ebox.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP3D.tmp" with contents
+[
+/nologo /MDd /W4 /GX /ZI /Od /D "_AFXEXT" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/Ebox_d32.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\E_BOX.PDB" /FD /c 
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Eboxdll.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\EoxWnd.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Hexbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Hexbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBar0.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBar1.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBar2.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBar3.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBox0.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBox1.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBox2.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBox3.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\OldGlob.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\OldTool.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Palette.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Penbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Penbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Pipebar.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\PipeBox.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Quadbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Quadbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Stdafx.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Tetbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Tetbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Tribar.cpp"
+"C:\drgraf4_0\TOOLBOXS\ELEMBOX\Tribox.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP3D.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP3E.tmp" with contents
+[
+Dr3D_D32.lib Spec_D32.lib Mesh_D32.lib Elem_D32.lib Draw_D32.lib OGen_D32.lib Supp_D32.lib StaL_D32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/Ebox_d32.pdb" /map:"c:\drgraf4_0\toolboxs\elembox\Debug\Ebox_d32.map" /debug /machine:IX86 /def:".\Ebox_d.def" /out:"c:\drgraf4_0\applic\Debug\Ebox_d32.dll" /implib:"c:\drgraf4_0\applic\Debug\Ebox_d32.lib" 
+.\Debug\Eboxdll.obj
+.\Debug\EoxWnd.obj
+.\Debug\Hexbar.obj
+.\Debug\Hexbox.obj
+.\Debug\MeshBar0.obj
+.\Debug\MeshBar1.obj
+.\Debug\MeshBar2.obj
+.\Debug\MeshBar3.obj
+.\Debug\MeshBox0.obj
+.\Debug\MeshBox1.obj
+.\Debug\MeshBox2.obj
+.\Debug\MeshBox3.obj
+.\Debug\OldGlob.obj
+.\Debug\OldTool.obj
+.\Debug\Palette.obj
+.\Debug\Penbar.obj
+.\Debug\Penbox.obj
+.\Debug\Pipebar.obj
+.\Debug\PipeBox.obj
+.\Debug\Quadbar.obj
+.\Debug\Quadbox.obj
+.\Debug\Stdafx.obj
+.\Debug\Tetbar.obj
+.\Debug\Tetbox.obj
+.\Debug\Tribar.obj
+.\Debug\Tribox.obj
+.\Debug\Ebox.res
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP3E.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Eboxdll.cpp
+c:\drgraf4_0\toolboxs\elembox\eboxdll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+EoxWnd.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\EoxWnd.cpp(174) : warning C4101: 'PtrOldBrush' : unreferenced local variable
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\EoxWnd.cpp(255) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+Hexbar.cpp
+Hexbox.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\Hexbox.cpp(247) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+MeshBar0.cpp
+MeshBar1.cpp
+MeshBar2.cpp
+MeshBar3.cpp
+MeshBox0.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBox0.cpp(256) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBox0.cpp(255) : warning C4189: 'ScreenWidth' : local variable is initialized but not referenced
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBox0.cpp(258) : warning C4101: 'BoxHeight' : unreferenced local variable
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\MeshBox0.cpp(258) : warning C4101: 'BoxWidth' : unreferenced local variable
+MeshBox1.cpp
+MeshBox2.cpp
+MeshBox3.cpp
+OldGlob.cpp
+OldTool.cpp
+Palette.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\Palette.cpp(106) : warning C4100: 'nIDCursor' : unreferenced formal parameter
+Penbar.cpp
+Penbox.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\Penbox.cpp(246) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+Pipebar.cpp
+PipeBox.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\PipeBox.cpp(246) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+Quadbar.cpp
+Quadbox.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\Quadbox.cpp(249) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+Stdafx.cpp
+Tetbar.cpp
+Tetbox.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\Tetbox.cpp(246) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+Tribar.cpp
+Tribox.cpp
+C:\drgraf4_0\TOOLBOXS\ELEMBOX\Tribox.cpp(248) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\Ebox_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\Ebox_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug\Ebox_d32.lib and object c:\drgraf4_0\applic\Debug\Ebox_d32.exp
+<h3>
+--------------------Configuration: IGenBox - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/IGenbox.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\TOOLBOXS\IGenBox\IGenbox.rc"" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP42.tmp" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "_AFXEXT" /D "_WINDLL" /D "_AFXDLL" /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFX_EXT" /Fp".\Debug/IGenBox.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\TOOLBOXS\IGenBox\BoxWnd.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Cntlbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\COpbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\COpbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Curvebar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Curvebox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Dlg_LSyT.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Dlg_MovT.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Dlg_RotT.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\DynLbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\DynLbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\EDimBar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\EDimBox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\GOpbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\GOpbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\IGenbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\IGenbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\IGendll.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\IGenMgr.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\MainBar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Mainbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\MCNodbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\MCNodbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\MGenbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\MNodbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\MNodbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Nodebar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Nodebox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\OldGlob.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\OldTool.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Palette.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Patchbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Patchbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Solidbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Solidbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\SpeLbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\SpeLbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\StaLbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\StaLbox.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Suppbar.cpp"
+"C:\drgraf4_0\TOOLBOXS\IGenBox\Suppbox.cpp"
+]
+Creating command line "cl.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP42.tmp" 
+Creating temporary file "C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP43.tmp" with contents
+[
+Dr3D_D32.lib Spec_D32.lib Mesh_D32.lib Elem_D32.lib Draw_D32.lib OGen_D32.lib Stal_D32.lib Supp_D32.lib EBox_D32.lib /nologo /subsystem:windows /dll /incremental:yes /pdb:".\Debug/IGBx_D32.pdb" /map:".\Debug/IGBx_D32.map" /debug /machine:I386 /def:".\IGenBox_d.def" /out:"c:\DrGraf4_0\Applic\Debug/IGBx_D32.dll" /implib:"c:\DrGraf4_0\Applic\Debug/IGBx_D32.lib" 
+.\Debug\BoxWnd.obj
+.\Debug\CNTLbar.obj
+.\Debug\Cntlbox.obj
+.\Debug\COpbar.obj
+.\Debug\COpbox.obj
+.\Debug\Curvebar.obj
+.\Debug\Curvebox.obj
+.\Debug\Dlg_LSyT.obj
+.\Debug\Dlg_MovT.obj
+.\Debug\Dlg_RotT.obj
+.\Debug\DynLbar.obj
+.\Debug\DynLbox.obj
+.\Debug\EDimBar.obj
+.\Debug\EDimBox.obj
+.\Debug\GOpbar.obj
+.\Debug\GOpbox.obj
+.\Debug\IGenbar.obj
+.\Debug\IGenbox.obj
+.\Debug\IGendll.obj
+.\Debug\IGenMgr.obj
+.\Debug\MainBar.obj
+.\Debug\Mainbox.obj
+.\Debug\MCNodbar.obj
+.\Debug\MCNodbox.obj
+.\Debug\MGenbox.obj
+.\Debug\MNodbar.obj
+.\Debug\MNodbox.obj
+.\Debug\Nodebar.obj
+.\Debug\Nodebox.obj
+.\Debug\OldGlob.obj
+.\Debug\OldTool.obj
+.\Debug\Palette.obj
+.\Debug\Patchbar.obj
+.\Debug\Patchbox.obj
+.\Debug\Solidbar.obj
+.\Debug\Solidbox.obj
+.\Debug\SpeLbar.obj
+.\Debug\SpeLbox.obj
+.\Debug\StaLbar.obj
+.\Debug\StaLbox.obj
+.\Debug\Suppbar.obj
+.\Debug\Suppbox.obj
+.\Debug\IGenbox.res
+\drgraf4_0\applic\Debug\Dbox_d32.lib
+\drgraf4_0\applic\Debug\Ebox_d32.lib
+]
+Creating command line "link.exe @C:\DOCUME~1\DEBABR~1\LOCALS~1\Temp\RSP43.tmp"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+COpbar.cpp
+COpbox.cpp
+Curvebar.cpp
+Curvebox.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\Curvebox.cpp(213) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+Dlg_LSyT.cpp
+Dlg_MovT.cpp
+Dlg_RotT.cpp
+DynLbar.cpp
+DynLbox.cpp
+EDimBar.cpp
+EDimBox.cpp
+GOpbar.cpp
+GOpbox.cpp
+IGenbar.cpp
+IGenbox.cpp
+IGendll.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\IGendll.cpp(30) : warning C4100: 'lpReserved' : unreferenced formal parameter
+IGenMgr.cpp
+MainBar.cpp
+Mainbox.cpp
+MCNodbar.cpp
+MCNodbox.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\MCNodbox.cpp(205) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+MGenbox.cpp
+MNodbar.cpp
+MNodbox.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\MNodbox.cpp(207) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+Nodebar.cpp
+Nodebox.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\Nodebox.cpp(206) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+OldGlob.cpp
+OldTool.cpp
+Palette.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\Palette.cpp(106) : warning C4100: 'nIDCursor' : unreferenced formal parameter
+Patchbar.cpp
+Patchbox.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\Patchbox.cpp(212) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+Solidbar.cpp
+Solidbox.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\Solidbox.cpp(212) : warning C4189: 'ScreenHeight' : local variable is initialized but not referenced
+SpeLbar.cpp
+SpeLbox.cpp
+StaLbar.cpp
+StaLbox.cpp
+Suppbar.cpp
+Suppbox.cpp
+BoxWnd.cpp
+C:\drgraf4_0\TOOLBOXS\IGenBox\BoxWnd.cpp(174) : warning C4101: 'PtrOldBrush' : unreferenced local variable
+C:\drgraf4_0\TOOLBOXS\IGenBox\BoxWnd.cpp(256) : warning C4189: 'pWnd' : local variable is initialized but not referenced
+Cntlbox.cpp
+Linking...
+.\IGenBox_d.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\IGenBox_d.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\DrGraf4_0\Applic\Debug/IGBx_D32.lib and object c:\DrGraf4_0\Applic\Debug/IGBx_D32.exp
+
+
+
+<h3>Results</h3>
+IGBx_D32.dll - 0 error(s), 110 warning(s)
+</pre>
+</body>
+</html>

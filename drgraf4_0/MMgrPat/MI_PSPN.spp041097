@@ -1,0 +1,527 @@
+// Rotate.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+
+#include "glb_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+#include "XForm.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "MPatMgr.h"
+///////////////////// elements
+#include "Def_Elem.h"
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "MI_PSPN.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define new	DEBUG_NEW
+#define	BUFF_SIZE			1024
+#define MIN_CNODES_CURVE	4
+#define	NUM_LEN				12 
+#define	MAX_SEG_ANGLE		120
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_PSPN,CMI_CSPN,1)
+/////////////////////////////////////////////////////////////////////////////
+CMI_PSPN::CMI_PSPN()
+{
+	m_pDrCurve = NULL;
+	m_pDrPatch = NULL;
+	m_pDrSolid = NULL;
+}
+
+CMI_PSPN::~CMI_PSPN()
+{
+}
+
+int CMI_PSPN::RBUp_PSpawn(CView* pView,UINT nView) 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	//////////////////////////////////////////////////////////////////
+	CString		ID;
+	CString*	pID = &ID;
+	////////////////////////////////////////////////////////////////
+	m_pDrPatch	= GetInfo();                  	// 
+	///////////////////////////////////////////////////////////////////// Go Generate	
+	if(m_pDrPatch)
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(80);
+				
+		sprintf(buf,"Got All Patch Spawning Info");
+		/////////////////////////	
+		AfxMessageBox(*str);
+		/////////////////////////
+		str->ReleaseBuffer();
+		delete str;
+	}	
+	else
+		return -1;	// Cancel
+	///////////////////////////////// Spawn Nodes
+	MATRIX Mat;
+	///////////
+	if(m_pDrPatch->IsInstanced())
+	{
+		CMatObj* pMatObj	= m_pDrPatch->GetMatObj();
+		Mat					= *(pMatObj->GetMatrix());
+		/////////////////////
+		if(SpawnPatch(&Mat)<0)
+			return -1;
+		/////////////////////
+	}
+	else
+	{
+		MATRIX Mat;
+		C3DMath Math3D;
+		Math3D.GetIdentityMATRIX(&Mat);
+		/////////////////////
+		if(SpawnPatch(&Mat)<0)
+			return -1;
+		/////////////////////
+	}
+	///////////////////////////// make it Unposted 
+	m_pDrPatch->SetPosted(FALSE);
+	/////////////////////////////////////////////////////////// Control RectBound
+	m_pDrPatch->SetDirty(TRUE);
+	m_pDrPatch->SetShow(TRUE);
+	////////////////////////////////////// LOCAL 3DBounds using
+										// ConVexHull Property
+	m_pDrPatch->Calc_3DBoundsLocal();											
+	////////////////////////////////////////////////////////// Save
+	CString PatchID	= m_pDrPatch->GetObjectID();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+	int nPatchIndex = pDListMgr->GetObjectIndex(PATCH,PatchID); 
+	int nOldIndex 	= pObjectMgr->GetActiveObjectIndex();
+	pObjectMgr->SetActiveObjectIndex(nPatchIndex); 
+	pObjectMgr->SetActiveObjectType(PATCH); 
+    ////////////////////////////////////////////////////////// done/Invalidate
+	pObjectMgr->UpdateAllViewsWithActiveIndex(NULL,nPatchIndex,PATCH);
+	/////////
+	return 0;		 
+}			
+	 
+CDrPatch* CMI_PSPN::GetInfo()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+	//////////////////////////////////////////////////////////////////
+	CMPatMgr* 	pMPatMgr;
+	CString		Cid;
+	int 		index;
+	///////////////////////////////////////////////////
+	if (pMPatMgr->DoModal_Spawn_P(&Cid,1) == IDCANCEL)
+		return (CDrPatch*)NULL; 
+    /////////////////////////////////////////////////////// update
+	index 					= pObjectMgr->
+								GetObjectIndexfromKey(PATCH,Cid,1);
+	if(index>=0)
+	{						
+		CDrPatch* pDrPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+		////////////////
+		return pDrPatch;
+	}
+	else 
+		return (CDrPatch*)NULL;
+}
+	 
+int CMI_PSPN::SpawnPatch(pMATRIX pXFMat)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	//////////////////////////////////////////////////////////////////
+	CString		Cid;
+	////////////////////////////////////////////////////////////////// Lists
+	SpawnListsInPatch(pXFMat);
+	////////////////////////////////////////////////////////////////// CurvIDs
+	int index;
+	//////////
+	for(int i=0;i<4;i++)
+	{
+		Cid = m_pDrPatch->GetCurveID(i);
+		if(Cid != "")
+		{
+			CString NewCid;
+			///////////////////////////////// 
+			index = pObjectMgr->
+					GetObjectIndexfromKey(CURVE,Cid,1);
+			pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+			if(index>=0)
+				m_pDrCurve = (CDrCurve*)(pDListMgr->GetObject(index));
+			else
+				m_pDrCurve = NULL;
+			////////////////
+			if(m_pDrCurve)
+				SpawnCurve(m_pDrCurve,pXFMat,&NewCid);// changes
+													  // m_pDrCurve
+													  // to New DrCurve
+			/////////////////////// Reciprocate
+			m_pDrCurve->GetPatchList()->InsertObject(m_pDrPatch);
+			/////////////////////// Put it in Patch
+			m_pDrPatch->SetCurveID(NewCid,i);
+		}
+	}
+	////////////////////////////////////////////////////////////////// Node Spawn : FromID_T
+	CDrNode* pOldNode;
+	CDrNode* pNewNode;
+	CString	 NewNID;
+	CString	FromID_T;		// also used:AnchorID for Sweep/Duct
+	Cid = m_pDrPatch->GetFromID_T();
+	if(Cid != "")
+	{
+		///////////////////////////////// 
+		index = pObjectMgr->
+				GetObjectIndexfromKey(NODE,Cid,1);
+		pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+		if(index>=0)
+			pOldNode = (CDrNode*)(pDListMgr->GetObject(index));
+		else
+			pOldNode = NULL;
+		////////////////
+		if(pOldNode)
+		{
+			//////////
+			int nResult = SpawnNode(pOldNode,pXFMat,&NewNID,TRUE);
+			///////////////////////
+			if(nResult<0)
+				return -1;
+			//////////////
+			index = pObjectMgr->GetObjectIndexfromKey(NODE,NewNID,1);
+			pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+			if(index>=0)
+			{						
+				pNewNode	= (CDrNode*)(pDListMgr->GetObject(index));
+				//////////////////////////////////////// Reciprocate
+				pNewNode->GetPatchList()->InsertObject(m_pDrPatch);
+				//////////////
+				m_pDrPatch->SetFromID_T(NewNID); //FromID_T 
+				////////
+			}
+			else
+				return -1;
+			///////////
+		}
+	}
+	////////////////////////////////////////////////////////////////// Node Spawn : ToID_T
+	CString	ToID_T;		// also used:AnchorID for Sweep/Duct
+	Cid = m_pDrPatch->GetToID_T();
+	if(Cid != "")
+	{
+		///////////////////////////////// 
+		index = pObjectMgr->
+				GetObjectIndexfromKey(NODE,Cid,1);
+		pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+		if(index>=0)
+			pOldNode = (CDrNode*)(pDListMgr->GetObject(index));
+		else
+			pOldNode = NULL;
+		////////////////
+		if(pOldNode)
+		{
+			//////////
+			int nResult = SpawnNode(pOldNode,pXFMat,&NewNID,TRUE);
+			///////////////////////
+			if(nResult<0)
+				return -1;
+			//////////////
+			index = pObjectMgr->GetObjectIndexfromKey(NODE,NewNID,1);
+			pDListMgr 	= pObjectMgr->GetObjectList(NODE);
+			if(index>=0)
+			{						
+				pNewNode	= (CDrNode*)(pDListMgr->GetObject(index));
+				//////////////////////////////////////// Reciprocate
+				pNewNode->GetPatchList()->InsertObject(m_pDrPatch);
+				//////////////
+				m_pDrPatch->SetToID_T(NewNID); //FromID_T 
+				////////
+			}
+			else
+				return -1;
+			///////////
+		}
+	}
+	/////////////////////////////////
+	// todo: after changing to String in DrPatch.h
+//	WORLD		m_Center_T;	// Circle
+	///////////////////////////////
+	return 0;
+}
+
+int CMI_PSPN::SpawnListsInPatch(pMATRIX pXFMat)
+{
+	CDListMgr*	pList;
+	int			nResult;
+	///////////////////////////////////////////////////////////////// CurveList
+    pList = m_pDrPatch->GetCurveList();
+	if(pList)
+	{
+		nResult = SpawnCurveListInPatch(pList,pXFMat);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocatePatchCurves(pList);
+	}
+	///////////////////////////////////////////////////////////////// NodeLists
+	/////////////////////////////////////////////////////////// CNode
+    pList = m_pDrPatch->GetCNodeList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, TRUE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocatePatchNodes(pList);
+	}
+	/////////////////////////////////////////////////////////// CN_BS
+    pList = m_pDrPatch->GetCN_BSList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, TRUE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocatePatchNodes(pList);
+	}
+	/////////////////////////////////////////////////////////// INode
+    pList = m_pDrPatch->GetINodeList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, FALSE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocatePatchNodes(pList);
+	}
+	/////////////////////////////////////////////////////////// ENode
+    pList = m_pDrPatch->GetENodeList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, FALSE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocatePatchNodes(pList);
+	}
+	/////////////////////////////////////////////////////////// Node
+    pList = m_pDrPatch->GetINodeList();
+	if(pList)
+	{
+		nResult = SpawnNodeList(pList, pXFMat, FALSE);
+		if(nResult<0)
+			return -1;
+		////////////////////////////// Reciprocate
+		ReciprocatePatchNodes(pList);
+	}
+	/////////////////////////////
+	return 0;
+	//////////////////////////////////////////////////////////////// Triangle List
+	CString Cid = m_pDrPatch->GetParentID();
+	////
+//	SpawnTriangleList(Cid, pXFMat);
+	/////////////////
+	return 0;
+}
+
+int CMI_PSPN::SpawnTriangleList(CString Cid, pMATRIX pXFMat)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+	//////////////////////////////////////////////////////////////////
+	int index;
+	CDrPatch* pOldPatch;
+	/////////
+	index = pObjectMgr->GetObjectIndexfromKey(PATCH,Cid,1);
+	if(index>=0)
+		pOldPatch = (CDrPatch*)(pDListMgr->GetObject(index));
+	else
+		pOldPatch = NULL;
+		////////////////
+	if(pOldPatch)
+	{
+		CDListMgr* pOldList = pOldPatch->GetTriangleList();
+		if(pOldList->IsEmpty() )
+		return 0;
+		////////////////////////
+		CDListMgr* pNewList = m_pDrPatch->GetTriangleList();
+		////////////////////////////////////////////////// copy
+		POSITION pos = pOldList->GetFirstObjectPos();
+		for (;pos !=NULL;)
+		pNewList->AddTail(pOldList->GetNextObject( pos));
+		///////
+	}
+	/////////
+	return 0;
+}
+	 		
+int CMI_PSPN::SpawnCurveListInPatch(CDListMgr* pFillList, pMATRIX pXFMat)
+{
+	if(pFillList->IsEmpty())
+		return 0;
+	////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+	//////////////////////////////////////////////////////////////////
+	CDListMgr TempList;
+	////////////////////////////////////////////////// copy
+	POSITION pos = pFillList->GetFirstObjectPos();
+	for (;pos !=NULL;)
+		TempList.AddTail(pFillList->GetNextObject( pos));
+	////////////////////////////////////////////////// Empty it
+	pFillList->RemoveAll();
+	/////////////////////////////////////////////////////////////////// XForm 
+	int			nMaxNodes,index;
+	CDrCurve*	pNewCurve;
+	CString		NewCID;
+	int s;
+	/////////////////////////////////////////////////////////////////// XForm 
+	nMaxNodes		 	= TempList.GetCount();
+	////////////////////////////////////////// 	
+	for ( s = 0; s<nMaxNodes; s++)
+	{
+		CDrCurve* pOldCurve = (CDrCurve*)TempList.GetObject( s);
+		///////////////////////////////////////// Get ID
+		int nResult = SpawnCurve(pOldCurve,pXFMat,&NewCID);
+		///////////////////////////////////// in Curve 
+		if(nResult<0)
+			return -1;
+		//////////////
+		index = pObjectMgr->GetObjectIndexfromKey(CURVE,NewCID,1);
+		if(index>=0)
+		{						
+			pNewCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+			////////////////
+			pFillList->InsertObject(pNewCurve); //CNodeList 
+			//////////////////////////////////////// Reciprocate
+			pNewCurve->GetPatchList()->InsertObject(m_pDrPatch);
+			////////
+		}	
+		else
+			return -1;
+	}				
+	///////////////////////////////////////////////////////// Empty it
+	TempList.RemoveAll();
+	////////////
+	return 0;
+}
+	 		
+int CMI_PSPN::SpawnCurve(CDrCurve* pOldCurve,pMATRIX pXFMat,CString* pCid)
+{
+	/////////////////////////////////////////////////////////////////// XForm 
+	CString		OldID,PatchID="",SolidID="";
+	CURVEPROC	CProc;
+	int			nChLen;
+	////////////////////
+	CXForm	XForm(TRUE);	// Parallel
+	/////////////////////////////////////////////////////////// Data
+	if(m_pDrPatch)
+		PatchID				= m_pDrPatch->GetObjectID();		 // Spawned Patch
+	if(m_pDrSolid)
+		SolidID				= m_pDrSolid->GetObjectID();		 // Spawned Solid
+	///////////////////////////////////////////// Name
+	nChLen	= PatchID.GetLength();
+	if(nChLen>NUM_LEN-2)
+		nChLen = NUM_LEN-2;
+	///////////////////////////////////////// Get ID
+	OldID		= pOldCurve->GetObjectID();
+	CProc		= pOldCurve->GetCurveType_S();
+	////////////////////////////////////////////////////////////////// Name
+	*pCid	=	SolidID.Left(nChLen)+
+				PatchID.Left(nChLen)+
+				OldID;
+	////////////////////////////////////////////////////////////////// CREATE	
+	CDrCurve* pNewCurve = PostCurve(*pCid, OldID, CProc);
+;	// Create DrCurve
+	if(!pNewCurve)	// Create DrCurve
+		return -1;
+	////////////////////////////////////////////////////////////////// XForm
+	m_pDrCurve = pNewCurve;
+	SpawnListsInCurve(pXFMat);
+	////////////////////////
+	return 0;
+}
+
+void CMI_PSPN::ReciprocatePatchNodes(CDListMgr* pList)
+{
+	if(!pList || pList->IsEmpty())
+		return;
+	///////////////////////////////////
+	int s,nMaxNodes;
+	nMaxNodes = pList->GetCount();
+	/////////////////////////////
+	for (s = 0; s<nMaxNodes; s++)
+	{
+		CDrNode* pNewNode	= (CDrNode*)(pList->GetObject(s));
+		//////////////////////////////////////// Reciprocate
+		pNewNode->GetPatchList()->InsertObject(m_pDrPatch);
+		////////
+	}
+}
+
+void CMI_PSPN::ReciprocatePatchCurves(CDListMgr* pList)
+{
+	if(!pList || pList->IsEmpty())
+		return;
+	///////////////////////////////////
+	int s,nMaxCurves;
+	nMaxCurves = pList->GetCount();
+	/////////////////////////////
+	for (s = 0; s<nMaxCurves; s++)
+	{
+		CDrCurve* pNewCurve	= (CDrCurve*)(pList->GetObject(s));
+		//////////////////////////////////////// Reciprocate
+		pNewCurve->GetPatchList()->InsertObject(m_pDrPatch);
+		////////
+	}
+}
+
+void CMI_PSPN::Serialize(CArchive& ar)
+{
+
+	CMI_CSPN::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMI_PSPN:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMI_PSPN:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////// end of module //////////////////

@@ -1,0 +1,88 @@
+; IGenBox_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	IGBx_D32
+DESCRIPTION  'IGenBox DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitIGenDLL												@2        										
+
+
+; CIGenMgr
+	; Constructor and Destructor
+	
+
+; CIGenBox
+	; Constructor and Destructor
+
+	??0CIGenBox@@QAE@XZ
+	??1CIGenBox@@UAE@XZ
+
+;?GetHeight@CIGenBox@@QAEIXZ
+;?GetWidth@CIGenBox@@QAEIXZ
+;?GetActiveIGenObject@CIGenBox@@QAEHXZ
+
+
+
+
+; CMGenBox
+	; Constructor and Destructor
+
+	??0CMGenBox@@QAE@XZ
+	??1CMGenBox@@UAE@XZ
+
+;?GetHeight@CMGenBox@@QAEIXZ
+;?GetWidth@CMGenBox@@QAEIXZ
+;?GetActiveIGenObject@CMGenBox@@QAEHXZ
+
+
+; CMainBox
+	; Constructor and Destructor
+
+	??1CMainBox@@UAE@XZ
+	??0CMainBox@@QAE@XZ
+
+
+
+; CCntlBox
+	; Constructor and Destructor
+
+	??0CCntlBox@@QAE@XZ
+	??1CCntlBox@@UAE@XZ
+
+?GetHeight@CBoxWnd@@QAEIXZ
+?GetWidth@CBoxWnd@@QAEIXZ
+
+
+
+; CEDimBox
+	; Constructor and Destructor
+
+	??0CEDimBox@@QAE@XZ
+	??1CEDimBox@@UAE@XZ
+
+	?Create@CBoxWnd@@QAEHPAVCWnd@@VCRect@@@Z
+
+
+	
+; CPaletteBar
+	
+;?classCPaletteBar@CPaletteBar@@2UCRuntimeClass@@A
+?messageMap@CPaletteBar@@1UAFX_MSGMAP@@B
+;public Hittest
+;?HitTest@CPaletteBar@@UAEHVCPoint@@@Z
+;protected Hittest
+?HitTest@CPaletteBar@@MAEHVCPoint@@@Z
+??1CPaletteBar@@UAE@XZ
+??0CPaletteBar@@QAE@XZ
+
+
+;??0CDlg_ROTT@@QAE@PAVCWnd@@@Z
+;??0CDlg_LSyT@@QAE@PAVCWnd@@@Z
+;??0CDlg_MOVT@@QAE@PAVCWnd@@@Z
+

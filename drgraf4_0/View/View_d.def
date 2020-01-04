@@ -1,0 +1,106 @@
+; View_D.def -- for CViewObj stuff --  DEBUG version
+
+LIBRARY	View_D32
+DESCRIPTION  'ViewObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitViewDLL												@2 NONAME
+
+
+  
+
+; CZBuffer
+;	; Constructor and Destructor
+	
+
+
+
+; CColorPal
+;	; Constructor and Destructor
+	
+
+??0CAxisDraw@@QAE@XZ
+
+
+
+;??0CWire_0@@QAE@PAVCDrawView@@W4RENDITION@@HQAH@Z
+
+?GetRuntimeClass@CWire_0@@UBEPAUCRuntimeClass@@XZ
+
+
+
+
+?ClippedByZBuffer@CRender@@UAEHPAVCDrObject@@@Z
+?SetCPixel@CRender@@UAEXPAVCClientDC@@HHPAURGBCOLOR@@@Z
+?GetCPixel@CRender@@UAEXPAVCClientDC@@HHPAURGBCOLOR@@@Z
+?LightUpPixel@CRender@@UAEKPAVCClientDC@@HHK@Z
+?LightUpScanSpan@CRender@@UAEXPAVCClientDC@@HHH@Z
+?RenderPixel_Z@CRender@@UAEXPAVCClientDC@@HHNK@Z
+?RenderLine_Z@CRender@@UAEXPAVCClientDC@@UtagPOINT@@1PAUWORLD@@2K@Z
+?RenderPolyline_Z@CRender@@UAEXPAVCClientDC@@FPAUtagPOINT@@PAUWORLD@@K@Z
+?DepthSort@CRender@@UAEXPAVCDListMgr@@H@Z
+?InShadow@CRender@@UAEHPAUWORLD@@NPAULTSOURCE@@PAN@Z
+?AddToEdgeList_LF@CRender@@UAEXPAVCDrObject@@00H@Z
+?AdjacentPoly@CRender@@UAEHPAVCDrObject@@0@Z
+?AddToEdgeList@CRender@@UAEXPAVCDrObject@@00H@Z
+?BuildEdgeList@CRender@@UAEXPAVCDrObject@@H@Z
+?EvaluateColor_LF@CRender@@UAE?AURGBCOLOR@@UWORLD@@0N@Z
+?EvaluateColor_FULL@CRender@@UAE?AURGBCOLOR@@HHUWORLD@@00H@Z
+?DoAntiAliasing@CRender@@UAEHXZ
+?RenderPixel_FULL@CRender@@UAEXPAVCClientDC@@HHUWORLD@@11H@Z
+?RenderSpan_FULL@CRender@@UAEXPAVCClientDC@@HPAUscanspan@@@Z
+?RenderScanLines@CRender@@UAEHPAVCClientDC@@@Z
+?RenderPolygon_FULL@CRender@@UAEHPAVCClientDC@@PAVCDrObject@@H@Z
+?RenderPolyList@CRender@@UAEXH@Z
+?DisposePolyList@CRender@@UAEXXZ
+?AddToPolyList@CRender@@UAEXPAVCDrObject@@@Z
+?IsAntiAliasingOn@CRender@@UAEHXZ
+?SetAntiAlias@CRender@@UAEXH@Z
+?IsShadowOn@CRender@@UAEHXZ
+?SetShadow@CRender@@UAEXH@Z
+?TermRender@CRender@@UAEXXZ
+?InitScan@CRender@@UAEHH@Z
+?Init@CRender@@UAEHPAVCRect@@PAULTENVIRON@@@Z
+?Transparency@CRender@@UAE?AURGBCOLOR@@PAU2@0N@Z
+?Opaqueness@CRender@@UAE?AURGBCOLOR@@PAU2@0N@Z
+?Serialize@CRender@@UAEXAAVCArchive@@@Z
+?GetRuntimeClass@CRender@@UBEPAUCRuntimeClass@@XZ
+
+
+
+?PerturbNormal@CTextures@@MAE?AUWORLD@@NNNU2@NNNN@Z
+?BumpsLocalMatrix@CTextures@@MAEXUWORLD@@00@Z
+?DepthLocalMatrix@CTextures@@MAEXUWORLD@@00@Z
+?RGBLocalMatrix@CTextures@@MAEXUWORLD@@00@Z
+?PICTLocalMatrix@CTextures@@MAEXUWORLD@@00@Z
+?RockLocalMatrix@CTextures@@MAEXUWORLD@@00@Z
+?WoodLocalMatrix@CTextures@@MAEXUWORLD@@00@Z
+?TransformWorldToTexture@CTextures@@MAEXPAUMATRIX@@NNNPAN11@Z
+?InverseLocalMatrix@CTextures@@MAEXPAUMATRIX@@UWORLD@@11@Z
+?FormLocalMatrix@CTextures@@MAEXPAUMATRIX@@UWORLD@@11@Z
+?Noise@CTextures@@MAENNNN@Z
+?Depth@CTextures@@UAE?AURGBCOLOR@@NNNU2@NN@Z
+?R_G_B@CTextures@@UAE?AURGBCOLOR@@NNNU2@N@Z
+?PICTbump@CTextures@@UAE?AUWORLD@@NNNU2@NNN@Z
+?PICT@CTextures@@UAE?AURGBCOLOR@@NNNU2@NNN@Z
+?PICTcleanup@CTextures@@UAEXXZ
+?PICTterm@CTextures@@UAEXXZ
+?PICTinit@CTextures@@UAEXKPAUBox@@@Z
+?Rock@CTextures@@UAE?AURGBCOLOR@@NNNU2@NNNN@Z
+?Wood@CTextures@@UAE?AURGBCOLOR@@NNNU2@NNN@Z
+?Init_Noise@CTextures@@UAEHXZ
+?EffectiveNormal@CTextures@@UAE?AUWORLD@@PAURENDINFO@@PAULTENVIRON@@U2@2@Z
+?TextureEffect@CTextures@@UAE?AURGBCOLOR@@PAURENDINFO@@PAULTENVIRON@@UWORLD@@@Z
+?Terminate@CTextures@@UAEXPAURENDINFO@@PAULTENVIRON@@@Z
+?Init@CTextures@@UAEXPAURENDINFO@@PAULTENVIRON@@@Z
+?Serialize@CTextures@@UAEXAAVCArchive@@@Z
+?GetRuntimeClass@CTextures@@UBEPAUCRuntimeClass@@XZ
+
+??0CViewInfo@@QAE@PAVCView@@@Z
+?Create@CViewInfo@@QAEHXZ

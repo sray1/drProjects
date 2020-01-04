@@ -1,0 +1,32 @@
+; Elem_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	Elem_D32
+DESCRIPTION  'ElemObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitElemDLL												@2 NONAME
+	
+
+
+
+
+; CDrMat_0D
+	; Constructor and Destructor
+
+ 
+
+
+
+; CDrMat_1D
+	; Constructor and Destructor
+
+ 
+
+
+
+ 

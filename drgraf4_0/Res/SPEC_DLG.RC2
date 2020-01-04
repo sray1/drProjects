@@ -1,0 +1,62 @@
+//
+// DRGRAF.RC2 - resources App Studio does not edit directly
+//
+
+#ifdef APSTUDIO_INVOKED
+	#error this file is not editable by App Studio
+#endif //APSTUDIO_INVOKED
+
+/////////////////////////////////////////////////////////////////////////////
+// Add additional manually edited resources here...
+
+/////////////////////////////////////////////////////////////////////////////
+// extra dialogs not editable with App Studio
+
+/////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////
+/////////////// The BELOW Dialog Box has been concocted by:                  ///////
+///////////////    1) get original from ControlTest:"CTRLtest.rc2"           ///////
+///////////////    2) get AppStudio created IDD_PEN         Dlg:"DRGRAF.RC"  ///////
+///////////////    3) mix 1) & 2) together                                   ///////
+//////////////////////////////////////////////////////////////////////////////////// 
+#include "muscroll.h"       // for spin button styles
+// 3 standard edit controls, with spin buttons
+
+IDD_PEN DIALOG DISCARDABLE  100, 60, 159, 78
+STYLE WS_POPUP | WS_VISIBLE | WS_CAPTION 
+CAPTION "PEN"
+FONT 12, "MS Sans Serif"
+BEGIN
+    CONTROL         "OK",IDOK,"Button",BS_OWNERDRAW | WS_TABSTOP,120,4,36,20
+    CONTROL         "Cancel",IDCANCEL,"Button",BS_OWNERDRAW | WS_TABSTOP,120,
+                    56,36,20
+    LISTBOX         IDC_LIST_COLOR,8,20,36,39,LBS_SORT | LBS_OWNERDRAWFIXED | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Color:",IDC_STATIC,8,8,32,7
+    LTEXT           "Style:",IDC_STATIC,48,8,30,7
+    LTEXT           "Width in pixels:",IDC_STATIC,8,68,52,7
+    EDITTEXT        IDC_EDIT_WIDTH,64,64,16,12,ES_AUTOHSCROLL
+	CONTROL         "", IDC_BUTTON_WIDTH, "MicroScroll", MSS_VERTICAL , 80, 64,
+					11, 12
+    COMBOBOX        IDC_COMBO_STYLE,48,20,60,64,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+END
+
+IDD_PEN DLGINIT
+BEGIN
+    158, 0x403, 6, 0
+0x6f53, 0x696c, 0x0064, 
+    158, 0x403, 5, 0
+0x6144, 0x6873, "\000" 
+    158, 0x403, 4, 0
+0x6f44, 0x0074, 
+    158, 0x403, 9, 0
+0x6144, 0x6873, 0x4420, 0x746f, "\000" 
+    158, 0x403, 13, 0
+0x6144, 0x6873, 0x4420, 0x746f, 0x4420, 0x746f, "\000" 
+    0
+END
+
+
+

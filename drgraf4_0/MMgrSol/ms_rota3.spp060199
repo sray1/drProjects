@@ -1,0 +1,431 @@
+// Rotate.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+#include <time.h>
+#include <stdio.h>
+
+#include "Def_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+#include "MSolMgr.h"
+#include "dlg_srot.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "PA_Rotat.h"
+ 
+#include "MS_Rota3.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define MIN_CNODES_CURVE	4
+#define MIN_CNODES_PATCH	16
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMS_Rota3,CMI_GangS,1)
+/////////////////////////////////////////////////////////////////////////////
+CMS_Rota3::CMS_Rota3()
+{
+	m_PatSubType = PS_TRIANGLE;
+	m_SolSubType = SS_PENTA;
+}
+
+CMS_Rota3::~CMS_Rota3()
+{
+}
+int CMS_Rota3::SetInfoBase
+				(
+					CString&						SolidID,		
+					CDrSolid*						pDrSolid,
+					CDListMgr*						pPatchList,
+					CList<PATCHLATCH,PATCHLATCH>*	pLatchList,
+					CDListMgr*						pNodeList,
+					CList<int,int>*					pElperSegList,
+					double							dLen,
+					double							Ratio,
+					CView*							pView
+				) 
+{
+	int index;
+//	CDrNode*	pDrNode;
+	////////////////////////////////////////////////////////// Dialog Info(Don't Display Dlg)
+	CDlg_RotP_S Dlg;
+	Dlg.m_SubType	= PS_TRIANGLE;
+	////////////////////////////////////////////////// SolidID
+	Dlg.m_PatchID	= SolidID;
+	////////////////////////////////////////////////// PatchID
+	if(pPatchList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMS_Rotat::SetInfoBase\npPatchList->GetCount() != 1");
+		return -1;
+	}
+	CDrPatch* pDrPatch	= (CDrPatch*)(pPatchList->GetObject(0) );
+	Dlg.m_CurveID	= pDrPatch->GetObjectID();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index				= pDrPatch->GetSolidList()->GetObjectIndex(pDrSolid);
+	if(index>=0)
+		pDrPatch->GetSolidList()->RemoveObject(index);
+/*
+	////////////////////////////////////////////////// Latch Edge No
+	if(pLatchList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMS_Xtrud::SetInfoBase\npLatchList->GetCount() != 1");
+		return -1;
+	}
+	Dlg.m_Orient_1	= pLatchList->GetHead();
+*/
+	////////////////////////////////////////////////// FromNodeID & ToNodeID 
+	if(pNodeList->GetCount() != 2)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMS_Rotat::SetInfoBase\npNodeList->GetCount() != 2");
+		return -1;
+	}
+	m_pFromIDNode	= (CDrNode*)(pNodeList->GetObject(0) );
+	Dlg.m_FromID	= m_pFromIDNode->GetObjectID();
+	Dlg.m_bFromCN	= m_pFromIDNode->IsControlNode();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index			= m_pFromIDNode->GetSolidList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		m_pFromIDNode->GetSolidList()->RemoveObject(index);
+	/////////
+	m_pToIDNode		= (CDrNode*)(pNodeList->GetObject(1) );
+	Dlg.m_ToID		= m_pToIDNode->GetObjectID();
+	Dlg.m_bToCN		= m_pToIDNode->IsControlNode();
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	index			= m_pToIDNode->GetSolidList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		m_pToIDNode->GetSolidList()->RemoveObject(index);
+	////////////////////////////////////////////////// Mesh
+	if(pElperSegList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMS_Rotat::SetInfoBase\npElperSegList->GetCount() != 1");
+		return -1;
+	}
+	Dlg.m_nMesh		= pElperSegList->GetHead();
+	Dlg.m_dAng_1	= 0.0;
+	Dlg.m_dAng_2	= dLen;
+	Dlg.m_Ratio		= Ratio;
+	////////////////////////////////////////////////// Fill Info
+	Dlg.SetInfoForDataBase(pDrSolid);
+	////////////////////////////////////////////////// Do It
+	int nResult = GoDoIt(pDrSolid);
+	//////////////
+	if(nResult<0)
+		return -1;
+	/////////////////////
+	return 0;		 
+}
+
+int CMS_Rota3::GoDoIt(CDrSolid* pDrSolid) 
+{
+
+	//////////////////////////////////////////////////////////
+	GetInfo(pDrSolid);
+	m_pDrSolid = pDrSolid;
+	//////////////////////////////////	
+	m_pCNodeList 	= m_pDrSolid->GetCNodeList();	
+	///////                    				// ControlNode Mesh
+	Rotate();
+	////////////////////////
+	m_SolidType = SO_TENSOR;
+	////////////////////////
+	if(InsertMeshInfo_Solid_3()<0)
+		return -1;
+	/////////////////////
+	return 0;
+}
+
+CDrSolid* CMS_Rota3::GoDoIt() 
+{
+	//////////////////////////////////////////////////////////
+	m_pDrSolid 		= GetInfo();       // PGen Dialog
+	if(!m_pDrSolid)		// cancel
+		return (CDrSolid*)NULL;
+	//////////////////////////////////	
+	m_pCNodeList 	= m_pDrSolid->GetCNodeList();	
+	///////                    				// ControlNode Mesh
+	Rotate();
+	////////////////////////
+	m_SolidType = SO_TENSOR;
+	////////////////////////
+	if(InsertMeshInfo_Solid_3()<0)
+		return (CDrSolid*)NULL;
+	/////////////////////
+	return m_pDrSolid;
+}			
+
+CDrSolid* CMS_Rota3::GetInfo()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(SOLID);
+	//////////////////////////////////////////////////////////////////
+	CMSolMgr 	MSolMgr;
+	CMSolMgr* 	pMSolMgr = &MSolMgr;
+	CString		Cid;
+	int 		index;
+	///////////////////////////////////////////////////
+	if (pMSolMgr->DoModal_Solid_Rotate(&Cid,PS_TRIANGLE) == IDCANCEL)
+			return (CDrSolid*)NULL; 
+    /////////////////////////////////////////////////////// update
+	m_CurrentSolidID 	= Cid;
+	index 				= pObjectMgr->
+							GetObjectIndexfromKey(SOLID,Cid,1);
+	if(index>=0)
+	{						
+		CDrSolid* pDrSolid	= (CDrSolid*)(pDListMgr->GetObject(index));
+   		//////////////////////////////
+		m_pPenList		= pDrSolid->GetPentaList();
+		m_SolidProc		= pDrSolid->GetSolidProc();
+		m_pNum_t_R		= pDrSolid->GetNum_tPointer_R();
+//		m_FromID 		= pDrSolid->GetFromID_R();
+//		m_ToID			= pDrSolid->GetToID_R();
+		m_pFromIDNode 	= pDrSolid->GetFromIDNode_R();
+		m_pToIDNode		= pDrSolid->GetToIDNode_R();
+		m_CurveID_S[0]	= pDrSolid->GetPatchID(0);
+		m_dAng_1		= pDrSolid->GetAng_1_R();		// Increment for Uniform case
+		m_dAng_2		= pDrSolid->GetAng_2_R();
+		m_pDisAng_R		= pDrSolid->GetDis_AngPointer_R();	// Distribution of angles 
+		////////////////////////////////////////////////
+		m_nSegs_R		= pDrSolid->GetMaxBezSegments_R();	// # of Bezier Patches 
+		m_Ratio			= pDrSolid->GetRatio_R();
+		m_bUnifOT		= pDrSolid->IsUniform_R();
+		m_nOut_R		= pDrSolid->GetMaxOutPts_R();;
+		m_nOrder_R		= pDrSolid->GetOrder_R();
+		m_CurveType_R	= pDrSolid->GetCurveType_R();;
+		m_nDim_R		= pDrSolid->GetnDim_R();
+		m_bClosed_R		= pDrSolid->IsClosed_R();					// for Extrusion
+		///////////////////////////////////////// Bezier Quadratic
+		m_nOut_RCon		= (m_nOrder_R-1) * m_nSegs_R + 1;	// # of  Bezier Controls in T-dir
+		if(m_bClosed_R)
+				m_nOut_RCon--;
+		/////////////////////////////////////
+		m_nSegs_RCon		= m_nOut_RCon - 1;
+		m_nMaxSolidCNodes_R = m_nOut_RCon;
+
+#ifdef _DEBUG
+		///////////////////////////////////////// Check
+		int i;
+		double dTotAng=0.0,dAngInc;
+		//////
+		for(i=0;i<m_nSegs_R;i++)
+		{
+			dAngInc	= m_pDisAng_R[i];
+			dTotAng	+= dAngInc;
+		}
+		if(fabs(dTotAng-m_dAng_2)>.01)
+		{
+			AfxMessageBox("ERROR\nCMP_Rotat::GetInfo()-fabs(dTotAng-m_dAng_2)>.01");
+			return (CDrSolid*)NULL;
+		}
+#endif
+		////////////////
+		return pDrSolid;
+	}
+	else 
+		return (CDrSolid*)NULL;
+}			
+
+int CMS_Rota3::GetInfo(CDrSolid* pDrSolid)
+{
+	//////////////////////////////
+	m_pPenList		= pDrSolid->GetPentaList();
+	m_SolidProc		= pDrSolid->GetSolidProc();
+	m_pNum_t_R		= pDrSolid->GetNum_tPointer_R();
+//	m_FromID 		= pDrSolid->GetFromID_R();
+//	m_ToID			= pDrSolid->GetToID_R();
+	m_pFromIDNode 	= pDrSolid->GetFromIDNode_R();
+	m_pToIDNode		= pDrSolid->GetToIDNode_R();
+	m_CurveID_S[0]	= pDrSolid->GetPatchID(0);
+	m_dAng_1		= pDrSolid->GetAng_1_R();		// Increment for Uniform case
+	m_dAng_2		= pDrSolid->GetAng_2_R();
+	m_pDisAng_R		= pDrSolid->GetDis_AngPointer_R();	// Distribution of angles 
+	////////////////////////////////////////////////
+	m_nSegs_R		= pDrSolid->GetMaxBezSegments_R();	// # of Bezier Patches 
+	m_Ratio			= pDrSolid->GetRatio_R();
+	m_bUnifOT		= pDrSolid->IsUniform_R();
+	m_nOut_R		= pDrSolid->GetMaxOutPts_R();;
+	m_nOrder_R		= pDrSolid->GetOrder_R();
+	m_CurveType_R	= pDrSolid->GetCurveType_R();;
+	m_nDim_R		= pDrSolid->GetnDim_R();
+	m_bClosed_R		= pDrSolid->IsClosed_R();					// for Extrusion
+	///////////////////////////////////////// Bezier Quadratic
+	m_nOut_RCon		= (m_nOrder_R-1) * m_nSegs_R + 1;	// # of  Bezier Controls in T-dir
+	if(m_bClosed_R)
+			m_nOut_RCon--;
+	/////////////////////////////////////
+	m_nSegs_RCon		= m_nOut_RCon - 1;
+	m_nMaxSolidCNodes_R = m_nOut_RCon;
+
+#ifdef _DEBUG
+		///////////////////////////////////////// Check
+		int i;
+		double dTotAng=0.0,dAngInc;
+		//////
+		for(i=0;i<m_nSegs_R;i++)
+		{
+			dAngInc	= m_pDisAng_R[i];
+			dTotAng	+= dAngInc;
+		}
+		if(fabs(dTotAng-m_dAng_2)>.01)
+		{
+			AfxMessageBox("ERROR\nCMP_Rota3::GetInfo()-fabs(dTotAng-m_dAng_2)>.01");
+			return -1;
+		}
+#endif
+	////////////////
+	return 0;
+}			
+
+int CMS_Rota3::Rotate() 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr;
+	///////////////////////////////////////////////////
+	CString		PatchID;
+//	BOOL		bPutinCNodeList = TRUE;
+	BOOL		bPutinCNodeList = FALSE;	//061297
+	int i;
+	//////////////////////////////////////// get Patch Info:XSection	
+	PatchID = m_CurveID_S[0];
+	/////////////////////////
+	int index	= pObjectMgr->
+					GetObjectIndexfromKey(PATCH,PatchID,1);
+	if(index<0)
+	{
+		AfxMessageBox("CMS_Rota3::Rotate\nPatchIndex Failure!");
+		return -1;
+	}
+	///////////	
+	pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+	CDrPatch* pDrPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+	if(!pDrPatch)
+		return -1;
+	/////////////////
+	GetInfo_Patch_3(pDrPatch);
+	/////////////////////////////////////////// Memory ControlPts 
+	m_pIn_S[0] = FixMem((long)m_nMaxSolidCNodes_ST);
+	m_pInWts_S[0]	= FixMemD((long)m_nMaxSolidCNodes_ST);
+	if( !m_pIn_S[0] || !m_pInWts_S[0] )
+	{
+		AfxMessageBox("CMP_Rotat::Curve\nFixMemforCNodes Failure!");
+		return -1;
+	}
+	///////////////////////////////////////// Store LOCAL Pos
+	FillCNodesLOCAL_Solid(pDrPatch->GetCNodeList(),m_pWts_BZ_ST,
+		m_pIn_S[0],m_pInWts_S[0],m_nMaxSolidCNodes_ST,bPutinCNodeList,
+		FALSE);
+	////////////////////////////////// Save SolidInfo
+	m_nOut				= ((long)m_nOut_ST)*((long)m_nOut_R);				
+	m_nOutCon			= ((long)m_nOut_STCon)*((long)m_nOut_RCon);				
+	m_nMaxSolidCNodes	= m_nOutCon;
+   ///////////////////////////////////////// AxisVector from
+    									   // end nodes	
+    UnitAxisFromEndNodes(0);
+	/////////////////////////////////////////// Memory OutPts 
+	m_pOut = FixMem(m_nOutCon);
+	m_pOutWts	= FixMemD(m_nOutCon);
+	if( !m_pOut || !m_pOutWts )
+	{
+		AfxMessageBox("CMS_Rota3::Rotate\nFixMem Failure!");
+		return -1;
+	}
+	///////////////////////////////////////// Go Rotate 
+	int nResult = GenerateCNodes();
+	///////////////////////////////////////// Free InputCNodeMems
+    for(i=0;i<4;i++)
+    {
+    	if(m_pIn_S[i])
+    	{
+			FreeMem(m_pIn_S[i]);
+			m_pIn_S[i] = NULL;
+		}	
+    	if(m_pInWts_S[i])
+    	{
+			FreeMemD(m_pInWts_S[i]);
+			m_pInWts_S[i] = NULL;
+		}	
+	}	
+	///////////////////////////////////////////////////////////// 
+	if(nResult<0)	
+		return -1;
+	else	
+		return 0;
+	/////////////			 
+}
+			
+int CMS_Rota3::GenerateCNodes()
+{
+	////////////////////////////////////////////// 
+	int nOut		= (int)m_nOutCon;  // for now
+	////////////////////////////////////////////// generate Patch Pts
+	CPA_Rotat	PA_Rotat;
+	int nOutActual	= PA_Rotat.RotateCurve
+			(
+				m_bClosed_R,
+				m_nSegs_R,		//	# of Quadratic Bezier Segments
+				m_pDisAng_R,	//	Angle Distribution for each Bez Patch in degrees
+				m_vAxis,		//	unit rotation vector (direction)
+				m_FromPt,		//	a pt. on the rotation vector
+//				m_nSegs_RCon,	//	subdivision value (interior spaces)
+				m_nOut_STCon,	//	number of input data points
+				m_pIn_S[0],		//	input XSec curve dataPts
+				m_pInWts_S[0],	//	input XSec curve Wts
+				m_pOut,			//	Output ControlPts
+				m_pOutWts		//	Output Wts array
+			);	  
+	////////////////////////////	
+	if(nOutActual != nOut)
+		return -1;
+	else
+		return 0;
+												
+}
+
+void CMS_Rota3::Serialize(CArchive& ar)
+{
+
+	CMI_GangS::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMP_Rota3:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMP_Rota3:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////// end of module //////////////////

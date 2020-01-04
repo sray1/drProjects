@@ -1,0 +1,616 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+#include <math.h> 
+
+#include "3DMath.h"
+#include "XForm.h"
+
+#include "Def_Objs.h"
+#include "Def_View.h"
+#include "Def_Type.h"
+#include "Def_CuPS.h"
+/////////////////////
+#include "drgraf.h"
+#include "drgradoc.h"
+/////////////////////
+#include "ObjMgr.h"
+#include "DListMgr.h"
+///////////////////// dialogMgr
+//#include "EDl2Mgr.h"  
+///////////////////// cards
+#include "Def_Card.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "Def_Elem.h"
+#include "DrNode.h"
+///////////////////// Support
+#include "Def_Supp.h"
+#include "DrLinSup.h"
+///////////////////// specials
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+#include "precison.h"
+#include "mapfacto.h"
+#include "ScaleFac.h"
+/////////////////////
+#include "MI_LSupp.h" 
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMI_LSupp,CMI_GangS,1)
+/////////////////////////////////////
+#define new	DEBUG_NEW
+#define	BUFF_SIZE			1024
+/////////////////////////////////////////////////////////////////////////////
+CMI_LSupp::CMI_LSupp()
+{
+	m_bCurveTan	= FALSE;
+	m_bPatchNor	= FALSE;
+}
+
+CMI_LSupp::~CMI_LSupp()
+{
+}	
+
+//////////////////////////////////////////////////////////////////////////// Poting Helper
+CDrLinSup* CMI_LSupp::CreatePatchLinSup_3(SUPPPROC SuppProc,SUPPCARD& supCard,CDrPatch* pPatch,
+										UINT SuppBased)
+{
+	AfxMessageBox("Internal ERROR:\nCMI_LSupp::CreatePatchLinSup_3\nNOT YET IMPLEMENTED"); 
+	return (CDrLinSup*)NULL;
+}
+
+CDrLinSup* CMI_LSupp::CreatePatchLinSup_4(SUPPPROC SuppProc,SUPPCARD& supCard,CDrPatch* pPatch,
+										UINT SuppBased)
+{
+	m_bReciproDone	= FALSE;
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(LIN_SUPPORT);
+	CDrLinSup* pAdd;
+	int nActiveIndex;
+	//////////////////////////////////////////// Output memory
+	BOOL bClosed_S		= pPatch->IsClosed_S();
+	BOOL bClosed_T		= pPatch->IsClosed_T();
+	int nOut_S			= pPatch->GetOut_S();
+	int nOut_T			= pPatch->GetOut_T();
+	long nOut			= pPatch->GetLongOutPts();
+	BOOL bLinSpr		= pPatch->IsLinSpr();
+	BOOL bLinSnu		= pPatch->IsLinSnu();
+	CDListMgr*	pList	= pPatch->GetSuppList();
+	////////////////////////////////
+	pWORLD	pOut	= FixMem(nOut);
+	pDOUBLE pOutWts = FixMemD(nOut);
+	//////////////////////////////////////////// Now Generate
+	m_bBack = FALSE;
+	m_PatSubType = pPatch->GetPatSubType(); 
+	FillMeshNodesPatch(pPatch,pOut,pOutWts);
+	//////////////////////////////////////////// Generate Normals, if Needed
+	pWORLD	pOutPatchNor;
+	m_bPatchNor	= supCard.bTan;
+	///////////////////////////
+	if(m_bPatchNor)
+	{
+		pOutPatchNor	= FixMem(nOut);
+		//////////////////////////////////////////// Now Generate
+		FillMeshNormalsPatch(pPatch,pOutPatchNor);
+		/////////////////////
+	}
+	///////////////////////////////////////////////////////////////// Replace, if needed
+	if(bLinSpr || bLinSnu)
+	{
+		int nResult = RemoveOldLinSup(SuppProc, pList);
+		if(nResult<0)
+				return (CDrLinSup*)NULL;
+	}
+	////////////////////////////////////////////////////////
+	int nOutCreate_S = nOut_S;
+	if(bClosed_S)
+		nOutCreate_S--;
+	int nOutCreate_T = nOut_T;
+	if(bClosed_T)
+		nOutCreate_T--;
+	//////////////////////////////////////////////////////// Loop Over MeshPts
+	int i,j;
+	int k = -1;
+	///////////
+	for(j=0; j<nOutCreate_T;j++)
+	{
+		for(i=0; i<nOutCreate_S;i++)
+		{
+			k++;
+			///////////////////////////////////////////////////////////////////////// Add
+			pAdd = (CDrLinSup*)(pObjectMgr->AddToDataBase(nActiveIndex,LIN_SUPPORT));
+			////////////////////////////
+			m_SuppProc	= SuppProc;
+			(pAdd->GetSuppCard())->SuppProc	= m_SuppProc;
+			///////////////////////////////////////////// init Raw Support Data
+			pAdd->InitRawData(SuppProc);
+			/////////////////////
+			m_SuppBased	= SuppBased;
+			m_pPatch	= pPatch;
+			m_NodePos	= *(pOut+k);
+			if(m_bPatchNor)
+				m_PatchNor	= *(pOutPatchNor+k);
+			///////////////////////////
+			SetInfoForLinSupBase(pAdd,supCard);	
+			///////
+		}		
+	}
+	/////////////////////////////////////// Free Memory
+	FreeMem(pOut);
+	if(m_bPatchNor)
+		FreeMem(pOutPatchNor);
+	/////////////////////
+    return pAdd;
+}
+
+CDrLinSup* CMI_LSupp::CreateCurveLinSup(SUPPPROC SuppProc,SUPPCARD& supCard,CDrCurve* pCurve,
+										UINT SuppBased)
+{
+	m_bReciproDone	= FALSE;
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(LIN_SUPPORT);
+	CDrLinSup* pAdd;
+	int nActiveIndex;
+	//////////////////////////////////////////// Output memory
+	BOOL bClosed		= pCurve->IsClosed_S();
+	int nOut			= pCurve->GetLongOutPts();
+	BOOL bLinSpr		= pCurve->IsLinSpr();
+	BOOL bLinSnu		= pCurve->IsLinSnu();
+	CDListMgr*	pList	= pCurve->GetSuppList();
+	////////////////////////////////
+	pWORLD	pOut	= FixMem(nOut);
+	pDOUBLE pOutWts = FixMemD(nOut);
+	//////////////////////////////////////////// Now Generate
+	m_bBack = FALSE;
+	FillMeshNodesCurve(pCurve,pOut,pOutWts,nOut);
+	//////////////////////////////////////////// Generate Tangents, if Needed
+	pWORLD	pOutCurveTan;
+	m_bCurveTan	= supCard.bTan;
+	///////////////////////////
+	if(m_bCurveTan)
+	{
+		int nOutTan		= nOut;
+		if(bClosed)
+			nOutTan--;
+		pOutCurveTan	= FixMem(nOutTan);
+		//////////////////////////////////////////// Now Generate
+		FillMeshTangentsCurve(pCurve,pOutCurveTan,nOutTan);
+		/////////////////////
+	}
+	///////////////////////////////////////////////////////////////// Replace, if needed
+	if(bLinSpr || bLinSnu)
+	{
+		int nResult = RemoveOldLinSup(SuppProc, pList);
+		if(nResult<0)
+				return (CDrLinSup*)NULL;
+	}
+	////////////////////////////////////////////////////////
+	int nOutCreate = nOut;
+	if(bClosed)
+		nOutCreate--;
+	//////////////////////////////////////////////////////// Loop Over MeshPts
+	for(i=0; i<nOutCreate;i++)
+	{
+		///////////////////////////////////////////////////////////////////////// Add
+	    pAdd = (CDrLinSup*)(pObjectMgr->AddToDataBase(nActiveIndex,LIN_SUPPORT));
+		////////////////////////////
+		m_SuppProc	= SuppProc;
+		(pAdd->GetSuppCard())->SuppProc	= m_SuppProc;
+		///////////////////////////////////////////// init Raw Support Data
+		pAdd->InitRawData(SuppProc);
+		/////////////////////
+		m_SuppBased	= SuppBased;
+		m_pCurve	= pCurve;
+		m_NodePos	= *(pOut+i);
+		if(m_bCurveTan)
+			m_CurveTan	= *(pOutCurveTan+i);
+		///////////////////////////
+		SetInfoForLinSupBase(pAdd,supCard);	
+		///////	
+	}
+	/////////////////////////////////////// Free Memory
+	FreeMem(pOut);
+	if(m_bCurveTan)
+		FreeMem(pOutCurveTan);
+	/////////////////////
+    return pAdd;
+}
+
+CDrLinSup* CMI_LSupp::CreateNodeLinSup(SUPPPROC SuppProc,SUPPCARD& supCard,CDrNode* pNode,
+										UINT SuppBased)
+{
+
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(LIN_SUPPORT);
+	CDrLinSup* pAdd;
+	int nActiveIndex;
+	////////////////////
+	m_bCurveTan	= FALSE;
+	///////////////////////////////////////////////////////////////////////////
+	// Remove or Destroy Old One similar to Current Supproc
+	////////////////////////////////////////
+	CDListMgr* pList = pNode->GetSuppList();
+	///////////////////////////////
+	if(pList->GetCount() > 2)
+	{
+		AfxMessageBox("Internal ERROR:\nCMI_LSupp::CreateNodeLinSup\npList->GetCount() > 2"); 
+		return (CDrLinSup*)NULL;
+	}
+	////////////////////////////////////////////////////////////////////////
+	int i;
+	CDrLinSup*	pDrLinSup;
+	/////////////////////////////////////////////////////////// Go Over List
+	for(i=0;i<pList->GetCount();i++)
+	{
+		if(i==0)
+			pDrLinSup = (CDrLinSup*)pList->GetHead();
+		else
+			pDrLinSup = (CDrLinSup*)pList->GetTail();
+		////
+		if(!pDrLinSup)
+		{
+			AfxMessageBox("Internal ERROR:\nCMI_LSupp::CreateNodeLinSup\npDrLinSup=NULL"); 
+			return (CDrLinSup*)NULL;
+		}
+		//////////////////////////////////////////////////////////////////// Remove
+		if((pDrLinSup->GetSuppCard())->SuppProc == SuppProc)
+		{
+			if(i==0)
+				pList->RemoveHead();
+			else
+				pList->RemoveTail();
+			//////////////////////////////////////////////////////////////// Delete
+			CString SupID	= pDrLinSup->GetObjectID();
+			nActiveIndex	= pDListMgr->GetObjectIndex(LIN_SUPPORT, SupID);
+			if(nActiveIndex>=0)
+				pObjectMgr->DeleteFromDataBase(nActiveIndex,LIN_SUPPORT);
+			////////
+			break;
+		}
+	}
+	/////////////////////////////////////////////////////////////////////////// Add Always
+	pAdd 	= (CDrLinSup*)(pObjectMgr->AddToDataBase(nActiveIndex,LIN_SUPPORT));
+	////////////////////////////
+	m_SuppProc	= SuppProc;
+	(pAdd->GetSuppCard())->SuppProc	= m_SuppProc;
+	///////////////////////////////////////////// init Raw Support Data
+	pAdd->InitRawData(SuppProc);
+	/////////////////////
+	m_SuppBased	= SuppBased;
+	m_pNode		= pNode;
+	m_NodePos	= *(m_pNode->GetLocalPos());
+	///////////////////////////////////////
+	SetInfoForLinSupBase(pAdd,supCard);	
+	///////	
+    return pAdd;
+}
+
+void CMI_LSupp::SetInfoForLinSupBase(CDrLinSup* pSupp,SUPPCARD supCard)
+{
+
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	CPrecision* pPrecision     	= (CPrecision*)pObjectMgr->GetSpecObject(PRECISION);
+	CScaleFactor* pScaleFactor 	= (CScaleFactor*)pObjectMgr->GetSpecObject(SCALEFACTOR);
+	CMapFactor* pMapFactor     	= (CMapFactor*)pObjectMgr->GetSpecObject(MAPFACTOR); 
+	CDrPen*	pDrPen				= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer				= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current Node
+	LONG  lWorldBase  	= pPrecision->GetWorldBase(); 
+    double dWorldBase 	= (double)lWorldBase;
+    ///////////////////////////////////////////
+	double dMapFactor   = pMapFactor->GetMapFactor();
+	/////////////////////////////////////////////////
+	pSupp->SetObjectType((int)LIN_SUPPORT);
+	pSupp->SetElemType((int)ELEM_OBJECT);              // globals.h
+    pSupp->SetLevelType((int)LEVEL_GRAPA);								// Kid Level
+	pSupp->SetObjectID(m_sup_id);             
+	/////////////////////////////////////////////////
+//		int			ElNum;                 
+//		int			IDNum;
+	/////////////////////////////////////////////////////////
+	if(m_SuppBased == NODE)
+	{
+		///////////////////////////////////////////////// Nodelist
+		pSupp->GetNodeList()->AddTail(m_pNode);
+		///////////////////////////////////// Reciprocate
+		if(m_SuppProc == SUP_RIGID || m_SuppProc == SUP_LINSPR)
+			m_pNode->SetLinSpr(TRUE);
+		else
+		if(m_SuppProc == SUP_LINSNU)
+			m_pNode->SetLinSnu(TRUE);
+		//////////////////////
+		(m_pNode->GetNodeCard())->sup_id = supCard.sup_id;
+		m_pNode->GetSuppList()->AddTail(pSupp);
+	}
+	else
+	if(m_SuppBased == CURVE)
+	{
+		///////////////////////////////////////////////// Curvelist
+		pSupp->GetCurveList()->AddTail(m_pCurve);
+		///////////////////////////////////// Reciprocate
+		if(m_SuppProc == SUP_RIGID || m_SuppProc == SUP_LINSPR)
+			m_pCurve->SetLinSpr(TRUE);
+		else
+		if(m_SuppProc == SUP_LINSNU)
+			m_pCurve->SetLinSnu(TRUE);
+		//////////////////////
+		m_pCurve->GetSuppList()->AddTail(pSupp);
+		/////////////////////////
+	}
+	else
+	if(m_SuppBased == PATCH)
+	{
+		///////////////////////////////////////////////// Patchlist
+		pSupp->GetPatchList()->AddTail(m_pPatch);
+		///////////////////////////////////// Reciprocate
+		if(m_SuppProc == SUP_RIGID || m_SuppProc == SUP_LINSPR)
+			m_pPatch->SetLinSpr(TRUE);
+		else
+		if(m_SuppProc == SUP_LINSNU)
+			m_pPatch->SetLinSnu(TRUE);
+		//////////////////////
+		m_pPatch->GetSuppList()->AddTail(pSupp);
+		/////////////////////////
+	}
+	else
+	if(m_SuppBased == SOLID)
+	{
+		///////////////////////////////////////////////// Solidlist
+		pSupp->GetSolidList()->AddTail(m_pSolid);
+		///////////////////////////////////// Reciprocate
+		if(m_SuppProc == SUP_RIGID || m_SuppProc == SUP_LINSPR)
+			m_pSolid->SetLinSpr(TRUE);
+		else
+		if(m_SuppProc == SUP_LINSNU)
+			m_pSolid->SetLinSnu(TRUE);
+		//////////////////////
+		m_pSolid->GetSuppList()->AddTail(pSupp);
+		/////////////////////////
+	}
+	///////////////////////////////////////////////// Kode
+	if(m_SuppProc == SUP_RIGID)
+	{
+		for(int i=0;i<6;i++)
+		{
+			(pSupp->GetSuppCard())->kode[i] = 1;
+			(pSupp->GetSuppCard())->pgap[i] = 0;
+		}
+	}
+	else
+	{
+		for(int i=0;i<6;i++)
+		{
+			(pSupp->GetSuppCard())->kode[i] = supCard.kode[i];
+			(pSupp->GetSuppCard())->pgap[i] = supCard.pgap[i];
+		}
+	}
+	//////////////////////////////////////////////////
+	(pSupp->GetSuppCard())->sup_id		= supCard.sup_id;
+//	(pSupp->GetSuppCard())->SuppProc 	= m_SuppProc;		// done in Calling Routine
+	(pSupp->GetSuppCard())->stiffness 	= supCard.stiffness;
+	(pSupp->GetSuppCard())->nid_a 		= supCard.nid_a;
+	///////////////////////////////////////////////// Convert Support LocalData to WORLD
+   	WORLD LocalPos,CNodPos;
+	pWORLD pDat;
+	int i,j,nPts;
+	////////////////////////////////////////////////////////// Skewed Support
+	C3DMath	Math3D;
+	CXForm	XForm;
+	MATRIX Mat;
+	pMATRIX pMat = &Mat; 
+	WORLD NewX;
+	pWORLD pNewX = &NewX;
+	////////////////////////
+	if(supCard.nid_a != "")
+	{
+		CDListMgr* pList	= pObjectMgr->GetObjectList(NODE);
+		int index			= pList->GetObjectIndex(NODE,supCard.nid_a);
+		CDrNode* pNode		= (CDrNode*)pList->GetObject(index);
+		CNodPos				= *(pNode->GetLocalPos());
+		/////////////////////
+		Math3D.GetIdentityMATRIX(pMat);
+		/////////////////////////////////// Get NewX Direction
+		Math3D.Sub3DPts(&CNodPos,&m_NodePos,pNewX);
+		/////////////////////////////////// Rotate to NewX
+		XForm.RotateToNewXMATRIX(pNewX, pMat,XF_REPLACE);
+	}
+	else
+	if(m_SuppBased == CURVE)
+	{
+		if(m_bCurveTan)
+		{
+			/////////////////////
+			Math3D.GetIdentityMATRIX(pMat);
+			/////////////////////////////////// Rotate to NewX = Tangent direction
+			XForm.RotateToNewXMATRIX(&m_CurveTan, pMat,XF_REPLACE);
+		}
+	}
+	else
+	if(m_SuppBased == PATCH)
+	{
+		if(m_bPatchNor)
+		{
+			/////////////////////
+			Math3D.GetIdentityMATRIX(pMat);
+			/////////////////////////////////// Rotate to NewX = Tangent direction
+			XForm.RotateToNewYMATRIX(&m_PatchNor, pMat,XF_REPLACE);
+		}
+	}
+	////////////////////////////////////////////////////////// Over All Directions 
+	for(i=0;i<6;i++)		
+	{
+		if
+		(
+			((pSupp->GetSuppCard())->kode[i] == 0) ||
+			(i>0 && (pSupp->GetSuppCard())->SuppProc == SUP_RIGID)
+		)
+		continue;
+		/////////////	// Over Active Directions
+		nPts = pSupp->GetnPts(i);
+		pDat = pSupp->GetpLoc(i);
+		/////////////////////////
+		for(j=0;j<nPts;j++)
+		{
+			LocalPos.x = pDat[j].x;
+			LocalPos.y = pDat[j].y;
+			LocalPos.z = pDat[j].z;
+			/////////////////////////// strip Scale Factor (World Coord)
+			pObjectMgr->SCtoDS(&(LocalPos.x));
+			pObjectMgr->SCtoDS(&(LocalPos.y));
+			pObjectMgr->SCtoDS(&(LocalPos.z));
+			/////////////////////////////////////////////// Rotate for Skewed Support
+			if(supCard.nid_a != "" || m_bCurveTan || m_bPatchNor)
+			{
+				/////////////////////////////////// Now Rotate
+				XForm.Transform(&LocalPos, &LocalPos, pMat);
+			}
+    		/////////////////////////////////////////////// also Xlate to Node
+    		pDat[j].x = (LocalPos.x)*dWorldBase/dMapFactor + m_NodePos.x; 
+    		pDat[j].y = (LocalPos.y)*dWorldBase/dMapFactor + m_NodePos.y; 
+    		pDat[j].z = (LocalPos.z)*dWorldBase/dMapFactor + m_NodePos.z;
+		}
+	}
+	////////////////////////////////////////// 
+	pSupp->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pSupp->SetLayer(pLayer->GetCurrentLayer());
+	//////////////////
+	return;
+	
+} 
+
+int CMI_LSupp::RemoveOldLinSup(SUPPPROC SuppProc, CDListMgr* pList)
+{
+
+	//////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr	= pObjectMgr->GetObjectList(LIN_SUPPORT);
+	////////////////////////////////////////////////////// Current Spring or Snubber?
+	int i,j;
+	BOOL bLinSprCurrent,bLinSprToRemove;
+	switch(SuppProc)
+	{
+		case SUP_RIGID:
+		case SUP_LINSPR:
+			bLinSprCurrent = TRUE;
+			break;
+		case SUP_LINSNU:
+			bLinSprCurrent = FALSE;
+			break;
+		default:
+			{
+				AfxMessageBox("Internal ERROR:\nCMI_LSupp::CreatePatchLinSup_4\nSuppProc ILLEGAL"); 
+				return -1;
+			}
+	}
+	//////////////////////////////////
+	int	nCount	= pList->GetCount();
+	//////////////////////////////////////////////////////// Remove Old Similar ListItems
+	for(i=0; i<nCount;i++)
+	{
+		////////////////////
+		POSITION pos;
+		///////////////////////////////////////////////////////
+		// Remove or Destroy Old Ones similar to Current Supproc
+		///////////////////////////////
+		CDrLinSup*	pDrLinSup;
+		/////////////////////////////////////////////////////////// 
+		pos = pList->FindIndex(nCount-i-1);
+		pDrLinSup = (CDrLinSup*)pList->GetAt(pos);
+		////
+		if(!pDrLinSup)
+		{
+			AfxMessageBox("Internal ERROR:\nCMI_LSupp::CreatePatchLinSup_4\npDrLinSup=NULL"); 
+			return -1;
+		}
+		///////////////////////////////////////////////// Linear Supports
+		SUPPPROC SuppProc_ToRemove = (pDrLinSup->GetSuppCard())->SuppProc;
+		////////////////////////////////////////////////////// Current Spring or Snubber?
+		switch(SuppProc)
+		{
+			case SUP_RIGID:
+			case SUP_LINSPR:
+				bLinSprToRemove = TRUE;
+				break;
+			case SUP_LINSNU:
+				bLinSprToRemove = FALSE;
+				break;
+			default:
+			{
+				AfxMessageBox("Internal ERROR:\nCMI_LSupp::CreatePatchLinSup_4\nSuppProc ILLEGAL"); 
+				return -1;
+			}
+		}
+		//////////////////////////////////////////////////////
+		if(bLinSprToRemove == bLinSprCurrent)
+		{
+			pList->RemoveAt(pos);
+			///////////////////////////////////////////// Delete Sup
+			int nSupCount = pDListMgr->GetCount();
+			/////////
+			CString sup_id_ToRemove = (pDrLinSup->GetSuppCard())->sup_id;
+			//////////////////////////////////////////////////////////
+			for(j=0; j<nSupCount;j++)
+			{
+				pos					= pDListMgr->FindIndex(nSupCount-j-1);
+				CDrLinSup* pSup		= (CDrLinSup*)pList->GetAt(pos); 
+				CString sup_id_j	= (pSup->GetSuppCard())->sup_id;
+				////////////////////////////////////////////////
+				if(sup_id_ToRemove == sup_id_j)
+				{
+					pObjectMgr->DeleteFromDataBase(nSupCount-j-1,LIN_SUPPORT);
+					break;
+				}
+				////////////////////////////
+			}
+		}
+	}
+	////////////////////////////////////////////////////////
+	return 0;
+}
+
+void CMI_LSupp::Serialize(CArchive& ar)
+{
+
+	CMI_GangS::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMI_LSupp:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMI_LSupp:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////////// end of Module //////////////////////		
+
+

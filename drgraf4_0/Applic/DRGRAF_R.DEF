@@ -1,0 +1,13 @@
+; drgraf.def : Declares the module parameters for the application.
+
+NAME         DRGRAF
+DESCRIPTION  'DRGRAF Windows Application'
+EXETYPE      WINDOWS
+
+CODE         PRELOAD MOVEABLE DISCARDABLE
+DATA         PRELOAD MOVEABLE MULTIPLE
+
+HEAPSIZE     4096   ; initial heap size
+; Stack size is passed as argument to linker's /STACK option
+
+

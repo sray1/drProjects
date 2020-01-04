@@ -1,0 +1,24 @@
+; StaL_D.def -- for CStaLObj stuff --  DEBUG version
+
+LIBRARY	StaL_D32
+DESCRIPTION  'StaLObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitStaLDLL												@2 NONAME
+
+
+
+; CDrStatic
+	; Constructor and Destructor
+		??0CDrStatic@@QAE@XZ
+		??1CDrStatic@@UAE@XZ 
+
+ 
+		?classCDrStatic@CDrStatic@@2UCRuntimeClass@@A
+		?Serialize@CDrStatic@@UAEXAAVCArchive@@@Z
+

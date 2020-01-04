@@ -1,0 +1,155 @@
+; Gen_D.def -- for CElemObj stuff --  DEBUG version
+
+LIBRARY	OGEN_D32
+DESCRIPTION  'GenObjs DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitOGenDLL												@2 NONAME
+
+
+
+; CDrObj3D
+	; Constructor and Destructor
+ 		??0CDrObj3D@@QAE@XZ
+		??1CDrObj3D@@UAE@XZ 
+
+		?classCDrObj3D@CDrObj3D@@2UCRuntimeClass@@A
+		?Serialize@CDrObj3D@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CDrSolid
+	; Constructor and Destructor
+		??0CDrSolid@@QAE@XZ
+		??1CDrSolid@@UAE@XZ 
+
+
+ 
+		?classCDrSolid@CDrSolid@@2UCRuntimeClass@@A
+		?Serialize@CDrSolid@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CDrPatch
+	; Constructor and Destructor
+		??0CDrPatch@@QAE@XZ
+		??1CDrPatch@@UAE@XZ 
+
+ 
+		?classCDrPatch@CDrPatch@@2UCRuntimeClass@@A
+		?Serialize@CDrPatch@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CSurface4
+;	; Constructor and Destructor
+
+ 		??0CSurface4@@QAE@XZ
+		??1CSurface4@@UAE@XZ 
+
+;		?classCSurface4@CSurface4@@2UCRuntimeClass@@A
+
+
+
+
+; CDrProf_C
+	; Constructor and Destructor
+		??0CDrProf_C@@QAE@XZ
+		??1CDrProf_C@@UAE@XZ 
+ 
+		?classCDrProf_C@CDrProf_C@@2UCRuntimeClass@@A
+		?Serialize@CDrProf_C@@UAEXAAVCArchive@@@Z 
+
+
+
+
+; CDrProf_P
+	; Constructor and Destructor
+		??0CDrProf_P@@QAE@XZ
+		??1CDrProf_P@@UAE@XZ 
+ 
+		?classCDrProf_P@CDrProf_P@@2UCRuntimeClass@@A
+		?Serialize@CDrProf_P@@UAEXAAVCArchive@@@Z 
+
+
+	
+
+
+
+; CDrCurve
+	; Constructor and Destructor
+		??0CDrCurve@@QAE@XZ
+		??1CDrCurve@@UAE@XZ 
+ 
+		?classCDrCurve@CDrCurve@@2UCRuntimeClass@@A
+		?Serialize@CDrCurve@@UAEXAAVCArchive@@@Z 
+
+
+
+
+
+; CDrNode (CDrFE0D)
+;	; Constructor and Destructor
+		??0CDrNode@@QAE@XZ
+		??1CDrNode@@UAE@XZ 
+		
+		?classCDrNode@CDrNode@@2UCRuntimeClass@@A
+		?Serialize@CDrNode@@UAEXAAVCArchive@@@Z 
+	
+
+
+
+; CCurve
+	; Constructor and Destructor
+		??0CCurve@@QAE@XZ
+		??1CCurve@@UAE@XZ 
+
+
+ 
+;		?classCCurve@CCurve@@2UCRuntimeClass@@A
+
+
+
+
+; CCurve_1
+	; Constructor and Destructor
+		??0CCurve_1@@QAE@XZ
+		??1CCurve_1@@UAE@XZ 
+
+
+ 
+;		?classCCurve_1@CCurve_1@@2UCRuntimeClass@@A
+
+
+
+
+
+; CCurve_2
+	; Constructor and Destructor
+		??0CCurve_2@@QAE@XZ
+		??1CCurve_2@@UAE@XZ 
+
+
+ 
+;		?classCCurve_2@CCurve_2@@2UCRuntimeClass@@A
+
+
+
+
+
+; CCurve_3
+	; Constructor and Destructor
+		??0CCurve_3@@QAE@XZ
+		??1CCurve_3@@UAE@XZ 
+
+
+ 
+;		?classCCurve_3@CCurve_3@@2UCRuntimeClass@@A

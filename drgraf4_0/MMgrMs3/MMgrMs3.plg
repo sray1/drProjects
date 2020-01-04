@@ -1,0 +1,47 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: MMgrMs3 - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating command line "rc.exe /l 0x409 /fo".\Debug/MMs3Mgr.res" /d "_DEBUG" /d "_AFXDLL" "C:\drgraf4_0\MMgrMs3\MMs3Mgr.rc"" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP2151.TMP" with contents
+[
+/nologo /MDd /W4 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_MBCS" /D "_AFXEXT" /Fp".\Debug/MMgrMs3.pch" /YX"stdafx.h" /Fo".\Debug/" /Fd".\Debug/" /FD /c 
+"C:\drgraf4_0\MMgrMs3\Mi_Gang3.cpp"
+"C:\drgraf4_0\MMgrMs3\MMs3dll.cpp"
+"C:\drgraf4_0\MMgrMs3\MMs3Mgr.cpp"
+]
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP2151.TMP" 
+Creating temporary file "C:\WINDOWS\TEMP\RSP2152.TMP" with contents
+[
+OMgr_D32.lib Spec_d32.lib Draw_D32.lib Elem_D32.lib OGen_D32.lib Dr3D_D32.lib MNod_D32.lib MCur_D32.lib MPat_D32.lib MMs0_d32.lib MMs1_d32.lib MMs2_d32.lib /nologo /subsystem:windows /dll /incremental:no /pdb:".\Debug/MMs3_D32.pdb" /map:".\Debug/MMs3_D32.map" /debug /machine:I386 /def:".\MMs3Mgr.def" /out:"c:\drgraf4_0\applic\Debug/MMs3_D32.dll" /implib:"c:\drgraf4_0\applic\Debug/MMs3_D32.lib" 
+.\Debug\Mi_Gang3.obj
+.\Debug\MMs3dll.obj
+.\Debug\MMs3Mgr.obj
+.\Debug\MMs3Mgr.res
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP2152.TMP"
+<h3>Output Window</h3>
+Compiling resources...
+Compiling...
+Mi_Gang3.cpp
+c:\drgraf4_0\mmgrms3\mi_gang3.cpp(49) : warning C4101: 'nResult' : unreferenced local variable
+MMs3dll.cpp
+C:\drgraf4_0\MMgrMs3\MMs3dll.cpp(29) : warning C4100: 'lpReserved' : unreferenced formal parameter
+MMs3Mgr.cpp
+Linking...
+LINK : warning LNK4075: ignoring /EDITANDCONTINUE due to /INCREMENTAL:NO specification
+.\MMs3Mgr.def : warning LNK4017: CODE statement not supported for the target platform; ignored
+.\MMs3Mgr.def : warning LNK4017: DATA statement not supported for the target platform; ignored
+   Creating library c:\drgraf4_0\applic\Debug/MMs3_D32.lib and object c:\drgraf4_0\applic\Debug/MMs3_D32.exp
+
+
+
+<h3>Results</h3>
+MMs3_D32.dll - 0 error(s), 5 warning(s)
+</pre>
+</body>
+</html>

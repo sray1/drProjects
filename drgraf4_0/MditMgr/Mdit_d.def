@@ -1,0 +1,115 @@
+; Edit_D.def -- for CDrawBox stuff --  DEBUG version
+
+LIBRARY	Mdit_D32
+DESCRIPTION  'Mesh Edit Debug DLL' 
+EXETYPE	WINDOWS
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMditDLL											@2 NONAME
+
+
+; CDbMouse
+	; Constructor and Destructor
+
+
+; CMouse
+	; Constructor and Destructor
+
+
+
+; CMouseMgr
+	; Constructor and Destructor
+
+
+??0CMditMgr@@QAE@XZ
+??1CMditMgr@@UAE@XZ
+
+?ReSetToolID@CMditMgr@@QAEIIII@Z
+
+;?OnDBoxMouseMove@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+;?SetViewNumber@CMouse@@QAEXI@Z
+;?OnDBoxLButtonDown@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+;?OnDBoxLButtonUp@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+;?OnDBoxRButtonDown@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+;?OnDBoxRButtonUp@CDBMouse@@QAEXPAVCClientDC@@PAVCView@@IVCPoint@@@Z
+?SetViewCursor@CMditMgr@@QAEXH@Z
+?GetStatusMouseWIC@CMditMgr@@QAE?AULPOINT3@@XZ
+;?SetMouseWIC@CMouse@@QAEXULPOINT3@@@Z 
+;?InitDlgIn@CMouseMgr@@QAEXXZ
+
+
+
+;CNodMdit
+
+?OnEBoxMouseMove_NOD@CNodMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_NOD@CNodMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_NOD@CNodMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_NOD@CNodMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_NOD@CNodMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+;CCurMdit
+
+?OnEBoxMouseMove_CUR@CCurMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_CUR@CCurMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_CUR@CCurMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_CUR@CCurMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_CUR@CCurMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+
+;CPatMdit
+
+?OnEBoxMouseMove_PAT@CPatMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_PAT@CPatMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_PAT@CPatMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_PAT@CPatMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_PAT@CPatMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+;CSolMdit
+
+?OnEBoxMouseMove_SOL@CSolMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonDown_SOL@CSolMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxLButtonUp_SOL@CSolMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonDown_SOL@CSolMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+?OnEBoxRButtonUp_SOL@CSolMdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+
+;CSupEdit
+
+;?OnEBoxMouseMove_SUP@CSupEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonDown_SUP@CSupEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonUp_SUP@CSupEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonDown_SUP@CSupEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonUp_SUP@CSupEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+;CSLDEdit
+
+;?OnEBoxMouseMove_SLD@CSLDEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonDown_SLD@CSLDEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonUp_SLD@CSLDEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonDown_SLD@CSLDEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonUp_SLD@CSLDEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+
+
+
+;CMNodEdit
+
+;?OnEBoxMouseMove_NOD@CMNodEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonDown_NOD@CMNodEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxLButtonUp_NOD@CMNodEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonDown_NOD@CMNodEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+;?OnEBoxRButtonUp_NOD@CMNodEdit@@QAEXPAVCClientDC@@PAVCView@@W4GENERATE@@IVCPoint@@@Z
+ 
+
+
+ 

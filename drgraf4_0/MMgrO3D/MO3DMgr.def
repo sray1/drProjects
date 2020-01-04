@@ -1,0 +1,22 @@
+; MSolMgr_D.def -- DEBUG version
+
+LIBRARY	MSol_D32
+DESCRIPTION  'MSolMgr Debug DLL' 
+
+CODE	LOADONCALL MOVEABLE DISCARDABLE
+DATA	PRELOAD MOVEABLE SINGLE
+
+
+EXPORTS
+
+	; Explicitly exported initialization routine
+	InitMSolDLL											@2 NONAME
+
+?classCMI_GangS@CMI_GangS@@2UCRuntimeClass@@A
+
+;CMI_SSPN
+
+??0CMI_SSPN@@QAE@XZ
+??1CMI_SSPN@@UAE@XZ
+
+?classCMI_SSPN@CMI_SSPN@@2UCRuntimeClass@@A

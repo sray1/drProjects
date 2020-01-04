@@ -1,0 +1,220 @@
+// CPo_Truss.cpp : implementation of the CPo_Truss class
+//
+
+#include "stdafx.h"
+#include <math.h>
+#include <Float.h>		//DBL_MIN in sweep/duct
+
+#include "3DMath.h"
+/////////////////////
+#include "drgraf.h"
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "DListMgr.h"
+/////////////////////
+#include "Def_Elem.h"
+#include "DrPatch.h"
+/////////////////////
+#include "Def_Mesh.h"
+#include "DrMesh2D.h"
+///////////////////
+#include "Po_Truss.h"
+
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+/////////////////////////////////////////////////////////////////////////////
+// CPo_Truss
+
+IMPLEMENT_DYNAMIC(CPo_Truss,CPo_FE1D)
+/*
+BEGIN_MESSAGE_MAP(CPo_Truss,CPo_FE1D)
+//BEGIN_MESSAGE_MAP
+	//{{AFX_MSG_MAP(CPo_Truss)
+	//}}AFX_MSG_MAP
+END_MESSAGE_MAP()
+*/
+//////////////////////////////////////////////
+CPo_Truss::CPo_Truss()
+{
+	m_ElTypeNum			= TRUSS;
+}
+
+int CPo_Truss::Do_MeshObjs(CDrObject* pMesh,CDrObject* pDrPatch,UINT nGenType)		
+{
+	m_GenObjType	= nGenType;	// Mesh0D,Mesh1D,Mesh2D or Mesh3D
+	m_pGenObj		= pMesh;
+	/////////////////////////////////////////////////////////////
+	int nResult;
+	///
+	if(((CDrPatch*)pDrPatch)->GetPatSubType() == PS_QUADRILAT)
+		nResult = Do_MeshObjs_4(pMesh,pDrPatch);
+	else
+		nResult = Do_MeshObjs_3(pMesh,pDrPatch);
+	///////////////
+	return nResult;
+}
+
+int CPo_Truss::Do_MeshObjs_3(CDrObject* pMesh,CDrObject* pDrPatch)		
+{
+	return -1; //todo
+}
+
+int CPo_Truss::Do_MeshObjs_4(CDrObject* pMesh,CDrObject* pDrPatch)		
+{
+	pMesh		= (CDrMesh2D*)pMesh;
+	//////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMsObjMgr* pMsObjMgr 	= pDoc->GetMsObjMgr();
+	//////////////////////////////////////////// 
+	int nResult;
+	//////////////////////////////////////////// Output memory
+	int nOut_S		= (int)((CDrPatch*)pDrPatch)->GetOut_S();
+	int nOut_T		= (int)((CDrPatch*)pDrPatch)->GetOut_T();
+	////////////////////////////////
+	int		s,t,nMax_S,nMax_T;
+	int		nIndex[2];			// corner nodes
+	int		ni,nj;
+	///////////////////////////////////////// Shorter Length First NodeNumbering
+	BOOL bSwitch;
+	bSwitch	= (nOut_T<nOut_S) ? TRUE:FALSE;
+	nMax_S	= (bSwitch) ? nOut_T:nOut_S;
+	nMax_T	= (bSwitch) ? nOut_S:nOut_T;
+	/////////////////////////////////////////
+	CDListMgr*	pList = pMesh->GetFE0DList();
+	if(pList->IsEmpty())
+		return -1;
+	//////////////////////////////////////////////////////////////////////////////// S-direction
+	for (t = 0; t<nMax_T; t++)
+	{
+		for (s = 0; s<nMax_S-1; s++)
+		{
+			////////////////////////////////// Create a Beam
+			int nTrussIndex;
+			CDrTruss* pNewObj	= (CDrTruss*)(pMsObjMgr->AddToDataBase(nTrussIndex,TRUSS));
+			///
+			pNewObj->SetShow(FALSE);	// not quite ready
+			//////////////////////////////////////////////////////////////
+			CString EdgeID;
+			SetElemInfoID(EdgeID,TRUSS);		
+			////////////////////////////////////
+			nIndex[0] = ni = t*nMax_S + s;  
+//			nj = (bSwitch) ? ni + nMax_S : ni + 1;
+			nIndex[1] = nj = ni + 1;
+			///
+			nResult = Post_FE1D((CDrFE1D*)pNewObj,(CDrMesh2D*)pMesh,nIndex,EdgeID);
+			///////////////////////////////////////////////////////////// Fill info
+			Fill_Data_MeshObjs(pNewObj,pMesh,m_GenObjType);		
+			//////////////////////////////////
+
+		}
+	}
+	//////////////////////////////////////////////////////////////////////////////// T-direction
+	for (s = 0; s<nMax_S; s++)
+	{
+		for (t = 0; t<nMax_T-1; t++)
+		{
+			////////////////////////////////// Create a Beam
+			int nTrussIndex;
+			CDrTruss* pNewObj	= (CDrTruss*)(pMsObjMgr->AddToDataBase(nTrussIndex,TRUSS));
+			///
+			pNewObj->SetShow(FALSE);	// not quite ready
+			//////////////////////////////////////////////////////////////
+			CString EdgeID;
+			SetElemInfoID(EdgeID,TRUSS);		
+			////////////////////////////////////
+			nIndex[0] = ni = t*nMax_S + s;  
+//			nj = (bSwitch) ? ni + 1 : ni + nMax_S;
+			nIndex[1] = nj = ni + nMax_S;
+			///
+			nResult = Post_FE1D((CDrFE1D*)pNewObj,(CDrMesh2D*)pMesh,nIndex,EdgeID);
+			///////////////////////////////////////////////////////////// Fill info
+			Fill_Data_MeshObjs(pNewObj,pMesh,m_GenObjType);		
+			//////////////////////////////////
+		}
+	}
+	/////////
+	return 0;
+}
+
+int CPo_Truss::Do_MeshObjs(CDrObject* pMesh,int nOut,UINT nGenType)		
+{
+	// UINT nGenType = MESH1D or MESH2D or MESH3D
+	/////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CMsObjMgr* pMsObjMgr 	= pDoc->GetMsObjMgr();
+	CDListMgr* pList;
+	/////////////////////////////////////// Mesh Nodes
+	pList	= pMesh->GetFE0DList();
+	//////////////////////
+	if(pList->GetCount() != nOut)
+	{
+		AfxMessageBox("Internal ERROR\nCCurPost::Do_TRUSSS\nFE0DList->GetCount() != nOut\n");
+		return -1;
+	}
+	if(pList->IsEmpty())
+	{
+		AfxMessageBox("Internal ERROR\nCCurPost::Do_TRUSSS\nMESH NodeList Empty!\n");
+		return -1;
+	}
+	///////////////////////////////////////////////////////// Generate Elements
+	int i,nCount;
+	CDrFE0D*	pNi;
+	CDrFE0D*	pNj;
+	POSITION	pos;
+	CDrTruss*	pNewObj;
+	/////////////
+	pos = pList->FindIndex(0);
+	pNi	= (CDrFE0D*)pList->GetAt(pos);
+	//////////////////////////////////
+	nCount	= pList->GetCount();
+	////////////////
+	for (i=1;i<nCount;i++)
+	{
+		pos = pList->FindIndex(i);
+		pNj	= (CDrFE0D*)pList->GetAt(pos);
+		////////////////////////////////// Mesh Node(Not just Vertex)
+		pNi->SetMeshNode(TRUE);
+		pNj->SetMeshNode(TRUE);
+		////////////////////////////////// Create a Beam
+		int nTrussIndex;
+		pNewObj	= (CDrTruss*)(pMsObjMgr->AddToDataBase(nTrussIndex,TRUSS));
+		///
+		pNewObj->SetShow(FALSE);	// not quite ready
+		////////////////////////////////// TrussID & Num & No
+		SetElemInfoID(m_ElNumID,TRUSS);		
+		////////////////////////////////// Fill Data
+		Fill_Data_MeshObjs(pNewObj,pMesh,nGenType);		
+		////////////////////////////////// Save & Reciprocate
+		pMesh->GetFE1DList()->InsertObject(pNewObj);
+		pNi->GetFE1DList()->InsertObject(pNewObj);
+		pNj->GetFE1DList()->InsertObject(pNewObj);
+		pNewObj->GetFE0DList()->InsertObject(pNi);
+		pNewObj->GetFE0DList()->InsertObject(pNj);
+		//////////////////////////////////
+		pNewObj->SetShow(TRUE);	// Now Ready
+		////////////////////////////////// Update pNi;
+		pNi = pNj;
+	}
+	/////////
+	return 0;
+}
+
+int CPo_Truss::Fill_Data_MeshObjs(CDrTruss* pNewObj,CDrObject* pMesh,UINT nGenType)		
+{
+	////////////////////////////////// Object Specific Data
+	pNewObj->SetObjectType((int)TRUSS);
+	pNewObj->SetElemType((int)MESH_OBJECT);              // globals.h
+	pNewObj->SetLevelType((int)LEVEL_KIDDO);			// globals
+	pNewObj->SetObjectID(m_ElNumID);			
+	////////////////////////////////// FE1D Specific
+	FillData_1D((CDrFE1D*)pNewObj,pMesh);
+	////////////////////////////////// Truss Specific Data
+	///
+	return 0;
+}
+////////////////////////////////////////// end of module //////////////////

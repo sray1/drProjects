@@ -1,0 +1,300 @@
+// Mouse.cpp : implementation file
+//
+
+
+#include "stdafx.h" 
+#include "math.h"
+
+#include "drgraf.h"
+#include "drgradoc.h"
+#include "ObjMgr.h"
+/////////////////////
+#include "Def_Type.h"
+#include "Def_CuPS.h"
+/////////////////////
+#include "3DMath.h" 
+#include "XForm.h" 
+/////////////////////
+#include "In_Crcle.h" 
+
+#ifdef _DEBUG
+#include <stdio.h>
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+/////////////////////////////////////
+IMPLEMENT_SERIAL(CIn_Circle,CObject,1)
+/////////////////////////////////////
+#define MIN_INODES_CURVE	2        
+#define	new DEBUG_NEW
+#define	BUFF_SIZE	1024
+/////////////////////////////////////////////////////////////////////////////
+CIn_Circle::CIn_Circle()
+{
+	/////////////////// Memory
+	m_MemErr	= 0;
+	m_pWts_BS_S	= NULL;
+	m_pWts_BZ_S	= NULL;
+	m_pData		= NULL;
+	m_pDat_Ex	= NULL;
+	m_pCon_BS_S	= NULL;
+	m_pCon_BZ_S	= NULL;
+}
+
+CIn_Circle::~CIn_Circle()
+{
+	/////////////////// Memory
+	if(m_MemErr<0)
+	{
+		if(m_pWts_BS_S)
+			delete [] m_pWts_BS_S; 
+		if(m_pWts_BZ_S)
+			delete [] m_pWts_BZ_S; 
+		if(m_pData)
+			delete [] m_pData; 
+		if(m_pDat_Ex)
+			delete [] m_pDat_Ex; 
+		if(m_pCon_BS_S)
+			delete [] m_pCon_BS_S; 
+		if(m_pCon_BZ_S)
+			delete [] m_pCon_BZ_S;
+	}	
+}
+///////////////////////////////////////////////////////////////////////////////////// Interpolation
+	//////////////////////////////////////////////////////////////////////////////
+	//	NOTE:  BackGround:	k = Order; k-1 = Degree of Curve [ k=3 for Circle]	//
+	//																			//
+///////////////////////////////////////////////////////////////////////////////////////////////	
+int CIn_Circle::Interpolate()
+{
+
+	////////////////////////////////////////////////////////////////////////  Cons/Wts
+	m_pWts_BS_S	= new double[m_nCon_BS_S];		
+	m_pCon_BS_S	= new WORLD [m_nCon_BS_S];
+	m_pWts_BZ_S	= new double[m_nCon_BZ_S];
+	m_pCon_BZ_S	= new WORLD [m_nCon_BZ_S];
+	///////////
+	if(!m_pWts_BS_S || !m_pCon_BS_S || !m_pWts_BZ_S || !m_pCon_BZ_S )
+	{
+		AfxMessageBox("ERROR:Interpolate -Memory Failure!");
+		m_MemErr = -1;
+		return m_MemErr;
+	}
+	//////////////////////////////////////////////////////////////// FillUp 
+	m_pDat_Ex = m_pData;
+	////////////////////
+	FillUpBezier(m_pDat_Ex, m_Center, m_Radius, 
+ 				 m_pCon_BZ_S, m_pWts_BZ_S,m_nCon_BZ_S, m_nSeg_DT_S, m_bClosed_S);
+	//////////// 							 
+ 	FillUpSpline(m_pCon_BZ_S, m_pWts_BZ_S,m_nCon_BZ_S,
+	 			 m_pCon_BS_S, m_pWts_BS_S,m_nCon_BS_S, m_nSeg_DT_S, m_bClosed_S);
+	/////////////////////////////////////////////////////////////////
+/*
+	if(m_pData)
+	{
+		delete [] m_pData;
+		m_pData = NULL;
+	}
+	if(m_pDat_Ex)
+	{
+		delete [] m_pDat_Ex;
+		m_pDat_Ex = NULL;
+	}
+*/	
+	////////////////
+	return 0;
+}		
+
+int CIn_Circle::FillUpBezier(pWORLD Data, WORLD Center, double Radius, 
+							 pWORLD Con, pDOUBLE Wts,int nCon, int L, BOOL bClosed)
+{
+	
+	int k;
+	///////////////////////////////////////////// Junctions
+	int nJunc = L+1;
+	if(bClosed)
+		nJunc--;
+	//////////////	
+	{
+		for(k=0;k<nJunc;k++)                        
+		{                                                                     
+			Con[2*k].x 	= Data[k].x;
+			Con[2*k].y 	= Data[k].y; 
+			Con[2*k].z 	= Data[k].z;
+			Wts[2*k]	= 1.0;		
+		}
+	}	
+	////////////////////////////////////////////////////////// In-Betweens Cons/Wts
+	int L2 = 2*L;
+	if(bClosed)
+	{
+		for(k=0;k<L;k++)
+		{
+			int Lt2 = 2*k;                        
+			Compute_b1_w1(Center,Con[Lt2],Con[(Lt2+2)%L2],Radius,
+							&(Con[Lt2+1]),&(Wts[Lt2+1]));
+		} 
+	}
+	else	
+	{
+		for(k=0;k<L;k++)
+		{
+			int Lt2 = 2*k;                        
+			Compute_b1_w1(Center,Con[Lt2],Con[Lt2+2],Radius,
+							&(Con[Lt2+1]),&(Wts[Lt2+1]));
+		} 
+	}
+	//////////////////////////////////////////////////// View Matrices
+#ifdef _DEBUG
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	if(1 != 1 ) // iDLL = 12 , Module = 1
+	{
+		CString* str = new CString;
+		char* buf = str->GetBuffer(BUFF_SIZE);
+		////////////////////
+		int j,k;
+		//////////
+		sprintf(buf,"FillUpBezier\nCIn_Circle::FillUpBezier");
+		AfxMessageBox(*str);
+		///////////////////
+		j = sprintf(buf,"Cons[%d]\n      X             Y            Z\n",nCon);
+		for(k=0;k<nCon;k++)
+		{
+		   j += sprintf( buf + j, "%2d %7.2f %7.2f %7.2f\n", k,
+		   							Con[k].x,Con[k].y,Con[k].z );
+		}
+		if(j>BUFF_SIZE)
+		{
+			 sprintf( buf, "Increase buffer to %d",j);
+			 AfxMessageBox(*str);
+			 delete str;
+			 return -1;
+		}	 
+		AfxMessageBox(*str);
+		///////////////////
+		j = sprintf(buf,"Wts[%d]\n      X             Y            Z\n",nCon);
+		for(k=0;k<nCon;k++)
+		{
+		   j += sprintf( buf + j, "%2d %7.2f\n", k,Wts[k] );
+		}
+		if(j>BUFF_SIZE)
+		{
+			 sprintf( buf, "Increase buffer to %d",j);
+			 AfxMessageBox(*str);
+			 delete str;
+			 return -1;
+		}	 
+		AfxMessageBox(*str);
+		///////////////////
+		delete str;
+	}		
+#endif				
+	/////////
+	return 0;
+}
+
+int CIn_Circle::FillUpSpline(pWORLD Con_BZ, pDOUBLE Wts_BZ,int nCon_BZ,
+							 pWORLD Con_BS, pDOUBLE Wts_BS,int nCon_BS, int L, BOOL bClosed)
+{
+	int k;
+	///////////////////////////////////////////// 
+	{
+		////////////////////////////////////////// Controls                                                                     
+		Con_BS[0].x = Con_BZ[0].x;
+		Con_BS[0].y = Con_BZ[0].y;
+		Con_BS[0].z = Con_BZ[0].z;
+		////////////////////////////////////////// Weights (Not Right)!!!                                                                     
+		Wts_BZ[0]	= 1.0;
+		////////////////////////		
+		for(k=1;k<nCon_BS-1;k++)                        
+		{
+			////////////////////////////////////// Controls                                                                     
+			Con_BS[k].x = Con_BZ[2*k-1].x;
+			Con_BS[k].y = Con_BZ[2*k-1].y;
+			Con_BS[k].z = Con_BZ[2*k-1].z;
+			////////////////////////////////////// Weights                                                                     
+			Wts_BS[k]	= 1.0;		
+		}
+		////////////////////////////////////////// Controls                                                                     
+		Con_BS[nCon_BS-1].x = Con_BZ[nCon_BZ-1].x;
+		Con_BS[nCon_BS-1].y = Con_BZ[nCon_BZ-1].y;
+		Con_BS[nCon_BS-1].z = Con_BZ[nCon_BZ-1].z;
+		////////////////////////////////////////// Weights                                                                     
+		Wts_BS[nCon_BS-1]	= 1.0;
+		////////////////////////		
+	}	
+	return 0;
+}
+								 
+int CIn_Circle::Compute_b1_w1(WORLD Center,WORLD b0,WORLD b2,double Rad,
+									pWORLD pb1,pDOUBLE pw1)
+{
+
+	// To find:
+	//		b1	= Bezier In-Betwen Pt.
+	//			= Intersection of Tangents at b0 and b2
+	// and
+	//		w1	= Weight at b1
+	//////////////////////////////////////////////////////// MidPt of Chord
+	double w1;
+	WORLD Rm;
+	////////////
+	Rm.x = .5 * (b0.x + b2.x);
+	Rm.y = .5 * (b0.y + b2.y);
+	Rm.z = .5 * (b0.z + b2.z);
+	//////////////////////////////////////////////////////// normal
+	WORLD N;
+	//////////
+	N.x = Rm.x - Center.x;									
+	N.y = Rm.y - Center.y;									
+	N.z = Rm.z - Center.z;
+	double Base = sqrt(N.x*N.x + N.y*N.y + N.z*N.z );
+	//////////////////////////////////////////////////////// Weight = cos(alfa) 
+	w1 = Base/Rad;
+	//////////////////////////////////////////////////////// Bezier In-Between Pt
+	//////////////////////////////// Unit Normal 
+	Base = 1./Base;
+	N.x *= Base;									
+	N.y *= Base;									
+	N.z *= Base;
+	////////////// Rad/cos(alfa) = length from center to b1
+	Base = Rad/w1;
+	////////////////////////////////
+	pb1->x 	= Center.x + Base * N.x; 
+	pb1->y 	= Center.y + Base * N.y; 
+	pb1->z 	= Center.z + Base * N.z;
+	*pw1	= w1; 
+	//////////////////////////////
+	return 0;
+	
+}
+	 					   	 
+void CIn_Circle::Serialize(CArchive& ar)
+{
+
+	CObject::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CIn_Circle:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CIn_Circle:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////////////// end of Module //////////////////////

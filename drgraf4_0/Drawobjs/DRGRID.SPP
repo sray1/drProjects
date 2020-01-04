@@ -1,0 +1,121 @@
+/*****************************************************************************
+ *	File:		3dGrid.cpp
+ *
+ *	Purpose:	General purpose 3d wireframe gridwork, non hidden.
+ *
+ *****************************************************************************
+ */
+#include <WIN_TRIM.H>
+#include <OSINTF.h>
+#include <3dGrid.h>
+#include <3dXFDraw.h>
+
+/*****************************************************************************
+ *
+ *	Function:	xfGrid()
+ *
+ *	Purpose:	General purpose 3d background gridwork.  Options provide for
+ *				size limits, connector lines, line patterns, color, etc.
+ *
+ *****************************************************************************
+ */
+#pragma optimize("",off)
+CDrGrid::Grid(pWORLD min,pWORLD max,pWORLD steps,pGR_Opt options,pMatrix xf)
+{
+	WORLD		step;
+	Fixed		f,x,y,z;
+
+	switch (options->gridPat) {
+		case GP_WHITE:
+			break;
+		case GP_LTGRAY:
+			break;
+		case GP_GRAY:
+			break;
+		case GP_DKGRAY:
+			break;
+		case GP_BLACK:
+			break;
+		default:
+			break;
+	}
+	step.x = (max->x-min->x)/steps->x;
+	step.y = (max->y-min->y)/steps->y;
+	step.z = (max->z-min->z)/steps->z;
+	if (options->bottom||options->back||options->top||options->front)
+		for(f=min->x;f<=max->x;f+=step.x) {
+			if (options->bottom)
+				xfDraw3dLine(f,min->y,min->z,f,min->y,max->z,xf); /* y const */
+			if (options->back)
+				xfDraw3dLine(f,min->y,max->z,f,max->y,max->z,xf); /* z const */
+			if (options->top)
+				xfDraw3dLine(f,max->y,min->z,f,max->y,max->z,xf); /* y const */
+			if (options->front)
+				xfDraw3dLine(f,min->y,min->z,f,max->y,min->z,xf); /* z const */
+		}
+	if (options->left||options->back||options->right||options->front)
+		for(f=min->y;f<=max->y;f+=step.y) {
+			if (options->left)
+				xfDraw3dLine(min->x,f,min->z,min->x,f,max->z,xf); /* x const */
+			if (options->back)
+				xfDraw3dLine(min->x,f,max->z,max->x,f,max->z,xf); /* z const */
+			if (options->right)
+				xfDraw3dLine(max->x,f,min->z,max->x,f,max->z,xf); /* x const */
+			if (options->front)
+				xfDraw3dLine(min->x,f,min->z,max->x,f,min->z,xf); /* z const */
+		}
+	if (options->left||options->bottom||options->right||options->top)
+		for(f=min->z;f<=max->z;f+=step.z) {
+			if (options->left)
+				xfDraw3dLine(min->x,min->y,f,min->x,max->y,f,xf); /* x const */
+			if (options->bottom)
+				xfDraw3dLine(min->x,min->y,f,max->x,min->y,f,xf); /* y const */
+			if (options->right)
+				xfDraw3dLine(max->x,min->y,f,max->x,max->y,f,xf); /* x const */
+			if (options->top)
+				xfDraw3dLine(min->x,max->y,f,max->x,max->y,f,xf); /* y const */
+		}
+	if(options->connectX||options->connectY||options->connectZ)
+		switch (options->connectPat) {
+			case GP_WHITE:		break;
+			case GP_LTGRAY:		break;
+			case GP_GRAY:		break;
+			case GP_DKGRAY:		break;
+			case GP_BLACK:		break;
+		}
+	if(options->connectX||options->connectZ) {
+		for(y=min->y+step.y;y<max->y;y+=step.y) {
+			if(options->connectX)
+				for(z=min->z+step.z;z<max->z;z+=step.z)
+					xfDraw3dLine(min->x,y,z,max->x,y,z,xf);
+			if(options->connectZ)
+				for(x=min->x+step.x;x<max->x;x+=step.x)
+					xfDraw3dLine(x,y,min->z,x,y,max->z,xf);
+		}
+	}
+	if(options->connectY)
+		for(x=min->x+step.x;x<max->x;x+=step.x)
+			for(z=min->z+step.z;z<max->z;z+=step.z)
+				xfDraw3dLine(x,min->y,z,x,max->y,z,xf);
+}
+/*
+#define	FACETLINE(a,b,c,t,n,s) {\
+		register int	i = (n);\
+		ix[0] = ixV++;\
+		pV[ix[0]].p.x = (a);\
+		pV[ix[0]].p.y = (b);\
+		pV[ix[0]].p.z = (c);\
+		pV[ix[0]].impure = false;\
+		while( i-- ){ \
+			ix[1] = ixV++;\
+			pV[ix[1]] = pV[ix[0]];\
+			pV[ix[1]].p.##t += (s);\
+			MakePolyFacet(&pF[ixF++],2,(pUInt)ix,pV);\
+			ix[0] = ix[1];\
+		}\
+	}
+
+#define	FACETLINEX(a,b,c,n,s)	FACETLINE((a),(b),(c),x,(n),(s))
+#define	FACETLINEY(a,b,c,n,s)	FACETLINE((a),(b),(c),y,(n),(s))
+#define	FACETLINEZ(a,b,c,n,s)	FACETLINE((a),(b),(c),z,(n),(s))
+*/

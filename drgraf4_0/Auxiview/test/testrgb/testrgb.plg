@@ -1,0 +1,38 @@
+--------------------Configuration: testrgb - Win32 Debug--------------------
+Begining build with project "C:\drgraf4_0\Auxiview\test\testrgb\testrgb.dsp", at root.
+Active configuration is Win32 (x86) Application (based on Win32 (x86) Application)
+
+Project's tools are:
+			"32-bit C/C++ Compiler for 80x86" with flags "/nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Fp"Debug/testrgb.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c "
+			"OLE Type Library Maker" with flags "/nologo /D "_DEBUG" /mktyplib203 /o NUL /win32 "
+			"Win32 Resource Compiler" with flags "/l 0x409 /fo"Debug/testrgb.res" /d "_DEBUG" /d "_AFXDLL" "
+			"Browser Database Maker" with flags "/nologo /o"Debug/testrgb.bsc" "
+			"COFF Linker for 80x86" with flags "/nologo /subsystem:windows /incremental:yes /pdb:"Debug/testrgb.pdb" /debug /machine:I386 /out:"Debug/testrgb.exe" /pdbtype:sept "
+			"Custom Build" with flags ""
+			"<Component 0xa>" with flags ""
+
+Creating temp file "C:\WINDOWS\TEMP\RSP92C0.TMP" with contents </nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Fp"Debug/testrgb.pch" /Yu"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\drgraf4_0\Auxiview\test\testrgb\testrgb.cpp"
+"C:\drgraf4_0\Auxiview\test\testrgb\testrgbDlg.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP92C0.TMP" 
+Creating temp file "C:\WINDOWS\TEMP\RSP92C1.TMP" with contents </nologo /MDd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Fp"Debug/testrgb.pch" /Yc"stdafx.h" /Fo"Debug/" /Fd"Debug/" /FD /c 
+"C:\drgraf4_0\Auxiview\test\testrgb\StdAfx.cpp"
+>
+Creating command line "cl.exe @C:\WINDOWS\TEMP\RSP92C1.TMP" 
+Creating command line "link.exe /nologo /subsystem:windows /incremental:yes /pdb:"Debug/testrgb.pdb" /debug /machine:I386 /out:"Debug/testrgb.exe" /pdbtype:sept  .\Debug\StdAfx.obj .\Debug\testrgb.obj .\Debug\testrgbDlg.obj .\Debug\testrgb.res" 
+Compiling...
+StdAfx.cpp
+Compiling...
+testrgb.cpp
+testrgbDlg.cpp
+C:\drgraf4_0\Auxiview\test\testrgb\testrgbDlg.cpp(145) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+C:\drgraf4_0\Auxiview\test\testrgb\testrgbDlg.cpp(145) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+C:\drgraf4_0\Auxiview\test\testrgb\testrgbDlg.cpp(145) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+C:\drgraf4_0\Auxiview\test\testrgb\testrgbDlg.cpp(145) : warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+Generating Code...
+Linking...
+
+
+
+testrgb.exe - 0 error(s), 4 warning(s)

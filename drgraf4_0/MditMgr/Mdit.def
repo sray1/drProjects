@@ -1,0 +1,7 @@
+; Mdit.def : Declares the module parameters for the DLL.
+
+LIBRARY      "Mdit"
+DESCRIPTION  'Mdit Windows Dynamic Link Library'
+
+EXPORTS
+    ; Explicit exports can go here

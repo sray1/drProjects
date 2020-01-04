@@ -1,0 +1,2183 @@
+// drgrafrm.cpp : implementation of the CDrGrafFrame class
+//
+
+#include "stdafx.h"
+
+#include "glb_Mous.h"
+#include "glb_View.h"
+/////////////////////
+//#include "stdio.h"
+#include "Banner.h"
+#include <time.h>
+#include "clock.h"
+/////////////////////
+#include "drgraf.h"
+#include "drgracfm.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+///////////////////// ElemObjects
+#include "ElDefine.h"
+/////////////////////////////////////////////// Dialogs
+//#include "MDlgrsrc.h"
+#include "UserMsg.h"                     // resource for GoodBy Id etc. NodIn etc
+/////////////////////
+#include "12view.h"
+#include "23view.h"
+#include "31view.h"
+#include "3Dview.h"
+#include "dataview.h"
+///////////////////// SpecObjs
+#include "SpDefine.h"
+#include "SDlgMgr.h"
+#include "Booleans.h"
+/////////////////////
+#include "drgrafrm.h"
+/////////////////////
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+//////////////////////
+enum TIMER
+{
+	TM_CLOCK,
+	TM_BANNER,
+	TM_MEMORY
+};	
+/////////////////////////////////////////////////////////////////////////////
+// CDrGrafFrame
+
+IMPLEMENT_DYNAMIC(CDrGrafFrame, CMDIFrameWnd)
+
+BEGIN_MESSAGE_MAP(CDrGrafFrame, CMDIFrameWnd)
+	//{{AFX_MSG_MAP(CDrGrafFrame)
+	ON_WM_CREATE()
+	ON_WM_CLOSE()
+	ON_COMMAND(IDM_DECK_DREAMPIPE, OnDeckDreampipe)
+	ON_UPDATE_COMMAND_UI(IDM_DECK_DREAMPIPE, OnUpdateDeckDreampipe)
+	ON_COMMAND(IDM_DECK_SAP, OnDeckSap)
+	ON_UPDATE_COMMAND_UI(IDM_DECK_SAP, OnUpdateDeckSap)
+	ON_COMMAND(IDM_DECK_TAB, OnDeckTab)
+	ON_UPDATE_COMMAND_UI(IDM_DECK_TAB, OnUpdateDeckTab)
+	ON_COMMAND(IDM_OPTION_AXISON, OnOptionAxison)
+	ON_UPDATE_COMMAND_UI(IDM_OPTION_AXISON, OnUpdateOptionAxison)
+	ON_COMMAND(IDM_OPTION_DIALOGON, OnOptionDialogon)
+	ON_UPDATE_COMMAND_UI(IDM_OPTION_DIALOGON, OnUpdateOptionDialogon)
+	ON_COMMAND(IDM_OPTION_PENCHANGE, OnOptionPenchange)
+	ON_UPDATE_COMMAND_UI(IDM_OPTION_PENCHANGE, OnUpdateOptionPenchange)
+	ON_COMMAND(IDM_OPTION_REFRESH, OnOptionRefresh)
+	ON_UPDATE_COMMAND_UI(IDM_OPTION_REFRESH, OnUpdateOptionRefresh)
+	ON_COMMAND(IDM_OPTION_RUBBERBAND, OnOptionRubberband)
+	ON_UPDATE_COMMAND_UI(IDM_OPTION_RUBBERBAND, OnUpdateOptionRubberband)
+	ON_COMMAND(IDM_VIEW_12VIEW, OnView12view)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_12VIEW, OnUpdateView12view)
+	ON_COMMAND(IDM_VIEW_23VIEW, OnView23view)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_23VIEW, OnUpdateView23view)
+	ON_COMMAND(IDM_VIEW_31VIEW, OnView31view)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_31VIEW, OnUpdateView31view)
+	ON_COMMAND(IDM_VIEW_3DVIEW, OnView3dview)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_3DVIEW, OnUpdateView3dview)
+	ON_COMMAND(IDM_VIEW_DATAVIEW, OnViewDataview)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_DATAVIEW, OnUpdateViewDataview)
+	ON_COMMAND(IDM_VIEW_DRAWBOX, OnViewDrawbox)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_DRAWBOX, OnUpdateViewDrawbox)
+	ON_COMMAND(IDM_VIEW_ELEMENTBOX, OnViewElementbox)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_ELEMENTBOX, OnUpdateViewElementbox)
+	ON_COMMAND(IDM_VIEW_S_BAR_BOT, OnViewSBarBot)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_S_BAR_BOT, OnUpdateViewSBarBot)
+	ON_COMMAND(IDM_VIEW_S_BAR_TOP, OnViewSBarTop)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_S_BAR_TOP, OnUpdateViewSBarTop)
+	ON_COMMAND(IDM_SPEC_PAPER, OnSpecPaper)
+	ON_COMMAND(IDM_SPEC_PRECISION, OnSpecPrecision)
+	ON_COMMAND(IDM_SPEC_SCALEFACTOR, OnSpecScalefactor)
+	ON_COMMAND(IDM_SPEC_UNITS, OnSpecUnits)
+	ON_COMMAND(IDM_MODE_INPUT, OnModeInput)
+	ON_COMMAND(IDM_MODE_OUTPUT, OnModeOutput)
+	ON_UPDATE_COMMAND_UI(IDM_MODE_INPUT, OnUpdateModeInput)
+	ON_UPDATE_COMMAND_UI(IDM_MODE_OUTPUT, OnUpdateModeOutput)
+	ON_WM_TIMER()
+	ON_WM_WININICHANGE()
+	ON_COMMAND(IDM_VIEW_MESHBOX, OnViewMeshBox)
+	ON_UPDATE_COMMAND_UI(IDM_VIEW_MESHBOX, OnUpdateViewMeshBox)
+	ON_COMMAND(IDM_OPTION_AUTOACCEPTON, OnOptionAutoacceptOn)
+	ON_UPDATE_COMMAND_UI(IDM_OPTION_AUTOACCEPTON, OnUpdateOptionAutoacceptOn)
+	ON_COMMAND(IDM_OPTION_BLINEON, OnOptionBlineOn)
+	ON_UPDATE_COMMAND_UI(IDM_OPTION_BLINEON, OnUpdateOptionBlineOn)
+	ON_COMMAND(IDM_OPTION_SINGLESEGON, OnOptionSingleSegOn)
+	ON_UPDATE_COMMAND_UI(IDM_OPTION_SINGLESEGON, OnUpdateOptionSingleSegOn)
+	//}}AFX_MSG_MAP
+	// Global help commands
+	ON_COMMAND(ID_HELP_INDEX, CMDIFrameWnd::OnHelpIndex)
+	ON_COMMAND(ID_HELP_USING, CMDIFrameWnd::OnHelpUsing)
+	ON_COMMAND(ID_HELP, CMDIFrameWnd::OnHelp)
+	ON_COMMAND(ID_CONTEXT_HELP, CMDIFrameWnd::OnContextHelp)
+	ON_COMMAND(ID_DEFAULT_HELP, CMDIFrameWnd::OnHelpIndex)
+	ON_MESSAGE(ID_RESET_MODELESS,OnResetModeLess)
+	ON_MESSAGE(ID_ACTIVE_SUPIN,OnCreateorActivateSupIn)
+	ON_MESSAGE(ID_UPDATE_SUPIN,OnUpdateSupIn)
+	ON_MESSAGE(ID_GOODBYE_SUPIN,OnGoodByeSupIn)
+	ON_MESSAGE(ID_ACTIVE_NODIN,OnCreateorActivateNodIn)
+	ON_MESSAGE(ID_UPDATE_NODIN,OnUpdateNodIn)
+	ON_MESSAGE(ID_GOODBYE_NODIN,OnGoodByeNodIn)
+	ON_MESSAGE(ID_ACTIVE_LQCIN,OnCreateorActivateLQCIn)
+	ON_MESSAGE(ID_UPDATE_LQCIN,OnUpdateLQCIn)
+	ON_MESSAGE(ID_GOODBYE_LQCIN,OnGoodByeLQCIn)
+	ON_MESSAGE(ID_ACTIVE_CRCIN,OnCreateorActivateCrcIn)
+	ON_MESSAGE(ID_UPDATE_CRCIN,OnUpdateCrcIn)
+	ON_MESSAGE(ID_GOODBYE_CRCIN,OnGoodByeCrcIn)
+	ON_MESSAGE(ID_ACTIVE_CO4IN,OnCreateorActivateCo4In)
+	ON_MESSAGE(ID_UPDATE_CO4IN,OnUpdateCo4In)
+	ON_MESSAGE(ID_GOODBYE_CO4IN,OnGoodByeCo4In)
+END_MESSAGE_MAP()
+
+/////////////////////////////////////////////////////////////////////////////
+// arrays of IDs used to initialize control bars
+
+// toolbar buttons - IDs are command buttons
+static UINT BASED_CODE buttons[] =
+{
+	// same order as in the bitmap 'toolbar.bmp'
+	ID_FILE_NEW,
+	ID_FILE_OPEN,
+	ID_FILE_SAVE,
+		ID_SEPARATOR,
+	ID_EDIT_CUT,
+	ID_EDIT_COPY,
+	ID_EDIT_PASTE,
+		ID_SEPARATOR,
+	ID_FILE_PRINT,
+	ID_APP_ABOUT,
+	ID_CONTEXT_HELP,
+};
+
+static UINT BASED_CODE indicators[] =
+{
+	ID_SEPARATOR,           // status line indicator
+//	ID_INDICATOR_CAPS,
+//	ID_INDICATOR_NUM,
+//	ID_INDICATOR_SCRL,
+};
+
+static UINT BASED_CODE top_indicators[] =
+{
+
+	ID_INDICATOR_TEXT_DRAWING,
+	ID_SEPARATOR,			
+	ID_INDICATOR_TEXT_LAYER,
+	ID_SEPARATOR,			
+	ID_INDICATOR_TEXT_UNIT,
+	ID_SEPARATOR,			
+	ID_SEPARATOR,			  // STRETCH
+    ID_INDICATOR_TEXT_TIME,
+	ID_SEPARATOR,			
+    ID_INDICATOR_TEXT_DATE,
+	ID_SEPARATOR
+
+};
+
+/////////////////////////////////////////////////////////////////////////////
+// CDrGrafFrame construction/destruction
+
+CDrGrafFrame::CDrGrafFrame()
+{
+	if(!(GetInitMenu()->m_hMenu))
+		GetInitMenu()->LoadMenu(IDR_MAINFRAME);
+	if(!(GetInputMenu()->m_hMenu))
+		GetInputMenu()->LoadMenu(IDR_INPUTMENU);
+	if(!(GetOutputMenu()->m_hMenu))
+		GetOutputMenu()->LoadMenu(IDR_OUTPUTMENU);
+	///////////////////////////////
+	m_OpMode = OP_INPUT;	//default menu selection
+	////////////////////////////////////////////// Modeless Dialogs
+	m_pSupInDlg		= new CDlg_SupI(this);                                                                                
+	m_pNodInDlg		= new CDlg_NodI(this);                                                                                
+	m_pLQCInDlg		= new CDlg_LQCI(this); 
+	m_pCrcInDlg		= new CDlg_CrcI(this); 
+	m_pCo4InDlg		= new CDlg_Co4I(this); 
+	////////////////////////////////////////////// ToolBoxes
+    m_bElemBox		= TRUE;    // ElemBox Active
+    m_nObjectType	= NODE;
+	m_nToolType		= -1;      // Insert Mode
+	m_bDrawBox		= FALSE;    // DrawBox InActive
+	//////////////////////////////////////////////
+
+}
+
+CDrGrafFrame::~CDrGrafFrame()
+{
+	/////////////////////////////////// Menu
+	if(GetInitMenu()->m_hMenu)
+		GetInitMenu()->DestroyMenu();
+	if(GetInputMenu()->m_hMenu)
+		GetInputMenu()->DestroyMenu();
+	if(GetOutputMenu()->m_hMenu)
+		GetOutputMenu()->DestroyMenu();
+	/////////////////////////////////// StatusBars
+	if(m_wndSBarTop.m_hWnd)
+		m_wndSBarTop.DestroyWindow();
+	if(m_wndSBarBot.m_hWnd)
+		m_wndSBarBot.DestroyWindow();
+	if(m_wndStatusBar.m_hWnd)
+		m_wndStatusBar.DestroyWindow();
+	if(m_wndToolBar.m_hWnd)
+		m_wndToolBar.DestroyWindow();
+	/////////////////////////////////// Modeless Dialogs
+	if(m_pSupInDlg->m_hWnd)
+		m_pSupInDlg->DestroyWindow();
+	if(m_pNodInDlg->m_hWnd)
+		m_pNodInDlg->DestroyWindow();
+	/////////////////////////////////
+	if(m_pLQCInDlg->m_hWnd)
+		m_pLQCInDlg->DestroyWindow();
+	if(m_pCrcInDlg->m_hWnd)
+		m_pCrcInDlg->DestroyWindow();
+	if(m_pCo4InDlg->m_hWnd)
+		m_pCo4InDlg->DestroyWindow();
+	///////////////////
+	delete m_pSupInDlg;                                                                                
+	delete m_pNodInDlg;                                                                                
+	delete m_pLQCInDlg; 
+	delete m_pCrcInDlg; 
+	delete m_pCo4InDlg; 
+	///////////////////
+/*
+	if(m_pCo3InDlg->m_hWnd)
+		m_pCo3InDlg->DestroyWindow();
+	delete m_pCo3InDlg; 
+*/
+		
+}
+void CDrGrafFrame::SwitchMenu( UINT nMenuNum)
+{
+/*
+	HMENU hMenuBar	= GetInputMenu()->GetSafeHmenu( );
+	HMENU hWinBar	= GetWindowMenuPopup( hMenuBar );
+	CMenu WinPopUpMenu;
+	WinPopUpMenu.FromHandle(hWinBar);
+*/
+	////////////////////////
+	switch(nMenuNum)
+	{
+		case IDR_MAINFRAME:
+
+//			MDISetMenu(GetInitMenu(),&WinPopUpMenu); // 
+			MDISetMenu(GetInitMenu(),NULL); // 
+//			SetMenu(GetInitMenu()); //
+			m_CurMenuID = IDR_MAINFRAME; 
+			break;
+			
+		case IDR_INPUTMENU:
+		
+
+//			MDISetMenu(GetInputMenu(),&WinPopUpMenu); // 
+			MDISetMenu(GetInputMenu(),NULL); // 
+//			SetMenu(GetInputMenu()); //
+			m_CurMenuID = IDR_INPUTMENU; 
+			break;
+		
+		case IDR_OUTPUTMENU:
+		
+//			MDISetMenu(GetOutputMenu(),&WinPopUpMenu); // 
+			MDISetMenu(GetOutputMenu(),NULL); // 
+//			SetMenu(GetOutputMenu()); //
+			m_CurMenuID = IDR_OUTPUTMENU; 
+			break;
+		
+		default:
+			break;
+	}
+	//////////////			
+	DrawMenuBar();
+	////////////// 
+}
+
+CWnd* CDrGrafFrame::GetMessageBar() 
+{
+	//overrides of CFrameWnd to redirect Message to our StatusBar
+	CBotStatusBar* pBar = (CBotStatusBar*)GetDescendantWindow(IDS_BOT_STATUSBAR, TRUE);
+
+//	if (pBar->GetStyle() && WS_VISIBLE)
+	if (MDIGetActive())
+		return GetDescendantWindow(IDS_BOT_STATUSBAR, TRUE);
+	else
+		return GetDescendantWindow(AFX_IDW_STATUS_BAR, TRUE);
+		
+}
+
+int CDrGrafFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
+{
+	if (CMDIFrameWnd::OnCreate(lpCreateStruct) == -1)
+		return -1;
+	////////////////////////////////////////////////////////// DefaultToolBar
+	if (!m_wndToolBar.Create(this) ||
+		!m_wndToolBar.LoadBitmap(IDR_MAINFRAME) ||
+		!m_wndToolBar.SetButtons(buttons,
+		  sizeof(buttons)/sizeof(UINT)))
+	{
+		TRACE("Failed to create toolbar\n");
+		return -1;      // fail to create
+	}
+	RecalcLayout();
+	////////////////////////////////////////////////////////// Init StatusBar
+	if (!m_wndStatusBar.Create(this) ||
+		!m_wndStatusBar.SetIndicators(indicators,
+		  sizeof(indicators)/sizeof(UINT)))
+	{
+		TRACE("Failed to create status bar\n");
+		return -1;      // fail to create
+	}
+	RecalcLayout();
+	////////////////////////////////////////////////////////// Top StatusBar
+	if (!m_wndSBarTop.Create(this,WS_CHILD|CBRS_TOP,
+			IDS_TOP_STATUSBAR) ||
+		!m_wndSBarTop.SetIndicators(top_indicators,
+		  sizeof(top_indicators)/sizeof(UINT)))
+	{
+		TRACE("Failed to create Top status bar\n");
+		return -1;		// fail to create
+	}
+	////////////////////////////////////////////////////////// Bottom StatusBar
+	if (!m_wndSBarBot.Create(this,WS_CHILD|CBRS_BOTTOM,
+			IDS_BOT_STATUSBAR) ||
+		!m_wndSBarBot.SetIndicators(indicators,
+		  sizeof(indicators)/sizeof(UINT)))
+	{
+		TRACE("Failed to create status bar\n");
+		return -1;		// fail to create
+	}
+	/////////////////// Get the 0 pane ready
+	CString str;
+	UINT nID, nStyle;
+	int cxWidth;
+
+	m_wndSBarBot.GetPaneInfo(0,nID,nStyle,cxWidth);
+	m_wndSBarBot.SetPaneInfo(0,nID,SBPS_STRETCH,cxWidth);
+	////////////////////////////////////////////////////////// ToolBoxes
+	CRect BoxRect;
+	BoxRect.left = BoxRect.top = BoxRect.right = BoxRect.bottom = 0;
+	///////////////////////////////////////
+	if(!(GetMeshBox()->Create((CWnd*)this,BoxRect))  )
+	{
+		TRACE0("Failed to create ElemBox\n");
+		return -1;       // fail to create
+	}
+	///////////////////////////////////////
+	if(!(GetElemBox()->Create((CWnd*)this,BoxRect))  )
+	{
+		TRACE0("Failed to create ElemBox\n");
+		return -1;       // fail to create
+	}
+	////////////////////////////
+	if(!(GetDrawBox()->Create((CWnd*)this,BoxRect))  )
+	{
+		TRACE0("Failed to create DrawBox\n");
+		return -1;       // fail to create
+	}
+	////////////////////////////////////////////////////////////////////// Setup Timers	
+	////////////////////////////////////////////////////////// Clock Timer
+	if (!SetTimer(TM_CLOCK, 1000 /*1000 msec = 1 sec*/, NULL))
+	{
+		MessageBox("Not enough timers available for this window.",
+				"Frame:OnCreate", MB_ICONEXCLAMATION | MB_OK);
+
+		// signal creation failure...
+		return -1;
+	} 
+	////////////////////////////////////////////////////////// Banner Timer
+	if (!SetTimer(TM_BANNER, 5000 /*1000 msec = 1 sec*/, NULL))
+	{
+		MessageBox("Not enough timers available for this window.",
+				"Frame:OnCreate", MB_ICONEXCLAMATION | MB_OK);
+
+		// signal creation failure...
+		return -1;
+	} 
+	////////////////////////////////////////////////////////// Memory Timer
+	if (!SetTimer(TM_MEMORY, 1000 /*1000 msec = 1 sec*/, NULL))
+	{
+		MessageBox("Not enough timers available for this window.",
+				"Frame:OnCreate", MB_ICONEXCLAMATION | MB_OK);
+
+		// signal creation failure...
+		return -1;
+	} 
+	////////////////////////////
+	return 0;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CDrGrafFrame diagnostics
+
+#ifdef _DEBUG
+void CDrGrafFrame::AssertValid() const
+{
+	CMDIFrameWnd::AssertValid();
+}
+
+void CDrGrafFrame::Dump(CDumpContext& dc) const
+{
+	CMDIFrameWnd::Dump(dc);
+}
+
+#endif //_DEBUG
+
+/////////////////////////////////////////////////////////////////////////////
+void CDrGrafFrame::Init()   // Called by Open Document.Init
+{
+
+	///////////////////////////////////////////////////////// ToolBoxes Creation
+	CRect FrameRect;
+	GetClientRect(&FrameRect);
+	ClientToScreen(&FrameRect);
+	////////////////////////////////////////////////////////////////////// StatusBars                        								
+	GetStatusBar()->ShowWindow(SW_HIDE);
+	RecalcLayout();
+	GetSBarTop()->Init();
+	GetSBarTop()->ShowWindow(SW_SHOW);
+	RecalcLayout();
+	GetSBarBot()->Init();
+	GetSBarBot()->ShowWindow(SW_SHOW);
+	RecalcLayout();
+	////////////////////////////////////////////////////////////// Menu
+	if(m_OpMode == OP_INPUT)
+		SwitchMenu(IDR_INPUTMENU);
+	else	  
+	if(m_OpMode == OP_OUTPUT)
+	{
+		SwitchMenu(IDR_OUTPUTMENU);
+		return;
+	}
+	/////////////////////////////////////////////////////////////////// System Sizes
+	int cxBorder	= ::GetSystemMetrics(SM_CXBORDER);
+	int cyBorder	= ::GetSystemMetrics(SM_CYBORDER);
+	int cxVScroll	= ::GetSystemMetrics(SM_CXVSCROLL);
+	int cyMenuSize	= ::GetSystemMetrics(SM_CYMENUSIZE);
+	int cyEdge		= ::GetSystemMetrics(SM_CYEDGE);
+	int cyFrame		= ::GetSystemMetrics(SM_CYSIZEFRAME);
+	int cyCapSize	= ::GetSystemMetrics(SM_CYSIZE);
+	///////////////////////////////
+	CRect BoxRect;
+	int Boxwidth,Boxheight; 
+	/////////////////////////////////////////////////////////////// DrawBox 
+	Boxwidth  		= (int)GetDrawBox()->GetWidth();
+	Boxheight 		= (int)GetDrawBox()->GetHeight();
+
+   	BoxRect.left   = 0;
+   	BoxRect.right  = BoxRect.left + Boxwidth; //
+   	BoxRect.top    = 0;   //
+   	BoxRect.bottom = BoxRect.top   + Boxheight;
+//	ClientToScreen(&Rect);
+	::AdjustWindowRect(&BoxRect,WS_BORDER|WS_CAPTION,FALSE);
+	//////////////////////////////////////////// OutToOut
+	Boxwidth  = BoxRect.Width();
+	Boxheight = BoxRect.Height(); 
+	////////////////////////////////////////////////////////
+   	BoxRect.right  = FrameRect.right - cxBorder - cxVScroll; //
+   	BoxRect.top    = FrameRect.top + cyEdge + cyCapSize + cyFrame + cyMenuSize;   //
+   	BoxRect.left   = BoxRect.right - Boxwidth;
+   	BoxRect.bottom = BoxRect.top   + Boxheight;
+	//////////////////////////////////////////////////////////////
+	if(m_OpMode == OP_INPUT)
+	{
+		GetDrawBox()->SetWindowPos(NULL,BoxRect.left,BoxRect.top,BoxRect.right-BoxRect.left,
+                     BoxRect.bottom-BoxRect.top,SWP_NOZORDER|SWP_HIDEWINDOW);
+	}
+	else
+	if(m_OpMode == OP_OUTPUT)
+	{
+		GetDrawBox()->SetWindowPos(NULL,BoxRect.left,BoxRect.top,BoxRect.right-BoxRect.left,
+                     BoxRect.bottom-BoxRect.top,SWP_NOZORDER|SWP_SHOWWINDOW);
+	}
+	////////////////////////////////////////////////////////////// ElemBox 
+	Boxwidth  = (int)GetElemBox()->GetWidth();
+	Boxheight = (int)GetElemBox()->GetHeight(); 
+
+   	BoxRect.left   = 0;
+   	BoxRect.right  = BoxRect.left + Boxwidth; //
+   	BoxRect.top    = 0;   //
+   	BoxRect.bottom = BoxRect.top   + Boxheight;
+//	ClientToScreen(&Rect);
+	::AdjustWindowRect(&BoxRect,WS_BORDER|WS_CAPTION,FALSE);
+	//////////////////////////////////////////// OutToOut
+	Boxwidth  = BoxRect.Width();
+	Boxheight = BoxRect.Height(); 
+	////////////////////////////////////////////////////////
+   	BoxRect.right  = FrameRect.right - cxBorder - cxVScroll; //
+   	BoxRect.top    = FrameRect.top + cyEdge + cyCapSize + cyFrame + cyMenuSize;   //
+   	BoxRect.left   = BoxRect.right - Boxwidth;
+   	BoxRect.bottom = BoxRect.top   + Boxheight;
+	//////////////////////////////////////////////////////////////
+	if(m_OpMode == OP_INPUT)
+	{
+		GetElemBox()->SetWindowPos(NULL,BoxRect.left,BoxRect.top,BoxRect.right-BoxRect.left,
+                     BoxRect.bottom-BoxRect.top,SWP_NOZORDER|SWP_SHOWWINDOW);
+	}
+	else
+	if(m_OpMode == OP_OUTPUT)
+	{
+		GetElemBox()->SetWindowPos(NULL,BoxRect.left,BoxRect.top,BoxRect.right-BoxRect.left,
+                     BoxRect.bottom-BoxRect.top,SWP_NOZORDER|SWP_HIDEWINDOW);
+	}
+	////////////////////////////////////////////////////////////// MeshBox 
+	Boxwidth  = (int)GetMeshBox()->GetWidth();
+	Boxheight = (int)GetMeshBox()->GetHeight(); 
+
+   	BoxRect.left   = 0;
+   	BoxRect.right  = BoxRect.left + Boxwidth; //
+   	BoxRect.top    = 0;   //
+   	BoxRect.bottom = BoxRect.top   + Boxheight;
+//	ClientToScreen(&Rect);
+	::AdjustWindowRect(&BoxRect,WS_BORDER|WS_CAPTION,FALSE);
+	//////////////////////////////////////////// OutToOut
+	Boxwidth  = BoxRect.Width();
+	Boxheight = BoxRect.Height(); 
+	////////////////////////////////////////////////////////
+   	BoxRect.left   = cyBorder; //
+   	BoxRect.right  = BoxRect.left + Boxwidth;
+   	BoxRect.top    = FrameRect.top + cyEdge + cyFrame + cyMenuSize;  //
+   	BoxRect.bottom = BoxRect.top  + Boxheight;
+	//////////////////////////////////////////////////////////////
+	GetMeshBox()->SetWindowPos(NULL,BoxRect.left,BoxRect.top,BoxRect.right-BoxRect.left,
+                        BoxRect.bottom-BoxRect.top,SWP_NOZORDER|SWP_HIDEWINDOW);
+	///////////////////////////////////////////////////////////////////////////// DataDialogs
+	if(m_OpMode == OP_INPUT)
+	{
+		CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+		CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+		/////////////////////////////////////////////////////////////////////////
+		if(	(GetActiveToolType() == NODE))
+		{
+			SendMessage(ID_ACTIVE_NODIN,IDOK);
+		}
+	}
+
+}
+	
+// /////////////////////////////////Helpers for saving/restoring window state
+
+static char BASED_CODE szSection[] = "Settings";
+static char BASED_CODE szWindowPos[] = "WindowPos";
+static char szFormat[] = "%u,%u,%d,%d,%d,%d,%d,%d,%d,%d";
+
+static BOOL PASCAL FAR ReadWindowPlacement(LPWINDOWPLACEMENT pwp)
+//BOOL CDrGrafFrame::ReadWindowPlacement(LPWINDOWPLACEMENT pwp)
+{
+	CString strBuffer = AfxGetApp()->GetProfileString(szSection, szWindowPos);
+	if (strBuffer.IsEmpty())
+		return FALSE;
+
+	WINDOWPLACEMENT wp;
+	int nRead = sscanf(strBuffer, szFormat,
+		&wp.flags, &wp.showCmd,
+		&wp.ptMinPosition.x, &wp.ptMinPosition.y,
+		&wp.ptMaxPosition.x, &wp.ptMaxPosition.y,
+		&wp.rcNormalPosition.left, &wp.rcNormalPosition.top,
+		&wp.rcNormalPosition.right, &wp.rcNormalPosition.bottom);
+
+	if (nRead != 10)
+		return FALSE;
+
+	wp.length = sizeof wp;
+	*pwp = wp;
+	return TRUE;
+}
+
+static void PASCAL FAR WriteWindowPlacement(LPWINDOWPLACEMENT pwp)
+//void CDrGrafFrame::WriteWindowPlacement(LPWINDOWPLACEMENT pwp)
+	// write a window placement to settings section of app's ini file
+{
+	char szBuffer[sizeof("-32767")*8 + sizeof("65535")*2];
+
+	sprintf(szBuffer, szFormat,
+		pwp->flags, pwp->showCmd,
+		pwp->ptMinPosition.x, pwp->ptMinPosition.y,
+		pwp->ptMaxPosition.x, pwp->ptMaxPosition.y,
+		pwp->rcNormalPosition.left, pwp->rcNormalPosition.top,
+		pwp->rcNormalPosition.right, pwp->rcNormalPosition.bottom);
+
+	AfxGetApp()->WriteProfileString(szSection, szWindowPos, szBuffer);
+}
+
+///////////////////////////////////////////////////////////////////////////// ModeLess Dialogs
+void CDrGrafFrame::SizeRectDlgIn(CRect& BoxRect)
+{
+	
+	/////////////////////////////////////////////////////////////////// System Sizes
+	int cxBorder	= ::GetSystemMetrics(SM_CXBORDER);
+	int cyBorder	= ::GetSystemMetrics(SM_CYBORDER);
+	int cxVScroll	= ::GetSystemMetrics(SM_CXVSCROLL);
+	int cyMenuSize	= ::GetSystemMetrics(SM_CYMENUSIZE);
+	int cyEdge		= ::GetSystemMetrics(SM_CYEDGE);
+	int cyFrame		= ::GetSystemMetrics(SM_CYSIZEFRAME);
+	int cyCapSize	= ::GetSystemMetrics(SM_CYSIZE);
+	///////////////////////////////
+	CRect FrameRect;
+	GetWindowRect(&FrameRect);
+	/////////////////////////////////////////////////////////////// ...InBox 
+	int Boxwidth  		= BoxRect.Width();
+	int Boxheight 		= BoxRect.Height();
+	///////////////////////////////////////
+	BoxRect.top    = 1 + FrameRect.top + cyEdge + cyCapSize;   //		
+	BoxRect.bottom = BoxRect.top	+ Boxheight; //
+	BoxRect.right  = FrameRect.right - cxBorder;
+	BoxRect.left   = BoxRect.right	- Boxwidth;
+	////////////////////////////////
+	return;
+}
+
+long CDrGrafFrame::OnCreateorActivateSupIn(UINT wParam, long lParam)
+{
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetSupInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		GetSupInDlg()->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		GetSupInDlg()->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetSupInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetSupInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if SupeDlg Open
+	if(GetSupInDlg()->m_hWnd)
+	{
+		if((UINT)GetActiveViewNumber() == VIEWISO)
+		{
+			SendMessage(ID_GOODBYE_SUPIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	SUPPPROC	SuppProc;	
+	CString		SupID;
+	BOOL		bRx,bRy,bRz,bTx,bTy,bTz;
+	double		dStif;
+	////////////////
+	int aTool	= GetActiveToolType();
+	//////////////////////////////////
+	SuppProc	= SUP_RIGID;
+	if	(
+			aTool == NSUP_LINSPRING	||	aTool == CSUP_LINSPRING	||
+			aTool == PSUP_LINSPRING	||	aTool == SSUP_LINSPRING	
+		)
+		SuppProc	= SUP_LINSPR;
+	else
+	if	(
+			aTool == NSUP_LINSNUBBER	||	aTool == CSUP_LINSNUBBER	||
+			aTool == PSUP_LINSNUBBER	||	aTool == SSUP_LINSNUBBER	
+		)
+		SuppProc	= SUP_LINSNU;
+	/////////////////////////////////////////////////// Reset in SupMouse & Sup_Dlg
+	GetMouseMgr()->GetSupMouse()->SetSuppProc(SuppProc);
+	GetSupInDlg()->m_SuppProc = SuppProc;
+	GetSupInDlg()->UpdateData(FALSE);
+	///////////////////////////////////////////////////
+	SupID		= GetMouseMgr()->GetSupMouse()->GetCurrentSupID();
+	dStif		= GetMouseMgr()->GetSupMouse()->GetCurrentStif();
+	bTx			= GetMouseMgr()->GetSupMouse()->GetTx();
+	bTy			= GetMouseMgr()->GetSupMouse()->GetTy();
+	bTz			= GetMouseMgr()->GetSupMouse()->GetTz();
+	bRx			= GetMouseMgr()->GetSupMouse()->GetRx();
+	bRy			= GetMouseMgr()->GetSupMouse()->GetRy();
+	bRz			= GetMouseMgr()->GetSupMouse()->GetRz();
+	///////
+	GetSupInDlg()->m_bRx		= bRx;
+	GetSupInDlg()->m_bRy		= bRy;
+	GetSupInDlg()->m_bRz		= bRz;
+	GetSupInDlg()->m_bTx		= bTx;
+	GetSupInDlg()->m_bTy		= bTy;
+	GetSupInDlg()->m_bTz		= bTz;
+	GetSupInDlg()->m_dStif		= dStif;
+	GetSupInDlg()->m_SupID		= SupID;
+	GetSupInDlg()->m_SuppProc	= SuppProc;
+	///////////////////////////////////////
+	if(SuppProc == SUP_RIGID)
+	{
+		////////////////////////////////////////
+		GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(TRUE);
+	}
+	////////////////////////////////
+	GetSupInDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnGoodByeSupIn(UINT wParam, long lParam)
+{
+	
+	if(GetSupInDlg()->m_hWnd)
+		GetSupInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnUpdateSupIn(UINT wParam, long lParam)
+{
+
+	GetSupInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	SUPPPROC	SuppProc;
+	CString		SupID;
+	BOOL		bRx,bRy,bRz,bTx,bTy,bTz;
+	double		dStif;
+	////////////////
+	int aTool	= GetActiveToolType();
+	//////////////////////////////////
+	SuppProc	= SUP_RIGID;
+	if	(
+			aTool == NSUP_LINSPRING	||	aTool == CSUP_LINSPRING	||
+			aTool == PSUP_LINSPRING	||	aTool == SSUP_LINSPRING	
+		)
+		SuppProc	= SUP_LINSPR;
+	else
+	if	(
+			aTool == NSUP_LINSNUBBER	||	aTool == CSUP_LINSNUBBER	||
+			aTool == PSUP_LINSNUBBER	||	aTool == SSUP_LINSNUBBER	
+		)
+		SuppProc	= SUP_LINSNU;
+	/////////////////////////////////////////////////// Reset in SupMouse & Sup_Dlg
+	GetMouseMgr()->GetSupMouse()->SetSuppProc(SuppProc);
+	GetSupInDlg()->m_SuppProc = SuppProc;
+	///////////////////////////////////////
+	if(SuppProc == SUP_RIGID)
+	{
+		////////////////////////////////////////
+		GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(FALSE);	
+		GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(FALSE);
+	}
+	else
+	{
+		GetSupInDlg()->GetDlgItem(IDC_TX)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_TY)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_TZ)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RX)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RY)->EnableWindow(TRUE);	
+		GetSupInDlg()->GetDlgItem(IDC_RZ)->EnableWindow(TRUE);
+	}
+	////////////////////////////////
+	GetSupInDlg()->UpdateData(FALSE);
+	///////////////////////////////////////////////////
+	bRx			= GetSupInDlg()->m_bRx;
+	bRy			= GetSupInDlg()->m_bRy;
+	bRz			= GetSupInDlg()->m_bRz;
+	bTx			= GetSupInDlg()->m_bTx;
+	bTy			= GetSupInDlg()->m_bTy;
+	bTz			= GetSupInDlg()->m_bTz;
+	dStif		= GetSupInDlg()->m_dStif;
+	SupID		= GetSupInDlg()->m_SupID;
+	///////////////////////////////// Reset data in ElMouse
+	GetMouseMgr()->GetSupMouse()->SetCurrentSupID(SupID);
+	GetMouseMgr()->GetSupMouse()->SetCurrentStif(dStif);
+	GetMouseMgr()->GetSupMouse()->SetTx(bTx);
+	GetMouseMgr()->GetSupMouse()->SetTy(bTy);
+	GetMouseMgr()->GetSupMouse()->SetTz(bTz);
+	GetMouseMgr()->GetSupMouse()->SetRx(bRx);
+	GetMouseMgr()->GetSupMouse()->SetRy(bRy);
+	GetMouseMgr()->GetSupMouse()->SetRz(bRz);
+	GetMouseMgr()->GetSupMouse()->SetSuppProc(SuppProc);
+	//////////
+	return 0L;
+}
+	
+
+long CDrGrafFrame::OnCreateorActivateNodIn(UINT wParam, long lParam)
+{
+	CWnd  wndTopMost;
+	///////////////////////////////////////////////////////// 
+	if(GetNodInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		m_pNodInDlg->Create();
+		//////////////////////
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		m_pNodInDlg->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////
+		GetNodInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetNodInDlg()->SetActiveWindow();
+	///////////////////////////////////////////////////////////////// if NodeDlg Open
+	if(GetNodInDlg()->m_hWnd)
+	{
+		CStatic* pCtl;
+		pCtl = (CStatic*)(GetNodInDlg()->GetDlgItem(IDC_OTHER));
+		////////////////////////////////////////////////////////
+		if((UINT)GetActiveViewNumber() == VIEW12)
+			pCtl->SetWindowText("Z");
+		else
+		if((UINT)GetActiveViewNumber() == VIEW23)
+			pCtl->SetWindowText("X");
+		else
+		if((UINT)GetActiveViewNumber() == VIEW31)
+			pCtl->SetWindowText("Y");
+		else
+		if((UINT)GetActiveViewNumber() == VIEWISO)
+		{
+			SendMessage(ID_GOODBYE_NODIN,IDOK);
+			return 0L;
+		}
+	}
+	////////////////////////////////////////////////////////////////// Set Info
+	CString Nid,Sid,Lid;
+	double	dCoord;
+	////////////////
+	
+	Nid		= GetMouseMgr()->GetELMouse()->GetCurrentNodeID();
+	Sid		= GetMouseMgr()->GetELMouse()->GetCurrentSupID();
+	Lid		= GetMouseMgr()->GetELMouse()->GetCurrentLoadID();
+	dCoord	= GetMouseMgr()->GetELMouse()->GetCurrentThirdCoord();
+	///////
+	GetNodInDlg()->m_NID		= Nid;
+	GetNodInDlg()->m_SID		= Sid;
+	GetNodInDlg()->m_nViewNum	= GetActiveViewNumber();
+	GetNodInDlg()->m_bnid_C		= FALSE;
+	GetNodInDlg()->m_dCoord		= dCoord;
+	////////////////////////////////
+	GetNodInDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnGoodByeNodIn(UINT wParam, long lParam)
+{
+	
+	if(GetNodInDlg()->m_hWnd)
+		GetNodInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnUpdateNodIn(UINT wParam, long lParam)
+{
+
+	GetNodInDlg()->UpdateData(TRUE);
+	////////////////////////////////////////////////////////////////// Get Info
+	CString Nid,Sid,Lid;
+	LPOINT3 NewMouseWIC;
+	double	dCoord;
+	////////////////
+	Nid			= GetNodInDlg()->m_NID;
+	Sid			= GetNodInDlg()->m_SID;
+	NewMouseWIC	= GetNodInDlg()->m_MouseWIC;
+	dCoord		= GetNodInDlg()->m_dCoord;
+	///////////////////////////////// Reset data in ElMouse
+	GetMouseMgr()->GetELMouse()->SetCurrentNodeID(Nid);
+	GetMouseMgr()->GetELMouse()->SetCurrentSupID(Sid);
+	GetMouseMgr()->GetELMouse()->SetCurrentLoadID(Lid);
+	GetMouseMgr()->GetELMouse()->SetMouseWIC(NewMouseWIC);
+	GetMouseMgr()->GetELMouse()->SetCurrentThirdCoord(dCoord);
+	//////////
+	return 0L;
+}
+	
+long CDrGrafFrame::OnCreateorActivateLQCIn(UINT wParam, long lParam)
+{
+	
+	if(GetLQCInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		m_pLQCInDlg->Create();
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		m_pLQCInDlg->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////////////////////////////////////
+		GetLQCInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetLQCInDlg()->SetActiveWindow();
+	////////////////////////////////////////////////////////////////// Set ID
+	CString Cid = GetMouseMgr()->GetELMouse()->GetCurrentCurveID();
+	CString Nid = GetMouseMgr()->GetELMouse()->GetCurrentNodeID();
+	CString Sid = GetMouseMgr()->GetELMouse()->GetCurrentSupID();
+	CString Lid = GetMouseMgr()->GetELMouse()->GetCurrentLoadID();
+	int nEl		= GetMouseMgr()->GetELMouse()->GetCurrentElPerSeg();
+	double rat	= GetMouseMgr()->GetELMouse()->GetCurrentRatio();
+	BOOL bClose	= GetMouseMgr()->GetELMouse()->IsClosed();
+	BOOL bAdv	= GetMouseMgr()->GetELMouse()->IsAdvanceOn();
+	//////////////////////////////////
+	GetLQCInDlg()->m_CID		= Cid;
+	GetLQCInDlg()->m_NID		= Nid;
+	GetLQCInDlg()->m_SID		= Sid;
+	GetLQCInDlg()->m_nElperSeg	= nEl;
+	GetLQCInDlg()->m_dRatio		= rat;
+	GetLQCInDlg()->m_bClosed	= bClose;
+	GetLQCInDlg()->m_bAdvanceOn	= bAdv;
+	////////////////////////////////
+	GetLQCInDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnGoodByeLQCIn(UINT wParam, long lParam)
+{
+	
+	if(GetLQCInDlg()->m_hWnd)
+		GetLQCInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnUpdateLQCIn(UINT wParam, long lParam)
+{
+
+	GetLQCInDlg()->UpdateData(TRUE);
+	////////////////////////////////
+	CString Cid = GetLQCInDlg()->m_CID;
+	CString Nid = GetLQCInDlg()->m_NID;
+	CString Sid = GetLQCInDlg()->m_SID;
+	int nEl		= GetLQCInDlg()->m_nElperSeg;
+	double rat	= GetLQCInDlg()->m_dRatio;
+	BOOL bClose	= GetLQCInDlg()->m_bClosed;
+	BOOL bAdv	= GetLQCInDlg()->m_bAdvanceOn;
+	///////////////////////////////// Reset data in ElMouse
+	GetMouseMgr()->GetELMouse()->SetCurrentCurveID(Cid);
+	GetMouseMgr()->GetELMouse()->SetCurrentNodeID(Nid);
+	GetMouseMgr()->GetELMouse()->SetCurrentSupID(Sid);
+	GetMouseMgr()->GetELMouse()->SetCurrentElPerSeg(nEl);
+	GetMouseMgr()->GetELMouse()->SetCurrentRatio(rat);
+	GetMouseMgr()->GetELMouse()->SetClosed(bClose);
+	GetMouseMgr()->GetELMouse()->SetAdvanceOn(bAdv);
+	//////////
+	return 0L;
+}
+	
+long CDrGrafFrame::OnCreateorActivateCrcIn(UINT wParam, long lParam)
+{
+	
+	if(GetCrcInDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		m_pCrcInDlg->Create();
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		m_pCrcInDlg->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////////////////////////////////////
+		GetCrcInDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetCrcInDlg()->SetActiveWindow();
+	////////////////////////////////////////////////////////////////// Set ID
+	CString Cid = GetMouseMgr()->GetELMouse()->GetCurrentCurveID();
+	CString Nid = GetMouseMgr()->GetELMouse()->GetCurrentNodeID();
+	int nEl		= GetMouseMgr()->GetELMouse()->GetCurrentElPerSeg();
+	double rat	= GetMouseMgr()->GetELMouse()->GetCurrentRatio();
+	GetCrcInDlg()->m_nElperSeg	= nEl;
+	GetCrcInDlg()->m_dRatio		= rat;
+	GetCrcInDlg()->m_CID		= Cid;
+	GetCrcInDlg()->m_NID		= Nid;
+	////////////////////////////////
+	GetCrcInDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnGoodByeCrcIn(UINT wParam, long lParam)
+{
+	
+	GetCrcInDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnUpdateCrcIn(UINT wParam, long lParam)
+{
+
+	GetCrcInDlg()->UpdateData(TRUE);
+	////////////////////////////////
+	CString Cid = GetCrcInDlg()->m_CID;
+	CString Nid = GetCrcInDlg()->m_NID;
+	int nEl		= GetCrcInDlg()->m_nElperSeg;
+	double rat	= GetCrcInDlg()->m_dRatio;
+	///////////////////////////////// Reset data in ElMouse
+	GetMouseMgr()->GetELMouse()->SetCurrentCurveID(Cid);
+	GetMouseMgr()->GetELMouse()->SetCurrentNodeID(Nid);
+	GetMouseMgr()->GetELMouse()->SetCurrentElPerSeg(nEl);
+	GetMouseMgr()->GetELMouse()->SetCurrentRatio(rat);
+	//////////
+	return 0L;
+}
+
+long CDrGrafFrame::OnCreateorActivateCo4In(UINT wParam, long lParam)
+{
+	
+	if(GetCo4InDlg()->GetSafeHwnd() ==0)	// not created already
+	{
+		m_pCo4InDlg->Create();
+		CRect BoxRect;
+		CWnd  wndTopMost;
+		m_pCo4InDlg->GetWindowRect(&BoxRect);
+		SizeRectDlgIn(BoxRect);
+		//////////////////////////////////////////////////////////////
+		GetCo4InDlg()->SetWindowPos(&wndTopMost,BoxRect.left,BoxRect.top,BoxRect.Width(),
+                        BoxRect.Height(),SWP_NOZORDER|SWP_SHOWWINDOW);
+		//////////////////////////////////////////////////////////////  
+	}
+	else
+		GetCo4InDlg()->SetActiveWindow();
+	////////////////////////////////////////////////////////////////// Set ID
+	CString Pid = GetMouseMgr()->GetELMouse()->GetCurrentPatchID();
+	////////////
+	CString PCid[4];
+	CURVELATCH CLat[4];
+	CString sLat[4];
+	int Elem[4];
+	////////////
+	for(int i=0;i<4;i++)
+	{
+		PCid[i] = GetMouseMgr()->GetELMouse()->GetPatCurveID(i);
+		CLat[i] = GetMouseMgr()->GetELMouse()->GetPatCurveLat(i);
+		Elem[i] = GetMouseMgr()->GetELMouse()->GetPatCurveElem(i);
+	}
+	//////////////////////////////////////
+	for(i=0;i<4;i++)
+	{
+		sLat[i] = "FORWARD";
+		/////////////////////////
+		if(CLat[i] == CL_BACKWARD)
+			sLat[i] = "BACKWARD";
+	}
+	////////////
+	GetCo4InDlg()->m_PatchID	= Pid;
+	GetCo4InDlg()->m_CID_1		= PCid[0];
+	GetCo4InDlg()->m_CID_2		= PCid[1];
+	GetCo4InDlg()->m_CID_3		= PCid[2];
+	GetCo4InDlg()->m_CID_4		= PCid[3];
+	GetCo4InDlg()->m_TotEl_1	= Elem[0];
+	GetCo4InDlg()->m_TotEl_2	= Elem[1];
+	GetCo4InDlg()->m_TotEl_3	= Elem[2];
+	GetCo4InDlg()->m_TotEl_4	= Elem[3];
+	GetCo4InDlg()->m_Orient_1	= sLat[0];
+	GetCo4InDlg()->m_Orient_2	= sLat[1];
+	GetCo4InDlg()->m_Orient_3	= sLat[2];
+	GetCo4InDlg()->m_Orient_4	= sLat[3];
+	////////////////////////////////
+	GetCo4InDlg()->UpdateData(FALSE);
+	////////////////////////////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnGoodByeCo4In(UINT wParam, long lParam)
+{
+	
+	GetCo4InDlg()->DestroyWindow();
+	//////////
+	return 0L;
+}
+	 
+long CDrGrafFrame::OnUpdateCo4In(UINT wParam, long lParam)
+{
+
+	GetCo4InDlg()->UpdateData(TRUE);
+	//////////////////////////////////////
+	CString Pid = GetCo4InDlg()->m_PatchID;
+	///////////
+	CString PCid[4];
+	CURVELATCH CLat[4];
+	CString sLat[4];
+	int Elem[4];
+	//////////////////////////////////////
+	PCid[0] = GetCo4InDlg()->m_CID_1;
+	PCid[1] = GetCo4InDlg()->m_CID_2;
+	PCid[2] = GetCo4InDlg()->m_CID_3;
+	PCid[3] = GetCo4InDlg()->m_CID_4;
+	Elem[0] = GetCo4InDlg()->m_TotEl_1;
+	Elem[1] = GetCo4InDlg()->m_TotEl_2;
+	Elem[2] = GetCo4InDlg()->m_TotEl_3;
+	Elem[3] = GetCo4InDlg()->m_TotEl_4;
+	sLat[0] = GetCo4InDlg()->m_Orient_1;
+	sLat[1] = GetCo4InDlg()->m_Orient_2;
+	sLat[2] = GetCo4InDlg()->m_Orient_3;
+	sLat[3] = GetCo4InDlg()->m_Orient_4;
+	//////////////////////////////////////
+	int i;
+	for(i=0;i<4;i++)
+	{
+		CLat[i] = CL_FORWARD;
+		/////////////////////////
+		if(sLat[i] == "BACKWARD")
+			CLat[i] = CL_BACKWARD;
+	}
+	///////////////////////////////// Reset data in ElMouse
+	GetMouseMgr()->GetELMouse()->SetCurrentPatchID(Pid);
+	for(i=0;i<4;i++)
+	{
+		GetMouseMgr()->GetELMouse()->SetCurrentPatCurveID(PCid[i],i);
+		GetMouseMgr()->GetELMouse()->SetPatCurveLat(CLat[i],i);
+		GetMouseMgr()->GetELMouse()->SetPatCurveElem(Elem[i],i);
+	}
+	//////////
+	return 0L;
+}
+/////////////////////////////////////////////////////////////////////////////////////	
+void CDrGrafFrame::InitialShowWindow(UINT nCmdShow)
+{
+	WINDOWPLACEMENT wp;
+	if (!ReadWindowPlacement(&wp))
+	{
+//		ShowWindow(nCmdShow);
+		ShowWindow(SW_SHOWMAXIMIZED);
+		return;
+	}
+	if (nCmdShow != SW_SHOWNORMAL)
+		wp.showCmd = nCmdShow;
+		
+	SetWindowPlacement(&wp);
+//	ShowWindow(wp.showCmd);
+	ShowWindow(SW_SHOWMAXIMIZED);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CDrGrafFrame message handlers
+/////////////////////////////////////////////////////////////////////////////
+void CDrGrafFrame::OnClose()
+{  
+	// before it is destroyed, 
+	////////////////////////////////////////////// Kill Timers	
+	KillTimer(TM_CLOCK);
+	KillTimer(TM_MEMORY);
+	/////////////////////////////////// toolboxes	 
+	if(m_wndElemBox.m_hWnd)
+		m_wndElemBox.DestroyWindow();
+	if(m_wndDrawBox.m_hWnd)
+		m_wndDrawBox.DestroyWindow(); 
+		
+	// before it is destroyed, save the position of the window
+	WINDOWPLACEMENT wp;
+	wp.length = sizeof wp;
+	if (GetWindowPlacement(&wp))
+	{
+		wp.flags = 0;
+		if (IsZoomed())
+			wp.flags |= WPF_RESTORETOMAXIMIZED;
+		// and write it to the .INI file
+		WriteWindowPlacement(&wp);
+	}
+	///////////////////////////////////////////
+    CMDIFrameWnd::OnClose();  
+    
+}
+                                             
+void CDrGrafFrame::CreateOrActivateFrame(CDocTemplate* pTemplate, 
+				   CRuntimeClass* pViewClass)
+{
+
+	CDrGrafChildFrame* pMDIActive = (CDrGrafChildFrame*)MDIGetActive();
+	ASSERT(pMDIActive != NULL);
+	/////////////////////////////////////////////////
+	CDocument* pDoc = pMDIActive->GetActiveDocument();
+	ASSERT(pDoc != NULL);
+    /////////////////////////////////////////
+	CView* pView;
+	POSITION pos = pDoc->GetFirstViewPosition();
+	while (pos)
+	{
+		pView = pDoc->GetNextView(pos);
+		if (pView->IsKindOf(pViewClass))
+		{
+			pView->GetParentFrame()->ActivateFrame();
+			MDITile(MDITILE_SKIPDISABLED);
+			return;
+		}
+	}
+    ////////////////////////
+	CDrGrafChildFrame* pNewFrame
+		= (CDrGrafChildFrame*)(pTemplate->CreateNewFrame(pDoc, NULL));
+	if (pNewFrame == NULL)
+		return;     // not created
+	ASSERT(pNewFrame->IsKindOf(RUNTIME_CLASS(CDrGrafChildFrame)));
+	pTemplate->InitialUpdateFrame(pNewFrame, pDoc);  
+	//////////////////////////////
+	MDITile(MDITILE_SKIPDISABLED);
+	//////////////////////////////
+}
+
+void CDrGrafFrame::CloseView(CRuntimeClass* pViewClass)
+{
+
+//	CMDIChildWnd* pMDIActive = MDIGetActive();
+	CDrGrafChildFrame* pMDIActive = (CDrGrafChildFrame*)MDIGetActive();
+	ASSERT(pMDIActive != NULL);
+	CDocument* pDoc = pMDIActive->GetActiveDocument();
+	ASSERT(pDoc != NULL);
+
+	CView* pView;
+	POSITION pos = pDoc->GetFirstViewPosition();
+	while (pos)
+	{
+		pView = pDoc->GetNextView(pos);
+		if (pView->IsKindOf(pViewClass))
+		{
+			pView->GetParentFrame()->ShowWindow(SW_HIDE);
+			return;
+		}
+	}
+
+}
+////////////////////////////////////////////////////////////////////// TOOLBOXES: CREATIONS
+BOOL CMeshBox::Create(CWnd* pParentWnd,CRect rect)
+{
+	/////////////////////////////////////////////////////////////////////////
+	// TN001: following not supported in MFC4.0
+		//·	"AfxWnd" is used for all child windows created with CWnd::Create.
+		//·	class style : CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW
+		//·	no icon
+		//·	arrow cursor
+		//·	no background color
+	//////////////////////////////////////////////////////////////////////////
+	CString strAfxWnd_EB = AfxRegisterWndClass(CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW,
+							AfxGetApp()->LoadStandardCursor(IDC_ARROW),(HBRUSH)NULL,(HICON)NULL );
+	////////////////////////////
+	BOOL bOk = CreateEx(	0,
+	//					"AfxWnd",
+						strAfxWnd_EB,
+						NULL,
+						WS_POPUP |WS_CLIPCHILDREN |WS_CAPTION,
+						rect.left,
+						rect.top, 
+						rect.right - rect.left, 
+						rect.bottom - rect.top,
+						pParentWnd->GetSafeHwnd(),
+						(HMENU)NULL/*IDW_MeshBOX*/,
+						NULL
+					);
+	return bOk;				
+}
+
+BOOL CElemBox::Create(CWnd* pParentWnd,CRect rect)
+{
+	/////////////////////////////////////////////////////////////////////////
+	// TN001: following not supported in MFC4.0
+		//·	"AfxWnd" is used for all child windows created with CWnd::Create.
+		//·	class style : CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW
+		//·	no icon
+		//·	arrow cursor
+		//·	no background color
+	//////////////////////////////////////////////////////////////////////////
+	CString strAfxWnd_EB = AfxRegisterWndClass(CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW,
+							AfxGetApp()->LoadStandardCursor(IDC_ARROW),(HBRUSH)NULL,(HICON)NULL );
+	////////////////////////////
+	BOOL bOk = CreateEx(	0,
+	//					"AfxWnd",
+						strAfxWnd_EB,
+						NULL,
+						WS_POPUP |WS_CLIPCHILDREN |WS_CAPTION,
+						rect.left,
+						rect.top, 
+						rect.right - rect.left, 
+						rect.bottom - rect.top,
+						pParentWnd->GetSafeHwnd(),
+						(HMENU)NULL/*IDW_ElemBOX*/,
+						NULL
+					);
+	return bOk;				
+}
+
+BOOL CDrawBox::Create(CWnd* pParentWnd,CRect rect)
+{
+
+	/////////////////////////////////////////////////////////////////////////
+	// TN001: following not supported in MFC4.0
+		//·	"AfxWnd" is used for all child windows created with CWnd::Create.
+		//·	class style : CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW
+		//·	no icon
+		//·	arrow cursor
+		//·	no background color
+	//////////////////////////////////////////////////////////////////////////
+	CString strAfxWnd_DB = AfxRegisterWndClass(CS_DBLCLKS | CS_HREDRAW | CS_VREDRAW,
+							AfxGetApp()->LoadStandardCursor(IDC_ARROW),(HBRUSH)NULL,(HICON)NULL);
+	////////////////////////////
+	BOOL bOk = CreateEx(	0,
+	//					"AfxWnd",
+						strAfxWnd_DB,
+						NULL,
+						WS_POPUP |WS_CLIPCHILDREN |WS_CAPTION,
+						rect.left,
+						rect.top, 
+						rect.right - rect.left, 
+						rect.bottom - rect.top,
+						pParentWnd->GetSafeHwnd(),
+						(HMENU)NULL/*IDW_ElemBOX*/,
+						NULL
+					);
+	return bOk;				
+}
+
+//////////////////////////////////////////////////////////// Message Handler
+void CDrGrafFrame::OnDeckDreampipe()
+{
+	// TODO: Add your command handler code here
+	
+}
+
+void CDrGrafFrame::OnUpdateDeckDreampipe(CCmdUI* pCmdUI)
+{
+	// TODO: Add your command update UI handler code here
+	
+}
+
+void CDrGrafFrame::OnDeckSap()
+{
+	// TODO: Add your command handler code here
+	
+}
+
+void CDrGrafFrame::OnUpdateDeckSap(CCmdUI* pCmdUI)
+{
+	// TODO: Add your command update UI handler code here
+	
+}
+
+void CDrGrafFrame::OnDeckTab()
+{
+	// TODO: Add your command handler code here
+	
+}
+
+void CDrGrafFrame::OnUpdateDeckTab(CCmdUI* pCmdUI)
+{
+	// TODO: Add your command update UI handler code here
+	
+}
+
+void CDrGrafFrame::OnOptionAxison()
+{
+	// TODO: Add your command handler code here
+	
+}
+
+void CDrGrafFrame::OnUpdateOptionAxison(CCmdUI* pCmdUI)
+{
+	// TODO: Add your command update UI handler code here
+	
+}
+
+void CDrGrafFrame::OnOptionAutoacceptOn() 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->ToggleAutoAcceptOn();
+	
+}
+
+void CDrGrafFrame::OnUpdateOptionAutoacceptOn(CCmdUI* pCmdUI) 
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pCmdUI->SetCheck(pBool->IsAutoAcceptOn());
+}
+
+void CDrGrafFrame::OnOptionSingleSegOn() 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->ToggleSingleSegOn();
+	
+}
+
+void CDrGrafFrame::OnUpdateOptionSingleSegOn(CCmdUI* pCmdUI) 
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pCmdUI->SetCheck(pBool->IsSingleSegOn());
+}
+
+void CDrGrafFrame::OnOptionBlineOn() 
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->ToggleBLineOn();
+	
+}
+
+void CDrGrafFrame::OnUpdateOptionBlineOn(CCmdUI* pCmdUI) 
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pCmdUI->SetCheck(pBool->IsBLineOn());
+}
+
+void CDrGrafFrame::OnOptionDialogon()
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->ToggleDialogOn();
+	
+}
+
+void CDrGrafFrame::OnUpdateOptionDialogon(CCmdUI* pCmdUI)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pCmdUI->SetCheck(pBool->IsDialogOn());
+}
+
+void CDrGrafFrame::OnOptionPenchange()
+{
+	// TODO: Add your command handler code here
+	
+}
+
+void CDrGrafFrame::OnUpdateOptionPenchange(CCmdUI* pCmdUI)
+{
+	// TODO: Add your command update UI handler code here
+	
+}
+
+void CDrGrafFrame::OnOptionRefresh()
+{
+	// TODO: Add your command handler code here
+	
+}
+
+void CDrGrafFrame::OnUpdateOptionRefresh(CCmdUI* pCmdUI)
+{
+	// TODO: Add your command update UI handler code here
+	
+}
+
+void CDrGrafFrame::OnOptionRubberband()
+{
+	
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->ToggleDragOn();
+	
+}
+
+void CDrGrafFrame::OnUpdateOptionRubberband(CCmdUI* pCmdUI)
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pCmdUI->SetCheck(pBool->IsDragOn());
+		
+}
+
+void CDrGrafFrame::OnView12view()
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	//////////////////////////////////////////  
+	pBool->Toggle12ViewActive();
+	if(pBool->Is12ViewActive() )
+	{
+		SetActiveViewNumber(VIEW12);
+		SetOpMode(OP_INPUT);
+		////////////////////////////
+		CreateOrActivateFrame(((CDrGrafApp*)AfxGetApp())->Get12ViewTemplate(), 
+				RUNTIME_CLASS(C12View));
+		///////////////////////////////////////////// View Changed
+		((CDrGrafDoc*)pDoc)->GetObjectMgr()->SetViewChanged(TRUE);
+		////////////////////////////
+		ModeLessOn();
+
+    }
+	else
+	{
+		if(!AnyOtherInputViewVisible())
+			ModeLessOff();
+		//////////////////
+	    CloseView(RUNTIME_CLASS(C12View));  
+	}	    
+}
+
+void CDrGrafFrame::OnUpdateView12view(CCmdUI* pCmdUI)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	//////////////////////////////////
+	pCmdUI->SetCheck(pBool->Is12ViewActive() );
+	
+}
+
+void CDrGrafFrame::OnView23view()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->Toggle23ViewActive();
+	if(pBool->Is23ViewActive() )
+	{
+		SetOpMode(OP_INPUT);
+		SetActiveViewNumber(VIEW23);
+		////////////////////////////
+		CreateOrActivateFrame(((CDrGrafApp*)AfxGetApp())->Get23ViewTemplate(), 
+				RUNTIME_CLASS(C23View));
+		////////////////////////////
+		ModeLessOn();
+    }
+	else
+	{
+		if(!AnyOtherInputViewVisible())
+			ModeLessOff();
+		//////////////////
+	    CloseView(RUNTIME_CLASS(C23View));  
+	}	    
+
+}
+
+void CDrGrafFrame::OnUpdateView23view(CCmdUI* pCmdUI)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	//////////////////////////////////
+	pCmdUI->SetCheck(pBool->Is23ViewActive() );
+	
+}
+
+void CDrGrafFrame::OnView31view()
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->Toggle31ViewActive();
+	if(pBool->Is31ViewActive() )
+	{
+		SetOpMode(OP_INPUT);
+		SetActiveViewNumber(VIEW31);
+ 		////////////////////////////
+		CreateOrActivateFrame(((CDrGrafApp*)AfxGetApp())->Get31ViewTemplate(), 
+				RUNTIME_CLASS(C31View));
+ 		////////////////////////////
+		ModeLessOn();
+   }
+	else
+	{
+		if(!AnyOtherInputViewVisible())
+			ModeLessOff();
+		//////////////////
+	    CloseView(RUNTIME_CLASS(C31View));  
+	}	    
+
+}
+
+void CDrGrafFrame::OnUpdateView31view(CCmdUI* pCmdUI)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	//////////////////////////////////
+	pCmdUI->SetCheck(pBool->Is31ViewActive() );
+
+}
+
+void CDrGrafFrame::OnView3dview()
+{
+	////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->ToggleIsoViewActive();
+	if(pBool->IsIsoViewActive() )
+	{
+		SetActiveViewNumber(VIEWISO);
+		SetOpMode(OP_OUTPUT);
+		////////////////////////////
+		CreateOrActivateFrame(((CDrGrafApp*)AfxGetApp())->Get3DViewTemplate(), 
+				RUNTIME_CLASS(C3DView));
+		///////////////////////////////////////////// View Changed
+		((CDrGrafDoc*)pDoc)->GetObjectMgr()->SetViewChanged(TRUE);
+		////////////////////////////////////////// Close Data Dialog, if Any
+		ModeLessOff();
+		/////////////////////////////////////
+		// also sets m_nView in CDrGrafFrame 
+		////////////////////////////////////////// 
+		CMDIChildWnd* pMDIActive = MDIGetActive();
+		if(!pMDIActive)
+			return;
+		///////////////	
+		CDocument* pDoc = pMDIActive->GetActiveDocument();
+		if(pDoc)
+		{
+   			/////////////
+			CView* pView;
+			POSITION pos = pDoc->GetFirstViewPosition();
+			while (pos)
+			{
+				pView = pDoc->GetNextView(pos);
+				///////////////////////////////////////////// Scale Changed
+				if( ((CDrawView*)pView)->GetViewNum() == VIEWISO)  // View3D
+					((CDrawView*)pView)->SetScalevv3DToLP();
+				///////////////////////////////////
+				break;
+			}
+		}
+	}
+	else
+	    CloseView(RUNTIME_CLASS(C3DView));
+	//////////////////////////////////////
+	
+}
+
+void CDrGrafFrame::OnUpdateView3dview(CCmdUI* pCmdUI)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	//////////////////////////////////
+	pCmdUI->SetCheck(pBool->IsIsoViewActive() );
+	
+}
+
+void CDrGrafFrame::OnViewDataview()
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	////////////////////////////////////////// 
+	pBool->ToggleDataViewActive();
+	if(pBool->IsDataViewActive() )
+	{
+		CreateOrActivateFrame(((CDrGrafApp*)AfxGetApp())->GetDataViewTemplate(), 
+			RUNTIME_CLASS(CDataView));
+	}
+	else
+	    CloseView(RUNTIME_CLASS(CDataView));
+	
+}
+
+void CDrGrafFrame::OnUpdateViewDataview(CCmdUI* pCmdUI)
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	//////////////////////////////////
+	pCmdUI->SetCheck(pBool->IsDataViewActive() );
+	
+}
+
+void CDrGrafFrame::OnViewDrawbox()
+{
+
+	m_wndDrawBox.ShowWindow((m_wndDrawBox.GetStyle() & WS_VISIBLE) == 0);
+	
+}
+
+void CDrGrafFrame::OnUpdateViewDrawbox(CCmdUI* pCmdUI)
+{
+
+	pCmdUI->SetCheck((m_wndDrawBox.GetStyle() & WS_VISIBLE) != 0);
+	
+}
+
+void CDrGrafFrame::OnViewElementbox()
+{
+
+//	if((m_wndSupportBar.GetStyle() & WS_VISIBLE) != 0)	// Turn Support OFF
+//			m_wndSupportBar.ShowWindow(SW_HIDE);  
+			
+	m_wndElemBox.ShowWindow((m_wndElemBox.GetStyle() & WS_VISIBLE) == 0);
+	
+}
+
+void CDrGrafFrame::OnUpdateViewElementbox(CCmdUI* pCmdUI)
+{
+
+	pCmdUI->SetCheck((m_wndElemBox.GetStyle() & WS_VISIBLE) != 0);
+	
+}
+
+void CDrGrafFrame::OnViewMeshBox() 
+{
+	m_wndMeshBox.ShowWindow((m_wndMeshBox.GetStyle() & WS_VISIBLE) == 0);
+	
+}
+
+void CDrGrafFrame::OnUpdateViewMeshBox(CCmdUI* pCmdUI) 
+{
+	pCmdUI->SetCheck((m_wndMeshBox.GetStyle() & WS_VISIBLE) != 0);
+	
+}
+
+void CDrGrafFrame::OnViewSBarBot()
+{
+	CWnd* pBar = GetDescendantWindow(IDS_BOT_STATUSBAR);
+	if(pBar)
+	{
+		pBar->ShowWindow( (pBar->GetStyle() & WS_VISIBLE) == 0); // toggle
+		RecalcLayout();
+	}
+}
+
+void CDrGrafFrame::OnUpdateViewSBarBot(CCmdUI* pCmdUI)
+{
+	CWnd* pBar = GetDescendantWindow(IDS_BOT_STATUSBAR);
+	if(pBar)
+	{
+		pCmdUI->SetCheck( (pBar->GetStyle() & WS_VISIBLE) != 0);
+	}	
+}
+
+void CDrGrafFrame::OnViewSBarTop()
+{
+	CWnd* pBar = GetDescendantWindow(IDS_TOP_STATUSBAR);
+	if(pBar)
+	{
+		pBar->ShowWindow( (pBar->GetStyle() & WS_VISIBLE) == 0);    // toggle
+		RecalcLayout();
+	}
+}
+
+void CDrGrafFrame::OnUpdateViewSBarTop(CCmdUI* pCmdUI)
+{
+	CWnd* pBar = GetDescendantWindow(IDS_TOP_STATUSBAR);
+	if(pBar)
+	{
+		pCmdUI->SetCheck( (pBar->GetStyle() & WS_VISIBLE) != 0);
+	}	
+}
+
+void CDrGrafFrame::OnSpecPaper()
+{
+	// TODO: Add your command handler code here
+	
+}
+
+void CDrGrafFrame::OnSpecPrecision()
+{
+
+	CSDlgMgr* pSDlgMgr;
+	/////////////////////////
+	pSDlgMgr->DoModal_SpecObjs(PRECISION);
+	
+}
+
+void CDrGrafFrame::OnSpecScalefactor()
+{
+
+	CSDlgMgr* pSDlgMgr;
+	/////////////////////////
+	pSDlgMgr->DoModal_SpecObjs(SCALEFACTOR);
+	
+}
+void CDrGrafFrame::OnSpecUnits()
+{
+
+	CSDlgMgr* pSDlgMgr;
+	/////////////////////////
+	pSDlgMgr->DoModal_SpecObjs(UNIT);
+	
+}
+
+CView* CDrGrafFrame::GetViewPointer(CRuntimeClass* pViewClass)
+{
+	/////////////////////////////////////////////////////////
+	// also sets m_nView in CMouse and CDrGrafFrame 
+	///////////////////////////////////////////////////////// 
+	CDrGrafFrame* pWnd = (CDrGrafFrame*)(AfxGetApp()->m_pMainWnd ); 
+	CMDIChildWnd* pMDIActive = pWnd->MDIGetActive();
+	ASSERT(pMDIActive != NULL);
+	CDocument* pDoc = pMDIActive->GetActiveDocument();
+	ASSERT(pDoc != NULL);
+
+	CView* pView;
+	POSITION pos = pDoc->GetFirstViewPosition();
+	while (pos)
+	{
+		pView = pDoc->GetNextView(pos);
+		///////////////////////////////
+		if (pView->IsKindOf(pViewClass))
+			return pView;
+	}
+    return (CView*)NULL;
+}
+
+BOOL CDrGrafFrame::AnyOtherInputViewVisible()
+{
+
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	/////////////////////////////////////////////// 
+	CBooleans* pBool = (CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+	//////////////////////////////////////////  
+	if	(GetActiveViewNumber() != VIEW12 && pBool->Is12ViewActive())
+		return TRUE;
+	////////////////
+	if	(GetActiveViewNumber() != VIEW23 && pBool->Is23ViewActive())
+		return TRUE;
+	////////////////
+	if	(GetActiveViewNumber() != VIEW31 && pBool->Is31ViewActive())
+		return TRUE;
+	////////////////
+	return FALSE;
+}
+	
+void CDrGrafFrame::ModeLessOff()
+{
+	if(GetLQCInDlg()->m_hWnd)
+		SendMessage(ID_GOODBYE_LQCIN,IDOK);
+	if(GetCrcInDlg()->m_hWnd)
+		SendMessage(ID_GOODBYE_CRCIN,IDOK);
+	if(GetCo4InDlg()->m_hWnd)
+		SendMessage(ID_GOODBYE_CO4IN,IDOK);
+	if(GetNodInDlg()->m_hWnd)
+		SendMessage(ID_GOODBYE_NODIN,IDOK);
+	if(GetSupInDlg()->m_hWnd)
+		SendMessage(ID_GOODBYE_SUPIN,IDOK);
+}
+	
+long CDrGrafFrame::OnResetModeLess(UINT wParam, long lParam)
+{
+	ModeLessOn();
+	return 0L;
+}
+
+void CDrGrafFrame::ModeLessOn()
+{
+	///////////////////////////////////////////////////////////////////////// ModeLess Dlgs
+	int aTool	= GetActiveToolType();
+	int aObj	= GetActiveObjectType();
+	/////////////////////////////////////////////////////////////////////////
+	if
+	(	
+		(aTool == NODE) ||(aTool == CNODE)
+	)
+	{
+		if(GetLQCInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_LQCIN,IDOK);
+		if(GetCrcInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_CRCIN,IDOK);
+		if(GetCo4InDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_CO4IN,IDOK);
+		if(GetSupInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_SUPIN,IDOK);
+		if(!GetNodInDlg()->m_hWnd)
+			SendMessage(ID_ACTIVE_NODIN,IDOK);
+		/////////////////////////////////////// Other Coords
+		if(GetNodInDlg()->m_hWnd)
+		{
+			CStatic* pCtl;
+			pCtl = (CStatic*)GetNodInDlg()->GetDlgItem(IDC_OTHER);
+			if(GetActiveViewNumber() == VIEW12)
+				pCtl->SetWindowText("Z");
+			else
+			if(GetActiveViewNumber() == VIEW23)
+				pCtl->SetWindowText("X");
+			else
+			if(GetActiveViewNumber() == VIEW31)
+				pCtl->SetWindowText("Y");
+		}
+	}
+	else
+	if
+	(
+		(aTool == C_LINEAR)		||	(aTool == C_QUADRATIC)	||
+		(aTool == C_PARABOLA)	||	(aTool == C_BSPLINE)		||		     
+		(aTool == C_NURB)		||	(aTool == C_BEZIER)				     
+	)
+	{
+		if(!GetLQCInDlg()->m_hWnd)
+			SendMessage(ID_ACTIVE_LQCIN,IDOK);
+		if(GetCrcInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_CRCIN,IDOK);
+		if(GetCo4InDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_CO4IN,IDOK);
+		if(GetNodInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_NODIN,IDOK);
+		if(GetSupInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_SUPIN,IDOK);
+	}
+	else
+	if
+	(	(aTool == C_CIRCLE)		||	(aTool == C_ELLIPSE)		)
+	{
+		if(GetLQCInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_LQCIN,IDOK);
+		if(!GetCrcInDlg()->m_hWnd)
+			SendMessage(ID_ACTIVE_CRCIN,IDOK);
+		if(GetCo4InDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_CO4IN,IDOK);
+		if(GetNodInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_NODIN,IDOK);
+		if(GetSupInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_SUPIN,IDOK);
+	}
+	else
+	if(aTool == P_COONS)
+	{
+		if(GetLQCInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_LQCIN,IDOK);
+		if(GetCrcInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_CRCIN,IDOK);
+		if(!GetCo4InDlg()->m_hWnd)
+			SendMessage(ID_ACTIVE_CO4IN,IDOK);
+		if(GetNodInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_NODIN,IDOK);
+		if(GetSupInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_SUPIN,IDOK);
+	}
+	else
+	if	(
+			aTool == NSUP_RIGID		||	aTool == NSUP_LINSPRING	||
+			aTool == CSUP_RIGID		||	aTool == CSUP_LINSPRING	||
+			aTool == PSUP_RIGID		||	aTool == PSUP_LINSPRING	||
+			aTool == SSUP_RIGID		||	aTool == SSUP_LINSPRING	
+		)
+	{
+		if(GetLQCInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_LQCIN,IDOK);
+		if(GetCrcInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_CRCIN,IDOK);
+		if(GetCo4InDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_CO4IN,IDOK);
+		if(GetNodInDlg()->m_hWnd)
+			SendMessage(ID_GOODBYE_NODIN,IDOK);
+		if(!GetSupInDlg()->m_hWnd)
+			SendMessage(ID_ACTIVE_SUPIN,IDOK);
+	}
+
+}
+
+void CDrGrafFrame::OnModeInput()
+{
+	/////////////////
+	SetOpMode(OP_INPUT);
+	SwitchMenu(IDR_INPUTMENU);
+	////////////////////////////////////////// Activate Data Dialog, if Any
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////////////////////////////// sets m_nView in
+																		   // CDrGrafFrame 
+	////////////////////////////////////////// 
+	CMDIChildWnd* pMDIActive = MDIGetActive();
+	if(!pMDIActive)
+		return;
+	///////////////	
+//	CDocument* pDoc = pMDIActive->GetActiveDocument();
+	if(pDoc)
+	{
+   		/////////////
+		CView* pView;
+		POSITION pos = pDoc->GetFirstViewPosition();
+		while (pos)
+		{
+			pView = pDoc->GetNextView(pos);
+			pView->GetParentFrame()->ShowWindow(SW_HIDE);
+			///////////////////////////////////////////// Scale Changed
+			((CDrawView*)pView)->SetOpMode(OP_INPUT);
+			((CDrawView*)pView)->SetScalevv3DToLP();
+			///////////////////////////////////
+		}
+		///////////////////////////////////////////// View Changed
+		((CDrGrafDoc*)pDoc)->GetObjectMgr()->SetViewChanged(TRUE);
+		/////////////////////////////////////////////
+		CObjectMgr* pObjectMgr 	= ((CDrGrafDoc*)pDoc)->GetObjectMgr();
+		CBooleans* pBool = 
+			(CBooleans*)pObjectMgr->GetSpecObject(BOOLEANS);
+		pBool->Toggle12ViewActive();
+		//////////////
+		OnView12view();
+		SetActiveViewNumber(VIEW12);
+		////////////////////////////
+		m_wndElemBox.ShowWindow
+			((m_wndElemBox.GetStyle() & WS_VISIBLE) == 0);
+//		m_wndDrawBox.ShowWindow
+//			((m_wndDrawBox.GetStyle() & WS_VISIBLE) == 0);
+        /////////////
+	}
+	////////////////////////////
+	ModeLessOn();
+	/////////////
+}
+
+void CDrGrafFrame::OnUpdateModeInput(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_OpMode == OP_INPUT);	
+}
+
+void CDrGrafFrame::OnModeOutput()
+{
+	SetOpMode(OP_OUTPUT);
+	SwitchMenu(IDR_OUTPUTMENU);
+	//////////////////////////// close MeshBox, ElemBox & DrawBox
+	m_wndMeshBox.ShowWindow(SW_HIDE);
+	m_wndElemBox.ShowWindow(SW_HIDE);
+	///////////////////////	
+	OnView3dview();
+	//////////////////
+}
+
+void CDrGrafFrame::OnUpdateModeOutput(CCmdUI* pCmdUI)
+{
+	pCmdUI->SetCheck(m_OpMode == OP_OUTPUT);	
+}
+//////////////////////// end of Module /////////////////////
+
+void CDrGrafFrame::OnTimer(UINT nIDEvent)
+{
+	if(nIDEvent == TM_CLOCK)
+	{
+		CClock clock; 
+		CString strDate,strTime;
+	
+		clock.GetTimeDate(&strDate,&strTime);
+ 
+		GetSBarTop()->SetPaneText(8,strTime,TRUE);
+		GetSBarTop()->SetPaneText(10,strDate,TRUE);
+	}
+	else
+	if(nIDEvent == TM_BANNER)
+	{
+/*
+		CBanner* pBanWnd = ((CDrGrafApp*)AfxGetApp())->GetBannerWnd();
+//		pBanWnd->DissolveRect();
+		pBanWnd->DestroyWindow(); 
+*/		
+	    /////////////////////////////////////////	
+	    KillTimer(TM_BANNER);
+		/////////////////////
+	}			   
+	if(nIDEvent == TM_MEMORY)
+	{
+/*
+	///////////////////////////////////////////////////////
+	// MEMORY WILL BE SWITCHED TO DIALOG OPTION					todo june96
+	///////////////////////////////////////////////////////
+typedef struct _MEMORYSTATUS { // mst 
+    DWORD dwLength;        // sizeof(MEMORYSTATUS) 
+    DWORD dwMemoryLoad;    // percent of memory in use 
+    DWORD dwTotalPhys;     // bytes of physical memory 
+    DWORD dwAvailPhys;     // free physical memory bytes 
+    DWORD dwTotalPageFile; // bytes of paging file 
+    DWORD dwAvailPageFile; // free bytes of paging file 
+    DWORD dwTotalVirtual;  // user bytes of address space 
+    DWORD dwAvailVirtual;  // free user bytes 
+} MEMORYSTATUS, *LPMEMORYSTATUS; 
+ 
+  
+The MEMORYSTATUS structure contains information about current memory availability. The GlobalMemoryStatus function uses this structure. 
+Members
+dwLength
+Indicates the size of the structure. The calling process should set this member prior to calling GlobalMemoryStatus. 
+dwMemoryLoad
+Specifies a number between 0 and 100 that gives a general idea of current memory utilization, in which 0 indicates no memory use and 100 indicates full memory use. 
+dwTotalPhys
+Indicates the total number of bytes of physical memory. 
+dwAvailPhys
+Indicates the number of bytes of physical memory available. 
+dwTotalPageFile
+Indicates the total number of bytes that can be stored in the paging file. Note that this number does not represent the actual physical size of the paging file on disk. 
+dwAvailPageFile
+Indicates the number of bytes available in the paging file. 
+dwTotalVirtual
+Indicates the total number of bytes that can be described in the user mode portion of the virtual address space of the calling process. 
+dwAvailVirtual
+Indicates the number of bytes of unreserved and uncommitted memory in the user mode portion of the virtual address space of the calling process. 
+See Also
+GlobalMemoryStatus 
+*/
+ 
+//		DWORD dwFreeMem = GetFreeSpace(0);
+		MEMORYSTATUS memStat;
+		memStat.dwLength = sizeof(MEMORYSTATUS); 
+		GlobalMemoryStatus(&memStat);
+		/////////////////////////////
+		CString str;
+		char Buf[40];
+		sprintf(Buf,"%.2f Free  %.2f Total(Megs)",
+			memStat.dwAvailVirtual/1024./1024.,
+			memStat.dwTotalVirtual/1024./1024.); 
+ 
+		GetSBarTop()->SetPaneText(6,str = Buf,TRUE);
+	}
+}
+
+void CDrGrafFrame::OnWinIniChange(LPCSTR lpszSection)
+{
+	CMDIFrameWnd::OnWinIniChange(lpszSection);
+	///////////////////
+	CClock clock;
+	clock.SetInternational();
+	///////////////////
+	
+}
+/////////////////////////////////////// end of module ///////////////////

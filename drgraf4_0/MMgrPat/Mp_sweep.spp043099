@@ -1,0 +1,774 @@
+// MP_Sweep.cpp : implementation file
+//
+
+
+#include "stdafx.h"
+#include "math.h"
+#include <Float.h>		// MSVC/INC for DBL_MAX,DBL_MIN
+
+#include "Def_Objs.h"
+//////////////////// 
+#include "3dMath.h" 
+
+#include "drgraf.h"
+/////////////////////
+#include "drgradoc.h"
+#include "ObjMgr.h"
+#include "NewObjs.h"
+#include "DListMgr.h"
+#include "Def_MouseAct.h"
+///////////////////// dialogMgr
+//#include "MPatMgr.h"
+//#include "dlg_Swip.h"
+///////////////////// elements
+#include "Def_IGen.h"
+#include "DrNode.h"
+#include "DrCurve.h"
+#include "DrPatch.h"
+///////////////////// DrawObjs
+#include "Def_Draw.h"
+#include "DrLabel.h"
+///////////////////// SpecObjs
+#include "Def_Spec.h"
+#include "drpen.h"
+#include "Layer.h"
+/////////////////////
+#include "PA_Sweep.h"
+ 
+#include "MP_Sweep.h" 
+
+
+#ifdef _DEBUG
+#undef THIS_FILE
+static char BASED_CODE THIS_FILE[] = __FILE__;
+#endif
+
+#define MIN_CNODES_CURVE	4
+#define MIN_CNODES_PATCH	16
+////////////////////////////////////
+IMPLEMENT_SERIAL(CMP_Sweep,CMI_GangP,1)
+/////////////////////////////////////////////////////////////////////////////
+CMP_Sweep::CMP_Sweep()
+{
+}
+
+CMP_Sweep::~CMP_Sweep()
+{
+}
+
+int CMP_Sweep::SetInfoBase
+				(
+					CString&						PatchID,		
+					CDrPatch*						pDrPatch,
+					CDListMgr*						pCurveList,
+					CDListMgr*						pNodeList,
+					CList<CURVELATCH,CURVELATCH>*	pLatchList,
+					double							TwistMult,
+					BOOL							bIncrement,
+					double							TwistStart,
+					double							RadiusMult,
+					BOOL							bIncRad,
+					double							RadStart,
+					CView*							pView
+				) 
+{
+	int index;
+	CDrCurve*	pDrCurve;
+//	CDrNode*	pDrNode;
+	POSITION	pos;
+	////////////////////////////////////////////////// PatchID
+	m_PatchID	= PatchID;
+	////////////////////////////////////////////////// CurveID
+	// ??????What if No Twist/Radial Curve; may be Incremental????????????????????
+	if(pCurveList->GetCount() != 4)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Sweep::SetInfoBase\npCurveList->GetCount() != 4");
+		return -1;
+	}
+	////////////////////////////////////////////////// Latch
+	if(pLatchList->GetCount() != 4)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Sweep::SetInfoBase\npLatchList->GetCount() != 4");
+		return -1;
+	}
+	////////////////////////////////////////////////// Mesh
+	if(pNodeList->GetCount() != 1)
+	{
+		AfxMessageBox("INTERNAL PROBLEM:\nCMP_Sweep::SetInfoBase\npNodeList->GetCount() != 1");
+		return -1;
+	}
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	m_pCurve_S[0]		= (CDrCurve*)(pCurveList->GetObject(0) );
+	///
+	index				= m_pCurve_S[0]->GetPatchList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		pDrCurve->GetPatchList()->RemoveObject(index);
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	m_pCurve_S[1]		= (CDrCurve*)(pCurveList->GetObject(1) );
+	///
+	index				= m_pCurve_S[1]->GetPatchList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		pDrCurve->GetPatchList()->RemoveObject(index);
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	m_pCurve_S[2]		= (CDrCurve*)(pCurveList->GetObject(2) );
+	///
+	index				= pDrCurve->GetPatchList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		pDrCurve->GetPatchList()->RemoveObject(index);
+	///////////////////////////////// Detach (It is Reciprocated in SetInfoBase of Dlg)
+	m_pCurve_S[3]		= (CDrCurve*)(pCurveList->GetObject(3) );
+	///
+	index				= pDrCurve->GetPatchList()->GetObjectIndex(pDrPatch);
+	if(index>=0)
+		pDrCurve->GetPatchList()->RemoveObject(index);
+	////////////////////////////////////////////////// Latch
+	m_CuLatch[0]		= pLatchList->GetHead();
+	///////
+	pos					= pLatchList->FindIndex(1);
+	m_CuLatch[1]		= pLatchList->GetAt(pos);
+	///////
+	pos					= pLatchList->FindIndex(2);
+	m_CuLatch[2]		= pLatchList->GetAt(pos);
+	///////
+	pos					= pLatchList->FindIndex(3);
+	m_CuLatch[3]		= pLatchList->GetAt(pos);
+	////////////
+	m_pFromIDNode		= (CDrNode*)(pNodeList->GetObject(0) );
+	//////////////////
+	m_TwistMult			= TwistMult;
+	m_bIncrement		= bIncrement;
+	m_TwistStart		= TwistStart;
+	m_RadiusMult		= RadiusMult;
+	m_bIncRad			= bIncRad;
+	m_RadStart			= RadStart;
+	////////////////////////////////////////////////// Fill Info
+	SetInfoForDataBase(pDrPatch);
+	/////////////////////
+	return MA_OK;		 
+}
+
+int CMP_Sweep::GoDoIt(CDrPatch* pDrPatch) 
+{
+
+	//////////////////////////////////////////////////////////
+	GetInfo(pDrPatch);
+	m_pDrPatch = pDrPatch;
+	//////////////////////////////////	
+	m_pCNodeList 	= m_pDrPatch->GetCNodeList();	
+	///////                    				// ControlNode Mesh
+	Sweep();
+	////////////////////////
+	m_PatchType = PA_TENSOR;
+	////////////////////////
+	if(InsertMeshInfo(FALSE)<0)
+		return MA_ERROR;
+	/////////////////////
+	return MA_OK;
+}
+/*
+CDrPatch* CMP_Sweep::GoDoIt() 
+{
+	//////////////////////////////////////////////////////////
+	m_pDrPatch 		= GetInfo();       // PGen Dialog
+	if(!m_pDrPatch)		// cancel
+		return (CDrPatch*)NULL;
+	//////////////////////////////////// ControlNode Mesh	
+	m_pCNodeList 	= m_pDrPatch->GetCNodeList();	
+	///////                    				
+	Sweep();
+	////////////////////////
+	m_PatchType = PA_TENSOR;
+	////////////////////////
+	if(InsertMeshInfo(FALSE)<0)
+		return (CDrPatch*)NULL;
+	/////////////////////
+	return m_pDrPatch;
+}			
+
+CDrPatch* CMP_Sweep::GetInfo()
+{
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr* pDListMgr 	= pObjectMgr->GetObjectList(PATCH);
+	//////////////////////////////////////////////////////////////////
+	CMPatMgr 	MPatMgr;
+	CMPatMgr* 	pMPatMgr = &MPatMgr;
+	CString		Cid;
+	int 		index;
+	///////////////////////////////////////////////////
+	if (pMPatMgr->DoModal_Patch_Swip(&Cid,4) == IDCANCEL)
+			return (CDrPatch*)NULL;
+    /////////////////////////////////////////////////////// update
+	index 				= pObjectMgr->
+							GetObjectIndexfromKey(PATCH,Cid,1);
+	if(index>=0)
+	{						
+		CDrPatch* pDrPatch	= (CDrPatch*)(pDListMgr->GetObject(index));
+   		//////////////////////////////
+		m_PatchProc		= pDrPatch->GetPatchProc();
+//		m_FromID 		= pDrPatch->GetFromID_T();  // AnchorID
+		m_pFromIDNode	= pDrPatch->GetFromIDNode_T();	// AnchorID
+//		m_CurveID_S[0]	= pDrPatch->GetCurveID(0);// XSec
+//		m_CurveID_S[1]	= pDrPatch->GetCurveID(1);// Spine
+//		m_CurveID_S[2]	= pDrPatch->GetCurveID(2);// Twist
+//		m_CurveID_S[3]	= pDrPatch->GetCurveID(3);// Scale
+		m_pCurve_S[0]	= pDrPatch->GetCurvePtr(0);	// XSec
+		m_pCurve_S[1]	= pDrPatch->GetCurvePtr(1);	// Spine
+		m_pCurve_S[2]	= pDrPatch->GetCurvePtr(2);	// Twist
+		m_pCurve_S[3]	= pDrPatch->GetCurvePtr(3);	// Scale
+		////////////
+		m_CuLatch[0]	= pDrPatch->GetCurveLatch(0);
+		m_CuLatch[1]	= pDrPatch->GetCurveLatch(1);
+		m_CuLatch[2]	= pDrPatch->GetCurveLatch(2);
+		m_CuLatch[3]	= pDrPatch->GetCurveLatch(3);
+		////////////////
+		m_TwistStart	= pDrPatch->GetTwistStart_T();
+		m_TwistMult		= pDrPatch->GetTwistMult_T();
+		m_bIncTwist		= pDrPatch->IsIncTwist_T();
+		m_ScaleStart	= pDrPatch->GetScaleStart_T();
+		m_ScaleMult		= pDrPatch->GetScaleMult_T();
+		m_bIncScale		= pDrPatch->IsIncScale_T();
+		////////////////
+		return pDrPatch;
+	}
+	else
+		return (CDrPatch*)NULL;
+}			
+*/
+int CMP_Sweep::GetInfo(CDrPatch* pDrPatch)
+{
+	//////////////////////////////
+	m_PatchProc		= pDrPatch->GetPatchProc();
+//	m_FromID 		= pDrPatch->GetFromID_T();	// AnchorID
+	m_pFromIDNode	= pDrPatch->GetFromIDNode_T();	// AnchorID
+//	m_CurveID_S[0]	= pDrPatch->GetCurveID(0);// XSec
+//	m_CurveID_S[1]	= pDrPatch->GetCurveID(1);// Spine
+//	m_CurveID_S[2]	= pDrPatch->GetCurveID(2);// Twist
+//	m_CurveID_S[3]	= pDrPatch->GetCurveID(3);// Scale
+		m_pCurve_S[0]	= (CDrCurve*)pDrPatch->GetCurveList()->GetObject(0);	// XSec
+		m_pCurve_S[1]	= (CDrCurve*)pDrPatch->GetCurveList()->GetObject(1);	// Spine
+		m_pCurve_S[2]	= (CDrCurve*)pDrPatch->GetCurveList()->GetObject(2);	// Twist
+		m_pCurve_S[3]	= (CDrCurve*)pDrPatch->GetCurveList()->GetObject(3);	// Scale
+	////////////
+	m_CuLatch[0]	= pDrPatch->GetCurveLatch(0);
+	m_CuLatch[1]	= pDrPatch->GetCurveLatch(1);
+	m_CuLatch[2]	= pDrPatch->GetCurveLatch(2);
+	m_CuLatch[3]	= pDrPatch->GetCurveLatch(3);
+	////////////////
+	m_TwistStart	= pDrPatch->GetTwistStart_T();
+	m_TwistMult		= pDrPatch->GetTwistMult_T();
+	m_bIncTwist		= pDrPatch->IsIncTwist_T();
+	m_ScaleStart	= pDrPatch->GetScaleStart_T();
+	m_ScaleMult		= pDrPatch->GetScaleMult_T();
+	m_bIncScale		= pDrPatch->IsIncScale_T();
+	////////////////
+	return 0;
+}			
+
+int CMP_Sweep::Sweep() 
+{
+	int	nResult;
+	//////////////////////////////////////////////////////////////////////////////////
+	//	DUCTING is LINEAR interpolation of GENERATED NODES, NOT of CONTROL NODES	//
+	//	of the curves in T-Direction. So, all generated nodes of SPINE curve will	//
+	//	be saved as CNodes of the patch in T-Direction and eventually the PATCH		//
+	//  will be generated by LINEAR interpolation in T- direction,					//
+	//					IRRESPECTIVE of CURVETYPE of SPINE							// 												//
+	//	THIS INEFFICIENCY is needed for Finite Element Data Generation wherein		//
+	//		Total Tally of Generated Nodes are important , Not of Control Nodes		//
+	//////////////////////////////////////////////////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument(); 
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	CDListMgr*	pDListMgr 	= pObjectMgr->GetObjectList(CURVE);
+	//////////////////////////////////////////////////////////////////
+	CDrCurve*	pDrCurve;
+	int			nOut;
+	CString		CurveID;
+	///////////////////////// 
+	if(m_pOut != NULL)
+	{
+		FreeMem(m_pOut);
+		m_pOut = NULL;
+	}	
+	if(m_pOutWts != NULL)
+	{
+		FreeMemD(m_pOutWts);
+		m_pOutWts = NULL;
+	}	
+	///////////////////////////////////////////////////////////////// XSection: S-dir
+/*
+   	CurveID = m_CurveID_S[0];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+*/
+	pDrCurve	= m_pCurve_S[0];
+	if(!pDrCurve)
+		return -1;
+	////////////////////////////////////// Set Curve Info	
+	GetInfo_Curve(pDrCurve);
+	/////////////////////////////////////////// PreProcess
+	nResult = Pre_S_Direction(pDrCurve, 0, FALSE);
+	if(nResult<0)
+		return -1;
+	///////////////////////////////////////////////////////////////// SpinePath: T-dir
+/*
+   	CurveID = m_CurveID_S[1];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+*/
+	pDrCurve	= m_pCurve_S[1];
+	if(!pDrCurve)
+		return -1;
+	//////////////
+	m_nOut_T	= pDrCurve->GetMaxOutPts_S();
+	////////
+	nResult		= Pre_T_Direction(pDrCurve, 1, m_nOut_T);
+	if(nResult<0)
+		return -1;
+	///////////////////// PreProcess: save as T-dir Info
+	SpineProcess(pDrCurve);
+	///////////////////////////////////////////////////////////////// Twist: T-dir
+/*
+   	CurveID = m_CurveID_S[2];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+*/
+	pDrCurve	= m_pCurve_S[2];
+	if(!pDrCurve)
+		return -1;
+	//////////////
+	nOut	= pDrCurve->GetMaxOutPts_S();
+	if(nOut != m_nOut_T)
+	{
+		AfxMessageBox("CMP_Sweep::Duct\nSPine & Twist MisMatch\nnOut != m_nOut_T");
+		return -1;
+	}
+	/////////////////////////
+	nResult = Pre_T_Direction(pDrCurve, 2, m_nOut_T);
+	if(nResult<0)
+		return -1;
+	///////////////////
+	TwistProcess(m_pIn_S[2], m_nOut_T, m_TwistMult, m_bIncTwist);
+	///////////////////////////////////////////////////////////////// Scale: T-dir
+/*
+   	CurveID = m_CurveID_S[3];
+	//////////////////////////////////////// get Curve Info	
+	index	= pObjectMgr->
+					GetObjectIndexfromKey(CURVE,CurveID,1);
+
+	if(index<0)
+		return -1;
+	/////////////////////////////////////////////
+	pDrCurve	= (CDrCurve*)(pDListMgr->GetObject(index));
+*/
+	pDrCurve	= m_pCurve_S[3];
+	if(!pDrCurve)
+		return -1;
+	//////////////
+	nOut	= pDrCurve->GetMaxOutPts_S();
+	if(nOut != m_nOut_T)
+	{
+		AfxMessageBox("CMP_Sweep::Duct\nSPine & Scale MisMatch\nnOut != m_nOut_T");
+		return -1;
+	}
+	/////////////////////////
+	nResult = Pre_T_Direction(pDrCurve, 3, m_nOut_T);
+	if(nResult<0)
+		return -1;
+	///////////////////
+	ScaleProcess(m_pIn_S[3], m_nOut_T, m_ScaleMult, m_bIncScale);
+	/////////////////////////////////////////////// Save PatchInfo
+	m_nOut				= (((long)m_nOut_S)*((long)m_nOut_T) );				
+	m_nOutCon			= (((long)m_nOut_SCon)*((long)m_nOut_TCon) );				
+	m_nMaxPatchCNodes	= (int)m_nOutCon;
+    /////////////////////////////////////////////// Anchor Node Coords.
+    UnitAxisFromEndNodes(1);
+	/////////////////////////////////////////////// Memory OutPts 
+	m_pOut		= FixMem(m_nOutCon);
+	m_pOutWts	= FixMemD(m_nOutCon);
+	if( !m_pOut || !m_pOutWts )
+	{
+		AfxMessageBox("CMP_Sweep::Duct\nFixMem Failure!");
+		return -1;
+	}
+	///////////////////////////////////////// Go Duct
+	nResult = GenerateCNodes();
+	///////////////////////////////////////// Free InputCNodeMems
+	int i;
+	//////
+    for(i=0;i<4;i++)
+    {
+    	if(m_pIn_S[i])
+    	{
+			FreeMem(m_pIn_S[i]);
+			m_pIn_S[i] = NULL;
+		}	
+    	if(m_pInWts_S[i])
+    	{
+			FreeMemD(m_pInWts_S[i]);
+			m_pInWts_S[i] = NULL;
+		}	
+	}	
+	/////////////// 
+	if(nResult<0)	
+		return -1;
+	else	
+		return 0;
+	/////////////			 
+}			
+
+int CMP_Sweep::Pre_S_Direction(CDrCurve* pDrCurve, int i, BOOL bPutinCNodeList)
+{
+
+	////////////////////////////////////////////////// FILL INFO
+	m_pIn_S[i]		= FixMem((long)m_nMaxCurveCNodes_S);
+	m_pInWts_S[i]	= FixMemD((long)m_nMaxCurveCNodes_S);
+	if( !m_pIn_S[i] || !m_pInWts_S[i]  )
+	{
+		AfxMessageBox("CMP_Sweep::Curve\nFixMemforCNodes[i] Failure!");
+		return -1;
+	}
+	/////////////////////////// Store LOCAL Pos	
+	m_bBack = FALSE;
+	if(m_CuLatch[i] == CL_BACKWARD)
+		m_bBack = TRUE;
+	FillCNodesLOCAL(pDrCurve->GetCNodeList(),m_pWts_BZ_S,
+		m_pIn_S[i],m_pInWts_S[i],m_nMaxCurveCNodes_S,bPutinCNodeList);
+	//////////
+	return 0;
+}
+
+int CMP_Sweep::Pre_T_Direction(CDrCurve* pDrCurve,int i, int nOut_T)
+{
+
+	/////////////////////////////////////////////// Memory OutPts 
+	m_pIn_S[i]		= FixMem(nOut_T);
+	m_pInWts_S[i]	= FixMemD(nOut_T);
+	if( !m_pIn_S[i] || !m_pInWts_S[i] )
+	{
+		AfxMessageBox("CMP_Sweep::Duct\nFixMem Failure!");
+		return -1;
+	}
+	/////////////////////////////////////////////// Generate Curve
+	m_bBack = FALSE;
+	if(m_CuLatch[i] == CL_BACKWARD)
+		m_bBack = TRUE;
+	FillMeshNodesCurve(pDrCurve, m_pIn_S[i], m_pInWts_S[i], nOut_T);
+	///////////////
+	return 0;
+
+}
+
+int CMP_Sweep::SpineProcess(CDrCurve* pDrCurve)
+{
+	int i;
+	////////////////////////////////////// LINEAR BEZIER in T-direction
+	m_nSegs_T			= 1;	// ALWAYS
+	m_nOrder_T			= 2;	// ALWAYS
+	m_CurveType_T		= CP_LINEAR;
+	m_nOut_TCon			= m_nOut_T;
+	////////////////////////////////////////////////// FILL INFO
+	m_bClosed_T			= pDrCurve->IsClosed_S();	// 
+	m_nDim_T			= pDrCurve->GetnDim_S();
+	if(m_nDim_S == 4)
+		m_nDim_T = m_nDim_S;
+	/////////////////////////////////////
+	m_nSegs_TCon		= m_nOut_TCon - 1;
+	m_nMaxPatchCNodes_T = m_nOut_TCon;
+	/////////
+//	m_pNum_t_T			= pDrCurve->GetNum_tPointer_S();
+	m_pNum_t_T			= new int[m_nSegs_TCon];
+	for (i=0;i<m_nSegs_TCon;i++)
+		m_pNum_t_T[i] = 1;
+	////////////////////
+	return 0;
+}
+
+int CMP_Sweep::TwistProcess(pWORLD pIn, int nOut, double ScaleMax, BOOL bIncremental)
+{
+	// ONLY Y-COMPONENT IS USEFUL
+	/////////////////////////////////////////////
+	int		i;
+	////////////////////////////
+	pWORLD p = pIn;
+	///////////////////////////////////////////////// No Twist
+	if(ScaleMax == 0.0)
+	{
+		///////////
+		for(i=0;i<nOut;i++)
+			(p+i)->y = 0.0;
+		///////////////////
+	/////////
+	return 0;
+	}
+	///////////////////////////////////////////////// Incremental
+	if(bIncremental)
+	{
+		double dInc = ScaleMax; // could be +ve or -ve
+		p->y = m_TwistStart;
+		///////////
+		for(i=1;i<nOut;i++)
+			(p+i)->y = (p+i-1)->y + dInc;
+	/////////
+	return 0;
+	}
+	///////////////////////////////////////////////// Maximum
+	double	yMaxP;
+	double	yMaxN;
+	double	val;
+	/////////////////
+	yMaxP =  -DBL_MAX;
+	yMaxN =   DBL_MAX;
+	//////////////////////////////// Brackets
+	for (i=0;i<nOut;i++)
+	{
+		val = (p+i)->y;
+		///////////////////// y
+		if(val>=0)
+		{
+			if(val>yMaxP)
+				yMaxP = val;
+		}
+		else
+		{
+			if(val<yMaxN)
+				yMaxN = val;
+		}
+	}
+	////////////////////
+	if(yMaxP == -DBL_MAX)
+		yMaxP = 0.0;
+	if(yMaxN == DBL_MAX)
+		yMaxN = 0.0;
+	///////////////////////////
+	double Scale;
+	double diff = yMaxP - yMaxN;
+	if(diff == 0.0)
+		Scale = 0.0;
+	else
+		Scale = ScaleMax/diff;
+	//////////////////////////////// Scale
+	// change y-Coord 
+	///////////
+	for(i=0;i<nOut;i++)
+		(p+i)->y *= Scale;
+	////////////
+	return 0;
+
+}
+
+int CMP_Sweep::ScaleProcess(pWORLD pIn, int nOut, double ScaleMax, BOOL bIncremental)
+{
+	// ONLY Y-COMPONENT IS USEFUL
+	/////////////////////////////////////////////
+	int		i;
+	////////////////////////////
+	pWORLD p = pIn;
+	///////////////////////////////////////////////// No Twist
+	if(ScaleMax == 0.0)
+	{
+		///////////
+		for(i=0;i<nOut;i++)
+			(p+i)->y = 0.0;
+		///////////////////
+	/////////
+	return 0;
+	}
+	///////////////////////////////////////////////// Incremental
+	if(bIncremental)
+	{
+		double dInc = ScaleMax; // could be +ve or -ve
+		p->y = m_ScaleStart;
+		///////////
+		for(i=1;i<nOut;i++)
+		{
+			(p+i)->y = (p+i-1)->y + dInc;
+			if((p+i)->y<0.)
+				(p+i)->y = 0.;
+		}
+	/////////
+	return 0;
+	}
+	///////////////////////////////////////////////// Maximum
+	double	yMaxP;
+	double	yMaxN;
+	double	val;
+	/////////////////
+	yMaxP =  -DBL_MAX;
+	yMaxN =   DBL_MAX;
+	//////////////////////////////// Brackets
+	for (i=0;i<nOut;i++)
+	{
+		val = (p+i)->y;
+		///////////////////// y
+		if(val>=0)
+		{
+			if(val>yMaxP)
+				yMaxP = val;
+		}
+		else
+		{
+			if(val<yMaxN)
+				yMaxN = val;
+		}
+	}
+	////////////////////
+	if(yMaxP == -DBL_MAX)
+		yMaxP = 0.0;
+	if(yMaxN == DBL_MAX)
+		yMaxN = 0.0;
+	///////////////////////////
+	double Scale;
+	double diff = yMaxP - yMaxN;
+	if(diff == 0.0)
+		Scale = 0.0;
+	else
+		Scale = ScaleMax/diff;
+	//////////////////////////////// Scale
+	// change y-Coord 
+	///////////
+	for(i=0;i<nOut;i++)
+	{
+		(p+i)->y *= Scale;
+		if((p+i)->y<0.)
+			(p+i)->y = 0.;
+	}
+	////////////
+	return 0;
+
+}
+
+int CMP_Sweep::GenerateCNodes()
+{
+
+	////////////////////////////////////////////// 
+	int nOut		= (int)m_nOutCon;  // for now
+	////////////////////////////////////////////// generate Patch Pts
+	CPA_Sweep	PA_Sweep;		 	   	
+	int nOutActual	= PA_Sweep.Sweep
+			(
+				m_FromPt,		//	Anchor 3D Pt. for Xsec scale,twist etc
+		    	m_nOut_SCon,	//	number of cross section points
+		      	m_pIn_S[0],		//	cross section curve ControlPts
+		      	m_pInWts_S[0],	//	cross section Wts 
+		   		m_nOut_TCon,	//	number of path points
+		      	m_pIn_S[1],		//	path curve ControlPts
+		      	m_pIn_S[2],		//	path Twist Factor distribution
+		     	m_pIn_S[3],		//	path Scale factors
+				m_pOut,			//	Output ControlPts
+				m_pOutWts		//	Output Wts array
+			);	  
+	////////////////////////////	
+	if(nOutActual != nOut)
+		return -1;
+	else 
+		return 0;
+												
+}
+void CMP_Sweep::SetInfoForDataBase(CDrPatch* pDrObject)
+{
+
+	///////////////////////////////////////
+	CDrGrafDoc* pDoc 		= ((CDrGrafApp*)AfxGetApp())->GetDocument();
+	CObjectMgr* pObjectMgr 	= pDoc->GetObjectMgr();
+	///////////////////////////////////////////////
+	CDrPen*	pDrPen			= (CDrPen*)pObjectMgr->GetSpecObject(DRPEN);
+	CLayer* pLayer			= (CLayer*)pObjectMgr->GetSpecObject(LAYER); 
+	//////////////////////////////////////////////////// Update Current DrObject
+    pDrObject->SetObjectType((int)PATCH);
+    pDrObject->SetElemType((int)GENR_OBJECT);          // globals
+    pDrObject->SetLevelType((int)LEVEL_GRAPA);          // globals
+	pDrObject->SetPatchProc(PP_SWEEP);
+	pDrObject->SetPatchType(PA_TENSOR);
+	pDrObject->SetPatSubType(PS_QUADRILAT);
+	////////////////////////////////////////////////////////////
+	pDrObject->SetOutMethod_T(PA_HORNER);		// Output Method
+    //////////////////////////////
+	pDrObject->SetObjectID(m_PatchID);
+/*
+	pDrObject->SetCurveID(m_CID_Xsec,0);
+	pDrObject->SetCurveID(m_CID_Spine,1);
+	pDrObject->SetCurveID(m_CID_Twist,2);
+	pDrObject->SetCurveID(m_CID_Radius,3);
+*/
+	/////////////////////////////////
+	int i;
+	for(i=0;i<4;i++)
+		pDrObject->SetCurveLatch(m_CuLatch[i],i);
+	//////////////////////////////////////////////////////////////////// Reciprocate
+	pDrObject->GetCurveList()->RemoveAll();
+	//////////////////////////////////////
+	m_pCurve_S[0]->GetPatchList()->InsertObject(pDrObject);
+	pDrObject->GetCurveList()->InsertObject(m_pCurve_S[0]);
+	//////////////////////////////////////
+	m_pCurve_S[1]->GetPatchList()->InsertObject(pDrObject);
+	pDrObject->GetCurveList()->InsertObject(m_pCurve_S[1]);
+	//////////////////////////////////////
+	m_pCurve_S[2]->GetPatchList()->InsertObject(pDrObject);
+	pDrObject->GetCurveList()->InsertObject(m_pCurve_S[2]);
+	//////////////////////////////////////
+	m_pCurve_S[3]->GetPatchList()->InsertObject(pDrObject);
+	pDrObject->GetCurveList()->InsertObject(m_pCurve_S[3]);
+	////////////////////////////////////////// Reciprocate
+	m_pFromIDNode->GetPatchList()->InsertObject(pDrObject);
+	pDrObject->SetFromIDNode_T(m_pFromIDNode);
+	///////////////////////////////////////////////// Twist/Scale Multiplier
+	pDrObject->SetIncTwist_T(m_bIncrement);
+	pDrObject->SetIncScale_T(m_bIncRad);
+	pDrObject->SetTwistMult_T(m_TwistMult);
+	pDrObject->SetScaleMult_T(m_RadiusMult);
+	pDrObject->SetTwistStart_T(m_TwistStart);
+	pDrObject->SetScaleStart_T(m_RadStart);
+	pDrObject->NumberOfElements(P_DUCT,1/*int nElemType*/); // temp:1=LINE
+	////////////////////////////////////////////////	
+	pDrObject->SetPenInfo(pDrPen->GetWidth(),pDrPen->GetColor(),pDrPen->GetStyle());
+	pDrObject->SetLayer(pLayer->GetCurrentLayer());
+	//////////////////
+	return;
+	
+} 
+
+void CMP_Sweep::Serialize(CArchive& ar)
+{
+
+	CMI_GangP::Serialize( ar);              // must call base class Serializer
+	/////////////////////////
+	////////////////////////////
+	if (ar.IsStoring())
+	{
+		TRACE(" CMP_Sweep:    Storing\n");	
+		
+ 			/////////////////////////////////////////////////
+ 			//////////////////////////////
+
+	}
+	else
+	{
+		TRACE(" CMP_Sweep:    Loading\n");	
+
+			/////////////////////////////////////////////////
+ 		//////////////////////////////
+	
+	}        
+	//////////////////
+}
+///////////////////////////// end of module ///////////////////////
+

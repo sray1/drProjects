@@ -1,0 +1,5 @@
+!MS$FREEFORM
+! Microsoft Developer Studio generated include file.
+! Used by MSolMgr.rc
+!
+      integer, parameter :: IDD_SOL_IN                      = 125
