@@ -1,0 +1,73 @@
+Microsoft (R) Help Compiler
+HCRTF 4.03.0002
+Copyright (c) Microsoft Corp 1990 - 1995. All rights reserved.
+HLP_NOD.HPJ
+    HC1003: Note: topic #4 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	A paragraph marker is formatted as a hidden character.
+    HC1003: Note: topic #4 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	A paragraph marker is formatted as a hidden character.
+    HC1003: Note: topic #4 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	A paragraph marker is formatted as a hidden character.
+    HC1003: Note: topic #4 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	A paragraph marker is formatted as a hidden character.
+    HC3050: Warning: topic #10 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	Missing Topic IDs in hypergraphic
+
+    HC3025: Warning: MLDLG_NODE.SHG : 
+	Jump to undefined Topic ID: "HIDD_CANCEL".
+    HC3025: Warning: topic #12 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	Jump to undefined Topic ID: "GlossCancel.14".
+    HC3025: Warning: topic #12 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	Jump to undefined Topic ID: "GlossThirdCoordinate.X.YorZ..22".
+    HC3025: Warning: MLDLG_NODE.SHG : 
+	Jump to undefined Topic ID: "HIDD_NOD_IN".
+    HC3025: Warning: topic #12 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	Jump to undefined Topic ID: "GlossNodeDataDialogBox.21".
+    HC3025: Warning: topic #12 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	Jump to undefined Topic ID: "GlossUpdate.23".
+    HC3025: Warning: GENERATORS.SHG : 
+	Jump to undefined Topic ID: "HBUT_IGEN_NODE".
+    HC3025: Warning: topic #12 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	Jump to undefined Topic ID: "GlossNID.19".
+    HC3025: Warning: OPT_NODE.SHG : 
+	Jump to undefined Topic ID: "HBUT_IGEN_CNODE".
+    HC3025: Warning: GENERATORS.SHG : 
+	Jump to undefined Topic ID: "HBUT_IGEN_CURVE".
+    HC3025: Warning: OPT_NODE.SHG : 
+	Jump to undefined Topic ID: "HBUT_IGEN_INODE".
+    HC3025: Warning: GENERATORS.SHG : 
+	Jump to undefined Topic ID: "HBUT_IGEN_PATCH".
+    HC3025: Warning: GENERATORS.SHG : 
+	Jump to undefined Topic ID: "HBUT_IGEN_SOLID".
+    HC3025: Warning: topic #12 of C:\DrHlp4_0\GiG\Node\.\.\Hlp_nod.rtf : 
+	Jump to undefined Topic ID: "GlossAdvanced.13".
+    HC1010: Note: 
+	The following mapped Topic IDs were not used in any topic:
+	WhatisaNode.2
+	MeshNode.7
+	HowmanykindsofNode.4
+	Howdowegenerate.8
+	GlossNode.16
+	On.the.flyMode.10
+	GlossMeshNode.13
+	GlossKinematic.12
+	GlossControlNode.14
+	GlossaryOfTerms.11
+	InputNodeMode.9
+	ControlNode.6
+	GlossInputNode.15
+	InputNode.5
+	WhydoweneedNode.3
+	HelpContents1
+    HC4009: Warning: 
+	The Topic ID "HelpContents1" specified in the Project files as the Default Topic does not exist.
+23	Topics
+55	Jumps
+11	Keywords
+3	Bitmaps
+
+
+Created C:\DrHlp4_0\GiG\Node\Hlp_nod.hlp, 38,653 bytes
+Bitmaps: 23,199 bytes
+Compile time: 0 minutes, 0 seconds
+5 notes, 16 warnings

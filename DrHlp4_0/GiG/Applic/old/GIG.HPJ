@@ -1,0 +1,48 @@
+[Options]
+TITLE=mmCAFE Graphical Input Generator(GIG)
+ERRORLOG=D:\DRMAN4_0\GIG.err
+CONTENTS=HelpContents1
+ROOT=D:\DRMAN4_0
+COMPRESS=FALSE
+BMROOT=D:\DRMAN4_0\BITMAPS
+REPORT=ON
+COPYRIGHT=© Dr
+[FILES]
+GIG.RTF
+NODE.RTF
+[CONFIG]
+BrowseButtons()
+CreateButton("jump_glossary","&Glossary","JumpId(`',`GlossaryOfTerms.12')")
+;{{Watermark: DO NOT EDIT!
+RR("D2HTOOLS.DLL", "InitWatermark", "")
+RR("D2HTOOLS.DLL", "SetWatermark", "SSSS")
+RR("D2HTOOLS.DLL", "SetTopicWatermark", "USSS")
+RR("D2HTOOLS.DLL", "SetMainWatermark", "SSS")
+InitWatermark()
+;}}Watermark: DO NOT EDIT!
+[MAP]
+HelpContents1	1	; Help Contents
+Node.2	13	; Node
+WhatisaNode.3	2	; What is a Node
+WhydoweneedNode.4	3	; Why do we need Node
+HowmanykindsofNode.5	4	; How many kinds of Node
+InputNode.6	5	; Input Node
+ControlNode.7	6	; Control Node
+MeshNode.8	7	; Mesh Node
+Howdowegenerate.9	8	; How do we generate
+InputNodeMode.10	9	; Input Node Mode
+On.the.flyMode.11	10	; On-the-fly Mode
+GlossaryOfTerms.12	11	; Glossary of Terms
+GlossKinematic.13	14	; D2HGlossKinematic
+GlossMeshNode.14	15	; D2HGlossMeshNode
+GlossControlNode.15	16	; D2HGlossControlNode
+GlossInputNode.16	17	; D2HGlossInputNode
+GlossNode.17	12	; D2HGlossNode
+[WINDOWS]
+main="mmCAFE Graphical Input Generator(GIG)", , 0, , , 0
+
+[BAGGAGE]
+;{{Topic Watermark: DO NOT EDIT!
+\drhlp4_0\mainfrm\res\screen~1.bmp
+\drhlp4_0\node\res\opt_node.bmp
+;}}Topic Watermark: DO NOT EDIT!

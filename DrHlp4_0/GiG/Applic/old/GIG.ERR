@@ -1,0 +1,22 @@
+Microsoft (R) Help Compiler
+HCRTF 4.01.0950
+Copyright (c) Microsoft Corp 1990 - 1995. All rights reserved.
+gig.hpj
+    HC4006: Warning: 
+	The folder "D:\DRMAN4_0\BITMAPS" specified for the "BMROOT" option does not exist.
+    HC3021: Warning: topic #9 of D:\DRMAN4_0\NODE.RTF : 
+	Cannot find the bitmap "Generators.shg."
+    HC3021: Warning: topic #9 of D:\DRMAN4_0\NODE.RTF : 
+	Cannot find the bitmap "Opt_Node.shg."
+    HC3021: Warning: topic #9 of D:\DRMAN4_0\NODE.RTF : 
+	Cannot find the bitmap "MLDlg_Node.shg."
+17	Topics
+33	Jumps
+11	Keywords
+3	Bitmaps
+
+
+File size: 408,449
+Bitmaps: 9,792 bytes
+Compile time: 0 minutes, 3 seconds
+0 notes, 4 warnings

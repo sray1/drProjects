@@ -1,0 +1,42 @@
+; This file is maintained by HCW. Do not modify this file directly.
+
+[OPTIONS]
+ERRORLOG=.\HLP_NOD.err
+LCID=0x409 0x0 0x0 ; English (United States)
+REPORT=Yes
+CONTENTS=HelpContents1
+TITLE=mmCAFE GiG_Node
+COPYRIGHT=© Dr
+BMROOT=..\View\res
+BMROOT=res
+ROOT=.
+HLP=.\Hlp_nod.hlp
+
+[FILES]
+.\Hlp_nod.rtf
+
+[MAP]
+HIDC_NID	0x806703f2	;NID
+HelpContents1	1	; Help Contents
+WhatisaNode.2	2	; What is a Node
+WhydoweneedNode.3	3	; Why do we need Node
+HowmanykindsofNode.4	4	; How many kinds of Node
+InputNode.5	5	; Input Node
+ControlNode.6	6	; Control Node
+MeshNode.7	7	; Mesh Node
+Howdowegenerate.8	8	; How do we generate
+InputNodeMode.9	9	; Input Node Mode
+On.the.flyMode.10	10	; On-the-fly Mode
+GlossaryOfTerms.11	11	; Glossary of Terms
+GlossKinematic.12	12	; D2HGlossKinematic
+GlossMeshNode.13	13	; D2HGlossMeshNode
+GlossControlNode.14	14	; D2HGlossControlNode
+GlossInputNode.15	15	; D2HGlossInputNode
+GlossNode.16	16	; D2HGlossNode
+
+[WINDOWS]
+main="mmCAFE GiG_Node",(338,133,457,564),27648,(r8454143),(r65535)
+
+[CONFIG]
+BrowseButtons()
+CreateButton("jump_glossary","&Glossary","JumpId(`',`GlossaryOfTerms.11')")

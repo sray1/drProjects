@@ -1,0 +1,2420 @@
+[VQHLPEDFILE_5.00.051_008]
+
+[PF]
+-1
+[EPF]
+
+[PGS]
+20
+[EPGS]
+
+[BT]
+[EBT]
+
+[BE]
+[EBE]
+
+[UB]
+False
+[EUB]
+
+[BX]
+ 1
+[EBX]
+
+[HA]
+[EHA]
+
+[HX]
+[EHX]
+
+[AF]
+[EAF]
+
+[AM]
+[EAM]
+
+[BM3]
+0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;
+[EBM3]
+
+[CV]
+4
+[ECV]
+
+[DN]
+-1
+[EDN]
+[FN]
+
+[EFN]
+[IE]
+
+[EIE]
+[SL]
+0x0409 0x0 0x0 ;English (United States)
+[ESL]
+[SO]
+0
+[ESO]
+[ER]
+0
+[EER]
+[FS]
+
+[EFS]
+[TS]
+0
+[ETS]
+[OPT]
+[CH]
+0
+[ECH]
+
+[CW]
+/C/E/M
+[ECW]
+
+[CM]
+node.H
+[ECM]
+
+[CP]
+0
+[ECP]
+
+[HV]
+500051
+[EHV]
+
+[IN3]
+0
+[EIN3]
+
+[LH]
+-1
+[ELH]
+
+[LN]
+0
+[ELN]
+
+[OK]
+0
+[EOK]
+
+[OP]
+0
+[EOP]
+
+[PJ]
+0
+[EPJ]
+
+[TI]
+DEFAULT.HLX
+[ETI]
+
+[UI]
+13113806
+[EUI]
+
+[HTIE]
+0
+[EHTIE]
+
+[HTSE]
+0
+[EHTSE]
+
+[HTV]
+0
+[EHTV]
+
+[HTM]
+0
+[EHTM]
+
+[HTP5]
+Auto|Auto|Auto|
+[EHTP5]
+
+[HTI]
+index.htm
+[EHTI]
+
+[HTH2]
+;;;;;;;;;;;;;;;;;
+[EHTH2]
+
+[HTW]
+[EHTW]
+
+[HTO]
+[EHTO]
+
+[HTF]
+0;8;10;12;14;20;26;36;
+[EHTF]
+
+[HTS]
+[EHTS]
+
+[HTA]
+[EHTA]
+
+[HTD]
+[EHTD]
+
+[HTN]
+0
+[EHTN]
+
+[HTPT]
+0
+[EHTPT]
+
+[HTG]
+[EHTG]
+
+[HTK]
+0
+[EHTK]
+
+[HTR]
+[EHTR]
+
+[HTRX]
+0
+[EHTRX]
+
+[HTRZ]
+0
+[EHTRZ]
+
+[HTE]
+[EHTE]
+
+[HTEX]
+0
+[EHTEX]
+
+[HTEZ]
+0
+[EHTEZ]
+
+[HTCX]
+0
+[EHTCX]
+
+[HTC]
+-2147483633
+[EHTC]
+
+[HTIM]
+[EHTIM]
+
+[HTCT]
+0
+[EHTCT]
+
+[HTCTX]
+0
+[EHTCTX]
+
+[HTCL]
+16711680
+[EHTCL]
+
+[HTCLX]
+0
+[EHTCLX]
+
+[HTCV]
+8388736
+[EHTCV]
+
+[HTCVX]
+0
+[EHTCVX]
+
+[HTCA]
+255
+[EHTCA]
+
+[HTCAX]
+0
+[EHTCAX]
+
+[HTFP]
+HM
+[EHTFP]
+
+[HTTO]
+False
+[EHTTO]
+
+[HTGBB]
+[EHTGBB]
+
+[HTGBS]
+[EHTGBS]
+
+[HTIL5]
+Images|Images|Images
+[EHTIL5]
+
+[HTFL]
+0
+[EHTFL]
+
+[HTFS]
+0
+[EHTFS]
+
+[HTV_2]
+2
+[EHTV_2]
+
+[HTM_2]
+4
+[EHTM_2]
+
+[HTI_2]
+index.htm
+[EHTI_2]
+
+[HTH2_2]
+;;;;;;;;;;;;;;;;;
+[EHTH2_2]
+
+[HTW_2]
+[EHTW_2]
+
+[HTO_2]
+[EHTO_2]
+
+[HTF_2]
+0;8;10;12;14;20;26;36;
+[EHTF_2]
+
+[HTS_2]
+[EHTS_2]
+
+[HTA_2]
+[EHTA_2]
+
+[HTD_2]
+[EHTD_2]
+
+[HTN_2]
+-1
+[EHTN_2]
+
+[HTPT_2]
+0
+[EHTPT_2]
+
+[HTG_2]
+[EHTG_2]
+
+[HTK_2]
+0
+[EHTK_2]
+
+[HTR_2]
+[EHTR_2]
+
+[HTRX_2]
+0
+[EHTRX_2]
+
+[HTRZ_2]
+0
+[EHTRZ_2]
+
+[HTE_2]
+[EHTE_2]
+
+[HTEX_2]
+0
+[EHTEX_2]
+
+[HTEZ_2]
+0
+[EHTEZ_2]
+
+[HTCX_2]
+0
+[EHTCX_2]
+
+[HTC_2]
+-2147483633
+[EHTC_2]
+
+[HTIM_2]
+[EHTIM_2]
+
+[HTCT_2]
+0
+[EHTCT_2]
+
+[HTCTX_2]
+0
+[EHTCTX_2]
+
+[HTCL_2]
+16711680
+[EHTCL_2]
+
+[HTCLX_2]
+0
+[EHTCLX_2]
+
+[HTCV_2]
+8388736
+[EHTCV_2]
+
+[HTCVX_2]
+0
+[EHTCVX_2]
+
+[HTCA_2]
+255
+[EHTCA_2]
+
+[HTCAX_2]
+0
+[EHTCAX_2]
+
+[HTFP_2]
+HM
+[EHTFP_2]
+
+[HTTO_2]
+False
+[EHTTO_2]
+
+[HTHLP]
+-1
+[EHTHLP]
+
+[HTHLPS]
+start_fr.htm
+[EHTHLPS]
+
+[HTHLPC]
+toc.htm
+[EHTHLPC]
+
+[HTHLPI]
+idx.htm
+[EHTHLPI]
+
+[HTHLPN]
+nav.htm
+[EHTHLPN]
+
+[HTHLPP]
+[EHTHLPP]
+
+[HTHLPO]
+[EHTHLPO]
+
+[HTHLPR]
+0
+[EHTHLPR]
+
+[HTHLPL]
+[EHTHLPL]
+
+[HTHLPT]
+Default
+[EHTHLPT]
+
+[HTHLPW]
+0
+[EHTHLPW]
+
+[HTHLPA]
+0
+[EHTHLPA]
+
+[HTHLPV]
+0
+[EHTHLPV]
+
+[HTHLPX]
+0
+[EHTHLPX]
+
+[HTHLPF]
+0
+[EHTHLPF]
+
+[HHWO]
+main\vq10\vq114462\vq1\vq1\vq1\vq1\vq10\vq10\vq10\vq1False\vq1False\vq1False\vq1True\vq10\vq1
+HT_Node\vq10\vq114462\vq1\vq1\vq1\vq1\vq10\vq10\vq10\vq1False\vq1False\vq1False\vq1True\vq10\vq1
+[EHHWO]
+
+[HTGBB_2]
+[EHTGBB_2]
+
+[HTGBS_2]
+[EHTGBS_2]
+
+[HTFL_2]
+0
+[EHTFL_2]
+
+[HTFS_2]
+0
+[EHTFS_2]
+
+[INF]
+0
+[EINF]
+
+[FTP]
+Your name for the Site
+Web Address or FTP
+21
+anonymous
+anonymous
+
+-1
+-1
+3
+[EFTP]
+
+[WM]
+1
+[EWM]
+
+[WS]
+-1
+[EWS]
+
+[BR]
+C:\DRHLP4_0\GIG\ALTERNATE\GIGHLP
+[EBR]
+
+[AV]
+0 0 0 0
+[EAV]
+
+[HF]
+[EHF]
+
+[EOPT]
+
+[TOL]
+0001,0002,0003,0004,0005,0006,0007,0008,0009,0010,0011,0012,0013,0014,0015,0016,0017,0018,0019,0020,
+[ETOL]
+[CLS]
+
+
+
+[ECLS]
+
+[VH]
+4.00.000-F007;
+5.00.051-F008;10/6/2004 1:16:28 PM
+[EVH]
+
+[D3]
+0;0;Normal;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+1;0;NC Heading;0;-1;0;0;-1;Lucida Calligraphy;22;FFFFFF;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+2;0;Topic Heading;0;0;0;0;0;MS Sans Serif;14;80;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+3;0;Paragraph Title;0;-1;0;0;0;MS Sans Serif;12;80;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+4;0;Bullet 1;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;19;-19;Symbol;183;0;10;0;50;;
+5;0;Hanging Indent 1;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;38;-38;;0;0;0;0;50;;
+[ED3]
+
+[BN]
+[EBN]
+
+[MD4]
+[EMD]
+
+[MI]
+[EMI]
+
+[WD4]
+main="DEFAULT.HLX"\vq1(100,100,823,823),0,(255,255,128),(0,0,255),244,7,0,\vq2\vq2,1
+HT_Node=""\vq1(500,100,200,400),20736,(255,255,128),(0,0,255),243,3,0,\vq2\vq2,2
+[EWD]
+
+[SK]
+000001002003004005000000000000000000000000000000000000000000
+[ESK]
+
+[SWW]
+\vq1\vq1\vq1
+[ESWW]
+
+[HT]
+[TOPIC 1]
+[PK]
+131138060001
+[EPK]
+
+[PT]
+T_021512380007
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001001
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+What_is_a_Node
+[ECS]
+[TA]
+Title\vq1What is a Node\vq2
+[ETA]
+
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+-1 
+-1 
+-1 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fscript\fcharset0 LUCIDA CALLIGRAPHY;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\sl240 \f0 \par
+\ATXpt1 \f1 \fs44 \b \i \cf15     What is a Node\par
+\ATXpt0 
+
+\vq14
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\sl240 \f1 \par
+\sl0 	The most fundamental element of discretization upon which all other  elements are built. \par
+	h
+as zero dimension may have many DOFs associated with it for analysis purposes\par
+	uniquely determined by its three positional coordinates- x,,y & z, three kinds as described later\par
+\sl240 \f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 2]
+[PK]
+131138060002
+[EPK]
+
+[PT]
+Whjy do we need Node
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001001
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Why_do_we_need_Node
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fscript\fcharset0 LUCIDA CALLIGRAPHY;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt1\sl240 \f1 \fs44 \b \i \cf15 \par
+Why do we need Node\par
+\ATXpt0\sl0 
+
+\vq14
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720 \f1 \par
+	All other Elements of a simple to the most complicated Model, such as Curves, Patches and Solids, etc.\par
+\sl240 	are all generated by using many Nodes. Moreover, Structure Kinematic and/or Force Boundary or Initial\par
+	Conditions may be assigned on Nodes. In other words, some Nodes may be assigned a support condition\par
+	or subjected to loadings.\par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 3]
+[PK]
+131138060003
+[EPK]
+
+[PT]
+How many kinds of Node
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001001
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+How_many_kinds_of_Node
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fscript\fcharset0 LUCIDA CALLIGRAPHY;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\sl240 \f0 \par
+\ATXpt1 \f1 \fs44 \b \i \cf15 How many kinds of Node\par
+\ATXpt0 
+
+\vq14
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\sl240 \f1 \par
+\sl0 	Input Node\par
+	Control Node\par
+	Mesh Node  \par
+\par
+\sl240 \f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 4]
+[PK]
+131138060004
+[EPK]
+
+[PT]
+T_021512380007
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+CS_021512380007
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Input Node\par
+\par
+\ATXpt0\sl0 \fs20 \cf0 	A Node that is necessary to generate, and an 
+integral part of, a \par
+\sl240 	more complex element, such as Curve, Patch and Solid, that you\par
+	want to generate and on which Kinematic or Force Boundary or\par
+	Intial Conditions may be assigned\par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 5]
+[PK]
+131138060005
+[EPK]
+
+[PT]
+T_021512380006
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+CS_021512380006
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Control Node\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	A helper Node that is optionally needed to
+ generate, but \par
+\sl240 	NOT a part of , a more complex element , such as Curve, \par
+	Patch and Solid, that you want to generate and on which \par
+	Kinematic or Force Boundary or Intial Condition(s) may\par
+	NOT be assigned \par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 6]
+[PK]
+131138060006
+[EPK]
+
+[PT]
+T_021512380005
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+CS_021512380005
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Mesh Node\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	A final Node that is generated to help define
+ a discretized Model.\par
+\sl240 \f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 7]
+[PK]
+131138060007
+[EPK]
+
+[PT]
+How do we generate
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001001
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+How_do_we_generate
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fscript\fcharset0 LUCIDA CALLIGRAPHY;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\sl240 \f0 \par
+\ATXpt1 \f1 \fs44 \b \i \cf15 How do we generate\par
+\ATXpt0 
+
+\vq14
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720 \f1  \par
+	On-the-fly Mode\par
+\sl240 \f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 8]
+[PK]
+131138060008
+[EPK]
+
+[PT]
+Input Node Mode
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[N3]
+0220210000001GENERA~1.BMP0220210000002OPT_NODE.BMP0220210000003MLDLG_~1.BMP
+[EN3]
+
+[PG]
+001001
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Input_Node_Mode
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fscript\fcharset0 LUCIDA CALLIGRAPHY;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\sl240 \par
+\ATXpt1 \f1 \fs44 \b \i \cf15  Node: Input Node Mode \par
+\ATXpt0 
+
+\vq14
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720 \f1 \par
+	If the Generator ToolBar is not visible:\par
+	Pull Down ViewMenu in MenuBar\par
+	Click on item ToolBars
+\par
+	Click On Generator ToolBar:\par
+	A Check Mark next to it will  indicate Selection\par
+	Generator ToolBar will appear on right of the Screen as shown below \par
+\sl240 \par
+					 \ATXnt1 @\ATXnt0  \par
+\par
+\sl0 	Click on Node Button 
+of the Generator TooLBar\par
+	A Node ToolBar will appear on the Screen as shown below:\par
+\sl240 \par
+\par
+			 \ATXnt2 @\ATXnt0  \par
+\par
+\par
+\sl0 	Click on Input Node Button or Control Node Button:\par
+	Node ToolBar will disappear
+\par
+	A Node Dialog Box will appear on right upper corner of the Screen:\par
+\sl240 \f0 \par
+\f1 		 \ATXnt3 @\f0 \ATXnt0  \par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 9]
+[PK]
+131138060009
+[EPK]
+
+[PT]
+On-the-fly Mode
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+On_the_fly_Mode
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 On-the-fly Mode\par
+\par
+\ATXpt0\sl0 \fs20 \cf0 	Input Node is a part of a more complex e
+lement , such as Curve, \par
+\sl240 	Patch and Solid, that may have to be generated later.\par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 10]
+[PK]
+131138060010
+[EPK]
+
+[PT]
+Advanced
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Advanced
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Advanced\par
+\par
+\ATXpt0\sl0 \fs20 \cf0 	Clicking this Button will open up the Advanced 
+Option Dialog Box\par
+\sl240 	that enables you to generate Node by other useful means.\par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 11]
+[PK]
+131138060011
+[EPK]
+
+[PT]
+Cancel
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Cancel
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Cancel\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 Clicking this Button will cancel Node Generation 
+Mode.\par
+\sl240 \f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 12]
+[PK]
+131138060012
+[EPK]
+
+[PT]
+Control Node
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Control_Node
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Control Node\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	A helper Node that is optionally needed to
+ generate, but NOT\par
+\sl240 	a part of , a more complex element , such as Curve, Patch and\par
+	Solid, that you want to generate and on which Kinematic or Force\par
+	Boundary Condition(s) may not be assigned\par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 13]
+[PK]
+131138060013
+[EPK]
+
+[PT]
+Input Node
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Input_Node
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Input Node\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	A Node that is necessary to generate, and an
+ integral part of, a more \par
+	complex element, such as Curve, Patch and Solid, that you want to \par
+	generate and on which Kinematic or Force Boundary Conditions may \par
+	be assigned\par
+\sl240 \f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 14]
+[PK]
+131138060014
+[EPK]
+
+[PT]
+Kinematic
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Kinematic
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Kinematic\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	Displacement, Velocity & Acceleration type Bo
+undary or \par
+\sl240 	Intial Conditions\par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 15]
+[PK]
+131138060015
+[EPK]
+
+[PT]
+Mesh Node
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Mesh_Node
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Mesh Node\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	A final Node that is generated to help define
+ a discretized Model.\par
+\sl240 \f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 16]
+[PK]
+131138060016
+[EPK]
+
+[PT]
+NID
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+NID
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 NID\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	Generator will associate the NodeID shown in the Ed
+it Box\par
+\sl240 	with the New Node. If you want any special ID, type it in.	\par
+	Make sure, by pulling down the Drop-down list associated\par
+	with this Edit Box, that your special ID is unique .i.e., does\par
+	not appear in the list.\par
+\f0 
+\par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 17]
+[PK]
+131138060017
+[EPK]
+
+[PT]
+Basic Node
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Basic_Node
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Node\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	Fundamental Element of discretization for Modeling
+\par
+\sl240 \f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 18]
+[PK]
+131138060018
+[EPK]
+
+[PT]
+Node Data Dialog Box
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Node_Data_Dialog_Box
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Node Data Dialog Box\par
+\ATXpt0\sl0 \fs20 \cf0 	\par
+\sl240 	This Dialog Box helps you i
+nsert any special information or\par
+	access Advanced Options associated with Node generation\par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 19]
+[PK]
+131138060019
+[EPK]
+
+[PT]
+Third Coordinate
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Third_Coordinate
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Third Coordinate (X,Y or Z)\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	Please type in any value yo
+u desire for the Current Node\par
+\sl240  	or leave it alone. For 2D problem, this you should always\par
+	leave as 0.0. The Generator always the last value typed in..\par
+\f0 \par
+\par
+\vq12
+[ETX]
+[EHT]
+
+[TOPIC 20]
+[PK]
+131138060020
+[EPK]
+
+[PT]
+Update
+[EPT]
+
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Update
+[ECS]
+[FCT]
+[EFCT]
+
+[FCPT]
+[EFCPT]
+
+[FEN]
+[EFEN]
+
+[FET]
+[EFET]
+
+[FRN]
+[EFRN]
+
+[FFMP]
+[EFFMP]
+
+[FMPP]
+[EFMPP]
+
+[FPP]
+[EFPP]
+
+[FSF]
+[EFSF]
+
+[FEXT]
+[EFEXT]
+
+[FDTB]
+0
+[EFDTB]
+
+[FRLT]
+[EFRLT]
+
+[FRLU]
+[EFRLU]
+
+
+[HTDF]
+ 0 
+ 0 
+ 0 
+[EHTDF]
+
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 Update\par
+\ATXpt0 \fs20 \cf0 \par
+\sl0 	Clicking this Button will associate the currentl
+y showing\par
+\sl240 	info. with the Node being generated.\par
+\sl0 \par
+\vq12
+[ETX]
+[EHT]
+
+[FT]
+MS SANS SERIF,fmodern,48
+SYSTEM,fswiss,0
+LUCIDA CALLIGRAPHY,fscript,0
+[EFT]
+
+[EOF]

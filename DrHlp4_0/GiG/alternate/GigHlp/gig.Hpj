@@ -1,0 +1,25 @@
+;Windows 32 Bit Help Project File
+[OPTIONS]
+COMPRESS = 0
+DBCS = NO
+REPORT = YES
+LCID = 0x0409 0x0 0x0 ;English (United States)
+ERRORLOG = C:\DrHlp4_0\GiG\alternate\GigHlp\gig.ERR
+BMROOT = C:\DRHLP4_0\GIG\ALTERNATE\GIGHLP
+TITLE = DEFAULT.HLX
+MULTIKEY = M
+
+[WINDOWS]
+main="gig.hmp",(100,100,823,823),0,(255,255,128),(0,0,255),f4
+HT_Node="",(500,100,200,400),20736,(255,255,128),,f3
+
+[BAGGAGE]
+
+
+[FILES]
+gig.Rtf
+node.Rtf
+
+[MAP]
+#include <gig.H>
+#include <node.H>

@@ -1,0 +1,1537 @@
+üVQHLPEDFILE_4.00.010_007ü
+
+[PF]
+-1
+[EPF]
+[DICTIONARY]
+AF - Append Project FILES Section
+AL - Project ALIAS Section
+AM - Append Project MAP Section
+AN - Annotations
+BI - Browse info
+AV - Audio/Video Project Options
+BX - Build Expression Index
+BM - Bookmarks
+BM3 - New Bookmarks
+BN - Browse group names
+BR - Bitmap root
+BE - Build Expression
+BP - Build Tag Pointer Strings
+BT - Build Tags
+CH - Character set
+CI - Citation
+CM - Context map
+CN - Context number
+CNI - Context Number Index
+CP - Compress
+CR - Copyright
+CS - Context string
+CSI - Context String Index
+CV - Compiler version
+CW - Compiler Switch(s)
+DH - Defined help styles
+D2 - Defined help styles - ver 2.00
+D3 - Defined help styles - Ver 3.00
+FM - Font markers
+FT - Font table
+F2 - Font markers - ver 2.00
+HA - Help author
+HC - Help compiler dir
+HF - Help files
+HX - Help comments
+HT - Help topic section
+HTV - HTML options - HTML version
+HTM - HTML options - server version
+HTP - HTML options - export path
+HTI - HTML options - index filename
+HTH - HTML options - headers
+HTW - HTML options - web browser
+HTO - HTML options - web browser options
+HTF - HTML options - font translations
+HTS - HTML options - default URL
+HTA - HTML options - alternate HTML
+HTD - HTML options - default HTML
+HTN - HTML options - nonscrolling region
+HTG - HTML options - image path on server
+HTK - HTML options - add keywords
+HTR - HTML options - footer text
+HTRX - HTML options - footer flag
+HTE - HTML options - header text
+HTEX - HTML options - header flag
+HTC - HTML options - background color
+HTCX - HTML options - background color flag
+HTIM - HTML options - background image
+HTCT - HTML options - text color
+HTCTX - HTML options - text color flag
+HTCL - HTML options - link color
+HTCLX - HTML options - link color flag
+HTCV - HTML options - visited link color
+HTCVX - HTML options - visited link color flag
+HTCA - HTML options - activated link color
+HTCAX - HTML options - activated link color flag
+HV - Help Magician Version
+IC - Icon FileName
+IN - Index
+JM - Jump markers
+J2 - Jump markers - ver 2.00
+J3 - Jump markers - ver 3.00
+KW - Keywords
+KW3 - Keywords
+KW4 - Keywords
+KWA - A Keywords
+LN - Language
+LT - Links Tags
+MD - Macro definitions
+MD4 - Macro definitions - ver 4.00
+MM - Multimedia markers
+MK - Multiple keywords
+MK4 - Multiple keywords
+MI - Macro info
+MT - Mid Topic Context Strings
+NS - WYSIWYG Nonscrolling Regions
+NT - NTags
+N2 - NTags - ver 2.00
+N3 - NTags - ver 3.00
+OK - Old key phrase
+OP - Optimize for  CDROM
+PF - Project Flag
+PG - Paragraph Tags
+PJ - Project macro
+PK - Primary Key
+PKI - Primary Key Index
+PM - Popup markers
+P2 - Popup markers - ver 2.00
+P3 - Popup markers - ver 3.00
+PR - Paragraph markers
+PT - Page title
+RC - RTF Compatibility
+SK - Style Hot Keys
+TI - Title
+TLI - Title Index
+TM - Topic macro
+TP - Template
+TX - Help Text
+UB - Use Build Expression
+UI - Unique File ID
+UR - URL Addresses
+WA - Warning
+WD - Window definitions
+WD3 - Window definitions
+WD4 - Window definitions
+WM - Write map file
+WP - Word Processor
+WS - Windows specification source
+VH - Version History
+[END OF DICTIONARY]
+
+[NS]
+-1
+[ENS]
+
+[BT]
+[EBT]
+
+[BE]
+
+
+
+
+
+
+
+
+
+
+[EBE]
+
+[UB]
+True
+[EUB]
+
+[BX]
+ 1
+[EBX]
+
+[HA]
+Dr
+[EHA]
+
+[HX]
+[EHX]
+
+[AF]
+[EAF]
+
+[AM]
+[EAM]
+
+[BM3]
+0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;
+[EBM3]
+
+[CV]
+4
+[ECV]
+
+[OPT]
+[CH]
+0
+[ECH]
+
+[CW]
+/C/E/M
+[ECW]
+
+[CP]
+0
+[ECP]
+
+[HV]
+400010
+[EHV]
+
+[IN3]
+0
+[EIN3]
+
+[LN]
+0
+[ELN]
+
+[OK]
+0
+[EOK]
+
+[OP]
+0
+[EOP]
+
+[PJ]
+0
+[EPJ]
+
+[RC]
+2
+[ERC]
+
+[TI]
+~TMPHLX.HLX
+[ETI]
+
+[TP]
+D:\\WINWORD\\D2H_HELP.DOT
+[ETP]
+
+[UI]
+27093312
+[EUI]
+
+[HTV]
+0
+[EHTV]
+
+[HTM]
+0
+[EHTM]
+
+[HTP]
+D:\HMPRO95\HTML
+[EHTP]
+
+[HTI]
+index.htm
+[EHTI]
+
+[HTH]
+-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;-1;
+[EHTH]
+
+[HTW]
+[EHTW]
+
+[HTO]
+[EHTO]
+
+[HTF]
+0;8;10;12;14;20;26;36;
+[EHTF]
+
+[HTS]
+[EHTS]
+
+[HTA]
+[EHTA]
+
+[HTD]
+[EHTD]
+
+[HTN]
+-1
+[EHTN]
+
+[HTG]
+[EHTG]
+
+[HTK]
+0
+[EHTK]
+
+[HTR]
+[EHTR]
+
+[HTRX]
+0
+[EHTRX]
+
+[HTE]
+[EHTE]
+
+[HTEX]
+0
+[EHTEX]
+
+[HTCX]
+0
+[EHTCX]
+
+[HTC]
+12632256
+[EHTC]
+
+[HTIM]
+[EHTIM]
+
+[HTCT]
+0
+[EHTCT]
+
+[HTCTX]
+0
+[EHTCTX]
+
+[HTCL]
+16711680
+[EHTCL]
+
+[HTCLX]
+0
+[EHTCLX]
+
+[HTCV]
+8388736
+[EHTCV]
+
+[HTCVX]
+0
+[EHTCVX]
+
+[HTCA]
+255
+[EHTCA]
+
+[HTCAX]
+0
+[EHTCAX]
+
+[HTFP]
+HM
+[EHTFP]
+
+[WA]
+3
+[EWA]
+
+[WM]
+1
+[EWM]
+
+[WS]
+-1
+[EWS]
+
+[BR]
+[EBR]
+
+[AV]
+0 0 0 0
+[EAV]
+
+[HF]
+[EHF]
+
+[EOPT]
+
+[VH]
+4.00.010-F007;
+[EVH]
+
+[D3]
+0;0;Normal;0;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+230;0;toc 3;29;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+231;0;toc 2;29;0;0;0;0;Arial;11;0;0;25;25;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+232;0;toc 1;29;-1;0;0;0;Arial;14;0;0;100;50;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+237;0;index 3;30;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;50;0;;0;0;0;0;50;;
+238;0;index 2;30;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;25;0;;0;0;0;0;50;;
+239;0;index 1;30;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+241;239;index heading;26;-1;0;0;0;Arial;11;0;0;126;51;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+242;242;footer;15;0;0;0;0;Arial;10;0;0;0;0;0;4;0;0;0;0;0;0;;0;0;0;0;50;R0675;
+243;243;header;15;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;R0675;
+244;0;footnote reference;0;0;0;0;0;Arial;8;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+245;245;footnote text;0;-1;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+250;16;heading 5;26;-1;0;0;0;Arial;14;0;0;142;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+251;24;heading 4;26;-1;0;0;-1;Arial;12;0;0;90;6;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+252;27;heading 3;26;-1;0;0;0;Arial;14;0;0;142;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+253;27;heading 2;26;-1;0;0;0;Arial;18;0;0;151;18;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+254;253;heading 1;26;-1;0;0;0;Arial;24;0;0;401;701;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+255;255;Normal Indent;0;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;50;0;;0;0;0;0;50;;
+229;0;toc 4;230;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;50;150;0;;0;0;0;0;50;;
+2;2;SourceTop;12;0;0;0;0;Courier New;10;0;0;48;0;117;0;0;1;0;0;50;0;;0;0;0;0;50;L0075L0100L0125L0150L0175L0200L0225L0250L0275L0300L0325L0350L0375L0400L0425;
+3;35;RelatedHead;26;-1;0;0;0;Arial;12;FF0000;0;75;8;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+4;4;List 2 Table;34;0;0;0;0;Arial;10;0;0;42;0;117;0;0;0;0;0;75;-25;;0;0;0;0;50;L0075;
+5;5;List Table;24;0;0;0;0;Arial;10;0;0;42;0;117;0;0;0;0;0;50;-25;;0;0;0;0;50;;
+6;27;Caption;27;0;0;0;-1;Arial;10;0;0;0;67;117;0;0;0;0;0;0;0;;0;0;0;0;50;L0025;
+7;7;Margin Note;27;0;0;0;-1;Arial;10;0;0;25;25;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+8;8;TOCTitle;26;-1;0;0;0;Arial;24;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+9;9;Title;26;-1;0;0;0;Arial;36;0;2;101;301;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+10;10;ByLine;9;-1;0;0;0;Arial;14;0;2;101;301;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+11;11;Body Text Table;27;0;0;0;0;Arial;10;0;0;42;0;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+12;12;Source;20;0;0;0;0;Courier New;10;0;0;0;0;117;0;0;1;0;0;50;0;;0;0;0;0;50;L0075L0100L0125L0150L0175L0200L0225L0250L0275L0300L0325L0350L0375L0400L0425;
+13;6;Figures;27;0;0;0;0;Arial;10;0;0;25;25;117;0;0;0;0;0;0;0;;0;0;0;0;50;L0025;
+14;14;Figures Table;13;0;0;0;0;Arial;10;0;0;25;25;117;0;0;0;0;0;0;0;;0;0;0;0;50;L0025;
+15;15;Header Base;0;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+16;16;Definition;27;0;0;0;0;Arial;10;0;0;48;0;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+17;17;CodeExplained;20;0;0;0;0;Courier New;10;0;0;42;17;117;0;0;0;0;0;50;0;;0;0;0;0;50;;
+18;18;TableHeading;26;-1;0;0;0;Arial;10;0;0;25;0;0;0;0;0;0;5;0;0;;0;0;0;0;50;;
+19;19;TableText;27;0;0;0;0;Arial;9;0;0;17;17;0;0;0;0;0;5;0;0;;0;0;0;0;50;;
+20;20;Code Base;27;0;0;0;0;Courier New;10;0;0;42;0;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+21;21;SuperTitle;9;-1;0;0;0;Arial;14;0;2;400;0;0;4;1;0;0;0;100;0;;0;0;0;0;50;;
+22;22;GlossaryTerm;27;0;0;0;0;Arial;11;0;0;17;17;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+23;0;TableBorder;27;0;0;0;0;Arial;10;0;0;0;0;8;0;0;0;0;0;0;0;;0;0;0;0;50;;
+24;24;List;27;0;0;0;0;Arial;10;0;0;42;0;117;0;0;0;0;0;50;-25;;0;0;0;0;50;;
+25;25;Note;27;0;0;0;0;Arial;10;0;0;75;75;117;5;0;0;0;0;0;0;;0;0;0;0;50;;
+26;26;Heading Base;0;-1;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+27;27;Body Text;0;0;0;0;0;Arial;10;0;0;42;0;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+28;28;CaptionTable;6;0;0;0;-1;Arial;10;0;0;0;67;117;0;0;0;0;0;0;0;;0;0;0;0;50;L0025;
+29;29;TOC Base;0;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+30;30;Index Base;0;0;0;0;0;Arial;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+31;31;Jump Base;27;0;0;0;0;Arial;10;0;0;0;25;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+32;32;Jump from Contents;31;-1;0;0;0;Arial;11;0;0;8;25;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+33;33;Jump from List;31;0;0;0;0;Arial;10;0;0;0;25;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+34;34;List 2;24;0;0;0;0;Arial;10;0;0;42;0;117;0;0;0;0;0;75;-25;;0;0;0;0;50;L0075;
+35;35;Jump;31;0;0;0;0;Arial;10;0;0;0;25;117;0;0;0;0;0;0;0;;0;0;0;0;50;;
+36;36;BodyTable;0;0;0;0;0;Roman PS;10;0;0;48;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;;
+37;37;ListTable;0;0;0;0;0;Roman PS;10;0;0;48;0;0;0;0;0;0;0;75;-25;;0;0;0;0;50;L0025;
+38;38;header even;0;-1;0;0;0;Arial;9;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;R0675;
+39;39;header odd;0;-1;0;0;0;Arial;9;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;0;50;R0675;
+40;40;footer odd;242;-1;0;0;0;Arial;9;0;0;0;0;0;4;0;0;0;0;0;0;;0;0;0;0;50;R0675;
+41;41;footer even;242;-1;0;0;0;Arial;9;0;0;0;0;0;4;0;0;0;0;0;0;;0;0;0;0;50;R0675;
+42;42;FiguresTable;13;0;0;0;0;Times New Roman;10;0;0;58;25;0;0;0;0;0;0;50;0;;0;0;0;0;50;L0275;
+43;43;Warning;0;-1;0;0;-1;Times New Roman;10;0;0;48;0;0;1;0;0;0;0;200;0;;0;0;0;0;50;;
+[ED3]
+
+[BN]
+1:SECTION1;
+[EBN]
+
+[MD4]
+[EMD]
+
+[MI]
+[EMI]
+
+[WD4]
+main="DEFAULT.HLX"(100,100,823,823),0,(255,255,255),(255,255,255),0,7,0,,1
+[EWD]
+
+[SK]
+000230231232237238239241242243244245250251252253254255229002
+[ESK]
+
+[HT]
+[PK]
+270933120001
+[EPK]
+[PT]
+Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[J3]
+02010002000200001Node.2
+[EJ3]
+
+[MT]
+[EMT]
+
+[PG]
+001008001032001252
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+HelpNodeContents1
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\ATXts720 \plain\fs24 \ATXpt8 \f2\fs48\b \f2\fs24\b    \fs48 Contents
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\ATXts720 \plain\fs24 \ATXpt32 \sb19\sa60\sl281 \f2\fs22\b\ul \ATXul1026 \cf2 \ATXht1 Node\ulnone \ATXul0 \cf0 \ATXht0  \par 
+\pard\sb0\sa0\sl0\ATXts720 \plain\fs24 \ATXpt252 \sb341 \f2\fs28\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120002
+[EPK]
+[PT]
+Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[J3]
+02710003000200001WhatisaNode.303410005000200002HowmanykindsofNode.503110009000200003Howdowegenerate.9
+[EJ3]
+
+[MT]
+[EMT]
+
+[PG]
+001032001253
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Node.2
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt252 \sb341 \f2\fs28\b \f0\fs24\b    \f2\fs28 Node
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\ATXts720 \plain\fs24 \ATXpt32 \sb19\sa60\sl281 \f2\fs22\b\ul \ATXul1026 \cf2 \ATXht1 What is a Node\ulnone \ATXul0 \cf0 \ATXht0  \par 
+Why do we need Node\uldb0 \par 
+\ul \ATXul1026 \cf2 \ATXht2 How many kinds of Node\ulnone \ATXul0 \cf0 \ATXht0  \uldb0 \par 
+\ul \ATXul1026 \cf2 \ATXht3 How do we generate\ulnone \ATXul0 \cf0 \ATXht0  \uldb0 \par 
+\pard\sb0\sa0\sl0\ATXts720 \plain\fs24 \ATXpt253 \sb362\sa43 \f2\fs36\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120003
+[EPK]
+[PT]
+What is a Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001024001253
+[EPG]
+
+[BI]
+1:1;
+[EBI]
+[CS]
+WhatisaNode.3
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f1\froman\fcharset0 SYMBOL;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt253 \sb362\sa43 \f2\fs36\b \f2\fs24\b     \fs36 What is a Node
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f1\froman\fcharset0 SYMBOL;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\sa0\ATXts720 \plain\fs24 \ATXpt24 \fi-360\li720\sb101\sl281 \f2\fs20 \f1 ·\f2 	the most fundamental element of discretization upon which all other  \b element\b0 s are built. \par 
+\f1 ·\f2 	has zero \b dimension\par 
+\f1\b0 ·\f2 	may have many \b DOF\b0 s associated with it for analysis purposes\par 
+\f1 ·\f2 	uniquely determined by its three positional coordinates- x,y & z\par 
+\f1 ·\f2 	three kinds as described later\par 
+\pard\sb0\sl0\li0\fi0\ATXts720 \plain\fs24 \ATXpt253 \sb362\sa43 \f2\fs36\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120004
+[EPK]
+[PT]
+Why do we need Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[J3]
+02440000000200001Input Node
+[EJ3]
+
+[MT]
+[EMT]
+
+[PG]
+001027001003001035001253
+[EPG]
+
+[BI]
+1:2;
+[EBI]
+[CS]
+WhydoweneedNode.4
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt253 \sb362\sa43 \f2\fs36\b \f2\fs24\b     \fs36 Why do we need Node
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\sa0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 All other \b Element\b0 s of a simple to the most complicated \b Model\b0 , such as \b Curve\b0 s, \b Patch\b0 es and \b Solid\b0 s, etc. are all generated by using many \b Node\b0 s. Moreover, Structure \ul \ATXul1024 Kinematic\ul \ATXul1024 \ulnone \ATXul0  and/or \b Force Boundary or Initial Conditions\b0  may be assigned on \b Node\b0 s. In other words, some \b Node\b0 s may be assigned a support condition or subjected to loadings.\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt3 \sb180\sa19 \f2\cf9\b \par 
+\pard\sb0\sa0\ATXts720 \plain\fs24 \ATXpt35 \sa60\sl281 \f2\fs20\ul \ATXul1026 \cf2 \ATXht1 \ulnone \ATXul0 \cf0 \ATXht0  \par 
+\uldb0 \uldb0 \pard\sa0\sl0\ATXts720 \plain\fs24 \ATXpt253 \sb362\sa43 \f2\fs36\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120005
+[EPK]
+[PT]
+How many kinds of Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[J3]
+02510006000200001InputNode.602410008000200002MeshNode.8
+[EJ3]
+
+[MT]
+[EMT]
+
+[PG]
+001033001252
+[EPG]
+
+[BI]
+1:3;
+[EBI]
+[CS]
+HowmanykindsofNode.5
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt253 \sb362\sa43 \f2\fs36\b \f2\fs24\b     \fs36 How many kinds of Node
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\sa0\ATXts720 \plain\fs24 \ATXpt33 \sa60\sl281 \f2\fs20\ul \ATXul1026 \cf2 \ATXht1 Input Node\ulnone \ATXul0 \cf0 \ATXht0  \par 
+Control Node\uldb0 \par 
+\f0\fs20\ul \ATXul1026 \cf2 \ATXht2 Mesh Node\ulnone \ATXul0 \cf0 \ATXht0  \f0\fs20 \f2\uldb0  \par 
+\pard\sa0\sl0\ATXts720 \plain\fs24 \ATXpt252 \sb341 \f2\fs28\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120006
+[EPK]
+[PT]
+Input Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001252
+[EPG]
+
+[BI]
+1:4;
+[EBI]
+[CS]
+InputNode.6
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt252 \sb341 \f2\fs28\b \f0\fs24\b     \f2\fs28 Input Node
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 A \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  that is necessary to generate, and an integral part of, a more complex element, such as \b Curve\b0 , \b Patch\b0  and \b Solid\b0 , that you want to generate and on which \ul \ATXul1024 Kinematic\ul \ATXul1024 \ulnone \ATXul0  or Force Boundary Conditions may be assigned\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt252 \sb341 \f2\fs28\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120007
+[EPK]
+[PT]
+Control Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001027001252
+[EPG]
+
+[BI]
+1:5;
+[EBI]
+[CS]
+ControlNode.7
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt252 \sb341 \f2\fs28\b \f0\fs24\b     \f2\fs28 Control Node
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 A helper \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  that is optionally needed to generate, but NOT a part of , a more complex element , such as \b Curve\b0 , \b Patch\b0  and \b Solid\b0 , that you want to generate and on which \ul \ATXul1024 Kinematic\ul \ATXul1024 \ulnone \ATXul0  or Force Boundary Condition(s) may not be assigned \par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt252 \sb341 \f2\fs28\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120008
+[EPK]
+[PT]
+Mesh Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001027001253
+[EPG]
+
+[BI]
+1:6;
+[EBI]
+[CS]
+MeshNode.8
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt252 \sb341 \f2\fs28\b \f0\fs24\b     \f2\fs28 Mesh Node
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 A final \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  that is generated to help define a discretized \b Model\b0 .\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt253 \sb362\sa43 \f2\fs36\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120009
+[EPK]
+[PT]
+How do we generate
+[EPT]
+[MC]
+M
+[EMC]
+
+[J3]
+03010010000200001InputNodeMode.10
+[EJ3]
+
+[MT]
+[EMT]
+
+[PG]
+001033001252
+[EPG]
+
+[BI]
+1:7;
+[EBI]
+[CS]
+Howdowegenerate.9
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt253 \sb362\sa43 \f2\fs36\b \f2\fs24\b     \fs36 How do we generate
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\sa0\ATXts720 \plain\fs24 \ATXpt33 \sa60\sl281 \f2\fs20\ul \ATXul1026 \cf2 \ATXht1 Input Node Mode\ulnone \ATXul0 \cf0 \ATXht0  \par 
+\f0\fs20 On-the-fly Mode\f0\fs20 \f2\uldb0 \par 
+\pard\sa0\sl0\ATXts720 \plain\fs24 \ATXpt252 \sb341 \f2\fs28\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120010
+[EPK]
+[PT]
+Input Node Mode
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+005027004024001252
+[EPG]
+
+[BI]
+1:8;
+[EBI]
+[CS]
+InputNodeMode.10
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f1\froman\fcharset0 SYMBOL;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt252 \sb341 \f2\fs28\b \f0\fs24\b     \f2\fs28 Input Node Mode 
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f1\froman\fcharset0 SYMBOL;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 If the \b Generator ToolBar\b0  is not visible:\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt24 \fi-360\li720\sb101\sl281 \f2\fs20 \f1 ·\f2 	Pull Down \b ViewMenu\b0  in \b MenuBar\par 
+\pard\sb0\sl0\li0\fi0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 \b Click\b0  on item \b ToolBar\b0 s\par 
+\b Click\b0  On \b Generator ToolBar\b0 :\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt24 \fi-360\li720\sb101\sl281 \f2\fs20 \f1 ·\f2 	A Check Mark next to it will  indicate Selection\par 
+\f1\b ·\f2\b 	Generator ToolBar \b0 will appear on right of the Screen as shown below :\par 
+			@GENERATORS.SHG@ \par 
+\pard\sb0\sl0\li0\fi0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 \b Click\b0  on \ul \ATXul1024 Node\ul \ATXul1024 \b\ulnone \ATXul0  Button\b0  of the \b Generator TooLBar\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt24 \fi-360\li720\sb101\sl281 \f2\fs20 \f1 ·\f2 	A \b Node ToolBar\b0  will appear on the \b Screen\b0  as shown below:\par 
+	 		@OPT_NODE.SHG@ \par 
+\pard\sb0\sl0\li0\fi0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 \b Click\b0  on \ul \ATXul1024 Input Node\ul \ATXul1024 \b\ulnone \ATXul0  Button\b0  or \ul \ATXul1024 Control Node\ul \ATXul1024 \b\ulnone \ATXul0  Button\b0 :\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt24 \fi-360\li720\sb101\sl281 \f2\fs20 \f1 ·\f2 	Node ToolBar will disappear\par 
+\f1 ·\f2 	A Node Dialog Box will appear on right upper corner of the Screen:\par 
+\pard\sb0\sl0\li0\fi0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 			@MLDLG_NODE.SHG@ \par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt252 \sb341 \f2\fs28\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120011
+[EPK]
+[PT]
+On-the-fly Mode
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001027001008
+[EPG]
+
+[BI]
+1:9;
+[EBI]
+[CS]
+On.the.flyMode.11
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt252 \sb341 \f2\fs28\b \f0\fs24\b     \f2\fs28 On-the-fly Mode
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\sb0\ATXts720 \plain\fs24 \ATXpt27 \sb101\sl281 \f2\fs20 Input \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  is a part of a more complex element , such as Curve, Patch and Solid, that may have to be generated later.\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt8 \f2\fs48\b 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120012
+[EPK]
+[PT]
+Glossary of Terms
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001022001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+GlossaryOfTerms.12
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt8 \f2\fs48\b \f0\fs24\b   \f2\fs48 Glossary of Terms
+
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \pard\ATXts720 \plain\fs24 \ATXpt22 \sb41\sa41\sl281 \f2\fs22 \ul \ATXul1024 Advanced\ul \ATXul1024  \par 
+\ul \ATXul1024 Cancel\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 Control Node\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 Input Node\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 Kinematic\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 Mesh Node\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 NID\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 Node\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 Node Data Dialog Box\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 Third Coordinate (X,Y or Z)\ul \ATXul1024 \ul \ATXul1024  \par 
+\ul \ATXul1024 Update\ul \ATXul1024 \ul \ATXul1024  \par 
+\pard\sb0\sa0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120013
+[EPK]
+[PT]
+T_270933120013
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+HIDC_ADVANCED
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  Advanced\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 Clicking this Button will open up the Advanced Option Dialog Box that enables you to generate \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  by other useful means.\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120014
+[EPK]
+[PT]
+T_270933120014
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+HIDC_CANCEL
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  Cancel\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 Clicking this Button will cancel \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  Generation Mode.\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120015
+[EPK]
+[PT]
+T_270933120015
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+GlossControlNode.15
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  Control Node\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 A helper \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  that is optionally needed to generate, but NOT a part of , a more complex element , such as Curve, Patch and Solid, that you want to generate and on which \ul \ATXul1024 Kinematic\ul \ATXul1024 \ulnone \ATXul0  or Force Boundary Condition(s) may not be assigned\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120016
+[EPK]
+[PT]
+T_270933120016
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+GlossInputNode.16
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  Input Node\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 A \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  that is necessary to generate, and an integral part of, a more \par 
+complex element, such as Curve, Patch and Solid, that you want to \par 
+generate and on which \ul \ATXul1024 Kinematic\ul \ATXul1024 \ulnone \ATXul0  or Force Boundary Conditions may \par 
+be assigned\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120017
+[EPK]
+[PT]
+T_270933120017
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+GlossKinematic.17
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  Kinematic\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 Displacement, Velocity & Acceleration type Boundary Conditions\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120018
+[EPK]
+[PT]
+T_270933120018
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+GlossMeshNode.18
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  Mesh Node\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 A final \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  that is generated to help define a discretized Model.\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120019
+[EPK]
+[PT]
+T_270933120019
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+HIDC_NID
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  NID\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 Generator will associate the NodeID shown in the Edit Box with the New \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0 . If you want any special ID, type it in. Make sure, by pulling down the Drop-down list associated with this Edit Box, that your special ID is unique .i.e., does  not appear in the list.\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120020
+[EPK]
+[PT]
+T_270933120020
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+GlossNode.20
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  Node\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 Fundamental Element of discretization for Modeling\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120021
+[EPK]
+[PT]
+T_270933120021
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+HIDD_NODE
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs16\b0  \fs28\b Node Data Dialog Box\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 This Dialog Box helps you insert any special information or access \ul \ATXul1024 Advanced\ul \ATXul1024 \ulnone \ATXul0  Options associated with \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  generation\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120022
+[EPK]
+[PT]
+T_270933120022
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001250
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+HIDC_COORD
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs16\b0  \fs28\b Third Coordinate (X,Y or Z)\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 Please type in any value you desire for the Current \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0   or leave it alone. For 2D problem, this you should always leave as 0.0. The Generator always the last value typed in..\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt250 
+
+[ETX]
+[EHT]
+
+[PK]
+270933120023
+[EPK]
+[PT]
+T_270933120023
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001016001241
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+HIDC_UPDATE
+[ECS]
+[TW]
+2
+[ETW]
+
+[TX]
+{\fonttbl
+{\f0\froman\fcharset0 TIMES NEW ROMAN;}
+{\f2\fswiss\fcharset0 ARIAL;}
+}
+
+\paperw12240 \margr1080\margl1440 \pard\plain \ATXpt250 \f2\fs28\b \f2\fs28  Update\par 
+\pard\ATXts720 \plain\fs24 \ATXpt16 \sb115\sl281 \f2\fs20 Clicking this Button will associate the currently showing info. with the \ul \ATXul1024 Node\ul \ATXul1024 \ulnone \ATXul0  being generated.\par 
+\pard\sb0\sl0\ATXts720 \plain\fs24 \ATXpt241 \sb302\sa122 \f2\fs22\b \par 
+
+[ETX]
+[EHT]
+
+[FT]
+ARIAL,fswiss,0
+TIMES NEW ROMAN,froman,0
+SYMBOL,froman,0
+[EFT]
+
+[EOF]
+9953,10733,11803,12938,14354,15330,16326,17346,18138,19008,21306,22147,23485,24148,24740,25567,26394,26957,27569,28362,28903,29625,30370,
+9926,10706,11776,12911,14327,15303,16299,17319,18111,18981,21279,22120,23458,24121,24713,25540,26367,26930,27542,28335,28876,29598,30343,
+10095,10947,11913,13109,14544,15436,16434,17451,18302,19125,21417,22256,23591,24254,24846,25673,26500,27063,27675,28468,29009,29731,30476,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+10139,10980,11953,13153,14591,15474,16474,17488,18346,19168,21461,22301,23631,24292,24892,25717,26544,27106,27710,28507,29045,29768,30514,
+31685
+10024,10882,11844,13028,14475,15367,16365,17382,18233,19050,21348,22191,23526,24189,24781,25608,26435,26998,27610,28403,28944,29666,30411,
+10080,10932,11894,13090,14525,15417,16415,17432,18283,19106,21398,22241,23576,24239,24831,25658,26485,27048,27660,28453,28994,29716,30461,
+[NDX]
+[TLI]00031079
+[PKI]00031218
+[CSI]00031357
+[CNI]00031497
+[TXI]00031545
+[BTI]00031685
+[MTI]00031692
+[BEI]00003243
+[WDI]00009742
+[PSI]00004626
+[OPT]00003489
+[MAC]00009711
+[BII]00031832
+[BNI]00009689
+[ENDX]
+00031972
+

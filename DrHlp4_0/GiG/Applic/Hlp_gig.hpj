@@ -1,0 +1,32 @@
+; This file is maintained by HCW. Do not modify this file directly.
+
+[OPTIONS]
+ERRORLOG=.\HLP_GIG.err
+LCID=0x409 0x0 0x0 ; English (United States)
+REPORT=Yes
+CONTENTS=HelpMenuContents1
+TITLE=mm_CAFE Graphical Input Generato
+CNT=.\Hlp_GiG.cnt
+COPYRIGHT=© iDRi 1996-1997
+BMROOT=..\Node\res
+BMROOT=..\View\res
+BMROOT=res
+ROOT=.
+HLP=.\Hlp_gig.hlp
+
+[FILES]
+.\Hlp_gig.rtf
+..\Node\Hlp_nod.rtf
+
+[MAP]
+#include ..\Node\Node_Doc.hm
+#include .\GiG_Doc.hm
+#include c:\drgraf4_0\Applic\drgraf.hm
+#include C:\drgraf4_0\MMgrNod\MNodRsrc.hm
+
+[WINDOWS]
+main="mm_CAFE Graphical Input Generato",(390,98,363,466),27648,(r8454143),(r65535)
+
+[CONFIG]
+BrowseButtons()
+CreateButton("jump_glossary","&Glossary","JumpId(`',`GlossaryOfTerms.10')")

@@ -1,0 +1,28 @@
+; This file is maintained by HCW. Do not modify this file directly.
+
+;Windows 95 Help Project File
+[OPTIONS]
+ERRORLOG=C:\DRHLP4_0\GIG\GIG.ERR
+LCID=0x409 0x0 0x0 ; English (United States)
+REPORT=Yes
+TITLE=~TMPHLX.HLX
+BMROOT=D:\DRHLP4_0\GIG\NODE
+BMROOT=D:\DRHLP4_0\GIG\NODE\RES
+BMROOT=D:\DRHLP4_0\GIG\VIEW\RES
+BMROOT=D:\HMPRO95
+HLP=GIG.hlp
+
+[FILES]
+NODE.RTF
+
+[MAP]
+#include Node\nodemap.h
+
+[WINDOWS]
+main="GIG.HMP",(100,100,823,823),0,(r8454143),(r16711680),f4
+Glossary="Glossary",(600,70,375,875),0,(r16777215),(r12632256),1
+Procedur="How to ...",(500,100,423,623),20736,,(r8454143)
+
+[CONFIG]
+CreateButton("Glossary_btn", "&Glossary", "JumpId(`GIG.HLP>Glossary', `Glossary')")
+BrowseButtons()

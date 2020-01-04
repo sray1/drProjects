@@ -1,0 +1,368 @@
+üVQHLPEDFILE_4.00.000_007ü
+
+[PF]
+-1
+[EPF]
+[DICTIONARY]
+AF - Append Project FILES Section
+AL - Project ALIAS Section
+AM - Append Project MAP Section
+AN - Annotations
+BI - Browse info
+AV - Audio/Video Project Options
+BX - Build Expression Index
+BM - Bookmarks
+BM3 - New Bookmarks
+BN - Browse group names
+BR - Bitmap root
+BE - Build Expression
+BP - Build Tag Pointer Strings
+BT - Build Tags
+CH - Character set
+CI - Citation
+CM - Context map
+CN - Context number
+CNI - Context Number Index
+CP - Compress
+CR - Copyright
+CS - Context string
+CSI - Context String Index
+CV - Compiler version
+CW - Compiler Switch(s)
+DH - Defined help styles
+D2 - Defined help styles - ver 2.00
+D3 - Defined help styles - Ver 3.00
+FM - Font markers
+FT - Font table
+F2 - Font markers - ver 2.00
+HA - Help author
+HC - Help compiler dir
+HF - Help files
+HX - Help comments
+HT - Help topic section
+HTV - HTML options - HTML version
+HTM - HTML options - server version
+HTP - HTML options - export path
+HTI - HTML options - index filename
+HTH - HTML options - headers
+HTW - HTML options - web browser
+HTO - HTML options - web browser options
+HTF - HTML options - font translations
+HTS - HTML options - default URL
+HTA - HTML options - alternate HTML
+HTD - HTML options - default HTML
+HTN - HTML options - nonscrolling region
+HTG - HTML options - image path on server
+HV - Help Magician Version
+IC - Icon FileName
+IN - Index
+JM - Jump markers
+J2 - Jump markers - ver 2.00
+J3 - Jump markers - ver 3.00
+KW - Keywords
+KW3 - Keywords
+KW4 - Keywords
+KWA - A Keywords
+LN - Language
+LT - Links Tags
+MD - Macro definitions
+MD4 - Macro definitions - ver 4.00
+MM - Multimedia markers
+MK - Multiple keywords
+MK4 - Multiple keywords
+MI - Macro info
+MT - Mid Topic Context Strings
+NS - WYSIWYG Nonscrolling Regions
+NT - NTags
+N2 - NTags - ver 3.00
+OK - Old key phrase
+OP - Optimize for  CDROM
+PF - Project Flag
+PG - Paragraph Tags
+PJ - Project macro
+PK - Primary Key
+PKI - Primary Key Index
+PM - Popup markers
+P2 - Popup markers - ver 2.00
+P3 - Popup markers - ver 3.00
+PR - Paragraph markers
+PT - Page title
+RC - RTF Compatibility
+SK - Style Hot Keys
+TI - Title
+TLI - Title Index
+TM - Topic macro
+TP - Template
+TX - Help Text
+UB - Use Build Expression
+UI - Unique File ID
+UR - URL Addresses
+WA - Warning
+WD - Window definitions
+WD3 - Window definitions
+WD4 - Window definitions
+WM - Write map file
+WP - Word Processor
+WS - Windows specification source
+VH - Version History
+[END OF DICTIONARY]
+
+[NS]
+-1
+[ENS]
+
+[BT]
+[EBT]
+
+[BE]
+
+
+
+
+
+
+
+
+
+
+[EBE]
+
+[UB]
+False
+[EUB]
+
+[BX]
+ 1
+[EBX]
+
+[HA]
+[EHA]
+
+[HX]
+[EHX]
+
+[AF]
+[EAF]
+
+[AM]
+[EAM]
+
+[BM3]
+0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;
+[EBM3]
+
+[CV]
+4
+[ECV]
+
+[OPT]
+[CH]
+0
+[ECH]
+
+[CP]
+0
+[ECP]
+
+[HV]
+400000
+[EHV]
+
+[IN3]
+0
+[EIN3]
+
+[LN]
+0
+[ELN]
+
+[OK]
+0
+[EOK]
+
+[OP]
+0
+[EOP]
+
+[PJ]
+0
+[EPJ]
+
+[RC]
+2
+[ERC]
+
+[TI]
+path
+[ETI]
+
+[UI]
+02142609
+[EUI]
+
+[HTV]
+0
+[EHTV]
+
+[HTM]
+0
+[EHTM]
+
+[HTP]
+D:\WINDOWS\HMPRO95\HTML
+[EHTP]
+
+[HTI]
+index.htm
+[EHTI]
+
+[HTH]
+0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+[EHTH]
+
+[HTW]
+[EHTW]
+
+[HTO]
+[EHTO]
+
+[HTF]
+0;8;10;12;14;20;26;36;
+[EHTF]
+
+[HTS]
+[EHTS]
+
+[HTA]
+[EHTA]
+
+[HTD]
+[EHTD]
+
+[HTN]
+0
+[EHTN]
+
+[HTG]
+[EHTG]
+
+[WA]
+3
+[EWA]
+
+[WM]
+1
+[EWM]
+
+[WS]
+-1
+[EWS]
+
+[BR]
+[EBR]
+
+[AV]
+0 0 0 0
+[EAV]
+
+[HF]
+[EHF]
+
+[EOPT]
+
+[VH]
+4.00.000-F007;
+[EVH]
+
+[D3]
+0;0;Normal;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+1;0;Emphasized;0;-1;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+2;0;Topic Heading;0;0;0;0;0;MS Sans Serif;14;80;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+3;0;Paragraph Title;0;-1;0;0;0;MS Sans Serif;12;80;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+4;0;Bullet 1;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;19;-19;Symbol;183;0;10;0;50;;
+5;0;Hanging Indent 1;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;38;-38;;0;0;0;0;50;;
+[ED3]
+
+[BN]
+[EBN]
+
+[MD4]
+[EMD]
+
+[MI]
+[EMI]
+
+[WD4]
+main="path"(100,100,823,823),0,(255,255,255),(255,255,255),244,7,0,,1
+HT_Node=""(500,100,200,400),20736,(255,255,128),(0,0,255),243,3,0,,2
+[EWD]
+
+[SK]
+000001002003004005000000000000000000000000000000000000000000
+[ESK]
+
+[HT]
+[PK]
+021426090001
+[EPK]
+[PT]
+T_021426090001
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+CS_021426090001
+[ECS]
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw8175 \margr0\margl0 \plain \fs20 \ATXts720\sl240 \f1 node\par
+
+[ETX]
+[EHT]
+
+[FT]
+MS SANS SERIF,fswiss,0
+SYSTEM,fswiss,0
+[EFT]
+
+[EOF]
+4385,
+4358,
+4477,
+0,
+4501,
+4776
+4426,
+4462,
+[NDX]
+[TLI]00004744
+[PKI]00004751
+[CSI]00004758
+[CNI]00004765
+[TXI]00004769
+[BTI]00004776
+[MTI]00004782
+[BEI]00002591
+[WDI]00004106
+[PSI]00003501
+[OPT]00002834
+[MAC]00004075
+[BII]00004789
+[BNI]00004066
+[ENDX]
+00004796
+

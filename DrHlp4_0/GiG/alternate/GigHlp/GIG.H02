@@ -1,0 +1,474 @@
+üVQHLPEDFILE_4.00.000_007ü
+
+[PF]
+-1
+[EPF]
+[DICTIONARY]
+AF - Append Project FILES Section
+AL - Project ALIAS Section
+AM - Append Project MAP Section
+AN - Annotations
+BI - Browse info
+AV - Audio/Video Project Options
+BX - Build Expression Index
+BM - Bookmarks
+BM3 - New Bookmarks
+BN - Browse group names
+BR - Bitmap root
+BE - Build Expression
+BP - Build Tag Pointer Strings
+BT - Build Tags
+CH - Character set
+CI - Citation
+CM - Context map
+CN - Context number
+CNI - Context Number Index
+CP - Compress
+CR - Copyright
+CS - Context string
+CSI - Context String Index
+CV - Compiler version
+CW - Compiler Switch(s)
+DH - Defined help styles
+D2 - Defined help styles - ver 2.00
+D3 - Defined help styles - Ver 3.00
+FM - Font markers
+FT - Font table
+F2 - Font markers - ver 2.00
+HA - Help author
+HC - Help compiler dir
+HF - Help files
+HX - Help comments
+HT - Help topic section
+HTV - HTML options - HTML version
+HTM - HTML options - server version
+HTP - HTML options - export path
+HTI - HTML options - index filename
+HTH - HTML options - headers
+HTW - HTML options - web browser
+HTO - HTML options - web browser options
+HTF - HTML options - font translations
+HTS - HTML options - default URL
+HTA - HTML options - alternate HTML
+HTD - HTML options - default HTML
+HTN - HTML options - nonscrolling region
+HTG - HTML options - image path on server
+HV - Help Magician Version
+IC - Icon FileName
+IN - Index
+JM - Jump markers
+J2 - Jump markers - ver 2.00
+J3 - Jump markers - ver 3.00
+KW - Keywords
+KW3 - Keywords
+KW4 - Keywords
+KWA - A Keywords
+LN - Language
+LT - Links Tags
+MD - Macro definitions
+MD4 - Macro definitions - ver 4.00
+MM - Multimedia markers
+MK - Multiple keywords
+MK4 - Multiple keywords
+MI - Macro info
+MT - Mid Topic Context Strings
+NS - WYSIWYG Nonscrolling Regions
+NT - NTags
+N2 - NTags - ver 3.00
+OK - Old key phrase
+OP - Optimize for  CDROM
+PF - Project Flag
+PG - Paragraph Tags
+PJ - Project macro
+PK - Primary Key
+PKI - Primary Key Index
+PM - Popup markers
+P2 - Popup markers - ver 2.00
+P3 - Popup markers - ver 3.00
+PR - Paragraph markers
+PT - Page title
+RC - RTF Compatibility
+SK - Style Hot Keys
+TI - Title
+TLI - Title Index
+TM - Topic macro
+TP - Template
+TX - Help Text
+UB - Use Build Expression
+UI - Unique File ID
+UR - URL Addresses
+WA - Warning
+WD - Window definitions
+WD3 - Window definitions
+WD4 - Window definitions
+WM - Write map file
+WP - Word Processor
+WS - Windows specification source
+VH - Version History
+[END OF DICTIONARY]
+
+[NS]
+-1
+[ENS]
+
+[BT]
+[EBT]
+
+[BE]
+
+
+
+
+
+
+
+
+
+
+[EBE]
+
+[UB]
+False
+[EUB]
+
+[BX]
+ 1
+[EBX]
+
+[HA]
+[EHA]
+
+[HX]
+[EHX]
+
+[AF]
+[EAF]
+
+[AM]
+[EAM]
+
+[BM3]
+0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;0;0;0;;
+[EBM3]
+
+[CV]
+4
+[ECV]
+
+[OPT]
+[CH]
+0
+[ECH]
+
+[CM]
+GIG.H
+[ECM]
+
+[CP]
+0
+[ECP]
+
+[HV]
+400000
+[EHV]
+
+[IN3]
+0
+[EIN3]
+
+[LN]
+0
+[ELN]
+
+[OK]
+0
+[EOK]
+
+[OP]
+0
+[EOP]
+
+[PJ]
+0
+[EPJ]
+
+[RC]
+2
+[ERC]
+
+[TI]
+gig.hlx
+[ETI]
+
+[UI]
+02132626
+[EUI]
+
+[HTV]
+0
+[EHTV]
+
+[HTM]
+0
+[EHTM]
+
+[HTP]
+D:\WINDOWS\HMPRO95\HTML
+[EHTP]
+
+[HTI]
+index.htm
+[EHTI]
+
+[HTH]
+0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;
+[EHTH]
+
+[HTW]
+[EHTW]
+
+[HTO]
+[EHTO]
+
+[HTF]
+0;8;10;12;14;20;26;36;
+[EHTF]
+
+[HTS]
+[EHTS]
+
+[HTA]
+[EHTA]
+
+[HTD]
+[EHTD]
+
+[HTN]
+0
+[EHTN]
+
+[HTG]
+[EHTG]
+
+[WA]
+3
+[EWA]
+
+[WM]
+1
+[EWM]
+
+[WS]
+-1
+[EWS]
+
+[BR]
+[EBR]
+
+[AV]
+0 0 0 0
+[EAV]
+
+[HF]
+[EHF]
+
+[EOPT]
+
+[VH]
+4.00.000-F007;
+[EVH]
+
+[D3]
+0;0;Normal;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+1;0;Emphasized;0;-1;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+2;0;Topic Heading;0;0;0;0;0;MS Sans Serif;14;80;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+3;0;Paragraph Title;0;-1;0;0;0;MS Sans Serif;12;80;0;0;0;0;0;0;0;0;0;0;0;;0;0;0;8;50;;
+4;0;Bullet 1;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;19;-19;Symbol;183;0;10;0;50;;
+5;0;Hanging Indent 1;0;0;0;0;0;MS Sans Serif;10;0;0;0;0;0;0;0;0;0;0;38;-38;;0;0;0;0;50;;
+[ED3]
+
+[BN]
+[EBN]
+
+[MD4]
+[EMD]
+
+[MI]
+[EMI]
+
+[WD4]
+main="gig.hlx"(100,100,823,823),0,(255,255,255),(255,255,255),244,7,0,,1
+HT_Node=""(500,100,200,400),20736,(255,255,128),(0,0,255),243,3,0,,2
+[EWD]
+
+[SK]
+000001002003004005000000000000000000000000000000000000000000
+[ESK]
+
+[HT]
+[PK]
+021326260001
+[EPK]
+[PT]
+How To Create ...
+[EPT]
+[MC]
+M
+[EMC]
+
+[J3]
+0141000200020000101410002000200002
+[EJ3]
+
+[P3]
+01410003000010001
+[EP3]
+
+[MT]
+[EMT]
+
+[N2]
+021709000001SHORTCUT.BMP
+[EN2]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+How_To_Create
+[ECS]
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 How to create ...\par
+\ATXpt0 \fs20 \ATXul1026 \cf2 \ATXht1 Node\par
+\ATXul0 \cf0 \ATXht0 Curve\par
+Patch\par
+Solid\par
+\par
+Click here \ATXht2 \ATXnt1 {\object\objemb{\*\objdata 
+0105000002000000070000004d53447261770000000000000000000002000004000e000e00010009000003f500000001007a00000000001800000026060f002700484d416c69676e3a4320436f6c6f72
+733a342046696c653a53484f52544355542e424d502000050000000b0200000000050000000c020e000e00030000001e000400000003010800050000000102ffffff000500000009020000000004000000070103000400000004010d00040000000201020025000000f7000003100000000000800000000080000080800000
+00008000800080000080800080808000c0c0c000ff00000000ff0000ffff00000000ff00ff00ff0000ffff00ffffff0004000000340200000300000035007a000000430f2000cc0000000e000e00000000000e000e0000000000280000000e0000000e00000001000400000000000000000000000000000000001000000010
+0000000000000000008000008000000080800080000000800080008080000080808000c0c0c0000000ff0000ff000000ffff00ff000000ff00ff00ffff0000ffffff00000000000000000087777777777770008f888888888870008f888888558870008f888888558870008f888888558870008f885885558870008f885555
+588870008f885555888870008f885555588870008f888888888870008f888888888870008fffffffffff70008888888888888000040000002701ffff0300000000000080008000800080008000800080008001050000050000000d0000004d45544146494c455049435400730100008dfefffff2010000040073017301a60f
+010009000003f500000001007a00000000001800000026060f002700484d416c69676e3a4320436f6c6f72733a342046696c653a53484f52544355542e424d502000050000000b0200000000050000000c020e000e00030000001e000400000003010800050000000102ffffff000500000009020000000004000000070103
+000400000004010d00040000000201020025000000f700000310000000000080000000008000008080000000008000800080000080800080808000c0c0c000ff00000000ff0000ffff00000000ff00ff00ff0000ffff00ffffff0004000000340200000300000035007a000000430f2000cc0000000e000e00000000000e00
+0e0000000000280000000e0000000e000000010004000000000000000000000000000000000010000000100000000000000000008000008000000080800080000000800080008080000080808000c0c0c0000000ff0000ff000000ffff00ff000000ff00ff00ffff0000ffffff00000000000000000087777777777770008f
+888888888870008f888888558870008f888888558870008f888888558870008f885885558870008f885555588870008f885555888870008f885555588870008f888888888870008f888888888870008fffffffffff70008888888888888000040000002701ffff030000000000
+}{\result }}\ATXht0 \ATXnt0  for \ATXul3074 \cf2 \ATXht10001 Node\ATXul0 \cf0 \ATXht0  Creation Procedure
+
+[ETX]
+[EHT]
+
+[PK]
+021326260003
+[EPK]
+[PT]
+How To Create a Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+001002
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+How_To_Create_a_Node
+[ECS]
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\ATXpt2\sl240 \f1 \fs28 \cf4 How To Create a Node\par
+\ATXpt0 \fs20 \cf0 \par
+step 0:	 WARNINGS!!!\par
+Step1:	Click o
+n the item NODE on the Generator Box as show in the picture below:\par
+\par
+\par
+
+[ETX]
+[EHT]
+
+[PK]
+021326260002
+[EPK]
+[PT]
+Node
+[EPT]
+[MC]
+M
+[EMC]
+
+[MT]
+[EMT]
+
+[PG]
+[EPG]
+
+[BI]
+
+[EBI]
+[CS]
+Node
+[ECS]
+[TX]
+{\fonttbl
+{\f0\fswiss\fcharset0 SYSTEM;}
+{\f1\fswiss\fcharset0 MS SANS SERIF;}
+}
+\paperw14715 \margr0\margl0 \plain \fs20 \ATXts720\sl240 \f1  Node\par
+\par
+the most fundamental and primitive element of Mesh Generation\par
+
+[ETX]
+[EHT]
+
+[FT]
+MS SANS SERIF,fswiss,0
+SYSTEM,fswiss,0
+[EFT]
+
+[EOF]
+4413,7354,7888,
+4386,7327,7861,
+4642,7460,7970,
+0,0,0,
+4664,7489,7983,
+8377
+4542,7401,7919,
+4627,7445,7955,
+[NDX]
+[TLI]00008301
+[PKI]00008318
+[CSI]00008335
+[CNI]00008352
+[TXI]00008360
+[BTI]00008377
+[MTI]00008383
+[BEI]00002591
+[WDI]00004131
+[PSI]00003526
+[OPT]00002834
+[MAC]00004100
+[BII]00008400
+[BNI]00004091
+[ENDX]
+00008417
+

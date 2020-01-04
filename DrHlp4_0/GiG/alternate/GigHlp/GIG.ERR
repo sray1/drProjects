@@ -1,0 +1,20 @@
+Microsoft (R) Help Compiler
+HCRTF 4.03.0002
+Copyright (c) Microsoft Corp 1990 - 1995. All rights reserved.
+gig.hpj
+    HC3021: Warning: topic #8 of C:\DrHlp4_0\GiG\alternate\GigHlp\node.Rtf : 
+	Cannot find the bitmap "GENERA~1.BMP."
+    HC3021: Warning: topic #8 of C:\DrHlp4_0\GiG\alternate\GigHlp\node.Rtf : 
+	Cannot find the bitmap "OPT_NODE.BMP."
+    HC3021: Warning: topic #8 of C:\DrHlp4_0\GiG\alternate\GigHlp\node.Rtf : 
+	Cannot find the bitmap "MLDLG_~1.BMP."
+24	Topics
+3	Jumps
+0	Keywords
+4	Bitmaps
+
+
+Created c:\drhlp4_0\gig\alternate\gighlp\gig.hlp, 24,638 bytes
+Bitmaps: 10,151 bytes
+Compile time: 0 minutes, 0 seconds
+0 notes, 3 warnings
