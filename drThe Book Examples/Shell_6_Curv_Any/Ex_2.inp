@@ -1,0 +1,108 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ Run date and time is Mon Jul 14 11:38:23 2003
+ =========================================
+    S H E L L   T O T A L   G E N 3 D 
+ =========================================
+ Example Problem is Deep Arch PALAZ.:c0=.01:  Ex_2
+
+     Geometry and DOFs Controls
+  Total Elemental Angle       =   53.13000 degree
+  Total Elemental Angle       =    0.92729 radian
+  Radius                      =       100.00
+  Length                      =        92.73
+  Depth                       =    1.00000
+  Width                       =    1.00000
+  Element Geometry Order      =          4 nQc1
+  Element Geometry Order      =          2 nQc2
+  Displacement Order          =          6 nQd1
+  Displacement Order          =          2 nQd2
+  No. of Supported DOFs       =         44
+  No. of Loaded DOFs          =          2
+
+
+     Real Controls
+  Elasticity Modulus          =   50.000    
+  Shear Modulus               =   25.000    
+  Poisson's Ratio             =    0.00000
+
+ A(nSx):Supported DOFs.......( 44) Array
+
+         1          2         11         12         13         14
+        15         16         17         18         19         20
+        21         22         23         24         25         26
+        37         38         39         40         41         42
+        43         44         45         46         47         48
+        59         60         61         62         63         64
+        65         66         67         68         69         70
+        71         72
+ A(n5):Load DOFs.A(nSx):Support(  2) Array
+
+        35         36
+ A(n5V):Load Values..A(n5):Load(  2) Array
+
+       -0.5000000000        -0.5000000000
+
+     Solution Controls
+  Convergence Tolerance				=  0.10000E-07
+  Arc Length							=    1.00000
+  Max. Number of Load Steps			=         35
+  Max. Number of Iterations			=         20
+  Max. Subdivision of Iterations    =          0
+  No. of Gauss-Legendre Pts.(dir1)	=          5
+  No. of Gauss-Legendre Pts.(dir2)	=          1
+  No. of Gauss-Legendre Pts.(Total)	=          5
+
+
+  Element Geometry Degree in dir.1     = CUBIC     
+  Element Geometry Degree in dir.2     = LINEAR    
+  Element displacement Degree in dir.1 = QUINTIC   
+  Element displacement Degree in dir.2 = LINEAR    
+  Nodal DOFs                           =     6
+  Nodal Extended DOFs                  =    18
+  No. of Elements                      =     1
+  Element DOFs                         =    72
+
+
+     Integer Controls
+  Size of ConstitutiveMatrix           =         12 nCMat
+  No. of Nodal DOFs                    =          6 nDOF
+  No. of Analysis Nodal DOFs           =         18 nDOF2
+  Element Stiffness Size               =         72 nStifEL
+  Singular Assembly Stiffness Size     =         72 nStifS
+  Inter-ElementControl Cn, n			 =     0  Geometry
+  Inter-ElementControl Cn, n			 =     0  Displac.
+  Inter-ElementControl Dofs			 =     0
+  Constrained Stiffness Size			 =    72
+  No. of Supported Dofs				 =    44
+  NonSingular Assembly Stiffness Size	 =         28 nStifN
+  Element Type:						 = NonLinear Shell     
+
+
+     Constitutive Matrix 
+   1        50.         0.         0.         0.         0.         0.         0.         0.         0.         0.         0.         0.
+   2         0.        12.         0.         0.         0.         0.        12.         0.         0.         0.         0.         0.
+   3         0.         0.        25.         0.         0.         0.         0.         0.         0.         0.         0.         0.
+   4         0.         0.         0.      3200.         0.         0.         0.         0.         0.         0.     -3200.         0.
+   5         0.         0.         0.         0.     12800.         0.         0.         0.         0.         0.         0.         0.
+   6         0.         0.         0.         0.         0.         0.         0.         0.         0.         0.         0.         0.
+   7         0.        12.         0.         0.         0.         0.        12.         0.         0.         0.         0.         0.
+   8         0.         0.         0.         0.         0.         0.         0.        50.         0.         0.         0.         0.
+   9         0.         0.         0.         0.         0.         0.         0.         0.        25.         0.         0.         0.
+  10         0.         0.         0.         0.         0.         0.         0.         0.         0.     12800.         0.         0.
+  11         0.         0.         0.     -3200.         0.         0.         0.         0.         0.         0.      3200.         0.
+  12         0.         0.         0.         0.         0.         0.         0.         0.         0.         0.         0.         0.
+  0     0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00    0  0.0000E+00  +

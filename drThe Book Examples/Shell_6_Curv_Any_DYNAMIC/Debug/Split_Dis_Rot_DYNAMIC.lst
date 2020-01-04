@@ -1,0 +1,234 @@
+SPLIT_DIS_ROT_DYNAMIC           Source Listing                  16-Aug-2008 13:52:14  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                16-Aug-2008 13:51:05  Split_Dis_Rot_DYNAMIC.f
+
+	      1 	Subroutine Split_Dis_Rot_DYNAMIC(Qd,nStif,T,nDof,Iout)
+	      2 !
+	      3 !	Coerced Isoparametric Quadrilateral_Cubic_Cubic Element
+	      4 !
+	      5 !	Notes:	Nint should be atleast 2
+	      6 !
+	      7 !	Inputs
+	      8 !		Qd(nStif)	= Latest displacement controls: state vector
+	      9 !		Iout		= Error Output file#
+	     10 !		 	
+	     11 !	Outputs 
+	     12 !		Trace		= trace of the matrix
+	     13 !
+	     14 	Implicit Real(kind=8) (a-h,o-z)
+	     15 !	===========================
+	     16 	include 'CurParams.h'
+	     17 !	include 'SizeVar.h'
+	     30 	include 'LoadStepIter.h'
+	     32 	include 'ShellParams.h'
+	     33 !============================================
+	     34 !
+	     35 !	Input Variables & Arrays
+	     36 !
+	     50 	Real(kind=8)	Qd                   
+	     51 	Dimension		Qd(nStif)
+	     52 !	
+	     53 !	Working Variables & Arrays	
+	     54 !
+	     55 	Real(kind=8)	HD          
+	     56 	Dimension		HD(nDof)
+	     57 !	
+	     58 !	Output Variables & Arrays	
+	     59 !
+	     60 	Real(kind=8)	T                  
+	     61 	Dimension		T(nDof,nStif)
+	     62 !	=============================== 
+	     63 	DATA zero/0.D0/,one/1.0D0/,onm/-1.0D0/ 
+	     64 	DATA NC/3/
+	     65 !	//////////////////////
+	     66 !--------------------------------------------------------------------- DisRots & Derivatives
+	     67 	HD		= MATMUL(T,Qd)
+	     68 !============================================================== 
+	     69 	iPrt = 0
+	     70 		if((iStep == 1).AND.(iNut == 2)) Then
+	     71 			iPrt = 0
+	     72 		endif
+	     73 	if(iPrt == 1) then
+	     74 		call DumpIntegerVar(iStep,"iStep",iPrt,iOut)
+	     75 		call DumpIntegerVar(iNut,"iNut",iPrt,iOut)
+	     76 		call DumpStringVar("Beg:Split_Dis_Rot_Deriv",iPrt,iOut)
+	     77 		call DumpRealArray(Hd,nDof2,"HD array",1,iOut)
+	     78 		call DumpStringVar("End:Split_Dis_Rot_Deriv",iPrt,iOut)
+	     79 	iPrt = 0
+	     80 	endif
+	     81 !============================================================== 
+	     82 	nG =nDof2
+	     83 !	------------------------------------------------------------------- H(dHat):Incremental
+
+SPLIT_DIS_ROT_DYNAMIC           Source Listing                  16-Aug-2008 13:52:14  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                16-Aug-2008 13:51:05  Split_Dis_Rot_DYNAMIC.f
+
+	     84 	call VectorExtract_Vector(HD,nG,DD,nC,1,Iout)		!displacement
+	     85 	call VectorExtract_Vector(HD,nG,RR,nC,4,Iout)		!rotation
+	     86 !	=============================================== Modify to use beam formulas .
+	     87 	return
+	     88 !
+	     89  1010 format("Full Stiffness Matrix:Stif(",I2,",",I2,")"/)
+	     90  1020 format(I5/(6(12(f8.1,1X)/)/))
+	     91  1030 format("DMat(12,12)"/(12(f7.0,1X)))
+	     92  1040 format(2X, "EDG Matrix(18,18)"/(I3,18(f5.0,1X)))
+	     93 	end   		
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    24 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  364 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                                96   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                  925   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 _CURPARAMS                             376 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  6 _LOADSTEPITER                           16 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  7 _SHELLPARAMS                           768 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  8 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  9 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 2873
+
+
+ENTRY POINTS
+
+ Address      Name                 
+                                   
+  4-00000000  SPLIT_DIS_ROT_DYNAMIC
+
+
+VARIABLES
+
+ Address      Type  Name     Address      Type  Name     Address      Type  Name     Address      Type  Name   
+                                                                                                               
+  6-00000008  R*8   BRESET    6-00000000  I*4   ISTEP         **      I*4   NSTIF     5-00000160  R*8   XLAM1  
+  5-00000158  R*8   CT        2-00000168  I*4   NC        2-00000158  R*8   ONE       5-00000168  R*8   XLAM2  
+  6-00000004  I*4   INUT          **      I*4   NDOF      2-00000150  R*8   ONM       2-00000160  R*8   ZERO   
+      **      I*4   IOUT      1-00000010  I*4   NDOF2     5-00000170  R*8   RUTAHAT                            
+  1-00000014  I*4   IPRT      1-0000000C  I*4   NG        5-00000150  R*8   ST                                 
+
+
+ARRAYS
+
+ Address      Type  Name         Bytes  Dimensions
+
+  5-000000D8  R*8   A1HAT           24  (3)
+  5-000000F0  R*8   A2HAT           24  (3)
+  5-00000060  R*8   AA1             24  (3)
+  5-00000078  R*8   AA2             24  (3)
+  7-00000090  R*8   AMAT1           72  (3, 3)
+  7-000000D8  R*8   AMAT2           72  (3, 3)
+
+SPLIT_DIS_ROT_DYNAMIC           Source Listing                  16-Aug-2008 13:52:14  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                16-Aug-2008 13:51:05  Split_Dis_Rot_DYNAMIC.f
+
+  5-00000090  R*8   AO1             24  (3)
+  5-00000108  R*8   AO12N           72  (3, 3)
+  5-000000A8  R*8   AO2             24  (3)
+  5-00000000  R*8   C01             24  (3)
+  5-00000018  R*8   C02             24  (3)
+  5-00000030  R*8   CK1             24  (3)
+  5-00000048  R*8   CK2             24  (3)
+  7-00000000  R*8   DD              24  (3)
+  7-00000030  R*8   DP1             24  (3)
+  7-00000060  R*8   DP2             24  (3)
+  7-000002A0  R*8   FMT1            48  (6)
+  7-000002D0  R*8   FMT2            48  (6)
+      **      R*8   HD              **  (*)
+      **      R*8   QD              **  (*)
+  7-00000240  R*8   RE1             48  (6)
+  7-00000270  R*8   RE2             48  (6)
+  7-000001B0  R*8   RMAT1           72  (3, 3)
+  7-000001F8  R*8   RMAT2           72  (3, 3)
+  7-00000048  R*8   RP1             24  (3)
+  7-00000078  R*8   RP2             24  (3)
+  7-00000018  R*8   RR              24  (3)
+      **      R*8   T               **  (*, *)
+  7-00000120  R*8   WMAT1           72  (3, 3)
+  7-00000168  R*8   WMAT2           72  (3, 3)
+  5-000000C0  R*8   XNOR            24  (3)
+
+SPLIT_DIS_ROT_DYNAMIC           Source Listing                  16-Aug-2008 13:52:14  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                16-Aug-2008 13:51:05  Split_Dis_Rot_DYNAMIC.f
+
+	     94 	   		
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+
+SPLIT_DIS_ROT_DYNAMIC           Source Listing                  16-Aug-2008 13:52:14  Compaq Visual Fortran 6.6-1684    Page 5
+                                                                16-Aug-2008 13:51:05  Split_Dis_Rot_DYNAMIC.f
+
+  /nowarn:unused                        /warn:usage
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Split_Dis_Rot_DYNAMIC.lst
+  /o         filename : Debug/Split_Dis_Rot_DYNAMIC.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.03 seconds
+  Elapsed time:      0.03 seconds
+  Pagefaults:           0
+  I/O Count:            0

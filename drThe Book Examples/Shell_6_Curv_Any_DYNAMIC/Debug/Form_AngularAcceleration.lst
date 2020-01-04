@@ -1,0 +1,169 @@
+FORM_ANGULARACC_VECTOR          Source Listing                   1-Sep-2008 12:17:14  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 1-Sep-2008 12:17:14  Form_AngularAcceleration.f
+
+	      1 	Subroutine Form_AngularACC_Vector(W,Wd,Td,T2,AA,nS,Iout)
+	      2 !	----------------------------------------------------------------------------- S Matrix
+	      3 !
+	      4 !	AV		= Angular Acceleration Vector 
+	      5 !			= WDot*thetadot+W*theta2dot 
+	      6 !	----------------------------------------------------------------------------- 
+	      7 !	Inputs
+	      8 !	W			= Rodrigues transformation matrix depends on current Rotation
+	      9 !	Wd			= rate of Rodrigues transformation matrix depends on current Rotation
+	     10 !	Td			= rate of Current Rotation: Thetadot(3)
+	     11 !	T2			= Second rate of Current Rotation: Theta2dot(3)
+	     12 ! 	
+	     13 !	Outputs 
+	     14 !		RG			= Rot Gyroscopic Matrix: RG(3,3)
+	     15 !	------------------------------------------------------------
+	     16 
+	     17 	Implicit Real(kind=8) (a-h,o-z)
+	     18 !
+	     19 !	include 'mass.h'
+	     20 
+	     21 !
+	     22 	Real(kind=8)	W       ,Wd       ,AA                
+	     23 	Dimension		W(nS,nS),Wd(nS,nS),AA(nS)
+	     24 	Dimension		Td(nS),T2(nS)
+	     25 	Real(kind=8)	Td    ,T2                       
+	     26 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	     27 !---------------------------------------------------------- Gyro
+	     28 	AA = MATMUL(Wd,Td) + MATMUL(W,T2)
+	     29 !---------------------------------------------------------- Write:
+	     30 	iPrt = 0
+	     31 	if (iPrt == 1) Then
+	     32 		call DumpRealArray(AA,3,"Angular Acceleration",iPrt,iOut)
+	     33 	endif
+	     34 !----------------------------------------------------------
+	     35 	return
+	     36 !
+	     37  1000	format(A,I5,A)
+	     38  1010 format("Rotational Gyroscopic Matrix RG(3,3)"/
+	     39      &        (I5,3(3(f10.7,1X)/)))
+	     40 	end
+
+FORM_ANGULARACC_VECTOR          Source Listing                   1-Sep-2008 12:17:14  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 1-Sep-2008 12:17:14  Form_AngularAcceleration.f
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    12 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  184 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                                40   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 1047   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 1587
+
+
+ENTRY POINTS
+
+ Address      Name                  
+                                    
+  4-00000000  FORM_ANGULARACC_VECTOR
+
+
+VARIABLES
+
+ Address      Type  Name   Address      Type  Name   Address      Type  Name   Address      Type  Name 
+                                                                                                       
+      **      I*4   IOUT        **      I*4   NS      2-00000098  R*8   THREE   2-000000B0  R*8   ZERO 
+  1-00000008  I*4   IPRT    2-000000A8  R*8   ONE     2-000000A0  R*8   TWO                            
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+      **      R*8   AA             **  (*)
+      **      R*8   T2             **  (*)
+      **      R*8   TD             **  (*)
+      **      R*8   W              **  (*, *)
+      **      R*8   WD             **  (*, *)
+
+FORM_ANGULARACC_VECTOR          Source Listing                   1-Sep-2008 12:17:14  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 1-Sep-2008 12:17:14  Form_AngularAcceleration.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+FORM_ANGULARACC_VECTOR          Source Listing                   1-Sep-2008 12:17:14  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 1-Sep-2008 12:17:14  Form_AngularAcceleration.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Form_AngularAcceleration.lst
+  /o         filename : Debug/Form_AngularAcceleration.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.01 seconds
+  Elapsed time:      0.01 seconds
+  Pagefaults:           0
+  I/O Count:            0

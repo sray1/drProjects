@@ -1,0 +1,107 @@
+ =====================================================
+         I N C R E M E N T A L   G E N 3 D 
+ =====================================================
+ Run date and time is Tue Apr  9 11:11:28 2002
+ Example Problem is 3D Curved CantilevLINMOD: Ex_4
+
+     Integer Controls
+  Singular Stiffness Size    =    66
+  Inter-ElementControl Cn, n =     0  Geometry
+  Inter-ElementControl Cn, n =     0  Displacement
+  Inter-ElementControl Dofs  =     0
+  Constrained Stiffness Size =    66
+  No. of Supported Dofs      =     6
+  NonSingular Stiffness Size =    60
+  No. of Gauss-Legendre Pts. =     5
+  Element Type:              = 3D NonLinear Beam   
+
+
+  Element Degree             = QUINTIC   
+  Nodal DOFs                 =     6
+  No. of Elements            =     2
+  Element DOFs               =    36
+
+
+     Geometry Controls
+  Total Elemental Angle       =   45.00000 degree
+  Total Elemental Angle       =    0.78540 radian
+  Radius                      =        10.00
+  Length                      =         0.00
+  Depth                       =    1.00000
+  Width                       =    1.00000
+
+
+     Real Controls
+  Elasticity Modulus          =  0.10500E+08
+  Shear Modulus               =  0.40000E+07
+  Poisson's Ratio             =    0.31250
+
+
+     Constitutive Matrix 
+  GA		=  0.10500E+08
+  EAM		=  0.33333E+07
+  EAB		=  0.33333E+07
+  GJ		=  0.66667E+06
+  EIM		=  0.87500E+06
+  EIB		=  0.87500E+06
+
+
+     Solution Controls
+  Convergence Tolerance            =  0.10000E-03
+  Arc Length                       =  500.00000
+  Max. Number of Load Steps        =         10
+  Max. Number of Iterations        =         50
+  Max. Subdivision of Iterations   =          0
+
+ Supported DOF(  6) Array
+
+         1          7         13         19         25         31
+ Element Numbe =                1
+      Geometry Coords(  3,  6) Matrix
+
+    1        0.000000000000000    0.000000000000000    0.750000000000000    2.000000000000000
+   3.500000000000000    5.000000000000000
+    2        0.000000000000000    0.000000000000000    0.000000000000000    0.125000000000000
+   0.500000000000000    1.250000000000000
+    3        0.000000000000000    3.000000000000000    5.250000000000000    6.875000000000000
+   8.000000000000000    8.750000000000000
+
+  Just before Leaving: FormIndexEL_2
+
+
+  Indices for Element#2 for Global Assembly: 1x 36
+        6       37       38       39       40
+       41       12       42       43       44
+       45       46       18       47       48
+
+       49       50       51       24       52
+       53       54       55       56       30
+       57       58       59       60       61
+
+       36       62       63       64       65
+       66
+QC(3,6) for Element# =   1
+    1       0.000000   0.000000   0.750000   2.000000   3.500000   5.000000
+    2       0.000000   0.000000   0.000000   0.125000   0.500000   1.250000
+    3       0.000000   3.000000   5.250000   6.875000   8.000000   8.750000
+
+QC(3,6) for Element# =   2
+    1       5.000000   6.500000   8.000000   9.250000  10.000000  10.000000
+    2       1.250000   2.000000   3.125000   4.750000   7.000000  10.000000
+    3       8.750000   9.500000   9.875000  10.000000  10.000000  10.000000
+
+  0     0.00000E+00    0.50000E+01    0.12500E+01    0.87500E+01    0  0.0000E+00  +
+        0.00000E+00    0.10000E+02    0.10000E+02    0.10000E+02    0  0.0000E+00  +
+        Enter:LoadStep_1_iter_1
+  
+
+
+   w = -0.25921
+   v =  0.058639
+   u =  0.06399
+
+I do not have any shear deformation.  I also get rotations as follows:
+   theta_x = -0.019446
+   theta_y =  0.011664
+   theta_z = -0.001188
+

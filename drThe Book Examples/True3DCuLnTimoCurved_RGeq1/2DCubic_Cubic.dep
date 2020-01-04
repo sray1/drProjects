@@ -1,0 +1,5 @@
+# Microsoft Developer Studio Generated Dependency File, included by 2DCubic_Cubic.mak
+
+.\Solve_AxEqB.f : \
+	{$(INCLUDE)}"NUMERICAL_LIBRARIES.mod"\
+	

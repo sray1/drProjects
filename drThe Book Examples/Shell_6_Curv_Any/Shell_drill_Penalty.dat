@@ -1,0 +1,364 @@
+ Run date and time is Fri Nov  7 07:43:46 2003
+ =========================================================
+    S H E L L   T O T A L   G E N 3 D  w i t h  D R I L L 
+ =========================================================
+ Example Problem is Deep Arch PALAZ.:c0=.01:  Ex_2
+
+     Geometry and DOFs Controls
+  Total Elemental Angle       =   53.13000 degree
+  Total Elemental Angle       =    0.92729 radian
+  Radius                      =       100.00
+  Length                      =        92.73
+  Depth                       =    1.00000
+  Width                       =    1.00000
+  Element Geometry Order      =          4 nQc1
+  Element Geometry Order      =          2 nQc2
+  Displacement Order          =          6 nQd1
+  Displacement Order          =          4 nQd2
+  No. of Supported DOFs       =         32
+  No. of Loaded DOFs          =          4
+
+
+     Real Controls
+  Elasticity Modulus          =   100.00    
+  Shear Modulus               =   50.000    
+  Poisson's Ratio             =    0.00000
+
+ A(nSx):Supported DOFs.......( 32) Array
+
+         1          2          3          4         21         22
+        23         24         25         26         27         28
+        45         46         47         48         49         50
+        51         52         93         94         95         96
+       117        118        119        120        141        142
+       143        144
+ A(n5):Load DOFs.A(nSx):Support(  4) Array
+
+        69         70         71         72
+ A(n5V):Load Values..A(n5):Load(  4) Array
+
+       -0.2500000000        -0.2500000000        -0.2500000000        -0.2500000000
+
+     Solution Controls
+  Convergence Tolerance				=  0.10000E-06
+  Arc Length							=    2.00000
+  Max. Number of Load Steps			=         10
+  Max. Number of Iterations			=         20
+  Max. Subdivision of Iterations    =          0
+  No. of Gauss-Legendre Pts.(dir1)	=          5
+  No. of Gauss-Legendre Pts.(dir2)	=          3
+  No. of Gauss-Legendre Pts.(Total)	=         15
+
+
+  Element Geometry Degree in dir.1     = CUBIC     
+  Element Geometry Degree in dir.2     = LINEAR    
+  Element displacement Degree in dir.1 = QUINTIC   
+  Element displacement Degree in dir.2 = CUBIC     
+  Nodal DOFs                           =     6
+  Nodal Extended DOFs                  =    18
+  No. of Elements                      =     1
+  Element DOFs                         =   144
+
+
+     Integer Controls
+  Size of ConstitutiveMatrix           =         12 nCMat
+  No. of Nodal DOFs                    =          6 nDOF
+  No. of Analysis Nodal DOFs           =         18 nDOF2
+  Element Stiffness Size               =        144 nStifEL
+  Singular Assembly Stiffness Size     =        144 nStifS
+  Inter-ElementControl Cn, n			 =     0  Geometry
+  Inter-ElementControl Cn, n			 =     0  Displac.
+  Inter-ElementControl Dofs			 =     0
+  Constrained Stiffness Size			 =   144
+  No. of Supported Dofs				 =    32
+  No. of UnSupported NonDrilling Dofs	 =    92
+  No. of UnSupported Drilling Dofs	 =    20
+  NonSingular Assembly Stiffness Size	 =        112 nStifN
+  Element Type:						 = NonLinear Shell     
+
+  Put_Reference_AllGauss: Opt1 = FALSE
+
+
+     Condensed Constitutive Matrix 
+   1       100.         0.         0.         0.         0.         0.         0.         0.
+   2         0.       100.         0.         0.         0.         0.         0.         0.
+   3         0.         0.       100.         0.         0.         0.         0.         0.
+   4         0.         0.         0.        50.         0.         0.         0.         0.
+   5         0.         0.         0.         0.        50.         0.         0.         0.
+   6         0.         0.         0.         0.         0.     25600.         0.         0.
+   7         0.         0.         0.         0.         0.         0.     25600.         0.
+   8         0.         0.         0.         0.         0.         0.         0.     25600.
+  0     0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00    0  0.0000E+00  +
+        Enter:LoadStep_1_iter_1
+
+     Expansion Matrix		= VIRTUAL 
+   1   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+   2   0.00   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00
+   3   0.00   0.50   0.00   0.00   0.00   0.00   0.50   0.00   0.00   0.00   0.00   0.00
+   4   0.00   0.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+   5   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00
+   6   0.00   0.00   0.00   0.00   1.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00
+   7   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   0.00   1.00   0.00   0.00
+   8   0.00   0.00   0.00   0.50   0.00   0.00   0.00   0.00   0.00   0.00   0.50   0.00
+
+     Expanded Constitutive Matrix 
+   1     100.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00
+   2       0.00      25.00       0.00       0.00       0.00       0.00      25.00       0.00       0.00       0.00       0.00       0.00
+   3       0.00       0.00      50.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00
+   4       0.00       0.00       0.00    6400.00       0.00       0.00       0.00       0.00       0.00       0.00    6400.00       0.00
+   5       0.00       0.00       0.00       0.00   25600.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00
+   6       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00
+   7       0.00      25.00       0.00       0.00       0.00       0.00      25.00       0.00       0.00       0.00       0.00       0.00
+   8       0.00       0.00       0.00       0.00       0.00       0.00       0.00     100.00       0.00       0.00       0.00       0.00
+   9       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00      50.00       0.00       0.00       0.00
+  10       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00   25600.00       0.00       0.00
+  11       0.00       0.00       0.00    6400.00       0.00       0.00       0.00       0.00       0.00       0.00    6400.00       0.00
+  12       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00       0.00
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                1
+ jGau....iGau. =                1
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                1
+ jGau....iGau. =                2
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                1
+ jGau....iGau. =                3
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                2
+ jGau....iGau. =                1
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                2
+ jGau....iGau. =                2
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                2
+ jGau....iGau. =                3
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                3
+ jGau....iGau. =                1
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                3
+ jGau....iGau. =                2
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                3
+ jGau....iGau. =                3
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                4
+ jGau....iGau. =                1
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                4
+ jGau....iGau. =                2
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                4
+ jGau....iGau. =                3
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                5
+ jGau....iGau. =                1
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                5
+ jGau....iGau. =                2
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+        Beg:Quad_QQ_STIF_aftEDG
+ iStep........ =                0
+ iNut....iStep =                0
+ iGau....Beg:Q =                5
+ jGau....iGau. =                3
+        End:Quad_QQ_STIF_aftEDG
+    Beg:Form_EtranDEplusGMatrix
+                         Beta12 =    0.000000000000000
+                         Beta21 =    0.000000000000000
+                      Beta12-21 =    0.000000000000000
+    End:Form_EtranDEplusGMatrix
+                 Determinant =  =    6.585016882515329
+ Solution(n).End:From:Solve_AxE(112) Array
+
+       -0.2759666741        -0.2759666731        -0.2759666721        -0.2759666711
+       -0.4816865000        -0.4816865045        -0.4816865090        -0.4816865135
+       -0.5702520692        -0.5702520632        -0.5702520572        -0.5702520511
+       -0.3831777123        -0.3831777148        -0.3831777173        -0.3831777199
+       -0.0000000271        -0.0000000271        -0.0000000271        -0.0000000271
+        0.0000000784         0.0000000784         0.0000000784         0.0000000784
+       -0.0000000264        -0.0000000264        -0.0000000264        -0.0000000264
+       -0.0000000274        -0.0000000274        -0.0000000274        -0.0000000274
+       -0.3098861455        -0.3098861454        -0.3098861453        -0.3098861452
+       -0.8248014625        -0.8248014629        -0.8248014633        -0.8248014637
+       -1.6734977968        -1.6734977968        -1.6734977967        -1.6734977966
+       -2.5959732070        -2.5959732069        -2.5959732068        -2.5959732067
+       -2.9681076719        -2.9681076719        -2.9681076719        -2.9681076719
+        0.0000000000         0.0000000000         0.0000000000         0.0000000000
+        0.0000000002         0.0000000002         0.0000000002         0.0000000002
+       -0.0000000012        -0.0000000012        -0.0000000012        -0.0000000012
+        0.0000000003         0.0000000003         0.0000000003         0.0000000003
+        0.0000000003         0.0000000003         0.0000000003         0.0000000003
+        0.0233137455         0.0233137455         0.0233137455         0.0233137455
+        0.0233131687         0.0233131687         0.0233131687         0.0233131687
+        0.0289196022         0.0289196022         0.0289196022         0.0289196023
+        0.0316880878         0.0316880878         0.0316880878         0.0316880878
+        0.0243236040         0.0243236040         0.0243236040         0.0243236040
+        0.7805021990        -2.3415065970         2.3415065970        -0.7805021990
+       -0.0260514167         0.0781542379        -0.0781542441         0.0260514106
+        0.3492459525        -1.0477378033         1.0477378305        -0.3492459253
+       -7.0012850930        21.0038552068       -21.0038552430         7.0012850568
+       10.2849479062       -30.8548436882        30.8548437034       -10.2849478910
+
+  Just before Leaving: Solve_AxEqB
+
+
+  Solved DisplacementControls: 1x112
+    -0.275966674144740    -0.275966673139280    -0.275966672126563
+    -0.275966671101199    -0.481686499997131    -0.481686504470719
+    -0.481686508963493    -0.481686513493163    -0.570252069167902
+    -0.570252063179174    -0.570252057178947    -0.570252051128987
+
+    -0.383177712274706    -0.383177714793705    -0.383177717310651
+    -0.383177719855445    -0.000000027088644    -0.000000027088414
+    -0.000000027088597    -0.000000027088849     0.000000078426290
+     0.000000078425655     0.000000078425986     0.000000078426703
+
+    -0.000000026422145    -0.000000026421407    -0.000000026421607
+    -0.000000026422444    -0.000000027408232    -0.000000027408595
+    -0.000000027408587    -0.000000027408181    -0.309886145466563
+    -0.309886145388894    -0.309886145311513    -0.309886145233797
+
+    -0.824801462501464    -0.824801462896948    -0.824801463290652
+    -0.824801463686265    -1.673497796845114    -1.673497796759714
+    -1.673497796677971    -1.673497796592423    -2.595973207004487
+    -2.595973206896277    -2.595973206784912    -2.595973206676785
+
+    -2.968107671925974    -2.968107671925800    -2.968107671926615
+    -2.968107671926424     0.000000000000536     0.000000000000536
+     0.000000000000536     0.000000000000536     0.000000000230357
+     0.000000000230357     0.000000000230356     0.000000000230356
+
+    -0.000000001181177    -0.000000001181177    -0.000000001181176
+    -0.000000001181176     0.000000000250940     0.000000000250940
+     0.000000000250940     0.000000000250940     0.000000000327247
+     0.000000000327247     0.000000000327247     0.000000000327247
+
+     0.023313745517283     0.023313745518706     0.023313745520123
+     0.023313745521544     0.023313168719422     0.023313168721694
+     0.023313168724068     0.023313168726454     0.028919602239188
+     0.028919602243421     0.028919602247340     0.028919602251261
+
+     0.031688087847978     0.031688087837266     0.031688087826878
+     0.031688087816502     0.024323603963008     0.024323603965590
+     0.024323603968067     0.024323603970508     0.780502199010453
+    -2.341506597001148     2.341506597016737    -0.780502198995508
+
+    -0.026051416723271     0.078154237896939    -0.078154244056600
+     0.026051410561391     0.349245952489898    -1.047737803335368
+     1.047737830463955    -0.349245925349680    -7.001285093041314
+    21.003855206844548   -21.003855243036327     7.001285056816789
+
+    10.284947906177472   -30.854843688157089    30.854843703356192
+   -10.284947890950518

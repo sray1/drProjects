@@ -1,0 +1,307 @@
+INITIATE_SOLUTIONDATA           Source Listing                   5-Aug-2008 15:06:00  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 1-Jul-2008 16:04:52  Initiate_SolutionData.for
+
+	      1 	Subroutine Initiate_SolutionData(iOut)
+	      2 	Implicit Real(kind=8) (a-h,o-z)
+	      3 !	
+	      4 	include 'LogParams.h'
+	      9 	include 'solve.h'
+	     14 	include 'Examples.h'
+	     17 	include 'SizeVar.h'
+	     18 !
+	     24 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/ 
+	     25 !-------------------------------------------- for Check with Quintic
+	     26 !	pen			= .1000D+10
+	     27 !	pen			= .0995D+3	! giving best result for Pal
+	     28 	pen			= .9950D+2		
+	     29 !	pen			= .1000D+6
+	     30 !			
+	     31 	Tol			= .1000D-06
+	     32 	Tol			= .1000D-07
+	     33 !	Tol			= .1000D-09
+	     34 	Tol			= .1000D-06
+	     35 !	Tol			= .1000D-03
+	     36 !
+	     37 	SELECT CASE (nEx)
+	     38 		CASE (1)							! PALAZOTTO:c0=0:           Ex_1
+	     39 			ArcLen		= 100.D0		! c = 0 
+	     40 !			ArcLen		=  50.D0		! c = 0 
+	     41 			MaxSteps	=  70			! c = 0 
+	     42 !			MaxSteps	=  50			! c = 0 
+	     43 			MaxIt		= 20
+	     44 		!	ArcLen		= 100.D0		! c = 0 
+	     45 		!	MaxSteps	= 70			! c = 0 
+	     46 		!	ArcLen		= 500.D0		! c = 0 
+	     47 !			MaxSteps	= 15			! c = 0 
+	     48 		!	ArcLen		= 200.D0		! c = 0 
+	     49 		!	MaxSteps	= 35			! c = 0 
+	     50 	Nint1		=  nQd1-1			! Gauss Order (OPTIMAL)   
+	     51 	Nint2		=  nQd2-1			! Gauss Order (OPTIMAL)   
+	     52 		CASE (2)							! PALAZOTTO:c0=0.01:        Ex_2
+	     53 			ArcLen		= 2.D0			! c = .01 
+	     54 			ArcLen		= 2.D0			! c = .01 
+	     55 			MaxSteps	= 35			! c = .01 
+	     56 			MaxSteps	= 18			! c = .01 
+	     57 			MaxIt		= 20
+	     58 	Nint1		=  nQd1-1			! Gauss Order (OPTIMAL)   
+	     59 	Nint2		=  nQd2-1			! Gauss Order (OPTIMAL)   
+	     60 		CASE (3)							! 2D Str. Cantilever-TipMom:Ex_3
+	     61 
+	     62 !			ArcLen		=  7.0D0		!
+	     63 			ArcLen		=  3.0D0		!
+	     64 			MaxSteps	= 24		!
+	     65 			ArcLen		=  5.0D0		!
+	     66 			MaxSteps	= 16			!
+	     67 			ArcLen		= 10.0D0		!
+	     68 			MaxSteps	= 7			!			MAX SUCCESSFUL
+	     69 			MaxIt		= 20
+	     70 		!	MaxIt		=  2
+	     71 		!	iCutMax		= 10
+	     72 	Nint1		=  nQd1-1			! Gauss Order (OPTIMAL)   
+
+INITIATE_SOLUTIONDATA           Source Listing                   5-Aug-2008 15:06:00  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 1-Jul-2008 16:04:52  Initiate_SolutionData.for
+
+	     73 	Nint2		=  nQd2-1			! Gauss Order (OPTIMAL)   
+	     74 		CASE (4)							! 3D Curved CantilevLINMOD: Ex_4
+	     75 			ArcLen		= 500.D0		 
+	     76 			MaxSteps	=  39			 
+	     77 			MaxSteps	=  25			 
+	     78 	!		MaxSteps	=  2			 
+	     79 			MaxIt		=  50
+	     80 	!		MaxIt		=  10
+	     81 	Nint1		=  nQd1  
+	     82 	Nint2		=  nQd2   
+	     83 		CASE (5)							! 3D Curved Cantilev.Bathe: Ex_5
+	     84 			ArcLen		= 314.5D0		!	1 Element	
+	     85 			MaxSteps	= 40			!
+	     86 			MaxIt		= 20
+	     87 !			ArcLen		= 500.0D0		!	1 Element	
+	     88 	Nint1		=  nQd1  
+	     89 	Nint2		=  nQd2   
+	     90 		CASE (6)							! 2D Frame Buckling-Argyris: Ex_6
+	     91 			ArcLen		= .1D0			!	1 Element	
+	     92 			MaxSteps	= 1			!
+	     93 			MaxIt		= 20
+	     94 !			ArcLen		= 500.0D0		!	1 Element	
+	     95 	Nint1		=  nQd1  
+	     96 	Nint2		=  nQd2   
+	     97 		CASE (7:9)    ! FALL THRO'           Other: Ex_7-10...
+	     98 			return 
+	     99 		CASE (10)							! Hemisphere w/ hole       Ex_10
+	    100 !-------------------------------------------------------- NonLinear
+	    101 			MaxSteps	= 1			! 
+	    102 			MaxIt		= 3
+	    103 			MaxSteps	= 11		! 2x2 
+	    104 			MaxSteps	= 13		! 2x2
+	    105 			ArcLen		= 5.D0		! 2x2 Quintics
+	    106 			MaxIt		= 20
+	    107 			MaxSteps	= 45		! 1 Quintic
+	    108 			MaxSteps	= 13		! 1 Quintic
+	    109 			ArcLen		= 3.D0		! 1 Quintics
+	    110 !			MaxSteps	= 100	! c = 0 
+	    111 !--------------------------------------------------------
+	    112 !	Nint1		=  nQd1-1		! NO GOOD/TOOLOW  
+	    113 !	Nint2		=  nQd2-1		! NO GOOD/TOOLOW     
+	    114 !	Nint1		=  nQd1+1		! NO GOOD/TOOHigh   
+	    115 !	Nint2		=  nQd2+1		! NO GOOD/TOOHigh    
+	    116 	Nint1		=  nQd1  
+	    117 	Nint2		=  nQd2   
+	    118 		CASE (11)							! Scordelis Low            Ex_11
+	    119 !-------------------------------------------------------- Nonlinear Check
+	    120 			MaxSteps	= 1			! c = 0 
+	    121 !--------------------------------------------------------
+	    122 !-------------------------------------------------------- Nonlinear
+	    123 			ArcLen		= 100.D0		! c = 0 
+	    124 !			ArcLen		=  50.D0		! c = 0 
+	    125 			MaxSteps	=  70			! c = 0 
+	    126 !			MaxSteps	=  50			! c = 0 
+	    127 			MaxIt		= 20
+	    128 !			MaxSteps	= 2				! Print check
+	    129 			ArcLen		= 0.17D0		! R/h = 200 
+
+INITIATE_SOLUTIONDATA           Source Listing                   5-Aug-2008 15:06:00  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 1-Jul-2008 16:04:52  Initiate_SolutionData.for
+
+	    130 			ArcLen		= 5.D-2			! R/h = 400 
+	    131 			MaxSteps	= 30			! c = 0 
+	    132 !--------------------------------------------------------
+	    133 	Nint1		=  nQd1  
+	    134 	Nint2		=  nQd2   
+	    135 		CASE (12)							! 2D Str. Cantil-Tip Twist:Ex_12
+	    136 
+	    137 !			ArcLen		=  7.0D0		!
+	    138 			ArcLen		=  3.0D0		!
+	    139 			MaxSteps	= 24		!
+	    140 			ArcLen		=  5.0D0		!
+	    141 			MaxSteps	= 16			!
+	    142 			ArcLen		= 10.0D0		!
+	    143 			MaxSteps	= 7			
+	    144 			MaxSteps	= 10			
+	    145 			MaxSteps	= 5			
+	    146 			MaxIt		= 20
+	    147 		!	MaxIt		=  2
+	    148 		!	iCutMax		= 10
+	    149 	Nint1		=  nQd1  
+	    150 	Nint2		=  nQd2   
+	    151 		CASE DEFAULT
+	    152 			return
+	    153 	END SELECT
+	    154 !	-------------------------------------------------------
+	    155 	Nint		=  Nint1*Nint2		! Gauss Order (OPTIMAL)		Total Gauss Pts
+	    156 !	=======================================================
+	    157 	write(iOut,1020) pen,TOL,ArcLen,MaxSteps,MaxIt,iCutMax,
+	    158      &				Nint1,Nint2,Nint
+	    159 !	------
+	    160 	return
+	    161  1020 Format(/ 5x,"Solution Controls"/
+	    162      &	2x,"Penalty								= ",G12.5/
+	    163      &	2x,"Convergence Tolerance				= ",G12.5/
+	    164      &	2x,"Arc Length							= ",F10.5/
+	    165      &	2x,"Max. Number of Load Steps			= ",I10/
+	    166      &	2x,"Max. Number of Iterations			= ",I10/
+	    167      &	2x,"Max. Subdivision of Iterations    = ",I10/
+	    168      &	2x,"No. of Gauss-Legendre Pts.(dir1)	= ",I10/
+	    169      &	2x,"No. of Gauss-Legendre Pts.(dir2)	= ",I10/
+	    170      &	2x,"No. of Gauss-Legendre Pts.(Total)	= ",I10/
+	    171      &	)		
+	    172 	end
+
+INITIATE_SOLUTIONDATA           Source Listing                   5-Aug-2008 15:06:00  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 1-Jul-2008 16:04:52  Initiate_SolutionData.for
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                     4 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  648 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               128   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 1315   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .link                                   48 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT QUAD
+  6 _LOGPARAMS                             796 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  7 _SOLVAR                                104 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  8 _EXAMPLES                              364 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  9 _SIZEVAR                               100 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 10 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+ 11 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 3811
+
+
+ENTRY POINTS
+
+ Address      Name                 
+                                   
+  4-00000000  INITIATE_SOLUTIONDATA
+
+
+VARIABLES
+
+ Address      Type  Name         Address      Type  Name         Address      Type  Name         Address      Type  Name       
+                                                                                                                               
+  7-00000048  R*8   ARCLEN        7-00000060  I*4   ICUTMAX       9-00000020  I*4   NELEM         9-00000024  I*4   NSTIFEL    
+  6-00000000  L*4   BENG          9-00000000  I*4   IGEOM         9-00000048  I*4   NELTYPE       9-00000040  I*4   NSTIFN     
+  6-00000004  L*4   BOPT1         7-00000064  L*4   IMAGINARY     8-00000168  I*4   NEX           9-00000038  I*4   NSTIFS     
+  6-00000310  L*4   BPEN              **      I*4   IOUT          9-00000030  I*4   NINT          9-00000014  I*4   NSUP       
+  6-00000318  L*4   BPLOT         7-00000020  I*4   ITERMO        9-00000028  I*4   NINT1         9-00000060  I*4   NSZDBL     
+  6-00000314  L*4   BPRINT        7-00000024  I*4   ITERREF       9-0000002C  I*4   NINT2         9-0000005C  I*4   NSZINT     
+  7-00000028  R*8   DELLAMDAIO    7-0000005C  I*4   MAXIT         9-00000044  I*4   NLOD          2-00000278  R*8   ONE        
+  7-00000018  R*8   DELLM         7-00000058  I*4   MAXSTEPS      9-0000000C  I*4   NQC1          6-00000308  R*8   PEN        
+  7-00000010  R*8   DELLMO        9-00000034  I*4   NCINT         9-00000010  I*4   NQC2          7-00000030  R*8   SLAMDAM    
+  7-00000040  R*8   DELTALAMDAI   9-00000054  I*4   NCMAT         9-0000001C  I*4   NQD           7-00000038  R*8   SLAMDAMO   
+  7-00000008  R*8   DETK          9-00000008  I*4   NDIM          9-0000004C  I*4   NQD1          7-00000050  R*8   TOL        
+  7-00000000  R*8   DETKO         9-00000018  I*4   NDOF          9-00000050  I*4   NQD2          2-00000270  R*8   TWO        
+  9-00000004  I*4   ICONT         9-00000058  I*4   NDOF2         9-0000003C  I*4   NSTIFC        2-00000280  R*8   ZERO       
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+  8-00000000  CHAR  CEX           360  (12)
+  6-00000008  R*8   XE            768  (8, 12)
+
+INITIATE_SOLUTIONDATA           Source Listing                   5-Aug-2008 15:06:00  Compaq Visual Fortran 6.6-1684    Page 5
+                                                                 1-Jul-2008 16:04:52  Initiate_SolutionData.for
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+INITIATE_SOLUTIONDATA           Source Listing                   5-Aug-2008 15:06:00  Compaq Visual Fortran 6.6-1684    Page 6
+                                                                 1-Jul-2008 16:04:52  Initiate_SolutionData.for
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Initiate_SolutionData.lst
+  /o         filename : Debug/Initiate_SolutionData.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.01 seconds
+  Elapsed time:      0.02 seconds
+  Pagefaults:           0
+  I/O Count:            0

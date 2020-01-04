@@ -1,0 +1,318 @@
+INITIATE_SOLUTIONDATA_DYNAMIC   Source Listing                   5-Aug-2008 15:31:51  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 5-Aug-2008 15:29:26  Initiate_SolutionData_DYNAMIC.f
+
+	      1 	Subroutine Initiate_SolutionData_DYNAMIC(iOut)
+	      2 	Implicit Real(kind=8) (a-h,o-z)
+	      3 !	
+	      4 	include 'LogParams.h'
+	      9 	include 'solveDyn.h'
+	     15 	include 'ExamplesDYN.h'
+	     18 	include 'SizeVar.h'
+	     19 !
+	     25 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/ 
+	     26 !	--------------------------------------- dynamic examples
+	     27 	bDynamic	= .TRUE.
+	     28 !-------------------------------------------- for Check with Quintic
+	     29 !	pen			= .1000D+10
+	     30 !	pen			= .0995D+3	! giving best result for Pal
+	     31 	pen			= .9950D+2		
+	     32 !	pen			= .1000D+6
+	     33 !			
+	     34 	Tol			= .1000D-06
+	     35 	Tol			= .1000D-07
+	     36 !	Tol			= .1000D-09
+	     37 	Tol			= .1000D-06
+	     38 !	Tol			= .1000D-03
+	     39 !-------------------------------------------- Dynamic/Newmark
+	     40 	beta		= 0.25D0
+	     41 	gama		= 0.5D0
+	     42 	begTim		= 0.D0
+	     43 !-------------------------------------------- Dynamic/Newmark End
+	     44 	SELECT CASE (nExD)
+	     45 		CASE (1)							! PALAZOTTO:c0=0:           Ex_1
+	     46 			MaxIt		= 20
+	     47 			delTim		= .1
+	     48 			begTim		= 0.D0
+	     49 			endTim		= 5.D0
+	     50 			totTim		= endtim - begtim	
+	     51 			tem			= beta*delTim	
+	     52 			velmul		= gama/tem
+	     53      			accmul		= one/tem/delTim
+	     54 			MaxSteps	= integer(totTim/delTim)  
+	     55 
+	     56 !
+	     57 	Nint1		=  nQd1-1			! Gauss Order (OPTIMAL)   
+	     58 	Nint2		=  nQd2-1			! Gauss Order (OPTIMAL)   
+	     59 		CASE (2)							! PALAZOTTO:c0=0.01:        Ex_2
+	     60 			ArcLen		= 2.D0			! c = .01 
+	     61 			ArcLen		= 2.D0			! c = .01 
+	     62 			MaxSteps	= 35			! c = .01 
+	     63 			MaxSteps	= 18			! c = .01 
+	     64 			MaxIt		= 20
+	     65 	Nint1		=  nQd1-1			! Gauss Order (OPTIMAL)   
+	     66 	Nint2		=  nQd2-1			! Gauss Order (OPTIMAL)   
+	     67 		CASE (3)							! 2D Str. Cantilever-TipMom:Ex_3
+	     68 
+	     69 !			ArcLen		=  7.0D0		!
+	     70 			ArcLen		=  3.0D0		!
+	     71 			MaxSteps	= 24		!
+	     72 			ArcLen		=  5.0D0		!
+	     73 			MaxSteps	= 16			!
+
+INITIATE_SOLUTIONDATA_DYNAMIC   Source Listing                   5-Aug-2008 15:31:51  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 5-Aug-2008 15:29:26  Initiate_SolutionData_DYNAMIC.f
+
+	     74 			ArcLen		= 10.0D0		!
+	     75 			MaxSteps	= 7			!			MAX SUCCESSFUL
+	     76 			MaxIt		= 20
+	     77 		!	MaxIt		=  2
+	     78 		!	iCutMax		= 10
+	     79 	Nint1		=  nQd1-1			! Gauss Order (OPTIMAL)   
+	     80 	Nint2		=  nQd2-1			! Gauss Order (OPTIMAL)   
+	     81 		CASE (4)							! 3D Curved CantilevLINMOD: Ex_4
+	     82 			ArcLen		= 500.D0		 
+	     83 			MaxSteps	=  39			 
+	     84 			MaxSteps	=  25			 
+	     85 	!		MaxSteps	=  2			 
+	     86 			MaxIt		=  50
+	     87 	!		MaxIt		=  10
+	     88 	Nint1		=  nQd1  
+	     89 	Nint2		=  nQd2   
+	     90 		CASE (5)							! 3D Curved Cantilev.Bathe: Ex_5
+	     91 			ArcLen		= 314.5D0		!	1 Element	
+	     92 			MaxSteps	= 40			!
+	     93 			MaxIt		= 20
+	     94 !			ArcLen		= 500.0D0		!	1 Element	
+	     95 	Nint1		=  nQd1  
+	     96 	Nint2		=  nQd2   
+	     97 		CASE (6)							! 2D Frame Buckling-Argyris: Ex_6
+	     98 			ArcLen		= .1D0			!	1 Element	
+	     99 			MaxSteps	= 1			!
+	    100 			MaxIt		= 20
+	    101 !			ArcLen		= 500.0D0		!	1 Element	
+	    102 	Nint1		=  nQd1  
+	    103 	Nint2		=  nQd2   
+	    104 		CASE (7:9)    ! FALL THRO'           Other: Ex_7-10...
+	    105 			return 
+	    106 		CASE (10)							! Hemisphere w/ hole       Ex_10
+	    107 !-------------------------------------------------------- NonLinear
+	    108 			MaxSteps	= 1			! 
+	    109 			MaxIt		= 3
+	    110 			MaxSteps	= 11		! 2x2 
+	    111 			MaxSteps	= 13		! 2x2
+	    112 			ArcLen		= 5.D0		! 2x2 Quintics
+	    113 			MaxIt		= 20
+	    114 			MaxSteps	= 45		! 1 Quintic
+	    115 			MaxSteps	= 13		! 1 Quintic
+	    116 			ArcLen		= 3.D0		! 1 Quintics
+	    117 !			MaxSteps	= 100	! c = 0 
+	    118 !--------------------------------------------------------
+	    119 !	Nint1		=  nQd1-1		! NO GOOD/TOOLOW  
+	    120 !	Nint2		=  nQd2-1		! NO GOOD/TOOLOW     
+	    121 !	Nint1		=  nQd1+1		! NO GOOD/TOOHigh   
+	    122 !	Nint2		=  nQd2+1		! NO GOOD/TOOHigh    
+	    123 	Nint1		=  nQd1  
+	    124 	Nint2		=  nQd2   
+	    125 		CASE (11)							! Scordelis Low            Ex_11
+	    126 !-------------------------------------------------------- Nonlinear Check
+	    127 			MaxSteps	= 1			! c = 0 
+	    128 !--------------------------------------------------------
+	    129 !-------------------------------------------------------- Nonlinear
+	    130 			ArcLen		= 100.D0		! c = 0 
+
+INITIATE_SOLUTIONDATA_DYNAMIC   Source Listing                   5-Aug-2008 15:31:51  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 5-Aug-2008 15:29:26  Initiate_SolutionData_DYNAMIC.f
+
+	    131 !			ArcLen		=  50.D0		! c = 0 
+	    132 			MaxSteps	=  70			! c = 0 
+	    133 !			MaxSteps	=  50			! c = 0 
+	    134 			MaxIt		= 20
+	    135 !			MaxSteps	= 2				! Print check
+	    136 			ArcLen		= 0.17D0		! R/h = 200 
+	    137 			ArcLen		= 5.D-2			! R/h = 400 
+	    138 			MaxSteps	= 30			! c = 0 
+	    139 !--------------------------------------------------------
+	    140 	Nint1		=  nQd1  
+	    141 	Nint2		=  nQd2   
+	    142 		CASE (12)							! 2D Str. Cantil-Tip Twist:Ex_12
+	    143 
+	    144 !			ArcLen		=  7.0D0		!
+	    145 			ArcLen		=  3.0D0		!
+	    146 			MaxSteps	= 24		!
+	    147 			ArcLen		=  5.0D0		!
+	    148 			MaxSteps	= 16			!
+	    149 			ArcLen		= 10.0D0		!
+	    150 			MaxSteps	= 7			
+	    151 			MaxSteps	= 10			
+	    152 			MaxSteps	= 5			
+	    153 			MaxIt		= 20
+	    154 		!	MaxIt		=  2
+	    155 		!	iCutMax		= 10
+	    156 	Nint1		=  nQd1  
+	    157 	Nint2		=  nQd2   
+	    158 		CASE DEFAULT
+	    159 			return
+	    160 	END SELECT
+	    161 !	-------------------------------------------------------
+	    162 	Nint		=  Nint1*Nint2		! Gauss Order (OPTIMAL)		Total Gauss Pts
+	    163 !	=======================================================
+	    164 	write(iOut,1020) pen,TOL,beta,gama,
+	    165      &				 delTim,begTim,endTim,totTim,
+	    166      &				 MaxSteps,MaxIt,Nint1,Nint2,Nint
+	    167 !	------
+	    168 	return
+	    169  1020 Format(/ 5x,"Solution Controls"/
+	    170      &	2x,"Penalty								= ",G12.5/
+	    171      &	2x,"Convergence Tolerance				= ",G12.5/
+	    172      &	2x,"beta     							= ",F10.5/
+	    173      &	2x,"gama     							= ",F10.5/
+	    174      &	2x,"Time Step  							= ",F10.5/
+	    175      &	2x,"Begin time 							= ",F10.5/
+	    176      &	2x,"End time 							= ",F10.5/
+	    177      &	2x,"Total time 							= ",F10.5/
+	    178      &	2x,"Max. Number of Load Steps			= ",I10/
+	    179      &	2x,"Max. Number of Iterations			= ",I10/
+	    180      &	2x,"No. of Gauss-Legendre Pts.(dir1)	= ",I10/
+	    181      &	2x,"No. of Gauss-Legendre Pts.(dir2)	= ",I10/
+	    182      &	2x,"No. of Gauss-Legendre Pts.(Total)	= ",I10/
+	    183      &	)		
+	    184 	end
+
+INITIATE_SOLUTIONDATA_DYNAMIC   Source Listing                   5-Aug-2008 15:31:51  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 5-Aug-2008 15:29:26  Initiate_SolutionData_DYNAMIC.f
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    40 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  840 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               160   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 1635   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .link                                   48 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT QUAD
+  6 _LOGPARAMS                             796 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  7 _SOLDYN                                 76 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  8 _EXAMPLESDYN                           364 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  9 _SIZEVAR                               100 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 10 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+ 11 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 4363
+
+
+ENTRY POINTS
+
+ Address      Name                         
+                                           
+  4-00000000  INITIATE_SOLUTIONDATA_DYNAMIC
+
+
+VARIABLES
+
+ Address      Type  Name      Address      Type  Name      Address      Type  Name      Address      Type  Name    
+                                                                                                                   
+  7-00000040  R*8   ACCMUL     7-00000008  R*8   GAMA       8-00000168  I*4   NEXD       9-00000038  I*4   NSTIFS  
+  1-00000008  R*8   ARCLEN     9-00000004  I*4   ICONT      9-00000030  I*4   NINT       9-00000014  I*4   NSUP    
+  7-00000048  L*4   BDYNAMIC   9-00000000  I*4   IGEOM      9-00000028  I*4   NINT1      9-00000060  I*4   NSZDBL  
+  7-00000018  R*8   BEGTIM         **      I*4   IOUT       9-0000002C  I*4   NINT2      9-0000005C  I*4   NSZINT  
+  6-00000000  L*4   BENG       1-00000024  I*4   MAXIT      9-00000044  I*4   NLOD       2-00000338  R*8   ONE     
+  7-00000000  R*8   BETA       1-00000020  I*4   MAXSTEPS   9-0000000C  I*4   NQC1       6-00000308  R*8   PEN     
+  6-00000004  L*4   BOPT1      9-00000034  I*4   NCINT      9-00000010  I*4   NQC2       1-00000010  R*8   TEM     
+  6-00000310  L*4   BPEN       9-00000054  I*4   NCMAT      9-0000001C  I*4   NQD        1-00000018  R*8   TOL     
+  6-00000318  L*4   BPLOT      9-00000008  I*4   NDIM       9-0000004C  I*4   NQD1       7-00000028  R*8   TOTTIM  
+  6-00000314  L*4   BPRINT     9-00000018  I*4   NDOF       9-00000050  I*4   NQD2       2-00000330  R*8   TWO     
+  7-00000010  R*8   DELTIM     9-00000058  I*4   NDOF2      9-0000003C  I*4   NSTIFC     7-00000038  R*8   VELMUL  
+  7-00000030  R*8   DISMUL     9-00000020  I*4   NELEM      9-00000024  I*4   NSTIFEL    2-00000340  R*8   ZERO    
+  7-00000020  R*8   ENDTIM     9-00000048  I*4   NELTYPE    9-00000040  I*4   NSTIFN                               
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+  8-00000000  CHAR  CEXD          360  (12)
+  6-00000008  R*8   XE            768  (8, 12)
+
+INITIATE_SOLUTIONDATA_DYNAMIC   Source Listing                   5-Aug-2008 15:31:51  Compaq Visual Fortran 6.6-1684    Page 5
+                                                                 5-Aug-2008 15:29:26  Initiate_SolutionData_DYNAMIC.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+INITIATE_SOLUTIONDATA_DYNAMIC   Source Listing                   5-Aug-2008 15:31:51  Compaq Visual Fortran 6.6-1684    Page 6
+                                                                 5-Aug-2008 15:29:26  Initiate_SolutionData_DYNAMIC.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Initiate_SolutionData_DYNAMIC.lst
+  /o         filename : Debug/Initiate_SolutionData_DYNAMIC.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.01 seconds
+  Elapsed time:      0.02 seconds
+  Pagefaults:           0
+  I/O Count:            0

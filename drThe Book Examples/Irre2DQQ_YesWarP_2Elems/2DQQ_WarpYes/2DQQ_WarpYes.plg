@@ -1,0 +1,53 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: 2DQQ_WarpYes - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSPE085.TMP" with contents
+[
+/check:bounds /compile_only /debug:full /libs:qwin /nologo /traceback /warn:argument_checking /warn:nofileopt /module:"Debug/" /object:"Debug/" /pdbfile:"Debug/DF60.PDB" 
+"C:\The Book\Irre2DQQ_YesWarP_2Elems\Prog_Quart_Quart_WARP_YES_2ELs.f"
+]
+Creating temporary file "C:\WINDOWS\TEMP\RSPE090.TMP" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /entry:"WinMainCRTStartup" /subsystem:windows /incremental:no /pdb:"Debug/2DQQ_WarpYes.pdb" /debug /machine:I386 /nodefaultlib:"dfconsol.lib" /out:"Debug/2DQQ_WarpYes.exe" /pdbtype:sept 
+".\Debug\Bez_CC_EL_1.obj"
+".\Debug\Bez_CC_EL_2.obj"
+".\Debug\CC_StrainDis4.obj"
+".\Debug\Compute_StrainEnergy.obj"
+".\Debug\Disp_CC_EL_1.obj"
+".\Debug\Disp_CC_EL_2.obj"
+".\Debug\Expand_BZCons_C0.obj"
+".\Debug\Expand_BZCons_C0_BCr0.obj"
+".\Debug\Expand_BZCons_C1.obj"
+".\Debug\ExpandFrom_C1or2Sol.obj"
+".\Debug\FormBC_r0_Matrix.obj"
+".\Debug\FormIndex_EL2.obj"
+".\Debug\FormTransformation Matrix_C1.obj"
+".\Debug\FormTransformation Matrix_C2.obj"
+".\Debug\Impose_BC_r0_Constraints.obj"
+".\Debug\Impose_C1or2.obj"
+".\Debug\Non_Singular_CC.obj"
+".\Debug\Prog_Quart_Quart_WARP_YES_2ELs.obj"
+".\Debug\Quad_CC_LVX.obj"
+".\Debug\Quad_CC_LVY.obj"
+".\Debug\Quad_CC_STIF4.obj"
+".\Debug\Quad_CC_STIF_ASSEMBLE.obj"
+".\Debug\Solve_AxEqB.obj"
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSPE090.TMP"
+<h3>Output Window</h3>
+Compiling Fortran...
+C:\The Book\Irre2DQQ_YesWarP_2Elems\Prog_Quart_Quart_WARP_YES_2ELs.f
+Linking...
+
+
+
+<h3>Results</h3>
+2DQQ_WarpYes.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

@@ -1,0 +1,696 @@
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	      1 !	Subroutine Quad_QQ_STIF(RoCOld,CuCOld,RoSav,CKSav,Qd,
+	      2 !     &						Nel,DMat,B,T,
+	      3 !     &						Stif,BFors,StifK,nStif,Iout,Trace)
+	      4 	Subroutine Quad_QQ_STIF_DYNAMIC(RoCOld,CuCOld,RoSav,CKSav,
+	      5      &						Qd,Qv,Qa,
+	      6      &						Nel,DMat,B,T,
+	      7      &						Stif,BFors,StifK,nStif,Iout,Trace)
+	      8 !
+	      9 !	Coerced Isoparametric Quadrilateral_Cubic_Cubic Element
+	     10 !
+	     11 !	Notes:	Nint should be atleast 2
+	     12 !
+	     13 !	Inputs
+	     14 !		Qd(nStif)	= Latest displacement controls: state vector
+	     15 !		Qv(nStif)	= Latest velocity     controls: state vector
+	     16 !		Qa(nStif)	= Latest acceleration controls: state vector
+	     17 !		Nel			= Element Number
+	     18 !		NelType		= Element Type:
+	     19 !						0 = Plane Stress
+	     20 !						1 = Plane Strain
+	     21 !						2 = Axi-symmtric	(NOT DONE YET)
+	     22 !		Nint		= Number of Gauss Points
+	     23 !		E			= Elasticity Modulus
+	     24 !		PR			= Poisson's ratio
+	     25 !		Thk			= Thickness
+	     26 !		nStif		= Row or Col size of Stiffness matrix 
+	     27 !						= nDof*nQd1*nQd2
+	     28 !		Iout		= Error Output file#
+	     29 !		 	
+	     30 !	Outputs 
+	     31 !		Stif(nStif,nStif)	= Desired Stiffness Matrix
+	     32 !		bFors(nStif)		= Desired Body force Vector Integrals
+	     33 !		StifK(nStif)		= Desired kLamda Stiffness last column Vector Integrals
+	     34 !		Trace		= trace of the matrix
+	     35 !
+	     36 	Implicit Real(kind=8) (a-h,o-z)
+	     37 !	===========================
+	     38 	include 'ProblemTyp.h'
+	     41 	include 'Mass.h'
+	     43 	include 'SolveDyn.h'
+	     48 	include 'ShellParams_DYNAMIC.h'
+	     49 !	-------
+	     58 	include 'Material.h'
+	     61 	include 'CurParams.h'
+	     74 	include 'SizeVar.h'
+	     80 	include 'LoadStepIter.h'
+	     82 	include 'Scratch.h'
+	     85 	include 'ShellParams.h'
+	     99 	include 'LogParams.h'
+	    104 	include 'GaussIndex.h'
+	    105 !============================================
+	    106 !
+	    107 !	Input Variables & Arrays
+	    108 !
+	    110 	Real(kind=8)	dis       ,vel       ,acc                   
+	    111 	Dimension		dis(nStif),vel(nStif),acc(nStif)
+	    112 	Real(kind=8)	RoSav       ,CKSav            
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	    113 	Dimension		RoSav(nCInt),CKSav(nCInt)
+	    114 	Real(kind=8)	RoCOld       ,CuCOld            
+	    115 	Dimension		RoCOld(nCInt),CuCOld(nCInt)
+	    116 	Real(kind=8)	DMat   
+	    117 	Dimension		DMat(nCMat,nCMat)
+	    118 !	
+	    119 !	Working Variables & Arrays	
+	    120 !
+	    121 !	Real(kind=8)	DD   ,RR   ,DP1   ,Rp1   ,Dp2   ,Rp2                
+	    122 !	Dimension		DD(3),RR(3),DP1(3),Rp1(3),Dp2(3),Rp2(3)
+	    123 !	
+	    124 !	Output Variables & Arrays	
+	    125 !
+	    126 	Real(kind=8)	XM           ,GY           ,CF           ,DT        
+	    127 	Dimension		XM(nDof,nDof),GY(nDof,nDof),CF(nDof,nDof),DT(nDof)
+	    128 
+	    129 	Real(kind=8)	B             ,T     
+	    130 	Dimension		B(nDof2,nStif),T(nDof,nStif)
+	    131 	Real(kind=8)	BFors       ,StifK       ,Stif			   ,Trace
+	    132 	Dimension		BFors(nStif),StifK(nStif),Stif(nStif,nStif)
+	    133 	Real(kind=8)	EDG             ,DB        
+	    134 	Dimension		EDG(nDof2,nDof2),DB(nDof2)
+	    135 	Real(kind=8)	Add       ,HD       ,Rp   
+	    136 	Dimension		Add(nStif),HD(nDof2),Rp(3)
+	    137 	Real(kind=8)	BVEC       ,SKLM       ,R0   ,RK          
+	    138 	Dimension		BVEC(nStif),SKLM(nStif),R0(3),RK(3)
+	    139 	Real(kind=8) AM,BM,CM,TH,Ri,Rj,Si,Wt,sum
+	    140 !	=============================== ARGYRIS Frame
+	    141 !	Real(kind=8)	AA
+	    142 !	Dimension		AA(nStif,nStif)
+	    143 !	=============================== ARGYRIS Frame End
+	    144 	LOGICAL bReset
+	    145 	DATA zero/0.D0/,one/1.0D0/,onm/-1.0D0/ 
+	    146 	DATA NC/3/
+	    147 !================================================================================
+	    148 !	Stiffness Matrix Calculation
+	    149 !
+	    150 	XM		= 0.D0	!all
+	    151 	GY		= 0.D0	!all
+	    152 	CF		= 0.D0	!all
+	    153 !
+	    154 	BFors	= 0.D0	!all
+	    155 	StifK	= 0.D0	!all
+	    156     	Stif	= 0.D0	! all elements = 0.
+	    157 !============================================================== 
+	    158 	iPrt = 0
+	    159 	if((iStep == 1).AND.(iNut == 2)) Then
+	    160 		iPrt = 0
+	    161 	endif
+	    162 	if(iPrt == 1) then
+	    163 			call DumpIntegerVar(iStep,"iStep",iPrt,iOut)
+	    164 			call DumpIntegerVar(iNut,"iNut",iPrt,iOut)
+	    165 		call DumpStringVar("Beg:From:Quad_QQ_STIF",iPrt,iOut)
+	    166 		call DumpRealArray(Qd,nStif,"Qd array",1,iOut)
+	    167 		call DumpStringVar("End:From:Quad_QQ_STIF",iPrt,iOut)
+	    168 	endif
+	    169 	iPrt = 0
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	    170 !============================================================== .
+	    171 !	Rewind CUrvatureInfo, B & T Scratch files
+	    172 	if(Nel == 1) then
+	    173 		nRec = 0
+	    174 		rewind iRefPro1
+	    175 		rewind iRefPro2
+	    176 	endif
+	    177 !	Loop over Gauss Locations
+	    178 	do 60 iGau = 1,Nint1
+	    179 	do 60 jGau = 1,Nint2
+	    180 !		------------------------------ gauss positions
+	    181 		ri = GaussPtVal(iGau,Nint1,1) 
+	    182 		rj = GaussPtVal(jGau,Nint2,1) 
+	    183 !------------------------------------------------------------- Get  Geometric Curvature Vector etc.
+	    184 !		if(iNut == 1) Then
+	    185 !		if((iStep == 1).AND.(iNut == 5)) Then
+	    186 		if((iStep == 0).AND.(iNut == 0)) Then
+	    187 			abc = 1
+	    188 		endif
+	    189 !
+	    190 		nRec = nRec + 1
+	    191 !		===============
+	    192 		iPrt = 0
+	    193 		if((iStep == 1).AND.(iNut == 2)) Then
+	    194 			iPrt = 0
+	    195 		endif
+	    196 		if(iPrt == 1) then
+	    197 			call DumpStringVar("Beg:Quad_QQ_STIF",iPrt,iOut)
+	    198 			call DumpRealVar(ri,"ri",iPrt,iOut)
+	    199 			call DumpRealVar(rj,"rj",iPrt,iOut)
+	    200 			call DumpStringVar("End:Calc_ReferenceProps",iPrt,iOut)
+	    201 		endif
+	    202 		iPrt = 0
+	    203 !	---------------------------------------------------
+	    204 		T = zero
+	    205 		B = zero
+	    206 		call Get_ReferenceInfoataGaussPt
+	    207      &					(T,B,nDof,nDof2,nStif,Nel,nRec)
+	    208 !	---------------------------------------------------
+	    209 !		call Get_ReferenceInfo(Qc,nC,nQc,RoCOld,CuCOld,nCInt,
+	    210 !		&                    Rjj,jGau,Rkk,kInt,R0,C0,CK,nC,T,B,
+	    211 !		&                    nDof,nDof2,nStif,RutAhat,Iout,Nel,Nint)
+	    212 !		endif
+	    213 !		-------------------------------------------------------- Debug 
+	    214 		iPrt = 0
+	    215 		if((iStep == 1).AND.(iNut == 2)) Then
+	    216 			iPrt = 0
+	    217 		endif
+	    218 		if(iPrt == 1) then
+	    219 			call DumpStringVar("Beg:Quad_QQ_STIF_befEDG",iPrt,iOut)
+	    220 			call DumpIntegerVar(Nel,"Element#",iPrt,iOut)
+	    221 			call DumpIntegerVar(iStep,"iStep",iPrt,iOut)
+	    222 			call DumpIntegerVar(iNut,"iNut",iPrt,iOut)
+	    223 			call DumpIntegerVar(iGau,"GIndex:iGau",iPrt,iOut)
+	    224 	!		call DumpRealVar(Ri,"GaussPt.:Ri",iPrt,iOut)
+	    225 			call DumpIntegerVar(jGau,"GIndex:jGau",iPrt,iOut)
+	    226 	!		call DumpRealVar(Rj,"GaussPt.:Rj",iPrt,iOut)
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	    227 			call DumpIntegerVar(nCInt,"nCInt",iPrt,iOut)
+	    228 !			call DumpRealArray(Rocold,nCInt,"Rocold",iPrt,iOut)
+	    229 !			call DumpRealArray(Cucold,nCInt,"Cucold",iPrt,iOut)
+	    230 			call DumpRealArray(Qd,nStif,"Qd",iPrt,iOut)
+	    231 			call DumpRealArray(R0,3,"R0",iPrt,iOut)
+	    232 			call DumpRealArray(C01,3,"C01",iPrt,iOut)
+	    233 			call DumpRealArray(CK1,3,"CK1BefEDG",iPrt,iOut)
+	    234 			call DumpRealArray(C02,3,"C02",iPrt,iOut)
+	    235 			call DumpRealArray(CK2,3,"CK2BefEDG",iPrt,iOut)
+	    236 			iPrt = 0
+	    237 !			call DumpRealMatrix(T,nDof,nStif,"T",iPrt,iOut)
+	    238 			call DumpRealMatrix(B,nDof2,nStif,"B",iPrt,iOut)
+	    239 			iPrt = 0
+	    240 			call DumpStringVar("End:Quad_QQ_STIF_befEDG",iPrt,iOut)
+	    241 		endif
+	    242 		iPrt = 0
+	    243 !		-------------------------------------------------------- Debug : End
+	    244 !--------------------------------------------------------------------- DisRots & Derivatives
+	    245 !		if(bReset == .TRUE.) Then
+	    246 		if(iStep == 6) Then
+	    247 			abc = one
+	    248 		endif
+	    249 !		====================================== Debug
+	    250 !		if((iStep == 1).AND.(iNut == 2)) Then
+	    251 		if((iStep == 1).AND.(iNut == 2)) Then
+	    252 			abc = 1
+	    253 !			call DumpRealArray(Qd,nStif,"Qd",0,iOut)
+	    254 		endif
+	    255 !		====================================== Debug End
+	    256 		call Split_Dis_Rot_Deriv(Qd,nStif,B,Iout)
+	    257 !	---------------------------------------------------------------- Update Rotation
+	    258 !		do 10 i = 1,nC				
+	    259 !   10		RK(i) = R0(i) + RR(i)
+	    260 !		-------------------------------------------------------- Debug 
+	    261 		iPrt = 0
+	    262 		if((iStep == 1).AND.(iNut == 2)) Then
+	    263 			iPrt = 0
+	    264 		endif
+	    265 		if(iprt == 1) then
+	    266 !			call DumpStringVar("Beg:Quad_QQ_STIF_aftEDG",iPrt,iOut)
+	    267 !			call DumpIntegerVar(iStep,"iStep",iPrt,iOut)
+	    268 !			call DumpIntegerVar(iNut,"iNut",iPrt,iOut)
+	    269 			call DumpIntegerVar(iGau,"iGau",iPrt,iOut)
+	    270 			call DumpIntegerVar(jGau,"jGau",iPrt,iOut)
+	    271 !			call DumpStringVar("End:Quad_QQ_STIF_aftEDG",iPrt,iOut)
+	    272 		endif
+	    273 		iPrt = 0
+	    274 !		-------------------------------------------------------- Debug : End
+	    275 !		================================================================ ED+G(nDof2,nDof2)
+	    276 		call Form_EtranDEplusGMatrix(DMat,T,B,BVEC,SKLM,EDG,Iout)
+	    277 !		-------------------------------------------------------- Debug 
+	    278 		iPrt = 0
+	    279 		if((iStep == 1).AND.(iNut == 2)) Then
+	    280 			iPrt = 0
+	    281 		endif
+	    282 		if(iprt == 1) then
+	    283 			call DumpStringVar("Beg:Quad_QQ_STIF_aftEDG",iPrt,iOut)
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 5
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	    284 			call DumpRealArray(RK,3,"RK",iPrt,iOut)
+	    285 			call DumpRealArray(C01,3,"C01_aftEDG",iPrt,iOut)
+	    286 			call DumpRealArray(CK1,3,"CK1_aftEDG",iPrt,iOut)
+	    287 			call DumpRealArray(C02,3,"C02_aftEDG",iPrt,iOut)
+	    288 			call DumpRealArray(CK2,3,"CK2_aftEDG",iPrt,iOut)
+	    289 			call DumpRealArray(BFors,nStif,"BFors",iPrt,iOut)
+	    290 			call DumpRealArray(BVEC,nStif,"BVEC",iPrt,iOut)
+	    291 			call DumpRealArray(SKLM,nStif,"SKLM",iPrt,iOut)
+	    292 			if(iPrt == 1) Then
+	    293 				write(Iout,1030) ((DMat(i,j),j = 1,nCMat),i=1,nCMat)
+	    294 				write(Iout,1040) (i,(EDG(i,j),j = 1,nDof2),i=1,nDof2)
+	    295 			endif
+	    296 !		----------------------------------------------------------
+	    297 			call DumpStringVar("End:Quad_QQ_STIF_aftEDG",iPrt,iOut)
+	    298 		endif
+	    299 !		-------------------------------------------------------- Debug : End
+	    300 		if((iNut.LE.1).AND.(Nel == 2)) Then
+	    301 			abc = 0
+	    302 		endif
+	    303 !============================================================= save
+	    304 !		if(iNut.LE.1) Then
+	    305 !			do 10 ii = 1,nC
+	    306 !			ij = ii + (jGau -1)*nC
+	    307 !			RoCOld(ij) = RK(ii) 
+	    308 !			CuCold(ij) = CK(ii) 
+	    309 !   10		continue
+	    310 !			nRec = (Nel-1)*Nint + jGau
+	    311 !			if(iRotCur == iRotCur1) Then
+	    312 !				call PutGetRotCur(iRotCur2,RoCOld,CuCold,nCInt,nRec,1)
+	    313 !			else
+	    314 !				call PutGetRotCur(iRotCur1,RoCOld,CuCold,nCInt,nRec,1)
+	    315 !			endif			
+	    316 !		endif
+	    317 !------------------------------------------------------------- Form: Btran_ED+G_B 
+	    318 !		Add to stiffness matrix
+	    319 !
+	    320 		Wt = GaussPtVal(iGau,Nint1,2)*GaussPtVal(jGau,Nint2,2)
+	    321      &						 		 *RutAhat
+	    322 		iPrt = 0
+	    323 		if((iStep == 1).AND.(iNut == 2)) Then
+	    324 			iPrt = 0
+	    325 		endif
+	    326 		if(iprt == 1) then
+	    327 			call DumpRealVar(RutAhat,"RutAhat",iPrt,iOut)
+	    328 			call DumpRealVar
+	    329      &			(GaussPtVal(iGau,Nint1,2),"Gaussi",iPrt,iOut)
+	    330 			call DumpRealVar
+	    331      &			(GaussPtVal(jGau,Nint1,2),"Gaussj",iPrt,iOut)
+	    332 			call DumpRealVar(Wt,"Weight",iPrt,iOut)
+	    333 		endif
+	    334 		iPrt = 0
+	    335 !		===============================================
+	    336 		Stif = Wt*(MATMUL(TRANSPOSE(B),MATMUL(EDG,B)))
+	    337 !		===============================================
+	    338 !		------------------------------------------------------------- Load Vector: Residual:Gint-GExtStatic
+	    339 !															
+	    339 	evaluated at deltim = n + (1/2)
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 6
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	    340 		call Form_Residual_Internal(BVec,FMns,BMat,
+	    341      &							nCMat,nDof2,nStifEL,Iout)
+	    342 !
+	    343 		BFors = BFors + Wt*BVec
+	    344 !----------------------------------------------------------------------- if Static Skip
+	    345 		if(cProbTyp == "STATIC ") then
+	    346 		! ONLY External Body Force Needed because of arc length constraint treatment
+	    347 			call Form_Residual_External_Static(BVec,SKLM,TMat,
+	    348      &											nDof,nStifEL,Iout)
+	    349 			BFors = BFors - Wt*BVec
+	    350 !			------------------------------------------------------------- Form: Last Column of
+	    351 			StifK = StifK + Wt*SKLM     !stiffness: KLamda Body Force part
+	    352 			go to 60
+	    353 		endif
+	    354 !----------------------------------------------------------------------- DYNAMIC PART
+	    355 		call Split_Vel_RotV_DYNAMIC(Qv,nStif,T,Iout)
+	    356 		call Split_Acc_RotA_DYNAMIC(Qa,nStif,T,Iout)
+	    357 		call Form_AngularVEL_Vector(W,RotV,AVel,nC,Iout)
+	    358 		call Form_AngularACC_Vector(W,WVel,RotV,RotA,AAcc,nC,Iout)
+	    359 !		------------------------------------------------------------- Form & Add:T_trans_XM_T * (accmul)
+	    360 !		============================================ XM(nDof,nDof):MASS Matrix
+	    361 		call Form_Mass_Matrix(W,XM,nC,ndof,Iout)
+	    362 !
+	    363 !		Add to stiffness matrix the MASS matrix
+	    364 !
+	    365 		do 150 j = 1,nStif
+	    366 			do 120 k = 1,nDof		! 
+	    367 				DT(k) = 0.0
+	    368 			do 120 l = 1,nDof		! 
+	    369 				DT(k) = DT(k) + XM(k,l)*T(l,j)
+	    370   120			continue
+	    371 			do 140 i = j,nStif
+	    372 				sum = 0.0
+	    373 				do 130 l = 1,nDof		! 
+	    374 					sum = sum + T(l,i)*DT(l)
+	    375   130				continue
+	    376 				Stif(i,j) = Stif(i,j) + sum*Wt*accmul
+	    377   140			continue
+	    378   150		continue
+	    379 !		------------------------------------------------------------- Form & Add: Ttran_GY_T * (velmul)
+	    380 !		================================================ GY(nDof,nDof):GYROSCOPIC Matrix
+	    381 		call Form_Gyro_Matrix(W,WVel,RotV,GY,nC,ndof,Iout)
+	    382 !
+	    383 !		Add to stiffness matrix the GYROSCOPIC matrix
+	    384 !
+	    385 		do 250 j = 1,nStif
+	    386 			do 220 k = 1,nDof		! 
+	    387 				DT(k) = 0.0
+	    388 			do 220 l = 1,nDof		! 
+	    389 				DT(k) = DT(k) + GY(k,l)*T(l,j)
+	    390   220			continue
+	    391 			do 240 i = j,nStif
+	    392 				sum = 0.0
+	    393 				do 230 l = 1,nDof		! 
+	    394 					sum = sum + T(l,i)*DT(l)
+	    395   230				continue
+	    396 				Stif(i,j) = Stif(i,j) + sum*Wt*velmul
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 7
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	    397   240			continue
+	    398   250		continue
+	    399 !		------------------------------------------------------------- Form & Add: Ttran_CF_T 
+	    400 !		================================================ CF(nDof,nDof):CENTRIFUGAL Matrix
+	    401 		call Form_Centri_Matrix(W,WVel,WAcc,RR,RotV,RotA,
+	    402      &							RVel,RAcc,CF,nC,ndof,Iout)
+	    403 !
+	    404 !		Add to stiffness matrix the CENTRIFUGAL matrix
+	    405 !
+	    406 		do 350 j = 1,nStif
+	    407 			do 320 k = 1,nDof		! 
+	    408 				DT(k) = 0.0
+	    409 			do 320 l = 1,nDof		! 
+	    410 				DT(k) = DT(k) + CF(k,l)*T(l,j)
+	    411   320			continue
+	    412 			do 340 i = j,nStif
+	    413 				sum = 0.0
+	    414 				do 330 l = 1,nDof		! 
+	    415 					sum = sum + T(l,i)*DT(l)
+	    416   330				continue
+	    417 				Stif(i,j) = Stif(i,j) + sum*Wt
+	    418   340			continue
+	    419   350		continue
+	    420 !		------------------------------------------------------------- Load Vector: Residual:Giner
+	    421 !		call Residual(BVec,    )
+	    422 !
+	    423 
+	    424 		do 53 i = 1,nStif
+	    425 			BFors(i) = BFors(i) + Wt*BVec(i)
+	    426    53		continue		
+	    427 !------------------------------------------------------------- DYNAMIC PART END
+	    428 !   		
+	    429    60 continue
+	    430 !
+	    431 !	symmetry: Upper Triangle 
+	    432 !
+	    433 	do 70 j = 1,nStif
+	    434 	do 70 i = j,nStif
+	    435   	Stif(j,i) = Stif(i,j)
+	    436    70 continue
+	    437 !
+	    438 !	Get Trace
+	    439 !
+	    440 	Trace = 0.D0
+	    441 	do 80 i = 1,nStif
+	    442 	Trace = Trace + Stif(i,i)
+	    443    80 continue			
+	    444 !
+	    445 !	done
+	    446 !
+	    447 	iPrt = 0
+	    448 	if(iPrt == 1) Then
+	    449 		write(Iout,1010) nStif,nStif
+	    450 		do 110 i = 1,nStif
+	    451 		write(Iout,1020) i,(Stif(i,j),j = 1,nStif)
+	    452   110	continue
+	    453 	endif 
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 8
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	    454 !============================================================== Check each col.
+	    455 	iPrt = 0
+	    456 	if(iPrt == 1) then
+	    457 		Add = 0.D0
+	    458 		do 999 j = 1,nStif
+	    459 		sum = 0.0 
+	    460 		do  99 i = 1,nStif	
+	    461 		sum = sum + Stif(i,j)
+	    462    99		continue
+	    463 		Add(j) = sum
+	    464   999		continue
+	    465 			call DumpIntegerVar(iStep,"iStep",iPrt,iOut)
+	    466 			call DumpIntegerVar(iNut,"iNut",iPrt,iOut)
+	    467 		call DumpStringVar("Beg:From:Quad_QQ_STIF",iPrt,iOut)
+	    468 		call DumpRealArray(Add,nStif,"Add_Col_Stiffness",1,iOut)
+	    469 		call DumpStringVar("End:From:Quad_QQ_STIF",iPrt,iOut)
+	    470 	endif
+	    471 	iPrt = 0
+	    472 !============================================================== Check each col.
+	    473 !
+	    474 	return
+	    475 !
+	    476  1010 format("Full Stiffness Matrix:Stif(",I5,",",I5,")"/)
+	    477  1020 format(I5/(6(8(f12.1,1X)/)/))
+	    478  1030 format("DMat(12,12)"/(12(f7.0,1X)))
+	    479  1040 format(2X, "EDG Matrix(18,18)"/(I3,18(f5.0,1X)))
+	    480 	end   		
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   248 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  364 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               520   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                14729   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 _PROBLEMTYP                              7 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  6 _MASS                                   24 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  7 _SOLDYN                                 72 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  8 _SHELLPARAMS_DYNAMIC                   360 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  9 _MATERIAL                               24 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 10 _CURPARAMS                             376 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 11 _SIZEVAR                               100 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 12 _LOADSTEPITER                           12 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 13 _SCRATCH                                20 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 14 _SHELLPARAMS                           768 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 15 _LOGPARAMS                             796 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 16 _GAUSSINDEX                              8 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 17 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+ 18 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                18732
+
+
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 9
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+ENTRY POINTS
+
+ Address      Name                
+                                  
+  4-00000000  QUAD_QQ_STIF_DYNAMIC
+
+
+VARIABLES
+
+ Address      Type  Name      Address      Type  Name      Address      Type  Name      Address      Type  Name    
+                                                                                                                   
+  1-00000030  R*8   ABC        1-000000A0  I*4   I         11-00000020  I*4   NELEM          **      R*8   QA      
+  7-00000040  R*8   ACCMUL    11-00000004  I*4   ICONT     11-00000048  I*4   NELTYPE        **      R*8   QD      
+  1-00000078  R*8   AM        16-00000000  I*4   IGAU      11-00000030  I*4   NINT           **      R*8   QV      
+  7-00000018  R*8   BEGTIM    11-00000000  I*4   IGEOM     11-00000028  I*4   NINT1      1-00000008  R*8   RACC    
+ 15-00000000  L*4   BENG      13-00000010  I*4   IINDXEL   11-0000002C  I*4   NINT2      1-00000058  R*8   RI      
+  7-00000000  R*8   BETA      12-00000004  I*4   INUT      11-00000044  I*4   NLOD       1-00000050  R*8   RJ      
+  1-00000070  R*8   BM             **      I*4   IOUT      11-0000000C  I*4   NQC1       6-00000010  R*8   RMASS   
+  1-00000020  R*8   BMAT       1-000000A8  I*4   IPRT      11-00000010  I*4   NQC2      10-00000170  R*8   RUTAHAT 
+ 15-00000004  L*4   BOPT1     13-00000008  I*4   IREFPRO1  11-0000001C  I*4   NQD        1-00000010  R*8   RVEL    
+ 15-00000310  L*4   BPEN      13-0000000C  I*4   IREFPRO2  11-0000004C  I*4   NQD1       1-00000048  R*8   SI      
+ 15-00000318  L*4   BPLOT     13-00000000  I*4   IROTCUR1  11-00000050  I*4   NQD2      10-00000150  R*8   ST      
+ 15-00000314  L*4   BPRINT    13-00000004  I*4   IROTCUR2   1-000000A4  I*4   NREC       1-00000038  R*8   SUM     
+ 12-00000008  L*4   BRESET    12-00000000  I*4   ISTEP          **      I*4   NSTIF      1-00000060  R*8   TH      
+  1-00000068  R*8   CM         1-0000009C  I*4   J         11-0000003C  I*4   NSTIFC     6-00000008  R*8   TMASS   
+  5-00000000  CHAR  CPROBTYP  16-00000004  I*4   JGAU      11-00000024  I*4   NSTIFEL    1-00000018  R*8   TMAT    
+ 10-00000158  R*8   CT         1-00000098  I*4   K         11-00000040  I*4   NSTIFN     7-00000028  R*8   TOTTIM  
+  7-00000010  R*8   DELTIM     1-00000094  I*4   L         11-00000038  I*4   NSTIFS         **      R*8   TRACE   
+  6-00000000  R*8   DENSITY    2-00000168  I*4   NC        11-00000014  I*4   NSUP       7-00000038  R*8   VELMUL  
+  7-00000030  R*8   DISMUL    11-00000034  I*4   NCINT     11-00000060  I*4   NSZDBL     1-00000040  R*8   WT      
+  9-00000000  R*8   E         11-00000054  I*4   NCMAT     11-0000005C  I*4   NSZINT    10-00000160  R*8   XLAM1   
+  7-00000020  R*8   ENDTIM    11-00000008  I*4   NDIM       2-00000158  R*8   ONE       10-00000168  R*8   XLAM2   
+  1-00000028  R*8   FMNS      11-00000018  I*4   NDOF       2-00000150  R*8   ONM        2-00000160  R*8   ZERO    
+  9-00000008  R*8   G         11-00000058  I*4   NDOF2     15-00000308  R*8   PEN                                  
+  7-00000008  R*8   GAMA           **      I*4   NEL        9-00000010  R*8   PR                                   
+
+
+ARRAYS
+
+ Address      Type  Name          Bytes  Dimensions
+
+ 10-000000D8  R*8   A1HAT            24  (3)
+ 10-000000F0  R*8   A2HAT            24  (3)
+ 10-00000060  R*8   AA1              24  (3)
+ 10-00000078  R*8   AA2              24  (3)
+  8-00000078  R*8   AACC             24  (3)
+      **      R*8   ACC              **  (*)
+      **      R*8   ADD              **  (*)
+ 14-00000090  R*8   AMAT1            72  (3, 3)
+ 14-000000D8  R*8   AMAT2            72  (3, 3)
+ 10-00000090  R*8   AO1              24  (3)
+ 10-00000108  R*8   AO12N            72  (3, 3)
+ 10-000000A8  R*8   AO2              24  (3)
+  8-00000048  R*8   AVEL             24  (3)
+      **      R*8   B                **  (*, *)
+      **      R*8   BFORS            **  (*)
+      **      R*8   BVEC             **  (*)
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 10
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+ 10-00000000  R*8   C01              24  (3)
+ 10-00000018  R*8   C02              24  (3)
+      **      R*8   CF               **  (*, *)
+ 10-00000030  R*8   CK1              24  (3)
+ 10-00000048  R*8   CK2              24  (3)
+      **      R*8   CKSAV            **  (*)
+      **      R*8   CUCOLD           **  (*)
+      **      R*8   DB               **  (*)
+ 14-00000000  R*8   DD               24  (3)
+      **      R*8   DIS              **  (*)
+      **      R*8   DMAT             **  (*, *)
+ 14-00000030  R*8   DP1              24  (3)
+ 14-00000060  R*8   DP2              24  (3)
+      **      R*8   DT               **  (*)
+      **      R*8   EDG              **  (*, *)
+ 14-000002A0  R*8   FMT1             48  (6)
+ 14-000002D0  R*8   FMT2             48  (6)
+      **      R*8   GY               **  (*, *)
+      **      R*8   HD               **  (*)
+  1-000000C8  R*8   R0               24  (3)
+ 14-00000240  R*8   RE1              48  (6)
+ 14-00000270  R*8   RE2              48  (6)
+  1-000000B0  R*8   RK               24  (3)
+ 14-000001B0  R*8   RMAT1            72  (3, 3)
+ 14-000001F8  R*8   RMAT2            72  (3, 3)
+      **      R*8   ROCOLD           **  (*)
+      **      R*8   ROSAV            **  (*)
+  8-00000018  R*8   ROTA             24  (3)
+  8-00000000  R*8   ROTV             24  (3)
+  1-000000E0  R*8   RP               24  (3)
+ 14-00000048  R*8   RP1              24  (3)
+ 14-00000078  R*8   RP2              24  (3)
+ 14-00000018  R*8   RR               24  (3)
+      **      R*8   SKLM             **  (*)
+      **      R*8   STIF             **  (*, *)
+      **      R*8   STIFK            **  (*)
+      **      R*8   T                **  (*, *)
+  8-00000060  R*8   TACC             24  (3)
+  8-00000030  R*8   TVEL             24  (3)
+      **      R*8   VEL              **  (*)
+  8-00000090  R*8   W                72  (3, 3)
+  8-00000120  R*8   WACC             72  (3, 3)
+ 14-00000120  R*8   WMAT1            72  (3, 3)
+ 14-00000168  R*8   WMAT2            72  (3, 3)
+  8-000000D8  R*8   WVEL             72  (3, 3)
+ 15-00000008  R*8   XE              768  (8, 12)
+      **      R*8   XM               **  (*, *)
+ 10-000000C0  R*8   XNOR             24  (3)
+
+
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 11
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+LABELS
+
+ Address      Label  Address      Label  Address      Label  Address      Label  Address      Label
+                                                                                                   
+      **      53          **      99          **      140         **      240         **      340  
+  4-00003277  60          **      110     4-000027E2  150     4-00002CA0  250     4-00003172  350  
+      **      70          **      120         **      220         **      320         **      999  
+      **      80          **      130         **      230         **      330                      
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 12
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+	    481 	   		
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+
+QUAD_QQ_STIF_DYNAMIC            Source Listing                   3-Sep-2008 12:11:22  Compaq Visual Fortran 6.6-1684    Page 13
+                                                                 3-Sep-2008 12:11:22  Quad_QQ_STIF_DYNAMIC.f
+
+  /nowarn:unused                        /warn:usage
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Quad_QQ_STIF_DYNAMIC.lst
+  /o         filename : Debug/Quad_QQ_STIF_DYNAMIC.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.10 seconds
+  Elapsed time:      0.11 seconds
+  Pagefaults:           0
+  I/O Count:            0

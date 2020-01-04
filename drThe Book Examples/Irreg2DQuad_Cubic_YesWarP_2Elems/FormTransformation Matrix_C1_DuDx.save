@@ -1,0 +1,162 @@
+	Subroutine FormTransformationMatrix_C1(Qc1,Qc2,iCol,nOrderR,
+     &									nOrderS,T,nStifS,nStifC)
+!
+!	Coerced Isoparametric Quadrilateral_Cubic_Cubic Element
+!------------------------------------------------------------
+!	C1- Contraints:
+!------------------------------------------------------------
+!	Inputs
+!		Qc(1,12)	= Bezier X-Coordinates
+!					=	(qc00x qc10x...qc33x)
+!		Qc(2,12)	= Bezier Y-Coordinates
+!					=	(qc00y qc10y...qc33y)
+!-----------------------------------
+!
+!	Inputs
+!		nStifS					= Row or Col size of SinStiffness matrix 
+!		nStifC					= Row or Col size of ConStiffness matrix
+!		 	
+!	Outputs 
+!		T(nStifS,nStifC)		= C0 Transformation Matrix
+!
+!
+	Implicit Real(kind=8) (a-h,o-z)
+!
+!	Input Variables & Arrays
+!
+	Real(kind=8)	Qc1       ,Qc2
+	Dimension		Qc(2,iCol),Qc2(2,iCol)
+!	
+!	Output Variables & Arrays	
+!
+	Real(kind=8)	T				,half
+	Dimension		T(nStifS,nStifC)
+!
+!	Working Variables & Arrays
+!	
+	Real(kind=8)	H1D	 
+	Dimension		H1D(2,12)
+	Real(kind=8)	AJI     ,Det   
+	Dimension		AJI(2,2)
+	Real(kind=8)	AJ11_10,AJ21_10,AJ11_1h,AJ21_1h,AJ11_11,AJ21_11	!element 1	 
+	Real(kind=8)	AJ11_00,AJ21_00,AJ11_0h,AJ21_0h,AJ11_01,AJ21_01	!element 2
+!
+	Real(kind=8)	Ge     ,Gc     ,GeInv     ,Ts      
+	Dimension		Ge(3,3),Gc(3,6),GeInv(3,3),Ts(3,6)
+!
+	Integer DofR1(3),Loc1(6),DofR2(3),Loc2(6), nDof
+	DATA DofR1 /4 ,8 ,12/			!(At Old Row)To be removed by
+	DATA Loc1  /3 ,6 , 9,19,22,25/	!(At New Col) these and
+	DATA DofR2 /16,20,24/			!(At Old Row)To be removed by
+	DATA Loc2  /12,15,18,28,31,34/	!(At New Col) these
+	DATA nDofR/3/
+	DATA nDofC/6/
+!---------------------------------------------------------
+!	Get Inverse Jacobians for the Junction Nodes
+!--------------------------
+!	Element_1:(r=1,s=0)
+	call CQ_Jacobian(Qc1,12,4,3,1.0,0.0,H1D,AJI,Det,Nel,Iout)
+	AJ11_10 = AJI(1,1)
+	AJ21_10 = AJI(2,1)
+!	Element_1:(r=1,s=1/2)
+	call CQ_Jacobian(Qc1,12,4,3,1.0,0.5,H1D,AJI,Det,Nel,Iout)
+	AJ11_1h = AJI(1,1)
+	AJ21_1h = AJI(2,1)
+!	Element_1:(r=1,s=1)
+	call CQ_Jacobian(Qc1,12,4,3,1.0,1.0,H1D,AJI,Det,Nel,Iout)
+	AJ11_11 = AJI(1,1)
+	AJ21_11 = AJI(2,1)
+!	Element_2:(r=0,s=0)
+	call CQ_Jacobian(Qc1,12,4,3,0.0,0.0,H1D,AJI,Det,Nel,Iout)
+	AJ11_00 = AJI(1,1)
+	AJ21_00 = AJI(2,1)
+!	Element_2:(r=0,s=1/2)
+	call CQ_Jacobian(Qc1,12,4,3,0.0,0.5,H1D,AJI,Det,Nel,Iout)
+	AJ11_0h = AJI(1,1)
+	AJ21_0h = AJI(2,1)
+!	Element_2:(r=0,s=1)
+	call CQ_Jacobian(Qc1,12,4,3,0.0,1.0,H1D,AJI,Det,Nel,Iout)
+	AJ11_01 = AJI(1,1)
+	AJ21_01 = AJI(2,1)
+!---------------------------------------------------------
+!	Form Constraint Matrices
+!-----------------------------
+	Ge = 0.0D0	!zero all
+	Ge(1,1) = 3.0*(AJ11_10+AJ11_00)-2.0*(AJ21_10-AJ21_00) 
+	Ge(1,2) =-2.0*(AJ21_00-AJ21_10) 
+	Ge(2,1) = 0.75*(AJ11_1h+AJ11_0h)-(AJ21_1h-AJ21_0h) 
+	Ge(2,2) = 1.5*(AJ11_1h+Aj11_0h) 
+	Ge(2,3) = 0.75*(AJ11_1h+AJ11_0h)+(AJ21_1h-AJ21_0h)  
+	Ge(3,2) =-2.0*(AJ21_11-AJ21_01) 
+	Ge(3,3) = 3.0*(AJ11_11+AJ11_01)+2.0*(AJ21_11-AJ21_01) 
+!-----------------------------
+	Gc = 0.0D0	!zero all
+	Gc(1,1) = 3.0*AJ11_10
+	Gc(1,4) = 3.0*AJ11_00
+	Gc(2,1) = 0.75*AJ11_1h 
+	Gc(2,2) = 1.50*AJ11_1h 
+	Gc(2,3) = 0.75*AJ11_1h 
+	Gc(2,4) = 0.75*AJ11_0h 
+	Gc(2,5) = 1.50*AJ11_0h 
+	Gc(2,6) = 0.75*AJ11_0h 
+	Gc(3,3) = 3.0*AJ11_11
+	Gc(3,6) = 3.0*AJ11_01
+!---------------------------------------------------------
+!	Get Inverse of Ge
+!-----------------------------
+	call DLINRG(3,Ge,3,GeInv,3)
+!---------------------------------------------------------
+!	Get Ts = GeInv*Gc
+!-----------------------------
+	do 5 i = 1,3
+	do 5 j = 1,6
+	sum = 0.0
+	do 4 k = 1,3
+	sum = sum + GeInv(i,k)*Gc(k,j)
+    4 Continue
+    5 Ts(i,j) = sum
+!---------------------------------------------------------
+!	Form Transformation Matrix 
+!-------------------------------
+	T		= 0.0D0	! everything zeroed
+!
+	k1 = 0
+	k2 = 0
+	iremoved = 0
+	do 30 i = 1,nStifS
+		do 10 k = 1,nDofR
+			if(i == DofR1(k)) Then
+				k1 = k1 + 1
+				do 6 j = 1, nDofC
+				T(i,Loc1(j)) = Ts(k1,j)
+    6				continue
+				iremoved = iremoved + 1
+				go to 20
+			else if(i == DofR2(k)) Then
+				k2 = k2 + 1
+				do 7 j = 1, nDofC
+				T(i,Loc2(j)) = Ts(k2,j)
+    7				continue
+				iremoved = iremoved + 1
+				go to 20
+			end if
+   10     continue
+		T(i,i-iremoved) = 1.0D0 
+   20		continue
+   30 continue
+   40 continue		 
+!
+!
+!	OPEN (unit = 17, FILE = 'Tran_C1.prt', STATUS = 'NEW')
+!	do 110 i = 1,nStifS
+!	write(17,1010) nStifS,nStifC,i,(T(i,j),j = 1,nStifC)
+!  110	continue
+  120 continue
+!
+!
+ 1010 format("C1 Transformation Matrix:T(",I3,",",I3,")"/
+     &        I5/(5(9(f5.2,1X)/)))
+!   		 
+!   		 
+	return
+	end   		

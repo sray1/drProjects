@@ -1,0 +1,48 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: 2DCubic_Cubic - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSP2230.TMP" with contents
+[
+kernel32.lib smathd.lib sf90mp.lib /nologo /stack:0x3d0900 /entry:"WinMainCRTStartup" /subsystem:windows /incremental:no /pdb:"Debug/2DCubic_Cubic.pdb" /debug /machine:I386 /nodefaultlib:"dfconsol.lib" /out:"Debug/2DCubic_Cubic.exe" /pdbtype:sept 
+".\Debug\BernStein.obj"
+".\Debug\BernStein_IstDerivative.obj"
+".\Debug\Bez_QQ_EL_1.obj"
+".\Debug\Compare_Bernoulli.obj"
+".\Debug\Compare_DisRot.obj"
+".\Debug\Compute_ElementReactions.obj"
+".\Debug\Compute_StrainEnergy.obj"
+".\Debug\Cubic_ArbitrarySi.obj"
+".\Debug\Cubic_Subdivide.obj"
+".\Debug\DegreeElevate.obj"
+".\Debug\Expand_BZCons_C0.obj"
+".\Debug\ExtractEL_DispCon.obj"
+".\Debug\GaussPtVal.obj"
+".\Debug\Initiate_DegreeData.obj"
+".\Debug\Initiate_ExtractionIndex.obj"
+".\Debug\Initiate_Support.obj"
+".\Debug\Jacobian.obj"
+".\Debug\Non_Singular_QQ.obj"
+".\Debug\Prog_Timo_QQ_1EL.obj"
+".\Debug\QQ_StrainDis.obj"
+".\Debug\Quad_QQ_LVY.obj"
+".\Debug\Quad_QQ_STIF.obj"
+".\Debug\Quad_QQ_STIF_ASSEMBLE.obj"
+".\Debug\Solve_AxEqB.obj"
+".\Debug\StressRecovery.obj"
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP2230.TMP"
+<h3>Output Window</h3>
+Linking...
+
+
+
+<h3>Results</h3>
+2DCubic_Cubic.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

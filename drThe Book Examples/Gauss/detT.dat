@@ -1,0 +1,91 @@
+ =========================================
+         T O T A L   G E N 3 D 
+ =========================================
+ Run date and time is Fri Oct 24 08:20:17 2003
+ Example Problem is PALAZOTTO:c0=0.01:        Ex_2
+
+     Integer Controls
+  Singular Stiffness Size    =    36
+  Inter-ElementControl Cn, n =     0  Geometry
+  Inter-ElementControl Cn, n =     0  Displacement
+  Inter-ElementControl Dofs  =     0
+  Constrained Stiffness Size =    36
+  No. of Supported Dofs      =    22
+  NonSingular Stiffness Size =    14
+  No. of Gauss-Legendre Pts. =     5
+  Element Type:              = 3D NonLinear Beam   
+
+
+  Element Degree             = QUINTIC   
+  Nodal DOFs                 =     6
+  No. of Elements            =     1
+  Element DOFs               =    36
+
+
+     Geometry Controls
+  Total Elemental Angle       =   53.13000 degree
+  Total Elemental Angle       =    0.92729 radian
+  Radius                      =       100.00
+  Length                      =         0.00
+  Depth                       =    1.00000
+  Width                       =    1.00000
+
+
+     Real Controls
+  Elasticity Modulus          =   100.00    
+  Shear Modulus               =   50.000    
+  Poisson's Ratio             =    0.00000
+
+
+     Constitutive Matrix 
+  EA		=   100.00    
+  GAM		=   50.000    
+  GAB		=   0.0000    
+  GJ		=   0.0000    
+  EIM		=   0.0000    
+  EIB		=   25600.    
+
+
+     Solution Controls
+  Convergence Tolerance            =  0.10000E-06
+  Arc Length                       =    2.00000
+  Max. Number of Load Steps        =         18
+  Max. Number of Iterations        =         20
+  Max. Subdivision of Iterations   =          0
+
+  0     0.00000E+00    0.00000E+00    0.00000E+00    0.00000E+00    0  0.0000E+00  +
+
+  Just before Leaving: Compute Strain Energy
+
+
+  Strain Energy    =           1.4840538
+  Potential Energy =          -1.4840538
+         iStep =                1
+          iNut =                1
+ LoadParamChan( 14) Array
+
+       -0.5519333459        -0.9633730123        -1.1405041221        -0.7663554327
+        0.6197722907         1.6496029261         3.3469955934         5.1919464146
+        5.9362153447         0.0466274910         0.0466263374         0.0578392045
+        0.0633761757         0.0486472079
+ LoadParamChan( 14) Array
+
+        0.0000000000         0.0000000000         0.0000000000         0.0000000000
+        0.0000000000         0.0000000000         0.0000000000         0.0000000000
+        0.0000000000         0.0000000000         0.0000000000         0.0000000000
+        0.0000000000         0.0000000000
+ LoadParamChan( 14) Array
+
+       -0.2759666729        -0.4816865061        -0.5702520610        -0.3831777164
+        0.3098861454         0.8248014630         1.6734977967         2.5959732073
+        2.9681076724         0.0233137455         0.0233131687         0.0289196022
+        0.0316880878         0.0243236040
+     iter =  1 ARC =  8.924  Lambda =    2.00  u =    0.00000  w =    5.93622  v =    0.00000  Error =  Infinity 
+                                               tt=    0.00000  tm=    0.00000  tb=    0.00000
+     iter =  2 ARC =  8.924  Lambda =    1.80  u =    0.00000  w =    5.87385  v =    0.00000  Error = .14345E-01
+                                               tt=    0.00000  tm=    0.00000  tb=    0.00000
+     iter =  3 ARC =  8.924  Lambda =    1.80  u =    0.00000  w =    5.87384  v =    0.00000  Error = .21294E-04
+                                               tt=    0.00000  tm=    0.00000  tb=    0.00000
+     iter =  4 ARC =  8.924  Lambda =    1.80  u =    0.00000  w =    5.87384  v =    0.00000  Error = .47000E-09
+                                               tt=    0.00000  tm=    0.00000  tb=    0.00000
+  1     0.36068E+01    0.25375E-14    0.58738E+01   -0.15942E-15    4  0.4700E-09  +

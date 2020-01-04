@@ -1,0 +1,24 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: 2DCubic_Cubic - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSPB162.TMP" with contents
+[
+/check:bounds /compile_only /debug:full /include:"Debug/" /nologo /traceback /warn:argument_checking /warn:nofileopt /module:"Debug/" /object:"Debug/" /pdbfile:"Debug/DF60.PDB" /libs:qwins 
+"C:\The Book\Irre2DQQ_YesWarP_2Elems\CC_StrainDis4.f"
+]
+<h3>Output Window</h3>
+Compiling Fortran...
+C:\The Book\Irre2DQQ_YesWarP_2Elems\CC_StrainDis4.f
+
+
+
+<h3>Results</h3>
+CC_StrainDis4.obj - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

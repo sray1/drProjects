@@ -1,0 +1,26 @@
+ Run date and time is Fri Jul 18 16:07:49 2003
+ =========================================
+    S H E L L   T O T A L   G E N 3 D 
+ =========================================
+ Example Problem is Deep Arch PALAZ.:c0=.01:  Ex_2
+
+     Geometry and DOFs Controls
+  Total Elemental Angle       =   53.13000 degree
+  Total Elemental Angle       =    0.92729 radian
+  Radius                      =       100.00
+  Length                      =        92.73
+  Depth                       =    1.00000
+  Width                       =    1.00000
+  Element Geometry Order      =          4 nQc1
+  Element Geometry Order      =          2 nQc2
+  Displacement Order          =          6 nQd1
+  Displacement Order          =          2 nQd2
+  No. of Supported DOFs       =         44
+  No. of Loaded DOFs          =          2
+
+
+     Real Controls
+  Elasticity Modulus          =   50.000    
+  Shear Modulus               =   25.000    
+  Poisson's Ratio             =    0.00000
+

@@ -1,0 +1,182 @@
+FORM_RESIDUAL_INERTIAL          Source Listing                   3-Sep-2008 10:42:01  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 3-Sep-2008 10:34:14  Form_Residual_Inertial.f
+
+	      1 	Subroutine Form_Residual_Inertial(RIne,W,TAcc,AAcc,TMat,
+	      2      &						TMass,RMass,nS,nDof,nStifEL,Iout)
+	      3 !	----------------------------------------------------------------------------- S Matrix
+	      4 !	RIne		= Inertial Residual Vector
+	      5 !				= dbarTrans*Tmass*TAcc + ThetaBarTrans*RMass*(Wtrans*RAcc 
+	      6 !	----------------------------------------------------------------------------- 
+	      7 !	Inputs
+	      8 !		nS		= 3
+	      9 !		nDof	= Nodal DOF = 2*nS = 6
+	     10 !		nStifel	= Total Element DOF = 
+	     11 !		W		= Rotational Transformation Matrix: W(nS,nS)	
+	     12 !		TACC	= Translational Acceleration Vector: TAcc(nS)	
+	     13 !		AACC	= Angular Acceleration Vector: AAcc(nS)	
+	     14 !		TMAT	= Generalized Control Transformation Matrix: TMat(nDof,nStifEL)	
+	     15 !		TMass	= Translational Mass density	
+	     16 !		RMass	= Rotational    Mass density	
+	     17 !	Outputs 
+	     18 !		RIne	= Inertial Residual Vector: RIne(nStifEL) at Integration Pt.
+	     19 !	------------------------------------------------------------
+	     20 
+	     21 	Implicit Real(kind=8) (a-h,o-z)
+	     22 !
+	     23 !	include 'mass.h'
+	     24 !
+	     25 	Real(kind=8)	W       ,TAcc    ,AAcc    ,TMat                                               
+	     26 	Dimension		W(nS,nS),TAcc(nS),AAcc(nS),TMat(nDof,nStifEL)
+	     27 	Real(kind=8)	RIne                                                                      
+	     28 	Dimension		RIne(nStifEL)
+	     29 	Real(kind=8)	Tem      ,TP    ,AP                                                                      
+	     30 	Dimension		Tem(nDof),TP(nS),AP(nS)
+	     31 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	     32 !	------------------------------------------------------ Translational Part
+	     33 	TP		= TMass*TAcc
+	     34 !	------------------------------------------------------ Angular Part
+	     35 	AP		= RMass*MATMUL(TRANSPOSE(W),AAcc)
+	     36 !	------------------------------------------------------ together
+	     37 	do ii = 1,nS
+	     38 		Tem(ii)		= TP(ii)
+	     39 		Tem(ii+nS)	= AP(ii)
+	     40 	end do		
+	     41 !	------------------------------------------------------ Residual Inertial
+	     42 	RIne = MATMUL(TRANSPOSE(TMat),Tem)
+	     43 !---------------------------------------------------------- Write:
+	     44 	iPrt = 0
+	     45 	call DumpRealArray(RIne,nStifEL,"Residual_Inertial",iPrt,iOut)
+	     46 !----------------------------------------------------------
+	     47 	return
+	     48 !
+	     49 	end
+
+FORM_RESIDUAL_INERTIAL          Source Listing                   3-Sep-2008 10:42:01  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 3-Sep-2008 10:34:14  Form_Residual_Inertial.f
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    24 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                   40 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                                32   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 1824   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 2224
+
+
+ENTRY POINTS
+
+ Address      Name                  
+                                    
+  4-00000000  FORM_RESIDUAL_INERTIAL
+
+
+VARIABLES
+
+ Address      Type  Name     Address      Type  Name     Address      Type  Name     Address      Type  Name   
+                                                                                                               
+  1-00000014  I*4   II            **      I*4   NDOF      2-00000018  R*8   ONE           **      R*8   TMASS  
+      **      I*4   IOUT          **      I*4   NS            **      R*8   RMASS     2-00000010  R*8   TWO    
+  1-00000010  I*4   IPRT          **      I*4   NSTIFEL   2-00000008  R*8   THREE     2-00000020  R*8   ZERO   
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+      **      R*8   AACC           **  (*)
+      **      R*8   AP             **  (*)
+      **      R*8   RINE           **  (*)
+      **      R*8   TACC           **  (*)
+      **      R*8   TEM            **  (*)
+      **      R*8   TMAT           **  (*, *)
+      **      R*8   TP             **  (*)
+      **      R*8   W              **  (*, *)
+
+FORM_RESIDUAL_INERTIAL          Source Listing                   3-Sep-2008 10:42:01  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 3-Sep-2008 10:34:14  Form_Residual_Inertial.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+FORM_RESIDUAL_INERTIAL          Source Listing                   3-Sep-2008 10:42:01  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 3-Sep-2008 10:34:14  Form_Residual_Inertial.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Form_Residual_Inertial.lst
+  /o         filename : Debug/Form_Residual_Inertial.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.01 seconds
+  Elapsed time:      0.02 seconds
+  Pagefaults:           0
+  I/O Count:            0

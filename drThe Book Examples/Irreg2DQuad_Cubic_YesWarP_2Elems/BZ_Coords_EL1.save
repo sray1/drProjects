@@ -1,0 +1,62 @@
+	Subroutine BZ_Coords_EL1(Qc,nR,nC,xLx,xUx,xLy,iGeo,iOut)
+	
+	real(kind = 8)	Qc
+	Dimension		Qc(nR,nC)
+	real(kind = 8)	xLx,xUx,xLy,xLx3,x2Lx3,xLy3,x2Ly3
+	integer			nR,nC
+!
+	Qc			= 0.			! zero all
+!
+	xLx3		= xLx/3.
+	xUx3		= xUx/3.
+	xLy2		= xLy/2.
+	x2Lx3		= 2.*xLx3
+	x2Ux3		= 2.*xUx3
+!-------------------------- C0
+	Qc(1,1)		= 0.0
+	Qc(1,2)		= xLx3
+	Qc(1,3)		= x2Lx3
+	Qc(1,4)		= xLx
+!-------------------------- C1
+!	Qc(1,2)		= 8.0D0/3.0D0
+!	Qc(1,3)		= 8.00D0
+!	Qc(1,4)		= xLx
+!----------------------------------- C0
+	Qc(1,5)		= 0.0
+	Qc(1,6)		= (xLx3+xUx3)/2.
+	Qc(1,7)		= (x2Lx3+x2Ux3)/2.
+	Qc(1,8)		= (xLx+xUx)/2.
+!----------------------------------- C0
+	Qc(1,9)		= 0.0
+	Qc(1,10)	= xUx3
+	Qc(1,11)	= x2Ux3
+	Qc(1,12)	= xUx
+!----------------------------------- C1
+!	Qc(1,10)	= 13.33D0
+!	Qc(1,11)	= 24.00D0
+!	Qc(1,12)	= xUx
+!------------------------------------ Y
+	xLy2		= xLy/2.
+!
+!	Qc(2,1)		= 0.
+!	Qc(2,2)		= 0.
+!	Qc(2,3)		= 0.
+!	Qc(2,4)		= 0
+!
+	Qc(2,5)		= xLy2
+	Qc(2,6)		= xLy2
+	Qc(2,7)		= xLy2
+	Qc(2,8)		= xLy2
+
+!
+	Qc(2,9)		= xLy
+	Qc(2,10)	= xLy
+	Qc(2,11)	= xLy
+	Qc(2,12)	= xLy
+!
+  100 continue
+
+!
+	return
+	end
+	

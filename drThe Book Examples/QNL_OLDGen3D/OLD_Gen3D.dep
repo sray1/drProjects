@@ -1,0 +1,9 @@
+# Microsoft Developer Studio Generated Dependency File, included by QNL_Gen3D.mak
+
+.\Prog_NL_Circular_2ELs.f : \
+	{$(INCLUDE)}"linear_operators.mod"\
+	
+
+.\Solve_AxEqB.f : \
+	{$(INCLUDE)}"NUMERICAL_LIBRARIES.mod"\
+	

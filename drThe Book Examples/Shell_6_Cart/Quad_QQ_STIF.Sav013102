@@ -1,0 +1,160 @@
+	Subroutine Quad_QQ_STIF(Qd,Qc,nQc,Nel,NelType,Nint,DMat,
+     &						Stif,BFors,StifK,nStif,Iout,Trace)
+!
+!	Coerced Isoparametric Quadrilateral_Cubic_Cubic Element
+!
+!	Notes:	Nint should be atleast 2
+!
+!	Inputs
+!		Qd(nStif)	= Latest displacement solution: state vector
+!		Qc(1,16)	= Bezier X-Coordinates
+!					=	(qc00x qc10x...qc33x)
+!		Qc(2,16)	= Bezier Y-Coordinates
+!					=	(qc00y qc10y...qc33y)
+!		Qc(3,16)	= Bezier Z-Coordinates
+!					=	(qc00z qc10z...qc33z)
+!		Nel			= Element Number
+!		NelType		= Element Type:
+!						0 = Plane Stress
+!						1 = Plane Strain
+!						2 = Axi-symmtric	(NOT DONE YET)
+!		Nint		= Number of Gauss Points
+!		E			= Elasticity Modulus
+!		PR			= Poisson's ratio
+!		Thk			= Thickness
+!		nStif		= Row or Col size of Stiffness matrix ( MUST BE 32)
+!		Iout		= Error Output file#
+!		 	
+!	Outputs 
+!		Stif(nStif,nStif)	= Desired Stiffness Matrix
+!		bFors(nStif)		= Desired Body force Vector Integrals
+!		StifK(nStif)		= Desired kLamda Stiffness last column Vector Integrals
+!		Trace		= trace of the matrix
+!
+	Implicit Real(kind=8) (a-h,o-z)
+!
+!	Input Variables & Arrays
+!
+	Real(kind=8)	Qc       ,C0      
+	Dimension		Qc(3,nQc),C0(3)
+	Real(kind=8)	Qd       ,Br     ,H1D     ,Axes     ,DMat   
+	Dimension		Qd(nStif),Br(nQc),H1D(nQc),Axes(3,3),DMat(6,6)
+	integer			Nel,NelType,Iout,nStif
+!	
+!	Output Variables & Arrays	
+!
+	Real(kind=8)	BFors       ,StifK       ,Stif			   ,Trace
+	Dimension		BFors(nStif),StifK(nStif),Stif(nStif,nStif)
+	Real(kind=8)	EDG       ,B          ,DB    ,T     
+	Dimension		EDG(12,12),B(12,nStif),DB(12),T(6,nStif)
+	Real(kind=8)	Add    
+	Dimension		Add(nStif)
+	Real(kind=8)	BVEC       ,SKLM    
+	Dimension		BVEC(nStif),SKLM(nStif)
+	Real(kind=8) AM,BM,CM,TH,Ri,Si,Wt,sum
+!
+	DATA zero/0.D0/,one/1.0D0/ 
+	DATA nC/3/,nDof/6/,nDof2/12/
+!----------------------------------------------------------
+!	Stiffness Matrix Calculation
+!
+	BFors	= 0.D0	!all
+	StifK	= 0.D0	!all
+    	Stif	= 0.D0	! all elements = 0.
+!
+	iPrt = 0
+	If (iPrt == 1) Then
+		write(Iout,1000) Nel,nC,nQc,(i,(Qc(i,j),j=1,nQc),i=1,nC)
+	endif
+
+!	Loop over Gauss Locations
+	do 60 lr = 1,Nint
+	Ri = GaussPtVal(lr,Nint,1) 
+!------------------------------------------------------------- Get  Curvature Vector etc.
+	call TMB_CuLn(Qc,nQc,nOrderR,Ri,Br,H1D,Det,Cur,Tor,
+     &						Axes,dxbardr,Nel,Iout,iPrt)
+!	------------- Prepare
+	AJI = one/det
+	C0(1) = Tor
+	C0(2) = zero
+	C0(3) = Cur
+!------------------------------------------------------------- Get  T(nDof,nDim*nQc),B(nDof2,nDim*nQc)
+	call Form_B_and_Tmatrices(Br,H1D,T,nDof,B,nDof2,nStif,AJI,
+     &							nQc,Iout)
+!------------------------------------------------------------- Get  EDG(nDof2,nDof2)
+	call Form_EtranDEplusGMatrix(nQc,Qd,nStif,DMat,C0,
+     &				T,B,BVEC,SKLM,EDG,3,nDof,nDof2,Iout)
+!------------------------------------------------------------- Form: Btran_EDG_B 
+!	Add to stiffness matrix
+!
+	Wt = GaussPtVal(lr,Nint,2)*Det
+!
+	do 50 j = 1,nStif
+	do 20 k = 1,nDof2		! 
+	DB(k) = 0.0
+	do 20 l = 1,nDof2		! 
+	DB(k) = DB(k) + EDG(k,l)*B(l,j)
+   20 continue
+	do 40 i = j,nStif
+	sum = 0.0
+	do 30 l = 1,nDof2		! 
+	sum = sum + B(l,i)*DB(l)
+   30	continue
+	Stif(i,j) = Stif(i,j) + sum*Wt
+   40	continue
+   50 continue
+!------------------------------------------------------------- Load Vector: Residual & Body force part 
+	do 53 i = 1,nStif
+	BFors(i) = BFors(i) + Wt*BVec(i)
+   53 continue		
+!------------------------------------------------------------- Form: Last Column of
+!                                                              stiffness: KLamda Body Force part
+ 
+	do 55 i = 1,nStif
+	StifK(i) = StifK(i) + Wt*SKLM(i)
+   55 continue		
+   60 continue
+!
+!	symmetry: Upper Triangle 
+!
+	do 70 j = 1,nStif
+	do 70 i = j,nStif
+  	Stif(j,i) = Stif(i,j)
+   70 continue
+!
+!	Get Trace
+!
+	Trace = 0.D0
+	do 80 i = 1,nStif
+	Trace = Trace + Stif(i,i)
+   80 continue			
+!
+!	Check each col. vector for Null
+!
+	Add = 0.D0
+	do 100 j = 1,nStif
+	sum = 0.0 
+	do 90 i = 1,nStif	
+	sum = sum + Stif(i,j)
+   90 continue
+	Add(j) = sum
+  100 continue			
+!
+!	done
+!
+	iPrt = 0
+	if(iPrt == 1) Then
+		write(Iout,1010) nStif,nStif
+		do 110 i = 1,nStif
+		write(Iout,1020) i,(Stif(i,j),j = 1,nStif)
+  110	continue
+	endif 
+!
+	return
+!
+ 1000 format("QC(",I1,",",I1,"): Elem# =",I4/
+     &        2(I5,5X,5(f10.6,1X)/) )
+ 1010 format("Full Stiffness Matrix:Stif(",I2,",",I2,")"/)
+ 1020 format(I5/(3(5(f16.6,1X)/)/))
+	end   		
+	   		

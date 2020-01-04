@@ -1,0 +1,159 @@
+SOLVE_AXEQB                     Source Listing                  30-Aug-2008 10:06:12  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                30-Aug-2008 10:06:12  Solve_AxEqB.f
+
+	      1 	Subroutine Solve_AxEqB(A,b,x,LDA,n,iOut)
+	      2  
+	      3       USE NUMERICAL_LIBRARIES
+	      4  
+	      5 	Implicit Real(kind=8) (a-h,o-z)
+	      6 	common/LoadStepIter/iStep,iNut,bReset
+	      7 
+	      8       REAL(kind = 8)  A       , b   , x
+	      9       Dimension		A(LDA,n), b(n), x(n)
+	     10 C
+	     11 	Real(kind=8)	Add    
+	     12 	Dimension		Add(n)
+	     13 !
+	     14 	iPrt = 0
+	     15 	iPath = 1
+	     16 	CALL DLSARG (n, A, LDA, b, iPath, X)
+	     17 !
+	     18 	iPrt = 1
+	     19 	iPrt = 0
+	     20 !
+	     21 !		write(iOut,1000)
+	     22 !		write(iOut,1010) N,(X(i),i = 1,N)
+	     23 	iPrt = 0
+	     24 !   		 
+	     25 	return
+	     26  1000 Format(/2x,"Just before Leaving: Solve_AxEqB"/)
+	     27  1010 Format(/2x,"Solved DisplacementControls: 1x"I3/
+	     28      &								4(3(2x,F20.15)/) )
+	     29 	end
+
+SOLVE_AXEQB                     Source Listing                  30-Aug-2008 10:06:12  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                30-Aug-2008 10:06:12  Solve_AxEqB.f
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    20 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  188 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .text                                  248   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  4 _LOADSTEPITER                           16 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  5 .drectve                               287 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                88 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                  847
+
+
+ENTRY POINTS
+
+ Address      Name       
+                         
+  3-00000000  SOLVE_AXEQB
+
+
+VARIABLES
+
+ Address      Type  Name    Address      Type  Name    Address      Type  Name    Address      Type  Name  
+                                                                                                           
+  4-00000008  R*8   BRESET       **      I*4   IOUT     1-00000010  I*4   IPRT         **      I*4   LDA   
+  4-00000004  I*4   INUT     1-0000000C  I*4   IPATH    4-00000000  I*4   ISTEP        **      I*4   N     
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+      **      R*8   A              **  (*, *)
+      **      R*8   ADD            **  (*)
+      **      R*8   B              **  (*)
+      **      R*8   X              **  (*)
+
+SOLVE_AXEQB                     Source Listing                  30-Aug-2008 10:06:12  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                30-Aug-2008 10:06:12  Solve_AxEqB.f
+
+	     30 
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /show:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+
+SOLVE_AXEQB                     Source Listing                  30-Aug-2008 10:06:12  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                30-Aug-2008 10:06:12  Solve_AxEqB.f
+
+  /nowarn:unused                        /warn:usage
+
+  /I         path : C:\drProjects\drThe Book Examples\timestep\MdDynamicEq\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Solve_AxEqB.lst
+  /o         filename : Debug/Solve_AxEqB.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.14 seconds
+  Elapsed time:      0.14 seconds
+  Pagefaults:           0
+  I/O Count:            0

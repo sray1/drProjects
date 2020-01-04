@@ -1,0 +1,457 @@
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+	      1 	Subroutine Form_EtranDEplusGMatrix(DMat,EMat,
+	      2      &							TMat,BMat,EDG,Iout)
+	      3 !	Subroutine Form_EtranDEplusGMatrix(RoOld,Hd,nStifEL,DMat,RK,
+	      4 !     &				TMat,BMat,BVEC,SKLM,EDG,nC,nDof,nDof2,Iout)
+	      5 !	Inputs
+	      6 !		nDof			= 6
+	      7 !		nDof2			= 18
+	      8 !		CK				= Current Curvature
+	      9 !		nQc				= Order of the Bezier
+	     10 !		DMat			= DMat(nCMat =12,nCMat =12)
+	     11 !		C01				= C01(nC=3)= curvature Vector Reference in dir 1
+	     12 !		C02				= C02(nC=3)= curvature Vector Reference in dir 2
+	     13 !		TMat			= T(nDof  =  6,nStifEL = 6*nQd1*nQd2)
+	     14 !		BMat			= T(nDof2 = 18,nStifEL = 6*nQd1*nQd2)
+	     15 !
+	     16 ! 	
+	     17 !	Outputs 
+	     18 !		EDG(18,18)		= EtranDEplusG Matrix at integration point R
+	     19 !		EFO(18)			= EtransposeF0 Vector at integration point R				
+	     20 !		BVEC(nStifEL)	= BtransEtranF0-Ttrans_dFB/dLamda Vector at integration point R				
+	     21 !		SKLM(nStifEL)	= kLamda Stiffness Vector at integration point R				
+	     22 !
+	     23 	Implicit Real(kind=8) (a-h,o-z)
+	     24 !============================================
+	     25 	include 'SizeVar.h'
+	     31 	include 'LoadStepIter.h'
+	     33 	include 'CurParams.h'
+	     46 	include 'ThetaConstants.h'
+	     48 	include 'BeamParams.h'
+	     57 	include 'ShellParams.h'
+	     71 	include 'LogParams.h'
+	     76 	include 'GaussIndex.h'
+	     77 !==============================================
+	     79 	Real(kind=8)	BVEC         ,SKLM         ,EFO              
+	     80 	Dimension		BVEC(nStifEL),SKLM(nStifEL),EFO(nDof2)
+	     81 	Real(kind=8)	EDG             ,BF      ,dBF
+	     82 	Dimension		EDG(nDof2,nDof2),BF(nDof),dBF(nDof)
+	     83 	Real(kind=8)	DMat           
+	     84 	Dimension		DMat(nCMat,nCMat)
+	     85 	Real(kind=8)	TMat              ,BMat                                               
+	     86 	Dimension		TMat(nDof,nStifEL),BMat(nDof2,nStifEL)
+	     87 	Real(kind=8)	RK      ,G             ,EMat                                        
+	     88 	Dimension		RK(nDim),G(nDof2,nDof2),EMat(nCMat,nDof2)
+	     89 	Real(kind=8)	FMns       ,FMn                               
+	     90 	Dimension		FMns(nCMat),FMn(nCMat)
+	     91 	Real(kind=8)	Hat1   ,Hat2   ,rE    ,FMtt                                                
+	     92 	Dimension		Hat1(3),Hat2(3),rE(12),FMtt(12) 
+	     93 !	--------------------------------------------------------------- Constrained	                            
+	     93                   
+	     94 	Real(kind=8)	GCb             ,EMatCb      ,FMnCb                                 
+	     95 	Dimension		GCb(nDof2,nDof2),EMatCb(1,18),FMnCb(18)
+	     96 	Real(kind=8)	GCk             ,EMatCk      ,FMnCk                                 
+	     97 	Dimension		GCk(nDof2,nDof2),EMatCk(1,18),FMnCk(18)
+	     98 	CHARACTER ctrRot*30
+	     99 !	--------------------------------------------------
+	    100 	Equivalence (rE(1),rE1(1)),(rE(7),rE2(1))
+	    101 	Equivalence (FMtt,FMt1(1)),(FMtt(7),FMt2(1))
+
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+	    102 	Equivalence (FMnCb,EMatCb(1,1)),(FMnCk,EMatCk(1,1))
+	    103 !
+	    104 	DATA zero/0.D0/,one/1.0D0/ 
+	    105 	DATA Hat1/1.0D0,0.D0,0.D0/
+	    106 	DATA Hat2/0.0D0,1.D0,0.D0/
+	    107 !============================================
+	    108 !	nCMat	= 12	
+	    109 !	nC		= 3	
+	    110 !	nDof	= 6	
+	    111 !	nDof2	= 18
+	    112 	nC		= nDim	
+	    113 	nG		= nDof2
+	    114 !	====================================== Debug
+	    115 !	if((iStep == 1).AND.(iNut == 2)) Then
+	    116 	if((iStep == 1).AND.(iNut == 2)) Then
+	    117 		abc = 1
+	    118 	endif
+	    119 !-------------------------------------------------------------------------------------------- Prepare: theta constan
+	    119 ts
+	    120 !															
+	    120 					c1,c2,c1b,c2b
+	    121 	Di		= DD
+	    122 	Ro		= RR
+	    123 	call FormThetaConstants(Ro,nC,c1,c2,c1b,c2b,Iout)
+	    124 !======================================================================================= Direction 1
+	    125 	C0		= C01
+	    126 	Hat		= Hat1
+	    127 	Dp		= Dp1
+	    128 	Rp		= Rp1
+	    129 !	-------------------------------
+	    130 	call Form_a_N_kc_N_AMat(1,Iout)
+	    131 !	-------------------------------
+	    132 	CK1		= CK
+	    133 	AA1		= AA
+	    134 	AMat1	= AMat		
+	    135 	WMat1	= WMat		
+	    136 !	-------------------------------
+	    137 	iPrt = 0
+	    138 	if(iprt == 1) then
+	    139 		ctrRot = " "
+	    140 		trR = AMat(1,1) + AMat(2,2) + AMat(3,3)
+	    141 		if(trR.LE.-0.99) then
+	    142 			ctrRot = "  ***** Almost Singular ***** "
+	    143 !	                  123456789012345678901234567890
+	    144 			write(Iout,1100) iGau,jGau,trR,ctrRot
+	    145 		endif
+	    146 	endif
+	    147 	iPrt = 0
+	    148 !	-------------------------------
+	    149 	call FormR_Matrix(Ro,Rp,RMat1,nC,c1,c2,c1b,c2b,Iout) !R matrix
+	    150 	RMat = RMat1
+	    151 !	--------------------------------------------------- E(12x18): direction 1 part
+	    152 	call FormEMatrix_1(EMat,nCMat,nDof2,nDim,1,Iout)
+	    153 !	--------------------------------------------------- Real Strains (n-Mn-Qn coords)
+	    154 	call FormRealStrains_Ncoords(rE1,nDof,3,1,Iout)	! strain in shell coords
+	    155 !======================================================================================= Direction 2
+	    156 	C0		= C02
+
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+	    157 	Hat		= Hat2
+	    158 	Dp		= Dp2
+	    159 	Rp		= Rp2
+	    160 !	-------------------------------
+	    161 	call Form_a_N_kc_N_AMat(2,Iout)
+	    162 !	-------------------------------
+	    163 	CK2		= CK
+	    164 	AA2		= AA
+	    165 	AMat2	= AMat		
+	    166 	WMat2	= WMat		
+	    167 !	-------------------------------
+	    168 	call FormR_Matrix(Ro,Rp,RMat2,nC,c1,c2,c1b,c2b,Iout) !R matrix
+	    169 	RMat = RMat2
+	    170 !	--------------------------------------------------- E(12x18): Add direction 2 part
+	    171 	call FormEMatrix_2(EMat,nCMat,nDof2,nDim,2,Iout)
+	    172 !	--------------------------------------------------------------------- Real Strains (n-Mn-Qn coords)
+	    173 	call FormRealStrains_Ncoords(rE2,nDof,3,2,Iout)	! strain in shell coords
+	    174 !======================================================================================= G and E
+	    175 !--------------------------------------------------------------------- Force-Moments (t-m-b Coords)
+	    176 !															
+	    176 		and (n-Mn-Qn coords) for G Mat
+	    177 	call FormForMom(DMat,rE,nCMat,AMat1,AMat2,nC,nDof,FMt1,FMt2,
+	    178      &											FMn,FMns,Iout)
+	    179 !--------------------------------------------------------------------- G(18x18)
+	    180 	call FormGMatrix(G,nDof2,nDim,nDof,Iout)
+	    181 !	--------------------------------------------------------------------- ETransDE+G (18x18)
+	    182 !	G = zero
+	    183 	EDG	= MATMUL(MATMUL(TRANSPOSE(EMat),DMat),EMat) + G
+	    184 !	-------------------------------------------------------- Debug 
+	    185 		iPrt = 0
+	    186 		if((iStep == 1).AND.(iNut == 2)) Then
+	    187 			iPrt = 0
+	    188 		endif
+	    189 	if(iprt == 1) then
+	    190 			call DumpStringVar("Beg:Form_EtranDEplusGMatrix",iPrt,iOut)
+	    191 			call DumpRealVar(Re(2),"Beta12",iPrt,iOut)
+	    192 			call DumpRealVar(Re(7),"Beta21",iPrt,iOut)
+	    193 			call DumpRealVar(Re(2)-Re(7),"Beta12-21",iPrt,iOut)
+	    194 			call DumpStringVar("End:Form_EtranDEplusGMatrix",iPrt,iOut)
+	    195 	endif
+	    196 	iPrt = 0
+	    197 !		-------------------------------------------------------- Debug : End
+	    198 !---------------------------------------------------------- Write:
+	    199 	iPrt = 0
+	    200 	if((iStep == 9999).AND.(iNut == 2)) Then
+	    201 !	if((iStep == 0).AND.(iNut == 0)) Then
+	    202 		write(Iout,1005) (i,(EMat(i,j),j = 1,nDof2),i=1,nCMat)
+	    203 		write(Iout,1050) (i,(  G(i,j),j = 1,nDof2),i=1,nDof2)
+	    204 		write(Iout,1040) (i,(EDG(i,j),j = 1,nDof2),i=1,nDof2)
+	    205 	endif
+	    206 !--------------------------------------------------------------------- BtransEtranF0(6nx1)
+	    207 !															
+	    207 		 associated with Load b
+	    208 !	EFO			= MATMUL(TRANSPOSE(EMat),FMns)	!EFO(18x1) = ETrans(18x12) FMns(12x1)
+	    209 !	BVEC		= MATMUL(TRANSPOSE(BMat),EFO)
+	    210 !--------------------------------------------------------------------- Subtract Ttrans_FB
+	    211 !	applied body forces associated with residual integral
+
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+	    212 !	call BodyForce(Ri,BFN,BFQ,BFM,1)		! 1= residual associated bodyforces
+	    213 !	-----------------------------
+	    214 !	BF			= zero		! TEMPORARILY
+	    215 !	----------------
+	    216 !	BVEC		= BVEC - MATMUL(TRANSPOSE(TMat),BF) ! will add when BF is nonzero *******
+	    217 !--------------------------------------------------------------------- kLamda Stiffness Vector
+	    218 !															
+	    218 		 associated with Matrix A
+	    219 !	derivative associated with kLamda stiffness integral
+	    220 !	call BodyForce(Ri,BFN,BFQ,BFM,2)		! 2= kLambda associated derivative
+	    221 !	-----------------------------
+	    222 !	dBF = zero		! TEMPORARILY
+	    223 !	----------------
+	    224 !	SKLM = zero
+	    225 !	SKLM = MATMUL(TRANSPOSE(TMat),dBF)				! will add when dBF is nonzero *******	
+	    226 !		-------------------------------------------------------- Debug 
+	    227 		if((iStep == 9999).AND.(iNut == 0)) Then
+	    228 			iPrt = 1
+	    229 			call DumpStringVar("Beg:Form_EtranDEplusGMatrix",iPrt,iOut)
+	    230 			call DumpIntegerVar(iStep,"iStep",iPrt,iOut)
+	    231 			call DumpIntegerVar(iNut,"iNut",iPrt,iOut)
+	    232 			call DumpIntegerVar(lr,"GaussIndex",iPrt,iOut)
+	    233 			call DumpRealVar(Ri,"GaussPt.",iPrt,iOut)
+	    234 			call DumpRealArray(C01,nC,"C01",iPrt,iOut)
+	    235 			call DumpRealArray(C02,nC,"C02",iPrt,iOut)
+	    236 			call DumpRealMatrix(WMat,nC,nC,"WMat",iPrt,iOut)
+	    237 			call DumpRealMatrix(RMat,nC,nC,"RMat",iPrt,iOut)
+	    238 			call DumpRealMatrix(G,nDof2,nDof2,"GMat",iPrt,iOut)
+	    239 			call DumpRealMatrix(EMat,nDof,nDof2,"EMat",iPrt,iOut)
+	    240 !			call DumpRealArray(EFO,nDof2,"EFO",iPrt,iOut)
+	    241 !			call DumpRealArray(BVEC,nStifEL,"BVEC",iPrt,iOut)
+	    242 !			call DumpRealArray(SKLM,nStifEL,"SKLM",iPrt,iOut)
+	    243 			call DumpRealMatrix(EDG,nDof2,nDof2,"EDG",iPrt,iOut)
+	    244 			call DumpStringVar("End:Form_EtranDEplusGMatrix",iPrt,iOut)
+	    245 			iPrt = 0
+	    246 		endif
+	    247 !		-------------------------------------------------------- Debug : End
+	    248 !		---------------------------------------------------------- Write:
+	    249 			iPrt = 0
+	    250 			if(iPrt == 1) Then
+	    251 				write(Iout,1040) (i,(EDG(i,j),j = 1,nDof2),i=1,nDof2)
+	    252 				write(Iout,1020) nStifEL,(BVEC(i),i=1,nStifEL)
+	    253 !				write(Iout,1030) nStifEL,(SKLM(i),i=1,nStifEL)
+	    254 			endif
+	    255 !		----------------------------------------------------------
+	    256 	return
+	    257 !
+	    258  1000	format(A,I5,A)
+	    259  1005 format("EMat(12,18)"/(I3,18(f5.2,1X)))
+	    260  1020 format("BVEC Vector(",I2,")"/(6(f13.7,1X)))
+	    261  1030 format("SKLM Vector(",I2,")"/(6(f13.7,1X)))
+	    262  1040 format(2X, "EDG Matrix(18,18)"/(I3,18(f10.0,1X)))
+	    263  1050 format(2X, "G Matrix(18,18)"  /(I3,18(f8.0,1X)))
+	    264  1100 format(10X,"iGau = ",I2,5X,"jGau = ",I2,5X,
+	    265      &			"Rotation Matrix Trace = ",f10.7,2x,A30)
+	    266 	end
+
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 5
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   400 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  704 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               272   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 9250   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 _SIZEVAR                               100 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  6 _LOADSTEPITER                           16 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  7 _CURPARAMS                             376 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  8 _THETACONSTANTS                         32 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  9 _BEAMPARAMS                            456 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 10 _SHELLPARAMS                           768 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 11 _LOGPARAMS                             796 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 12 _GAUSSINDEX                              8 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 13 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+ 14 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                13482
+
+
+ENTRY POINTS
+
+ Address      Name                   
+                                     
+  4-00000000  FORM_ETRANDEPLUSGMATRIX
+
+
+VARIABLES
+
+ Address      Type  Name     Address      Type  Name     Address      Type  Name     Address      Type  Name   
+                                                                                                               
+  1-00000018  R*8   ABC      12-00000000  I*4   IGAU      5-00000020  I*4   NELEM     5-00000038  I*4   NSTIFS 
+ 11-00000000  L*4   BENG      5-00000000  I*4   IGEOM     5-00000048  I*4   NELTYPE   5-00000014  I*4   NSUP   
+ 11-00000004  L*4   BOPT1     6-00000004  I*4   INUT      1-00000040  I*4   NG        5-00000060  I*4   NSZDBL 
+ 11-00000310  L*4   BPEN          **      I*4   IOUT      5-00000030  I*4   NINT      5-0000005C  I*4   NSZINT 
+ 11-00000318  L*4   BPLOT     1-0000003C  I*4   IPRT      5-00000028  I*4   NINT1     2-00000280  R*8   ONE    
+ 11-00000314  L*4   BPRINT    6-00000000  I*4   ISTEP     5-0000002C  I*4   NINT2    11-00000308  R*8   PEN    
+  6-00000008  R*8   BRESET    1-00000034  I*4   J         5-00000044  I*4   NLOD      1-00000008  R*8   RI     
+  8-00000000  R*8   C1       12-00000004  I*4   JGAU      5-0000000C  I*4   NQC1      7-00000170  R*8   RUTAHAT
+  8-00000010  R*8   C1B       1-00000030  I*4   LR        5-00000010  I*4   NQC2      7-00000150  R*8   ST     
+  8-00000008  R*8   C2        1-00000044  I*4   NC        5-0000001C  I*4   NQD       1-00000010  R*8   TRR    
+  8-00000018  R*8   C2B       5-00000034  I*4   NCINT     5-0000004C  I*4   NQD1      7-00000160  R*8   XLAM1  
+  7-00000158  R*8   CT        5-00000054  I*4   NCMAT     5-00000050  I*4   NQD2      7-00000168  R*8   XLAM2  
+  1-0000004C  CHAR  CTRROT    5-00000008  I*4   NDIM      5-0000003C  I*4   NSTIFC    2-00000288  R*8   ZERO   
+  1-00000038  I*4   I         5-00000018  I*4   NDOF      5-00000024  I*4   NSTIFEL                            
+  5-00000004  I*4   ICONT     5-00000058  I*4   NDOF2     5-00000040  I*4   NSTIFN                             
+
+
+
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 6
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+ARRAYS
+
+ Address      Type  Name          Bytes  Dimensions
+
+  7-000000D8  R*8   A1HAT            24  (3)
+  7-000000F0  R*8   A2HAT            24  (3)
+  9-00000030  R*8   AA               24  (3)
+  7-00000060  R*8   AA1              24  (3)
+  7-00000078  R*8   AA2              24  (3)
+  9-000000A8  R*8   AMAT             72  (3, 3)
+ 10-00000090  R*8   AMAT1            72  (3, 3)
+ 10-000000D8  R*8   AMAT2            72  (3, 3)
+  7-00000090  R*8   AO1              24  (3)
+  7-00000108  R*8   AO12N            72  (3, 3)
+  7-000000A8  R*8   AO2              24  (3)
+      **      R*8   BF               **  (*)
+      **      R*8   BMAT             **  (*, *)
+      **      R*8   BVEC             **  (*)
+  9-00000000  R*8   C0               24  (3)
+  7-00000000  R*8   C01              24  (3)
+  7-00000018  R*8   C02              24  (3)
+  9-00000018  R*8   CK               24  (3)
+  7-00000030  R*8   CK1              24  (3)
+  7-00000048  R*8   CK2              24  (3)
+      **      R*8   DBF              **  (*)
+ 10-00000000  R*8   DD               24  (3)
+  9-00000048  R*8   DI               24  (3)
+      **      R*8   DMAT             **  (*, *)
+  9-00000078  R*8   DP               24  (3)
+ 10-00000030  R*8   DP1              24  (3)
+ 10-00000060  R*8   DP2              24  (3)
+      **      R*8   EDG              **  (*, *)
+      **      R*8   EFO              **  (*)
+      **      R*8   EMAT             **  (*, *)
+      **      R*8   EMATCB          144  (1, 18)
+      **      R*8   EMATCK          144  (1, 18)
+      **      R*8   FMN              **  (*)
+      **      R*8   FMNCB           144  (18)
+      **      R*8   FMNCK           144  (18)
+      **      R*8   FMNS             **  (*)
+  9-00000198  R*8   FMT              48  (6)
+ 10-000002A0  R*8   FMT1             48  (6)
+ 10-000002D0  R*8   FMT2             48  (6)
+ 10-000002A0  R*8   FMTT             96  (12)
+      **      R*8   G                **  (*, *)
+      **      R*8   GCB              **  (*, *)
+      **      R*8   GCK              **  (*, *)
+  9-00000180  R*8   HAT              24  (3)
+  2-000002A8  R*8   HAT1             24  (3)
+  2-00000290  R*8   HAT2             24  (3)
+ 10-00000240  R*8   RE               96  (12)
+ 10-00000240  R*8   RE1              48  (6)
+ 10-00000270  R*8   RE2              48  (6)
+      **      R*8   RK               **  (*)
+  9-00000138  R*8   RMAT             72  (3, 3)
+ 10-000001B0  R*8   RMAT1            72  (3, 3)
+ 10-000001F8  R*8   RMAT2            72  (3, 3)
+
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 7
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+  9-00000060  R*8   RO               24  (3)
+  9-00000090  R*8   RP               24  (3)
+ 10-00000048  R*8   RP1              24  (3)
+ 10-00000078  R*8   RP2              24  (3)
+ 10-00000018  R*8   RR               24  (3)
+      **      R*8   SKLM             **  (*)
+      **      R*8   TMAT             **  (*, *)
+  9-000000F0  R*8   WMAT             72  (3, 3)
+ 10-00000120  R*8   WMAT1            72  (3, 3)
+ 10-00000168  R*8   WMAT2            72  (3, 3)
+ 11-00000008  R*8   XE              768  (8, 12)
+  7-000000C0  R*8   XNOR             24  (3)
+
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 8
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+FORM_ETRANDEPLUSGMATRIX         Source Listing                   3-Sep-2008 11:28:34  Compaq Visual Fortran 6.6-1684    Page 9
+                                                                 3-Sep-2008 11:27:44  Form_EtranDEplusG.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Form_EtranDEplusG.lst
+  /o         filename : Debug/Form_EtranDEplusG.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.06 seconds
+  Elapsed time:      0.06 seconds
+  Pagefaults:           0
+  I/O Count:            0

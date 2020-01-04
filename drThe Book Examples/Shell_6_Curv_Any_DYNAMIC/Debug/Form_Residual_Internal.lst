@@ -1,0 +1,169 @@
+FORM_RESIDUAL_INTERNAL          Source Listing                   3-Sep-2008 10:42:46  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 3-Sep-2008 10:42:46  Form_Residual_Internal.f
+
+	      1 	Subroutine Form_Residual_Internal(RInt,FMns,BMat,
+	      2      &							nCMat,nDof2,nStifEL,Iout)
+	      3 !	----------------------------------------------------------------------------- S Matrix
+	      4 !	RInt		= Internal Residual Vector
+	      5 !				= BMatTrans*EMatTrans*FMns 
+	      6 !	----------------------------------------------------------------------------- 
+	      7 !	Inputs
+	      8 !		nCMat	= Full Constitutive Matrix Dimension = 12 
+	      9 !		nDof2	= Generalized Nodal DOF = 18
+	     10 !		nStifel	= Total Element DOF 
+	     11 !		EMat	= Strain Transformation Matrix: EMat(nCMat,nDof2)	
+	     12 !		BMat	= Generalized Control Transformation Matrix: BMat(nDof2,nStifEL)		
+	     13 !		FMns	= Force (n-coordinate) Vector: FMns(nCMat)	
+	     14 !		EFO		= Generalized Control Transformation Matrix: TMat(nDof,nStifEL)	
+	     15 !	Outputs 
+	     16 !		RInt	= Internal Residual Vector: RInt(nStifEL) at Integration Pt.
+	     17 !	------------------------------------------------------------
+	     18 
+	     19 	Implicit Real(kind=8) (a-h,o-z)
+	     20 !
+	     21 !	include 'mass.h'
+	     22 !
+	     23 	Real(kind=8)	FMns       ,EMat             ,BMat                                               
+	     24 	Dimension		FMns(nCMat),EMat(nCMat,nDof2),BMat(nDof2,nStifEL)
+	     25 	Real(kind=8)	RInt                                                                               
+	     26 	Dimension		RInt(nStifEL)
+	     27 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	     28 !--------------------------------------------------------------------- BtransEtranF0(6nx1)
+	     29 !															
+	     29 		 associated with Load b
+	     30 !	EFO			= MATMUL(TRANSPOSE(EMat),FMns)	!EFO(18x1) = ETrans(18x12) FMns(12x1)
+	     31 !	------------------------------------------------------ Residual Internal
+	     32 	RInt	= MATMUL(TRANSPOSE(BMat),MATMUL(TRANSPOSE(EMat),FMns))
+	     33 !---------------------------------------------------------- Write:
+	     34 	iPrt = 0
+	     35 	call DumpRealArray(RInt,nStifEL,"Residual_Internal",iPrt,iOut)
+	     36 !----------------------------------------------------------
+	     37 	return
+	     38 !
+	     39 	end
+
+FORM_RESIDUAL_INTERNAL          Source Listing                   3-Sep-2008 10:42:46  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 3-Sep-2008 10:42:46  Form_Residual_Internal.f
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    20 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                   40 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                                32   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 1143   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 1539
+
+
+ENTRY POINTS
+
+ Address      Name                  
+                                    
+  4-00000000  FORM_RESIDUAL_INTERNAL
+
+
+VARIABLES
+
+ Address      Type  Name     Address      Type  Name     Address      Type  Name   
+                                                                                   
+      **      I*4   IOUT          **      I*4   NDOF2     2-00000008  R*8   THREE  
+  1-00000010  I*4   IPRT          **      I*4   NSTIFEL   2-00000010  R*8   TWO    
+      **      I*4   NCMAT     2-00000018  R*8   ONE       2-00000020  R*8   ZERO   
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+      **      R*8   BMAT           **  (*, *)
+      **      R*8   EMAT           **  (*, *)
+      **      R*8   FMNS           **  (*)
+      **      R*8   RINT           **  (*)
+
+FORM_RESIDUAL_INTERNAL          Source Listing                   3-Sep-2008 10:42:46  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 3-Sep-2008 10:42:46  Form_Residual_Internal.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+FORM_RESIDUAL_INTERNAL          Source Listing                   3-Sep-2008 10:42:46  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 3-Sep-2008 10:42:46  Form_Residual_Internal.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Form_Residual_Internal.lst
+  /o         filename : Debug/Form_Residual_Internal.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.00 seconds
+  Elapsed time:      0.00 seconds
+  Pagefaults:           0
+  I/O Count:            0

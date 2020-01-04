@@ -1,0 +1,56 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: 2DCubic_Cubic - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSPB345.TMP" with contents
+[
+/check:bounds /compile_only /debug:full /include:"Debug/" /nologo /traceback /warn:argument_checking /warn:nofileopt /module:"Debug/" /object:"Debug/" /pdbfile:"Debug/DF60.PDB" /libs:qwins 
+"C:\The Book\Irre2DCubic_Cubic_YesWarP_2Elems\Prog_Quad_CC_WARP_YES_2ELs.f"
+]
+Creating temporary file "C:\WINDOWS\TEMP\RSPB346.TMP" with contents
+[
+kernel32.lib smathd.lib sf90mp.lib /nologo /stack:0x3d0900 /entry:"WinMainCRTStartup" /subsystem:windows /incremental:no /pdb:"Debug/2DCubic_Cubic.pdb" /debug /machine:I386 /nodefaultlib:"dfconsol.lib" /out:"Debug/2DCubic_Cubic.exe" /pdbtype:sept 
+".\Debug\Bez_CC_EL_1.obj"
+".\Debug\Bez_CC_EL_2.obj"
+".\Debug\CC_Disps_EL.obj"
+".\Debug\CC_StrainDis.obj"
+".\Debug\CC_Strains_EL.obj"
+".\Debug\Compute_StrainEnergy.obj"
+".\Debug\Expand_BZCons_C0.obj"
+".\Debug\Expand_BZCons_C0_BCr0.obj"
+".\Debug\Expand_BZCons_C1.obj"
+".\Debug\ExpandFrom_C1or2Sol.obj"
+".\Debug\ExtractEL_DispCon.obj"
+".\Debug\FormBC_r0_Matrix.obj"
+".\Debug\FormIndex_EL2.obj"
+".\Debug\FormTransformation Matrix_C1.obj"
+".\Debug\FormTransformation Matrix_C2.obj"
+".\Debug\GaussPtVal.obj"
+".\Debug\Impose_BC_r0_Constraints.obj"
+".\Debug\Impose_C1or2.obj"
+".\Debug\Jacobian.obj"
+".\Debug\Non_Singular_CC.obj"
+".\Debug\Prog_Quad_CC_WARP_YES_2ELs.obj"
+".\Debug\Quad_CC_LVX.obj"
+".\Debug\Quad_CC_LVY.obj"
+".\Debug\Quad_CC_STIF.obj"
+".\Debug\Quad_CC_STIF_ASSEMBLE.obj"
+".\Debug\Solve_AxEqB.obj"
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSPB346.TMP"
+<h3>Output Window</h3>
+Compiling Fortran...
+C:\The Book\Irre2DCubic_Cubic_YesWarP_2Elems\Prog_Quad_CC_WARP_YES_2ELs.f
+Linking...
+
+
+
+<h3>Results</h3>
+2DCubic_Cubic.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>

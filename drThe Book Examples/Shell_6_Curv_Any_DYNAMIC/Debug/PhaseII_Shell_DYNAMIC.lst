@@ -1,0 +1,609 @@
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+	      1 	subroutine PhaseII_Shell_DYNAMIC()
+	      2 !-------------------------
+	      3 	include 'Implicit.h'
+	      4 !========================================================================
+	      6 	include 'Blank.h'
+	      8 	include 'Output.h'
+	     12 	include 'CurParams.h'
+	     25 	include 'Examples.h'
+	     28 	include 'CurrentElem.h'
+	     30 	include 'LoadStepIter.h'
+	     32 	include 'general.h'
+	     34 	include 'Wpointers.h'
+	     41 	include 'Addpoints.h'
+	     43 	include 'SizeVar.h'
+	     49 	include 'material.h'
+	     52 	include 'geometry.h'
+	     54 	include 'files.h'
+	     57 	include 'Scratch.h'
+	     60 	include 'solve.h'
+	     65 	include 'LogParams.h'
+	     66 !	------------------------------------------
+	     71 	character*1		sign,pos,neg
+	     72 	Logical			DontSkip
+	     73 	LOGICAL			IsUpdateNeeded,TRUEE,
+	     74      &			 	ThetaNeedUpdate_STR,bReset
+	     75 !
+	     76 	data			pos/'+'/,neg/'-'/
+	     77 !========================================================================
+	     78 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	     79 	data			pos/'+'/,neg/'-'/
+	     80 	data			iDebug/0/
+	     81 !=================================================================================== Phase II: BEG
+	     82 	TRUEE			= .TRUE.
+	     83 	IsUpdateNeeded	= .FALSE.
+	     84 	bReset			= .FALSE.
+	     85 	Imaginary       = .FALSE.	
+	     86 !		-------------------------------------|------|----------------- Connectivity
+	     87 !------------------------------------------------------------------- Array sizes
+	     88 	call Set_WorkArrayPointers()
+	     89 !--------------------------------------------------------------------
+	     90 	if(nEx == 10.AND.nElem == 4) then
+	     91 		do i = 1,4
+	     92 			call FormIndex_ELEM_Hem(A(n2c),nStifEL,i,iOut)
+	     93 		end do ! i
+	     94 	else
+	     95 		call FormIndexEl_2(A(n2c),nStifEL,iOut)
+	     96 	endif
+	     97 !		-------------------------------------|------|----------------- State Vector:Initialize
+	     98 		if(iDebug == 1) write(iOut,2008)
+	     99 		iStep = 0
+	    100 		jStep = 0
+	    101 		SLamdam		= zero
+	    102 		SLamdamO	= zero
+	    103 		call Initialize_StateVector(A(nRoCOld),A(nCuCOld),nCInt,iOut)	  
+	    104 		call Initialize_StateVector(A(nRoKSav),A(nCKKSav),nCInt,iOut)	  
+	    105 		call Initialize_StateVector(A(nxo),A(nx),nStifS,iOut)	  
+	    106 		call Initialize_StateVector(A(nxmO),A(nxm),nStifS,iOut)	  
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+	    107 		call LV_Initialize(A(n4),nStifS,Iout)	! state
+	    108 		call LV_Initialize(A(nBo),nStifS,Iout)	! Old Load Vector for Convergence
+	    109 		call LV_Initialize(A(nxmO),nStifS,Iout)		! state
+	    110 		call LV_Initialize(A(nxm),nStifS,Iout)		! state
+	    111 !----------------------------------------------------------------------- For Printing End Results	
+	    112 		if (jStep == 1) Then
+	    113 			write(iOut,1030) 
+	    114 		endif
+	    115 !		--------------------------------------------------------- Print Undeformed Shape
+	    116 !----------------------------------------------------------------------- For Plotting Results	
+	    117 !------------------------------------------------------------------------- Elemental StepDisRot
+	    118 		do 5 iEL = 1,nElem
+	    119 			m1 =n1a
+	    120 			if(iEL == 2) Then
+	    121 				m1 =n1b
+	    122 			elseif(iEL == 3) Then
+	    123 				m1 =n1c
+	    124 			endif
+	    125 !			if(iEL.NE.nElem) then
+	    126 !				goto 5
+	    127 !			endif
+	    128 !			--------------------------------------------------------- 
+	    129 	if(nEx == 10.AND.nElem == 4) then
+	    130 			call Extract_DispCon(A(nxm),nStifS,A(ndelUiEL),	!Extract DisRotCOntrols
+	    131      &			nStifEL,iEL,iOut)
+	    132 			call DeformOut_MatLab(A(m1),A(ndelUiEL),Conv,pos,
+	    133      &				A(nEndwSav),iEL)
+	    134 	else
+	    135 		call Extract_DispCon(A(nxm),nStifS,A(ndelUiEL),	!Extract DisRotCOntrols
+	    136      &			nStifEL,iEL,iOut)
+	    137 		call DeformOut_MatLab(A(m1),A(ndelUiEL),Conv,pos,
+	    138      &				A(nEndwSav),iEL)
+	    139 	endif
+	    140     5		continue
+	    141 !--------------------------------------------------------------
+	    142 !	if(1==1) go to 998
+	    143 !============================================================================
+	    144   100		continue
+	    145 		if(bReset == .FALSE.) Then
+	    146 			jStep = iStep + 1
+	    147 		else
+	    148 			jStep = iStep
+	    149 		endif
+	    150 !===========================================================================================STEP 1 INITIALIZE
+	    151 		iNut		= 0		!	Set for Curvature Initialization in
+	    152 !								Get ReferenceInfo in QQ_Quad_Stif
+	    153 !===========================================================================================STEP 1 INITIALIZE
+	    154 		call LoadStep_1_iter_1_DYNAMIC()
+	    155 !	-------------------------------------------------------- Check for theta update
+	    156 !		bReset = .FALSE.
+	    157 !	IsUpdateNeeded = ThetaNeedUpdate_STR(A(nxm),nStifEL,nQc,Iout)
+	    158 !	if(IsUpdateNeeded.EQ. TRUEE ) Then
+	    159 !			call Update_StepQc(A(nxm),nStifS,A(n1a),nQc,Iout)
+	    160 !			call ResetReference(A(nxmO),A(nxm),nStifS,nQc,
+	    161 !     &					A(nRoCOld),A(nCuCOld),
+	    162 !     &					A(nRoKSav),A(nCKKSav),nCInt,Iout)
+	    163 !		bReset = TRUEE
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+	    164 !	endif
+	    165 !		-------------------------------------------------------- Check for theta update: End
+	    166 !===========================================================================================
+	    167 !		-------------------------------------|------|----------------- LOOP:Linearized Solution
+	    168 		iTerRef		= 5
+	    169 !		---------------
+	    170 		iDetSChange = 0		! determinant sign change
+	    171 		do 500 iStep = jStep, MaxSteps
+	    172 
+	    173  150     continue	! for Imaginary roots	
+	    174 !========================================================================================
+	    175 !		-------------------------------------------------------- Check for theta update
+	    176 !		bReset = .FALSE.
+	    177 !		IsUpdateNeeded = ThetaNeedUpdate_STR(A(nxm),nStifEL,nQc,Iout)
+	    178 !		if(IsUpdateNeeded.EQ. TRUEE ) Then
+	    179 !			call ResetReference(A(nxmO),A(nxm),nStifS,nQc,
+	    180 !     &					A(nRoCOld),A(nCuCOld),
+	    181 !     &					A(nRoKSav),A(nCKKSav),nCInt,Iout)
+	    182 !		bReset = TRUEE
+	    183 !		go to 100
+	    184 !		endif
+	    185 !		-------------------------------------------------------- Check for theta update: End
+	    186 !=============================================================================================
+	    187 		DontSkip	= .TRUE.
+	    188 		Imaginary	= .FALSE.
+	    189 		call LV_Initialize(A(ndelUi),nStifS,Iout)		! state
+	    190 		call LV_Initialize(A(ndeltaUi),nStifS,Iout)		! state
+	    191 		call LV_Initialize(A(ndeltaUi1),nStifS,Iout)	! state
+	    192 !		-------------------------------------| Newton Iterations for each LoadStep
+	    193 		do 300 inut = 1, MaxIt
+	    194 !		===================
+	    195 		if(inut.eq.1) Then
+	    196 !		---------------------------------------------------------------------- Stiffness Matrix
+	    197 			if(iStep.GT.1) Then
+	    198 				call LoadStep_n_iter_1()
+	    199 			endif
+	    200 !			--------------------------------- Save tangent stiffness needed to start over
+	    201 !												for possible Imagina
+	    201 ry root
+	    202 !			--------------------------------- Save Inverted Tangent STiffness/Residue for the STEP
+	    203 !			call InvertedTangentStiffness(A(n6),A(n6R),nStifN,1,iOut)	! 1 = Save
+	    204 			call StateatStartofIter(A(nxm),A(nxmR),nStifS,1,iOut)			! 1 = Save
+	    205 !			-----------------------------------------------			
+	    206 			go to 250
+	    207 		endif
+	    208 !		===================
+	    209 		call LV_Initialize(A(nB),nStifS,Iout)	! Current Load Vector
+	    210 !		---------------------------------------------------------------------- Stiffness Matrix
+	    211 !		-------------------------------------------------------- Debug 
+	    212 		if((iStep == 9999).AND.(iNut == 2)) Then
+	    213 			abc = 1
+	    214 		endif
+	    215 !		-------------------------------------------------------- Debug : End
+	    216 		call LoadStep_n_iter_m()
+	    217 !	-------------------------------------------------------- Check for theta update
+	    218 !		bReset = .FALSE.
+	    219 !	IsUpdateNeeded = ThetaNeedUpdate_STR(A(nxm),nStifEL,nQc,Iout)
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+	    220 !	if(IsUpdateNeeded.EQ. TRUEE ) Then
+	    221 !			call Update_StepQc(A(nxm),nStifS,A(n1a),nQc,Iout)
+	    222 !			call ResetReference(A(nxmO),A(nxm),nStifS,nQc,
+	    223 !     &					A(nRoCOld),A(nCuCOld),
+	    224 !     &					A(nRoKSav),A(nCKKSav),nCInt,Iout)
+	    225 !		bReset = TRUEE
+	    226 !	endif
+	    227 !		-------------------------------------------------------- Check for theta update: End
+	    228 !------------------
+	    229   250		continue
+	    230 !------------------
+	    231 !		-------------------------------------------------------- Debug 
+	    232 		if((iStep == 2).AND.(iNut == 1)) Then
+	    233 			abc = 1
+	    234 		endif
+	    235 !		-------------------------------------------------------- Debug : End
+	    236 !		! Step 3biii	
+	    237 !		call LoadParamChange(A(ndeltaUi1),A(ndeltaUi2),A(ndelUiO),	
+	    238 !     &						nStifN,DelLm,Imaginary,
+	    239 !     &					DeltaLamdai1,DeltaLamdai2,aa,bb,cc,iOut)
+	    240 		call LoadParamChange(A(ndeltaUi1),A(ndeltaUi2),A(ndelUiO),	
+	    241      &						nStifN,DelLm,Imaginary,
+	    242 !     &					DeltaLamdai1,DeltaLamdai2,aa,bb,cc,iOut)
+	    243      &					DeltaLamdai1,DeltaLamdai2,aa,bb,cc,iOut,
+	    244      &					A(nPLoad),DelLamdaiO)
+	    245 !		-------------------------------------------------------- Debug 
+	    246 		if((iStep == 9999).AND.(iNut == 3)) Then
+	    247 			iPrt = 0
+	    248 !			call DumpVar(iOut)
+	    249 			call DumpStringVar("Beg:aftLoadParamChange",iPrt,iOut)
+	    250 			call DumpIntegerVar(iStep,"iStep",iPrt,iOut)
+	    251 			call DumpIntegerVar(iNut,"iNut",iPrt,iOut)
+	    252 			call DumpRealVar(DelLm,"DelLm",iPrt,iOut)
+	    253 	call DumpRealVar(DeltaLamdai1,"DeltaLamdai1",iPrt,iOut)
+	    254 	call DumpRealVar(DeltaLamdai2,"DeltaLamdai2",iPrt,iOut)
+	    255 			call DumpRealVar(aa,"aa",iPrt,iOut)
+	    256 			call DumpRealVar(bb,"bb",iPrt,iOut)
+	    257 			call DumpRealVar(cc,"cc",iPrt,iOut)
+	    258 	call DumpRealArray(A(nBFors),nStifEL,"A(nBFors)",iPrt,iOut)
+	    259 	call DumpRealArray(A(nPLoad),nStifN,"A(nPLoad)",iPrt,iOut)
+	    260 	call DumpRealArray(A(nGuLam),nStifN,"A(nGuLam)",iPrt,iOut)
+	    261 	call DumpRealArray(A(ndeltaUi1),nStifN,"A(ndeltaUi1)",iPrt,iOut)
+	    262 	call DumpRealArray(A(ndeltaUi2),nStifN,"A(ndeltaUi2)",iPrt,iOut)
+	    263 	call DumpRealArray(A(ndelUiO),nStifN,"A(ndelUiO)",iPrt,iOut)
+	    264 			call DumpStringVar("End:aftLoadParamChange",iPrt,iOut)
+	    265 			iPrt = 0
+	    266 		endif
+	    267 !		-------------------------------------------------------- Debug : End
+	    268 		if(Imaginary) Then
+	    269 !			DontSkip = .FALSE.
+	    270 !			Stop 'IIMAGINARY ROOTS'
+	    271 !			--------------------------------- Recover Inverted Tangent STiffness/Residue for the STEP
+	    272 !			call InvertedTangentStiffness(A(n6),A(n6R),nStifN,2,iOut)		! 2 = Recall
+	    273 			call StateatStartofIter(A(nxm),A(nxmR),nStifN,2,iOut)			! 2 = Recall
+	    274 !			-----------------------------------------------			
+	    275 			DelLm = 0.5D0*DelLm					
+	    276 			go to 150
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 5
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+	    277 		endif
+	    278 !		! Step 3biv: eqn 8 part
+	    279 !			call Calc_deltaUi(delLamdai,A(ndeltaUi1),A(ndeltaUi2),
+	    280 !     &							A(ndeltaUi),NStifN,iOut)
+	    281 !		! Step 3biv: eqn 8
+	    282 		call Check_PossibleDisplacement(A(nDelUiO),
+	    283      &						A(ndeltaUi1),A(ndeltaUi2),		
+	    284      &						A(ndelUip11),A(ndelUip12),NStifN,
+	    285      &						DeltaLamdai1,DeltaLamdai2,iOut)
+	    286 !		! Step 3bv: eqn 11
+	    287 !		-------------------------------------------------------- Debug 
+	    288 		if((iStep == 9999).AND.(iNut == 3)) Then
+	    289 			iPrt = 0
+	    290 !			call DumpVar(iOut)
+	    291 		call DumpStringVar("Beg:aftPossibleDisplacement",iPrt,iOut)
+	    292 			call DumpIntegerVar(iStep,"iStep",iPrt,iOut)
+	    293 			call DumpIntegerVar(iNut,"iNut",iPrt,iOut)
+	    294 	call DumpRealVar(DeltaLamdai1,"DeltaLamdai1",iPrt,iOut)
+	    295 	call DumpRealVar(DeltaLamdai2,"DeltaLamdai2",iPrt,iOut)
+	    296 	call DumpRealArray(A(nDelUiO),nStifN,"A(nDelUiO)",iPrt,iOut)
+	    297 	call DumpRealArray(A(ndeltaUi1),nStifN,"A(ndeltaUi1)",iPrt,iOut)
+	    298 	call DumpRealArray(A(ndeltaUi2),nStifN,"A(ndeltaUi2)",iPrt,iOut)
+	    299 	call DumpRealArray(A(ndelUip11),nStifN,"A(ndelUip11)",iPrt,iOut)
+	    300 	call DumpRealArray(A(ndelUip12),nStifN,"A(ndelUip12)",iPrt,iOut)
+	    301 	call DumpStringVar("End:aftLoadParamChange",iPrt,iOut)
+	    302 		endif
+	    303 !		-------------------------------------------------------- Debug : End
+	    304 		call Calc_Angles(A(ndelUiO),A(ndelUip11),A(ndelUip12),NStifN,
+	    305      &						Th1,Th2,iOut)
+	    306 		call UpdateIter_Displace_Lambda(Th1,Th2,A(ndelUip11),
+	    307      &						A(ndelUip12),	
+	    308      &						A(ndelUi),A(ndelUiO),NStifN,DeltaLamdai,
+	    309      1						DeltaLamdai1,DeltaLamdai2,cc,bb,iOut)
+	    310 !-----------------
+	    311 !  250		continue
+	    312 !-----------------
+	    313 !		! Step 3bvi: eqn 9
+	    314 		call UpdateStep_Displace_Lambda(A(ndelUi),A(ndelUiO),A(nUm),
+	    315      &		A(nUmO),NStifN,DeltaLamdai,DelLamdaiO,DelLamdai,inut,iOut)
+	    316 !		SLamdam		= SLamdam + delLamdaiO 		
+	    317 !		--------------------------------------------------------- Expand State vector for Support
+	    318 		call Expand_BezierDispControls_C0(A(nUmO),nStifN,A(nxmO),
+	    319      &					nStifC,A(nSx),nSup,iCont,iOut)
+	    320 		call Expand_BezierDispControls_C0(A(nUm),nStifN,A(nxm),
+	    321      &					nStifC,A(nSx),nSup,iCont,iOut)
+	    322 		call Expand_BezierDispControls_C0(A(ndelUiO),nStifN,A(nxo),
+	    323      &					nStifC,A(nSx),nSup,iCont,iOut)
+	    324 		call Expand_BezierDispControls_C0(A(ndelUi),nStifN,A(nx),
+	    325      &					nStifC,A(nSx),nSup,iCont,iOut)
+	    326 !------------------------------------------------------------------------------- Test Convergence
+	    327 		call Convergence_Residual(A(nxmO),A(nxm),
+	    328      &							nStifS,Conv,inut,iOut)
+	    329 !		--------------------------------------------------------- Extract END Element DisRotCOntrols
+	    330 	if(nEx == 10.AND.nElem == 4) then
+	    331 		do jel = 1,2
+	    332 		call Hem4_Extract_DispCon(A(nxm),nStifS,A(ndelUiEL),nStifEL,
+	    333      &							jel,iOut)
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 6
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+	    334 		if(bPrint) then
+	    335 			call Hem4_Compute_uwthetaAtEnd(DelLm,SLamdam+DelLamdai,
+	    336      &		A(ndelUiEL),inut,MaxIt,Conv,jel,iOut)
+	    337 		endif
+	    338 		end do !jel
+	    339 	else
+	    340 		call Extract_DispCon(A(nxm),nStifS,A(ndelUiEL),nStifEL,
+	    341      &							nElem,iOut)
+	    342 		if(bPrint) then
+	    343 		if((iStep == 10).AND.(iNut == 1)) Then
+	    344 			abc = 1
+	    345 		endif
+	    346 		call Compute_uwthetaAtEnd(DelLm,SLamdam+DelLamdai,
+	    347      &		A(ndelUiEL),inut,MaxIt,Conv,iOut)
+	    348 		endif
+	    349 	endif
+	    350 !		-------------------------
+	    351 		if(Conv.LE.tol) go to 400
+	    352   300		continue
+	    353 !		--------------------------------------------------------- Iteration Limit Hit
+	    354 !		------------------------------------ Try Cutting ArcLen
+	    355 		write(iOut,4001) MaxIt
+	    356 		stop 'ITERATION LIMIT HIT'
+	    357 !		--------------------------------------------------------- Iteration SUCCESSFUL
+	    358   400		continue
+	    359 !		--------------------------------------------------------- Print LoadStep Result
+	    360 		SLamdam		= SLamdamO + delLamdaiO
+	    361 		SLamdamO	= SLamdam
+	    362 !
+	    363 		sign = pos
+	    364 		if(detK.LT.zero) sign = neg
+	    365 !------------------------------------------------------------------------- Elemental StepDisRot
+	    366 		do 25 iEL = 1,nElem
+	    367 			m1 =n1a
+	    368 			if(iEL == 2) Then
+	    369 				m1 =n1b
+	    370 			elseif(iEL == 3) Then
+	    371 				m1 =n1c
+	    372 			endif
+	    373 !			if(iEL.NE.nElem) then
+	    374 !				goto 25
+	    375 !			endif!			--------------------------------------------------------- 
+	    376 			call Extract_DispCon(A(nxm),nStifS,A(ndelUiEL),	!Extract DisRotCOntrols
+	    377      &			nStifEL,iEL,iOut)
+	    378 			call DeformOut_MatLab(A(m1),A(ndelUiEL),Conv,sign,
+	    379      &							A(nEndwSav),iEL)
+	    380    25		continue
+	    381 !	--------------------------------------------------------------
+	    382 !		--------------------------------------------------------- Update State for next LoadStep
+	    383 !		DelLamdaiO	= zero
+	    384 		DelLmO		= DelLm		
+	    385 		iTermO		= inut
+	    386 !========================================================================================
+	    387 !=============================================================================================
+	    388 !===========================================================================================
+	    389 !	-------------------------------------------------------- Check for theta update
+	    390 !		bReset = .FALSE.
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 7
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+	    391 !	IsUpdateNeeded = ThetaNeedUpdate_STR(A(nxm),nStifEL,nQc,Iout)
+	    392 !	if(IsUpdateNeeded.EQ. TRUEE ) Then
+	    393 !			call Update_StepQc(A(nxm),nStifS,A(n1a),nQc,Iout)
+	    394 !			call ResetReference(A(nxmO),A(nxm),nStifS,nQc,
+	    395 !     &					A(nRoCOld),A(nCuCOld),
+	    396 !     &					A(nRoKSav),A(nCKKSav),nCInt,Iout)
+	    397 !		bReset = TRUEE
+	    398 !	endif
+	    399 !		-------------------------------------------------------- Check for theta update: End
+	    400 !===========================================================================================
+	    401   500		continue
+	    402   998 continue
+	    403 !===========================================================================================
+	    404  1030	format(/" Step",8x,"Load",8x,"u(L)",12x,"w(L)",9x,"  v(L)  ",3x,
+	    405      &        " iter",2x,"convergence"/)
+	    406  2006 Format(/2x,"Entering: FormIndexEl_2"/)
+	    407  2008 Format(/2x,"Entering: StateVector"/)
+	    408  4001 Format(/5x,"ITERATION LIMIT OF",I3," HIT: Back to Drawing Board!"
+	    409      &               /)
+	    410 	end 
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   136 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  420 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               327   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 7686   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 _BLNK__                          240000000 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  6 _OUTPUT                                 44 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  7 _CURPARAMS                             376 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  8 _EXAMPLES                              364 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  9 _CURRENTELEM                             4 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 10 _LOADSTEPITER                           12 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 11 _GENERAL                                 8 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 12 _WPOINTERS                             184 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 13 _ADDPOINTS                               8 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 14 _SIZEVAR                               100 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 15 _MATERIAL                               24 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 16 _GEOMETRY                               48 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 17 _FILES                                  28 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 18 _SCRATCH                                20 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 19 _SOLVAR                                104 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 20 _LOGPARAMS                             796 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 21 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+ 22 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated            240010993
+
+
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 8
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+ENTRY POINTS
+
+ Address      Name                 
+                                   
+  4-00000000  PHASEII_SHELL_DYNAMIC
+
+
+VARIABLES
+
+ Address      Type  Name                 Address      Type  Name                 Address      Type  Name               
+                                                                                                                       
+  1-00000030  R*8   AA                   18-00000008  I*4   IREFPRO1             12-0000008C  I*4   NDELUIP12          
+  1-00000048  R*8   ABC                  18-0000000C  I*4   IREFPRO2             14-00000008  I*4   NDIM               
+ 19-00000048  R*8   ARCLEN               17-00000010  I*4   IROTCUR               6-00000014  I*4   NDIS               
+  1-00000028  R*8   BB                   18-00000000  I*4   IROTCUR1             12-000000A8  I*4   NDMAT              
+ 20-00000000  L*4   BENG                 18-00000004  I*4   IROTCUR2             14-00000018  I*4   NDOF               
+ 20-00000004  L*4   BOPT1                10-00000000  I*4   ISTEP                14-00000058  I*4   NDOF2              
+ 20-00000310  L*4   BPEN                  1-0000007C  L*4   ISUPDATENEEDED        2-0000019C  CHAR  NEG                
+ 20-00000318  L*4   BPLOT                19-00000020  I*4   ITERMO               14-00000020  I*4   NELEM              
+ 20-00000314  L*4   BPRINT               19-00000024  I*4   ITERREF              14-00000048  I*4   NELTYPE            
+ 10-00000008  L*4   BRESET                1-00000058  I*4   JEL                  12-000000B4  I*4   NENDW              
+  1-00000020  R*8   CC                    1-0000006C  I*4   JSTEP                12-000000A0  I*4   NENDWSAV           
+  1-00000050  R*8   CONV                  1-00000064  I*4   M1                    8-00000168  I*4   NEX                
+  7-00000158  R*8   CT                   19-0000005C  I*4   MAXIT                12-0000005C  I*4   NGULAM             
+  1-00000008  R*8   DELLAMDAI            19-00000058  I*4   MAXSTEPS             14-00000030  I*4   NINT               
+ 19-00000028  R*8   DELLAMDAIO           12-00000014  I*4   N1A                  14-00000028  I*4   NINT1              
+ 19-00000018  R*8   DELLM                12-00000018  I*4   N1B                  14-0000002C  I*4   NINT2              
+ 19-00000010  R*8   DELLMO               13-00000004  I*4   N1C                  14-00000044  I*4   NLOD               
+ 19-00000040  R*8   DELTALAMDAI          12-0000001C  I*4   N2                   12-00000058  I*4   NPLOAD             
+  1-00000040  R*8   DELTALAMDAI1         12-00000020  I*4   N2A                   6-0000000C  I*4   NPSTEP             
+  1-00000038  R*8   DELTALAMDAI2         12-00000024  I*4   N2B                   6-00000024  I*4   NPTSDEF            
+ 16-00000020  R*8   DEPTH                12-0000009C  I*4   N2C                   6-00000028  I*4   NPTSEND            
+ 19-00000008  R*8   DETK                 12-00000030  I*4   N3                    6-00000000  I*4   NPTSI              
+ 19-00000000  R*8   DETKO                12-00000028  I*4   N3A                   6-00000004  I*4   NPTSJ              
+  1-00000080  L*4   DONTSKIP             12-0000002C  I*4   N3B                  14-0000000C  I*4   NQC1               
+ 15-00000000  R*8   E                    12-00000034  I*4   N4                   14-00000010  I*4   NQC2               
+ 15-00000008  R*8   G                    12-00000038  I*4   N4B                  14-0000001C  I*4   NQD                
+  1-00000070  I*4   I                    12-0000003C  I*4   N5                   14-0000004C  I*4   NQD1               
+  9-00000000  I*4   ICEL                 12-000000A4  I*4   N5V                  14-00000050  I*4   NQD2               
+ 17-00000018  I*4   ICONFEA              12-00000094  I*4   N6                   12-00000004  I*4   NROCOLD            
+ 14-00000004  I*4   ICONT                12-00000098  I*4   N6R                  12-0000000C  I*4   NROKSAV            
+ 19-00000060  I*4   ICUTMAX              12-00000090  I*4   N7                    6-00000008  I*4   NSTEP              
+ 17-00000014  I*4   IDATFILE             12-00000054  I*4   NB                   14-0000003C  I*4   NSTIFC             
+  2-00000198  I*4   IDEBUG               12-00000048  I*4   NBFORS               14-00000024  I*4   NSTIFEL            
+  1-00000060  I*4   IDETSCHANGE          12-000000AC  I*4   NBMAT                12-0000004C  I*4   NSTIFK             
+  1-00000068  I*4   IEL                  12-00000050  I*4   NBO                  14-00000040  I*4   NSTIFN             
+ 17-00000000  I*4   IFILESTIFF           14-00000034  I*4   NCINT                14-00000038  I*4   NSTIFS             
+ 14-00000000  I*4   IGEOM                12-00000010  I*4   NCKKSAV               6-00000018  I*4   NSTR               
+ 18-00000010  I*4   IINDXEL              14-00000054  I*4   NCMAT                 6-0000001C  I*4   NSTRREC            
+ 19-00000064  L*4   IMAGINARY            12-00000008  I*4   NCUCOLD              14-00000014  I*4   NSUP               
+ 10-00000004  I*4   INUT                 12-00000074  I*4   NDELTAUI             12-00000000  I*4   NSX                
+ 17-00000004  I*4   IOUT                 12-00000078  I*4   NDELTAUI1            14-00000060  I*4   NSZDBL             
+ 17-00000008  I*4   IOUTDEF              12-0000007C  I*4   NDELTAUI2            14-0000005C  I*4   NSZINT             
+ 17-0000000C  I*4   IOUTEND              12-00000080  I*4   NDELUI               12-000000B0  I*4   NTMAT              
+  6-00000010  I*4   IPLOTCOUNTDEF        13-00000000  I*4   NDELUIEL             12-00000060  I*4   NUM                
+  6-00000020  I*4   IPLOTCOUNTEND        12-00000084  I*4   NDELUIO              12-00000064  I*4   NUMO               
+  1-0000005C  I*4   IPRT                 12-00000088  I*4   NDELUIP11            12-00000044  I*4   NX                 
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 9
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+ Address      Type  Name                 Address      Type  Name                 Address      Type  Name               
+                                                                                                                       
+ 12-0000006C  I*4   NXM                   1-00000084  CHAR  SIGN                 19-00000050  R*8   TOL                
+ 12-00000070  I*4   NXMO                 19-00000030  R*8   SLAMDAM              11-00000000  R*8   TRACE              
+ 12-00000068  I*4   NXMR                 19-00000038  R*8   SLAMDAMO              1-00000078  L*4   TRUEE              
+ 12-00000040  I*4   NXO                   7-00000150  R*8   ST                    2-00000180  R*8   TWO                
+  2-00000188  R*8   ONE                   1-00000018  R*8   TH1                  16-00000028  R*8   WIDTH              
+ 20-00000308  R*8   PEN                   1-00000010  R*8   TH2                   7-00000160  R*8   XLAM1              
+  2-000001A0  CHAR  POS                  16-00000008  R*8   THETAL                7-00000168  R*8   XLAM2              
+ 15-00000010  R*8   PR                    1-00000074  L*4   THETANEEDUPDATE_STR  16-00000018  R*8   XLENGTH            
+ 16-00000010  R*8   RADIUS               16-00000000  R*8   THETAP                2-00000190  R*8   ZERO               
+  7-00000170  R*8   RUTAHAT               2-00000178  R*8   THREE                                                      
+
+
+ARRAYS
+
+ Address      Type  Name         Bytes  Dimensions
+
+  5-00000000  R*8   A        240000000  (30000000)
+  7-000000D8  R*8   A1HAT           24  (3)
+  7-000000F0  R*8   A2HAT           24  (3)
+  7-00000060  R*8   AA1             24  (3)
+  7-00000078  R*8   AA2             24  (3)
+  7-00000090  R*8   AO1             24  (3)
+  7-00000108  R*8   AO12N           72  (3, 3)
+  7-000000A8  R*8   AO2             24  (3)
+  7-00000000  R*8   C01             24  (3)
+  7-00000018  R*8   C02             24  (3)
+  8-00000000  CHAR  CEX            360  (12)
+  7-00000030  R*8   CK1             24  (3)
+  7-00000048  R*8   CK2             24  (3)
+ 20-00000008  R*8   XE             768  (8, 12)
+  7-000000C0  R*8   XNOR            24  (3)
+
+
+LABELS
+
+ Address      Label  Address      Label  Address      Label  Address      Label  Address      Label
+                                                                                                   
+  4-00000717  5       4-00000740  100     4-000009C5  250         **      400     4-00001DD2  998  
+      **      25      4-000007B8  150         **      300         **      500                      
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 10
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+PHASEII_SHELL_DYNAMIC           Source Listing                  19-Aug-2008 17:32:28  Compaq Visual Fortran 6.6-1684    Page 11
+                                                                19-Aug-2008 17:32:26  PhaseII_Shell_DYNAMIC.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/PhaseII_Shell_DYNAMIC.lst
+  /o         filename : Debug/PhaseII_Shell_DYNAMIC.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.11 seconds
+  Elapsed time:      0.11 seconds
+  Pagefaults:           0
+  I/O Count:            0

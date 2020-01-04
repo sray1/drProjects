@@ -1,0 +1,161 @@
+FORM_TRANGYRO_MATRIX            Source Listing                   1-Sep-2008 10:40:59  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 1-Sep-2008 10:40:59  Form_TranGyroMatrix.f
+
+	      1 	Subroutine Form_TranGyro_Matrix(TG,TMass,nS,Iout)
+	      2 !	----------------------------------------------------------------------------- S Matrix
+	      3 !	TM		= Translational Mass matrix = TMass*Identity(3x3)  Symmetric
+	      4 !	----------------------------------------------------------------------------- 
+	      5 !	Inputs
+	      6 !		nS		= 3
+	      7 !		TMass	= Translational Mass density	
+	      8 !	Outputs 
+	      9 !		TM		= Tran Mass Matrix: TM(3,3)
+	     10 !	------------------------------------------------------------
+	     11 
+	     12 	Implicit Real(kind=8) (a-h,o-z)
+	     13 !
+	     14 !	include 'mass.h'
+	     15 
+	     16 !
+	     17 	Real(kind=8)	TG       ,IM                
+	     18 	Dimension		TG(nS,nS),IM(nS,nS)
+	     19 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	     20 !	------------------------------------------------------ identity matrix (I)
+	     21 	IM=0.D0
+	     22 !	------------------------------------------------------ Translational Mass
+	     23 	TG = TMass*IM
+	     24 !---------------------------------------------------------- Write:
+	     25 	iPrt = 0
+	     26 	if (iPrt == 1) Then
+	     27 		write(Iout,1010) (i,(TG(i,j),j = 1,3),i=1,3)
+	     28 	endif
+	     29 !----------------------------------------------------------
+	     30 	return
+	     31 !
+	     32  1000	format(A,I5,A)
+	     33  1010 format("Translational Gyro Matrix TG(3,3)"/
+	     34      &        (I5,3(3(f10.7,1X)/)))
+	     35 	end
+
+FORM_TRANGYRO_MATRIX            Source Listing                   1-Sep-2008 10:40:59  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 1-Sep-2008 10:40:59  Form_TranGyroMatrix.f
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    20 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  184 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                                32   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 1066   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 1606
+
+
+ENTRY POINTS
+
+ Address      Name                
+                                  
+  4-00000000  FORM_TRANGYRO_MATRIX
+
+
+VARIABLES
+
+ Address      Type  Name   Address      Type  Name   Address      Type  Name   Address      Type  Name   Address      Type  Name 
+                                                                                                                                 
+  1-0000000C  I*4   I       1-00000010  I*4   IPRT        **      I*4   NS      2-00000098  R*8   THREE   2-000000A0  R*8   TWO  
+      **      I*4   IOUT    1-00000008  I*4   J       2-000000A8  R*8   ONE         **      R*8   TMASS   2-000000B0  R*8   ZERO 
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+      **      R*8   IM             **  (*, *)
+      **      R*8   TG             **  (*, *)
+
+FORM_TRANGYRO_MATRIX            Source Listing                   1-Sep-2008 10:40:59  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 1-Sep-2008 10:40:59  Form_TranGyroMatrix.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+FORM_TRANGYRO_MATRIX            Source Listing                   1-Sep-2008 10:40:59  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 1-Sep-2008 10:40:59  Form_TranGyroMatrix.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Form_TranGyroMatrix.lst
+  /o         filename : Debug/Form_TranGyroMatrix.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.01 seconds
+  Elapsed time:      0.02 seconds
+  Pagefaults:           0
+  I/O Count:            0

@@ -1,0 +1,1686 @@
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	      1 	Program TimeStep_MDDynamic
+	      2 !------------------------- Modules
+	      3 	USE linear_operators
+	      4 	USE DFLIB
+	      5 	USE DFPORT
+	      6 !	USE SCIGRAPH
+	      7 !------------------------------------------------------------------- Files
+	      8 	include 'files.h'
+	      9       common/files/	  iFileStiff,Iout,IoutDef,IoutEnd,iRotCur,
+	     10      &                iDatFile,IConFEA
+	     11 	include 'solveDYN.h'
+	     12 	  common/SolDyn/	  beta,gama,delTim,begTim,endTim,totTim,
+	     13      &					  velmul,accmul,bDynamic
+	     14 	  Real*8			  beta,gama,delTim,begTim,endTim,totTim	
+	     15       Real*8					velmul,accmul
+	     16 	  LOGICAL			  bDynamic		
+	     17 	include 'SizeVar.h'
+	     18 	  common/SizeVar/	  iGeom,iCont,nDim,nQc1,nQc2,nSup,nDof,nQd,
+	     19      &					  nElem,
+	     20      &                  nStifEL,Nint1,Nint2,Nint,nCInt,nStifS,nStifC,
+	     21      &					nStifN,nLod,NelType,
+	     22      &					nQd1,nQd2,nCMat,nDof2,nSzInt,nSzDbl
+	     23 	include 'Blank.h'
+	     24 !
+	     25 	common A(300000)
+	     26 	Real(kind=8)	ddel
+	     27 	
+	     28 	integer			nStep,nDof
+	     29 	integer			nSzInt,nSzDbl
+	     30 	integer			n1,n2,n3,n4,n5,n6,nend
+	     31 !	
+	     32 !	--------------------------------------------------------------------------- Prelim
+	     33 	call Set_Files()
+	     34 !------------------------------------------------------------------- Today's Date/Time		
+	     35 	call Set_TimeDate(iOut)
+	     36 !	----------------------------------------------- Newmark
+	     37 	beta	= 0.25D0			! Average Acceleration
+	     38 	gama	= 0.5D0 
+	     39 !	----------------------------------------------- Dim & Data :BatheEx:8.1 p:314
+	     40 	nStep	= 13
+	     41 	nDof	= 2
+	     42 !	-----------
+	     43 	nSzInt			= 4 !bytes
+	     44 	nSzDbl			= 8 !bytes
+	     45 !
+	     46 	n1		= 1							!stif
+	     47 	n2		= n1 + nDof*nDof*nSzDbl		!damp
+	     48 	n3		= n2 + nDof*nDof*nSzDbl		!mass
+	     49 	n4		= n3 + nDof*nDof*nSzDbl		!load
+	     50 	n5		= n4 + nDof*nStep*nSzDbl	!d0
+	     51 	n6		= n5 + nDof*nSzDbl			!v0
+	     52 	nend	= n6 + nDof*nSzDbl			!end
+	     53 !	-----------
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	     54 	call getData2(A(n1),A(n2),A(n3),A(n4),A(n5),A(n6),
+		......................1.....2.....3.....4.....5.....6      
+(1) Warning: In the call to GETDATA2, actual argument #1 does not match the type and kind of the corresponding dummy argument.
+
+(2) Warning: In the call to GETDATA2, actual argument #2 does not match the type and kind of the corresponding dummy argument.
+
+(3) Warning: In the call to GETDATA2, actual argument #3 does not match the type and kind of the corresponding dummy argument.
+
+(4) Warning: In the call to GETDATA2, actual argument #4 does not match the type and kind of the corresponding dummy argument.
+
+(5) Warning: In the call to GETDATA2, actual argument #5 does not match the type and kind of the corresponding dummy argument.
+
+(6) Warning: In the call to GETDATA2, actual argument #6 does not match the type and kind of the corresponding dummy argument.
+
+	     55      &				nDof,nStep,ddel,iOut) 
+	     56 !	-------------------
+	     57 	call MidPtRule(A(n1),A(n2),A(n3),A(n4),A(n5),A(n6),nDof,
+		.......................1.....2.....3.....4                       
+(1) Warning: In the call to MIDPTRULE, actual argument #1 does not match the type and kind of the corresponding dummy argument.
+
+(2) Warning: In the call to MIDPTRULE, actual argument #2 does not match the type and kind of the corresponding dummy argument.
+
+(3) Warning: In the call to MIDPTRULE, actual argument #3 does not match the type and kind of the corresponding dummy argument.
+
+(4) Warning: In the call to MIDPTRULE, actual argument #4 does not match the type and kind of the corresponding dummy argument.
+
+	     58      &                     nStep,ddel,iOut,1)
+	     59 !	-----------
+	     60 	ddel	= 28.D0
+	     61 !	-------------------
+	     62 	call MidPtRule(A(n1),A(n2),A(n3),A(n4),A(n5),A(n6),nDof,
+		.......................1.....2.....3.....4                       
+(1) Warning: In the call to MIDPTRULE, actual argument #1 does not match the type and kind of the corresponding dummy argument.
+
+(2) Warning: In the call to MIDPTRULE, actual argument #2 does not match the type and kind of the corresponding dummy argument.
+
+(3) Warning: In the call to MIDPTRULE, actual argument #3 does not match the type and kind of the corresponding dummy argument.
+
+(4) Warning: In the call to MIDPTRULE, actual argument #4 does not match the type and kind of the corresponding dummy argument.
+
+	     63      &                     nStep,ddel,iOut,1)
+	     64 !	----------------------------------------------- Dim & Data :ChopraEx:15.1 p:614
+	     65 	nStep	= 21
+	     66 	nDof	= 5
+	     67 !	-----------
+	     68 	n1		= 1							!stif
+	     69 	n2		= n1 + nDof*nDof*nSzDbl		!damp
+	     70 	n3		= n2 + nDof*nDof*nSzDbl		!mass
+	     71 	n4		= n3 + nDof*nDof*nSzDbl		!load
+	     72 	n5		= n4 + nDof*nStep*nSzDbl	!d0
+	     73 	n6		= n5 + nDof*nSzDbl			!v0
+	     74 	nend	= n6 + nDof*nSzDbl			!end
+	     75 !	-----------
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	     76 	call getData5(A(n1),A(n2),A(n3),A(n4),A(n5),A(n6), 
+		......................1.....2.....3.....4.....5.....6       
+(1) Warning: In the call to GETDATA5, actual argument #1 does not match the type and kind of the corresponding dummy argument.
+
+(2) Warning: In the call to GETDATA5, actual argument #2 does not match the type and kind of the corresponding dummy argument.
+
+(3) Warning: In the call to GETDATA5, actual argument #3 does not match the type and kind of the corresponding dummy argument.
+
+(4) Warning: In the call to GETDATA5, actual argument #4 does not match the type and kind of the corresponding dummy argument.
+
+(5) Warning: In the call to GETDATA5, actual argument #5 does not match the type and kind of the corresponding dummy argument.
+
+(6) Warning: In the call to GETDATA5, actual argument #6 does not match the type and kind of the corresponding dummy argument.
+
+	     77      &				nDof,nStep,ddel,iOut) 
+	     78 !	-------------------
+	     79 	call MidPtRule(A(n1),A(n2),A(n3),A(n4),A(n5),A(n6),nDof,
+		.......................1.....2.....3.....4                       
+(1) Warning: In the call to MIDPTRULE, actual argument #1 does not match the type and kind of the corresponding dummy argument.
+
+(2) Warning: In the call to MIDPTRULE, actual argument #2 does not match the type and kind of the corresponding dummy argument.
+
+(3) Warning: In the call to MIDPTRULE, actual argument #3 does not match the type and kind of the corresponding dummy argument.
+
+(4) Warning: In the call to MIDPTRULE, actual argument #4 does not match the type and kind of the corresponding dummy argument.
+
+	     80      &                     nStep,ddel,iOut,2)
+	     81 !	-------------------
+	     82 	call AvgRule(A(n1),A(n2),A(n3),A(n4),A(n5),A(n6),nDof,
+		.....................1.....2.....3.....4.....5.....6           
+(1) Warning: In the call to AVGRULE, actual argument #1 does not match the type and kind of the corresponding dummy argument.
+
+(2) Warning: In the call to AVGRULE, actual argument #2 does not match the type and kind of the corresponding dummy argument.
+
+(3) Warning: In the call to AVGRULE, actual argument #3 does not match the type and kind of the corresponding dummy argument.
+
+(4) Warning: In the call to AVGRULE, actual argument #4 does not match the type and kind of the corresponding dummy argument.
+
+(5) Warning: In the call to AVGRULE, actual argument #5 does not match the type and kind of the corresponding dummy argument.
+
+(6) Warning: In the call to AVGRULE, actual argument #6 does not match the type and kind of the corresponding dummy argument.
+
+	     83      &                     nStep,ddel,iOut,2)
+	     84 !	-------------------
+	     85 	call ChopraAvgRule(A(n1),A(n2),A(n3),A(n4),A(n5),A(n6),nDof,
+		...........................1.....2.....3.....4.....5.....6           
+(1) Warning: In the call to CHOPRAAVGRULE, actual argument #1 does not match the type and kind of the corresponding dummy argument.
+
+(2) Warning: In the call to CHOPRAAVGRULE, actual argument #2 does not match the type and kind of the corresponding dummy argument.
+
+(3) Warning: In the call to CHOPRAAVGRULE, actual argument #3 does not match the type and kind of the corresponding dummy argument.
+
+(4) Warning: In the call to CHOPRAAVGRULE, actual argument #4 does not match the type and kind of the corresponding dummy argument.
+
+(5) Warning: In the call to CHOPRAAVGRULE, actual argument #5 does not match the type and kind of the corresponding dummy argument.
+
+(6) Warning: In the call to CHOPRAAVGRULE, actual argument #6 does not match the type and kind of the corresponding dummy argument.
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	     86      &                     nStep,ddel,iOut,2)
+	     87 !	-------------------------------------------- CubicC2 End
+	     88   999 Stop	'Program: TimeStep_MDDynamic Ran OK'
+	     89 
+	     90 	end 
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   444 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                 3212 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               970   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                39374   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 _BLNK__                            1200000 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  6 _FILES                                  28 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  7 _SOLDYN                                 68 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  8 _SIZEVAR                               100 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  9 _MPIBLOCK                               28 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+ 10 .drectve                               257 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+ 11 .debug$T                                88 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated              1244569
+
+
+ENTRY POINTS
+
+ Address      Name              
+                                
+  4-00000000  TIMESTEP_MDDYNAMIC
+
+
+VARIABLES
+
+ Address      Type  Name                                 Address      Type  Name                               
+                                                                                                               
+  7-00000038  R*8   ACCMUL                                1-0000001C  I*4   N4                                 
+  7-00000040  L*4   BDYNAMIC                              1-00000018  I*4   N5                                 
+  7-00000018  R*8   BEGTIM                                1-00000014  I*4   N6                                 
+  7-00000000  R*8   BETA                                  8-00000034  I*4   NCINT                              
+  1-00000008  R*8   DDEL                                  8-00000054  I*4   NCMAT                              
+  7-00000010  R*8   DELTIM                                8-00000008  I*4   NDIM                               
+  7-00000020  R*8   ENDTIM                                8-00000018  I*4   NDOF                               
+  7-00000008  R*8   GAMA                                  8-00000058  I*4   NDOF2                              
+  6-00000018  I*4   ICONFEA                               8-00000020  I*4   NELEM                              
+  8-00000004  I*4   ICONT                                 8-00000048  I*4   NELTYPE                            
+  6-00000014  I*4   IDATFILE                              1-00000010  I*4   NEND                               
+  6-00000000  I*4   IFILESTIFF                            8-00000030  I*4   NINT                               
+  8-00000000  I*4   IGEOM                                 8-00000028  I*4   NINT1                              
+  6-00000004  I*4   IOUT                                  8-0000002C  I*4   NINT2                              
+  6-00000008  I*4   IOUTDEF                               8-00000044  I*4   NLOD                               
+  6-0000000C  I*4   IOUTEND                               8-0000000C  I*4   NQC1                               
+  6-00000010  I*4   IROTCUR                               8-00000010  I*4   NQC2                               
+  1-00000028  I*4   N1                                    8-0000001C  I*4   NQD                                
+  1-00000024  I*4   N2                                    8-0000004C  I*4   NQD1                               
+  1-00000020  I*4   N3                                    8-00000050  I*4   NQD2                               
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 5
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+ Address      Type  Name                                 Address      Type  Name                               
+                                                                                                               
+  1-0000002C  I*4   NSTEP                                 9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE
+  8-0000003C  I*4   NSTIFC                                9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  8-00000024  I*4   NSTIFEL                               9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  8-00000040  I*4   NSTIFN                                9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  8-00000038  I*4   NSTIFS                                9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  8-00000014  I*4   NSUP                                  9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  8-00000060  I*4   NSZDBL                                9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  8-0000005C  I*4   NSZINT                                9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_HX_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_HX_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_HX_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_HX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_HX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_HX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_IX_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_HX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL      
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 6
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+ Address      Type  Name                                 Address      Type  Name                               
+                                                                                                               
+  9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_IX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_I_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_I_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_I_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_I_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000014  I*4   OPERATION_I_mp_MPI_ARGV_NULL       
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000014  I*4   OPERATION_I_mp_MPI_ARGV_NULL       
+  9-00000000  I*4   OPERATION_IX_mp_MPI_BOTTOM            9-00000014  I*4   OPERATION_I_mp_MPI_ARGV_NULL       
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_I_mp_MPI_ARGV_NULL       
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000000  I*4   OPERATION_I_mp_MPI_BOTTOM          
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000000  I*4   OPERATION_I_mp_MPI_BOTTOM          
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000000  I*4   OPERATION_I_mp_MPI_BOTTOM          
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000000  I*4   OPERATION_I_mp_MPI_BOTTOM          
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000010  I*4   OPERATION_I_mp_MPI_ERRCODES_IGNORE 
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000010  I*4   OPERATION_I_mp_MPI_ERRCODES_IGNORE 
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000010  I*4   OPERATION_I_mp_MPI_ERRCODES_IGNORE 
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-00000010  I*4   OPERATION_I_mp_MPI_ERRCODES_IGNORE 
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-0000000C  I*4   OPERATION_I_mp_MPI_IN_PLACE        
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-0000000C  I*4   OPERATION_I_mp_MPI_IN_PLACE        
+  9-00000010  I*4   OPERATION_IX_mp_MPI_ERRCODES_IGNORE   9-0000000C  I*4   OPERATION_I_mp_MPI_IN_PLACE        
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-0000000C  I*4   OPERATION_I_mp_MPI_IN_PLACE        
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000008  I*4   OPERATION_I_mp_MPI_STATUSES_IGNORE 
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000008  I*4   OPERATION_I_mp_MPI_STATUSES_IGNORE 
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000008  I*4   OPERATION_I_mp_MPI_STATUSES_IGNORE 
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000008  I*4   OPERATION_I_mp_MPI_STATUSES_IGNORE 
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000004  I*4   OPERATION_I_mp_MPI_STATUS_IGNORE   
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000004  I*4   OPERATION_I_mp_MPI_STATUS_IGNORE   
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000004  I*4   OPERATION_I_mp_MPI_STATUS_IGNORE   
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000004  I*4   OPERATION_I_mp_MPI_STATUS_IGNORE   
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-0000000C  I*4   OPERATION_IX_mp_MPI_IN_PLACE          9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000018  I*4   OPERATION_TX_mp_MPI_ARGVS_NULL     
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL      
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL      
+  9-00000008  I*4   OPERATION_IX_mp_MPI_STATUSES_IGNORE   9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL      
+  9-00000004  I*4   OPERATION_IX_mp_MPI_STATUS_IGNORE     9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL      
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 7
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+ Address      Type  Name                                 Address      Type  Name                               
+                                                                                                               
+  9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_TX_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_TX_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000000  I*4   OPERATION_TX_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_XH_mp_MPI_ARGVS_NULL     
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_TX_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XH_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_TX_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XH_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_TX_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 8
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+ Address      Type  Name                                 Address      Type  Name                               
+                                                                                                               
+  9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-00000010  I*4   OPERATION_XH_mp_MPI_ERRCODES_IGNORE   9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL      
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-0000000C  I*4   OPERATION_XH_mp_MPI_IN_PLACE          9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000000  I*4   OPERATION_XI_mp_MPI_BOTTOM         
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XH_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XI_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XH_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XI_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XI_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_XI_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 9
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+ Address      Type  Name                                 Address      Type  Name                               
+                                                                                                               
+  9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000008  I*4   OPERATION_XI_mp_MPI_STATUSES_IGNORE   9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000004  I*4   OPERATION_XI_mp_MPI_STATUS_IGNORE     9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-0000000C  I*4   OPERATION_XT_mp_MPI_IN_PLACE       
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000018  I*4   OPERATION_XT_mp_MPI_ARGVS_NULL        9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000008  I*4   OPERATION_XT_mp_MPI_STATUSES_IGNORE
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000014  I*4   OPERATION_XT_mp_MPI_ARGV_NULL         9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000004  I*4   OPERATION_XT_mp_MPI_STATUS_IGNORE  
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000000  I*4   OPERATION_XT_mp_MPI_BOTTOM            9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+  9-00000010  I*4   OPERATION_XT_mp_MPI_ERRCODES_IGNORE   9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL      
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 10
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+ Address      Type  Name                                 Address      Type  Name                               
+                                                                                                               
+  9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL         9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000018  I*4   OPERATION_X_mp_MPI_ARGVS_NULL         9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-0000000C  I*4   OPERATION_X_mp_MPI_IN_PLACE        
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000014  I*4   OPERATION_X_mp_MPI_ARGV_NULL          9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000008  I*4   OPERATION_X_mp_MPI_STATUSES_IGNORE 
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000000  I*4   OPERATION_X_mp_MPI_BOTTOM             9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    9-00000004  I*4   OPERATION_X_mp_MPI_STATUS_IGNORE   
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    7-00000028  R*8   TOTTIM                             
+  9-00000010  I*4   OPERATION_X_mp_MPI_ERRCODES_IGNORE    7-00000030  R*8   VELMUL                             
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+  5-00000000  R*4   A         1200000  (300000)
+
+
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 11
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+LABELS
+
+ Address      Label
+                   
+  4-00000A8B  999  
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 12
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	     91 !	 
+	     92 	Subroutine MidPtRule(Stif,Damp,Mass,Load,d0,v0,nDof,
+	     93      &                     nStep,deltaT,iOut,nProb)
+	     94  			
+	     95 !
+	     96 !	No Need for additional matrix. Momentum Balance @ Mid. Pt. of Step 
+	     97 ! 			
+	     98 	Real*8	Stif(nDof,nDof),Damp(nDof,nDof),Mass(nDof,nDof),time
+	     99 	Real*8	eStif(nDof,nDof),eLoad(nDof),Load(nDof,nStep),deltaT
+	    100 	Real*8	cLoad(nDof),dis(nDof,nStep),a0,a1,a2,a3,a4,sum,delu(nDof)
+	    101 
+	    102 	Real(kind=8)	d(nDof),ddot(nDof),d2dot(nDof),temv
+	    103 	
+	    104 	integer			nStep,iOut,nProb
+	    105 !
+	    106 !
+	    107 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	    108 !========================================================================
+	    109 !	Method		Newmark MidPt. Rule : MultiDegreeOfFreedom
+	    110 !------------------------------------------------------------------- Heading
+	    111 	write(iOut,*)
+	    112      &	'=========================================================',
+	    113      &	'==============='
+	    114 	write(iOut,*)
+	    115      &	'             MD Dynamic Equation Time Stepping           ',
+	    116      &	'               (Average Accl: Mid. Pt. Rule)             ',
+	    117      &    '                         by',   
+	    118      &    '                         ',   
+	    119      &    '                    DEBABRATA RAY',   
+	    120      &    '                         ' 
+	    121 	write(iOut,*)
+	    122      &'    No additional matrix. Momentum Balance @ Mid. Pt. of Step'
+	    123 	write(iOut,*)
+	    124      &	'=========================================================',
+	    125      &	'==============='
+	    126 !-------------------------------------------------------------------------------- 		
+	    127 	if(nProb == 1) then
+	    128 		write(iOut,1000) deltaT
+	    129 	else
+	    130 		write(iOut,1001) deltaT
+	    131 	endif 
+	    132 !
+	    133 	pi		= 4.D0*atan(1.)
+	    134 	time	= 0.D0
+	    135 !	-------------------------------- initial calc
+	    136 	d		= d0
+	    137 	ddot	= v0
+	    138 !
+	    139 	eStif	= Mass
+	    140 	call Invert_A(eStif,nDof,nDof,iOut)
+	    141 !
+	    142 	do i=1,nDof
+	    143 		cLoad(i)= Load(i,1)
+	    144 	end do
+	    145 !
+	    146 	do ii = 1,ndof
+	    147 		sum = 0.D0
+
+MIDPTRULE                       Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 13
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    148 		do jj = 1,ndof
+	    149 			sum	= sum- 
+	    150      &			Damp(ii,jj)*ddot(jj)-Stif(ii,jj)*d(jj)
+	    151 		end do
+	    152 			eLoad(ii) = sum+Load(ii,1) 
+	    153 	end do
+	    154 	d2dot = MATMUL(eStif,eLoad) 
+	    155 !
+	    156 	a1      = 1.D0/deltaT
+	    157 	a0      = 2.D0*a1/deltaT
+	    158 	a2		= 2.D0*a1
+	    159 	a3		= 4.D0*a1
+	    160 	a4		= 2.D0*a0
+	    161 !	-----------------------------------
+	    162 	do ii = 1,ndof
+	    163 		do jj = 1,ndof
+	    164 		eStif(ii,jj) =
+	    165      &		 a0*Mass(ii,jj)+a1*Damp(ii,jj)+.5D0*Stif(ii,jj)
+	    166 		end do
+	    167 	end do
+	    168 	call Invert_A(eStif,nDof,nDof,iOut)
+	    169 !	--------------------------------------------------------------------------- Loop
+	    170 	do is = 1,nStep-1
+	    171 !
+	    172 		do ii = 1,ndof
+	    173 			sum = 0.D0
+	    174 			do jj = 1,ndof
+	    175 				sum	= sum+
+	    176      &				a2*Mass(ii,jj)*ddot(jj)-Stif(ii,jj)*d(jj)
+	    177 			end do
+	    178 			eLoad(ii) = sum+.5D0*(Load(ii,is+1)+Load(ii,is)) 
+	    179 		end do
+	    180 !
+	    181 		delu	= MATMUL(eStif,eLoad)
+	    182 		do ii = 1,ndof
+	    183 			temv		= ddot(ii)
+	    184 			d(ii)		= d(ii) + delu(ii)
+	    185 			ddot(ii)	= a2*delu(ii) - temv 
+	    186 			d2dot(ii)	= a4*delu(ii) - a3*temv - d2dot(ii) 
+	    187 		end do  
+	    188 !	--------------------------- save for print
+	    189 		do ii = 1,ndof
+	    190 			dis(ii,is) = d(ii)
+	    191 		end do  
+	    192 !	---------------------------
+	    193 	end do
+	    194 !	---------------------------
+	    195 	if(nProb == 1) then
+	    196 		write(iOut, 1010) (i, i = 1,nStep-1) 
+	    197 		write(iOut, 1020) (i,(dis(i,j),j=1,nStep-1),i=1,nDof)	! Bathe
+	    198 	else
+	    199 		write(iOut, 1015) (i, i = 1,nDof) 
+	    200 		write(iOut, 1030) (j,(dis(i,j),i=1,nDof),j=1,nStep-1)	! Chopra
+	    201 	endif 
+	    202 !	----------
+	    203 	write(iOut,*)
+	    204      &	'=========================================================',
+
+MIDPTRULE                       Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 14
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    205      &	'==============='
+	    206 !
+	    207   999 return 
+	    208 
+	    209  1000 format(//5x,"Bathe: Example 8.1:pp 314",//
+	    210      &	10x,"time-step = ", f10.3//)
+	    211  1001 format(//5x,"Chopra: Example 15.1:pp 614",//
+	    212      &	10x,"time-step = ", f10.3//)
+	    213  1010 format( 5x, 'nDelT' ,5x, 12(I4,5x) )
+	    214  1015 format( 5x, 'nDOF ' ,5x, 5(I4,5x) )
+	    215  1020 format((5x, 'dis(',I1,')', 12(f8.4,1x)))
+	    216  1030 format((5x, I8, 5(f8.4,1x)))
+	    217 
+	    218 	end
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   444 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                 3212 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               970   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                39374   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               257 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                88 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                44345
+
+
+ENTRY POINTS
+
+ Address      Name     
+                       
+  4-00000AB1  MIDPTRULE
+
+
+VARIABLES
+
+ Address      Type  Name    Address      Type  Name    Address      Type  Name    Address      Type  Name  
+                                                                                                           
+  1-00000060  R*8   A0       1-00000088  I*4   I            **      I*4   NPROB    1-00000068  R*8   TIME  
+  1-00000058  R*8   A1       1-00000084  I*4   II           **      I*4   NSTEP    2-00000C40  R*4   TWO   
+  1-00000050  R*8   A2           **      I*4   IOUT     2-00000C44  R*4   ONE          **      R*4   V0    
+  1-00000048  R*8   A3       1-0000007C  I*4   IS       1-0000008C  R*4   PI       2-00000C48  R*4   ZERO  
+  1-00000040  R*8   A4       1-00000078  I*4   J        1-00000038  R*8   SUM                              
+      **      R*4   D0       1-00000080  I*4   JJ       1-00000030  R*8   TEMV                             
+      **      R*8   DELTAT       **      I*4   NDOF     2-00000C3C  R*4   THREE                            
+
+
+
+MIDPTRULE                       Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 15
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+ARRAYS
+
+ Address      Type  Name         Bytes  Dimensions
+
+      **      R*8   CLOAD           **  (*)
+      **      R*8   D               **  (*)
+      **      R*8   D2DOT           **  (*)
+      **      R*8   DAMP            **  (*, *)
+      **      R*8   DDOT            **  (*)
+      **      R*8   DELU            **  (*)
+      **      R*8   DIS             **  (*, *)
+      **      R*8   ELOAD           **  (*)
+      **      R*8   ESTIF           **  (*, *)
+      **      R*8   LOAD            **  (*, *)
+      **      R*8   MASS            **  (*, *)
+      **      R*8   STIF            **  (*, *)
+
+
+LABELS
+
+ Address      Label
+                   
+      **      999  
+
+MIDPTRULE                       Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 16
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    219 !	 
+	    220 !	 
+	    221 	Subroutine AvgRule(Stif,Damp,Mass,Load,d0,v0,nDof,
+	    222      &                     nStep,deltaT,iOut,nProb)
+	    223  			
+	    224 !
+	    225 !	No Need for additional matrix. Difference of Momentum Balance
+	    226 ! 			
+	    227 	Real*8	Stif(nDof,nDof),Damp(nDof,nDof),Mass(nDof,nDof),time
+	    228 	Real*8	eStif(nDof,nDof),eLoad(nDof),Load(nDof,nStep),deltaT
+	    229 	Real*8	cLoad(nDof),dis(nDof,nStep),a0,a1,a2,a3,a4,sum
+	    230 
+	    231 	Real(kind=8)	u(nDof),v(nDof),a(nDof),temv,d0,v0,tema
+	    232 	Real(kind=8)	du(nDof),dv(nDof),da(nDof)
+	    233 	
+	    234 	integer			nStep,iOut,nProb
+	    235 !
+	    236 !
+	    237 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	    238 !========================================================================
+	    239 !	Method		Newmark Avg. Rule : MultiDegreeOfFreedom
+	    240 !------------------------------------------------------------------- Heading
+	    241 	write(iOut,*)
+	    242      &	'=========================================================',
+	    243      &	'==============='
+	    244 	write(iOut,*)
+	    245      &	'             MD Dynamic Equation Time Stepping           ',
+	    246      &	'              (Average Accl: Difference Rule)            ',
+	    247      &    '                         by',   
+	    248      &    '                         ',   
+	    249      &    '                    DEBABRATA RAY',   
+	    250      &    '                         '   
+	    251 	write(iOut,*)
+	    252      &'    No additional matrix. Difference of Momentum Balance      '
+	    253 	write(iOut,*)
+	    254      &	'=========================================================',
+	    255      &	'==============='
+	    256 !-------------------------------------------------------------------------------- 		
+	    257 	if(nProb == 1) then
+	    258 		write(iOut,1000) deltaT
+	    259 	else
+	    260 		write(iOut,1001) deltaT
+	    261 	endif 
+	    262 !	---------------------------
+	    263 	if(nProb == 2) then
+	    264 		write(iOut, 1015) (i, i = 1,nDof) 
+	    265 	endif 
+	    266 !	-----------------
+	    267 	time	= 0.D0
+	    268 !	-------------------------------- initial calc
+	    269 	u		= d0
+	    270 	v		= v0
+	    271 	u		= 0.D0
+	    272 	v		= 0.D0
+	    273 !
+	    274 	eStif	= Mass
+	    275 !	call Invert_A(eStif,nDof,nDof,iOut)
+
+AVGRULE                         Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 17
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    276 !
+	    277 	do i=1,nDof
+	    278 		cLoad(i)= Load(i,1)
+	    279 	end do
+	    280 !
+	    281 	do ii = 1,ndof
+	    282 		sum = 0.D0
+	    283 		do jj = 1,ndof
+	    284 			sum	= sum- 
+	    285      &			Damp(ii,jj)*v(jj)-Stif(ii,jj)*u(jj)
+	    286 		end do
+	    287 			eLoad(ii) = sum+Load(ii,1) 
+	    288 	end do
+	    289 !	a = MATMUL(eStif,eLoad) 
+	    290 !
+	    291 	call Solve_AxEqB(eStif,eLoad,a,nDof,nDof,iOut)
+	    292 !
+	    293 !
+	    294 	a1      = 1.D0/deltaT
+	    295 	a0      = 2.D0*a1/deltaT
+	    296 	a2		= 2.D0*a1
+	    297 	a3		= 4.D0*a1
+	    298 	a4		= 2.D0*a0
+	    299 !	----------------------------------- Effective Stiffness
+	    300 	eStif	= 0.D0
+	    301 	do ii = 1,ndof
+	    302 		do jj = 1,ndof
+	    303 		eStif(ii,jj) =
+	    304      &		 a4*Mass(ii,jj)+a2*Damp(ii,jj)+Stif(ii,jj)
+	    305 		end do
+	    306 	end do
+	    307 !	call Invert_A(eStif,nDof,nDof,iOut)
+	    308 !	--------------------------------------------------------------------------- Loop
+	    309 	do is = 1,nStep-1
+	    310 !
+	    311 		do ii = 1,ndof
+	    312 			sum = 0.D0
+	    313 			do jj = 1,ndof
+	    314 				sum	= sum+
+	    315      &				Mass(ii,jj)*(a3*v(jj)+2.D0*a(jj))
+	    316      &               +Damp(ii,jj)*(2.D0*v(jj))
+	    317 			end do
+	    318 			eLoad(ii) = sum+(Load(ii,is+1) - Load(ii,is))
+	    319 		end do
+	    320 !
+	    321 !		du	= MATMUL(eStif,eLoad)
+	    322 !
+	    323 		call Solve_AxEqB(eStif,eLoad,du,nDof,nDof,iOut)
+	    324 !
+	    325 		do ii = 1,ndof
+	    326 			dv(ii)		= a2*du(ii) - 2.D0*v(ii) 
+	    327 			da(ii)		= a4*du(ii) - a3*v(ii) - 2.D0*a(ii) 
+	    328 		end do  
+	    329 !
+	    330 		do ii = 1,ndof
+	    331 			u(ii)	= u(ii)	+ du(ii)
+	    332 			v(ii)	= v(ii)	+ dv(ii) 
+
+AVGRULE                         Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 18
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    333 			a(ii)	= a(ii)	+ da(ii)
+	    334 		end do  
+	    335 !
+	    336 !============================================================ alternate
+	    337 !		do ii = 1,ndof
+	    338 !		sum = 0.D0
+	    339 !			do jj = 1,ndof
+	    340 !				sum	= sum- 
+	    341 !     &			Damp(ii,jj)*v(jj)-Stif(ii,jj)*u(jj)
+	    342 !			end do
+	    343 !			eLoad(ii) = sum+Load(ii,is+1) 
+	    344 !		end do
+	    345 !
+	    346 !		call Solve_AxEqB(Mass,eLoad,a,nDof,nDof,iOut)
+	    347 !============================================================ alternate END
+	    348 !
+	    349 !
+	    350 	time	= time + deltaT
+	    351 !	---------------------------
+	    352 	if(nProb == 2) then
+	    353 		write(iOut, 1030) time,(u(i),i=1,nDof)	! Chopra
+	    354 	endif 
+	    355 !	-----------------
+	    356 !	--------------------------- save for print
+	    357 		do ii = 1,ndof
+	    358 			dis(ii,is) = u(ii)
+	    359 		end do  
+	    360 !	--------------------------------------------------------------------------- Loop END
+	    361 	end do
+	    362 !	---------------------------
+	    363 	if(nProb == 1) then
+	    364 		write(iOut, 1010) (i, i = 1,nStep-1) 
+	    365 		write(iOut, 1020) (i,(dis(i,j),j=1,nStep-1),i=1,nDof)	! Bathe
+	    366 	endif 
+	    367 !	-----------------
+	    368 !	----------
+	    369 	write(iOut,*)
+	    370      &	'=========================================================',
+	    371      &	'==============='
+	    372 !
+	    373   999 return 
+	    374 
+	    375  1000 format(//5x,"Bathe: Example 8.1:pp 314",//
+	    376      &	10x,"time-step = ", f10.3//)
+	    377  1001 format(//5x,"Chopra: Example 15.2:pp 620",//
+	    378      &	10x,"time-step = ", f10.3//)
+	    379  1010 format( 5x, 'nDelT' ,5x, 12(I4,5x) )
+	    380  1015 format( 3x, 'time/nDOF' ,5x, 5(I4,5x) )
+	    381  1020 format((5x, 'dis(',I1,')', 12(f8.4,1x)))
+	    382  1030 format((5x, f6.1,2x, 5(f8.4,1x)))
+	    383 
+	    384 	end
+
+AVGRULE                         Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 19
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   444 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                 3212 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               970   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                39374   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               257 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                88 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                44345
+
+
+ENTRY POINTS
+
+ Address      Name   
+                     
+  4-000029E7  AVGRULE
+
+
+VARIABLES
+
+ Address      Type  Name    Address      Type  Name    Address      Type  Name    Address      Type  Name  
+                                                                                                           
+  1-000000C8  R*8   A0       1-000000F0  I*4   I            **      I*4   NPROB    1-000000D0  R*8   TIME  
+  1-000000C0  R*8   A1       1-000000EC  I*4   II           **      I*4   NSTEP    2-00000C50  R*4   TWO   
+  1-000000B8  R*8   A2           **      I*4   IOUT     2-00000C54  R*4   ONE          **      R*8   V0    
+  1-000000B0  R*8   A3       1-000000E4  I*4   IS       1-000000A0  R*8   SUM      2-00000C58  R*4   ZERO  
+  1-000000A8  R*8   A4       1-000000E0  I*4   J        1-00000090  R*8   TEMA                             
+      **      R*8   D0       1-000000E8  I*4   JJ       1-00000098  R*8   TEMV                             
+      **      R*8   DELTAT       **      I*4   NDOF     2-00000C4C  R*4   THREE                            
+
+
+ARRAYS
+
+ Address      Type  Name         Bytes  Dimensions
+
+      **      R*8   A               **  (*)
+      **      R*8   CLOAD           **  (*)
+      **      R*8   DA              **  (*)
+      **      R*8   DAMP            **  (*, *)
+      **      R*8   DIS             **  (*, *)
+      **      R*8   DU              **  (*)
+      **      R*8   DV              **  (*)
+      **      R*8   ELOAD           **  (*)
+      **      R*8   ESTIF           **  (*, *)
+      **      R*8   LOAD            **  (*, *)
+      **      R*8   MASS            **  (*, *)
+      **      R*8   STIF            **  (*, *)
+      **      R*8   U               **  (*)
+      **      R*8   V               **  (*)
+
+
+
+AVGRULE                         Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 20
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+LABELS
+
+ Address      Label
+                   
+      **      999  
+
+AVGRULE                         Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 21
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    385 !	 
+	    386 	Subroutine getData5(Stif,Damp,Mass,Load,d0,v0,
+	    387      &					nDof,nStep,deltaT,iOut)
+	    388  			
+	    389 !	chopra Ex15.1 p 614
+	    390 !
+	    391 	Real*8	Stif(nDof,nDof),Damp(nDof,nDof),Mass(nDof,nDof)
+	    392 	Real*8	Load(nDof,nStep),d0(nDof),v0(nDof),deltaT
+	    393 	Real*8	EI,h,xm,xp,xs
+	    394 
+	    395 	integer	iPrt
+	    396 !
+	    397 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	    398 !
+	    399 	deltaT		= 0.1D0
+	    400 	write(iOut,1000) deltaT
+	    401 !
+	    402 !
+	    403 	EI			= 5.469E10
+	    404 	h			= 120.D0
+	    405 	xm			= 208.6D0
+	    406 	xp			= 1000.D0
+	    407 !	============================================================== initial cond.
+	    408 	d0			= 0.D0
+	    409 	v0			= 0.D0
+	    410 !=================================================================== Stiffness
+	    411 	xs			= EI/h/h/h
+	    412 	stif		= 0.D0
+	    413 !
+	    414 	stif(1,1)	= 18.83D0	
+	    415 	stif(1,2)	= -11.90D0	
+	    416 	stif(2,1)	= -11.90D0	
+	    417 	stif(1,3)	= 4.773D0	
+	    418 	stif(3,1)	= 4.773D0	
+	    419 	stif(1,4)	= -1.193D0	
+	    420 	stif(4,1)	= -1.193D0	
+	    421 	stif(1,5)	= 0.1989D0
+	    422 	stif(5,1)	= 0.1989D0
+	    423 !	
+	    424 	stif(2,2)	= 14.65D0	
+	    425 	stif(2,3)	= -10.71D0	
+	    426 	stif(3,2)	= -10.71D0	
+	    427 	stif(2,4)	= 4.177D0	
+	    428 	stif(4,2)	= 4.177D0	
+	    429 	stif(2,5)	= -0.6961D0	
+	    430 	stif(5,2)	= -0.6961D0	
+	    431 !	
+	    432 	stif(3,3)	= 14.06D0	
+	    433 	stif(3,4)	= -9.514D0	
+	    434 	stif(4,3)	= -9.514D0	
+	    435 	stif(3,5)	= 2.586D0	
+	    436 	stif(5,3)	= 2.586D0	
+	    437 !	
+	    438 	stif(4,4)	= 9.878D0	
+	    439 	stif(4,5)	= -3.646D0
+	    440 	stif(5,4)	= -3.646D0
+	    441 !	
+
+GETDATA5                        Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 22
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    442 	stif(5,5)	= 1.608D0
+	    443 !=================================================================== Damp
+	    444 	dm			= 0.D0
+	    445 	damp		= 0.D0
+	    446 !=================================================================== mass
+	    447 	mass		= 0.D0
+	    448 !
+	    449 	mass(1,1)	= 1.D0
+	    450 	mass(2,2)	= 1.D0
+	    451 	mass(3,3)	= 1.D0
+	    452 	mass(4,4)	= 1.D0
+	    453 	mass(5,5)	= .5D0
+	    454 !=================================================================== load
+	    455 	load		= 0.D0
+	    456 !
+	    457 	do is = 2,nStep
+	    458 		load(5,is)	= 1.D0
+	    459 	end do
+	    460 !=================================================================== print
+	    461 	iPrt = 1
+	    462 	if(iPrt == 1) then 
+	    463 		write(iOut, 1000) nDof
+	    464 		write(iOut, 1010) ((stif(i,j),j=1,ndof),i=1,ndof)
+	    465 		write(iOut, 1020) ((damp(i,j),j=1,ndof),i=1,ndof)
+	    466 		write(iOut, 1030) ((mass(i,j),j=1,ndof),i=1,ndof)
+	    467 		write(iOut, 1040) (j,(load(i,j),i=1,ndof),j=1,nStep)
+	    468 	endif
+	    469 !	-------------------------------------------------------------- with multipliers
+	    470 	stif		= xs*stif	
+	    471 	mass		= xm*mass	
+	    472 !
+	    473 	do is = 1,nStep
+	    474 		load(5,is)	= xp*load(5,is)
+	    475 	end do
+	    476 !=================================================================== print again
+	    477 	iPrt = 1
+	    478 	if(iPrt == 1) then 
+	    479 		write(iOut, 1050) 
+	    480 		write(iOut, 1060) EI,h,xs,xm,xp 
+	    481 		write(iOut, 1070) ((stif(i,j),j=1,ndof),i=1,ndof)
+	    482 		write(iOut, 1020) ((damp(i,j),j=1,ndof),i=1,ndof)
+	    483 		write(iOut, 1030) ((mass(i,j),j=1,ndof),i=1,ndof)
+	    484 		write(iOut, 1040) (j,(load(i,j),i=1,ndof),j=1,nStep)
+	    485 	endif
+	    486 !
+	    487 !
+	    488   999 return 
+	    489 
+	    490  1000 format(//5x,"Chopra: Example 15.1:pp 614 DATA",//
+	    491      &	10x,"time-step = ", f10.3//)
+	    492  1010 format(//" Stiffness matrix.........."//5(2x,f10.4) )
+	    493  1020 format(//" Damping matrix.........."//5(2x,f10.4) )
+	    494  1030 format(//" Mass matrix.........."//5(2x,f10.4) )
+	    495  1040 format(//" Load Vectors.........."//
+	    496      &        (5x, 'Step(',I2,')', 5(f10.4,3x)) )
+	    497  1050 format(//5x,"Final Matrices............."//)
+	    498  1060 format(//
+
+GETDATA5                        Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 23
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    499      &" EI.......................... = ",2x,g10.4/
+	    500      &" h........................... = ",2x,f10.4/
+	    501      &" Stiffness Mult(EI/h**3)..... = ",2x,f10.4/
+	    502      &" Mass Mult................... = ",2x,f10.4/
+	    503      &" Load Mult................... = ",2x,f10.4 )
+	    504  1070 format(//" Stiffness matrix.........."//5(2x,f16.4) )
+	    505 !	-----
+	    506 	end
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   444 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                 3212 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               970   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                39374   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               257 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                88 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                44345
+
+
+ENTRY POINTS
+
+ Address      Name    
+                      
+  4-00004803  GETDATA5
+
+
+VARIABLES
+
+ Address      Type  Name    Address      Type  Name    Address      Type  Name    Address      Type  Name  
+                                                                                                           
+      **      R*8   DELTAT       **      I*4   IOUT         **      I*4   NSTEP    1-00000100  R*8   XP    
+  1-00000134  R*4   DM       1-00000138  I*4   IPRT     2-00000C64  R*4   ONE      1-000000F8  R*8   XS    
+  1-00000118  R*8   EI       1-00000130  I*4   IS       2-00000C5C  R*4   THREE    2-00000C68  R*4   ZERO  
+  1-00000110  R*8   H        1-00000128  I*4   J        2-00000C60  R*4   TWO                              
+  1-0000012C  I*4   I            **      I*4   NDOF     1-00000108  R*8   XM                               
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+      **      R*8   D0             **  (*)
+      **      R*8   DAMP           **  (*, *)
+      **      R*8   LOAD           **  (*, *)
+      **      R*8   MASS           **  (*, *)
+      **      R*8   STIF           **  (*, *)
+      **      R*8   V0             **  (*)
+
+
+
+GETDATA5                        Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 24
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+LABELS
+
+ Address      Label
+                   
+  4-00006BB3  999  
+
+GETDATA5                        Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 25
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    507 !	 
+	    508 	Subroutine getData2(Stif,Damp,Mass,Load,d0,v0,
+	    509      &					nDof,nStep,deltaT,iOut)
+	    510  			
+	    511 !	Bathe Ex8.1 p 314
+	    512 !
+	    513 	Real*8	Stif(nDof,nDof),Damp(nDof,nDof),Mass(nDof,nDof)
+	    514 	Real*8	Load(nDof,nStep),d0(nDof),v0(nDof),deltaT
+	    515 !
+	    516 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	    517 !
+	    518 	deltaT		=.28D0
+	    519 !	============================================================== initial cond.
+	    520 	d0			= 0.D0
+	    521 	v0			= 0.D0
+	    522 !=================================================================== Stiffness
+	    523 	stif		= 0.D0
+	    524 !
+	    525 	stif(1,1)	= 6.D0	
+	    526 	stif(1,2)	= -2.D0	
+	    527 	stif(2,1)	= -2.D0	
+	    528 	stif(2,2)	= 4.D0	
+	    529 !=================================================================== Damp
+	    530 	damp		= 0.D0
+	    531 !=================================================================== mass
+	    532 	mass		= 0.D0
+	    533 !
+	    534 	mass(1,1)	= 2.D0
+	    535 	mass(2,2)	= 1.D0
+	    536 !=================================================================== load
+	    537 	load		= 0.D0
+	    538 !
+	    539 	do is = 1,nStep
+	    540 		load(2,is)	= 10.D0
+	    541 	end do
+	    542 !=================================================================== print
+	    543 	write(iOut, 1000) nDof
+	    544 	write(iOut, 1010) ((stif(i,j),j=1,ndof),i=1,ndof)
+	    545 	write(iOut, 1020) ((damp(i,j),j=1,ndof),i=1,ndof)
+	    546 	write(iOut, 1030) ((mass(i,j),j=1,ndof),i=1,ndof)
+	    547 	write(iOut, 1040) ((load(i,j),j=1,nStep),i=1,ndof)
+	    548 !
+	    549 !
+	    550   999 return 
+	    551 
+	    552  1000 format(//5x,"Bathe: Example 8.1:pp 314 DATA",//2x,
+	    553      &  "nDof = ",i5//)
+	    554  1010 format(//" Stiffness matrix.........."//2(2x,f10.4) )
+	    555  1020 format(//" Damping matrix.........."//2(2x,f10.4) )
+	    556  1030 format(//" Mass matrix.........."//2(2x,f10.4) )
+	    557  1040 format(//" Load Vectors.........."//13(2x,f5.2) )
+	    558 !	-----
+	    559 	end
+
+GETDATA2                        Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 26
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   444 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                 3212 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               970   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                39374   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               257 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                88 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                44345
+
+
+ENTRY POINTS
+
+ Address      Name    
+                      
+  4-00006BC5  GETDATA2
+
+
+VARIABLES
+
+ Address      Type  Name    Address      Type  Name    Address      Type  Name    Address      Type  Name  
+                                                                                                           
+      **      R*8   DELTAT   1-0000014C  I*4   IS           **      I*4   NSTEP    2-00000C70  R*4   TWO   
+  1-00000148  I*4   I        1-00000144  I*4   J        2-00000C74  R*4   ONE      2-00000C78  R*4   ZERO  
+      **      I*4   IOUT         **      I*4   NDOF     2-00000C6C  R*4   THREE                            
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+      **      R*8   D0             **  (*)
+      **      R*8   DAMP           **  (*, *)
+      **      R*8   LOAD           **  (*, *)
+      **      R*8   MASS           **  (*, *)
+      **      R*8   STIF           **  (*, *)
+      **      R*8   V0             **  (*)
+
+
+LABELS
+
+ Address      Label
+                   
+      **      999  
+
+GETDATA2                        Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 27
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    560 !	 
+	    561 	Subroutine ChopraAvgRule(Stif,Damp,Mass,Load,d0,v0,nDof,
+	    562      &                     nStep,deltaT,iOut,nProb)
+	    563 !
+	    564 !	Needs additional matrix aa & bb
+	    565 ! 			
+	    566 	Real*8	aa(nDof,nDof),bb(nDof,nDof)
+	    567 !
+	    568 	Real*8	Stif(nDof,nDof),Damp(nDof,nDof),Mass(nDof,nDof),time
+	    569 	Real*8	eStif(nDof,nDof),eLoad(nDof),Load(nDof,nStep),deltaT
+	    570 	Real*8	dLoad,dis(nDof,nStep),a0,a1,a2,a3,a4,sum
+	    571 
+	    572 	Real(kind=8)	u(nDof),v(nDof),a(nDof),temv,d0,v0,tema
+	    573 	Real(kind=8)	du(nDof),dv(nDof),da(nDof)
+	    574 	
+	    575 	integer			nStep,iOut,nProb
+	    576 !
+	    577 !
+	    578 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	    579 !========================================================================
+	    580 !	Method		Newmark Avg. Rule : MultiDegreeOfFreedom
+	    581 !------------------------------------------------------------------- Heading
+	    582 	write(iOut,*)
+	    583      &	'=========================================================',
+	    584      &	'==============='
+	    585 	write(iOut,*)
+	    586      &	'             MD Dynamic Equation Time Stepping           ',
+	    587      &	'                (Chopra Average Accl Rule)               ',
+	    588      &    '                         by',   
+	    589      &    '                         ',   
+	    590      &    '                    DEBABRATA RAY',   
+	    591      &    '                         '   
+	    592 	write(iOut,*)
+	    593      &'Needs addl. matrices:aa & bb.Difference of Momentum Balance  '
+	    594 	write(iOut,*)
+	    595      &	'=========================================================',
+	    596      &	'==============='
+	    597 !-------------------------------------------------------------------------------- 		
+	    598 	if(nProb == 1) then
+	    599 		write(iOut,1000) deltaT
+	    600 	else
+	    601 		write(iOut,1001) deltaT
+	    602 	endif 
+	    603 !	---------------------------
+	    604 	if(nProb == 2) then
+	    605 		write(iOut, 1015) (i, i = 1,nDof) 
+	    606 	endif 
+	    607 !	-----------------
+	    608 	time	= 0.D0
+	    609 !	-------------------------------- initial calc
+	    610 !	u		= d0
+	    611 !	v		= v0
+	    612 	u		= 0.D0
+	    613 	v		= 0.D0
+	    614 !
+	    615 	eStif	= Mass
+	    616 !	call Invert_A(eStif,nDof,nDof,iOut)
+
+CHOPRAAVGRULE                   Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 28
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    617 !
+	    618 !
+	    619 	do ii = 1,ndof
+	    620 		sum = 0.D0
+	    621 		do jj = 1,ndof
+	    622 			sum	= sum- 
+	    623      &			Damp(ii,jj)*v(jj)-Stif(ii,jj)*u(jj)
+	    624 		end do
+	    625 			eLoad(ii) = sum+Load(ii,1) 
+	    626 	end do
+	    627 !	a = MATMUL(eStif,eLoad) 
+	    628 !
+	    629 	call Solve_AxEqB(eStif,eLoad,a,nDof,nDof,iOut)
+	    630 !
+	    631 	a2		= 2.D0/deltaT
+	    632 	a3		= 4.D0/deltaT
+	    633 	a4		= 4.D0/deltaT/deltaT
+	    634 !
+	    635 	aa		= 0.D0
+	    636 	bb		= 0.D0
+	    637 	do ii = 1,ndof
+	    638 		do jj = 1,ndof
+	    639 			aa(ii,jj) = a3*Mass(ii,jj)+2.D0*Damp(ii,jj)
+	    640 			bb(ii,jj) = 2.D0*Mass(ii,jj)
+	    641 		end do
+	    642 	end do
+	    643 !	----------------------------------- Effective Stiffness
+	    644 	eStif	= 0.D0
+	    645 	do ii = 1,ndof
+	    646 		do jj = 1,ndof
+	    647 			eStif(ii,jj) =
+	    648      &			a4*Mass(ii,jj)+a2*Damp(ii,jj)+Stif(ii,jj)
+	    649 		end do
+	    650 	end do
+	    651 !	call Invert_A(eStif,nDof,nDof,iOut)
+	    652 !	--------------------------------------------------------------------------- Loop
+	    653 	do is = 1,nStep-1
+	    654 !
+	    655 		do ii = 1,ndof
+	    656 			sum = 0.D0
+	    657 			do jj = 1,ndof
+	    658 				sum	= sum+
+	    659      &				aa(ii,jj)*v(jj)+bb(ii,jj)*a(jj)
+	    660 			end do
+	    661 			dLoad		= Load(ii,is+1) - Load(ii,is)
+	    662 			eLoad(ii)	= sum+dLoad
+	    663 		end do
+	    664 !
+	    665 !		du	= MATMUL(eStif,eLoad)
+	    666 !
+	    667 		call Solve_AxEqB(eStif,eLoad,du,nDof,nDof,iOut)
+	    668 !
+	    669 		do ii = 1,ndof
+	    670 			dv(ii)		= a2*du(ii) - 2.D0*v(ii) 
+	    671 			da(ii)		= a4*du(ii) - a3*v(ii) - 2.D0*a(ii) 
+	    672 		end do  
+	    673 !
+
+CHOPRAAVGRULE                   Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 29
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    674 		do ii = 1,ndof
+	    675 			u(ii)	= u(ii)	+ du(ii)
+	    676 			v(ii)	= v(ii)	+ dv(ii) 
+	    677 			a(ii)	= a(ii)	+ da(ii)
+	    678 		end do  
+	    679 !
+	    680 !============================================================ alternate
+	    681 !		do ii = 1,ndof
+	    682 !		sum = 0.D0
+	    683 !			do jj = 1,ndof
+	    684 !				sum	= sum- 
+	    685 !     &			Damp(ii,jj)*v(jj)-Stif(ii,jj)*u(jj)
+	    686 !			end do
+	    687 !			eLoad(ii) = sum+Load(ii,is+1) 
+	    688 !		end do
+	    689 !
+	    690 !		call Solve_AxEqB(Mass,eLoad,a,nDof,nDof,iOut)
+	    691 !============================================================ alternate END
+	    692 !
+	    693 !
+	    694 	time	= time + deltaT
+	    695 !	---------------------------
+	    696 	if(nProb == 2) then
+	    697 		write(iOut, 1030) time,(u(i),i=1,nDof)	! Chopra
+	    698 	endif 
+	    699 !	-----------------
+	    700 !	--------------------------- save for print for Bathe
+	    701 		do ii = 1,ndof
+	    702 			dis(ii,is) = u(ii)
+	    703 		end do  
+	    704 !	--------------------------------------------------------------------------- Loop END
+	    705 	end do
+	    706 !	---------------------------
+	    707 	if(nProb == 1) then
+	    708 		write(iOut, 1010) (i, i = 1,nStep-1) 
+	    709 		write(iOut, 1020) (i,(dis(i,j),j=1,nStep-1),i=1,nDof)	! Bathe
+	    710 	endif 
+	    711 !	-----------------
+	    712 !	----------
+	    713 	write(iOut,*)
+	    714      &	'=========================================================',
+	    715      &	'==============='
+	    716 !
+	    717   999 return 
+	    718 
+	    719  1000 format(//5x,"Bathe: Example 8.1:pp 314",//
+	    720      &	10x,"time-step = ", f10.3//)
+	    721  1001 format(//5x,"Chopra: Example 15.2:pp 620",//
+	    722      &	10x,"time-step = ", f10.3//)
+	    723  1010 format( 5x, 'nDelT' ,5x, 12(I4,5x) )
+	    724  1015 format( 3x, 'time/nDOF' ,5x, 5(I4,5x) )
+	    725  1020 format((5x, 'dis(',I1,')', 12(f8.4,1x)))
+	    726  1030 format((5x, f6.1,2x, 5(f8.4,1x)))
+	    727 
+	    728 	end
+
+CHOPRAAVGRULE                   Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 30
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                   444 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                 3212 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                               970   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                39374   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               257 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                88 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                44345
+
+
+ENTRY POINTS
+
+ Address      Name         
+                           
+  4-000078A2  CHOPRAAVGRULE
+
+
+VARIABLES
+
+ Address      Type  Name    Address      Type  Name    Address      Type  Name    Address      Type  Name  
+                                                                                                           
+  1-00000188  R*8   A0       1-00000190  R*8   DLOAD        **      I*4   NDOF     2-00000C7C  R*4   THREE 
+  1-00000180  R*8   A1       1-000001B8  I*4   I            **      I*4   NPROB    1-00000198  R*8   TIME  
+  1-00000178  R*8   A2       1-000001B4  I*4   II           **      I*4   NSTEP    2-00000C80  R*4   TWO   
+  1-00000170  R*8   A3           **      I*4   IOUT     2-00000C84  R*4   ONE          **      R*8   V0    
+  1-00000168  R*8   A4       1-000001AC  I*4   IS       1-00000160  R*8   SUM      2-00000C88  R*4   ZERO  
+      **      R*8   D0       1-000001A8  I*4   J        1-00000150  R*8   TEMA                             
+      **      R*8   DELTAT   1-000001B0  I*4   JJ       1-00000158  R*8   TEMV                             
+
+
+ARRAYS
+
+ Address      Type  Name         Bytes  Dimensions
+
+      **      R*8   A               **  (*)
+      **      R*8   AA              **  (*, *)
+      **      R*8   BB              **  (*, *)
+      **      R*8   DA              **  (*)
+      **      R*8   DAMP            **  (*, *)
+      **      R*8   DIS             **  (*, *)
+      **      R*8   DU              **  (*)
+      **      R*8   DV              **  (*)
+      **      R*8   ELOAD           **  (*)
+      **      R*8   ESTIF           **  (*, *)
+      **      R*8   LOAD            **  (*, *)
+      **      R*8   MASS            **  (*, *)
+      **      R*8   STIF            **  (*, *)
+      **      R*8   U               **  (*)
+      **      R*8   V               **  (*)
+
+
+
+CHOPRAAVGRULE                   Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 31
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+LABELS
+
+ Address      Label
+                   
+      **      999  
+
+CHOPRAAVGRULE                   Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 32
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+	    729 !	 
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /show:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+
+TIMESTEP_MDDYNAMIC              Source Listing                  30-Aug-2008 18:35:37  Compaq Visual Fortran 6.6-1684    Page 33
+                                                                30-Aug-2008 18:35:37  ProgFile.for
+
+  /nowarn:unused                        /warn:usage
+
+  /I         path : C:\drProjects\drThe Book Examples\timestep\MdDynamicEq\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/ProgFile.lst
+  /o         filename : Debug/ProgFile.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.43 seconds
+  Elapsed time:      0.44 seconds
+  Pagefaults:           0
+  I/O Count:            0

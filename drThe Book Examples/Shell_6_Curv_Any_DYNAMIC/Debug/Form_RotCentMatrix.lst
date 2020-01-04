@@ -1,0 +1,227 @@
+FORM_ROTCENT_MATRIX             Source Listing                   1-Sep-2008 11:55:51  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 1-Sep-2008 11:55:51  Form_RotCentMatrix.f
+
+	      1 	Subroutine Form_RotCent_Matrix(W,Wd,W2,T,Td,T2,AA,RC,RMass,
+	      2      &								nS,Iout)
+	      3 !	----------------------------------------------------------------------------- S Matrix
+	      4 !
+	      5 !	RC		= Rotational Centrifugal matrix 
+	      6 !			= U(AA)+(W-trans){W2d-(W*Td*Wd + Wd*Td*W) - WT2dW}
+	      7 !	U(AA)	= c1*AA_skew +(-c2*I-c3*T_skew +c4*T_skew2)*(AA*T_tran)
+	      8 !			 +c2{TtensorAA - AAtensorT + (TdotAA)I}
+	      9 !	AA		= Angular Acceleeration
+	     10 !			= Wd*Td + W*Tdd
+	     11 !	----------------------------------------------------------------------------- 
+	     12 !	Inputs
+	     13 !	T		= current Rotation vector
+	     14 !	Td		= rate of current Rotation vector
+	     15 !	T2d		= second rate of current Rotation vector
+	     16 !	W		= Rodrigues transformation matrix depends on current Rotation
+	     17 !	Wd		= rate of Rodrigues transformation matrix
+	     18 !	W2d		= second rate of Rodrigues transformation
+	     19 !	AA		= Angular acceleration
+	     20 ! 	
+	     21 !	Outputs 
+	     22 !		RC			= Rot Centrifugal Matrix: RC(3,3)
+	     23 !	------------------------------------------------------------
+	     24 
+	     25 	Implicit Real(kind=8) (a-h,o-z)
+	     26 !
+	     27 	include 'ThetaConstants.h'
+	     28 !	include 'mass.h'
+	     29 
+	     30 !
+	     32 	Real(kind=8)	W       ,Wd       ,W2       ,RC                
+	     33 	Dimension		W(nS,nS),Wd(nS,nS),W2(nS,nS),RC(nS,nS)
+	     34 	Dimension		T(nS)   ,Td(nS)   ,T2(nS)   ,AA(nS),U(nS,nS)
+	     35 	Real(kind=8)	T       ,Td       ,T2       ,AA    ,U                           
+	     36 	Dimension		TS(nS,nS),TdS(nS,nS),T2S(nS,nS),AAS(nS,nS)
+	     37 	Real(kind=8)	TS       ,TdS       ,T2S       ,AAS                          
+	     38 	Dimension		IM(nS,nS)
+	     39 	Real(kind=8)	IM       ,AAdotT                          
+	     40 	Real(kind=8)	AAtenT       ,TtenAA                
+	     41 	Dimension		AAtenT(nS,nS),TtenAA(nS,nS)
+	     42 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	     43 !	------------------------------------------------------ identity matrix (I)
+	     44 	IM=0.D0
+	     45 	IM(1,1) = 1.D0
+	     46 	IM(2,2) = 1.D0
+	     47 	IM(3,3) = 1.D0
+	     48 !	------------------------------------------------------ theta-Skew (TS)
+	     49 	call FormSkew(T,nS,TS,Iout)
+	     50 !	------------------------------------------------------ thetadot-Skew (TdS)
+	     51 	call FormSkew(Td,nS,TdS,Iout)
+	     52 !	------------------------------------------------------ thetadotdot-Skew (T2dS)
+	     53 	call FormSkew(T2,nS,T2S,Iout)
+	     54 !	------------------------------------------------------ AA-Skew (AAS)
+	     55 	call FormSkew(AA,nS,AAS,Iout)
+	     56 !---------------------------------------------------------- 
+	     57 	call DotProduct(AA,T,AAdotT,nS,Iout)
+	     58 !
+
+FORM_ROTCENT_MATRIX             Source Listing                   1-Sep-2008 11:55:51  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 1-Sep-2008 11:55:51  Form_RotCentMatrix.f
+
+	     59 	call TensorProduct(AA,T,AAtenT,nS,Iout)
+	     60 	call TensorProduct(T,AA,TtenAA,nS,Iout)
+	     61 !---------------------------------------------------------- U
+	     62 	c3	= c1b
+	     63 	c4	= c2b
+	     64 !
+	     65 	U   = c1*AAS + (-c2*IM -c3*TS +c4*T2S)*AAtenT
+	     66      &     + c2*(TtenAA - AAtenT + AAdotT*IM)
+	     67 !---------------------------------------------------------- Cent
+	     68 	RC	= U + TRANSPOSE(W)*(W2 - (W*TdS*Wd+Wd*TdS*W) - W*T2S*W)
+	     69 	RC	= RMass*RC	 
+	     70 !---------------------------------------------------------- Write:
+	     71 	iPrt = 0
+	     72 	if (iPrt == 1) Then
+	     73 		write(Iout,1010) (i,(RC(i,j),j = 1,3),i=1,3)
+	     74 	endif
+	     75 !----------------------------------------------------------
+	     76 	return
+	     77 !
+	     78  1000	format(A,I5,A)
+	     79  1010 format("Rotational Centrifugal Matrix RG(3,3)"/
+	     80      &        (I5,3(3(f10.7,1X)/)))
+	     81 	end
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    48 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  184 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                                40   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                 6963   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 _THETACONSTANTS                         32 NOPIC OVR REL GBL NOSHR NOEXE   RD   WRT OCTA
+  6 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  7 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 7571
+
+
+ENTRY POINTS
+
+ Address      Name               
+                                 
+  4-00000000  FORM_ROTCENT_MATRIX
+
+
+VARIABLES
+
+ Address      Type  Name    Address      Type  Name    Address      Type  Name    Address      Type  Name  
+                                                                                                           
+  1-00000018  R*8   AADOTT   1-00000010  R*8   C3       1-00000024  I*4   J        2-000000A0  R*8   TWO   
+  5-00000000  R*8   C1       1-00000008  R*8   C4           **      I*4   NS       2-000000B0  R*8   ZERO  
+  5-00000010  R*8   C1B      1-00000028  I*4   I        2-000000A8  R*8   ONE                              
+  5-00000008  R*8   C2           **      I*4   IOUT         **      R*8   RMASS                            
+  5-00000018  R*8   C2B      1-0000002C  I*4   IPRT     2-00000098  R*8   THREE                            
+
+
+FORM_ROTCENT_MATRIX             Source Listing                   1-Sep-2008 11:55:51  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 1-Sep-2008 11:55:51  Form_RotCentMatrix.f
+
+ARRAYS
+
+ Address      Type  Name          Bytes  Dimensions
+
+      **      R*8   AA               **  (*)
+      **      R*8   AAS              **  (*, *)
+      **      R*8   AATENT           **  (*, *)
+      **      R*8   IM               **  (*, *)
+      **      R*8   RC               **  (*, *)
+      **      R*8   T                **  (*)
+      **      R*8   T2               **  (*)
+      **      R*8   T2S              **  (*, *)
+      **      R*8   TD               **  (*)
+      **      R*8   TDS              **  (*, *)
+      **      R*8   TS               **  (*, *)
+      **      R*8   TTENAA           **  (*, *)
+      **      R*8   U                **  (*, *)
+      **      R*8   W                **  (*, *)
+      **      R*8   W2               **  (*, *)
+      **      R*8   WD               **  (*, *)
+
+FORM_ROTCENT_MATRIX             Source Listing                   1-Sep-2008 11:55:51  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 1-Sep-2008 11:55:51  Form_RotCentMatrix.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+FORM_ROTCENT_MATRIX             Source Listing                   1-Sep-2008 11:55:51  Compaq Visual Fortran 6.6-1684    Page 5
+                                                                 1-Sep-2008 11:55:51  Form_RotCentMatrix.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Form_RotCentMatrix.lst
+  /o         filename : Debug/Form_RotCentMatrix.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.03 seconds
+  Elapsed time:      0.03 seconds
+  Pagefaults:           0
+  I/O Count:            0

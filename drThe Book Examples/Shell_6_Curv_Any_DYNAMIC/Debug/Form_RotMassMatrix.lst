@@ -1,0 +1,161 @@
+FORM_ROTMASS_MATRIX             Source Listing                   1-Sep-2008 10:33:11  Compaq Visual Fortran 6.6-1684    Page 1
+                                                                 1-Sep-2008 10:33:11  Form_RotMassMatrix.f
+
+	      1 	Subroutine Form_RotMass_Matrix(W,RM,RMass,nS,Iout)
+	      2 !	----------------------------------------------------------------------------- S Matrix
+	      3 !	S		= Rotational Mass matrix = Io*(W-trans*W)  Symmetric
+	      4 !	----------------------------------------------------------------------------- 
+	      5 !	Inputs
+	      6 !	W			= Rodrigues transformation matrix depends on current Rotation
+	      7 ! 	
+	      8 !	Outputs 
+	      9 !		RM		= Rot Mass Matrix: RM(3,3)
+	     10 !	------------------------------------------------------------
+	     11 
+	     12 	Implicit Real(kind=8) (a-h,o-z)
+	     13 !
+	     14 !	include 'mass.h'
+	     15 
+	     16 !
+	     17 	Real(kind=8)	W       ,RM                
+	     18 	Dimension		W(nS,nS),RM(nS,nS)
+	     19 	Real(kind=8)	Io                
+	     20 	DATA zero/0.D0/,one/1.0D0/,two/2.0D0/,three/3.0D0/ 
+	     21 !	------------------------------------------------------ theta x pTranspose
+	     22 	RM = RMass*(TRANSPOSE(W))*W
+	     23 !---------------------------------------------------------- Write:
+	     24 	iPrt = 0
+	     25 	if (iPrt == 1) Then
+	     26 		write(Iout,1010) (i,(RM(i,j),j = 1,3),i=1,3)
+	     27 	endif
+	     28 !----------------------------------------------------------
+	     29 	return
+	     30 !
+	     31  1000	format(A,I5,A)
+	     32  1010 format("Rotational Mass Matrix RM(3,3)"/
+	     33      &        (I5,3(3(f10.7,1X)/)))
+	     34 	end
+
+FORM_ROTMASS_MATRIX             Source Listing                   1-Sep-2008 10:33:11  Compaq Visual Fortran 6.6-1684    Page 2
+                                                                 1-Sep-2008 10:33:11  Form_RotMassMatrix.f
+
+
+
+PROGRAM SECTIONS
+
+    Name				 Bytes   Attributes
+
+  1 .bss                                    32 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  2 .data                                  176 NOPIC CON REL LCL NOSHR NOEXE   RD   WRT QUAD
+  3 .literal                                23   PIC CON REL LCL   SHR NOEXE   RD NOWRT QUAD
+  4 .text                                  923   PIC CON REL LCL   SHR   EXE NORD NOWRT QUAD
+  5 .drectve                               212 NOPIC CON REL LCL NOSHR NOEXE NORD NOWRT QUAD
+  6 .debug$T                                92 NOPIC CON REL LCL NOSHR NOEXE   RD NOWRT BYTE
+
+    Total Space Allocated                 1458
+
+
+ENTRY POINTS
+
+ Address      Name               
+                                 
+  4-00000000  FORM_ROTMASS_MATRIX
+
+
+VARIABLES
+
+ Address      Type  Name   Address      Type  Name   Address      Type  Name   Address      Type  Name 
+                                                                                                       
+  1-00000018  I*4   I       1-0000001C  I*4   IPRT    2-000000A0  R*8   ONE     2-00000098  R*8   TWO  
+  1-00000008  R*8   IO      1-00000014  I*4   J           **      R*8   RMASS   2-000000A8  R*8   ZERO 
+      **      I*4   IOUT        **      I*4   NS      2-00000090  R*8   THREE                          
+
+
+ARRAYS
+
+ Address      Type  Name        Bytes  Dimensions
+
+      **      R*8   RM             **  (*, *)
+      **      R*8   W              **  (*, *)
+
+FORM_ROTMASS_MATRIX             Source Listing                   1-Sep-2008 10:33:11  Compaq Visual Fortran 6.6-1684    Page 3
+                                                                 1-Sep-2008 10:33:11  Form_RotMassMatrix.f
+
+COMPILER OPTIONS BEING USED
+
+  /noalign:commons                      /noalign:dcommons
+  /align:records                        /noalign:sequence
+  /noalign:rec1byte                     /noalign:rec2byte
+  /noalign:rec4byte                     /noalign:rec8byte
+  /altparam                             /noannotations:code
+  /noannotations:detail                 /noannotations:feedback
+  /noannotations:inlining               /noannotations:loop_transforms
+  /noannotations:loop_unrolling         /noannotations:prefetching
+  /noannotations:shrinkwrapping         /noannotations:software_pipelining
+  /noannotations:tail_calls             /noannotations:tail_recursion
+  /arch:generic                         /noasmattributes:machine
+  /noasmattributes:source               /assume:accuracy_sensitive
+  /noassume:buffered_io                 /noassume:byterecl
+  /noassume:dummy_aliases               /noassume:minus0
+  /assume:protect_constants             /assume:source_include
+  /noassume:underscore                  /noassume:2underscores
+  /noautomatic                          /nobintext
+  /ccdefault:default                    /nocheck:arg_temp_created
+  /check:bounds                         /check:flawed_pentium
+  /nocheck:format                       /nocheck:output_conversion
+  /nocheck:overflow                     /nocheck:power
+  /nocheck:underflow                    /convert:native
+  /D:_WIN32=1                           /D:_DF_VER=660
+  /D:_VF_VER=660                        /D:_X86_=1
+  /D:_M_IX86=500                        /D:_INTEGRAL_MAX_BITS=32
+  /double_size:64                       /nod_lines
+  /error_limit:30                       /extend_source:72
+  /nof66                                /nof77rtl
+  /nofast                               /nofltconsist
+  /nofpscomp:filesfromcmd               /nofpscomp:general
+  /nofpscomp:ioformat                   /nofpscomp:ldio_spacing
+  /fpscomp:libs                         /nofpscomp:logicals
+  /fixed                                /nofpconstant
+  /fpe3                                 /g2
+  /Gt0                                  /iface:stdref
+  /nointconstant                        /integer_size:32
+  /libdir:automatic                     /libdir:user
+  /nolibs_dll                           /nomachine_code
+  /math_library:check                   /mixed_str_len_arg
+  /module:Debug/                        /names:uppercase
+  /nonoinclude                          /O0
+  /inline:none                          /notransform_loops
+  /nopipeline                           /tune:generic
+  /unroll:0                             /nopad_source
+  /real_size:32                         /norecursive
+  /reentrancy:none                      /noshow:include
+  /show:map                             /stand:none
+  /nosyntax_only                        /traceback
+  /novms                                /warn:alignments
+  /warn:argument_checking               /nowarn:declarations
+  /nowarn:errors                        /warn:general
+  /nowarn:granularity                   /nowarn:ignore_loc
+  /nowarn:stderrors                     /nowarn:truncated_source
+  /warn:uncalled                        /warn:uninitialized
+  /nowarn:unused                        /warn:usage
+
+FORM_ROTMASS_MATRIX             Source Listing                   1-Sep-2008 10:33:11  Compaq Visual Fortran 6.6-1684    Page 4
+                                                                 1-Sep-2008 10:33:11  Form_RotMassMatrix.f
+
+  /I         path : C:\drProjects\drThe Book Examples\Shell_6_Curv_Any_DYNAMIC\,C:\Program Files\ArrayVisualizer\Include\,
+           C:\Program Files\Microsoft Visual Studio\DF98\CXML\Include\,C:\Program Files\Microsoft Visual Studio\DF98\IMSL\Include\,
+           C:\Program Files\Microsoft Visual Studio\VC98\Include\,C:\Program Files\Microsoft Visual Studio\DF98\Include\,
+           C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\COMMON\,C:\PROGRAM FILES\MICROSOFT VISUAL STUDIO\VC98\MFC\INCLUDE\
+  /V         filename : Debug/Form_RotMassMatrix.lst
+  /o         filename : Debug/Form_RotMassMatrix.obj
+  /nobrowser
+  /Fd        filename : Debug/DF60.PDB
+
+COMPILER: Compaq Visual Fortran 6.6-1684-47B6E
+
+COMPILATION STATISTICS
+
+  CPU time:          0.01 seconds
+  Elapsed time:      0.02 seconds
+  Pagefaults:           0
+  I/O Count:            0

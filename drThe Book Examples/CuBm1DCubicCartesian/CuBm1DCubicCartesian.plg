@@ -1,0 +1,35 @@
+<html>
+<body>
+<pre>
+<h1>Build Log</h1>
+<h3>
+--------------------Configuration: CuBm1DCubicCartesian - Win32 Debug--------------------
+</h3>
+<h3>Command Lines</h3>
+Creating temporary file "C:\WINDOWS\TEMP\RSP33A2.TMP" with contents
+[
+/check:bounds /compile_only /debug:full /libs:qwin /nologo /traceback /warn:argument_checking /warn:nofileopt /module:"CuBm1DCubicCartesian___Win32_Debug/" /object:"CuBm1DCubicCartesian___Win32_Debug/" /pdbfile:"CuBm1DCubicCartesian___Win32_Debug/DF60.PDB" 
+"C:\The Book\CuBm1DCubicCartesian\Prog_1D_CC_BeamCart.f"
+]
+Creating temporary file "C:\WINDOWS\TEMP\RSP33A3.TMP" with contents
+[
+kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /nologo /entry:"WinMainCRTStartup" /subsystem:windows /incremental:no /pdb:"CuBm1DCubicCartesian___Win32_Debug/CuBm1DCubicCartesian.pdb" /debug /machine:I386 /nodefaultlib:"dfconsol.lib" /out:"CuBm1DCubicCartesian___Win32_Debug/CuBm1DCubicCartesian.exe" /pdbtype:sept 
+".\CuBm1DCubicCartesian___Win32_Debug\CC_StrainDis.obj"
+".\CuBm1DCubicCartesian___Win32_Debug\Prog_1D_CC_BeamCart.obj"
+".\CuBm1DCubicCartesian___Win32_Debug\Quad_CC_LV.obj"
+".\CuBm1DCubicCartesian___Win32_Debug\Quad_CC_STIF.obj"
+".\CuBm1DCubicCartesian___Win32_Debug\Solve_AxEqB.obj"
+]
+Creating command line "link.exe @C:\WINDOWS\TEMP\RSP33A3.TMP"
+<h3>Output Window</h3>
+Compiling Fortran...
+C:\The Book\CuBm1DCubicCartesian\Prog_1D_CC_BeamCart.f
+Linking...
+
+
+
+<h3>Results</h3>
+CuBm1DCubicCartesian.exe - 0 error(s), 0 warning(s)
+</pre>
+</body>
+</html>
